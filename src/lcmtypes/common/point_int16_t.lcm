@@ -1,0 +1,7 @@
+package vulcan_lcm;
+
+struct point_int16_t
+{
+    int16_t x;
+    int16_t y;
+}

@@ -1,0 +1,10 @@
+package vulcan_lcm;
+
+/*
+* turn_around_command has the robot turn around to face the other direction when it is on a path. When at a place, the
+* command has no effect.
+*/
+struct turn_around_command
+{
+    int32_t id;
+}

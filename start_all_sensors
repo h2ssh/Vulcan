@@ -1,0 +1,9 @@
+#!/bin/bash
+
+xterm -e python3 check_pcan.py
+cd build/bin
+xterm -e ./laser_scan_producer --config-file front_laser_scan_producer.cfg &
+xterm -e ./laser_scan_producer --config-file back_laser_scan_producer.cfg &
+xterm -e ./odometry_producer --config-file odometry_producer.cfg &
+xterm -e ./imu_data_producer &
+xterm -e ./robot_interface --config-file robot_interface.cfg &

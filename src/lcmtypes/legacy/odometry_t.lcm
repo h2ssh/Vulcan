@@ -1,0 +1,14 @@
+package vulcan_lcm;
+
+struct odometry_t
+{
+    int64_t timestamp;
+    int32_t id;
+
+    double x;
+    double y;
+    double theta;
+
+    double translation;
+    double rotation;
+}

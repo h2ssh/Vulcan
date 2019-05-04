@@ -1,0 +1,14 @@
+package vulcan_lcm;
+
+/**
+* commanded_joystick_t defines the joystick command most recently sent to the robot's motors.
+* The command will be related to the most recent motion command, but might not be exactly the
+* same due to the internal characteristics of the robot controller being used.
+*/
+struct commanded_joystick_t
+{
+    int64_t timestamp;
+    
+    int16_t forward;
+    int16_t left;
+}

@@ -1,0 +1,39 @@
+Import('*')
+
+import os
+
+ui_env = mod_env.Clone()
+
+ui_env.ParseConfig('wx-config --libs core,base,gl,aui,adv --cflags --gl-libs')
+ui_env.Append(LIBS=['GL','GLU', 'vulcan_lcm'])
+ui_env.Prepend(LIBS=['interface_data',
+                     'metric_planner_func',
+                     'metric_planner_data',
+                     'exploration_data',
+                     'planner_utils',
+                     'global_metric_hssh_data',
+                     'global_topo_hssh_func',
+                     'global_topo_hssh_debug',
+                     'global_topo_hssh_data',
+                     'local_topo_hssh_debug',
+                     'local_topo_hssh_data',
+                     'local_metric_hssh_data',
+                     'hssh_utils',
+                     'vulcan_vision',
+                     'vulcan_laser_calib',
+                     'object_tracker_debug',
+                     'object_tracker_data',
+                     'nlopt'])
+
+ui_env.Prepend(LIBS=['vulcan_ui_components', 'vulcan_ui_common'])
+
+Export('ui_env')
+
+SConscript(['common/SConscript',
+            'debug/SConscript',
+            'components/SConscript',
+            'navigation/SConscript',
+            #'logical/SConscript',
+            'logplayer/SConscript',
+            'mapeditor/SConscript',
+            'simulator/SConscript',])

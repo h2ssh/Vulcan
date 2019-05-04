@@ -1,0 +1,6 @@
+Import('*')
+
+data_objects = lib_env.StaticObject([Glob('*.cpp')])
+
+data_lib = lib_env.Library(target = 'interface_data',  source = [data_objects])
+lib_env.Install(BUILD_LIB_DIR, data_lib)

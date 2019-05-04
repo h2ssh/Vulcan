@@ -1,0 +1,6 @@
+Import('*')
+
+core_objects = default_env.Object([Glob('*.cpp')])
+
+core_lib = default_env.Library(target = 'vulcan_core', source = [core_objects])
+default_env.Install(BUILD_LIB_DIR, core_lib)

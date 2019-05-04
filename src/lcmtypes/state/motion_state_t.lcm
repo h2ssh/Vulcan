@@ -1,0 +1,16 @@
+package vulcan_lcm;
+
+struct motion_state_t
+{
+    int64_t              timestamp;
+
+    robot_pose_t         pose;
+    pose_distribution_t  pose_distribution;
+    robot_velocity_t     velocity;
+    robot_acceleration_t acceleration;
+    drive_wheel_t        left_wheel;
+    drive_wheel_t        right_wheel;
+    
+    int8_t               haveDistribution;
+    int8_t               haveWheels;
+}

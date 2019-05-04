@@ -1,0 +1,6 @@
+package vulcan_lcm;
+
+struct save_lpm_command
+{
+    string filename;
+}

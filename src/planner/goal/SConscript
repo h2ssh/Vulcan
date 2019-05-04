@@ -1,0 +1,18 @@
+Import('*')
+
+goal_env = mod_env.Clone()
+goal_env.Prepend(LIBS=['global_topo_hssh_data', 'local_topo_hssh_data'])
+
+goal_planner = goal_env.Program('goal_planner', ['director.cpp',
+                                                 'goal_monitor.cpp',
+                                                 'goal_planner.cpp',
+                                                 'main.cpp',
+                                                 'params.cpp',
+                                                 'search.cpp'])
+
+search_test = goal_env.Program('search_test', ['search.cpp',
+                                               'search_test.cpp'])
+
+goal_env.Alias('goal_planner', '#src/planner/goal/goal_planner')
+goal_env.Install(BUILD_BIN_DIR, goal_planner)
+

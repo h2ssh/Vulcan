@@ -1,0 +1,49 @@
+Import('*')
+
+data_objects = lib_env.Object(['laser_object.cpp',
+                               'object_boundary.cpp',
+                               'object_motion.cpp',
+                               Glob('boundaries/*.cpp'),
+                               Glob('goals/*.cpp'),
+                               Glob('motions/*.cpp'),
+                               Glob('objects/*.cpp'),
+                               Glob('utils/*.cpp')])
+
+data_lib = lib_env.Library(target = 'object_tracker_data', source = data_objects)
+lib_env.Install(BUILD_LIB_DIR, data_lib)
+
+debug_objects = lib_env.Object(['evaluation/intention_evaluator.cpp'])
+debug_lib = lib_env.Library(target = 'object_tracker_debug', source = debug_objects)
+lib_env.Install(BUILD_LIB_DIR, debug_lib)
+
+func_objects = lib_env.Object(['object_detector.cpp',
+                               'object_tracker.cpp',
+                               'goal_predictor.cpp',
+                               Glob('tracking/*.cpp')])
+func_lib = lib_env.Library(target = 'object_tracker_func', source = func_objects)
+lib_env.Install(BUILD_LIB_DIR, func_lib)
+
+tracker_env = mod_env.Clone()
+tracker_env.Prepend(LIBS=['local_topo_hssh_data',
+                          'local_metric_hssh_data',
+                          'hssh_utils',
+                          'object_tracker_func',
+                          'object_tracker_data',
+                          'nlopt'])
+
+tracker = tracker_env.Program('object_tracker', ['director.cpp',
+                                                 'main.cpp'])
+
+tracker_env.Alias('object_tracker', '#src/tracker/object_tracker')
+tracker_env.Install(BUILD_BIN_DIR, tracker)
+tracker_env.Install(BUILD_BIN_DIR, Glob('*.plt'))
+tracker_env.Install(BUILD_BIN_DIR, Glob('evaluation/*.plt'))
+
+if int(test):
+    tracker_test_env = test_env.Clone()
+    tracker_test_env.Prepend(LIBS=['local_metric_hssh_data',
+                                   'hssh_utils',
+                                   'object_tracker_func',
+                                   'object_tracker_data',
+                                   'nlopt'])
+    tracker_test_env.Program('tracker_unit_tests', Glob('tests/*.cpp'))

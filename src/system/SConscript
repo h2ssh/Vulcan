@@ -1,0 +1,10 @@
+Import('*')
+
+
+system_lib = default_env.Library(target = 'vulcan_system', source = Glob('*.cpp'))
+default_env.Install(BUILD_LIB_DIR, system_lib)
+
+pch_env = default_env.Clone()
+
+pch_env['precompiled_header'] = File('common.h')
+pch_env['Gch'] = pch_env.Gch(target='common.h.gch', source=pch_env['precompiled_header'])

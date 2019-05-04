@@ -1,0 +1,209 @@
+\documentclass{article}
+
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+
+\title{Interfacing With The HSSH}
+\author{Collin Johnson}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This document discusses two things: the representation of the HSSH and our implementation of the HSSH. Each section
+describes a layer of the HSSH, providing some motivation and theory behind the representation, a summarized description
+of the representation, and details on how this representation is implemented in the Vulcan codebase.
+
+The code for the HSSH is in the src/hssh/ directory of the Vulcan repository. Each layer of the HSSH has a subdirectory
+within the src/hssh/ directory. The header files for the implementation of the representation of each layer exist
+within this subdirectory. For example, the LPM is defined in src/hssh/local\_metric/lpm.h. Further implementation, like
+the actual algorithm for LPM creation or the particle filters, are contained in further subdirectories to keep the
+interface more apparent.
+
+\section{Where Am I?}
+The Hybrid Spatial Semantic Hierarchy (HSSH) is a hybrid metric/topological solution to the simultaneous localization
+and mapping (SLAM) problem. The HSSH divides the SLAM problem into small-scale space and large-scale space. Small-scale
+space is the portion of the world within the robot's immediate sensory horizon. Large-scale space deals with the world
+as a whole, using information obtained from the small-scale space.
+
+The HSSH is concerned with determining a map of the robot's environment and the position of the robot within this map. 
+In the HSSH, a hierarchy of three spatial representations is used to describe the robot's environment and position. The
+map built by the HSSH contains both metric and topological descriptions of the environment. Similarly, the position of
+the robot is defined metrically and topologically. The spatial representations in the HSSH, referred to as layers of the
+hierarchy, are the local metric, the local topological, and the global topological. Each layer provides a unique
+description of the environment and the robot's position within the environment. The following sections detail how the
+robot's map and position are described in each level of the HSSH.
+
+
+
+% \begin{description}
+%     \item[Local Metric:] \hfill
+%         \begin{description}
+%             \item[Pose:] relative to map reference frame
+%         \end{description}
+% 
+%     \item[Local Topological:] \hfill
+%         \begin{description}
+%             \item[Local place:] small-scale place with topology described by small-scale star
+% %             \item[Local path:] connection between local places
+%         \end{description}
+% 
+%     \item[Global Topological:] \hfill
+%         \begin{description}
+%             \item[Global place:] large-scale place with topology described by large-scale star and incoming paths
+%             \item[Global path segment:] connection between two global places along a path
+%             \item[Global path:] larger structure connecting a series of places
+%         \end{description}
+% \end{description}
+% 
+% In the following sections, each quantity has an associated symbol, which will appear in parentheses next to the type.
+% For example, \textbf{Pose(l):}.
+
+\section{Local Metric}
+The local metric layer is a metric description of the small-scale space around the robot. The map, referred to as the
+local perceptual map (LPM), is a high-resolution occupancy grid. The position of the robot within the local metric
+layer is a pose $(x,y,\theta)$ with respect to the reference frame of the LPM.
+
+\subsection{Local Perceptual Map}
+The local perceptual map (LPM) is a high-resolution metric map of the robot's local surround. The LPM represents the
+part of the world within the robot's immediate sensory horizon and explicitly avoids handling large loop closures. The
+LPM dynamically resizes as the robot explores its world, based on incoming sensor values. To maintain the invariant that
+the LPM contains only the robot's immediate sensory horizon, the maximum dimension of the LPM is defined as twice the
+maximum distance of a sensor reading. For a laser-based LPM, this size is twice the maximum usable scan range. In
+addition to resizing based on sensory readings, the LPM scrolls as the robot moves, throwing away parts of the map that
+fall outside the sensory horizon.
+
+Maintaining a bounded-size LPM allows us to enforce two invariants. First, the robot is always well-localized within
+the LPM. Limiting the size of the LPM to the the sensory horizon ensures that a good portion of the LPM is visible to
+the robot at any time, which provides the observation model in the localization algorithm enough useful data to maintain
+localization. Furthermore, restricting the size of the metric map used by the robot avoids large loop closures and
+allows a simple SLAM algorithm to be used. In our implementation, the LPM is an occupancy grid. A particle filter is
+used for localization, and the map is updated using the mean of the posterior probability distribution of the pose.
+
+Second, computations using the LPM take a fixed amount of time. The LPM maintains an upper bound on its size,
+guaranteeing a maximum running time of any operation that depends on the size of the map.
+
+The LPM only guarantees local consistency, and the local frame of reference typically drifts over time, losing
+metric accuracy with respect to a single global reference frame. For the HSSH, the lack of global consistency is not a
+problem because global map consistency is maintained topologically in the global topological layer.
+
+\subsection{Local Metric Representation}
+
+\begin{description}
+    \item[Pose($l,r$):] position, $(x,y,\theta)$, of the robot in the reference frame, $r$, of an LPM.
+
+    \item[LPM($m$):] detailed map of the robot's local surround. An occupancy grid defined by the location of
+    the bottom left cell (0,0) in the metric reference frame, the width and height measured in cells, and a conversion
+    scale of meters/cell.
+\end{description}
+
+\subsection{Local Metric Implementation}
+The code for the local metric layer exists in the src/hssh/local\_metric folder of the Vulcan repository. The
+implementation of the LPM is a class LocalPerceptualMap (typedef'd to LPM) in the file lpm.h. The LPM implementation
+provides easy access to the cost and classification for each cell in the occupancy grid.
+
+The pose representation is a struct pose\_t defined in src/state/pose.h. pose\_t contains the $(x,y,\theta)$ of the
+robot in the reference frame of the related LPM. The reference frame associated with the pose is implicit based on the
+context in which the pose is used.
+
+\section{Local Topological}
+The local topological layer describes the qualitative decision structure of a local place. To determine the qualitative
+decision structure, the local topological layer is required to perform place detection and then calculate the decision
+structure of this place. Place detection and calculation of the decision structure depend on gateways, which define
+transition points in the environment.
+
+\subsection{Place Detection}
+
+\subsection{Local Topological Representation}
+
+\begin{description}
+    \item[Metric place map($m_p$):] The metric place map is a high-resolution occupancy grid of the place. The boundary
+    of the map is determined by ray tracing from the center of the gateways to occupied cells in the occupancy grid.
+    Thus, the boundary is a combination of occupied cells and gateways.
+
+    \item[Gateway($g_n$):] A gateway is a boundary between the place and either a path or another place. Each gateway
+    defines the transition between the place and the rest of the environment. A gateway is represented by a line segment
+    and a direction. The line segment is the location of the gateway in $m_p$. The direction points to the interior of
+    the place.
+
+    \item[Small-scale star($s$):] A small-scale star is a description of the topology of a local place. The small-scale
+    star consists of an ordered sequence of local path fragments. There are two fragments per incident path, thus there
+    are $2N_{path}$ local path fragments in the small-scale star.
+
+    \item[Local path fragment($\pi_n$):] A local path fragment represents a path segment incident to the local place.
+    The path fragment is associated with a gateway, $g_n$. Local path fragments come in pairs, defining the two
+    directions, $+$ and $-$, of a path in the small-scale star. The directions are assigned arbitrarily. Each local path
+    fragment has a flag indicating if the fragment is navigable or not.
+
+    \item[Local place($p$):] A local place consists of a small-scale star and a metric place map. $p = (s, m_p)$
+\end{description}
+
+\subsection{Local Topological Implementation}
+The code for the local topological layer exists in the src/hssh/local\_topological folder. Gateways are defined in
+gateway.h as gateway\_t. small\_scale\_star.h contains SmallScaleStar and local\_path\_fragment\_t. The metric place map
+is an LPM. The complete description of a place, a LocalPlace, is defined in local\_place.h.
+
+
+\section{Global Topological}
+The global topological layer is a topological description of the robot's large-scale environment. The representation
+divides the world into places and paths. Places represent decision points in the world, locations where paths
+intersect. Paths represent connections between places. Paths consist of an ordered sequence of path segments, where
+each path segment represents the connection between two adjacent places. Thus, a path connects two or more places. The
+topological map, then, is simply a set of places and a set of paths.
+
+\subsection{Global Topological Representation}
+
+\begin{description}
+    \item[Large-scale star($S$):] The large-scale star represents the topology of a place. The star is an ordered
+    sequence of global path fragments, analogous to the small-scale star. The fragments in the large-scale star
+    correspond to global paths, though. Therefore, the large-scale star describes how global paths intersect at a place.
+    
+    \item[Global path fragment($\Pi_n$):] A global path fragment represents a path incident to a global place. The
+    fragment contains the path id, the direction one would travel along the path if moving outbound through the
+    fragment, and navigability flag indicating if travel is possible in the specified direction.
+    
+    \item[Global place($P$):] A global place is represented as a large-scale star and a unique identifier: $P = (id, S)$
+    
+    \item[Global path segment($\phi_{xy}$):] A global path segment represents the connection between two places. If the
+    path segment is unexplored, one of these places will be labeled as a frontier. The path segment also contains a
+    value, $\lambda_{xy}$, describing the transformation of the reference frame between the connected place,
+    $[(0,0,0)_y]_x$. The path segment has a direction, so the places exist at the $+$ or $-$ end. Hence, the full path
+    segment description is $\phi_{xy} = (P_x^+, P_y^-, \lambda_{xy})$.
+    
+    \item[Global path($\Phi$):] A global path represents an ordered sequence of connected places. The connection
+    between consecutive places is represented as a global path segment. Thus, a global path is sequence of global path
+    segments ordered head-to-tail. For example, $P_y^-$ of the first segment is $P_x^+$ of the second segment.
+    
+    \item[Topological map($T$):] The topological map is the collection of global places and global paths.
+\end{description}
+
+\subsection{Global Topological Implementation}
+The global topological code exists in the src/hssh/global\_topological/ directory. large\_scale\_star.h contains
+declarations for LargeScaleStar and global\_path\_fragment\_t. global\_place.h contains the declaration of GlobalPlace.
+global\_path.h contains the declaration of GlobalPath. global\_path\_segment.h contains the declaration of
+GlobalPathSegment. The topological map hypotheses are defined by the TopologicalMapHypothesis type declared in
+topological\_map\_hypothesis.h, and the tree of topological maps is declared in tree\_of\_maps.h as TreeOfMaps.
+
+\section{The You-Are-Here Pointer}
+The complete description of the robot's position in the world consists of the robot's position at each of the layers of
+the HSSH.
+
+\subsection{You-Are-Here Representation}
+\begin{description}
+    \item[Local metric:] Location $l_m$ within the current LPM $m$.  $(l_m, m)$
+    
+    \item[Local topological:] Local place $p$ and the local path fragment through which the place was entered
+    $\pi_{enter}$. $(p, \pi_{enter})$
+    
+    \item[Global topological:] The global place $P$ and the global path fragment through which the place was entered
+    $\Pi_{enter}$, or the global path $\Phi$, current path segment $\phi_{xy}$, and direction of motion $+/-$. $(P,
+    \Pi_{enter})$ or $(\Phi, \phi_{xy}, +/-)$
+\end{description}
+
+\subsection{You-Are-Here Implementation}
+TODO
+
+\section{Routes}
+TODO
+
+\end{document}

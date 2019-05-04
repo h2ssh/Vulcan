@@ -1,0 +1,6 @@
+Import('*')
+
+#lib_objects = lib_env.StaticObject(['id.cpp'])
+
+#utils_lib = lib_env.Library(target = 'hssh_utils',  source = [lib_objects])
+#lib_env.Install(BUILD_LIB_DIR, utils_lib)

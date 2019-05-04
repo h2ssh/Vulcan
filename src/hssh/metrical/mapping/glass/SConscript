@@ -1,0 +1,6 @@
+Import('*')
+#glass_env = default_env.Clone()
+#glass_env.ParseConfig('pkg-config --libs --cflags opencv')
+#glass_env.Program('glass.cpp')
+#glass_env.Object('glass_interface.cpp')
+

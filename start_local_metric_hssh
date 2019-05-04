@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd build/bin/
+./local_metric_hssh --config-file local_metric_hssh.cfg

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#./start_all_sensors &
+
+cd build/bin
+xterm -title global_metric_hssh -e "bash -ic \"history -s ./global_metric_hssh --update-hz 20 --emulate-lpm; ./global_metric_hssh --update-hz 20 --emulate-lpm; exec bash\"" &
+xterm -title object_tracker    -e "bash -ic \"history -s ./object_tracker;    ./object_tracker;    exec bash\"" &
+xterm -title state_estimator   -e "bash -ic \"history -s ./state_estimator;   ./state_estimator;   exec bash\"" &
+xterm -title motion_controller -e "bash -ic \"history -s ./motion_controller; ./motion_controller; exec bash\"" &
+xterm -title metric_planner    -e "bash -ic \"history -s ./metric_planner --less-debug-info;    ./metric_planner --less-debug-info;    exec bash\"" &
+xterm -title local_topo_hssh   -e "bash -ic \"history -s ./local_topo_hssh --config-file explore_eecs3_local_topo.cfg; ./local_topo_hssh --config-file explore_eecs3_local_topo.cfg; exec bash\"" &
+xterm -title debug_ui          -e "bash -ic \"history -s ./debug_ui;          ./debug_ui;          exec bash\"" &
+xterm -title map_exploration   -e "bash -ic \"history -s ./map_exploration --explorer local_topo --map ../../data/campus_maps/eecs3_exploration_truth.ltm; ./map_exploration --explorer local_topo --map ../../data/campus_maps/eecs3_exploration_truth.ltm; exec bash\"" &

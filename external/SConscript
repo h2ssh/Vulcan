@@ -1,0 +1,12 @@
+Import('*')
+
+svm_lib = default_env.Library(target = 'libsvm', source = ['libsvm/svm.cpp'])
+default_env.Install(BUILD_LIB_DIR, svm_lib)
+
+default_env.Install(BUILD_INCLUDE_DIR, 'gnuplot-iostream/gnuplot-iostream.h')
+linear_objects = default_env.StaticObject([Glob('liblinear/blas/*.c'),
+                                          'liblinear/tron.cpp',
+                                          'liblinear/linear.cpp'])
+
+linear_lib = default_env.Library(target = 'liblinear', source=linear_objects)
+default_env.Install(BUILD_LIB_DIR, linear_lib)

@@ -1,0 +1,7 @@
+Import('*')
+
+#test_env.Program('test_line_intersections', ['tests/test_line_intersections.cpp'])
+#test_env.Program('test_shape_fitting', ['tests/test_shape_fitting.cpp'])
+
+if int(test):
+    test_env.Program('geometry_tests', [Glob('tests/*.cpp')])

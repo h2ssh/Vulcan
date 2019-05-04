@@ -1,0 +1,14 @@
+package vulcan_lcm;
+
+struct elevator_t
+{
+    int64_t timestamp;
+
+    int64_t startTime;
+    int64_t stopTime;
+
+    int32_t state;
+
+    double distance;
+    double velocity;
+}

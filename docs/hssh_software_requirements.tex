@@ -1,0 +1,101 @@
+\documentclass{article}
+
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+
+\title{HSSH Requirements and Design}
+\author{Collin Johnson}
+
+\begin{document}
+
+\maketitle
+
+\section{Local Metric}
+
+The Local Metric layer of the HSSH has two purposes:
+
+\begin{enumerate}
+ \item Provide situational awareness sufficient for safe local navigation.
+ \item Provide a stable, high-resolution map of the local surround for determining the local topological structure of 
+  the environment.
+\end{enumerate}
+
+To accomplish (1), the LPM maintained by the Local Metric HSSH must keep the current target pose within the map. As 
+long as the robot is driving towards the target, this requirement will always be satisfied.
+
+Accomplishing (2) requires more care to ensure the Local Topo HSSH doesn't have an artificially difficult task to 
+perform. First, the LPM needs to grow to fit the entirety of the current area being navigated by the robot. Doing so 
+keeps the area labeling from losing information. Once an area has been exited, the LPM can be truncated to remove the 
+area and prevent accidental loop closures in the LPM.
+
+Additionally, the Local Topo HSSH works better if the LPM axes are aligned with the environment. Thus, a request to 
+reorient the map can be made. For the rotation, the map rotates in-place by a requested amount, preserving cells as 
+much as possible given blurring due to cells not moving by an integer number of cells.
+
+Note, this rotation doesn't change the reference frame of the LPM, it just changes the cell-to-world mapping. By not 
+changing the reference frame, the tracked objects, waypoints, areas, etc. aren't invalidated, they just fall into 
+different cells on the next update. In order to ensure that an implicit dependence on the orthogonality of the 
+environment doesn't sneak into the topological map, the lambda for the path segment records the rotation amount for use 
+in the relaxation of the path segments used for finding the global layout.
+
+The following messages support the required functionality for controlling behavior of the Local Metric HSSH from the 
+other parts of the HSSH and MPEPC:
+
+\begin{description}
+ \item[Set SLAM Mode:] \hfill \\
+    \begin{description}
+     \item[Mapping Mode:] The map can be set to either \emph{scroll} to keep the robot within a fixed radius of the 
+        center of the map while maintaining a fixed size or to \emph{expand} as the robot explores new portions of 
+        the map, allowing the robot to drive right up to the edge of the map even.
+     \item[Localization Mode:] Set the Local Metric HSSH to only localize within the current LPM. The map won't be 
+        updated. This mode is most useful for testing functionality of the motion planner or when operating in a large 
+        metric map of a known environment.
+     \item[High-Resolution Mode:] The mapping can create a high-resolution version of the LPM. Switching to the 
+        pre-determined resolution, either 1cm or 2cm cells instead of 5cm cells.
+    \end{description}
+
+ \item[Save Map:] Saves the current LPM -- and glass map if available -- to the requested file.
+ 
+ \item[Relocalize In LPM:] Request the robot attempt to relocalize within the provided LPM or from an LPM loaded from a 
+    specified file.
+ \item[Rotate LPM:] Request the map be rotated around its center by the specified number of radians.
+ \item[Truncate LPM:] Request the map be truncated to the contain only the portion within the provided boundary 
+    rectangle.
+\end{description}
+
+
+\section{Local Topological (Topo)}
+
+The Local Topo HSSH layer has two purposes:
+
+\begin{enumerate}
+ \item Segment and label the LPM into distinct areas.
+ \item Determine when topological events (area transitions or turning around) have occurred.
+\end{enumerate}
+
+Local Topo HSSH requires Local Metric HSSH to be running in stretch-mode. A SetMappingMode command is sent at 1Hz to 
+change the mode to stretch-mode.
+
+\subsection{Response to Topological Events}
+
+Area transitions and turning around on a path are the topological events created by the Local Topo HSSH.
+
+\paragraph{Area Transition:}
+
+When the robot leaves an area, the LPM needs to be adjusted to chop out the part of the map containing the old area. 
+This action is taken to ensure that no loops are accidentally closed outside of Global Topo HSSH. The LPM is searched, 
+starting from the current robot position. A bounding rectangle is drawn around all free cells not falling in the 
+exited area. A TruncateMap command is sent to Local Metric HSSH to truncate the LPM to include only this portion of 
+the map, which may, due to it being a potentially loose-fitting bounding rectangle, overlap some or all of the area 
+trying to be removed. However, this bit of overlap shouldn't be a problem.
+
+If the exited area is a path segment, the LPM additionally needs to be rotated to align with the axis of the place that 
+was entered. This rotation will be in the opposite direction of $\theta_\lambda$ that was calculated when the 
+transition event was detected. This rotation is handled by sending a RotateMap command to Local Metric HSSH with the 
+rotation being $-\theta_\lambda$.
+
+\paragraph{Turn Around:}
+
+Nothing special happens when the robot turns around on a path. It simply means it is headed back from whence it came.
+
+\end{document}
+

@@ -1,0 +1,22 @@
+package vulcan_lcm;
+
+/**
+* imu_t contains the data read by a three-axis IMU. These data are the accelerations in all three axes,
+* rotational velocity around each axis, and the rotation of the robot around each axis.
+*
+* The time delta that is included is the amount of time elapsed since the prior imu_t message as measured
+* by the IMU itself. The data_sequence_number is a monotonically increasing identifier for the IMU message.
+*/
+struct imu_t
+{
+    int64_t timestamp;
+
+    int32_t sequence_number;
+    int32_t time_delta;
+
+    float accel[3];
+    float rotational_vel[3];
+    float orientation[3];  // order: roll, pitch, yaw
+    
+    float gravity;
+}

@@ -1,0 +1,18 @@
+Import('*')
+
+control_env = mod_env.Clone()
+control_env.Prepend(LIBS=['metric_planner_data',
+                          'object_tracker_data',
+                          'local_topo_hssh_data',
+                          'local_metric_hssh_data',
+                          'hssh_utils'])
+
+control_planner = control_env.Program('control_planner', [Glob('*.cpp'),
+                                                          Glob('tasks/*.cpp')])
+
+control_env.Alias('control_planner', '#src/planner/control/control_planner')
+control_env.Install(BUILD_BIN_DIR, control_planner)
+
+
+keyboard_control = control_env.Program('keyboard_control', ['tests/keyboard_control.cpp'])
+control_env.Install(BUILD_BIN_DIR, keyboard_control)

@@ -1,0 +1,12 @@
+Import('*')
+
+editor_env = ui_env.Clone()
+editor_env.Prepend(LIBS=['local_topo_training',
+                         'local_topo_hssh_func'])
+
+editor_objects = editor_env.Object(Glob('*.cpp'))
+
+map_editor = editor_env.Program('map_editor', [editor_objects])
+
+editor_env.Alias('map_editor', '#src/ui/mapeditor/map_editor')
+editor_env.Install(BUILD_BIN_DIR, map_editor)

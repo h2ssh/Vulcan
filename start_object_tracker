@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd build/bin/
+./object_tracker --config-file object_tracker.cfg

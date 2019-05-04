@@ -1,0 +1,3 @@
+#!/bin/bash
+
+lcm-logger -c 'LPM_MAP|STATE_POSE|LASER_SCAN_LINES' $1

@@ -1,0 +1,61 @@
+-------------- To Change ----------------------------------
+
+** Topological mapping algorithm **
+  - The basic topological mapping algorithm remains the same for all
+    different implementations -- tree, exhaustive, lazy eval -- but
+    there are two clear customizations points:
+      1) Selecting the next hypothesis to evaluate
+	    - Exhaustive expansion (tree, exhaustive)
+	    - Lazy expansion ( lazy)
+	  2) Creating child hypotheses given a parent hypothesis
+	    - Create all possible children (lazy, exhaustive)
+        - Lazily create children (new lazy)
+	    - Only add a new area (tree)
+  - The TopologicalMapper should accept these two strategy classes as
+    its inputs.
+
+** Map hypothesis updates **
+
+  - The private methods for updating the TopologicalMapHypothesis should
+    be made public and the output should be a new child hypothesis. Only
+    the root should be able to be created. The rest should be generated
+    only as a result of these methods to extend the hypothesis. Private
+    constructors can deal with creating the copy of the hypothesis before
+    the child is added.
+  - TreeOfMaps should be simpler and not responsible for actually creating
+    loop closures, which should happen in TopoMapHypothesis. TreeOfMaps
+    stores and provides access to the hypotheses that correspond to
+    different time points in the visit sequence.
+
+** Queues and topological actions **
+
+  - The current topology_action_t becomes TopologicalVisit.
+  - The measurements are directly encoded in the path segments and don't
+    need to be maintained externally.
+  - The sequence of visits is maintained in TopologicalVisitSequence. This
+    sequence is passed to the topological mapper.
+  - TopologicalVisitSequence handles creation of visits. Each event is
+    directly added to the sequence.
+
+** Storage **
+
+  - TopologicalMapper should keep around the MetricPlaceCache. Each time a
+    new event occurs, it will save the maps for the associated areas.
+
+
+--------------  Removed Functionality ---------------------
+
+When updating the module, some functionality was completely removed.
+It maybe be useful in the future, but for now it complicates the
+underlying structure. Once the Goal interface is implemented, then it
+can be added back in a better fashion.
+
+** Messages **
+
+  - Specifying the global topo map to use
+  - Specifying the robot's current location in the global topo map
+  - Specifying the directory of the saved local places
+
+When added back in to the module, the new message structure used by
+local_metric_hssh should be employed.
+

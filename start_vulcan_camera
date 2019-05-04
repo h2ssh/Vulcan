@@ -1,0 +1,13 @@
+#!/bin/bash
+
+SCRIPT_DIR=`pwd`
+
+cd src/sensors
+
+if [ $# -ne 1 ];
+then
+    ./image_producer --config-file ../config/vulcan/image_producer.cfg --camera-model avt
+else
+    mkdir -p $SCRIPT_DIR/images/$1
+    ./image_producer --config-file ../config/vulcan/image_producer.cfg --camera-model avt --output-basename $SCRIPT_DIR/images/$1/
+fi

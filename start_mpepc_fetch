@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd build/bin
+gnome-terminal -t LOCAL_METRIC_HSSH -e "bash -ic \"history -s ./local_metric_hssh; ./local_metric_hssh; exec bash\"" &
+gnome-terminal -t OBJECT_TRACKER    -e "bash -ic \"history -s ./object_tracker;    ./object_tracker;    exec bash\"" &
+gnome-terminal -t STATE_ESTIMATOR   -e "bash -ic \"history -s ./state_estimator;   ./state_estimator;   exec bash\"" &
+gnome-terminal -t MOTION_CONTROLLER -e "bash -ic \"history -s ./motion_controller; ./motion_controller; exec bash\"" &
+gnome-terminal -t METRIC_PLANNER    -e "bash -ic \"history -s ./metric_planner;    ./metric_planner --config-file metric_planner_fetch.cfg;    exec bash\"" &
+gnome-terminal -t DEBUG_UI          -e "bash -ic \"history -s ./debug_ui;          ./debug_ui;          exec bash\"" &
+
+

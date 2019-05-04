@@ -1,0 +1,11 @@
+Import('*')
+
+nav_env = ui_env.Clone()
+nav_env.Append(LIBS=['planner_utils'])
+nav_env.Prepend(LIBS=['planner_utils'])
+navigation_objects = nav_env.Object(Glob('*.cpp'))
+
+navigation_ui = nav_env.Program('navigation_interface', [navigation_objects])
+
+nav_env.Alias('navigation_interface', '#src/ui/navigation/navigation_interface')
+nav_env.Install(BUILD_BIN_DIR, navigation_ui)

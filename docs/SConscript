@@ -1,0 +1,8 @@
+Import('*')
+
+default_env.PDF('evaluation_tools.tex')
+default_env.PDF('hssh_software_requirements.tex')
+default_env.PDF('interfacing_with_hssh.tex')
+default_env.PDF('local_topo_map_exploration.tex')
+default_env.PDF('vulcan_lcm_interface.tex')
+default_env.PDF('vulcan_software_guide.tex')

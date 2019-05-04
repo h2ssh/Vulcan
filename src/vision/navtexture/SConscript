@@ -1,0 +1,32 @@
+Import('*')
+
+navtexture_env = default_env.Clone()
+navtexture_env.ParseConfig('pkg-config --libs --cflags opencv')
+navtexture_env.Append(CPPFLAGS = ['-funroll-loops'],
+                      LIBS = ['svm'])
+
+navtexture_objects = navtexture_env.Object(Glob('*.cpp'))
+
+vision_objects = navtexture_env.Object(['#src/vision/image_segmenter.cpp',
+                                       '#src/vision/felzenszwalb_segmenter.cpp',
+                                       '#src/vision/graph_based_segmenter.cpp',
+                                       '#src/vision/pixel_histograms.cpp',
+                                       '#src/vision/spin_image.cpp',
+                                       '#src/vision/vision_params.cpp',
+                                       '#src/vision/wassenberg_segmenter.cpp'])
+
+nav_image_object = navtexture_env.Object('navimage.o', '#src/vision/image.cpp')
+nav_image_utils_object = navtexture_env.Object('navimageutils.o', '#src/vision/image_utils.cpp')
+nav_dist_object  = navtexture_env.Object('navdist.o', '#src/vision/distortion.cpp')
+nav_homo_object  = navtexture_env.Object('navhomo.o', '#src/vision/homography.cpp')
+
+laser_objects = navtexture_env.Object('navlaser.o', ['#src/laser/laser_scan.cpp'])
+
+
+navtexture_env.Program('navtexture', [laser_objects,
+                                      navtexture_objects,
+                                      vision_objects,
+                                      nav_image_object,
+                                      nav_image_utils_object,
+                                      nav_dist_object,
+                                      nav_homo_object])

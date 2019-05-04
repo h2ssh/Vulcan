@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd build/bin
+./debug_ui debug_ui.cfg

@@ -1,0 +1,11 @@
+package vulcan_lcm;
+
+/*
+* vector_t is a vector of float values.
+*/
+struct vector_t
+{
+    int16_t length;
+
+    double vector[length];
+}

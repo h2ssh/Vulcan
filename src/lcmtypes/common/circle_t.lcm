@@ -1,0 +1,7 @@
+package vulcan_lcm;
+
+struct circle_t
+{
+    point_t center;
+    float   radius;
+}

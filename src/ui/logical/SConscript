@@ -1,0 +1,18 @@
+Import('*')
+
+logical_objects = ui_env.Object(Glob('*.cpp'))
+
+cartesian_laser_object = ui_env.Object('cartesian_laser_obj', '#src/laser/laser_scan.cpp')
+image_object           = ui_env.Object('image_obj',           '#src/vision/image.cpp')
+
+planner_display_object = ui_env.Object('#src/ui/debug/goal_planner_display_widget.cpp')
+
+ui_env.Prepend(LIBS=['vulcan_ui_components', 'vulcan_ui_common'])
+
+logical_interface_ui = ui_env.Program('logical_interface_ui', [logical_objects,
+                                                               planner_display_object,
+                                                               cartesian_laser_object,
+                                                               image_object])
+
+ui_env.Alias('logical_interface_ui', '#src/ui/logical/logical_interface_ui')
+ui_env.Install(BUILD_BIN_DIR, logical_interface_ui)

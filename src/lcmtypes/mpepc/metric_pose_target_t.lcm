@@ -1,0 +1,12 @@
+package vulcan_lcm;
+
+struct metric_pose_target_t
+{
+    int64_t id;
+
+    float x;
+    float y;
+    float theta;
+
+    int8_t is_position;
+}

@@ -1,0 +1,23 @@
+Import('*')
+
+data_objects = lib_env.StaticObject(['local_topo/exploration_map.cpp',
+                                     'local_topo/target_impl.cpp'])
+
+data_lib = lib_env.Library(target = 'exploration_data', source = [data_objects])
+lib_env.Install(BUILD_LIB_DIR, data_lib)
+
+explore_env = mod_env.Clone()
+explore_env.Prepend(LIBS=['exploration_data',
+                          'local_topo_hssh_data',
+                          'planner_utils',
+                          'metric_planner_data',
+                          'object_tracker_data',
+                          'local_topo_hssh_data',
+                          'local_metric_hssh_data',
+                          'hssh_utils'])
+
+map_exploration = explore_env.Program('map_exploration', [Glob('*.cpp'),
+                                                          'local_topo/local_topo_explorer.cpp'])
+
+explore_env.Alias('map_exploration', '#src/planner/exploration/map_exploration')
+explore_env.Install(BUILD_BIN_DIR, map_exploration)

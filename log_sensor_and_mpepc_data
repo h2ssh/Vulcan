@@ -1,0 +1,4 @@
+#!/bin/bash
+
+lcm-logger -c '^SENSOR_.*|MPEPC_.*|ROBOT_MOTION_STATE' $1
+

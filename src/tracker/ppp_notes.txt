@@ -1,0 +1,53 @@
+High-level tracking:
+
+Match laser ray clusters to existing tracking objects
+Create new tracking objects for unmatched clusters
+Remove old objects that haven't been seen in awhile
+Create a dynamic object for each of the remaining tracking objects
+
+
+Tracking director:
+
+Inputs:
+- LPM
+- polar_laser_scan_t
+- motion_state_t
+
+Outputs:
+- DynamicObjectCollection (system)
+- LaserObjectCollection   (debug)
+
+Trigger when:
+- The scan at the front of the queue has a pose before and after it in the trace, thus the position of the scan can
+  be interpolated correctly
+
+runUpdate:
+
+Pass current scan, pose, LPM to the ObjectDetector
+Pass the LaserObjectCollection to the ObjectTracker
+Send out the DynamicObjectCollection
+
+
+Object detection:
+
+Identify the cells that fall in free space or on dynamic cells
+Cluster these cells
+Add each cluster into a laser object collection
+
+
+Object tracking:
+
+Match the laser objects to currently tracked objects
+Create new tracked objects for each unmatched object
+Erase all old tracked objects
+Create a DynamicObjectCollection from all remaining tracked objects
+
+
+Object boundary:
+
+Contains three different estimates of the boundary (for now at least)
+Has a center position
+Can be updated
+    - the new boundary is used
+    - or some other approach determines what the boundary should be
+

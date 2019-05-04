@@ -1,0 +1,12 @@
+package vulcan_lcm;
+
+struct pose_distribution_t
+{
+    int64_t timestamp;
+
+    float x;
+    float y;
+    float theta;
+
+    gaussian_distribution_t uncertainty;
+}

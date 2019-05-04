@@ -1,0 +1,9 @@
+package vulcan_lcm;
+
+struct rectangle_t
+{
+    point_t bottom_left;
+    point_t bottom_right;
+    point_t top_left;
+    point_t top_right;
+}

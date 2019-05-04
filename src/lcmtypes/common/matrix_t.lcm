@@ -1,0 +1,12 @@
+package vulcan_lcm;
+
+/**
+* matrix_t is just that, a matrix of floats.
+*/
+struct matrix_t
+{
+    int16_t num_rows;
+    int16_t num_columns;
+
+    double matrix[num_rows][num_columns];
+}

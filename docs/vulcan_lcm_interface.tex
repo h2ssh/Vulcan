@@ -1,0 +1,284 @@
+\documentclass{article}
+
+\usepackage[top=1in,left=1in,right=1in,bottom=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\setlist[description]{leftmargin=2\parindent,labelindent=2\parindent} % description is used for fields, indent to 
+                                                                    % it easier to identify them
+
+\title{Vulcan LCM Message Interface}
+\author{Collin Johnson}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+This document describes the LCM interface for controlling Vulcan. The messages are divided into categories based on the 
+module they interact with.
+
+Note that the LCM interface is a subset of the full Vulcan functionality, but allows for interoperability between 
+different programming languages.
+
+\section{Local Metric HSSH Commands}
+
+\subsection{Inputs:}
+
+\subsubsection{save\_lpm\_command}
+
+Tell the local\_metric\_hssh module to save the current LPM it has constructed to a file.
+
+\paragraph{Channel:} 
+
+SAVE\_LPM
+
+\paragraph{Fields:}
+
+\begin{description}
+ \item[filename:] The filename to save the LPM to.
+\end{description}
+
+
+\paragraph{Effects:}
+
+\begin{itemize}
+  \item An LPM will be saved in a file with the provided filename. This LPM is saved in the LPM's internal file format, 
+which is based on the cereal serialization library. The file can only be read from a C++ program.
+\end{itemize}
+
+
+\paragraph{Errors:}
+
+\begin{itemize}
+  \item If the file cannot be created, then no map will be saved. A message will be output to the local\_metric\_hssh 
+console indicating the failure.
+\end{itemize}
+
+
+\subsubsection{load\_lpm\_command}
+
+Tell the local\_metric\_hssh module to load an LPM and attempt to relocalize within it. A guess at the position of the 
+robot in the LPM must be provided to assist in relocalizing in the map.
+
+A quirk with the current relocalization approach requires the robot to be moving slowly to help it relocalize. After 
+sending the command, drive the wheelchair slowly and it should relocalize.
+
+Relocalization is typically very fast as long as initial position estimate is good and clutter in the environment hasn't 
+changed much since the LPM being loaded was saved. Relocalization will occasionally fail by using the wrong 
+orientation. Currently, the only way to see if a failure has occurred is to look at the robot pose estimate in the 
+DebugUI. If relocalization fails, just try sending the message again. Relocalization is almost always succeeded within 
+two or three attempts.
+
+\paragraph{Channel:} 
+
+LOAD\_LPM
+
+\paragraph{Fields:}
+
+\begin{description}
+ \item[filename:] Filename containing the LPM to load.
+ \item[initial\_x:] x-position of center of region in which robot is located in the LPM being loaded.
+ \item[initial\_y:] y-position of center of region in which robot is located in the LPM being loaded.
+\end{description}
+
+
+\paragraph{Effects:}
+
+\begin{itemize}
+  \item An LPM will be loaded from a file with the provided filename. This file must have been saved in the LPM 
+file format, which is always true if saved via save\_lpm\_command.
+  \item The robot will begin attempting to relocalize in the LPM specified in the command. The relocalization guess 
+will be a square with side length 2m centered at (initial\_x, initial\_y).
+  \item After a successful relocalization, the robot will begin using the loaded LPM for local SLAM or localization.
+\end{itemize}
+
+\paragraph{Errors:}
+
+\begin{itemize}
+  \item If the LPM file cannot be opened, then relocalization will not be attempted. The only way to detect this 
+failure is to look at the console running the local\_metric\_hssh module.
+  \item Relocalization can fail if:
+    \begin{itemize}
+      \item the environment is ambiguous.
+      \item the environment doesn't sufficiently match the saved LPM due to clutter.
+      \item the particle filter has bad luck sampling the correct pose.
+      \item the initial position guess is too far from the robot's actual position.
+    \end{itemize}
+      
+  \item Relocalization failure is easiest to see in the DebugUI, where the robot will not be facing the correct 
+direction in the map
+\end{itemize}
+
+
+\subsection{Outputs:}
+
+\subsubsection{robot\_pose\_t}
+
+Sent every time the localization is updated in local\_metric\_hssh. The pose is the current $(x,y,\theta)$ estimate of 
+the robot's location in the LPM.
+
+\paragraph{Channel:} 
+
+ROBOT\_POSE
+
+\paragraph{Fields:}
+
+\begin{description}
+    \item[timestamp:] Time at which this pose estimate was calculated.
+    \item[x:] x-position of the robot in the LPM's frame of reference.
+    \item[y:] y-position of the robot in the LPM's frame of reference.
+    \item[theta:] orientation of the robot in the LPM's frame of reference.
+\end{description}
+
+\paragraph{Effects:}
+N/A
+
+\paragraph{Errors:}
+N/A
+
+\section{Metric Planner Interface}
+
+\subsection{Inputs:}
+
+\subsubsection{metric\_pose\_target\_t}
+
+Tell the metric\_planner module to drive to the specified pose $(x,y,\theta)$ or position $(x,y)$.
+
+There's also a simple program that is installed in the bin/ folder to test sending the message. In build/bin/ you can 
+run:
+
+\begin{verbatim}
+  ./metric\_pose\_target\_test x y theta
+\end{verbatim}
+
+to command the robot to drive to $(x,y,\theta)$. The $\theta$ is optional. If you don't provide it, then a position 
+target will be sent.
+
+\paragraph{Channel:}
+
+METRIC\_POSE\_TARGET
+
+\paragraph{Fields:}
+
+\begin{description}
+  \item[id:] Unique identifier for the target to identify the target in status messages
+  \item[x:] x-position to drive to in current LPM.
+  \item[y:] y-position to drive to in current LPM.
+  \item[theta:] desired orientation of the robot at the $(x,y)$ target (only if not a position target).
+  \item[is\_position:] Flag indicating if it only matters if the robot drives to a position $(x,y)$ rather than a 
+pose $(x, y, \theta)$. If $is_position = 1$, the robot will just drive to $(x,y)$ as efficiently as possible, rather 
+than trying to also reach the target orientation
+\end{description}
+
+\paragraph{Effects:}
+
+\begin{itemize}
+  \item The robot will begin planning and navigating a trajectory to the specified target position or pose.
+  \item Once planning begins, metric\_pose\_target\_status\_t messages will be sent for each update of the planner.
+  \item This command will override any existing commands being executed by the metric\_planner.
+\end{itemize}
+
+\paragraph{Errors:}
+
+\begin{itemize}
+  \item If the desired target cannot be safely reached by the robot, then it will fail to get there. The exact cause of 
+an execution failure will be reported in a metric\_pose\_target\_status\_t message.
+\end{itemize}
+
+
+\subsection{Outputs:}
+
+\subsubsection{metric\_pose\_target\_status\_t}
+
+Sent every time the metric\_planner is updated while planning and driving a route to a metric\_pose\_target\_t.
+
+\paragraph{Channel:} 
+
+METRIC\_POSE\_TARGET\_STATUS
+
+\paragraph{Fields:}
+
+\begin{description}
+    \item[timestamp:] Time at which the message was generated.
+    \item[target\_id:] Target for which this status applies.
+    \item[status:] Status of the planner in reaching the target, see below constants for possible values.
+\end{description}
+
+\hfill
+\\
+The status is an enumerated value providing information on the state of execution for the planner.
+\begin{description}
+    \item[IDLE:] The robot doesn't currently have a task.
+    \item[IN\_PROGRESS:] The robot is currently driving towards the target
+    \item[REACHED\_TARGET:] The robot reached the target it was driving to.
+    \item[FAILED\_CANNOT\_ASSIGN\_TARGET:] The robot cannot go to the target because it is too close to a wall or the 
+target is in a never-been-visited part of the map.
+    \item[FAILED\_ROBOT\_IS\_STUCK:] The robot cannot move for some reason.
+    \item[FAILED\_CANNOT\_FIND\_SOLUTION:] No path to the target exists.
+\end{description}
+
+\paragraph{Effects:}
+N/A
+
+\paragraph{Errors:}
+N/A
+
+\section{Control Planner Commands}
+
+\subsection{Inputs:}
+
+\subsubsection{direct\_control\_command}
+
+Command the control\_planner to drive using a simple set of commands:
+
+\begin{description}
+  \item[Stop:] Robot will stop where it is
+  \item[Go straight:] The robot sets a target 3m in front of it and starts driving there. When it gets within 1m, it 
+sets a new target 3m in front of it, this repeats until it can't move forward anymore. The behavior is a little finicky 
+if lots of clutter is around, but works well enough in a hallway. The robot will only drive to within 0.5m of a wall 
+before stopping.
+  \item[Turn left/right:] The robot will attempt to turn around. If the robot isn't able to turn-in-place, it will arc 
+away from the nearest obstacle until it can turn-in-place. This means the wheelchair might drive forward a little before 
+actually starting to turn. The robot motion can be a little slow and jerky when turning in place.
+\end{description}
+
+
+You can test the different motions using the \emph{keyboard\_control} program in build/bin. When you start it, it will 
+give the keys to use. Just enter the appropriate letter, hit enter, and it will send the direct\_control\_command to 
+the control\_planner.
+
+\paragraph{Channel:}
+
+DIRECT\_CONTROL\_COMMAND
+
+\paragraph{Fields:}
+
+\begin{description}
+ \item[timestamp:] Used for diagnostics, but doesn't affect handling of the command.
+ \item[source:] Informational data providing the source of the command message. The control\_planner outputs the 
+source of the message, but doesn't otherwise use it.
+  \item[command:] you know what to do with this one.
+  \item[speed:] Specify the desired speed at which to execute the command. If driving forward, it is the meters per 
+second to drive. If rotating, it is the radians per second to turn. This option isn't currently supported in MPEPC, so 
+it doesn't do anything
+\end{description}
+
+\paragraph{Effects:}
+
+\begin{itemize}
+  \item The robot will attempt to execute the specified command using the behavior described above. As long as the 
+robot can safely perform the requested motion, it will do so.
+  \item This command will override any existing commands being executed by the metric\_planner.
+\end{itemize}
+
+\paragraph{Errors:}
+
+\begin{itemize}
+ \item If the robot isn't able to execute the specified command, then it won't move. Not moving is not necessarily 
+indicative of failure, it just means the robot cannot safely execute the command.
+\end{itemize}
+
+\end{document}

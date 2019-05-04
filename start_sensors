@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd build/bin
+xterm -e ./laser_scan_producer --config-file front_laser_scan_producer.cfg &
+xterm -e ./laser_scan_producer --config-file back_laser_scan_producer.cfg &
+xterm -e ./imu_data_producer --port /dev/ttyACM0 &
+xterm -e ./robot_interface --config-file robot_interface.cfg &

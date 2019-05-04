@@ -1,0 +1,95 @@
+Import('*')
+
+globaltopo_env = default_env.Clone()
+globaltopo_env.Prepend(LIBS = ['levmar', 'lapack', 'blas'])
+
+data_objects = lib_env.StaticObject(['area.cpp',
+                                     'chi.cpp',
+                                     'global_place.cpp',
+                                     'graph.cpp',
+                                     'global_location.cpp',
+                                     'global_path.cpp',
+                                     'global_path_segment.cpp',
+                                     'topological_map.cpp',
+                                     'transition.cpp',
+                                     'transition_cycle.cpp',
+                                     'transition_sequence.cpp',
+                                     'utils/local_to_global.cpp',
+                                     'utils/visit.cpp',
+                                     ])
+
+debug_objects = lib_env.StaticObject(['mapping/tree_of_maps.cpp',
+                                      'utils/metric_map_cache.cpp',
+                                      ])
+
+func_objects = globaltopo_env.Object(['topo_slam.cpp',
+                                      'localization/localizer.cpp',
+                                      'localization/location_distribution.cpp',
+                                      'localization/utils.cpp',
+                                      'mapping/generator_queue.cpp',
+                                      'mapping/generator_queue_impl.cpp',
+                                      'mapping/hypothesis_generator.cpp',
+                                      'mapping/hypothesis_generator_factory_impl.cpp',
+                                      'mapping/lazy_generator.cpp',
+                                      'mapping/lev_mar_optimizer.cpp',
+                                      'mapping/loop_closures.cpp',
+                                      'mapping/map_optimizer.cpp',
+                                      'mapping/probability_evaluator.cpp',
+                                      'mapping/probability_heuristics.cpp',
+                                      'mapping/likelihood_evaluator.cpp',
+                                      'mapping/likelihood_evaluator_impl.cpp',
+                                      'mapping/prior_evaluator.cpp',
+                                      'mapping/prior_evaluator_impl.cpp',
+                                      'utils/event_log_runner.cpp',
+                                      'utils/visit_sequence.cpp',
+                                      Glob('commands/*.cpp'),
+                                      ])
+
+
+data_lib  = lib_env.Library(target = 'global_topo_hssh_data',  source = [data_objects])
+debug_lib = lib_env.Library(target = 'global_topo_hssh_debug', source = [debug_objects])
+func_lib = lib_env.Library(target = 'global_topo_hssh_func', source = [func_objects])
+
+lib_env.Install(BUILD_LIB_DIR, data_lib)
+lib_env.Install(BUILD_LIB_DIR, debug_lib)
+lib_env.Install(BUILD_LIB_DIR, func_lib)
+
+app_objects = globaltopo_env.Object(['director.cpp',
+                                     'main.cpp',
+                                     'params.cpp',
+                                     'utils/global_topo_data_queue.cpp',
+                                     ])
+
+globaltopo_env = mod_env.Clone()
+
+globaltopo_env.Prepend(LIBS=['global_topo_hssh_func',
+                             'global_topo_hssh_debug',
+                             'global_topo_hssh_data',
+                             'local_topo_hssh_debug',
+                             'local_topo_hssh_data',
+                             'global_metric_hssh_data',
+                             'local_metric_hssh_data',
+                             'hssh_utils',
+                             ])
+
+global_topo_hssh = globaltopo_env.Program('global_topo_hssh', [app_objects])
+
+globaltopo_env.Alias('global_topo_hssh', '#src/hssh/global_topo_hssh')
+
+default_env.Install(BUILD_BIN_DIR, global_topo_hssh)
+
+default_env.Install(BUILD_BIN_DIR, 'evaluation/plot_expanded.plt')
+default_env.Install(BUILD_BIN_DIR, 'evaluation/plot_leaves.plt')
+default_env.Install(BUILD_BIN_DIR, 'evaluation/plot_time.plt')
+
+
+if int(test):
+    gt_test_env = test_env.Clone()
+    gt_test_env.Prepend(LIBS=['global_topo_hssh_debug',
+                              'global_topo_hssh_data',
+                              'local_topo_hssh_data',
+                              'local_metric_hssh_data',
+                              'hssh_utils',
+                              ])
+    gt_test_env.Program('global_topo_hssh_unit_tests', [Glob('tests/*.cpp')])
+

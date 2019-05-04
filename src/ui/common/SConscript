@@ -1,0 +1,7 @@
+Import('*')
+
+common_objects = ui_env.Object(Glob('*.cpp'))
+
+common_lib = ui_env.Library(target = 'vulcan_ui_common', source = [common_objects])
+
+ui_env.Install(BUILD_LIB_DIR, common_lib)

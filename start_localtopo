@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd src/hssh/local_topological
+./local_topo_hssh --config-file ../../config/vulcan/local_topo_hssh.cfg

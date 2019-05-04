@@ -1,0 +1,8 @@
+Import('*')
+
+debug_objects = ui_env.Object(Glob('*.cpp'))
+
+debug_ui = ui_env.Program('debug_ui', [debug_objects])
+
+ui_env.Alias('debug_ui', '#src/ui/debug/debug_ui')
+ui_env.Install(BUILD_BIN_DIR, debug_ui)

@@ -1,0 +1,12 @@
+Import('*')
+
+SConscript(['control/SConscript',
+            'interface/SConscript',
+            'exploration/SConscript',
+            ])
+            #'decision/SConscript',
+            #'goal/SConscript'])
+            
+planner_utils_objects = lib_env.StaticObject(Glob('utils/*.cpp'))
+planner_utils_lib = lib_env.Library(target = 'planner_utils', source = [planner_utils_objects])
+lib_env.Install(BUILD_LIB_DIR, planner_utils_lib)

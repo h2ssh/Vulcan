@@ -1,0 +1,6 @@
+Import('*')
+
+calib_objects = default_env.Object(Glob('*.cpp'))
+calib_lib     = default_env.Library(target = 'vulcan_laser_calib', source = calib_objects)
+
+default_env.Install(BUILD_LIB_DIR, calib_lib)

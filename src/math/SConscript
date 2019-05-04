@@ -1,0 +1,16 @@
+Import('*')
+
+SConscript(['geometry/SConscript'])
+
+math_env = default_env.Clone()
+
+math_objects    = math_env.Object(Glob('*.cpp'))
+graph_objects   = math_env.Object(Glob('graph/*.cpp'))
+geometry_object = math_env.Object(Glob('geometry/*.cpp'))
+math_lib        = math_env.Library(target = 'vulcan_math', source = [math_objects, graph_objects, geometry_object])
+
+math_env.Install(BUILD_LIB_DIR, math_lib)
+
+if int(test):
+    zernike_test = math_env.Program(target = 'tests/zernike_test', source = ['tests/zernike_test.cpp'])
+    test_env.Program('dbscan_test', ['tests/dbscan_test.cpp'])

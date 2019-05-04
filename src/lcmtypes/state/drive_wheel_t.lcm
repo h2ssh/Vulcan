@@ -1,0 +1,8 @@
+package vulcan_lcm;
+
+struct drive_wheel_t
+{
+    int64_t timestamp;
+    float   speed;
+    float   motor_accel;
+}

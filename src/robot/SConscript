@@ -1,0 +1,44 @@
+Import('*')
+
+#SConscript(['remote_controller/SConscript'])
+SConscript(['state/SConscript'])
+
+model_objects = default_env.Object([Glob('model/*.cpp')])
+
+robot_lib = default_env.Library(target = 'vulcan_robot', source = [model_objects])
+default_env.Install(BUILD_LIB_DIR, robot_lib)
+
+
+control_env = default_env.Clone()
+
+control_env.Append(LIBS=['pcan','phidget21'])
+
+robot_control_objects = control_env.Object(['motion_checker.cpp',
+                                            'motion_command_filter.cpp',
+                                            'proximity_checker.cpp',
+                                            'main.cpp',
+                                            'director.cpp',
+                                            'params.cpp'])
+
+wheelchair_driver_objects = control_env.Object(['quantum_6000.cpp',
+                                                'invacare_atm.cpp',
+                                                'wheelchair.cpp'])
+
+gx2_object = control_env.Object(target = 'gx2.o', source = '#src/sensors/microstrain_3dmgx2.cpp')
+gx3_object = control_env.Object(target = 'gx3.o', source = '#src/sensors/microstrain_3dmgx3.cpp')
+
+control_env.Program('quantum_6000_test', ['quantum_6000_test.cpp', wheelchair_driver_objects])
+control_env.Program('quantum_6000_parameter_estimator', ['quantum_6000_parameter_estimator.cpp',
+                                                          wheelchair_driver_objects,
+                                                          gx2_object])
+
+control_env.Program('invacare_atm_parameter_estimator', ['invacare_atm_parameter_estimator.cpp',
+                                                          wheelchair_driver_objects,
+                                                         gx3_object])
+stop_test = mod_env.Program('stop_test_results', ['stop_test_results.cpp'])
+
+robot_interface = control_env.Program('robot_interface', [robot_control_objects, wheelchair_driver_objects])
+
+control_env.Alias('robot_interface', '#src/robot/robot_interface')
+control_env.Install(BUILD_BIN_DIR, robot_interface)
+mod_env.Install(BUILD_BIN_DIR, stop_test)

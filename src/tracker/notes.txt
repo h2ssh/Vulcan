@@ -1,0 +1,26 @@
+------------- Deciding when to throw away objects ------------------------
+
+The current system for deciding if an object should remain in the map or not is determined by a simple timeout. If an 
+object isn't seen for a fixed amount of time, then the object is removed from the set of tracked objects. This 
+condition isn't satisfying though because an object like a door, which when closed transitions back into being a wall, 
+shouldn't be erased as there is no evidence that it isn't there. In fact, there's great evidence that it \emph{is} 
+there. Namely, laser scans smacking into it.
+
+If laser scans are passing through an object, that's a good sign that it isn't there anymore. An occluded object will 
+simply not be seen, but an erroneous object that is no longer there would have laser rays passing through it.
+
+For the objects that aren't observed on the current update, intersection with the current laser scan can be performed. 
+If enough rays intersect it, then that's evidence that it isn't there.
+
+
+--------------------- Reloading state for a DynamicObject ----------------------
+
+Some method for saving the tracking state of fixed objects to a file needs to be created. Fixed objects are part of the 
+model of the environment, and as such, should be reloaded when opening a new map. Perhaps the map + fixed objects + 
+quasi-static object info (long-term comparisons of LPMs) belong in a single LocalEnvironment? These can be constructed 
+on-the-fly in response to various events that occur in the local or global topological map. If the global topological 
+reports entering the same area as a previous visit, the environment_manager (?) can load the old map and create the 
+appropriate relocalization message while also merging the constructed LPM into the LocalEnvironment's OccupanyGrid (or 
+perhaps EvidenceGrid, though it wouldn't quite work as an evidence grid unless all the observations get stored..hmmm..) 
+
+

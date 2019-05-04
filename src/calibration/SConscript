@@ -1,0 +1,36 @@
+Import('*')
+
+control_env = default_env.Clone()
+
+control_env.Append(LIBS=['pcan','phidget21'])
+
+wheelchair_driver_objects = control_env.Object(['#src/robot/quantum_6000.cpp',
+                                                '#src/robot/invacare_atm.cpp',
+                                                '#src/robot/wheelchair.cpp'])
+
+encoder_objects = control_env.Object(['#src/sensors/wheel_encoders.cpp',
+                                      '#src/sensors/wheel_encoders_params.cpp',
+                                      '#src/sensors/phidget_encoder_board.cpp',
+                                      '#src/sensors/remote_encoders.cpp'])
+
+can_env = default_env.Clone()
+can_env.Append(LIBS=['pcan','phidget21'])
+
+gx2_object = can_env.Object(target = 'gx2.o', source = '#src/sensors/microstrain_3dmgx2.cpp')
+
+can_env.Program('quantum_6000_calibration_maneuvers', 'quantum_6000/quantum_6000_calibration_maneuvers.cpp')
+#can_env.Program('quantum_6000_calibration_step_ramp', 'quantum_6000/quantum_6000_calibration_step_ramp.cpp')
+
+can_env.Program('quantum_6000_calibration_maneuvers_no_encoders', ['quantum_6000/quantum_6000_calibration_maneuvers_no_encoders.cpp',
+                                                                    wheelchair_driver_objects,
+                                                                    gx2_object])
+can_env.Program('quantum_6000_calibration_maneuvers_with_encoders', ['quantum_6000/quantum_6000_calibration_maneuvers_with_encoders.cpp',
+                                                                      wheelchair_driver_objects,
+                                                                      encoder_objects,
+                                                                      gx2_object])
+can_env.Program('log_joystick_with_encoders', ['quantum_6000/log_joystick_with_encoders.cpp',
+                                                wheelchair_driver_objects,
+                                                encoder_objects,
+                                                gx2_object])
+
+SConscript(['laser/SConscript'])

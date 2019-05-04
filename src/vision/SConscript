@@ -1,0 +1,27 @@
+Import('*')
+
+#SConscript(['groundplane/SConscript',
+#            'navtexture/SConscript'])
+
+#hom_env = default_env.Clone()
+#hom_env.Prepend(LIBS=['homest', 'levmar'])
+#hom_env.ParseConfig('pkg-config --libs --cflags opencv')
+
+#hom_env.Program('find_homography', ['distortion.cpp',
+#                                    'find_homography.cpp',
+#                                    'homography.cpp'])
+
+vision_objects = default_env.Object(['image_utils.cpp',
+                                     'felzenszwalb_segmenter.cpp',
+                                     'graph_based_segmenter.cpp',
+                                     'wassenberg_segmenter.cpp',
+                                     'image_segmenter.cpp',
+                                     'vision_params.cpp'])
+
+vision_lib     = default_env.Library(target = 'vulcan_vision', source = vision_objects)
+
+default_env.Install(BUILD_LIB_DIR, vision_lib)
+
+image_stream_logger = default_env.Program('image_stream_logger', ['image_stream_logger.cpp',
+                                                                  vision_objects])
+default_env.Install(BUILD_BIN_DIR, image_stream_logger)

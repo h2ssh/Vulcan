@@ -1,0 +1,35 @@
+# Use the LCM builder to build all the .lcm files in this directory using a blob,
+# compile those into a library, and install in the build directory
+
+
+Import('*')
+
+if int(lcm):
+    # Make the LCM files
+    lcm_files = Glob('*/*.lcm', strings=1) + Glob('*.lcm', strings=1)
+    #lcm_files   = Glob('*/*.lcm')
+    #lcm_headers = Glob('*/*.h')
+
+    lcm_gen_output = lcm_files
+
+    bld = Builder(action = 'lcm-gen -c --c-cpath src/lcmtypes --c-hpath src/lcmtypes -x --cpp-hpath src/lcmtypes -j --jpath src/lcmtypes/java/ $SOURCE')
+    default_env.Append(BUILDERS = {'Lcm' : bld})
+
+    i = 0
+    for file in lcm_files:
+        lcm_gen_output[i] = default_env.Lcm(file)
+        i += 1
+else:
+
+    # Create a library with all the LCM types
+    lcm_objects = default_env.Object(Glob('*.c') + Glob('*/*.cpp') + Glob('*.cpp'))
+    lcm_lib     = default_env.Library(target = 'vulcan_lcm', source = lcm_objects)
+
+    default_env.Alias('lcm', lcm_lib)
+    default_env.Install(BUILD_LIB_DIR, lcm_lib)
+
+    java_env = default_env.Clone()
+    java_env.Append(JAVACLASSPATH = ['/usr/local/share/java/lcm.jar'])
+
+    java_env.Java(target = '.', source = 'java')
+    lcm_java_lib = java_env.Jar(target = 'lcmtypes.jar', source = Glob('vulcan_lcm/*.class'))

@@ -1,0 +1,15 @@
+package vulcan_lcm;
+
+/*
+* command_result provides feedback on the success or failure of a particular command. A result is provided for each
+* received command.
+*/
+struct command_result
+{
+    const int32_t SUCCESS = 0;
+    const int32_t FAILURE = 1;
+
+    int32_t id;         // Id of the command this result pertains to
+    int32_t result;     // Result of executing the command
+    string message;     // Message describing in more detail the reason for failures
+}

@@ -1,0 +1,264 @@
+\documentclass{article}
+
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+
+\title{Vulcan Software Guide}
+\author{Collin Johnson}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+\section{Build System}
+
+The Vulcan code uses SCons (http://scons.org/) for its build system.  The build system works just like any other 
+hierarchical build system. In the root directory of the Vulcan project is a SConstruct file that sets up the build 
+environment for the subdirectories in the project. Each subdirectory in the src/ folder has a SConscript file that 
+handles the building for the utilities and modules that comprise the overall Vulcan project.
+
+The SConstruct provides four environments for building:
+
+\begin{itemize}
+ \item \textbf{lib\_env}     : Used for building static libraries that will be used for building processes and module.
+ \item \textbf{process\_env} : Used for building utility programs.
+ \item \textbf{mod\_env}     : Used for building modules.
+ \item \textbf{test\_env}    : Used for building unit tests with the Google Test library.
+\end{itemize}
+
+\textbf{process\_env} automatically links in the utils, math, and robot libraries which contain commonly used objects 
+and functions, like angle calculations, shapes, poses, points, lines, and config files.
+
+\textbf{test\_env} contains everything in \textbf{process\_env} and additionally links in the necessary libraries to 
+support unit testing with Google Test. It includes -lgtest\_main, so a main.cpp isn't needed with a unit test program. 
+This is described further in the Google Test documentation.
+
+\textbf{mod\_env} extends the \textbf{process\_env} environment with the system and communication libraries.
+
+Each module should create static libraries for help in building the code that interacts with other modules. The 
+potential libraries to create are:
+
+\begin{enumerate}
+ \item A data library named \emph{module\_data} that contains all data types needed by other modules to function. For 
+  example, the local\_metric\_hssh module outputs a LocalPose and LocalPerceptualMap to the other modules, so those are 
+  the types included in its data library. Modules that use the LPM, like metric\_planner only need to link against 
+  local\_metric\_hssh\_data to compile.
+  
+ \item A debug data library named \emph{module\_debug} that contains additional debugging outputs that aren't needed for 
+  system functionality, just for debugging in the UI or testing programs.
+  
+ \item A functionality library named \emph{module\_func} that contains the additional code necessary for actually 
+  running the processing that occurs inside the module. For example, if you want to calculate the isovists in the 
+  \textsc{local\_topo\_hssh} in the DebugUI, you can link against   \emph{local\_topo\_hssh\_func} and that'll work. 
+  This library is optional. If you want to test some things via the   DebugUI, then push those pieces into a func 
+  library.
+\end{enumerate}
+
+Given these three libraries, building a module only requires compiling any remaining glue code, like data queues and the 
+director, and linking them against these libraries. The DebugUI will needed to link with the data and debug libraries. 
+Other modules should only need to link against the data library.
+
+The reason for building in this fashion is that there are necessary interconnections between the modules. Finding a good 
+level of granularity between the modules during the build process helps minimize the build time when changes are made.
+
+\subsection{Static Library Dependencies}
+Static libraries are just clumps of aggregated object files produced by the compiler. There is no linker step in their 
+creation, any undefined symbols required in the object file must exist in another library or object file when a program 
+is linked. In GCC, the order of static libraries matters for finding symbols. If library 'Foo' requires definition of a 
+symbol 'bar', then 'bar' must be defined in a library that comes \emph{after} 'Foo' in the command-line arguments passed 
+to GCC, i.e. if library 'Baz' defines 'bar', then the command-line for building test.cpp would be:
+
+\begin{verbatim}
+  g++ -o test test.cpp -lFoo -lBaz
+\end{verbatim}
+
+switching the order of Foo and Bar would result in an undefined reference linker error.
+
+If there are circular dependencies between two static libraries, the code won't compile. They either need to be combined 
+into a single library or refactored in some other way.
+
+Great, so how does this apply to building modules and code with Vulcan and SCons? It's pretty simple. First, the 
+\emph{module\_data}, \emph{module\_debug}, and \emph{module\_func} libraries must be a simple linear hierarchy of 
+dependencies. Func can depend on Debug and Data. Debug can only depend on Data, but not Func. Data can't depend on 
+either. Using this rule, when creating the environment for building, prepend the libraries needed by the module. The 
+lowest-level Vulcan libraries are included by default. These libraries -- utils, math, robot, csp -- don't have 
+dependencies on any other code, whereas most code uses at least something from one of these classes. By prepending, all 
+the undefined symbols from high-level libraries will be correctly defined in the lowest-level libraries.
+
+To take an example, the build process for \textsc{local\_topo\_hssh} uses the following static libraries and 
+environments for building the module:
+
+\begin{verbatim}
+
+data_lib  = lib_env.Library(target = 'local_topo_hssh_data',  source = [data_objects])
+debug_lib = lib_env.Library(target = 'local_topo_hssh_debug', source = [debug_objects])
+func_lib  = lib_env.Library(target = 'local_topo_hssh_func',  source = [func_objects])
+
+event_objects = mod_env.Object([Glob('events/*.cpp'),
+                                'event_detector.cpp'])
+
+app_objects = mod_env.Object(['director.cpp',
+                              'main.cpp'])
+
+localtopo_env = mod_env.Clone()
+
+localtopo_env.Prepend(LIBS=['local_topo_hssh_func', 
+                            'global_topo_hssh_data', 
+                            'local_topo_hssh_debug', 
+                            'local_topo_hssh_data', 
+                            'local_metric_hssh_data', 
+                            'hssh_utils'])
+                            
+local_topo_hssh = localtopo_env.Program('local_topo_hssh', [event_objects,
+                                                            app_objects])
+ 
+\end{verbatim}
+
+\textsc{local\_topo\_hssh} uses all three libraries because the map editing tools need the full area segmentation code. 
+The libraries are built first. Following this, an environment is cloned from the \emph{mod\_env} to add the specific 
+libraries for \textsc{local\_topo\_hssh}. The libraries are prepended to the environment from highest-level to 
+lowest-level. Ensuring the dependencies form a DAG makes specifying the order quite simple.
+
+Each of the three libraries can then be used by other modules that use pieces of the \textsc{local\_topo\_hssh}. The 
+DebugUI needs the data and debug libraries. The MapEditor needs all three libraries. The DecisionPlanner needs the data 
+library.
+
+\section{Basic Conventions and Types}
+\subsection{Directories and Filenames}
+\subsection{Reference Frames}
+\subsection{Common Types}
+
+\section{Configuration Files}
+
+\section{Creating A Module}
+
+\section{Creating A Message}
+
+Inter-module communication on Vulcan uses a combination of two libraries: LCM and cereal. LCM is a UDP multicast-based 
+message passing system. It was first used on MIT DARPA Urban Challenge car. It has nice utilities for logging, log 
+playback, and viewing bandwidth usage. However, the need to maintain message definitions separately from the data types 
+in the Vulcan code is cumbersome, error-prone, and time-consuming enough to discourage creation of messages that would 
+otherwise be useful to have. 
+
+To counteract the downside of LCM, Vulcan uses a single LCM message that contains a single buffer of bytes. On top of 
+this message, the ModuleCommunicator class uses the cereal library and Boost.IOstreams to serialize \emph{any} Vulcan 
+data type that satisfies two requirements:
+
+\begin{enumerate}
+ \item The type defines a private serialize method or a non-member serialize function as described in the documentation 
+  for cereal: http://uscilab.github.io/cereal/ 
+  
+  \item The type specializes the message\_traits\_t struct to define which 
+  network the message is sent on (System or Debug) and the channel(s) used for the type.
+\end{enumerate}
+
+The requirements for the serialize method are best learned by reading the cereal documentation. The gist is that all 
+members of a class or struct are serialized into a binary archive. Each type being serialized must have a serialize 
+method or function defined. All PODs and STL classes already have defined functions. Only the Vulcan types need to be 
+defined. Many classes it simply comes down to listing the members, like below example with the pose\_t struct:
+
+\begin{verbatim}
+
+namespace vulcan
+{
+  namespace robot
+  {
+    
+    template <class Archive>
+    void serialize(Archive& ar, pose_t& pose)
+    {
+        ar (pose.x,
+            pose.y,
+            pose.theta);
+    }
+  }
+}
+    
+\end{verbatim}
+
+message\_traits\_t defines the properties of a type needed for transmission and subscription via the ModuleCommunicator. 
+There are two macros defined that make the specialization very simple. They take the type and then a paren-enclosed list 
+of channel names. The vast majority (everything but polar\_laser\_scan\_t?) of types have a single channel, but the 
+parens are still required for the macro to work correctly.
+
+\begin{verbatim}
+   
+    DEFINE_SYSTEM_MESSAGE(robot::pose_t, ("HSSH_LOCAL_POSE"))
+    DEFINE_DEBUG_MESSAGE(robot::pose_t, ("HSSH_LOCAL_POSE"))
+    
+\end{verbatim}
+
+A few things to keep in mind about these macros:
+
+\begin{enumerate}
+ \item The macro must appear in the header that declares the type being serialized. 
+ \item The macro must be declared in the global namespace.
+ \item The vulcan namespace isn't needed when specifying the type.
+ \item A message macro should only be written for types intended to be sent between modules. Internal types, like 
+  math::Point, don't have an associated macro because they aren't themselves sent between modules. They can have 
+  serialize functions though, so they can be easily serialized inside other types that will be sent between modules.
+\end{enumerate}
+
+There are two networks on which messages are sent, Debug and Release. The messages are split between the networks 
+because it is more efficient for processing. In particular, with UDP multicast, any message sent is received by 
+\emph{all} modules listening on that address. If you send 10Mb/s in maps, those 10Mb/s are received by every process 
+listening, though not transmitting, on that network. While the most efficient network would define a separate address 
+for each message, that, like the build process, is too fine a granularity to sanely maintain, so we define two networks.
+
+The \textbf{System} network is for messages essential to the functioning of Vulcan. These are the defined outputs of a 
+module that are required inputs for other modules to function. For example, the \textsc{local\_metric\_hssh} modules 
+outputs LocalPerceptualMap, LocalPose, and DynamicLaserPoints. These are used by myriad other modules. 
+
+The \textbf{Debug} network is for messages intended for the DebugUI for visualizations, for the TestRunner for 
+integration testing, or some other logging facility. They aren't required for the functionality of the robot and thus 
+are only read by the DebugUI under normal circumstances. Again using \textsc{local\_metric\_hssh}, it outputs particle 
+filter information, lines extracted from laser scans, and other internal details that highlight the processing of the 
+module, but aren't needed by other modules.
+
+\subsection{Polymorphic Types and Static Libraries}
+The serialization code will work with polymorphic types, as described at \\ 
+http://uscilab.github.io/cereal/polymorphism.html. However, it requires a little extra undocumented work in order to 
+actually get it functioning. In particular, the linker seems to enjoy throwing away the generated serialization 
+functions. Thus, the code will compile, but the desired functions won't be defined on the other side and a run-time 
+exception will be thrown. It will probably look like:
+
+\begin{verbatim}
+ EXCEPTION: Failed to unserialize message of type: 
+ N6vulcan4hssh46global_metric_relocalization_request_message_tE
+ Error : Trying to load an unregistered polymorphic type 
+ (vulcan::hssh::FreeSpaceFilterInitializer) Message discarded!
+\end{verbatim}
+
+In order to make the linker play nice, you need to do the following at the bottom of any header that defines a 
+polymorphic type:
+
+\begin{verbatim}
+// Serialization support for smart pointers
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/polymorphic.hpp>
+
+CEREAL_REGISTER_TYPE(fully-qualified type)
+\end{verbatim}
+
+Additionally, the header for the concrete type must be included somewhere in the module being compiled. If it isn't 
+included, then the registration never happens, make sense?
+
+For an example of this code in action, see hssh/local\_metric/director.cpp and \\
+hssh/local\_metric/commands/rotate\_lpm.h.
+
+\section{Adding Debugging Visualizations}
+
+
+\section{Testing}
+
+\subsection{Static Analysis}
+
+Static analysis is useful for helping find errors or inconsistencies lurking in the code. Clang has a good static 
+analyzer included with its distribution.
+
+\section{Bug Reporting}
+    
+    
+\end{document}

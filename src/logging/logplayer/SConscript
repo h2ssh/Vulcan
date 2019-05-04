@@ -1,0 +1,10 @@
+Import('*')
+
+log_objects = mod_env.Object([Glob('*_*.cpp'), 'params.cpp'])
+app_objects = mod_env.Object('main.cpp')
+
+logplayer = mod_env.Program('logplayer', [log_objects, app_objects])
+
+log_lib = mod_env.Library(target = 'vulcan_logplayer', source = log_objects)
+mod_env.Install(BUILD_LIB_DIR, log_lib)
+mod_env.Install(BUILD_BIN_DIR, logplayer)

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git log --since=$1 --no-merges --format=%B > changelog.txt
+

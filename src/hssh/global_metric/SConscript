@@ -1,0 +1,17 @@
+Import('*')
+
+data_objects = lib_env.StaticObject(['map.cpp',
+                                     'pose.cpp'])
+
+data_lib = lib_env.Library(target = 'global_metric_hssh_data',  source = [data_objects])
+lib_env.Install(BUILD_LIB_DIR, data_lib)
+
+global_env = mod_env.Clone()
+global_env.Prepend(LIBS=['global_metric_hssh_data', 'hssh_utils', 'local_metric_hssh_data'])
+
+app_objects        = global_env.Object(['director.cpp',
+                                        'main.cpp'])
+global_metric_hssh = global_env.Program('global_metric_hssh', [app_objects])
+
+global_env.Alias('global_metric_hssh', '#src/hssh/global_metric_hssh')
+global_env.Install(BUILD_BIN_DIR, global_metric_hssh)

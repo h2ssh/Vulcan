@@ -1,0 +1,26 @@
+package vulcan_lcm;
+
+/*
+* direct_control_command directly controls the speed of the robot by telling it to execute one of four simple commands:
+*
+*   - stop
+*   - go straight
+*   - turn left
+*   - turn right
+*
+* For each command other than stop, the speed at which to drive is specified. The robot will then try to maintain the
+* desired speed while performing obstacle avoidance.
+*/
+struct direct_control_command
+{
+    const int8_t STOP = 0;
+    const int8_t GO_STRAIGHT = 1;
+    const int8_t TURN_LEFT = 2;
+    const int8_t TURN_RIGHT = 3;
+
+    int64_t timestamp;  // time the command was issued using utils::system_time_us() or the equivalent operation
+    string source;      // name of the program issuing the command (for debugging purposes)
+
+    int8_t command;     // use one of the above constants
+    float speed;        // speed to drive in m/s (straight, good range = 0.75-1.0) or rad/s (turning, good range = 0.75 - 1.0)
+}

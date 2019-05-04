@@ -1,0 +1,26 @@
+When creating a new task for the metric_planner, you need to create two subclasses:
+
+    (1) A subclass of MetricPlannerTask that contains the description of the task, which will be sent to metric_planner
+        by other modules
+
+    (2) A subclass of TaskManifold that defines the progress metric for accomplishing the task.
+
+
+Given these two classes, anything behavior that has a well-defined progress metric should be implementable.
+
+In addition to the above, you will need to add an include for your new task in the tasks/serialization.h header. This
+will ensure that the metric_planner is correctly able to deserialize your task when sent from another module without
+needing to change any code in the metric_planner program itself.
+
+Don't forget to add the type registration at the bottom of your header file. Copy and paste the following and just
+change MetricPlannerTask to the name of your newly implemented task.
+
+--------------------------------------------------------------------
+
+// Serialization support via smart pointer
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/polymorphic.hpp>
+
+CEREAL_REGISTER_TYPE(vulcan::mpepc::MetricPlannerTask)
+
+---------------------------------------------------------------------

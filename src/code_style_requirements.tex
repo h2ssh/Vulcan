@@ -1,0 +1,127 @@
+\documentclass{article}
+
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+
+\title{Vulcan Software Style Requirements}
+\author{Collin Johnson}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+The following are a set of requirements for any code that you commit to the Vulcan repository. The goal of these requirements is to maintain some level of consistency amongst source files in the project, in spite of the fact that many people with different levels of experience and different coding styles will be working on the project.
+
+\textbf{NOTE:} As the project has progressed, new conventions that are most stylistically appealing have been developed. Consequently, not all files are consistent with all conventions. If you come across a file not in compliance, fix it! Don't be afraid. The more often a piece of code is massaged (gently!), the less likely the code is to rot away. In particular, the header at the beginning of all files was only determined on August 6, 2011. A considerable amount of code will not contain the appropriate file header. Fix the headers as you stumble through.
+
+The overarching, most important piece of information is the following:
+
+\textbf{BE CONSISTENT}
+
+That means that you do the same thing for every file and if you edit a file, follow the standards in that file. For example, do the braces the same way, or else change ALL of them to your preferred style.
+
+These requirements were inspired by the state of the HSSH code when I first started reading through it.
+
+\section{File Organization}
+\begin{verbatim}
+/**
+* \file     relative_filename (including extension)
+* \author   Your name here
+*
+* Description of file contents. Probably doesn't need to be more than a line or two, as the actual
+* contents of the file should be appropriately documented.
+*/
+\end{verbatim}
+
+\section{Naming Conventions}
+\subsection{Classes}
+\begin{verbatim}
+// class names begin with upper-case letter and use CamelCase
+class MyClass
+{
+public:
+    // method names begin with lower case letter and use camelCase
+    void aPublicMemberFunction(void);
+
+private:
+    // member variables begin with lower case letter and use camelCase
+    int memberVariable;
+};
+\end{verbatim}
+
+\subsection{PODs}
+\begin{verbatim}
+// C-style structs, i.e. plain old data types, are a bucket of bits intended
+// to merely group similar pieces of data together.
+struct my_plain_datatype_t   // _t makes it clear this is just a data type
+{
+    int someData;
+};
+\end{verbatim}
+
+\subsection{Stand-alone Functions}
+\begin{verbatim}
+// stand-alone functions are all lower case with words separated by an underscore
+void my_standalone_function(int first_arg, double second_arg);
+\end{verbatim}
+
+\subsection{Variables}
+\begin{verbatim}
+const int MY_CONST_VARIABLE = 1;
+
+int preferDescriptiveVariableNames = 0;   // clear what this means
+int prefDescVarNames = 0;                 // not so clear
+\end{verbatim}
+
+\subsection{Filenames}
+Filenames will be all lower case letters with each word separated by an underscore. \textit{my\_filename\_is\_really\_cool.ext}.
+
+\subsection{File Extensions}
+\begin{enumerate}
+ \item C++ header: .h
+ \item C++ source: .cpp
+\end{enumerate}
+
+\section{Formatting}
+\subsection{Whitespace}
+Use spaces, not tabs. All tabs are 4 spaces. Setup your dev environment to make it happen.
+
+\subsection{Variable Declaration}
+\begin{verbatim}
+int x = 0, y = 1, z = 2;  // ugly and confusing
+
+int x = 0;    // cleaner and more straight-forward
+int y = 1;
+int z = 2;
+\end{verbatim}
+
+\subsection{Blocks}
+It doesn't matter where you put your braces, but put them in the same place every time. Put braces around all logical blocks in your file. See the below code
+\begin{verbatim}
+if(x == 5) do_something();  // horrid!
+
+if(x == 5)
+    do_something();         // unacceptable!
+
+if(x == 5)                  // this bowl of porridge is juuust right!
+{
+    do_something();
+}
+
+// Same applies to looping constructs:
+
+for(int x = 0; x < array_end; ++x)
+{
+    do_something(x);
+}
+
+while(--x > 0)
+{
+    do_something(x);
+}
+
+\end{verbatim}
+
+Putting \textit{do\_something()} on a single line is unclear. Leaving out the braces, even though they are not strictly required sets you up for nasty bugs when you decide you want to \textit{do\_something\_else()} as well.
+
+\end{document}

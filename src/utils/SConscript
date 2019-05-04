@@ -1,0 +1,17 @@
+Import('*')
+
+default_env.Program('command_line_test', ['command_line.cpp', 'tests/command_line_test.cpp'])
+default_env.Program('icp_test', ['icp.cpp', 'tests/icp_test.cpp'])
+
+utils_objects = default_env.Object(Glob('*.cpp'))
+utils_lib     = default_env.Library(target = 'vulcan_utils', source = utils_objects)
+
+if int(test):
+    test_env.Program('visibility_graph_test', ['tests/visibility_graph_test.cpp'])
+    test_env.Program('compression_test', ['tests/compression_test.cpp'])
+    test_env.Program('edit_distance_test', ['tests/edit_distance_test.cpp'])
+    test_env.Program('pose_trace_test', ['tests/pose_trace_test.cpp'])
+    test_env.Program('cyclic_iterator_test', ['tests/cyclic_iterator_test.cpp'])
+    test_env.Program('hough_transform_test', ['tests/hough_transform_test.cpp'])
+
+default_env.Install(BUILD_LIB_DIR, utils_lib)

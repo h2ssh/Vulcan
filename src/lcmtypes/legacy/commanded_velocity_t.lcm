@@ -1,0 +1,14 @@
+package vulcan_lcm;
+
+/**
+* commanded_velocity_t defines the velocity command most recently sent to the robot's motors.
+* The command will be related to the most recent motion command, but might not be exactly the
+* same due to the internal characteristics of the robot controller being used.
+*/
+struct commanded_velocity_t
+{
+    int64_t timestamp;
+    
+    float linear_velocity;
+    float angular_velocity;
+}

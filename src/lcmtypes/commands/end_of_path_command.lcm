@@ -1,0 +1,10 @@
+package vulcan_lcm;
+
+/*
+* end_of_path_command drives the robot to the end of the path traveling in the direction it is currently facing. If the
+* robot is not on a path, then the command has no effect.
+*/
+struct end_of_path_command
+{
+    int32_t id;     // Unique id of the command
+}

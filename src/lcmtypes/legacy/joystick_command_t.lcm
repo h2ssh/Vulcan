@@ -1,0 +1,15 @@
+package vulcan_lcm;
+
+/**
+* joystick_command_t defines a joystick command issued from a joystick controller for the
+* robot. In the case of the wheelchair, the joystick is tightly coupled to the motion of
+* the wheelchair, and the wheelchair produces joystick commands issued by the human driver.
+*/
+struct joystick_command_t
+{
+    int64_t timestamp;
+    
+    int8_t forward;
+    int8_t left;
+    int8_t gain;
+}

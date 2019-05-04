@@ -1,0 +1,12 @@
+package vulcan_lcm;
+
+/*
+* gaussian_distribution_t is a representation of a standard multivariate Gaussian
+* distribution. Use it for whatever purpose you wish and just change the channel
+* name as needed.
+*/
+struct gaussian_distribution_t
+{
+    vector_t mean;
+    matrix_t covariance;
+}

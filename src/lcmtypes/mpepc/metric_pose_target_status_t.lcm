@@ -1,0 +1,16 @@
+package vulcan_lcm;
+
+struct metric_pose_target_status_t
+{
+    // Constants defining the status of motion to the current target
+    const int32_t IDLE                             = 0;
+    const int32_t IN_PROGRESS                      = 1;
+    const int32_t REACHED_TARGET                   = 2;
+    const int32_t FAILED_TARGET_CANNOT_BE_ASSIGNED = 3;
+    const int32_t FAILED_ROBOT_IS_STUCK            = 4;
+    const int32_t FAILED_CANNOT_FIND_SOLUTION      = 5;
+
+    int64_t timestamp;      // Time at which the message was generated
+    int64_t target_id;      // Target for which this status applies
+    int32_t status;         // Status of the planner in reaching the target, see above constants for possible values
+}

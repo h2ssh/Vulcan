@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mv daily_* logs/daily/
+rsync -ravz logs/daily/ kuipers@woodstock.eecs.umich.edu:/data/vulcan/logs/daily/
+

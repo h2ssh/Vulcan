@@ -1,0 +1,33 @@
+Import('*')
+
+data_objects = lib_env.StaticObject(['lpm.cpp',
+                                     'lpm_io.cpp',
+                                     'map_rectification.cpp',
+                                     Glob('commands/*.cpp')])
+
+data_lib = lib_env.Library(target = 'local_metric_hssh_data',  source = [data_objects])
+lib_env.Install(BUILD_LIB_DIR, data_lib)
+
+lpm_env = mod_env.Clone()
+lpm_env.Prepend(LIBS=['local_metric_hssh_data', 'hssh_utils', 'vulcan_vision'])
+
+multi_floor_objects = lpm_env.Object(Glob('multifloor/*.cpp'))
+
+lpm_app_objects = lpm_env.Object(['director.cpp',
+                                  'main.cpp',
+                                  'params.cpp'])
+
+local_metric_hssh = lpm_env.Program('local_metric_hssh', [multi_floor_objects,
+                                                          lpm_app_objects])
+
+lpm_env.Alias('local_metric_hssh', '#src/hssh/local_metric/local_metric_hssh')
+
+default_env.Install(BUILD_BIN_DIR, local_metric_hssh)
+
+lpm_serialization_test = lpm_env.Program('lpm_serialization_test', ['lpm_serialization_test.cpp'])
+
+lpm_env.Program('save_random_lpms', ['save_random_lpms.cpp'])
+
+################################### Test programs ######################################
+save_load_test = mod_env.Program('save_load_lpm', ['tests/save_load_lpm.cpp'])
+mod_env.Install(BUILD_BIN_DIR, save_load_test);

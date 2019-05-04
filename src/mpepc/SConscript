@@ -1,0 +1,92 @@
+Import('*')
+
+import utils
+
+data_objects = lib_env.StaticObject([Glob('metric_planner/script/*.cpp'),
+                                     Glob('metric_planner/task/*.cpp'),
+                                     Glob('manifold/*.cpp'),
+                                     Glob('grid/*.cpp'),
+                                     Glob('cost/*.cpp'),
+                                     Glob('social/*.cpp'),
+                                     'evaluation/mpepc_log.cpp',
+                                     'evaluation/path_summary.cpp',
+                                     'evaluation/utils.cpp',
+                                     'trajectory/robot_trajectory_info.cpp',
+                                     ])
+
+func_objects = lib_env.StaticObject([Glob('simulator/*.cpp'),
+                                     'metric_planner/params.cpp',
+                                     Glob('trajectory/*.cpp'),
+                                     Glob('collision/*.cpp'),
+                                     Glob('control/*.cpp'),
+                                     Glob('math/*.cpp'),
+                                     Glob('rrt/*cpp')])
+
+data_lib  = lib_env.Library(target = 'metric_planner_data',  source = [data_objects])
+#debug_lib = lib_env.Library(target = 'metric_planner_debug', source = [debug_objects])
+func_lib  = lib_env.Library(target = 'metric_planner_func',  source = [func_objects])
+
+lib_env.Install(BUILD_LIB_DIR, data_lib)
+#lib_env.Install(BUILD_LIB_DIR, debug_lib)
+lib_env.Install(BUILD_LIB_DIR, func_lib)
+
+############################## Metric planner ##########################################
+
+mpepc_env = mod_env.Clone();
+mpepc_env.Prepend(LIBS=['metric_planner_func',
+                        'metric_planner_data',
+                        'object_tracker_data',
+                        'local_topo_hssh_data',
+                        'local_metric_hssh_data',
+                        'hssh_utils',
+                        'nlopt']);
+
+metric_planner_objects = mpepc_env.Object(utils.NoParamsGlob(mpepc_env, 'metric_planner/*.cpp'))
+
+metric_planner = mpepc_env.Program('metric_planner/metric_planner', [metric_planner_objects])
+
+mpepc_env.Alias('metric_planner', '#src/mpepc/metric_planner/metric_planner')
+mpepc_env.Install(BUILD_BIN_DIR, metric_planner)
+
+################################### Motion controller ######################################
+
+waypoint_follower_objects = mpepc_env.Object(Glob('motion_controller/waypoint_follower/*.cpp'))
+controllers_objects       = mpepc_env.Object(Glob('motion_controller/controller/*.cpp'))
+motion_controller_objects = mpepc_env.Object(Glob('motion_controller/*.cpp'))
+
+motion_controller = mpepc_env.Program('motion_controller/motion_controller', [waypoint_follower_objects,
+                                                                              controllers_objects,
+                                                                              motion_controller_objects])
+
+mpepc_env.Alias('motion_controller', '#scr/mpepc/motion_controller/motion_controller')
+mpepc_env.Install(BUILD_BIN_DIR, motion_controller);
+
+
+################################ Utility bits ##################################
+
+log_converter = mpepc_env.Program(target = 'mpepc_info_to_text', source = ['evaluation/mpepc_info_to_text.cpp'])
+mpepc_result_plots = mpepc_env.Program(target = 'mpepc_generate_results_plots', source = ['evaluation/generate_results_plots.cpp',
+                                                                                          'evaluation/metrics.cpp',])
+
+social_norm_results = mpepc_env.Program(target = 'social_norms_results', source = ['evaluation/social_norm_results.cpp',
+                                                                                   'evaluation/interaction.cpp',
+                                                                                   'evaluation/social_force.cpp',
+                                                                                   'training/agent_state.cpp',])
+
+train_norms = mpepc_env.Program(target = 'train_social_norms', source = ['training/train_social_norms.cpp',
+                                                                         'training/agent_state.cpp',])
+
+norms_clustering = mpepc_env.Program(target = 'social_norms_clustering',
+                                     source = ['training/social_norms_clustering.cpp',
+                                               'training/agent_state.cpp',])
+
+mpepc_env.Install(BUILD_BIN_DIR, log_converter)
+mpepc_env.Install(BUILD_BIN_DIR, mpepc_result_plots)
+mpepc_env.Install(BUILD_BIN_DIR, social_norm_results)
+mpepc_env.Install(BUILD_BIN_DIR, train_norms)
+mpepc_env.Install(BUILD_BIN_DIR, norms_clustering)
+
+
+################################### Test programs ######################################
+metric_pose_target_test = mod_env.Program('metric_pose_target_test', ['test/metric_pose_target_test.cpp'])
+mod_env.Install(BUILD_BIN_DIR, metric_pose_target_test);

@@ -1,0 +1,7 @@
+package vulcan_lcm;
+
+struct point_float_t
+{
+    float x;
+    float y;
+}

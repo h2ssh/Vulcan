@@ -1,0 +1,24 @@
+package vulcan_lcm;
+
+struct encoder_data_t
+{
+    int64_t timestamp;
+    int32_t id;
+
+    double  delta_left_wheel;
+    double  delta_right_wheel;
+    double  wheelbase;
+    double  left_circumference;
+    double  right_circumference;
+    int32_t left_ticks_per_rev;
+    int32_t right_ticks_per_rev;
+
+    double left_rpm;
+    double right_rpm;
+
+    int64_t left_ticks_total;
+    int64_t right_ticks_total;
+
+    int64_t left_index_pulse_total;
+    int64_t right_index_pulse_total;
+}

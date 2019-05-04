@@ -1,0 +1,15 @@
+Import('*')
+
+import os.path
+
+default_config = Glob('default/*.cfg')
+robot_config   = Glob(robot + '/*.cfg')
+dataset_config = Glob('dataset/*.cfg')
+
+default_cfg = [os.path.split(str(cfg)) for cfg in default_config]
+robot_cfg   = [os.path.split(str(cfg))[1] for cfg in robot_config]
+
+configs = robot_config + [os.path.join(cfg[0], cfg[1]) for cfg in default_cfg if not(cfg[1] in robot_cfg)] + dataset_config
+
+default_env.Install(BUILD_BIN_DIR, configs)
+default_env.Install(BUILD_BIN_DIR, 'default/initial_optimization_targets.txt')

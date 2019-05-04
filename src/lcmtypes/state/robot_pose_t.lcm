@@ -1,0 +1,11 @@
+package vulcan_lcm;
+
+struct robot_pose_t
+{
+    int64_t timestamp;
+
+    float x;
+    float y;
+    float theta;
+}
+  

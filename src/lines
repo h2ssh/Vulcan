@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Counting lines of code..."
+wc -l $(find * -name *.h) $(find * -name *.cpp) $(find * -name *.java) $(find * -name *.lcm) SConscript
+echo "That's a lot of frickin code!"

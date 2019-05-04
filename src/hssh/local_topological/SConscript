@@ -1,0 +1,167 @@
+Import('*')
+
+data_objects = lib_env.StaticObject(['small_scale_star.cpp',
+                                     'area.cpp',
+                                     Glob('areas/*.cpp'),
+                                     Glob('affordances/*.cpp'),
+                                     Glob('events/*.cpp'),
+                                     'voronoi_skeleton_grid.cpp',
+                                     'metric_place_io.cpp',
+                                     'lambda.cpp',
+                                     'area_detection/voronoi/search.cpp',
+                                     'area_detection/voronoi/voronoi_utils.cpp',
+                                     'area_detection/gateways/gateway_utils.cpp',
+                                     'gateway.cpp',
+                                     'local_topo_graph.cpp',
+                                     'local_topo_map.cpp',
+                                     'local_topo_route.cpp',
+                                     'evaluation/heat_map.cpp',
+                                     'evaluation/topological_edit_distance.cpp',
+                                     'area_extent.cpp'])
+
+debug_objects = lib_env.StaticObject(['area_detection/labeling/area_proposal.cpp',
+                                      'area_detection/labeling/hypothesis.cpp',
+                                      'area_detection/labeling/hypothesis_features.cpp',
+                                      'area_detection/labeling/hypothesis_type.cpp',
+                                      'area_detection/labeling/boundary.cpp',
+                                      'area_detection/labeling/boundary_classifier.cpp',
+                                      'area_detection/labeling/hypothesis_classifier.cpp',
+                                      'area_detection/labeling/path_endpoints.cpp',
+                                      'area_detection/labeling/path_similarity_star_builder.cpp',
+                                      'area_detection/local_topo_isovist_field.cpp',
+                                      'area_detection/gateways/isovist_gradients.cpp',
+                                      'area_detection/gateways/isovist_maxima.cpp',
+                                      'area_detection/gateways/feature_extraction.cpp',
+                                      'area_detection/gateways/gateway_classifier.cpp',
+                                      'area_detection/labeling/area_graph.cpp',
+                                      'area_detection/labeling/loops_and_trees.cpp',
+                                      'area_detection/voronoi/voronoi_edges.cpp',
+                                      'evaluation/stability_analyzer.cpp',
+                                      'evaluation/stability_log.cpp',
+                                      'training/labeled_area_data.cpp',
+                                      'training/labeled_boundary_data.cpp',
+                                      'training/labeled_gateway_data.cpp',
+                                      'training/gateway_classifier_test.cpp',
+                                      'training/gateway_errors.cpp',
+                                      'training/hypothesis_classifier_test.cpp',
+                                      'params.cpp'])
+
+func_objects = lib_env.StaticObject(['area_detection/voronoi/all_paths_graph_reducer.cpp',
+                                     'area_detection/voronoi/brushfire_skeleton_builder.cpp',
+                                     'area_detection/voronoi/frontiers_set.cpp',
+                                     'area_detection/voronoi/island_detector.cpp',
+                                     'area_detection/voronoi/voronoi_utils.cpp',
+                                     'area_detection/voronoi/skeleton_builder.cpp',
+                                     'area_detection/voronoi/skeleton_pruner.cpp',
+                                     'area_detection/voronoi/skeleton_graph_extractor.cpp',
+                                     'area_detection/voronoi/skeleton_graph_reducer.cpp',
+                                     'area_detection/voronoi/skeleton_graph_rasterization.cpp',
+                                     'area_detection/voronoi_graph_builder.cpp',
+                                     Glob('area_detection/gateways/*.cpp'),
+                                     'area_detection/area_classifier.cpp',
+                                     'area_detection/affordance_labeling_classifier.cpp',
+                                     'area_detection/stored_map_classifier.cpp',
+                                     'area_detection/labeling/area_creator.cpp',
+                                     'area_detection/labeling/parser.cpp',
+                                     'area_detection/labeling/hypothesis_association.cpp',
+                                     'area_detection/labeling/csp_solution.cpp',
+                                     'area_detection/labeling/max_likelihood_csp.cpp',
+                                     'area_detection/labeling/alignment_constraint.cpp',
+                                     #'area_detection/labeling/alignment_network.cpp',
+                                     'area_detection/labeling/mcmc_sampling.cpp',
+                                     'area_detection/labeling/hypothesis_constraints.cpp',
+                                     'area_detection/labeling/hypothesis_graph.cpp',
+                                     'area_detection/labeling/beam_star_builder.cpp',
+                                     'area_detection/labeling/small_scale_star_builder.cpp',
+                                     'area_detection/labeling/belief_prop.cpp',
+                                     'area_detection/labeling/factor.cpp',
+                                     'area_detection/labeling/factor_edge.cpp',
+                                     'area_detection/labeling/factor_graph.cpp',
+                                     'area_detection/labeling/factor_graph_utils.cpp',
+                                     'area_detection/labeling/hypothesis_factor_graph.cpp',
+                                     'area_detection/labeling/variable.cpp',
+                                     'area_detector.cpp',
+                                     Glob('event_detection/*.cpp'),
+                                     Glob('boundary/*.cpp'),
+                                     'event_detector.cpp',
+                                     'localizer.cpp',])
+
+training_objects = lib_env.StaticObject(['training/area_labels.cpp',
+                                         'training/local_topo_area_editor.cpp'])
+
+data_lib  = lib_env.Library(target = 'local_topo_hssh_data',  source = [data_objects])
+debug_lib = lib_env.Library(target = 'local_topo_hssh_debug', source = [debug_objects])
+func_lib  = lib_env.Library(target = 'local_topo_hssh_func',  source = [func_objects])
+training_lib = lib_env.Library(target = 'local_topo_training', source = [training_objects])
+
+lib_env.Install(BUILD_LIB_DIR, data_lib)
+lib_env.Install(BUILD_LIB_DIR, debug_lib)
+lib_env.Install(BUILD_LIB_DIR, func_lib)
+lib_env.Install(BUILD_LIB_DIR, training_lib)
+
+
+#event_objects = mod_env.Object([Glob('event_detection/*.cpp'),
+                                #'event_detector.cpp'])
+
+app_objects = mod_env.Object(['director.cpp',
+                              'main.cpp'])
+
+localtopo_env = mod_env.Clone()
+
+localtopo_env.Prepend(LIBS=['local_topo_training',
+                            'local_topo_hssh_func',
+                            'global_topo_hssh_data',
+                            'local_topo_hssh_debug',
+                            'local_topo_hssh_data',
+                            'local_metric_hssh_data',
+                            'hssh_utils'])
+local_topo_hssh = localtopo_env.Program('local_topo_hssh', [#event_objects,
+                                                            app_objects])
+train_classifiers = localtopo_env.Program('train_area_classifiers', ['training/train_area_classifiers.cpp'])
+fix_ltm = localtopo_env.Program('fix_ltm', ['training/fix_ltm.cpp'])
+boosting_selection = localtopo_env.Program('boosting_feature_selection', ['training/boosting_feature_selection.cpp'])
+gateway_search = localtopo_env.Program('gateway_feature_search', ['training/gateway_feature_search.cpp'])
+gateway_results = localtopo_env.Program('process_gateway_feature_results', ['training/process_gateway_feature_results.cpp'])
+
+eval_labels = localtopo_env.Program('evaluate_labels', ['evaluation/evaluate_labels.cpp'])
+summarize_results = localtopo_env.Program('summarize_label_results', ['evaluation/summarize_label_results.cpp'])
+comparison_plot = localtopo_env.Program('create_comparison_plots', ['evaluation/create_comparison_plots.cpp'])
+generate_heat_maps = localtopo_env.Program('generate_label_heat_maps', ['evaluation/generate_label_heat_maps.cpp'])
+gen_events = localtopo_env.Program('generate_event_sequence', ['evaluation/generate_event_sequence.cpp'])
+ltm_to_ppm = localtopo_env.Program('ltm_to_ppm', ['evaluation/ltm_to_ppm.cpp'])
+localtopo_env.Program('brushfire_test', ['area_detection/voronoi/brushfire_skeleton_builder_test.cpp'])
+
+if int(test):
+    lt_test_env = test_env.Clone()
+    lt_test_env.Prepend(LIBS=['local_topo_hssh_func', 'local_topo_hssh_debug', 'local_topo_hssh_data'])
+    lt_test_env.Program('local_topo_unit_tests', ['tests/gateway_utils_test.cpp',
+                                                  'tests/hypothesis_features_test.cpp'])
+    lt_test_env.Program('belief_prop_test', ['tests/belief_prop_test.cpp'])
+
+#SConscript(['evaluator/SConscript'])
+
+localtopo_env.Alias('local_topo_hssh', '#src/hssh/local_topo_hssh')
+default_env.Install(BUILD_BIN_DIR, local_topo_hssh)
+default_env.Install(BUILD_BIN_DIR, train_classifiers)
+default_env.Install(BUILD_BIN_DIR, fix_ltm)
+default_env.Install(BUILD_BIN_DIR, boosting_selection)
+default_env.Install(BUILD_BIN_DIR, gateway_search)
+default_env.Install(BUILD_BIN_DIR, gateway_results)
+default_env.Install(BUILD_BIN_DIR, eval_labels)
+default_env.Install(BUILD_BIN_DIR, summarize_results)
+default_env.Install(BUILD_BIN_DIR, comparison_plot)
+default_env.Install(BUILD_BIN_DIR, generate_heat_maps)
+default_env.Install(BUILD_BIN_DIR, ltm_to_ppm)
+default_env.Install(BUILD_BIN_DIR, gen_events)
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/evaluate_all_maps.sh')
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/evaluate_only.sh')
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/repeated_map_sampling.sh')
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/compare_against_human_maps.sh')
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/compare_against_all.sh')
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/compare_human_maps.sh')
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/generate_stability_logs.sh')
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/generate_ppm.sh')
+default_env.Install(BUILD_BIN_DIR, '#src/hssh/local_topological/evaluation/generate_all_comparison_plots.sh')
+
+# Copy plotting debugging scripts to where the local_topo_hssh will be run and hence where diagnostic files will be saved
+default_env.Install(BUILD_BIN_DIR, 'plot_isovist_gradients.plt')

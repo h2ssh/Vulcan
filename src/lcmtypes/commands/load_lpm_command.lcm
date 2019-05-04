@@ -1,0 +1,9 @@
+package vulcan_lcm;
+
+struct load_lpm_command
+{
+    string filename;
+
+    float initial_x;
+    float initial_y;
+}

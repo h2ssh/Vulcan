@@ -1,0 +1,9 @@
+Import('*')
+
+mod_env.Program('odometry_logger', ['odometry_logger.cpp'])
+
+env = mod_env.Clone()
+env.Prepend(LIBS=['local_metric_hssh_data', 'hssh_utils'])
+logger = env.Program('logger', ['data_logger.cpp', 'main.cpp'])
+
+env.Install(BUILD_BIN_DIR, logger)

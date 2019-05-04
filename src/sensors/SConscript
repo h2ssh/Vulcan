@@ -1,0 +1,86 @@
+Import('*')
+
+########################### Laser bits ###################################3
+
+laser_env = mod_env.Clone()
+laser_env.Append(LIBS=['urg', 'urg_coordinate', 'urg_common', 'urg_system', 'urg_geometry', 'urg_connection'])
+
+laser_env.Append(LIBS=['urg', 'urg_coordinate', 'urg_common', 'urg_system', 'urg_geometry', 'urg_connection'])
+
+laser_env.Program('hokuyo_urg_laser_test', ['hokuyo_urg_laser.cpp',
+                                            'test/hokuyo_urg_laser_test.cpp'])
+
+laser_env.Program('get_hokuyo_id', ['hokuyo_urg_laser.cpp',
+                                    'get_hokuyo_id.cpp'])
+
+laser_scan_producer = laser_env.Program('laser_scan_producer', ['laser_scan_producer.cpp',
+                                                                'hokuyo_urg_laser.cpp'])
+
+laser_env.Alias('laser_scan_producer', '#src/sensors/laser_scan_producer')
+laser_env.Install(BUILD_BIN_DIR, laser_scan_producer)
+
+
+################### IMU bits ##########################
+imu_objects = mod_env.Object(['microstrain_3dmgx2.cpp',
+                              'microstrain_3dmgx3.cpp'])
+
+imu_data_producer = mod_env.Program('imu_data_producer', ['imu_data_producer.cpp',
+                                                          imu_objects])
+
+mod_env.Program('microstrain_3dmgx2_test', ['test/microstrain_3dmgx2_test.cpp',
+                                            imu_objects])
+
+mod_env.Alias('imu_data_producer', '#src/sensors/imu_data_producer')
+mod_env.Install(BUILD_BIN_DIR, imu_data_producer)
+
+
+######################### Camera bits ###################################3
+
+if int(camera):
+    camera_env = mod_env.Clone()
+    camera_env.Append(LIBS=['vulcan_vision', 'PvAPI'])
+    camera_env.Append(CPPFLAGS=['-D_LINUX', '-D_x86'])  # need these defines for PvApi.h
+
+    camera_objects = camera_env.Object(['avt_camera.cpp',
+                                        'avt_camera_parameters.cpp'])
+
+    image_producer = camera_env.Program('image_producer', ['image_producer.cpp',
+                                                            camera_objects])
+
+    camera_env.Alias('image_producer', '#src/sensors/image_producer')
+    camera_env.Install(BUILD_BIN_DIR, image_producer)
+
+
+############################## Odometry bits ###################################
+
+odometry_env = mod_env.Clone()
+odometry_env.Append(LIBS=['phidget21'])
+
+odometry_objects = odometry_env.Object(['wheel_encoders.cpp',
+                                        'odometry_estimator.cpp',
+                                        'phidget_encoder_board.cpp',
+                                        'remote_encoders.cpp',
+                                        'wheel_encoders_params.cpp'])
+
+odometry_producer = odometry_env.Program(['odometry_producer.cpp',
+                                          odometry_objects])
+
+odometry_env.Alias('odometry_producer', '#src/sensors/odometry_producer')
+odometry_env.Install(BUILD_BIN_DIR, odometry_producer)
+
+################################ Utility bits ##################################
+
+mod_env.Append(LIBS=['vulcan_lcm', 'lcm', 'vulcan_system'])
+motion_converter = mod_env.Program(target = 'motion_sensors_to_text', source = ['motion_sensors_to_text.cpp'])
+mod_env.Install(BUILD_BIN_DIR, motion_converter)
+
+################################ Library bits ##################################
+
+sensor_lib_objects = lib_env.Object(['wheel_encoders.cpp','wheel_encoders_params.cpp', 'sensor_log.cpp'])
+sensor_lib         = lib_env.Library(target = 'vulcan_sensors', source = sensor_lib_objects)
+default_env.Install(BUILD_LIB_DIR, sensor_lib)
+
+if int(test):
+    sensor_log_test_env = test_env_no_main.Clone()
+    sensor_log_test_env.Append(LIBS = ['vulcan_lcm', 'vulcan_laser', 'lcm', 'vulcan_system', 'vulcan_lcm'])
+    sensor_log_test_env.Program('sensor_log_test', ['test/sensor_log_test.cpp'])

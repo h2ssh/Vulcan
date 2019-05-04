@@ -1,0 +1,156 @@
+\documentclass{article}
+
+\usepackage[top=1in,left=1in,right=1in,bottom=1in]{geometry}
+\usepackage{hyperref}
+
+\title{Evaluation Tools for Vulcan}
+\author{Collin Johnson}
+
+\begin{document}
+
+\tableofcontents
+
+\section{Introduction}
+
+This document details all programs and scripts to be used for generating results from the various components within 
+Vulcan. The evaluation tools are broken down into subsections, based on the approach they are evaluating.
+
+For mapping tools, the evaluations compare against a ground-truth map. Each section describes how this ground-truth map 
+can be created. There may be additional evaluations as well.
+
+For tracking, the main goal is to estimate the prediction accuracy.
+
+For planning, the main goal is to evaluate the safety and efficiency of the planner over time.
+
+\section{Local Metric}
+
+\subsection{Setting Ground Truth}
+
+\subsection{Glass Mapping}
+
+\section{Local Topological}
+
+Evaluation of the place classification and place labeling algorithm requires evaluating both the batch/full-map 
+labeling performance and incremental place detection performance for topological SLAM.
+
+\subsection{Setting Ground Truth}
+
+Ground-truth place labelings are created using the "Local Topo" panel in the \emph{map\_editor}. To create the labels:
+
+\begin{enumerate}
+  \item Load a metric map using the "Load Map" button.
+  \item Create the gateways by selecting the Gateways radio button in the "Edit Mode", and then clicking the
+    "Hand-Create" button. If you are simply editing previously created gateways, you can load those previous gateways
+    with the "Load From File" button. Previous gateways must have a ".gwy" extension in the same folder with the same
+    base map name.
+  \item To create a gateway:
+    \begin{enumerate}
+      \item Hover the mouse over the map. You'll see a translucent line, which is the proposed gateway boundary.
+      \item Right-click will add the gateway.
+      \item Ctrl+right-click and moving the mouse will rotate the gateway to allow fine-positioning.
+      \item Shift+right-click will erase the gateway that is highlighted in red.
+    \end{enumerate}
+  \item Once all gateways are added, hit "Create Areas". Areas will now become translucent black.
+  \item Switch the "Edit Mode" to "Label" and hit "Assign Labels" to being labeling.
+  \item The area under the mouse will change colors based on the selected label in the "Label to Assign" radio box:
+    \begin{description}
+      \item[\textbf{Path Segment:}] Green
+      \item[\textbf{Decision Point:}] Blue
+      \item[\textbf{Destination:}] Red
+    \end{description}
+  \item The easiest way to label is label each area type at a time. Once there is a single area remaining to label,
+    then you can just hit the "Label Remaining" button with the last label type to quickly label them all.
+  \item After finishing the labeling, hit "Store Map Info", which will save the ground-truth map with the name
+    'basename\_truth.ltm'.
+\end{enumerate}
+
+\subsection{Batch Labeling}
+
+Batch labeling involves running the labeling algorithm for a full-size global metric map. The following tools exist
+for evaluating the batch labels:
+
+\paragraph{evaluate\_all\_maps.sh}
+
+Run the batch labeling for each map for which an established ground-truth exists. Results are generated for each map 
+and saved to a file called 'all\_maps\_results.txt'.
+
+This script is useful for generating results for a single table in a paper that shows how well the algorith performs.
+This script should be used for most results. After running the script, use the program \emph{summarize\_label\_results}
+to summarize the results to put it in a paper.
+
+\paragraph{repeated\_map\_sampling.sh}
+
+This script runs the batch labeling over and over for each map in the 'data/maps' folder. A configurable number of
+iterations are run. The per-map results are saved in a file 'mapname\_results.txt'. This file can be processed
+with \emph{summarize\_label\_results} to produce statistics on how consistent the output of the MCMC algorithm is.
+
+Results from this script are intended to show the variability of the results and that the sampling produces
+reasonably stable results for a given map. Obviously, the more stable the better.
+
+Note that some maps are horrendously slow to label, so this script can take a long time to finish. One approach is
+to alter the script to run a subset of maps and then distribute the workload across many computers.
+
+\paragraph{compare\_against\_human\_maps.sh}
+
+Compare the best map found by the repeated sampling against the human-labeled maps. Results are all stored in the
+same results file so the comparison map-by-map as well as in bulk can be easily generated.
+
+These broader results start to generalize the results produced by the comparison to the single ground-truth used in
+previous results. With only eight total maps, the results are not statistically significant but do begin to paint
+a picture about how the algorithm is working.
+
+\paragraph{compare\_human\_maps.sh}
+
+Run the results comparison in a one-against-all fashion for each of the human-labeled maps. This comparison is
+intended to show how the variability amongst human-labeled maps compares with the results of the MCMC algorithm.
+The goal is to provide evidence that discrepencies between our algorithm and ground-truth is of similar magnitude
+to discrepencies between how people understand an environment.
+
+\paragraph{generate\_ppm.sh}
+
+Convert the best MCM result and ground-truth result into images for inclusion in Collin's thesis. The output images
+are saved in the thesis img directory so they are automatically regenerated and included as needed.
+
+\paragraph{generate\_label\_heat\_maps}
+
+Load all ground-truth maps in a directory and create images that show both the confusion cell-by-cell and what labels
+were assigned.
+
+This program can then be used to generate an alternate version of the cell-by-cell analysis that uses the weighted
+scores to show how the MCMC algorithm compares to people when their own uncertainty and variations in understanding
+are taken into account.
+
+\subsection{Incremental Labeling}
+
+The majority of analysis of the algorithm uses batch maps because they provide the most straightforward way to create
+comparisons. However, we also use our algorithm for place detection to create the global topological map. The batch
+analysis doesn't work here because the goal of the incremental place detection is not agreement with some established
+ground-truth map, but instead is self-consistency and stability. The focus is on creating the same abstraction of the
+environment, regardless of whether is corresponds precisely with the map a person might create. As a result, the
+evaluation of the incremental labeling only attempts to determine the stability of the generated abstraction with
+respect to itself and how stable the abstraction is in light of different viewpoints, pedestrians, clutter, or
+door states (i.e. open vs. closed).
+
+\paragraph{generate\_stability\_logs.sh}
+
+Process all logs in a directory and generate an event sequence that contains both global posees and local poses. The 
+dual poses make it easier to perform data association between multiple visits to an area because proximity/overlap
+can be used to make a data association.
+
+Stability focuses on the topological abstraction, i.e. the local transition cycle (small-scale star), but also
+computes statistics on how the boundaries of areas vary between visits to show that gateways remain in the same
+location most of the time, so boundaries can change but don't actually change very often.
+
+Currently, the Evaluation tab of the DebugUI is used to load and process the stability because the visual matching
+is so useful when creating figures or otherwise seeing if the results of the algorithm are sane and sensible.
+
+\section{Global Topological}
+
+\subsection{Setting Ground Truth}
+
+\section{Tracking}
+
+\section{Planning}
+
+ 
+\end{document}

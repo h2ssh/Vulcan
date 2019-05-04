@@ -1,0 +1,6 @@
+Import('*')
+
+components_objects = ui_env.Object(Glob('*.cpp'))
+components_lib     = ui_env.Library(target = 'vulcan_ui_components', source = components_objects)
+
+ui_env.Install(BUILD_LIB_DIR, components_lib)

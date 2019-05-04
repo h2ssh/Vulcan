@@ -1,0 +1,4 @@
+
+scons_make:
+	scons
+

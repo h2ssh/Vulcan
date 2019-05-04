@@ -1,0 +1,22 @@
+Import('*')
+
+utils_objects = lib_env.StaticObject(['utils/local_place_transform.cpp',
+                                      'utils/lpm_axes_calculator.cpp',
+                                      'utils/lpm_utils.cpp',
+                                      'utils/save_scans.cpp',
+                                      'utils/id.cpp',
+                                      Glob('metrical/*.cpp'),
+                                      Glob('metrical/localization/*.cpp'),
+                                      Glob('metrical/relocalization/*.cpp'),
+                                      Glob('metrical/mapping/*.cpp')])
+
+hssh_lib = lib_env.Library(target = 'hssh_utils', source = [utils_objects])
+lib_env.Install(BUILD_LIB_DIR, hssh_lib)
+
+SConscript(['global_topological/SConscript',
+            'global_metric/SConscript',
+            'local_metric/SConscript',
+            'local_topological/SConscript',
+            'utils/SConscript'])
+
+lib_env.Alias('hssh', ['local_metric_hssh', 'local_topo_hssh', 'global_topo_hssh'])

@@ -1,0 +1,9 @@
+Import('*')
+
+sim_env = ui_env.Clone()
+sim_objects = sim_env.Object(Glob('*.cpp'))
+
+simulator_ui = sim_env.Program('simulator_ui', [sim_objects])
+
+sim_env.Alias('simulator_ui', '#src/ui/simulator/simulator_ui')
+sim_env.Install(BUILD_BIN_DIR, simulator_ui)

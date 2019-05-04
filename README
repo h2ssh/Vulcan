@@ -1,0 +1,178 @@
+
+=========== Instructions for Vulcan ==========================
+
+STEP 1: Install dependencies using the install script.
+STEP 2: Compile Vulcan code.
+STEP 3: Run Vulcan code using log data.
+STEP 4: Collect sensor data on Vulcan
+
+===================================================================================
+
+STEP 1: Install dependecies using the install scripts.
+
+From the root directory, just run;
+
+./install.sh
+
+This script will install all required packages via apt-get and by installing other
+dependencies contained in the external folder.
+
+===================================================================================
+
+STEP 2: Compile Vulcan code.
+
+1) To compile the code, type in the Vulcan root directory:
+
+        scons (scons -c for cleaning, scons -jx with x=number of jobs)
+
+2) To view the code documentation, type in ./src
+
+        doxygen
+
+   Open the documentation from ./docs/doxygen/html/index.html.
+
+===================================================================================
+STEP 3: Run Vulcan offline
+
+1) Download log data:
+  The complete repository of logs is located in /data/vulcan/logs. While some cleanup has been done, many logs
+  are archaic and don't work with the current system. Recommended logs for trying things out are in the 'reference'
+  folder. 'bbb3_turn_in_place.log' and 'eecs3.log' both work well. In general anything from 2015 onwards should be
+  fine, as the hardware and low-level software matured by then.
+
+2) Run log data:
+
+        lcm-logplayer-gui <log data file name>
+
+3) Start the modules you want to run, the logs replace the sensors, so no sensors need to be connected.
+    All compiled modules are installed in the build/bin directory. Default arguments are sufficient to get started.
+
+    To test everything, try running:
+        - local_metric_hssh
+        - state_estimator
+        - debug_ui
+
+    Start the logplayer. In the Local Metric tab of the DebugUI, you'll see the robot driving around building an LPM
+    of the environment.
+
+===================================================================================
+STEP 4: Collect sensor data on Vulcan
+
+1) Turn on the sensors (on the wheelchair)
+2) Plug the sensors into the laptop.
+3) Start reading the sensor data, start the debug UI, and start the modules
+
+        ./start_all_sensors
+        ./start_debug_ui
+        (Most modules can be found in build/bin/.)
+
+        If you need camera (you probably don't!):
+        ./start_vulcan_camera (if you need to use the camera)
+
+4) Switch to robot mode for autonomous navigation
+5) Log data using
+
+        ./log_sensor_data
+
+6) When finished, close all sensor reading terminals (Ctrl+C)
+7) Switch to human mode if in robot mode
+8) Unplug the sensors from the laptop.
+9) Turn off the sensors.
+(IMPORTANT: Always unplug sensors from the laptop first and then turn them off, to prevent power surge)
+
+
+===================================================================================
+LCM-SPY JAVA INTEGRATION
+
+The build process produces a jar file containing the Java classes for the LCM messages. Including
+this jar file allows for introspection on the messages received by lcm-spy. The viewable messages
+will be any messages with real LCM types, as opposed to the generic binary buffer type. These
+complete types include all sensor messages and any messages involved in the high-level VADE
+architecture.
+
+To use this jar file:
+
+1) Build the code as normal via scons.
+2) Run from the root directory in a terminal:
+    source setenv.sh
+3) Run lcm-spy from this terminal.
+
+You should now see that some types of messages have been detected and have names as opposed to raw
+ids. Click on these messages and you'll be able to see the raw content!
+
+
+===============================================================
+DEPENDENCIES
+
+The following dependencies are automatically installed by the install script, but they are listed here in case you need
+to manually correct problems:
+
+Via Apt:
+
+git                    (version control system)
+scons                  (replacement for make)
+doxygen                (documentation system for C++ and other languages)
+texlive-latex-extra    (Tex Live packages)
+libboost-all-dev       (Boost C++ libraries)
+libarmadillo-dev       (linear algebra software)
+libwxgtk3.0-dev        (GUI for Vulcan)
+libwxgtk-media3.0-dev  (GUI for Vulcan)
+libf2c2-dev            (required by levmar)
+openjdk-8-jdk          (required by lcm gui, any version 6 or higher works)
+libusb-dev             (required by libphidget)
+libusb-1.0-0-dev       (required by libphidget)
+libpopt-dev            (required by peak-linux-driver, cmdline parsing)
+libsdl1.2-dev          (required by URG C++ libraries)
+libsdl-net1.2-dev      (required by URG C++ libraries)
+libopencv-dev          (OpenCV libraries)
+cmake                  (for building external libraries)
+autoconf               (for building LCM)
+
+
+External libraries:
+
+* levmar-2.6 (http://www.ics.forth.gr/~lourakis/levmar/)    (or the newest version.)
+
+        make
+        sudo cp liblevmar.a /usr/local/lib
+        sudo cp levmar.h /usr/local/include
+
+* lcm (https://github.com/lcm-proj/lcm/releases) (newest version)
+
+        ./configure
+        (Make sure Java is found; If not, do "sudo apt-get install openjdk-6/7/8-jdk" and then ./configure again.)
+        make
+        sudo make install
+
+
+* libphidget (https://www.phidgets.com/downloads/phidget21/libraries/linux/libphidget/libphidget_2.1.8.20151217.tar.gz)
+
+        ./configure
+        make
+        sudo make install
+
+
+* nlopt (http://ab-initio.mit.edu/wiki/index.php/NLopt) (newest version)
+
+        ./configure
+        make
+        sudo make install
+
+
+* peak-linux-driver (http://www.peak-system.com/fileadmin/media/linux/index.htm#download)  (newest version.)
+
+        make NET=NO_NETDEV_SUPPORT
+        sudo make install
+        sudo cp driver/pcan.h /usr/include/
+        sudo cp lib/libpcan.h /usr/include/
+
+
+* urg-0.8.18 (available in external/ directory)
+
+        ./configure LIBS=-lm
+        make
+        sudo make install
+
+        >>>>  Copy src/cpp/urg/ScipHandler.h to /usr/local/include/urg/    this is used for calculating timing information and isn't installed by default.
+
+        Note: Vulcan needs both C and C++ libraries. If C++ libraries does not compile make sure libsdl1.2-dev and libsdl-net1.2-dev are installed.

@@ -1,0 +1,17 @@
+<package>
+  <description brief="vgo_bridge">
+
+    Bridge between the VGo ROS messages and the Vulcan LCM-based communication.
+
+  </description>
+  <author>Collin Johnson</author>
+  <review status="unreviewed" notes=""/>
+  <url></url>
+
+  <depend package="roscpp"/>
+  <depend package="vgo_msgs"/>
+  <depend package="geometry_msgs"/>
+
+</package>
+
+

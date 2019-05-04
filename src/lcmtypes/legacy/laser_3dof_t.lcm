@@ -1,0 +1,28 @@
+package vulcan_lcm;
+
+/**
+* laser_3dof_t contains data sent from a laser rangefinder. The data is a list
+* of scan ranges, the angle of the first reading, and the angle increment
+* between subsequent readings.
+*/
+struct laser_3dof_t
+{
+    int32_t laser_id;
+
+    int64_t timestamp;
+    int32_t scan_id;
+
+    float start_angle;
+    float angle_increment;
+
+    int16_t num_ranges;
+    float   ranges[num_ranges];
+    int16_t intensities[num_ranges];
+
+    float max_range;
+    float scan_period;
+
+    float offset_x;
+    float offset_y;
+    float offset_theta;
+}

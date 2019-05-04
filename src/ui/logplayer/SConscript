@@ -1,0 +1,13 @@
+Import('*')
+
+logplayer_env = ui_env.Clone()
+logplayer_env.AppendUnique(LIBS=mod_env['LIBS'],
+                           LIBPATH=mod_env['LIBPATH'])
+
+logplayer_env.Prepend(LIBS=['vulcan_logplayer'])
+
+logplayer_objects = logplayer_env.Object(Glob('*.cpp'))
+logplayer_ui = logplayer_env.Program('logplayer_ui', [logplayer_objects])
+
+logplayer_env.Alias('logplayer_ui', '#src/ui/logplayer/logplayer_ui')
+logplayer_env.Install(BUILD_BIN_DIR, logplayer_ui)

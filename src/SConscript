@@ -1,0 +1,24 @@
+# For the base directory here, build the style requirements pdf and then jump into
+# each subdirectory and build those
+
+
+PDF(target = 'code_style_requirements.pdf', source = 'code_style_requirements.tex')
+
+SConscript(['core/SConscript',
+            'hssh/SConscript',
+            'calibration/SConscript',
+            'lcmtypes/SConscript',
+            'config/SConscript',
+            'laser/SConscript',
+            'logging/SConscript',
+            'math/SConscript',
+            'mpepc/SConscript',
+            'planner/SConscript',
+            'robot/SConscript',
+            'sensors/SConscript',
+            'simulator/SConscript',
+            'system/SConscript',
+            'tracker/SConscript',
+            'ui/SConscript',
+            'utils/SConscript',
+            'vision/SConscript'])

@@ -1,0 +1,19 @@
+package vulcan_lcm;
+
+/*
+* turn_command has the robot turn onto a desired path when a decision point is reached or when already at a decision
+* point. The direction to turn is relative to where the robot entered the decision point. If the robot starts at a
+* decision point, it will use its current heading to determine the turn direction.
+*/
+struct turn_command
+{
+    const int32_t LEFT = 0;
+    const int32_t RIGHT = 1;
+    const int32_t STRAIGHT = 2;
+    const int32_t BACK = 3;
+
+    int32_t id;             // Unique id for the command
+    int32_t direction;      // Direction to turn at the place -- one of the four described
+    int32_t num_to_skip;    // How many turns of this type to skip before executing the turn
+                            // The next turn = 0, The second turn = 1, etc.
+}

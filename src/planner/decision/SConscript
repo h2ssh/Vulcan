@@ -1,0 +1,9 @@
+Import('*')
+
+decision_env = mod_env.Clone()
+decision_env.Prepend(LIBS=['local_topo_hssh_data', 'global_topo_hssh_data', 'local_metric_hssh_data', 'hssh_utils'])
+
+decision_planner = decision_env.Program('decision_planner', Glob('*.cpp'))
+
+decision_env.Alias('decision_planner', '#src/planner/decision/decision_planner')
+decision_env.Install(BUILD_BIN_DIR, decision_planner)

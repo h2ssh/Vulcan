@@ -1,0 +1,9 @@
+package vulcan_lcm;
+
+struct robot_velocity_t
+{
+    int64_t timestamp;
+
+    float linear;
+    float angular;
+}

@@ -1,0 +1,9 @@
+package vulcan_lcm;
+
+struct laser_with_intensity_t
+{
+    laser_old_t laser;
+
+    int16_t num_intensities;
+    int16_t intensities[num_intensities];
+}

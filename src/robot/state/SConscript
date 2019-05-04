@@ -1,0 +1,7 @@
+Import('*')
+
+state_estimator = default_env.Program('state_estimator', [Glob('*.cpp')])
+
+default_env.Alias('state_estimator', '#src/robot/state/state_estimator')
+
+default_env.Install(BUILD_BIN_DIR, state_estimator)

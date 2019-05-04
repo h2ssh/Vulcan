@@ -1,0 +1,19 @@
+Import('*')
+
+simulator_env = mod_env.Clone()
+
+simulator_env.Prepend(LIBS=['metric_planner_func','metric_planner_data','object_tracker_data','local_topo_hssh_data','local_metric_hssh_data', 'hssh_utils'])
+
+# simulator_utils_objects = lib_env.Object(['robot_object.cpp', 'simulator_utils.cpp','robot_group.cpp','simulator_params.cpp'])
+
+# Install lib for other Modular
+# simulator_utils_lib  = lib_env.Library(target = 'simulator_utils', source = simulator_utils_objects)
+
+# default_env.Install(BUILD_LIB_DIR, simulator_utils_lib)
+
+# simulator_env.Prepend(LIBS='simulator_utils')
+
+simulator_main = simulator_env.Program('simulator_main', Glob('*.cpp'))
+
+simulator_env.Alias('simulator_main', '#src/simulator/simulator_main')
+simulator_env.Install(BUILD_BIN_DIR, simulator_main)

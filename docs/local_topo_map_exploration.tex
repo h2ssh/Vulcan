@@ -1,0 +1,66 @@
+\documentclass{article}
+
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+
+\title{Procedure for Local Topo-based Map Exploration}
+\author{Collin Johnson}
+
+\begin{document}
+
+\maketitle
+
+\section{Required Files}
+
+Before the map exploration can be successful, pull all necessary maps from woodstock using rsync in the Vulcan root 
+directory:
+
+\begin{verbatim}
+  ~/Vulcan/:rsync -ravz user@woodstock.eecs.umich.edu:/data/vulcan/data/ data/
+\end{verbatim}
+
+\section{Procedure}
+
+\begin{enumerate}
+  \item Drive the robot to the starting location:
+    \begin{itemize}
+     \item BBB3 : in front of the elevator, facing the spiral stairs
+     \item EECS3 : in front of the service elevator, facing the wall
+    \end{itemize}
+  \item Run \emph{start\_all\_sensors}
+  \item Run \emph{start\_\{bbb3,eecs3\}\_exploration}
+  \item Run \emph{log\_sensor\_data 'map name\_date.log'}
+  \item Run \emph{log\_mpepc\_data mpepc\_'map name\_date.log'}
+  \item Send relocalization message from DebugUI to get started. The maps are in data/campus\_maps/. Use either 
+bbb3\_ground\_truth.gmm or eecs3\_ground\_truth.gmm.
+  \item Jiggle the joystick a bit until relocalization is complete (should be fast).
+  \item The wheelchair will start driving.
+  \item Monitor progress using Exploration tab on DebugUI.
+  \item Stop logging data once the robot has returned to the initial location.
+\end{enumerate}
+
+\subsection{Known Issues:}
+
+The following are known issues with the exploration process. Fixing them is currently underway.
+
+\begin{itemize}
+  \item Currently the DebugUI will crash after the last area is explored. The robot will drive back to the starting 
+location before finishing. Look at the console running \emph{map\_exploration} to see when it has finished.
+  \item Area transitions are not always detected at the moment. As a result, the robot may visit some places multiple 
+times, but it'll be okay. If the current area isn't detect, you can restart \emph{local\_topo\_hssh} to force an area 
+detection if you want to end fast.
+\end{itemize}
+
+
+\section{Data}
+
+The data logs for for exploration contain the following:
+
+\begin{itemize}
+ \item Front laser at 40Hz
+ \item Back laser at 40Hz
+ \item IMU at 100Hz
+ \item Odometry at 125Hz
+ \item Encoder data at 125Hz
+\end{itemize}
+
+\end{document}
