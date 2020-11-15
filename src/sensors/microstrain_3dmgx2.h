@@ -113,7 +113,7 @@ private:
     // Methods for processing IMU data
     bool        initialize(void);
     bool        establishSerialConnection(void);
-    void        startContinuousMode(char command = 0xCC);
+    void        startContinuousMode(char command = '\xCC');
     void        stopContinuousMode(void);
     std::string readDeviceIdentifierString(char command);
 

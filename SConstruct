@@ -20,7 +20,8 @@ bare_env = Environment(ENV        = os.environ,             # use the system $PA
                        CPPPATH    = [BUILD_INCLUDE_DIR, '#src/', '#external', '#external/cereal/include',
                                      '#external/gnuplot-iostream'],
                        LIBPATH    = [BUILD_LIB_DIR],
-                       CPPDEFINES = ['_USE_LCM_'],
+                       CPPDEFINES = ['_USE_LCM_',
+                                     '-DARMA_DONT_USE_WRAPPER'],
                        tools      = ['default', 'gch'],
                        toolpath   = ['site_scons'])
 

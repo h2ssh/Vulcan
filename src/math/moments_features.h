@@ -154,7 +154,7 @@ ShapeFeatures shape_features(PointIterator begin, PointIterator end, double area
     }
 
     return features;
-};
+}
 
 
 /**
@@ -194,7 +194,7 @@ HuFeatures hu_features(PointIterator begin, PointIterator end, double area, cons
     (m[kM30]-3.0*m[kM12]) * (m[kM21]+m[kM03]) * (3.0*std::pow(m[kM30]+m[kM12], 2) - std::pow(m[kM21]+m[kM03], 2.0));
 
     return features;
-};
+}
 
 } // namespace math
 } // namespace vulcan

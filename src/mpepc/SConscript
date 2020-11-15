@@ -41,7 +41,9 @@ mpepc_env.Prepend(LIBS=['metric_planner_func',
                         'hssh_utils',
                         'nlopt']);
 
-metric_planner_objects = mpepc_env.Object(utils.NoParamsGlob(mpepc_env, 'metric_planner/*.cpp'))
+metric_planner_objects = mpepc_env.Object(['metric_planner/director.cpp',
+                                           'metric_planner/main.cpp',
+                                           'metric_planner/progress_checker.cpp',])
 
 metric_planner = mpepc_env.Program('metric_planner/metric_planner', [metric_planner_objects])
 

@@ -57,9 +57,12 @@ int main(int argc, char** argv)
     load_scan_from_file(regularIn,   loadedRegular);
     load_scan_from_file(intensityIn, loadedIntensity);
 
+    int success = 0;
+
     if(!compare_scans(regular, loadedRegular))
     {
         std::cout<<"ERROR: laser_io_test: Loaded regular scan failed to match original regular scan.\n";
+        success = 1;
     }
     else
     {
@@ -69,13 +72,14 @@ int main(int argc, char** argv)
     if(!compare_scans(intensity, loadedIntensity))
     {
         std::cout<<"ERROR: laser_io_test: Loaded intensity scan failed to match original intensity scan.\n";
+        success = 1;
     }
     else
     {
         std::cout<<"SUCCESS: laser_io_test: Loaded intensity scan matched original intensity scan.\n";
     }
 
-    return 0;
+    return success;
 }
 
 

@@ -25,6 +25,6 @@ std::ostream& operator<<(std::ostream& out, const drive_wheel_t& driveWheel)
 {
     out<<'('<<driveWheel.speed<<','<<driveWheel.motorAccel<<')';
     return out;
-};
+}
 
 } // namespace vulcan

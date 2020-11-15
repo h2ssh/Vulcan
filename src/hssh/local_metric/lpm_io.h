@@ -42,27 +42,6 @@ struct image_import_properties_t
 };
 
 /**
-* export_lpm_to_image writes the LPM cost to a PPM. The metatdata is stored at the beginning of the image.
-* The cost is stored to the green channel to allow editing in other channels.
-*
-* \param        filename    Name of the image
-* \param        lpm         LPM to save
-* \return   True if the image was saved successfully.
-*/
-bool export_lpm_to_image(const std::string& filename, const LocalPerceptualMap& lpm);
-
-/**
-* import_lpm_labels_from_image reads evaluation labels from an image originally 
-* created with export_lpm_to_image and hand labelled by coloring. The labels are
-* stored in the typeGrid of the LPM
-*
-* \param        filename    Name of the image
-* \param        lpm         LPM to load labels to
-* \return   True if the labels were loaded successfully.
-*/
-bool import_lpm_labels_from_image(const std::string& filename, LocalPerceptualMap& lpm);
-
-/**
 * import_lpm_from_image imports an LPM from a PGM image. The properties of the new LPM are provided
 * in the properties parameter.
 *

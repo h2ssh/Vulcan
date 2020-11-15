@@ -13,7 +13,7 @@ laser_lib     = default_env.Library(target = 'vulcan_laser', source = laser_obje
 default_env.Install(BUILD_LIB_DIR, laser_lib)
 
 default_env.Program('correlative_scan_matcher_test', [laser_objects,
-                                                      'correlative_scan_matcher_test.cpp'])
+                                                      'test/correlative_scan_matcher_test.cpp'])
 est_env = mod_env.Clone();
 est_env.Append(LIBS = ['vulcan_sensors'])
 laser_noise = mod_env.Program('estimate_laser_noise', [laser_objects,
@@ -21,4 +21,4 @@ laser_noise = mod_env.Program('estimate_laser_noise', [laser_objects,
 default_env.Install(BUILD_BIN_DIR, laser_noise)
 
 default_env.Program('laser_io_test', [laser_objects,
-                                      'laser_io_test.cpp'])
+                                      'test/laser_io_test.cpp'])

@@ -5,7 +5,7 @@ echo "Installing Vulcan from"$DIR
 echo "To install drivers for using the Vulcan wheelchair, set the DRIVERS environment variable:  DRIVERS=1 \
  $DIR/install.sh"
 
-sudo apt-get install -y git scons doxygen texlive-latex-extra libboost-all-dev libarmadillo-dev libwxgtk3.0-dev libwxgtk-media3.0-dev libf2c2-dev openjdk-8-jdk libusb-dev libusb-1.0-0-dev libpopt-dev libsdl1.2-dev libsdl-net1.2-dev libopencv-dev cmake autoconf;
+sudo apt-get install -y git scons doxygen texlive-latex-extra libboost-all-dev libarmadillo-dev libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev libf2c2-dev openjdk-8-jdk libusb-dev libusb-1.0-0-dev libpopt-dev libsdl1.2-dev libsdl-net1.2-dev libopencv-dev cmake autoconf;
 
 cd $DIR/external
 

@@ -24,7 +24,7 @@
 #   the variant dir should be added to the includes, before any of the other
 #   local includes for the compiler to search the pch file on the build directory
 #   that we just created. In doubt execute 'strace -f g++ ...' to check that it
-#   opens the correct pch. 
+#   opens the correct pch.
 #
 # FIXME: the original precompiled header has to be set
 #   in the environment as
@@ -104,7 +104,7 @@ def pch_emitter(pch_env_key, target, source, env):
             #print '|{0}|{1}|'.format(i, h_path)
             if i == h_path:
                 if 'explain' in env.GetOption('debug'):
-                    print 'Found dep. on pch: ', source[0], ' -> ', env[pch_env_key]
+                    print('Found dep. on pch: ', source[0], ' -> ', env[pch_env_key])
                 env.Depends(target, env[pch_env_key])
 
 

@@ -31,14 +31,14 @@ namespace vulcan
 namespace sensors
 {
 
-const char SYNC_BYTE_1 = 0x75;
-const char SYNC_BYTE_2 = 0x65;
+const char SYNC_BYTE_1 = '\x75';
+const char SYNC_BYTE_2 = '\x65';
 
-const char COMMAND_DESCRIPTOR_SET  = 0x0C;
-const char SCALED_ACCEL_DESCRIPTOR = 0x04;
-const char SCALED_GYRO_DESCRIPTOR  = 0x05;
-const char EULER_DESCRIPTOR        = 0x0C;
-const char TIME_DESCRIPTOR         = 0x0E;
+const char COMMAND_DESCRIPTOR_SET  = '\x0C';
+const char SCALED_ACCEL_DESCRIPTOR = '\x04';
+const char SCALED_GYRO_DESCRIPTOR  = '\x05';
+const char EULER_DESCRIPTOR        = '\x0C';
+const char TIME_DESCRIPTOR         = '\x0E';
 
 const double GRAVITY_CONSTANT_3DM_GX3 = 9.80665;
 
@@ -133,10 +133,10 @@ void Microstrain3DMGX3::stopData(void)
 
     mode = WAIT_FOR_ACK;
 
-    ack.set = 0x0C;
+    ack.set = '\x0C';
     ack.descriptors.clear();
-    ack.descriptors.push_back(0x11);
-    ack.descriptors.push_back(0x11);
+    ack.descriptors.push_back('\x11');
+    ack.descriptors.push_back('\x11');
     ack.acked.clear();
     ack.acked.push_back(false);
     ack.acked.push_back(false);
@@ -162,12 +162,12 @@ void Microstrain3DMGX3::calibrate(void)
 
 void Microstrain3DMGX3::setMessageFormat(void)
 {
-    const char DECIMATE_TO_100HZ = 0x0A;
+    const char DECIMATE_TO_100HZ = '\x0A';
 
     mode = WAIT_FOR_ACK;
-    ack.set = 0x0C;
+    ack.set = '\x0C';
     ack.descriptors.clear();
-    ack.descriptors.push_back(0x08);
+    ack.descriptors.push_back('\x08');
     ack.acked.clear();
     ack.acked.push_back(false);
 
@@ -175,24 +175,24 @@ void Microstrain3DMGX3::setMessageFormat(void)
     formatMessage[0] = SYNC_BYTE_1;
     formatMessage[1] = SYNC_BYTE_2;
     formatMessage[2] = COMMAND_DESCRIPTOR_SET;
-    formatMessage[3] = 0x10;
+    formatMessage[3] = '\x10';
 
     // AHRS Message Format (0x0C, 0x08)
-    formatMessage[4] = 0x10;
-    formatMessage[5] = 0x08;
-    formatMessage[6] = 0x01;
-    formatMessage[7] = 0x04;
+    formatMessage[4] = '\x10';
+    formatMessage[5] = '\x08';
+    formatMessage[6] = '\x01';
+    formatMessage[7] = '\x04';
 
     formatMessage[8]  = SCALED_ACCEL_DESCRIPTOR;
-    formatMessage[9]  = 0X00;
+    formatMessage[9]  = '\x00';
     formatMessage[10] = DECIMATE_TO_100HZ;
 
     formatMessage[11] = SCALED_GYRO_DESCRIPTOR;
-    formatMessage[12] = 0X00;
+    formatMessage[12] = '\x00';
     formatMessage[13] = DECIMATE_TO_100HZ;
 
     formatMessage[14] = EULER_DESCRIPTOR;
-    formatMessage[15] = 0X00;
+    formatMessage[15] = '\x00';
     formatMessage[16] = DECIMATE_TO_100HZ;
 
     formatMessage[17] = TIME_DESCRIPTOR;
@@ -239,9 +239,9 @@ void Microstrain3DMGX3::startContinuousMode(void)
 
     mode = WAIT_FOR_ACK;
 
-    ack.set = 0x0C;
+    ack.set = '\x0C';
     ack.descriptors.clear();
-    ack.descriptors.push_back(0x11);
+    ack.descriptors.push_back('\x11');
     ack.acked.clear();
     ack.acked.push_back(false);
 
@@ -369,12 +369,12 @@ void Microstrain3DMGX3::processDeviceInfo(char set, const char* packet, int leng
 
 void Microstrain3DMGX3::processAck(char set, const char* payload, int length)
 {
-    const char ACK_KEY = 0xF1;
+    const char ACK_KEY = '\xF1';
 
     const int ACK_DESCRIPTOR_OFFSET     = 1;
     const int COMMAND_DESCRIPTOR_OFFSET = 2;
     const int ERROR_CODE_OFFSET         = 3;
-   
+
     assert(length >= ERROR_CODE_OFFSET);
 
     if(payload[ACK_DESCRIPTOR_OFFSET] == ACK_KEY)
@@ -405,8 +405,8 @@ void Microstrain3DMGX3::verifyAck(char set, char descriptor, char status)
 
 void Microstrain3DMGX3::processContinuousData(char set, const char* payload, int length)
 {
-    const char AHRS_DATA = 0x80;
-    const char GPS_DATA  = 0x81;
+    const char AHRS_DATA = '\x80';
+    const char GPS_DATA  = '\x81';
 
     switch(set)
     {
@@ -466,7 +466,7 @@ bool valid_checksum(const char* data, int packetLength)
                  ((checksum & 0x00FF)       == (uint8_t)data[packetLength - 1]);
 
     std::cout<<"DEBUG:Microstrain3DMGX3:Checksum: Calc:"<<((checksum & 0xFF00) >> 8)<<' '<<(checksum & 0x00FF)
-             <<" Received:"<<(int)(uint8_t)data[packetLength-2]<<' '<<(int)(uint8_t)data[packetLength-1]<<" Valid:"<<valid<<'\n'; 
+             <<" Received:"<<(int)(uint8_t)data[packetLength-2]<<' '<<(int)(uint8_t)data[packetLength-1]<<" Valid:"<<valid<<'\n';
     #endif
 
     return ((checksum & 0xFF00) >> 8) == (uint8_t)data[packetLength - 2] &&
@@ -562,19 +562,19 @@ uint32_t parse_internal_timestamp(const char* data, uint32_t previousTimer, imu_
     *
     * Units: 16 microsecond ticks
     */
-    
+
     const int kTickDurationUs = 16;
 
     uint32_t timer = utils::char_to_uint32_t(data[0], data[1], data[2], data[3]);  // value in timer ticks
     uint32_t deltaTime = timer - previousTimer;
-    
+
     if(timer < previousTimer)  // check to see if roll over happened, if so, then figure out what the offset is
     {
         deltaTime = timer + (std::numeric_limits<uint32_t>::max() - previousTimer);
     }
-    
+
     imu.timeDelta = deltaTime * kTickDurationUs; // convert to microseconds
-    
+
     return timer;
 }
 

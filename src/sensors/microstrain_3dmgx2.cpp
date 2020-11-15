@@ -110,7 +110,7 @@ bool Microstrain3DMGX2::getIMUData(imu_data_t& data)
     // Ensure continuous mode is running, otherwise data is not being read
     if(!continuousModeActive)
     {
-        activeCommand        = 0xCC;
+        activeCommand        = '\xCC';
         activeResponseLength = 79;
 
         startContinuousMode(activeCommand);
@@ -139,7 +139,7 @@ unsigned int Microstrain3DMGX2::getVersion(void)
     // 0xF0 is the firmware command
 
     const int  RESPONSE_LENGTH = 7;
-    const char COMMAND         = 0xE9;
+    const char COMMAND         = '\xE9';
     int        numRead         = RESPONSE_LENGTH;
     char       response[RESPONSE_LENGTH];
 
@@ -162,7 +162,7 @@ unsigned int Microstrain3DMGX2::getVersion(void)
 
 std::string Microstrain3DMGX2::getSerialNumber(void)
 {
-    const char SERIAL_NUMBER_COMMAND = 0x01;
+    const char SERIAL_NUMBER_COMMAND = '\x01';
 
     if(serialNumber.empty())
     {
@@ -190,7 +190,7 @@ microstrain_3DMGX2_temperature_t Microstrain3DMGX2::getTemperature(void)
     *           [13-14] = Checksum
     */
 
-    const char COMMAND         = 0xD1;
+    const char COMMAND         = '\xD1';
     const int  RESPONSE_LENGTH = 15;
     int        numRead         = RESPONSE_LENGTH;
     char       response[RESPONSE_LENGTH];
@@ -250,9 +250,9 @@ bool Microstrain3DMGX2::captureBias(uint16_t sampleTimeMs)
     }
 
     // Create the command
-    command[0] = 0xCD;
-    command[1] = 0xC1;
-    command[2] = 0x29;
+    command[0] = '\xCD';
+    command[1] = '\xC1';
+    command[2] = '\x29';
     utils::uint16_to_char(sampleTimeMs, command[3], command[4]);
 
     // Send it off and wait for a response
@@ -341,12 +341,12 @@ void Microstrain3DMGX2::startContinuousMode(char command)
 //
 //     int numRead = RESPONSE_LENGTH;
 
-    commandString[0] = 0xC4;
-    commandString[1] = 0xC1;
-    commandString[2] = 0x29;
+    commandString[0] = '\xC4';
+    commandString[1] = '\xC1';
+    commandString[2] = '\x29';
     commandString[3] = command;
 
-    serial.write(commandString);
+    serial.write(commandString, COMMAND_LENGTH);
     serial.flush();
 
     continuousModeActive = true;
@@ -386,10 +386,10 @@ std::string Microstrain3DMGX2::readDeviceIdentifierString(char command)
 
     int numRead = RESPONSE_LENGTH;
 
-    commandString[0] = 0xEA;
+    commandString[0] = '\xEA';
     commandString[1] = command;
 
-    serial.write(commandString, 2);
+    serial.write(commandString, COMMAND_LENGTH);
     numRead = read_full_imu_packet(serial, response, RESPONSE_LENGTH);
 
     if(!valid_packet(response, numRead, RESPONSE_LENGTH-2))
@@ -521,13 +521,13 @@ imu_data_t Microstrain3DMGX2::parseActivePacket(int startByte)
     parse_accelerations_from_cc_packet   (packet, data);
     parse_angular_velocity_from_cc_packet(packet, data);
     parse_euler_angles_from_cc_packet    (packet, data);
-    
+
     previousTimer = calculate_time_delta_from_cc_packet(previousTimer,
                                                         packet,
                                                         secondsPerTick_,
                                                         data);
     totalSensorTime_ += data.timeDelta;
-    
+
     data.timestamp        = time_.timestamp(totalSensorTime_);
     data.gravityMagnitude = gravityMagnitude;
 
@@ -621,22 +621,22 @@ uint32_t calculate_time_delta_from_cc_packet(uint32_t previousTimer,
 {
     /*
     * [73-76] = Timer
-    * 
+    *
     * From the documentation:
     *   Timer / 19660800.0 = time in seconds for GX2
     *   16us ticks for GX3
     */
-    
+
     uint32_t timer     = utils::char_to_uint32_t(imuResponse[73], imuResponse[74], imuResponse[75], imuResponse[76]);
     uint32_t deltaTime = timer - previousTimer;
-    
+
     if(timer < previousTimer)  // check to see if roll over happened, if so, then figure out what the offset is
     {
         deltaTime = timer + (std::numeric_limits<uint32_t>::max() - previousTimer);
     }
-    
+
     imuData.timeDelta = utils::sec_to_usec(deltaTime * secondsPerTick);    // go to seconds then to microseconds
-    
+
     return timer;
 }
 

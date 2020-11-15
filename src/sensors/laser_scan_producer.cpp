@@ -1,22 +1,6 @@
-/* Copyright (C) 2010-2019, The Regents of The University of Michigan.
- All rights reserved.
-
- This software was developed as part of the The Vulcan project in the Intelligent Robotics Lab
- under the direction of Benjamin Kuipers, kuipers@umich.edu. Use of this code is governed by an
- MIT-style License that can be found at "https://github.com/h2ssh/Vulcan".
-*/
-
-
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <boost/shared_ptr.hpp>
-
 #include <core/pose.h>
-#include <math/geometry/rectangle.h>
 #include <sensors/laser_rangefinder.h>
 #include <core/laser_scan.h>
-#include <laser/laser_io.h>
 
 #include <sensors/hokuyo_urg_laser.h>
 #include <system/module_communicator.h>
@@ -25,6 +9,10 @@
 #include <utils/config_file.h>
 #include <utils/config_file_utils.h>
 #include <utils/timestamp.h>
+
+#include <string>
+#include <iostream>
+#include <memory>
 
 using namespace vulcan;
 
@@ -66,14 +54,13 @@ const std::string MODEL_KEY       ("laser_model");
 struct laser_params_t
 {
     pose_6dof_t     offset;
-    math::Rectangle<float> robotBoundary;
-    bool                   withIntensity;
-    std::size_t            firstValidIndex;
-    std::size_t            lastValidIndex;
-    std::string            channel;
-    std::string            port;
-    std::string            model;
-    int                    id;
+    bool            withIntensity;
+    std::size_t     firstValidIndex;
+    std::size_t     lastValidIndex;
+    std::string     channel;
+    std::string     port;
+    std::string     model;
+    int             id;
 };
 
 
@@ -83,25 +70,20 @@ bool display_help_message_if_needed(const utils::CommandLine& commandLine);
 laser_params_t load_laser_params(const utils::CommandLine& commandLine);
 
 // Helpers for loading the correct drivers
-boost::shared_ptr<sensors::LaserRangefinder> load_rangefinder_driver(const laser_params_t& params);
-boost::shared_ptr<sensors::LaserRangefinder> load_hokuyo_urg_laser_driver(const laser_params_t& params);
+std::shared_ptr<sensors::LaserRangefinder> load_rangefinder_driver(const laser_params_t& params);
+std::shared_ptr<sensors::LaserRangefinder> load_hokuyo_urg_laser_driver(const laser_params_t& params);
 
 // Helpers for loading the correct communication protocol
-boost::shared_ptr<system::ModuleCommunicator> load_scan_transmitter(const laser_params_t& params);
+std::shared_ptr<system::ModuleCommunicator> load_scan_transmitter(const laser_params_t& params);
 
 std::string data_description(const utils::CommandLine& commandLine);
-std::string log_filename    (const utils::CommandLine& commandLine);
 
 // Helpers for doing the actual data transmission
-void produce_laser_scans(boost::shared_ptr<sensors::LaserRangefinder>      rangefinder,
-                         boost::shared_ptr<system::ModuleCommunicator> transmitter,
-                         const laser_params_t&                             params,
-                         const std::string&                                logFilename);
+void produce_laser_scans(std::shared_ptr<sensors::LaserRangefinder>  rangefinder,
+                         std::shared_ptr<system::ModuleCommunicator> transmitter,
+                         const laser_params_t&                         params);
 
 void invalidate_scan_points(polar_laser_scan_t& scan, size_t firstIndex, size_t lastIndex);
-void invalidate_scan_points_hitting_robot(polar_laser_scan_t&           polar,
-                                          const cartesian_laser_scan_t& cartesian,
-                                          const math::Rectangle<float>&        boundary);
 
 /**
 * laser_scan_producer is a program that reads data from a laser rangefinder and then
@@ -124,7 +106,6 @@ void invalidate_scan_points_hitting_robot(polar_laser_scan_t&           polar,
 *   --id          'id'          Unique id for the laser
 *   --with-intensity            If present, then capture intensity data along with the range data (optional)
 *   --channel 'name'            Name of the channel for the data : Default = SENSOR_FRONT_LASER
-*   --log-file 'filename'       Name of file in which to save the scan data being produced. If the option isn't set, data isn't logged (optional)
 */
 int main(int argc, char** argv)
 {
@@ -138,11 +119,10 @@ int main(int argc, char** argv)
 
     laser_params_t params = load_laser_params(commandLine);
 
-    boost::shared_ptr<sensors::LaserRangefinder>       rangefinder = load_rangefinder_driver(params);
-    boost::shared_ptr<system::ModuleCommunicator>  transmitter = load_scan_transmitter(params);
-    std::string                                        logFilename = log_filename(commandLine);
+    std::shared_ptr<sensors::LaserRangefinder>       rangefinder = load_rangefinder_driver(params);
+    std::shared_ptr<system::ModuleCommunicator>  transmitter = load_scan_transmitter(params);
 
-    produce_laser_scans(rangefinder, transmitter, params, logFilename);
+    produce_laser_scans(rangefinder, transmitter, params);
 
     return 0;
 }
@@ -202,12 +182,10 @@ laser_params_t load_laser_params(const utils::CommandLine& commandLine)
     laser_params_t params;
 
     params.offset        = utils::create_pose_6dof_from_string(config.getValueAsString(PRODUCER_HEADING, OFFSET_KEY));
-    params.robotBoundary = utils::create_rectangle_from_string(config.getValueAsString(PRODUCER_HEADING, BOUNDARY_KEY));
     params.firstValidIndex = config.getValueAsUInt32(PRODUCER_HEADING, FIRST_VALID_KEY);
     params.lastValidIndex  = config.getValueAsUInt32(PRODUCER_HEADING, LAST_VALID_KEY);
 
     assert(params.firstValidIndex <= params.lastValidIndex);
-    assert(params.firstValidIndex >= 0 && params.lastValidIndex >= 0);
 
     if(!commandLine.argumentExists(CHANNEL) && config.hasValue(PRODUCER_HEADING, CHANNEL_KEY))
     {
@@ -259,11 +237,11 @@ laser_params_t load_laser_params(const utils::CommandLine& commandLine)
 
 
 // Helpers for loading the correct drivers
-boost::shared_ptr<sensors::LaserRangefinder> load_rangefinder_driver(const laser_params_t& params)
+std::shared_ptr<sensors::LaserRangefinder> load_rangefinder_driver(const laser_params_t& params)
 {
     assert(!params.model.empty());
 
-    boost::shared_ptr<sensors::LaserRangefinder> rangefinder;
+    std::shared_ptr<sensors::LaserRangefinder> rangefinder;
 
     if((params.model == URG_04LX) || (params.model == UTM_30LX))
     {
@@ -277,18 +255,18 @@ boost::shared_ptr<sensors::LaserRangefinder> load_rangefinder_driver(const laser
 }
 
 
-boost::shared_ptr<sensors::LaserRangefinder> load_hokuyo_urg_laser_driver(const laser_params_t& params)
+std::shared_ptr<sensors::LaserRangefinder> load_hokuyo_urg_laser_driver(const laser_params_t& params)
 {
     assert(!params.port.empty());
 
-    return boost::shared_ptr<sensors::LaserRangefinder>(new sensors::HokuyoURGLaser(params.port, params.id, params.withIntensity));
+    return std::shared_ptr<sensors::LaserRangefinder>(new sensors::HokuyoURGLaser(params.port, params.id, params.withIntensity));
 }
 
 
 // Helpers for loading the correct communication protocol
-boost::shared_ptr<system::ModuleCommunicator> load_scan_transmitter(const laser_params_t& params)
+std::shared_ptr<system::ModuleCommunicator> load_scan_transmitter(const laser_params_t& params)
 {
-    return boost::shared_ptr<system::ModuleCommunicator>(new system::ModuleCommunicator());
+    return std::shared_ptr<system::ModuleCommunicator>(new system::ModuleCommunicator());
 }
 
 
@@ -299,22 +277,14 @@ std::string log_filename(const utils::CommandLine& commandLine)
 
 
 // Helpers for doing the actual data transmission
-void produce_laser_scans(boost::shared_ptr<sensors::LaserRangefinder>      rangefinder,
-                         boost::shared_ptr<system::ModuleCommunicator> transmitter,
-                         const laser_params_t&                             params,
-                         const std::string&                                logFilename)
+void produce_laser_scans(std::shared_ptr<sensors::LaserRangefinder>      rangefinder,
+                         std::shared_ptr<system::ModuleCommunicator> transmitter,
+                         const laser_params_t&                             params)
 {
     int64_t startTime   = 0;
     int64_t endTime     = 0;
     int64_t deltaTime   = 0;
     int     numReadings = 0;
-
-    std::ofstream logFile;
-
-    if(logFilename.length() > 0)
-    {
-        logFile.open(logFilename.c_str());
-    }
 
     rangefinder->calculateLatency();
 
@@ -347,14 +317,8 @@ void produce_laser_scans(boost::shared_ptr<sensors::LaserRangefinder>      range
 
             polar_scan_to_cartesian_scan_in_robot_frame(polarScan, cartesianScan, false);
             invalidate_scan_points(polarScan, params.firstValidIndex, params.lastValidIndex);
-//             invalidate_scan_points_hitting_robot(polarScan, cartesianScan, params.robotBoundary);
 
             transmitter->sendMessage(polarScan, params.channel);
-
-            if(logFile.is_open())
-            {
-                laser::save_laser_scan_to_file(polarScan, logFile);
-            }
 
             ++polarScan.scanId;
         }
@@ -370,23 +334,6 @@ void invalidate_scan_points(polar_laser_scan_t& scan, size_t firstIndex, size_t 
         if((n < firstIndex || n > lastIndex) && (scan.ranges[n] > 0))
         {
             scan.ranges[n] *= -1;
-        }
-    }
-}
-
-
-void invalidate_scan_points_hitting_robot(polar_laser_scan_t&           polar,
-                                          const cartesian_laser_scan_t& cartesian,
-                                          const math::Rectangle<float>&        boundary)
-{
-    // Invalid scan points are those that fall within the bounding rectangle of the robot. The visibility of the lasers
-    // overlaps the actual robot. Thus, those points hitting the robot should be ignored. Ignoring laser points means
-    // their range is set to a negative number.
-    for(uint16_t n = 0; n < cartesian.numPoints; ++n)
-    {
-        if(boundary.contains(cartesian.scanPoints[n]) || n > 1040)
-        {
-            polar.ranges[n] *= -1;
         }
     }
 }

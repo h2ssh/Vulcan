@@ -10,7 +10,7 @@
 /**
 * \file     float_io.h
 * \author   Collin Johnson
-* 
+*
 * Helper functions for dealing with saving/loading floating point values to/from a stream.
 */
 
@@ -38,7 +38,7 @@ void save_floating_point(std::ostream& out, T val)
 {
     static_assert(std::is_floating_point<T>::value, "save_floating_point type must be floating point");
     out << std::setprecision(std::numeric_limits<double>::max_digits10) << val << ' ';
-};
+}
 
 /**
 * load_floating_point loads a floating point number from a stream.

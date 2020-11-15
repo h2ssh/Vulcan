@@ -485,7 +485,7 @@ void DiscretizedAngleGrid::tileWrite(Tile tile)
         std::cerr << "ERROR:DiscretizedAngleGrid: Failed to open tile cache file:" << tileName << '\n';
         perror("errno:");
     }
-};
+}
 
 
 void DiscretizedAngleGrid::tileRead(Tile tile)
@@ -496,9 +496,15 @@ void DiscretizedAngleGrid::tileRead(Tile tile)
     if(fp)
     {
         std::size_t compression;
-        if(fread(&compression,sizeof(std::size_t),1,fp));
+        if(fread(&compression,sizeof(std::size_t),1,fp))
+        {
+            // do nothing on error...
+        }
         std::size_t readsize;
-        if(fread(&readsize,sizeof(std::size_t),1,fp));
+        if(fread(&readsize,sizeof(std::size_t),1,fp))
+        {
+            // do nothing on error
+        }
 
         //Data is uncompressed
         if(!compression)

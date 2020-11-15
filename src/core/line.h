@@ -375,7 +375,7 @@ double distance_to_point_from_line_segment(const Point<T>& point, const Line<T>&
     distanceToPoint = std::sqrt(static_cast<double>(distanceToPoint));
 
     return distanceToPoint;
-};
+}
 
 
 /**
