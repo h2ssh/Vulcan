@@ -39,8 +39,8 @@ struct isovist_local_maximum_t
 };
 
 // inline bool operator<(const isovist_local_maximum_t& lhs, const isovist_local_maximum_t& rhs) { return lhs.totalChange < rhs.totalChange; };
-inline bool operator<(const isovist_local_maximum_t& lhs, const isovist_local_maximum_t& rhs) { return lhs.maximum < rhs.maximum; };
-inline bool operator>(const isovist_local_maximum_t& lhs, const isovist_local_maximum_t& rhs) { return lhs.maximum > rhs.maximum; };
+inline bool operator<(const isovist_local_maximum_t& lhs, const isovist_local_maximum_t& rhs) { return lhs.maximum < rhs.maximum; }
+inline bool operator>(const isovist_local_maximum_t& lhs, const isovist_local_maximum_t& rhs) { return lhs.maximum > rhs.maximum; }
 
 /**
 * VoronoiIsovistMaxima finds and provides access to the local maxima amongst the isovist gradients.
@@ -62,7 +62,7 @@ public:
     * \param    numAboveMean            Retrieve the number of gradient values that must be above the mean value for a maxima to be valid
     * \param    saveData                Flag indicating if data should be saved for debugging (optional, default = false)
     */
-    VoronoiIsovistMaxima(const VoronoiIsovistGradients& gradients, 
+    VoronoiIsovistMaxima(const VoronoiIsovistGradients& gradients,
                          const VoronoiEdges& edges,
                          const VoronoiSkeletonGrid& grid,
                          int numAboveMean = 2,
@@ -89,7 +89,7 @@ private:
     void findMaximaAlongEdge(CellConstIter begin, CellConstIter end, int descendingCutoff);
 };
 
-} // namespace hssh 
+} // namespace hssh
 } // namespace vulcan
 
 #endif // HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_MAXIMA_H

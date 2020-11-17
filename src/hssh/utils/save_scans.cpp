@@ -10,9 +10,9 @@
 /**
 * \file     save_scans.cpp
 * \author   Paul Foster
-* 
+*
 * Functions to allow saving the scans used in mapping to file
-* 
+*
 *   - accumulate_scan  :  stores a copy of the scan to a list of scans used
 *   - save_scans       :  dumps the stored scans to disk
 */
@@ -29,7 +29,7 @@ namespace hssh
 
 /**
  * scan_save_data_t stores the part of the scan data to save to file later
- * 
+ *
  */
 struct scan_save_data_t
 {
@@ -41,12 +41,12 @@ struct scan_save_data_t
     float thetaEnd;
     std::vector<laser::adjusted_ray_t> rays;
 };
-    
+
 static std::vector<scan_save_data_t> log;
 
 /**
 * accumulate_scan
-* 
+*
 * \param    scan      Maximum number of features to consider
 */
 void accumulate_scan(const map_update_data_t& data)
@@ -67,12 +67,12 @@ void accumulate_scan(const map_update_data_t& data)
     log.push_back(std::move(scanData));
 
     std::cout << "pushed:" << log.size() << '\n';
-};
+}
 
 #define w(r) {const auto& d=r;fwrite(&d,sizeof d,1,f);}
 /**
 * save_scans
-* 
+*
 * \param    filename File to save to
 */
 void save_scans(const std::string& filename) {

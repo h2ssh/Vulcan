@@ -653,7 +653,7 @@ voronoi_directions_t find_directions_from_trace(const voronoi_trace_t& trace, do
     double minHintDist  = 1000.0;
     double minOtherDist = 1000.0;
 
-    voronoi_directions_t directions = { angleHint, otherHint };
+    voronoi_directions_t directions = { angleHint, otherHint, minHintDist, minOtherDist };
 
     for(auto& t : trace.traces)
     {

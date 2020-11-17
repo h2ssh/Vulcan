@@ -10,7 +10,7 @@
 /**
 * \file     isovist_voronoi_gateway_generator.cpp
 * \author   Collin Johnson
-* 
+*
 * Definition of IsovistVoronoiGatewayGenerator.
 */
 
@@ -64,24 +64,24 @@ std::vector<WeightedGateway> IsovistVoronoiGatewayGenerator::generateGateways(co
     VoronoiEdges edges(grid, SKELETON_CELL_REDUCED_SKELETON);
     VoronoiIsovistGradients gradients(edges);
     gradients.calculateGradients(utils::Isovist::kShapeEccentricity, isovists);
-    
+
     VoronoiIsovistMaxima maxima(gradients, edges, grid, params_.numAboveMean, params_.saveGradientData);
-    
+
     initialGateways_.clear();
     isovists_      = &isovists;
     grid_          = &grid;
     validator_     = &validator;
 
     sourceToCells_ = extract_source_cells(grid, SKELETON_CELL_REDUCED_SKELETON);
-    
+
     for(auto& maximum : maxima)
     {
         createGatewayForMaximumIfValid(maximum);
     }
-    
+
     std::cout << "INFO: IsovistVoronoiGatewayGenerator: Maxima:" << maxima.size()
         << " Num generated:" << initialGateways_.size() << '\n';
-        
+
     return initialGateways_;
 }
 
@@ -89,7 +89,7 @@ std::vector<WeightedGateway> IsovistVoronoiGatewayGenerator::generateGateways(co
 bool IsovistVoronoiGatewayGenerator::createGatewayForMaximumIfValid(const isovist_local_maximum_t& maximum)
 {
     proposeGatewaysForMaximum(maximum);
-    
+
     if(proposals_.empty())
     {
         return false;
@@ -97,13 +97,13 @@ bool IsovistVoronoiGatewayGenerator::createGatewayForMaximumIfValid(const isovis
 
     // There was at least one proposal, so select the smallest proposed gateway and call it good
     auto bestProposalIt = std::max_element(proposals_.begin(), proposals_.end());
-    initialGateways_.emplace_back(WeightedGateway{toGateway(*bestProposalIt), bestProposalIt->gradient});
+    initialGateways_.emplace_back(WeightedGateway{toGateway(*bestProposalIt), bestProposalIt->gradient, false});
 
 #ifdef DEBUG_GATEWAYS
     std::cout << "DEBUG: GatewayGenerator: Best gateway for: " << maximum.maximum.position << "->"
         << initialGateways_.back().gateway.boundary() << '\n';
 #endif
-    
+
     return true;
 }
 
@@ -113,19 +113,19 @@ void IsovistVoronoiGatewayGenerator::proposeGatewaysForMaximum(const isovist_loc
     proposals_.clear();
     sourceCells_.clear();
     edgeCells_.clear();
-    
+
     // Find all valid source cells for gateways and all valid skeleton edge cells
-    
+
     for(auto& cell : maximum.skeletonCells)
     {
         // Find valid source cells associated with this skeleton cell
-        std::copy_if(grid_->beginSourceCells(cell.position), 
-                     grid_->endSourceCells(cell.position), 
-                     std::back_inserter(sourceCells_), 
+        std::copy_if(grid_->beginSourceCells(cell.position),
+                     grid_->endSourceCells(cell.position),
+                     std::back_inserter(sourceCells_),
                      [this](cell_t source) {
             return validator_->isValidEndpoint(source);
         });
-        
+
         // Store the cell itself for further gateway creation
         edgeCells_.push_back(cell.position);
     }
@@ -135,7 +135,7 @@ void IsovistVoronoiGatewayGenerator::proposeGatewaysForMaximum(const isovist_loc
     // For each skeleton cell, find the best possible gateway
     for(auto& cell : maximum.skeletonCells)
     {
-        // Ignore any cells that fall on a junction because 
+        // Ignore any cells that fall on a junction because
         if(num_neighbor_cells_with_classification(cell.position, SKELETON_CELL_REDUCED_SKELETON, *grid_, FOUR_THEN_EIGHT_WAY) > 2)
         {
             continue;
@@ -150,7 +150,7 @@ void IsovistVoronoiGatewayGenerator::proposeGatewaysForMaximum(const isovist_loc
             proposals_.push_back(*gateway);
         }
     }
-    
+
 #ifdef DEBUG_GATEWAYS
     if(proposals_.empty())
     {
@@ -184,7 +184,7 @@ IsovistVoronoiGatewayGenerator::proposeGatewayForSkeletonCell(cell_t skeletonCel
         for(auto source : boost::make_iterator_range(grid_->beginSourceCells(skeletonCell) + 1, grid_->endSourceCells(skeletonCell)))
         {
             auto sourceGateway = createProposalForSource(source, skeletonCell);
-            
+
             if(sourceGateway)
             {
                 if(!bestGateway || (sourceGateway->score() > bestGateway->score()))
@@ -193,7 +193,7 @@ IsovistVoronoiGatewayGenerator::proposeGatewayForSkeletonCell(cell_t skeletonCel
                 }
             }
         }
-        
+
         return bestGateway;
     }
     else
@@ -215,7 +215,7 @@ IsovistVoronoiGatewayGenerator::createProposalForSource(cell_t source, cell_t sk
     {
         return proposed_gateway_t(std::make_pair(source, bestGateway.second), bestGateway.first);
     }
-    
+
     return boost::none;
 }
 

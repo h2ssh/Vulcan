@@ -477,13 +477,15 @@ void AreaGraph::createEdgeBetweenNeighbors(CellNodePair node, CellNodePair neigh
     cells.push_back(
         {node.first,
         utils::grid_point_to_global_point(node.first, grid),
-        grid.getMetricDistance(node.first.x, node.first.y)}
+        grid.getMetricDistance(node.first.x, node.first.y),
+        false}
     );
 
     cells.push_back({
         neighbor.first,
         utils::grid_point_to_global_point(neighbor.first, grid),
-        grid.getMetricDistance(neighbor.first.x, neighbor.first.y)}
+        grid.getMetricDistance(neighbor.first.x, neighbor.first.y),
+        false}
     );
 
     addEdge(endpoints, cells, grid.metersPerCell(), node.second->isOnBoundary() | neighbor.second->isOnBoundary());

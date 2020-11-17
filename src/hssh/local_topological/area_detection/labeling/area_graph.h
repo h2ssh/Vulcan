@@ -62,11 +62,11 @@ class AreaNode
 {
 public:
 
-    static const char kJunction = 0x01;
-    static const char kGateway  = 0x02;
-    static const char kFrontier = 0x04;
-    static const char kDeadEnd  = 0x08;
-    static const char kAll      = 0xFF;
+    static const uint8_t kJunction = 0x01;
+    static const uint8_t kGateway  = 0x02;
+    static const uint8_t kFrontier = 0x04;
+    static const uint8_t kDeadEnd  = 0x08;
+    static const uint8_t kAll      = 0xFF;
 
     using EdgeIter = std::vector<AreaEdgePtr>::const_iterator;
 
@@ -168,7 +168,7 @@ private:
 
     Point<float>       position;
     cell_t                   cell;
-    char                     type;
+    uint8_t                  type;
     double                   probability = 1.0;
     bool                     onBoundary;
     bool                     onLoop = false;
