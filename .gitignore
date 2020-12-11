@@ -17,10 +17,8 @@ vulcan_lcm/*
 images/*
 data/*
 docs/doxygen/*
-build/release/*
-build/debug/*
-build/bin/*
-build/lib/
+build/
+bin/
 external/flycapture2-2.2.3.14-amd64/*
 /nbproject/private/
 /External_Libs/
