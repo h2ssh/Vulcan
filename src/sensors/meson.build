@@ -8,7 +8,7 @@ laser_producer = executable(
     include_directories : vulcan_inc,
     dependencies : urg_dep,
     link_with : [core_lib, system_lib, lcm_lib, utils_lib],
-    install : true
+    install : true,
 )
 
 ############################## IMU producer ###################################
@@ -21,7 +21,7 @@ imu_producer = executable(
     [ imu_src, 'imu_data_producer.cpp'],
     include_directories : vulcan_inc,
     link_with : [core_lib, system_lib, lcm_lib, utils_lib],
-    install : true
+    install : true,
 )
 
 ############################## Odometry producer ###################################
@@ -40,7 +40,7 @@ odometry_producer = executable(
     include_directories : vulcan_inc,
     dependencies : phidgets_dep,
     link_with : [core_lib, system_lib, lcm_lib, utils_lib],
-    install : true
+    install : true,
 )
 
 ################################ Sensors library ##################################
