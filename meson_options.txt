@@ -1,0 +1,7 @@
+option(
+    'platform',
+    type : 'combo',
+    choices : ['none', 'vulcan'],
+    value : 'none',
+    description : 'Platform software will be running on. If none, then no drivers will be built for low-level hardware interfaces',
+)
