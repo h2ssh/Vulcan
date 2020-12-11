@@ -135,6 +135,6 @@ private:
 } // namespace mpepc
 } // namespace vulcan
 
-DEFINE_DEBUG_MESSAGE(mpepc::VisibilityAnalysis, ("DEBUG_MPEPC_VISIBILITY_ANALYSIS"));
+DEFINE_DEBUG_MESSAGE(mpepc::VisibilityAnalysis, ("DEBUG_MPEPC_VISIBILITY_ANALYSIS"))
 
 #endif // MPEPC_GRIDS_VISIBILITY_ANALYSIS_H

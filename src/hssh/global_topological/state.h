@@ -10,7 +10,7 @@
 /**
 * \file     topological_state.h
 * \author   Collin Johnson
-* 
+*
 * Declaration of TopologicalState.
 */
 
@@ -32,7 +32,7 @@ namespace hssh
 
 /**
 * TopologicalState represents a possible topological state of the robot. The state contains:
-* 
+*
 *   - a unique identifier to be used for identifying the state in the TreeOfMaps
 *   - a topological map representing the robot's knowledge of the environment
 *   - the probability distribution for the map
@@ -50,7 +50,7 @@ struct TopologicalState
     int visitDepth = -1;
     int numPlaceVisits = 0;
     int visitEventCount = 0;
-    
+
     // Serialization support
     template <class Archive>
     void serialize(Archive& ar, const unsigned int version)
@@ -69,6 +69,6 @@ struct TopologicalState
 } // namespace hssh
 } // namespace vulcan
 
-DEFINE_SYSTEM_MESSAGE(hssh::TopologicalState, ("GLOBAL_TOPO_STATE"));
+DEFINE_SYSTEM_MESSAGE(hssh::TopologicalState, ("GLOBAL_TOPO_STATE"))
 
 #endif // HSSH_GLOBAL_TOPOLOGICAL_STATE_H

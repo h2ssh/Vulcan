@@ -31,8 +31,6 @@ namespace vulcan
 namespace logplayer
 {
 
-const unsigned int MAX_CARMEN_MESSAGE_LENGTH = 100000;
-
 const std::string OLD_LASER_HEADING("FLASER");
 const std::string PARAM_HEADING    ("PARAM");
 const std::string ROBOT_LASER_HEADING("ROBOTLASER1");

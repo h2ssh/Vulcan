@@ -191,7 +191,7 @@ inline std::string get_trj_debug_cost_text(robot_trajectory_debug_cost_type_t co
         default:
             return "No description available!";
     }
-};
+}
 
 
 /**

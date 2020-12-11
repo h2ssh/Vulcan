@@ -156,7 +156,7 @@ trajectory_evaluator_params_t::trajectory_evaluator_params_t(const utils::Config
     assert(velocityWeightOfCollision > 0.0);
     assert(collisionAreaWeight >= 0.0);
     assert(angularTravelWeightForPathCost >= 0.0);
-};
+}
 
 
 trajectory_planner_params_t::trajectory_planner_params_t(const utils::ConfigFile& config,
@@ -168,7 +168,7 @@ trajectory_planner_params_t::trajectory_planner_params_t(const utils::ConfigFile
 , optimizerParams(config)
 {
     // nothing special to be done here.
-};
+}
 
 } // mpepc
 } // vulcan

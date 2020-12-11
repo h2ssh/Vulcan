@@ -32,7 +32,7 @@ namespace mpepc
     struct trajectory_planner_debug_info_t;
     struct robot_trajectory_debug_info_t;
     struct named_pose_t;
-};
+}
 
 namespace ui
 {

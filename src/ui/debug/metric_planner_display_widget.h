@@ -46,7 +46,7 @@ namespace mpepc
     class RobotSimulator;
     class TrajectoryEvaluator;
     class TaskManifold;
-};
+}
 
 namespace mpepc { struct metric_planner_params_t; }
 

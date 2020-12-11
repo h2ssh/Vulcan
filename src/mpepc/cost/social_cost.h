@@ -92,6 +92,6 @@ void serialize(Archive& ar, learned_norm_info_t& debug)
 } // namespace mpepc
 } // namespace vulcan
 
-DEFINE_DEBUG_MESSAGE(mpepc::learned_norm_info_t, ("DEBUG_LEARNED_NORM_INFO"));
+DEFINE_DEBUG_MESSAGE(mpepc::learned_norm_info_t, ("DEBUG_LEARNED_NORM_INFO"))
 
 #endif // MPEPC_COSTS_LEARNED_NORM_COST_H

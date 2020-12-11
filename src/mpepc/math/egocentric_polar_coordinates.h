@@ -10,7 +10,7 @@
 /**
 * \file     egocentric_polar_coordinates.h
 * \author   Jong Jin Park
-* 
+*
 * Declaration of egocentric polar coordinates, which describes a relation
 * between between two poses on a plane.
 * See [Park-11] (original) and [Park-15] (updated) for further description.
@@ -64,7 +64,7 @@ void serialize(Archive& ar, egocentric_polar_coords_t& coords)
         coords.phi,
         coords.delta,
         coords.lineOfSightAngle);
-};
+}
 
 } // mpepc
 } // vulcan

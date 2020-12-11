@@ -167,6 +167,6 @@ private:
 } // mpepc
 } // vulcan
 
-DEFINE_SYSTEM_MESSAGE(mpepc::MetricPlannerScript, ("METRIC_PLANNER_SCRIPT"));
+DEFINE_SYSTEM_MESSAGE(mpepc::MetricPlannerScript, ("METRIC_PLANNER_SCRIPT"))
 
 #endif // MPEPC_METRIC_PLANNER_SCRIPT_H

@@ -43,7 +43,7 @@ struct hypothesis_tree_node_t
     int depth;
     std::vector<Id> children;
     TopoMapProbability probability;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
@@ -83,8 +83,8 @@ public:
     * \param    numLeaves           Number of leaf nodes in the tree
     * \param    numComplete         Number of complete nodes in the tree
     */
-    HypothesisTree(const std::vector<hypothesis_tree_node_t>& nodes, 
-                   Id rootId, 
+    HypothesisTree(const std::vector<hypothesis_tree_node_t>& nodes,
+                   Id rootId,
                    std::size_t numLeaves,
                    std::size_t numComplete)
     : nodes_(nodes)
@@ -108,7 +108,7 @@ public:
     * of the the tree of maps.
     */
     std::size_t numLeafNodes(void) const { return numLeafNodes_; }
-    
+
     /**
     * numCompleteNodes retrieves the number of complete nodes in the HypothesisTree. Complete nodes are those with
     * depth == depth of the overall tree.
@@ -126,17 +126,17 @@ public:
     /**
     * getNode retrieves the node with the specified id.
     *
-    * \param    id          Id of the node in the tree to retrieve 
+    * \param    id          Id of the node in the tree to retrieve
     * \return   The requested node if it exists. nullptr if no such node exists.
     */
-    const hypothesis_tree_node_t* getNode(Id id) const 
-    { 
+    const hypothesis_tree_node_t* getNode(Id id) const
+    {
         auto indexIt = idToIndex_.find(id);
         if(indexIt != idToIndex_.end())
         {
             return &nodes_[indexIt->second];
         }
-        
+
         return nullptr;
     }
 
@@ -154,10 +154,10 @@ private:
     std::size_t numLeafNodes_;
     std::size_t numCompleteNodes_;
     std::unordered_map<Id, std::size_t> idToIndex_;
-    
+
     // Serialization support
     friend class cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
@@ -173,6 +173,6 @@ private:
 } // namespace hssh
 } // namespace vulcan
 
-DEFINE_DEBUG_MESSAGE(hssh::HypothesisTree, ("DEBUG_GLOBAL_TOPO_HYPOTHESIS_TREE"));
+DEFINE_DEBUG_MESSAGE(hssh::HypothesisTree, ("DEBUG_GLOBAL_TOPO_HYPOTHESIS_TREE"))
 
 #endif // HSSH_GLOBAL_TOPOLOGICAL_DEBUG_HYPOTHESIS_TREE_H

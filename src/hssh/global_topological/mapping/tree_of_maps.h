@@ -282,6 +282,6 @@ private:
 } // namespace hssh
 } // namespace vulcan
 
-DEFINE_DEBUG_MESSAGE(hssh::TreeOfMaps, ("DEBUG_GLOBAL_TOPO_TREE_OF_MAPS"));
+DEFINE_DEBUG_MESSAGE(hssh::TreeOfMaps, ("DEBUG_GLOBAL_TOPO_TREE_OF_MAPS"))
 
 #endif // HSSH_GLOBAL_TOPOLOGICAL_MAPPING_TREE_OF_MAPS_H

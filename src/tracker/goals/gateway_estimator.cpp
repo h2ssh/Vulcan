@@ -142,7 +142,7 @@ ObjectGoalDistribution GatewayGoalEstimator::estimateSteadyGoal(const SteadyMoti
 
     for(auto& g : goals_)
     {
-        likelihood_t meas{motion.timestamp()};
+        likelihood_t meas{motion.timestamp(), 0.0};
 
         if(hasGoalBehavior)
         {

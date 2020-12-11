@@ -30,7 +30,7 @@ struct pose_t;
 namespace robot
 {
     struct motion_command_t;
-};
+}
 
 namespace mpepc
 {

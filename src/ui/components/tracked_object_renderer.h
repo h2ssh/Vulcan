@@ -15,7 +15,7 @@
 
 namespace vulcan
 {
-namespace mpepc   { struct dynamic_object_trajectory_debug_info_t; };
+namespace mpepc   { struct dynamic_object_trajectory_debug_info_t; }
 namespace tracker { class DynamicObject; }
 namespace tracker { class DynamicObjectCollection; }
 namespace tracker { class ObjectBoundary; }
@@ -29,13 +29,13 @@ namespace ui
 class TrackedObjectRenderer
 {
 public:
-    
+
     static const int kShowPositionUncertainy  = 0x01;   ///< Show the laser points associated with the laser object
     static const int kShowVelocityUncertainty = 0x02;   ///< Show the position uncertainty ellipse
     static const int kShowRecentTrajectory    = 0x04;   ///< Show the recent trajectory of the object
     static const int kDrawRectangle           = 0x08;   ///< Draw the rectangle boundary for the object
     static const int kDrawCircle              = 0x10;   ///< Draw the circle boundary for the object
-    
+
     TrackedObjectRenderer(void);
 
     /**
@@ -65,7 +65,7 @@ public:
     * \param    steps           Number of time steps (optional, default=3)
     */
     void renderObjectMotion(const tracker::DynamicObject& object, float time, std::size_t steps = 3);
-    
+
     void renderEstimatedObjectTrajectory(const mpepc::dynamic_object_trajectory_debug_info_t& estimatedObjectTrajectory);
 
 private:
@@ -76,10 +76,10 @@ private:
 
     GLColor objectColor_;
     std::vector<float> trajectoryPoses;
-    
+
     // trajectory rendering
     void   allocatePoseArraysIfNeeded(size_t size);
-  
+
 };
 
 }

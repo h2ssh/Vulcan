@@ -209,7 +209,7 @@ void MPEPCPoseFollower::evaluateGradient(const double x[], double cost, double g
 // setting up NLOPT
 void MPEPCPoseFollower::setupNLOpt(void)
 {
-    int kOptimizationDimension = 1;
+    const int kOptimizationDimension = 1;
     int kIdxVGain = 0;
 
     double minBounds[kOptimizationDimension];

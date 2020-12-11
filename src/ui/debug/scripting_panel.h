@@ -135,7 +135,7 @@ private:
     void saveScriptPressed            (wxCommandEvent& event);
     void loadScriptPressed            (wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 }

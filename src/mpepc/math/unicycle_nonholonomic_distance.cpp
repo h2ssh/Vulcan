@@ -29,9 +29,9 @@ namespace mpepc
 double distance_on_manifold(double r, double phi, double kPhi)
 {
     double weightedPhi = kPhi*phi;
-    
+
     return sqrt(r*r + weightedPhi*weightedPhi);
-};
+}
 
 // stabilizing vector fields
 double gradient_descent_on_manifold(double r, double phi, double kPhi, double rangeEpsilon)
@@ -44,7 +44,7 @@ double gradient_descent_on_manifold(double r, double phi, double kPhi, double ra
     {
         return 0; // avoid numerical error and align with target orientation
     }
-};
+}
 
 double smooth_descent_on_manifold(double r, double phi, double kPhi, double rangeEpsilon)
 {
@@ -56,7 +56,7 @@ double smooth_descent_on_manifold(double r, double phi, double kPhi, double rang
     {
         return 0; // avoid numerical error and align with target orientation
     }
-};
+}
 
 double stabilizing_delta_star(double r, double phi, double kPhi, stabilizing_vector_field_type_t vectorFieldType, double rangeEpsilon)
 {
@@ -74,18 +74,18 @@ double stabilizing_delta_star(double r, double phi, double kPhi, stabilizing_vec
             assert(false);
             break;
     }
-    
+
     return deltaStar;
-};
+}
 
 
 // distance to a target pose over the manifold equipped with stabilizing vector field
 double distance_to_manifold(double r, double phi, double delta, double kPhi, double kDelta, stabilizing_vector_field_type_t vectorFieldType, double rangeEpsilon)
 {
     double deltaStar = stabilizing_delta_star(r, phi, kPhi, vectorFieldType, rangeEpsilon);
-    
+
     return kDelta * fabs(delta - deltaStar);
-};
+}
 
 
 // distance to target pose in egocentric polar coordinates
@@ -93,9 +93,9 @@ double unicycle_nonholonomic_distance(double r, double phi, double delta, double
 {
     double distanceOnManifold = distance_on_manifold(r, phi, kPhi);
     double distanceTOManifold = distance_to_manifold(r, phi, delta, kPhi, kDelta, vectorFieldType, rangeEpsilon);
-    
+
     return distanceOnManifold + distanceTOManifold;
-};
+}
 
 } // mpepc
 } // vulcan
