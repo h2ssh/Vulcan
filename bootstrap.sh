@@ -1,3 +1,3 @@
 #!/bin/bash
 
-scons lcm=1 # (generate legacy LCM messages)
+meson setup --wipe --prefix=$PWD --werror --warnlevel=3 --buildtype=debugoptimized build
