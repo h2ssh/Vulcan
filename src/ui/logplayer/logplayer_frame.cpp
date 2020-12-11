@@ -141,13 +141,13 @@ void LogplayerFrame::enteredSpeed(wxCommandEvent& event)
 
 void LogplayerFrame::pressedFileOpen(wxCommandEvent& event)
 {
-    wxFileDialog open(this, 
-                      wxT("Select a log file to load..."), 
-                      wxT("../../logs/datasets"), 
+    wxFileDialog open(this,
+                      wxT("Select a log file to load..."),
+                      wxT("../logs/datasets"),
                       wxEmptyString,
                       wxEmptyString,
                       kFileOpenFlags);
-    
+
     if(open.ShowModal() == wxID_OK)
     {
         wxString path = open.GetPath();
