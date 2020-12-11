@@ -43,6 +43,7 @@ sudo cp liblevmar.a /usr/local/lib/
 chmod a+r levmar.h
 sudo cp levmar.h /usr/local/include/
 cd ../
+sudo cp levmar.pc /usr/local/lib/pkgconfig/
 
 # Install libraries for place labeling
 wget -nc https://github.com/cjlin1/liblinear/archive/v220.tar.gz -O liblinear.tar.gz
@@ -93,6 +94,7 @@ if [ "$DRIVERS" = "1" ]; then
     sudo make install
     sudo cp src/cpp/urg/ScipHandler.h /usr/local/include/urg/
     cd ..
+    sudo cp liburg.pc /usr/local/lib/pkgconfig/
 fi
 
 # Go back to root Vulcan directory and run the bootstrap for generating LCM messages
