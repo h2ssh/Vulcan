@@ -36,8 +36,8 @@ int main(int argc, char** argv)
 
     std::vector<utils::command_line_argument_t> arguments;
     arguments.push_back({utils::kConfigFileArgument, "Configuration file controlling the module behavior", true, ""});
-    arguments.push_back({kMapNameArg, "Name of the map or building the robot is operating in.", false, ""});
-    arguments.push_back({kDirectoryArg, "Directory where learned classifiers are stored.", true, "../../data/classifiers/"});
+    arguments.push_back({kMapNameArg, "Name of the map or building the robot is operating in.", true, ""});
+    arguments.push_back({kDirectoryArg, "Directory where learned classifiers are stored.", true, "../data/classifiers/"});
     arguments.push_back({kSaveEventsArg, "Save all generated events on exit to the specified file", true, ""});
     arguments.push_back({kSaveMapArg, "Save the final LocalTopoMap to the specified file", true, ""});
     arguments.push_back({kOneShotArg, "Provide an LPM to process in a single-go. Need to also specify MapName and SaveMapArg.", true, ""});
