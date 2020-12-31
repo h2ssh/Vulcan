@@ -40,8 +40,20 @@ lcmtypes = [
 lcmgen = find_program('lcm-gen')
 
 lcm_gen = generator(lcmgen,
-   output : ['vulcan_lcm_@BASENAME@.c', 'vulcan_lcm_@BASENAME@.h'],
-   arguments : ['-c', '--c-cpath=@BUILD_DIR@', '--c-hpath=@BUILD_DIR@', '--lazy', '@INPUT@'])
+   output : [
+    'vulcan_lcm_@BASENAME@.c', 
+    'vulcan_lcm_@BASENAME@.h', 
+    '@BASENAME@.hpp'],
+   arguments : [
+    '-c', 
+    '--c-cpath=@CURRENT_SOURCE_DIR@', 
+    '--c-hpath=@CURRENT_SOURCE_DIR@', 
+    '--lazy',
+    '-x',
+    '--cpp-hpath=@CURRENT_SOURCE_DIR@',
+    '-j', 
+    '--jpath=@CURRENT_SOURCE_DIR@/java/',
+    '@INPUT@'])
 
 lcm_src = lcm_gen.process(lcmtypes)
 
