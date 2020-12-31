@@ -8,11 +8,11 @@
 
 
 /**
-* \file     odometry_models.h
-* \author   Collin Johnson
-* 
-* Definition of InverseOdometryModel
-*/
+ * \file     odometry_models.h
+ * \author   Collin Johnson
+ *
+ * Definition of InverseOdometryModel
+ */
 
 #ifndef ROBOT_MODEL_ODOMETRY_MODELS_H
 #define ROBOT_MODEL_ODOMETRY_MODELS_H
@@ -21,15 +21,18 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace robot
 {
-    
+
 /**
-* odometry_model_params_t contains the parameters defining the noise estimates
-* for the odometry distribution.
-*/
+ * odometry_model_params_t contains the parameters defining the noise estimates
+ * for the odometry distribution.
+ */
 struct odometry_model_params_t
 {
     // Parameters pulled straight from Probabilistic Robotics
@@ -37,36 +40,33 @@ struct odometry_model_params_t
     double alpha2;
     double alpha3;
     double alpha4;
-    
+
     odometry_model_params_t(const utils::ConfigFile& config);
 };
-    
+
 /**
-* InverseOdometryModel
-*/
+ * InverseOdometryModel
+ */
 class InverseOdometryModel : public InverseMotionModel
 {
 public:
-    
     /**
-    * Constructor for InverseOdometryModel.
-    * 
-    * \param    params          Parameters for the model
-    */
+     * Constructor for InverseOdometryModel.
+     *
+     * \param    params          Parameters for the model
+     */
     InverseOdometryModel(const odometry_model_params_t& params);
-    
-    // InverseMotionModel interface
-    virtual pose_distribution_t predictPose(const pose_distribution_t& previousPose, 
-                                            const motion_model_data_t& previousData, 
-                                            const motion_model_data_t& currentData);
-    
-private:
-    
-    odometry_model_params_t params_;
-    
-};
-    
-}
-}
 
-#endif // ROBOT_MODEL_ODOMETRY_MODELS_H
+    // InverseMotionModel interface
+    virtual pose_distribution_t predictPose(const pose_distribution_t& previousPose,
+                                            const motion_model_data_t& previousData,
+                                            const motion_model_data_t& currentData);
+
+private:
+    odometry_model_params_t params_;
+};
+
+}   // namespace robot
+}   // namespace vulcan
+
+#endif   // ROBOT_MODEL_ODOMETRY_MODELS_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     hypothesis_classifier.h
-* \author   Collin Johnson
-*
-* Declaration of HypothesisClassifier.
-*/
+ * \file     hypothesis_classifier.h
+ * \author   Collin Johnson
+ *
+ * Declaration of HypothesisClassifier.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CLASSIFIER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CLASSIFIER_H
@@ -30,93 +30,91 @@ class LabeledAreaData;
 
 
 /**
-* HypothesisClassifier is a classifier that only calculates the likelihood of a given type in one-against-all
-* fashion, instead of a single multi-class classification. Thus, this classifier will assign appropriateness values
-* more akin to see how similiar a new observation is compared to the training examples.
-*/
+ * HypothesisClassifier is a classifier that only calculates the likelihood of a given type in one-against-all
+ * fashion, instead of a single multi-class classification. Thus, this classifier will assign appropriateness values
+ * more akin to see how similiar a new observation is compared to the training examples.
+ */
 class HypothesisClassifier
 {
 public:
-
     /**
-    * LearnClassifier performs supervised learning for learning a classifier for the different types of
-    * areas. The classifier learned selects between the full ontology of path, decision point, and destination.
-    *
-    * \pre      At least five examples of each type of area (decision, dest, path) in the examples.
-    * \param    examples            Examples from which to learn a classifier
-    * \return   A classifier trained to distinguish between path, dest, and decision.
-    */
+     * LearnClassifier performs supervised learning for learning a classifier for the different types of
+     * areas. The classifier learned selects between the full ontology of path, decision point, and destination.
+     *
+     * \pre      At least five examples of each type of area (decision, dest, path) in the examples.
+     * \param    examples            Examples from which to learn a classifier
+     * \return   A classifier trained to distinguish between path, dest, and decision.
+     */
     static std::unique_ptr<HypothesisClassifier> LearnClassifier(const LabeledAreaData& examples);
 
     /**
-    * Constructor for HypothesisClassifier.
-    *
-    * \param    filename        Name of the file containing the stored classifier information
-    */
+     * Constructor for HypothesisClassifier.
+     *
+     * \param    filename        Name of the file containing the stored classifier information
+     */
     HypothesisClassifier(const std::string& filename);
 
     /**
-    * classifyHypothesis determines the maximum likelihood type of the provided hypothesis.
-    *
-    * \param    features            Features to be classified
-    * \return   The best type for the hypothesis
-    */
+     * classifyHypothesis determines the maximum likelihood type of the provided hypothesis.
+     *
+     * \param    features            Features to be classified
+     * \return   The best type for the hypothesis
+     */
     HypothesisType classify(const HypothesisFeatures& features) const;
 
     /**
-    * calculateDistribution calculates the full probability distribution for all types that can be assigned to the
-    * hypothesis.
-    *
-    * \param    features            Features being classified
-    * \return   Full probability distribution across possible types for the hypothesis.
-    */
+     * calculateDistribution calculates the full probability distribution for all types that can be assigned to the
+     * hypothesis.
+     *
+     * \param    features            Features being classified
+     * \return   Full probability distribution across possible types for the hypothesis.
+     */
     HypothesisTypeDistribution calculateDistribution(const HypothesisFeatures& features) const;
 
     /**
-    * calculateRawDistribution calculates the unnormalized distribution for each hypothesis type.
-    * This unnormalized distribution can be used to see how much certainty actually exists about an hypothesis.
-    * If none of the probabilities are very high, then it's an extremely uncertain area and thus shouldn't affect
-    * the sampling algorithm much.
-    *
-    * \param    features            Features being classified
-    * \return   Unnormalized probability distribution across possible types for the hypothesis.
-    */
+     * calculateRawDistribution calculates the unnormalized distribution for each hypothesis type.
+     * This unnormalized distribution can be used to see how much certainty actually exists about an hypothesis.
+     * If none of the probabilities are very high, then it's an extremely uncertain area and thus shouldn't affect
+     * the sampling algorithm much.
+     *
+     * \param    features            Features being classified
+     * \return   Unnormalized probability distribution across possible types for the hypothesis.
+     */
     HypothesisTypeDistribution calculateRawDistribution(const HypothesisFeatures& features) const;
 
     /**
-    * calculateRawBoostingDistribution calculates just the unnormalized boosting distribution for each type.
-    */
+     * calculateRawBoostingDistribution calculates just the unnormalized boosting distribution for each type.
+     */
     HypothesisTypeDistribution calculateRawBoostingDistribution(const HypothesisFeatures& features) const;
 
     /**
-    * calculateRawIsovistDistribution calculates just the unnormalized isovist distribution for each type.
-    */
+     * calculateRawIsovistDistribution calculates just the unnormalized isovist distribution for each type.
+     */
     HypothesisTypeDistribution calculateRawIsovistDistribution(const HypothesisFeatures& features) const;
 
     /**
-    * save saves the parameters used by the classifier to the specified file.
-    *
-    * \param    filename            Name of the file in which the classifier should be saved
-    * \return   True if saving was successful.
-    */
+     * save saves the parameters used by the classifier to the specified file.
+     *
+     * \param    filename            Name of the file in which the classifier should be saved
+     * \return   True if saving was successful.
+     */
     bool save(const std::string& filename) const;
 
     /**
-    * load loads the parameters used by the classifier from the specified file.
-    *
-    * \param    filename            Name of the file from which to load the stored classifier
-    * \return   True if loading was successful.
-    */
+     * load loads the parameters used by the classifier from the specified file.
+     *
+     * \param    filename            Name of the file from which to load the stored classifier
+     * \return   True if loading was successful.
+     */
     bool load(const std::string& filename);
 
 private:
-
     struct type_classifier_t
     {
-        HypothesisType type;                                ///< Type that this instance is classifier for
+        HypothesisType type;   ///< Type that this instance is classifier for
 
-        utils::AdaBoostModelPtr areaClassifier;         ///< AdaBoost w/decision stumps classifier
-        utils::AdaBoostModelPtr isovistClassifier;  ///< AdaBoost w/decision stumps classifier for isovists
+        utils::AdaBoostModelPtr areaClassifier;      ///< AdaBoost w/decision stumps classifier
+        utils::AdaBoostModelPtr isovistClassifier;   ///< AdaBoost w/decision stumps classifier for isovists
     };
 
     type_classifier_t pathClassifier_;
@@ -124,10 +122,10 @@ private:
     type_classifier_t decisionClassifier_;
 
     HypothesisClassifier(type_classifier_t&& pathClassifier,
-                             type_classifier_t&& destClassifier,
-                             type_classifier_t&& decisionClassifier);
+                         type_classifier_t&& destClassifier,
+                         type_classifier_t&& decisionClassifier);
 
-    Vector boostingVotes(const Vector& features) const;     // unnormalized
+    Vector boostingVotes(const Vector& features) const;         // unnormalized
     Vector isovistVotes(const Matrix& isovistFeatures) const;   // unnormalized
 
     bool saveClassifier(const type_classifier_t& classifier,
@@ -140,7 +138,7 @@ private:
                         type_classifier_t& classifier);
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_LIKELIHOOD_ONLY_CLASSIFIER_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_LIKELIHOOD_ONLY_CLASSIFIER_H

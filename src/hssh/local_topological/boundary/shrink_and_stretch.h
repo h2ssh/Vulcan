@@ -8,11 +8,11 @@
 
 
 /**
-* \file     shrink_and_stretch.h
-* \author   Collin Johnson
-*
-* Declaration of ShrinkAndStretchBoundary implementation of SmallScaleSpaceBoundary interface.
-*/
+ * \file     shrink_and_stretch.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ShrinkAndStretchBoundary implementation of SmallScaleSpaceBoundary interface.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_BOUNDARY_SHRINK_AND_STRETCH_H
 #define HSSH_LOCAL_TOPOLOGICAL_BOUNDARY_SHRINK_AND_STRETCH_H
@@ -28,23 +28,23 @@ namespace hssh
 const std::string kShrinkAndStretchBoundaryType("shrink_and_stretch");
 
 /**
-* ShrinkAndStretchBoundary is a boundary that maintains the small-scale space in the LPM as defined in the LocalMetrical
-* section of the H2SSH description. The boundary as defined there contains:
-*
-*   - the extent of the current area
-*   - the extent of all areas adjacent to the current area
-*   - everything visible from the robot's current pose
-*
-* The first two conditions are easy to maintain within the Local Topological layer. Whenever a transition occurs, then
-* a new boundary is computed based on the areas within the LocalTopMap. The final condition will be maintained by
-* having the Local Metrical layer in the stretching mode, so as the robot sees more of the environment, the LPM will
-* stretch and grow along with it.
-*/
-class ShrinkAndStretchBoundary : public SmallScaleSpaceBoundary,
-                                 public LocalAreaEventVisitor
+ * ShrinkAndStretchBoundary is a boundary that maintains the small-scale space in the LPM as defined in the
+ * LocalMetrical section of the H2SSH description. The boundary as defined there contains:
+ *
+ *   - the extent of the current area
+ *   - the extent of all areas adjacent to the current area
+ *   - everything visible from the robot's current pose
+ *
+ * The first two conditions are easy to maintain within the Local Topological layer. Whenever a transition occurs, then
+ * a new boundary is computed based on the areas within the LocalTopMap. The final condition will be maintained by
+ * having the Local Metrical layer in the stretching mode, so as the robot sees more of the environment, the LPM will
+ * stretch and grow along with it.
+ */
+class ShrinkAndStretchBoundary
+: public SmallScaleSpaceBoundary
+, public LocalAreaEventVisitor
 {
 public:
-
     // SmallScaleSpaceBoundary interface
     boost::optional<MapBoundary> computeBoundary(const LocalAreaEventVec& events,
                                                  const LocalTopoMap& topoMap,
@@ -56,14 +56,13 @@ public:
     void visitTurnAround(const TurnAroundEvent& event) override;
 
 private:
-
     const LocalTopoMap* currentMap_;
     const LocalPerceptualMap* currentLpm_;
     Point<float> currentPosition_;
     boost::optional<MapBoundary> updatedBoundary_;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_BOUNDARY_SHRINK_AND_STRETCH_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_BOUNDARY_SHRINK_AND_STRETCH_H

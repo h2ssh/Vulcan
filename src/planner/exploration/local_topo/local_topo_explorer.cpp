@@ -8,23 +8,23 @@
 
 
 /**
-* \file     local_topo_explorer.cpp
-* \author   Collin Johnson
-* 
-* Definition of LocalTopoExplorer.
-*/
+ * \file     local_topo_explorer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalTopoExplorer.
+ */
 
 #include "planner/exploration/local_topo/local_topo_explorer.h"
-#include "planner/exploration/local_topo/exploration_status.h"
 #include "hssh/local_topological/events/area_transition.h"
 #include "hssh/local_topological/events/turn_around.h"
 #include "mpepc/metric_planner/task/navigation.h"
+#include "planner/exploration/local_topo/exploration_status.h"
 #include "system/module_communicator.h"
 #include "utils/auto_mutex.h"
 #include "utils/stub.h"
 #include "utils/timestamp.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 namespace vulcan
 {
@@ -67,7 +67,7 @@ void LocalTopoExplorer::subscribeToData(system::ModuleCommunicator& communicator
 }
 
 
-void LocalTopoExplorer::unsubscribeFromData(system::ModuleCommunicator& communicator) 
+void LocalTopoExplorer::unsubscribeFromData(system::ModuleCommunicator& communicator)
 {
     PRINT_STUB("LocalTopoExplorer::unsubscribeFromData");
 }
@@ -91,11 +91,10 @@ void LocalTopoExplorer::startExploring(system::ModuleCommunicator& communicator)
 {
     // To start exploring, first select a random area to go to first.
     LocalAreaTarget* start = explorationMap_.selectRandomTarget();
-    
-    if(start)
-    {
+
+    if (start) {
         goToTarget(start, communicator);
-        
+
         std::cout << "INFO: LocalTopoExplorer: Driving to starting area:";
         print_area(start->areaId(), map_);
         std::cout << '\n';
@@ -104,12 +103,11 @@ void LocalTopoExplorer::startExploring(system::ModuleCommunicator& communicator)
         state_ = driving_to_initial_area;
     }
     // There are targets to explore, so finish immediately
-    else
-    {
+    else {
         assert(explorationMap_.sizeUnvisited() == 0);
-        
+
         std::cerr << "WARNING: LocalTopoExplorer: Map contained no unvisited areas to explore. Num total areas:"
-            << explorationMap_.sizeVisited();
+                  << explorationMap_.sizeVisited();
         state_ = finished_exploring;
     }
 }
@@ -118,17 +116,16 @@ void LocalTopoExplorer::startExploring(system::ModuleCommunicator& communicator)
 void LocalTopoExplorer::continueExploring(system::ModuleCommunicator& communicator)
 {
     utils::AutoMutex autoLock(dataLock_);
-    
-    switch(state_)
-    {
+
+    switch (state_) {
     case waiting_for_initialization:
         // Nothing to do
         break;
-        
+
     case driving_to_initial_area:
         driveToInitialArea(communicator);
         break;
-        
+
     case exploring_map:
         exploreMap(communicator);
         break;
@@ -136,20 +133,19 @@ void LocalTopoExplorer::continueExploring(system::ModuleCommunicator& communicat
     case driving_to_start:
         driveToStart(communicator);
         break;
-        
+
     case finished_exploring:
     default:
         // Nothing needs to be done once finished
         break;
     }
-    
+
     // Clear out all stored data needed for updates
     events_.clear();
     taskStatus_.clear();
     haveNewData_ = false;
 
-    if(haveExplorationUpdate_)
-    {
+    if (haveExplorationUpdate_) {
         local_topo_exploration_status_t status;
         status.explorationMap = explorationMap_;
         status.currentArea = location_.areaId();
@@ -169,7 +165,7 @@ void LocalTopoExplorer::stopExploring(system::ModuleCommunicator& communicator)
     mpepc::metric_planner_command_message_t command;
     command.timestamp = utils::system_time_us();
     command.command = mpepc::CANCEL;
-    
+
     communicator.sendMessage(command);
 }
 
@@ -178,7 +174,7 @@ void LocalTopoExplorer::handleData(const hssh::LocalPose& pose, const std::strin
 {
     utils::AutoMutex autoLock(dataLock_);
     pose_ = pose;
-    
+
     haveNewData_ = true;
 }
 
@@ -187,13 +183,12 @@ void LocalTopoExplorer::handleData(const hssh::LocalLocation& location, const st
 {
     utils::AutoMutex autoLock(dataLock_);
 
-    if(location_.areaId() != location.areaId())
-    {
+    if (location_.areaId() != location.areaId()) {
         haveExplorationUpdate_ = true;
     }
 
     location_ = location;
-    
+
     haveNewData_ = true;
 }
 
@@ -206,7 +201,7 @@ void LocalTopoExplorer::handleData(const hssh::LocalAreaEventVec& events, const 
 
     // Whenever events occur, some sort of exploration event has occurred
     haveExplorationUpdate_ = true;
-    
+
     haveNewData_ = true;
 }
 
@@ -215,7 +210,7 @@ void LocalTopoExplorer::handleData(const mpepc::metric_planner_status_message_t&
 {
     utils::AutoMutex autoLock(dataLock_);
     taskStatus_.push_back(status);
-    
+
     haveNewData_ = true;
 }
 
@@ -233,44 +228,38 @@ bool LocalTopoExplorer::haveReachedCurrentTarget(void)
 {
     // The current target is reached once the MPEPC status says that its task is completed.
     bool isMpepcTaskFinished = false;
-    
-    for(auto& status : taskStatus_)
-    {
+
+    for (auto& status : taskStatus_) {
         isMpepcTaskFinished |= status.status == mpepc::SUCCESS_REACHED_POSE;
     }
-    
+
     // If the task is finished, but haven't reached the desired LocalArea, then raise a warning, but continue with life
-    if(isMpepcTaskFinished && currentTarget_ && (currentTarget_->areaId() != location_.areaId()))
-    {
+    if (isMpepcTaskFinished && currentTarget_ && (currentTarget_->areaId() != location_.areaId())) {
         std::cerr << "WARNING: LocalTopoExplorer: Finished MPEPC task, but was not in the expected area. Actual:";
         print_area(location_.areaId(), map_);
         std::cout << " Expected:";
         print_area(currentTarget_->areaId(), map_);
         std::cout << '\n';
     }
-    
+
     return isMpepcTaskFinished;
 }
 
 
 LocalTopoExplorer::PlannerTaskStatus LocalTopoExplorer::checkPlannerTaskStatus(void)
 {
-    if(taskStatus_.empty() || !currentPlannerTask_)
-    {
+    if (taskStatus_.empty() || !currentPlannerTask_) {
         return PlannerTaskStatus::unknown;
     }
-    
-    for(auto& status : taskStatus_)
-    {
-        if(status.taskId == currentPlannerTask_->id())
-        {
-            if((status.status == mpepc::ACTIVE_NORMAL) || (status.status == mpepc::PAUSED))
-            {
+
+    for (auto& status : taskStatus_) {
+        if (status.taskId == currentPlannerTask_->id()) {
+            if ((status.status == mpepc::ACTIVE_NORMAL) || (status.status == mpepc::PAUSED)) {
                 return PlannerTaskStatus::executing;
             }
         }
     }
-    
+
     return PlannerTaskStatus::not_executing;
 }
 
@@ -278,16 +267,14 @@ LocalTopoExplorer::PlannerTaskStatus LocalTopoExplorer::checkPlannerTaskStatus(v
 void LocalTopoExplorer::driveToInitialArea(system::ModuleCommunicator& communicator)
 {
     assert(state_ == driving_to_initial_area);
-    
+
     // If at the target, then clear out the current target and switch to exploring mode
-    if(haveReachedCurrentTarget())
-    {
+    if (haveReachedCurrentTarget()) {
         // When switching to exploration, set the first target to maintain invariant for that state
         currentTarget_ = explorationMap_.selectRandomTarget();
         state_ = exploring_map;
 
-        if(currentTarget_)
-        {
+        if (currentTarget_) {
             goToTarget(currentTarget_, communicator);
             std::cout << "INFO: LocalTopoExplorer: Selected new target:";
             print_area(currentTarget_->areaId(), map_);
@@ -295,8 +282,7 @@ void LocalTopoExplorer::driveToInitialArea(system::ModuleCommunicator& communica
         }
     }
     // If the planner isn't current executing the task, it failed to be received, so give it another try
-    else if(currentTarget_ && (checkPlannerTaskStatus() == PlannerTaskStatus::not_executing))
-    {
+    else if (currentTarget_ && (checkPlannerTaskStatus() == PlannerTaskStatus::not_executing)) {
         goToTarget(currentTarget_, communicator);
     }
 }
@@ -305,30 +291,27 @@ void LocalTopoExplorer::driveToInitialArea(system::ModuleCommunicator& communica
 void LocalTopoExplorer::exploreMap(system::ModuleCommunicator& communicator)
 {
     assert(state_ == exploring_map);
-    assert(currentTarget_); // exploring always has an active target
-    
+    assert(currentTarget_);   // exploring always has an active target
+
     // Process any newly visited areas
     int numVisited = explorationMap_.identifyVisitedTargets(events_);
-    
-    if(numVisited > 0)
-    {
+
+    if (numVisited > 0) {
         std::cout << "INFO: LocalTopoExplorer: Visited " << numVisited << " new areas.\n";
     }
-    
+
     // If the current target has been reached, then either:
     //  - select a new target
     //  - switch to finished exploration because no unvisited targets remain
-    if(currentTarget_ && haveReachedCurrentTarget())
-    {
+    if (currentTarget_ && haveReachedCurrentTarget()) {
         std::cout << "INFO: LocalTopoExplorer: Reached target:";
         print_area(currentTarget_->areaId(), map_);
         std::cout << '\n';
 
         currentTarget_ = explorationMap_.selectRandomTarget();
         state_ = currentTarget_ ? exploring_map : driving_to_start;
-        
-        if(currentTarget_)
-        {
+
+        if (currentTarget_) {
             goToTarget(currentTarget_, communicator);
 
             std::cout << "INFO: LocalTopoExplorer: Selected new target:";
@@ -336,8 +319,7 @@ void LocalTopoExplorer::exploreMap(system::ModuleCommunicator& communicator)
             std::cout << '\n';
         }
         // Drive to the start
-        else
-        {
+        else {
             currentPlannerTask_ = std::make_shared<mpepc::NavigationTask>(startPose_.pose());
             communicator.sendMessage(std::static_pointer_cast<mpepc::MetricPlannerTask>(currentPlannerTask_));
 
@@ -345,8 +327,7 @@ void LocalTopoExplorer::exploreMap(system::ModuleCommunicator& communicator)
         }
     }
     // If the planner isn't current executing the task, it failed to be received, so give it another try
-    else if(currentTarget_ && (checkPlannerTaskStatus() == PlannerTaskStatus::not_executing))
-    {
+    else if (currentTarget_ && (checkPlannerTaskStatus() == PlannerTaskStatus::not_executing)) {
         std::cout << "INFO: LocalTopoExplorer: metric_planner failed to start executing task. Resending.\n";
         goToTarget(currentTarget_, communicator);
     }
@@ -355,15 +336,14 @@ void LocalTopoExplorer::exploreMap(system::ModuleCommunicator& communicator)
 
 void LocalTopoExplorer::driveToStart(system::ModuleCommunicator& communicator)
 {
-    if(haveReachedCurrentTarget())
-    {
+    if (haveReachedCurrentTarget()) {
         std::cout << "INFO: LocalTopoExplorer: Reached starting pose. Finished exploring.\n";
         state_ = planner::LocalTopoExplorer::finished_exploring;
     }
     // If the planner isn't current executing the task, it failed to be received, so give it another try
-    else if(checkPlannerTaskStatus() != PlannerTaskStatus::executing)
-    {
-        std::cout << "INFO: LocalTopoExplorer: metric_planner failed to start executing task to drive to start. Resending.\n";
+    else if (checkPlannerTaskStatus() != PlannerTaskStatus::executing) {
+        std::cout
+          << "INFO: LocalTopoExplorer: metric_planner failed to start executing task to drive to start. Resending.\n";
         currentPlannerTask_ = std::make_shared<mpepc::NavigationTask>(startPose_.pose());
         communicator.sendMessage(std::static_pointer_cast<mpepc::MetricPlannerTask>(currentPlannerTask_));
 
@@ -376,11 +356,10 @@ void print_area(hssh::LocalArea::Id id, const hssh::LocalTopoMap& map)
 {
     auto areaPtr = map.areaWithId(id);
 
-    if(areaPtr)
-    {
+    if (areaPtr) {
         std::cout << "Area " << id << ':' << areaPtr->boundary();
     }
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

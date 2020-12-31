@@ -8,19 +8,19 @@
 
 
 /**
-* \file     evaluation_panel.cpp
-* \author   Collin Johnson
-*
-* Definition of EvaluationPanel.
-*/
+ * \file     evaluation_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of EvaluationPanel.
+ */
 
 #include "ui/debug/evaluation_panel.h"
-#include "ui/debug/evaluation_display_widget.h"
-#include "ui/debug/debug_ui.h"
-#include "ui/common/file_dialog_settings.h"
 #include "hssh/local_topological/evaluation/stability_analyzer.h"
 #include "hssh/local_topological/evaluation/stability_log.h"
 #include "mpepc/evaluation/path_summary.h"
+#include "ui/common/file_dialog_settings.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/evaluation_display_widget.h"
 #include "utils/serialized_file_io.h"
 
 namespace vulcan
@@ -29,12 +29,12 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(EvaluationPanel, wxEvtHandler)
-    EVT_BUTTON(ID_LOAD_EVAL_MAP_BUTTON, EvaluationPanel::loadMapPressed)
-    EVT_BUTTON(ID_IMPORT_STABILITY_LOG_BUTTON, EvaluationPanel::importLogPressed)
-    EVT_BUTTON(ID_CLEAR_STABILITY_EVAL_BUTTON, EvaluationPanel::clearAllPressed)
-    EVT_CHECKBOX(ID_DRAW_EVAL_BOUNDARY_BOX, EvaluationPanel::drawBoundaryChanged)
-    EVT_CHECKBOX(ID_DRAW_EVAL_STAR_BOX, EvaluationPanel::drawStarChanged)
-    EVT_BUTTON(ID_LOAD_MPEPC_RESULTS_FILE_BUTTON, EvaluationPanel::loadResultsLogsPressed)
+EVT_BUTTON(ID_LOAD_EVAL_MAP_BUTTON, EvaluationPanel::loadMapPressed)
+EVT_BUTTON(ID_IMPORT_STABILITY_LOG_BUTTON, EvaluationPanel::importLogPressed)
+EVT_BUTTON(ID_CLEAR_STABILITY_EVAL_BUTTON, EvaluationPanel::clearAllPressed)
+EVT_CHECKBOX(ID_DRAW_EVAL_BOUNDARY_BOX, EvaluationPanel::drawBoundaryChanged)
+EVT_CHECKBOX(ID_DRAW_EVAL_STAR_BOX, EvaluationPanel::drawStarChanged)
+EVT_BUTTON(ID_LOAD_MPEPC_RESULTS_FILE_BUTTON, EvaluationPanel::loadResultsLogsPressed)
 END_EVENT_TABLE()
 
 
@@ -74,36 +74,25 @@ void EvaluationPanel::update(void)
 
 void EvaluationPanel::saveSettings(utils::ConfigFileWriter& config)
 {
-
 }
 
 
 void EvaluationPanel::loadSettings(const utils::ConfigFile& config)
 {
-
 }
 
 
 void EvaluationPanel::loadMapPressed(wxCommandEvent& event)
 {
-    wxFileDialog loadDialog(widgets_.widget,
-                            wxT("Select map file..."),
-                            wxT(""),
-                            wxT(""),
-                            wxT("*.ltm"),
-                            kFileOpenFlags);
+    wxFileDialog loadDialog(widgets_.widget, wxT("Select map file..."), wxT(""), wxT(""), wxT("*.ltm"), kFileOpenFlags);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         auto path = std::string{loadDialog.GetPath().mb_str()};
         hssh::LocalTopoMap topoMap;
 
-        if(!utils::load_serializable_from_file(path, topoMap))
-        {
+        if (!utils::load_serializable_from_file(path, topoMap)) {
             std::cerr << "ERROR:LocalTopoPanel: Failed to load topo map to file " << path << '\n';
-        }
-        else
-        {
+        } else {
             map_.reset(new hssh::LocalTopoMap(topoMap));
             widgets_.widget->setMap(map_);
 
@@ -118,20 +107,13 @@ void EvaluationPanel::loadMapPressed(wxCommandEvent& event)
 void EvaluationPanel::importLogPressed(wxCommandEvent& event)
 {
     // If there's no analyzer, there's nothing to import a log into
-    if(!stabilityAnalyzer_)
-    {
+    if (!stabilityAnalyzer_) {
         return;
     }
 
-    wxFileDialog loadDialog(widgets_.widget,
-                            wxT("Select log file..."),
-                            wxT(""),
-                            wxT(""),
-                            wxT("*.log"),
-                            kFileOpenFlags);
+    wxFileDialog loadDialog(widgets_.widget, wxT("Select log file..."), wxT(""), wxT(""), wxT("*.log"), kFileOpenFlags);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         auto path = std::string{loadDialog.GetPath().mb_str()};
         hssh::AreaStabilityLog log(path);
         stabilityAnalyzer_->addLog(log);
@@ -142,8 +124,7 @@ void EvaluationPanel::importLogPressed(wxCommandEvent& event)
 void EvaluationPanel::clearAllPressed(wxCommandEvent& event)
 {
     // If we've actually loaded an analyzer, then just reinitialize it with a new map
-    if(stabilityAnalyzer_)
-    {
+    if (stabilityAnalyzer_) {
         stabilityAnalyzer_ = std::make_shared<hssh::AreaStabilityAnalyzer>(*map_);
         widgets_.widget->setAreas(stabilityAnalyzer_);
     }
@@ -171,13 +152,12 @@ void EvaluationPanel::loadResultsLogsPressed(wxCommandEvent& event)
                             wxT("*.*"),
                             kFileOpenFlags);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         auto resultsFile = std::string{loadDialog.GetPath().mb_str()};
         mpepc::PathSummary paths(resultsFile);
         widgets_.widget->setPaths(paths);
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

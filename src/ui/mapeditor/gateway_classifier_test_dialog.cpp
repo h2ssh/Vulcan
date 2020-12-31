@@ -8,17 +8,17 @@
 
 
 /**
-* \file     gateway_classifier_test_dialog.cpp
-* \author   Collin Johnson
-* 
-* Definition of GatewayClassifierTestResultsDialog.
-*/
+ * \file     gateway_classifier_test_dialog.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GatewayClassifierTestResultsDialog.
+ */
 
 #include "ui/mapeditor/gateway_classifier_test_dialog.h"
-#include "ui/common/file_dialog_settings.h"
 #include "hssh/local_topological/area_detection/gateways/gateway_classifier.h"
-#include <wx/variant.h>
+#include "ui/common/file_dialog_settings.h"
 #include <boost/range/iterator_range.hpp>
+#include <wx/variant.h>
 
 namespace vulcan
 {
@@ -26,8 +26,8 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(GatewayClassifierTestResultsDialog, ClassificationTestResultsDialogBase)
-    EVT_BUTTON(ID_SAVE_CLASSIFIER_BUTTON,   GatewayClassifierTestResultsDialog::saveClassifierPressed)
-    EVT_BUTTON(ID_CLOSE_CLASSIFIER_BUTTON, GatewayClassifierTestResultsDialog::closePressed)
+EVT_BUTTON(ID_SAVE_CLASSIFIER_BUTTON, GatewayClassifierTestResultsDialog::saveClassifierPressed)
+EVT_BUTTON(ID_CLOSE_CLASSIFIER_BUTTON, GatewayClassifierTestResultsDialog::closePressed)
 END_EVENT_TABLE()
 
 
@@ -41,24 +41,22 @@ GatewayClassifierTestResultsDialog::GatewayClassifierTestResultsDialog(const hss
 , haveSavedClassifier_(false)
 {
     classificationResultsSummaryLabel->SetLabel(wxString::Format("Summary: %s", results.generatorName));
-    
+
     // Change the text associated with the labels for the data to be specific to the desired format for gateways
     trainingResultsAccuracyLabel->SetLabel(wxString::Format("Precision"));
     trainingResultsCorrectLabel->SetLabel(wxString::Format("Recall"));
     classificationAccuracyLabel->SetLabel(wxString::Format("Precision"));
     correctClassificationTestsLabel->SetLabel(wxString::Format("Recall"));
-    
+
     setupDetailsGrid();
-    for(auto& result : results.testResults)
-    {
+    for (auto& result : results.testResults) {
         addResultsToDetailsGrid(result);
     }
     addResultsToDetailsGrid(results.overallTest);
     createSummary(results.overallTest, results.overallTraining);
-    
+
     // Turn off the save button if there's isn't anything to save
-    if(!classifier_)
-    {
+    if (!classifier_) {
         saveClassifierButton->Enable(false);
     }
 }
@@ -73,7 +71,7 @@ void GatewayClassifierTestResultsDialog::setupDetailsGrid(void)
     classificationDetailsList->AppendTextColumn("FN");
     classificationDetailsList->AppendTextColumn("Precision");
     classificationDetailsList->AppendTextColumn("Recall");
-    
+
     classificationDetailsList->Fit();
 }
 
@@ -83,7 +81,7 @@ void GatewayClassifierTestResultsDialog::addResultsToDetailsGrid(const hssh::Gat
     double precision = 0.0;
     double recall = 0.0;
     std::tie(precision, recall) = precision_and_recall(results);
-        
+
     wxVector<wxVariant> resultData;
     resultData.push_back(wxVariant(wxString(results.mapName)));
     resultData.push_back(wxVariant(wxString::Format("%i", results.numActualGateways)));
@@ -99,18 +97,15 @@ void GatewayClassifierTestResultsDialog::addResultsToDetailsGrid(const hssh::Gat
 void GatewayClassifierTestResultsDialog::createSummary(const hssh::GatewayMapResults& testResults,
                                                        const hssh::GatewayMapResults& trainingResults)
 {
-    setResultsText(testResults, 
-                   totalClassificationTestsText, 
+    setResultsText(testResults,
+                   totalClassificationTestsText,
                    correctClassificationTestsText,
                    classificationAccuracyText);
-    setResultsText(trainingResults,
-                   trainingResultsTotalText,
-                   trainingResultsCorrectText,
-                   trainingResultsAccuracyText);
+    setResultsText(trainingResults, trainingResultsTotalText, trainingResultsCorrectText, trainingResultsAccuracyText);
 }
 
 
-void GatewayClassifierTestResultsDialog::setResultsText(const hssh::GatewayMapResults& overall, 
+void GatewayClassifierTestResultsDialog::setResultsText(const hssh::GatewayMapResults& overall,
                                                         wxStaticText* numTestsText,
                                                         wxStaticText* numCorrectText,
                                                         wxStaticText* accuracyText)
@@ -118,7 +113,7 @@ void GatewayClassifierTestResultsDialog::setResultsText(const hssh::GatewayMapRe
     double precision = 0.0;
     double recall = 0.0;
     std::tie(precision, recall) = precision_and_recall(overall);
-    
+
     int totalTests = overall.numActualGateways;
     numTestsText->SetLabel(wxString::Format("%i", totalTests));
     numCorrectText->SetLabel(wxString::Format("%.2f", recall));
@@ -129,16 +124,14 @@ void GatewayClassifierTestResultsDialog::setResultsText(const hssh::GatewayMapRe
 void GatewayClassifierTestResultsDialog::saveClassifierPressed(wxCommandEvent& event)
 {
     assert(classifier_);
-    
+
     wxFileDialog saveDialog(this, wxT("Select output file..."), wxT(""), wxT(""), wxT(""), kFileSaveFlags);
 
-    if(saveDialog.ShowModal() == wxID_OK)
-    {
+    if (saveDialog.ShowModal() == wxID_OK) {
         wxString filename = saveDialog.GetPath();
         haveSavedClassifier_ = classifier_->save(filename.ToStdString());
 
-        if(!haveSavedClassifier_)
-        {
+        if (!haveSavedClassifier_) {
             std::cerr << "ERROR:GatewayClassifierTestResultsDialog: Failed to save classifier to " << filename << '\n';
         }
     }
@@ -147,12 +140,9 @@ void GatewayClassifierTestResultsDialog::saveClassifierPressed(wxCommandEvent& e
 
 void GatewayClassifierTestResultsDialog::closePressed(wxCommandEvent& event)
 {
-    if(IsModal())
-    {
+    if (IsModal()) {
         EndModal((!classifier_ || haveSavedClassifier_ ? wxID_OK : wxID_CANCEL));
-    }
-    else
-    {
+    } else {
         Destroy();
     }
 }
@@ -162,20 +152,18 @@ std::pair<double, double> precision_and_recall(const hssh::GatewayMapResults& re
 {
     double recall = 0.0;
     int totalExamples = results.numActualGateways;
-    if(totalExamples > 0)
-    {
+    if (totalExamples > 0) {
         recall = results.numTruePositives / static_cast<double>(totalExamples);
     }
-    
+
     double precision = 0.0;
     int totalPositives = results.numTruePositives + results.numFalsePositives;
-    if(totalPositives > 0)
-    {
+    if (totalPositives > 0) {
         precision = results.numTruePositives / static_cast<double>(totalPositives);
     }
 
     return std::make_pair(precision, recall);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

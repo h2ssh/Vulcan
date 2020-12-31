@@ -8,11 +8,11 @@
 
 
 /**
-* \file     global_topo_editor_widget.cpp
-* \author   Collin Johnson
-* 
-* Implementation of GlobalTopoEditorWidget.
-*/
+ * \file     global_topo_editor_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of GlobalTopoEditorWidget.
+ */
 
 #include "ui/mapeditor/global_topo_editor_widget.h"
 
@@ -20,7 +20,7 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 GlobalTopoEditorWidget::GlobalTopoEditorWidget(wxWindow* parent,
                                                wxWindowID id,
                                                const wxPoint& pos,
@@ -28,15 +28,14 @@ GlobalTopoEditorWidget::GlobalTopoEditorWidget(wxWindow* parent,
                                                long style,
                                                const wxString& name,
                                                const wxPalette& palette)
-    : OpenGLWidget(parent, id, pos, size, style, name, palette)
+: OpenGLWidget(parent, id, pos, size, style, name, palette)
 {
 }
 
 
 GlobalTopoEditorWidget::~GlobalTopoEditorWidget(void)
 {
-    
 }
-    
-}
-}
+
+}   // namespace ui
+}   // namespace vulcan

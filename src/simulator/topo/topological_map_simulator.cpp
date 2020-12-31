@@ -8,31 +8,30 @@
 
 
 /**
-* \file     topological_map_simulator.cpp
-* \author   Collin Johnson
-*
-* Definition of TopologicalMapSimulator.
-*/
+ * \file     topological_map_simulator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TopologicalMapSimulator.
+ */
 
+#include "simulator/topo/topological_map_simulator.h"
+#include "hssh/global_topological/utils/metric_map_cache.h"
+#include "planner/decision/decision_target.h"
 #include <cassert>
 #include <iostream>
-#include "simulator/topo/topological_map_simulator.h"
-#include "planner/decision/decision_target.h"
-#include "hssh/global_topological/utils/metric_map_cache.h"
 
 namespace vulcan
 {
 namespace simulator
 {
 
-TopologicalMapSimulator::TopologicalMapSimulator(const topological_map_simulator_params_t& params)
-                                            : params(params)
+TopologicalMapSimulator::TopologicalMapSimulator(const topological_map_simulator_params_t& params) : params(params)
 {
 }
 
 void TopologicalMapSimulator::setMapToSimulate(const hssh::TopologicalMap& map, const hssh::GlobalLocation& state)
 {
-    topoMap  = map;
+    topoMap = map;
     mapState = state;
 }
 
@@ -45,8 +44,7 @@ void TopologicalMapSimulator::setMapState(const hssh::GlobalLocation& state)
 
 event_type_t TopologicalMapSimulator::simulateTarget(const std::shared_ptr<planner::DecisionTarget>& target)
 {
-    switch(target->getType())
-    {
+    switch (target->getType()) {
     case planner::LOCAL_TOPO_PLACE_NEIGHBORHOOD:
         return simulatePlaceNeighborhoodTarget(target);
 
@@ -61,42 +59,45 @@ event_type_t TopologicalMapSimulator::simulateTarget(const std::shared_ptr<plann
 }
 
 
-event_type_t TopologicalMapSimulator::simulatePlaceNeighborhoodTarget(const std::shared_ptr<planner::DecisionTarget>& target)
+event_type_t
+  TopologicalMapSimulator::simulatePlaceNeighborhoodTarget(const std::shared_ptr<planner::DecisionTarget>& target)
 {
     assert(!mapState.onPath);
 
-    std::shared_ptr<planner::PlaceNeighborhoodTarget> placeTarget = std::static_pointer_cast<planner::PlaceNeighborhoodTarget>(target);
+    std::shared_ptr<planner::PlaceNeighborhoodTarget> placeTarget =
+      std::static_pointer_cast<planner::PlaceNeighborhoodTarget>(target);
 
     return LOCAL_PLACE_EVENT;
 }
 
 
-event_type_t TopologicalMapSimulator::simulateRelativePlaceTarget(const std::shared_ptr<planner::DecisionTarget>& target)
+event_type_t
+  TopologicalMapSimulator::simulateRelativePlaceTarget(const std::shared_ptr<planner::DecisionTarget>& target)
 {
     assert(!mapState.onPath);
 
-    std::shared_ptr<planner::RelativePlaceTarget> placeTarget = std::static_pointer_cast<planner::RelativePlaceTarget>(target);
+    std::shared_ptr<planner::RelativePlaceTarget> placeTarget =
+      std::static_pointer_cast<planner::RelativePlaceTarget>(target);
 
     int8_t exitOffset = 0;
 
-    switch(placeTarget->getCommand())
-    {
-        case planner::LOCAL_TOPO_TURN_LEFT:
-            exitOffset = -1;
-            break;
+    switch (placeTarget->getCommand()) {
+    case planner::LOCAL_TOPO_TURN_LEFT:
+        exitOffset = -1;
+        break;
 
-        case planner::LOCAL_TOPO_TURN_RIGHT:
-            exitOffset = 1;
-            break;
+    case planner::LOCAL_TOPO_TURN_RIGHT:
+        exitOffset = 1;
+        break;
 
-        case planner::LOCAL_TOPO_GO_STRAIGHT:
-            exitOffset = 2;
-            break;
+    case planner::LOCAL_TOPO_GO_STRAIGHT:
+        exitOffset = 2;
+        break;
 
-        case planner::LOCAL_TOPO_GO_BACK:
-        default:
-            exitOffset = 0;
-            break;
+    case planner::LOCAL_TOPO_GO_BACK:
+    default:
+        exitOffset = 0;
+        break;
     }
 
     int8_t fragmentId = mapState.placeState.entryFragmentId + exitOffset;
@@ -116,5 +117,5 @@ event_type_t TopologicalMapSimulator::simulateLocalPathTarget(const std::shared_
     return LOCAL_PLACE_EVENT;
 }
 
-} // namespace simulator
-} // namespace vulcan
+}   // namespace simulator
+}   // namespace vulcan

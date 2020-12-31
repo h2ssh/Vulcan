@@ -21,10 +21,10 @@ template <typename PointMessage, typename T>
 PointMessage convert_point_to_lcm(const Point<T>& point)
 {
     PointMessage pointMessage;
-    
+
     pointMessage.x = point.x;
     pointMessage.y = point.y;
-    
+
     return pointMessage;
 }
 
@@ -36,7 +36,7 @@ auto convert_lcm_to_point(const PointMessage& pointMessage) -> Point<decltype(po
     return Point<T>(pointMessage.x, pointMessage.y);
 }
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_COMMON_POINT_T_H
+#endif   // LCMTYPES_COMMON_POINT_T_H

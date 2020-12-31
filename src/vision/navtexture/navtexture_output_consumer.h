@@ -10,32 +10,31 @@
 #ifndef SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_OUTPUT_CONSUMER_H
 #define SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_OUTPUT_CONSUMER_H
 
-#include <vector>
 #include "vision/image_segment.h"
+#include <vector>
 
 namespace vulcan
 {
 namespace vision
 {
-    
+
 /**
-* NavTextureOutputConsumer is an interface for classes that will be handling the
-* output produced by the navtexture module.
-*
-* The current output is:
-*
-* TODO: Fill in the blanks here
-*/
+ * NavTextureOutputConsumer is an interface for classes that will be handling the
+ * output produced by the navtexture module.
+ *
+ * The current output is:
+ *
+ * TODO: Fill in the blanks here
+ */
 class NavTextureOutputConsumer
 {
 public:
-    
     virtual ~NavTextureOutputConsumer(void) { }
-    
+
     virtual void handleImageSegments(const std::vector<image_segment_t>& segments) = 0;
 };
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan
 
-#endif // SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_OUTPUT_CONSUMER_H
+#endif   // SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_OUTPUT_CONSUMER_H

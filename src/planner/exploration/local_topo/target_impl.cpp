@@ -8,17 +8,17 @@
 
 
 /**
-* \file     target_impl.cpp
-* \author   Collin Johnson
-* 
-* Definition of LocalAreaTarget and GatewayTarget subclasses of LocalTopoExplorationTarget.
-*/
+ * \file     target_impl.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalAreaTarget and GatewayTarget subclasses of LocalTopoExplorationTarget.
+ */
 
 #include "planner/exploration/local_topo/target_impl.h"
-#include "planner/utils/local_area_tasks.h"
 #include "hssh/local_topological/event.h"
 #include "hssh/local_topological/events/area_transition.h"
 #include "mpepc/metric_planner/task/navigation.h"
+#include "planner/utils/local_area_tasks.h"
 #include "utils/stub.h"
 
 namespace vulcan
@@ -41,8 +41,7 @@ LocalAreaTarget::LocalAreaTarget(const hssh::LocalArea& area)
 bool LocalAreaTarget::checkVisited(const hssh::LocalAreaEvent& event)
 {
     // If the area has not been visited yet, then check if it is visited by this event
-    if(!visited_)
-    {
+    if (!visited_) {
         event.accept(*this);
     }
 
@@ -71,19 +70,17 @@ void LocalAreaTarget::visitTurnAround(const hssh::TurnAroundEvent& event)
 
 //////////////////////////// GatewayTarget definition //////////////////////////////
 
-GatewayTarget::GatewayTarget(const hssh::Gateway& gateway)
-: visited_(false)
-, gateway_(gateway)
+GatewayTarget::GatewayTarget(const hssh::Gateway& gateway) : visited_(false), gateway_(gateway)
 {
     // The boundary extends +/- 0.25m to either side of the gateway so it will show up on the map.
     Point<double> delta(0.25 * std::cos(gateway.direction()), 0.25 * std::sin(gateway.direction()));
-    
+
     std::vector<Point<double>> vertices(4);
     vertices.push_back(gateway.boundary().a + delta);
     vertices.push_back(gateway.boundary().b + delta);
     vertices.push_back(gateway.boundary().b - delta);
     vertices.push_back(gateway.boundary().a - delta);
-    
+
     boundary_ = math::Polygon<float>(vertices);
 }
 
@@ -91,8 +88,7 @@ GatewayTarget::GatewayTarget(const hssh::Gateway& gateway)
 bool GatewayTarget::checkVisited(const hssh::LocalAreaEvent& event)
 {
     // If the gateway has not been visited yet, then check if it is visited by this event
-    if(!visited_)
-    {
+    if (!visited_) {
         event.accept(*this);
     }
 
@@ -112,8 +108,7 @@ void GatewayTarget::visitAreaTransition(const hssh::AreaTransitionEvent& event)
     // If this transition has a gateway, i.e. it isn't the very first area visited, then check and see if it is
     // similar to the gateway for this target. A similar gateway means the gateway is now visited.
     auto gateway = event.transitionGateway();
-    if(gateway)
-    {
+    if (gateway) {
         visited_ = gateway->isSimilarTo(gateway_);
     }
 }
@@ -124,5 +119,5 @@ void GatewayTarget::visitTurnAround(const hssh::TurnAroundEvent& event)
     // TurnAroundEvent doesn't affect the GatewayTarget
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

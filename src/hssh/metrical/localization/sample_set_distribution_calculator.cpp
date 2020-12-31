@@ -8,11 +8,11 @@
 
 
 /**
-* \file     sample_set_distribution_calculator.cpp
-* \author   Collin Johnson
-* 
-* Definition of create_sample_set_distribution_calculator factory function.
-*/
+ * \file     sample_set_distribution_calculator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_sample_set_distribution_calculator factory function.
+ */
 
 #include "hssh/metrical/localization/sample_set_distribution_calculator.h"
 #include "hssh/metrical/localization/adaptive_particle_filter.h"
@@ -24,22 +24,19 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 std::unique_ptr<SampleSetDistributionCalculator> create_sample_set_distribution_calculator(const std::string& type)
 {
-    if(type == ADAPTIVE_PARTICLE_FILTER_TYPE)
-    {
+    if (type == ADAPTIVE_PARTICLE_FILTER_TYPE) {
         return std::unique_ptr<SampleSetDistributionCalculator>(new BestSamplesDistributionCalculator);
-    }
-    else if(type == VANILLA_PARTICLE_FILTER_TYPE)
-    {
+    } else if (type == VANILLA_PARTICLE_FILTER_TYPE) {
         return std::unique_ptr<SampleSetDistributionCalculator>(new WeightedDistributionCalculator);
     }
-    
+
     std::cerr << "ERROR: create_sample_set_distribution_calculator: Unknown type: " << type << '\n';
     assert(false);
     return std::unique_ptr<SampleSetDistributionCalculator>();
 }
-    
-}
-}
+
+}   // namespace hssh
+}   // namespace vulcan

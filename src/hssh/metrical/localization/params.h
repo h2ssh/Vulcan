@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of params structs for metrical localization utilities.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of params structs for metrical localization utilities.
+ */
 
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_PARAMS_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_PARAMS_H
@@ -21,7 +21,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace hssh
 {
@@ -29,9 +32,9 @@ namespace hssh
 struct endpoint_observation_model_params_t
 {
     float maxEndpointDistance;
-    int   rayStride;
-    bool  useCovarianceWeighting;
-    bool  useMovingScan;
+    int rayStride;
+    bool useCovarianceWeighting;
+    bool useMovingScan;
 
     double occupiedLoglihood;
     double freeLoglihood;
@@ -43,7 +46,7 @@ struct endpoint_observation_model_params_t
 struct gaussian_observation_model_params_t
 {
     float maxEndpointDistance;
-    int   rayStride;
+    int rayStride;
 
     double gaussianSigma;
 
@@ -53,8 +56,8 @@ struct gaussian_observation_model_params_t
 struct discrete_beam_model_params_t
 {
     float maxRayDistance;
-    int   rayStride;
-    bool  useCovarianceWeighting;
+    int rayStride;
+    bool useCovarianceWeighting;
 
     double hitLoglihood;
     double shortLoglihood;
@@ -65,7 +68,7 @@ struct discrete_beam_model_params_t
 
 struct beam_observation_model_params_t
 {
-    double laserVariance; // this includes both laser noise and map discretizaion error
+    double laserVariance;   // this includes both laser noise and map discretizaion error
     double lambdaShort;
     double zHit;
     double zShort;
@@ -74,18 +77,18 @@ struct beam_observation_model_params_t
 
     double angleBetweenBeams;
 
-    double minRayWeight; // large values (~0.1) works too
+    double minRayWeight;   // large values (~0.1) works too
     double maxRayLength;
 
     // occupancy weighting is used by default
 
-    bool   useDistanceWeighting;
+    bool useDistanceWeighting;
     double minDistanceWeight;
 
-    bool   useLineWeighting;
+    bool useLineWeighting;
     double defaultLineWeight;
 
-    bool   useCovarianceWeighting;
+    bool useCovarianceWeighting;
 
     beam_observation_model_params_t(const utils::ConfigFile& config);
 };
@@ -93,12 +96,12 @@ struct beam_observation_model_params_t
 struct observation_model_params_t
 {
     std::string type;
-    bool        shouldDebug;
+    bool shouldDebug;
 
     endpoint_observation_model_params_t endpointParams;
     gaussian_observation_model_params_t gaussianParams;
-    discrete_beam_model_params_t        discreteParams;
-    beam_observation_model_params_t     beamParams;
+    discrete_beam_model_params_t discreteParams;
+    beam_observation_model_params_t beamParams;
 
     observation_model_params_t(const utils::ConfigFile& config);
 };
@@ -124,8 +127,9 @@ struct kld_sampling_params_t
 struct particle_filter_params_t
 {
     std::size_t maxUpdateAttempts;
-    std::size_t initialNumSamples;     // number of samples to use when the filter is initialized
-    std::size_t maxSamplesDrawn;       // need to put a cap on the number of samples drawn so that updates don't take so long there's no hope of recovery
+    std::size_t initialNumSamples;   // number of samples to use when the filter is initialized
+    std::size_t maxSamplesDrawn;     // need to put a cap on the number of samples drawn so that updates don't take so
+                                     // long there's no hope of recovery
 
     double positionInitialVariance;
     double orientationInitialVariance;
@@ -153,25 +157,25 @@ struct motion_model_params_t
 };
 
 /**
-* monte_carlo_localization_params_t is the params structure for the MonteCarloLocalization class. It should be
-* used. The individual params structs aren't needed by the user.
-*/
+ * monte_carlo_localization_params_t is the params structure for the MonteCarloLocalization class. It should be
+ * used. The individual params structs aren't needed by the user.
+ */
 struct monte_carlo_localization_params_t
 {
     std::string observationModelType;
     std::string samplerType;
     std::string distributionCalculatorType;
 
-    motion_model_params_t      motionParams;
+    motion_model_params_t motionParams;
     observation_model_params_t observationParams;
-    particle_filter_params_t   filterParams;
+    particle_filter_params_t filterParams;
 
     monte_carlo_localization_params_t(const utils::ConfigFile& config);
 };
 
 /**
-* localizer_params_t contains the parameters for the general localization.
-*/
+ * localizer_params_t contains the parameters for the general localization.
+ */
 struct localizer_params_t
 {
     std::string type;
@@ -181,7 +185,7 @@ struct localizer_params_t
     localizer_params_t(const utils::ConfigFile& config);
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_METRICAL_LOCALIZATION_PARAMS_H
+#endif   // HSSH_UTILS_METRICAL_LOCALIZATION_PARAMS_H

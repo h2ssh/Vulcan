@@ -9,25 +9,22 @@
 
 #include "lcmtypes/message_helpers.h"
 #include <algorithm>
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 namespace vulcan
 {
 namespace lcm
 {
-    
+
 void verify_channel(const std::string& channel, const std::string& defaultChannel, bool isSubscribing)
 {
     assert(!channel.empty());
-    
-    if(channel != defaultChannel)
-    {
-        std::cerr<<"WARNING:"
-                 <<(isSubscribing ? "subscribe_to_message" : "publish_data:")
-                 <<"Not "
-                 <<(isSubscribing ? "subscribing to " : "publishing on ")
-                 <<"the default channel. Default:"<<defaultChannel<<" Channel:"<<channel<<'\n';
+
+    if (channel != defaultChannel) {
+        std::cerr << "WARNING:" << (isSubscribing ? "subscribe_to_message" : "publish_data:") << "Not "
+                  << (isSubscribing ? "subscribing to " : "publishing on ")
+                  << "the default channel. Default:" << defaultChannel << " Channel:" << channel << '\n';
     }
 }
 
@@ -35,14 +32,12 @@ void verify_channel(const std::string& channel, const std::string& defaultChanne
 void verify_channel(const std::string& channel, const std::vector<std::string>& defaultChannels, bool isSubscribing)
 {
     // If the channel can't be found, then spit out a bunch of warning messages
-    if(std::find(defaultChannels.begin(), defaultChannels.end(), channel) == defaultChannels.end())
-    {
-        for(const auto& defaultChannel : defaultChannels)
-        {
+    if (std::find(defaultChannels.begin(), defaultChannels.end(), channel) == defaultChannels.end()) {
+        for (const auto& defaultChannel : defaultChannels) {
             verify_channel(channel, defaultChannel, isSubscribing);
         }
     }
 }
-    
-}
-}
+
+}   // namespace lcm
+}   // namespace vulcan

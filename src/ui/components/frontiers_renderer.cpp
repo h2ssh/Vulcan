@@ -8,17 +8,17 @@
 
 
 /**
-* \file     frontiers_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of FrontiersRenderer.
-*/
+ * \file     frontiers_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of FrontiersRenderer.
+ */
 
-#include <algorithm>
-#include <GL/gl.h>
 #include "ui/components/frontiers_renderer.h"
-#include "ui/common/gl_shapes.h"
 #include "hssh/local_topological/frontier.h"
+#include "ui/common/gl_shapes.h"
+#include <GL/gl.h>
+#include <algorithm>
 
 namespace vulcan
 {
@@ -35,9 +35,12 @@ void FrontiersRenderer::setRenderColor(const GLColor& frontierColor)
 
 void FrontiersRenderer::render(const std::vector<hssh::Frontier>& frontiers)
 {
-    // Set the color here so it doesn't need to be passed into the draw_frontier function, as all colors are the same right now
+    // Set the color here so it doesn't need to be passed into the draw_frontier function, as all colors are the same
+    // right now
     frontierColor.set();
-    std::for_each(frontiers.begin(), frontiers.end(), [](const hssh::Frontier& frontier) { draw_frontier(frontier); });
+    std::for_each(frontiers.begin(), frontiers.end(), [](const hssh::Frontier& frontier) {
+        draw_frontier(frontier);
+    });
 }
 
 
@@ -51,8 +54,8 @@ void draw_frontier(const hssh::Frontier& frontier)
     glVertex2f(frontier.boundary.b.x, frontier.boundary.b.y);
     glEnd();
 
-    gl_draw_small_arrow(frontier.exitPoint, length(frontier.boundary)*0.75, frontier.direction, LINE_WIDTH);
+    gl_draw_small_arrow(frontier.exitPoint, length(frontier.boundary) * 0.75, frontier.direction, LINE_WIDTH);
 }
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan

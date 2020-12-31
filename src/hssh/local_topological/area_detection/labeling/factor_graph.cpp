@@ -8,20 +8,20 @@
 
 
 /**
-* \file     factor_graph.cpp
-* \author   Collin Johnson
-* 
-* Definition of FactorGraph.
-*/
+ * \file     factor_graph.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of FactorGraph.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/factor_graph.h"
 
-namespace vulcan 
+namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
 
-FactorGraph::FactorGraph(std::vector<Variable::Ptr> variables, 
+FactorGraph::FactorGraph(std::vector<Variable::Ptr> variables,
                          std::vector<Factor::Ptr> factors,
                          std::vector<FactorEdge::Ptr> edges)
 : vars_(variables)
@@ -29,6 +29,6 @@ FactorGraph::FactorGraph(std::vector<Variable::Ptr> variables,
 , edges_(edges)
 {
 }
-    
-} // namespace hssh
-} // namespace vulcan
+
+}   // namespace hssh
+}   // namespace vulcan

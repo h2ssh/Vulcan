@@ -8,11 +8,11 @@
 
 
 /**
-* \file     truncated_gaussian_distribution.cpp
-* \author   Collin Johnson
-* 
-* Definition of TruncatedGaussianDistribution.
-*/
+ * \file     truncated_gaussian_distribution.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TruncatedGaussianDistribution.
+ */
 
 #include "math/truncated_gaussian_distribution.h"
 #include "math/statistics.h"
@@ -25,11 +25,11 @@ namespace vulcan
 {
 namespace math
 {
-    
-double gaussian_cdf        (double x, double mean, double sigma);
+
+double gaussian_cdf(double x, double mean, double sigma);
 double truncated_normalizer(double a, double b, double mean, double variance);
-    
-    
+
+
 TruncatedGaussianDistribution::TruncatedGaussianDistribution(double mean, double variance, double a, double b)
 : mean_(mean)
 , variance_(variance)
@@ -38,7 +38,7 @@ TruncatedGaussianDistribution::TruncatedGaussianDistribution(double mean, double
 {
     assert(a_ < b_);
     assert(variance_ > 0.0);
-    
+
     normalizer_ = truncated_normalizer(a_, b_, mean_, variance_);
     sigma_ = std::sqrt(variance);
     aCdf_ = gaussian_cdf(a_, mean_, sigma_);
@@ -61,11 +61,10 @@ double TruncatedGaussianDistribution::sample(void) const
 
 double TruncatedGaussianDistribution::likelihood(double value) const
 {
-    if((value < a_) || (value > b_))
-    {
+    if ((value < a_) || (value > b_)) {
         return 0.0;
     }
-    
+
     return normalizer_ * std::exp(-0.5 * std::pow(value - mean_, 2.0) / variance_);
 }
 
@@ -80,26 +79,27 @@ bool TruncatedGaussianDistribution::save(std::ostream& out) const
 bool TruncatedGaussianDistribution::load(std::istream& in)
 {
     in >> mean_ >> variance_ >> a_ >> b_;
-    
+
     assert(a_ < b_);
     assert(variance_ > 0.0);
-    
+
     normalizer_ = truncated_normalizer(a_, b_, mean_, sigma_);
-    
+
     return in.good();
 }
 
 
 double gaussian_cdf(double x, double mean, double sigma)
-{ 
-    return 0.5 * (1.0 + std::erf((x - mean) / (M_SQRT2 * sigma))); 
+{
+    return 0.5 * (1.0 + std::erf((x - mean) / (M_SQRT2 * sigma)));
 }
 
 
 double truncated_normalizer(double a, double b, double mean, double sigma)
 {
-    return 1.0 / (sigma * (gaussian_cdf(b, mean, sigma) - gaussian_cdf(a, mean, sigma)) * std::sqrt(2.0 * M_PI) * sigma);
+    return 1.0
+      / (sigma * (gaussian_cdf(b, mean, sigma) - gaussian_cdf(a, mean, sigma)) * std::sqrt(2.0 * M_PI) * sigma);
 }
-    
-} // namespace math
-} // namespace vulcan
+
+}   // namespace math
+}   // namespace vulcan

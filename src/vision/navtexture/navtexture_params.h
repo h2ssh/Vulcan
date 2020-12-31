@@ -10,32 +10,36 @@
 #ifndef SENSORS_VISION_NAVTEXTURE_NAVTEXURE_PARAMS_H
 #define SENSORS_VISION_NAVTEXTURE_NAVTEXURE_PARAMS_H
 
-#include <string>
 #include "vision/vision_params.h"
+#include <string>
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace vision
 {
 
 struct image_object_identifier_params_t
 {
-    std::string              segmenterType;
+    std::string segmenterType;
     image_segmenter_params_t segmenterParams;
 
-    std::string        histogramType;
+    std::string histogramType;
     histogram_params_t histogramParams;
-    
-    int numSegmentClusters;         // Number of clusters to use for the k-means clustering of image segments
-    int maxClusteringIterations;    // Maximum number of iterations to run k-means
 
-    float maxLaserDistance;         // Maximum range to consider from laser points. Should be correlated with homography performance (7 meters for current Vulcan measurement)
-    int   minDynamicMatches;        // Minimum number of matches between segment and dynamic point for a match to be made
-    
-    std::string homographyFile;     // Location of the homography matrix parameters
-    std::string calibrationFile;    // Location of the camera calibration parameters
+    int numSegmentClusters;        // Number of clusters to use for the k-means clustering of image segments
+    int maxClusteringIterations;   // Maximum number of iterations to run k-means
+
+    float maxLaserDistance;   // Maximum range to consider from laser points. Should be correlated with homography
+                              // performance (7 meters for current Vulcan measurement)
+    int minDynamicMatches;    // Minimum number of matches between segment and dynamic point for a match to be made
+
+    std::string homographyFile;    // Location of the homography matrix parameters
+    std::string calibrationFile;   // Location of the camera calibration parameters
 };
 
 struct navtexture_params_t
@@ -48,11 +52,11 @@ struct navtexture_params_t
 };
 
 /**
-* load_navtexture_params loads the parameters for navtexture module.
-*/
+ * load_navtexture_params loads the parameters for navtexture module.
+ */
 navtexture_params_t load_navtexture_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan
 
-#endif // SENSORS_VISION_NAVTEXTURE_NAVTEXURE_PARAMS_H
+#endif   // SENSORS_VISION_NAVTEXTURE_NAVTEXURE_PARAMS_H

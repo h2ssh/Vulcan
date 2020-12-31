@@ -7,10 +7,10 @@
 */
 
 
-#include "system/module.h"
 #include "mpepc/motion_controller/director.h"
-#include "utils/config_file.h"
+#include "system/module.h"
 #include "utils/command_line.h"
+#include "utils/config_file.h"
 #include <vector>
 
 using namespace vulcan;
@@ -23,7 +23,7 @@ int main(int argc, char** argv)
     utils::CommandLine commandLine(argc, argv, arguments);
     commandLine.verify();
 
-    utils::ConfigFile  config(commandLine.configName());
+    utils::ConfigFile config(commandLine.configName());
 
     system::Module<mpepc::MotionControllerDirector> module(commandLine, config);
 

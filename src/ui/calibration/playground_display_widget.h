@@ -8,18 +8,18 @@
 
 
 /**
-* \file     playground_display_widget.h
-* \author   Collin Johnson
-*
-* Declaration of PlaygroundDisplayWidget.
-*/
+ * \file     playground_display_widget.h
+ * \author   Collin Johnson
+ *
+ * Declaration of PlaygroundDisplayWidget.
+ */
 
 #ifndef UI_CALIBRATION_PLAYGROUND_DISPLAY_WIDGET_H
 #define UI_CALIBRATION_PLAYGROUND_DISPLAY_WIDGET_H
 
-#include "ui/components/grid_based_display_widget.h"
-#include "ui/common/ui_color.h"
 #include "hssh/local_metric/lpm.h"
+#include "ui/common/ui_color.h"
+#include "ui/components/grid_based_display_widget.h"
 
 namespace vulcan
 {
@@ -29,26 +29,25 @@ namespace ui
 struct calibration_ui_params_t;
 
 /**
-* PlaygroundDisplayWidget displays the playground configuration and current status for the Playground
-* tab of the CalibrationUI. The widget does the following things:
-*
-*   1) Displays the LPM in which the robot is moving.
-*   2) Allows creating the playground boundary via specifying a polygon on the screen.
-*   3) Allows creating the target region by specifying a polygon on the screen.
-*   4) Displays the currently generated target, along with the trajectory taken by the robot along the way.
-*/
+ * PlaygroundDisplayWidget displays the playground configuration and current status for the Playground
+ * tab of the CalibrationUI. The widget does the following things:
+ *
+ *   1) Displays the LPM in which the robot is moving.
+ *   2) Allows creating the playground boundary via specifying a polygon on the screen.
+ *   3) Allows creating the target region by specifying a polygon on the screen.
+ *   4) Displays the currently generated target, along with the trajectory taken by the robot along the way.
+ */
 class PlaygroundDisplayWidget : public GridBasedDisplayWidget
 {
 public:
-
     /**
-    * Constructor for PlaygroundDisplayWidget.
-    */
+     * Constructor for PlaygroundDisplayWidget.
+     */
     PlaygroundDisplayWidget(const calibration_ui_params_t& params);
-    
-    // Set target region and set playground boundary accept a flag indicating if they are final as the final color showing the
-    // region will likely be different than the intermediate color -- probably darker going to lighter
-    void setTargetRegion      (const math::Shape<float>& target,     bool final);
+
+    // Set target region and set playground boundary accept a flag indicating if they are final as the final color
+    // showing the region will likely be different than the intermediate color -- probably darker going to lighter
+    void setTargetRegion(const math::Shape<float>& target, bool final);
     void setPlaygroundBoundary(const math::Shape<float>& playground, bool final);
 
     // Methods for providing the data to be rendered
@@ -57,28 +56,27 @@ public:
     void setPath(const mpepc::metric_waypoint_path_t& path);
 
 private:
-    
     // GridBasedDisplayWidget interface
     virtual Point<uint16_t> convertWorldToGrid(const Point<float>& world) const;
-    virtual void                  renderWidget(void);
-    
+    virtual void renderWidget(void);
+
     // Helper renderers
     void drawPolygonBoundary(const std::vector<Point<float>>& boundary, const GLColor& color);
-    
+
     hssh::LocalPerceptualMap lpm;
-    pose_t            pose;
-    
+    pose_t pose;
+
     std::vector<Point<float>> targetRegion;
     std::vector<Point<float>> playgroundBoundary;
-    
+
     bool targetIsFinal;
     bool playgroundIsFinal;
-    
+
     GLColor targetColor;
     GLColor playgroundColor;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_CALIBRATION_PLAYGROUND_DISPLAY_WIDGET_H
+#endif   // UI_CALIBRATION_PLAYGROUND_DISPLAY_WIDGET_H

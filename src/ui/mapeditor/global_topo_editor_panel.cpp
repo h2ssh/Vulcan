@@ -8,11 +8,11 @@
 
 
 /**
-* \file     global_topo_editor_panel.cpp
-* \author   Collin Johnson
-* 
-* Implementation of GlobalTopoEditorPanel.
-*/
+ * \file     global_topo_editor_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of GlobalTopoEditorPanel.
+ */
 
 #include "ui/mapeditor/global_topo_editor_panel.h"
 
@@ -20,6 +20,6 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 }
-}
+}   // namespace vulcan

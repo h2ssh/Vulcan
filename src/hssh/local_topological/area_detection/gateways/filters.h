@@ -8,14 +8,14 @@
 
 
 /**
-* \file     filters.h
-* \author   Collin Johnson
-* 
-* Declaration of various filters to apply to weighted gateways:
-* 
-*   - filter_out_of_map_gateways : remove all gateways with a endpoint that isn't in the map
-*   - filter_generated_gateways : apply filters to generated gateway to ensure their uniqueness
-*/
+ * \file     filters.h
+ * \author   Collin Johnson
+ *
+ * Declaration of various filters to apply to weighted gateways:
+ *
+ *   - filter_out_of_map_gateways : remove all gateways with a endpoint that isn't in the map
+ *   - filter_generated_gateways : apply filters to generated gateway to ensure their uniqueness
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_GATEWAY_FILTERS_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_GATEWAY_FILTERS_H
@@ -25,50 +25,50 @@
 
 namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
-    
+
 class VornoiSkeletonGrid;
 
 /**
-* filter_out_of_map_gateways removes all gateways that are no longer contained in the current map.
-* 
-* \param    gateways        Gateways to filter
-* \param    skeleton        Current skeleton grid of the environment
-* \return   All gateways that are still in the boundary of the skeleton.
-*/
+ * filter_out_of_map_gateways removes all gateways that are no longer contained in the current map.
+ *
+ * \param    gateways        Gateways to filter
+ * \param    skeleton        Current skeleton grid of the environment
+ * \return   All gateways that are still in the boundary of the skeleton.
+ */
 std::vector<WeightedGateway> filter_out_of_map_gateways(const std::vector<WeightedGateway>& gateways,
                                                         const VoronoiSkeletonGrid& skeleton);
 
 /**
-* filter_generated_gateways removes gateways that fail the following conditions:
-* 
-*   - intersects a higher weighted gateway
-*   - is similar to a higher weighted gateway
-* 
-* \param    gateways        Gateways to filter
-* \param    skeleton        Current skeleton grid of the environment
-* \return   All gateways that pass all the filters.
-*/
+ * filter_generated_gateways removes gateways that fail the following conditions:
+ *
+ *   - intersects a higher weighted gateway
+ *   - is similar to a higher weighted gateway
+ *
+ * \param    gateways        Gateways to filter
+ * \param    skeleton        Current skeleton grid of the environment
+ * \return   All gateways that pass all the filters.
+ */
 std::vector<WeightedGateway> filter_generated_gateways(const std::vector<WeightedGateway>& gateways,
-                                                        const VoronoiSkeletonGrid& skeleton);
+                                                       const VoronoiSkeletonGrid& skeleton);
 
 
 /**
-* is_gateway_boundary_valid checks if the gateway has a valid boundary in skeleton.
-* 
-* A boundary is valid if:
-*   - both endpoints are on obstacle cells
-*   - the center is on a skeleton cell
-*   - all boundary cells are stored
-* 
-* \param    g           Gateway to check for validity
-* \param    skeleton    Skeleton grid in which the gateway needs to exist
-* \return   True if the gateway boundary is still valid per the specified conditions.
-*/
+ * is_gateway_boundary_valid checks if the gateway has a valid boundary in skeleton.
+ *
+ * A boundary is valid if:
+ *   - both endpoints are on obstacle cells
+ *   - the center is on a skeleton cell
+ *   - all boundary cells are stored
+ *
+ * \param    g           Gateway to check for validity
+ * \param    skeleton    Skeleton grid in which the gateway needs to exist
+ * \return   True if the gateway boundary is still valid per the specified conditions.
+ */
 bool is_gateway_boundary_valid(const Gateway& g, const VoronoiSkeletonGrid& skeleton);
 
-} // namespace hssh 
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_GATEWAY_FILTERS_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_GATEWAY_FILTERS_H

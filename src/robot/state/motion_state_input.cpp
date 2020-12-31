@@ -8,22 +8,22 @@
 
 
 /**
-* \file     motion_state_input.cpp
-* \author   Collin Johnson
-* 
-* Implementation of MotionStateInputQueue.
-*/
+ * \file     motion_state_input.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of MotionStateInputQueue.
+ */
 
 #include "robot/state/motion_state_input.h"
-#include "utils/timestamp.h"
 #include "utils/auto_mutex.h"
+#include "utils/timestamp.h"
 #include <iostream>
 
 namespace vulcan
 {
 namespace robot
 {
-    
+
 template <class T>
 void read_queue_into_vector(std::deque<T>& queue, std::vector<T>& vector)
 {
@@ -51,22 +51,22 @@ bool MotionStateInputQueue::isDataAvailable(void) const
 motion_state_input_t MotionStateInputQueue::readInput(void)
 {
     utils::AutoMutex autoLock(dataLock_);
-    
+
     motion_state_input_t input;
-    
-    read_queue_into_vector(imuQueue_,               input.imu);
-    read_queue_into_vector(odometryQueue_,          input.odometry);
-    read_queue_into_vector(encodersQueue_,          input.encoders);
+
+    read_queue_into_vector(imuQueue_, input.imu);
+    read_queue_into_vector(odometryQueue_, input.odometry);
+    read_queue_into_vector(encodersQueue_, input.encoders);
     read_queue_into_vector(commandedJoystickQueue_, input.commandedJoysticks);
     read_queue_into_vector(commandedVelocityQueue_, input.commandedVelocities);
-    read_queue_into_vector(poseQueue_,              input.localizedPoses);
-    
+    read_queue_into_vector(poseQueue_, input.localizedPoses);
+
     odometry_.hasData = false;
     encoders_.hasData = false;
     joystick_.hasData = false;
     command_.hasData = false;
     imu_.hasData = false;
-    
+
     return input;
 }
 
@@ -120,5 +120,5 @@ void MotionStateInputQueue::handleData(const pose_distribution_t& pose, const st
     poseQueue_.push_back(pose);
 }
 
-} // namespace robot
-} // namespace vulcan
+}   // namespace robot
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     labeled_boundary_data.h
-* \author   Collin Johnson
-*
-* Declaration of LabeledBoundaryFeatures and LabeledBoundaryData.
-*/
+ * \file     labeled_boundary_data.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LabeledBoundaryFeatures and LabeledBoundaryData.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LABELED_BOUNDARY_DATA_H
 #define HSSH_LOCAL_TOPOLOGICAL_LABELED_BOUNDARY_DATA_H
@@ -26,8 +26,8 @@ namespace hssh
 {
 
 /**
-* LabeledBoundaryFeatures stores the types of the areas on either side of a boundary.
-*/
+ * LabeledBoundaryFeatures stores the types of the areas on either side of a boundary.
+ */
 struct LabeledBoundaryFeatures
 {
     // Necessary to satisfy the LabeledData concept even though only one feature version exists
@@ -36,19 +36,18 @@ struct LabeledBoundaryFeatures
         int version(void) const { return 0; }
     };
 
-    std::array<HypothesisType, 2> types;    // types of areas on either side of the boundary
-    bool isOn;                              // flag indicating if this gateway was accepted
+    std::array<HypothesisType, 2> types;   // types of areas on either side of the boundary
+    bool isOn;                             // flag indicating if this gateway was accepted
     DummyFeatureVersion features;
 };
 
 
 /**
-* LabeledBoundaryData stores the data about the boundary adjacencies found in the ground-truth topological maps.
-*/
+ * LabeledBoundaryData stores the data about the boundary adjacencies found in the ground-truth topological maps.
+ */
 class LabeledBoundaryData : public TopoTrainingData<LabeledBoundaryFeatures>
 {
 public:
-
     LabeledBoundaryData(const TopoTrainingData<LabeledBoundaryFeatures>& data)
     : TopoTrainingData<LabeledBoundaryFeatures>(data)
     {
@@ -60,8 +59,8 @@ public:
 // Operators
 
 /**
-* Equality operator. Equal when the type and features match.
-*/
+ * Equality operator. Equal when the type and features match.
+ */
 bool operator==(const LabeledBoundaryFeatures& lhs, const LabeledBoundaryFeatures& rhs);
 bool operator!=(const LabeledBoundaryFeatures& lhs, const LabeledBoundaryFeatures& rhs);
 
@@ -69,7 +68,7 @@ bool operator!=(const LabeledBoundaryFeatures& lhs, const LabeledBoundaryFeature
 std::ostream& operator<<(std::ostream& out, const LabeledBoundaryFeatures& example);
 std::istream& operator>>(std::istream& in, LabeledBoundaryFeatures& example);
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_LABELED_BOUNDARY_DATA_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_LABELED_BOUNDARY_DATA_H

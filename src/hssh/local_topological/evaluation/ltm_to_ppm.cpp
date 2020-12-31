@@ -7,11 +7,11 @@
 */
 
 
-#include "hssh/local_topological/local_topo_map.h"
+#include "core/image.h"
 #include "hssh/local_topological/areas/serialization.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include "utils/cell_grid_utils.h"
 #include "utils/serialized_file_io.h"
-#include "core/image.h"
 #include "vision/image_utils.h"
 #include <iostream>
 
@@ -21,8 +21,7 @@ using namespace vulcan::hssh;
 
 int main(int argc, char** argv)
 {
-    if(argc < 2)
-    {
+    if (argc < 2) {
         std::cout << "Expected usage: ltm_to_ppm 'ltm_file'\n";
         return -1;
     }
@@ -30,8 +29,7 @@ int main(int argc, char** argv)
     // Iterate through the directory and find all maps containing "_truth.ltm"
     LocalTopoMap map;
 
-    if(!utils::load_serializable_from_file(argv[1], map))
-    {
+    if (!utils::load_serializable_from_file(argv[1], map)) {
         std::cerr << "ERROR: Failed to load requested LTM: " << argv[1] << '\n';
     }
 
@@ -49,22 +47,15 @@ int main(int argc, char** argv)
     Image ltmImg(width, height, Colorspace::RGB);
 
     // Fill the images with the underlying map first
-    for(int y = 0; y < height; ++y)
-    {
-        for(int x = 0; x < width; ++x)
-        {
-            if(grid.getClassification(x, y) & SKELETON_CELL_FREE)
-            {
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            if (grid.getClassification(x, y) & SKELETON_CELL_FREE) {
                 mapImg.setPixel(x, height - y, 255, 255, 255);
                 ltmImg.setPixel(x, height - y, 255, 255, 255);
-            }
-            else if(grid.getClassification(x, y) & SKELETON_CELL_OCCUPIED)
-            {
+            } else if (grid.getClassification(x, y) & SKELETON_CELL_OCCUPIED) {
                 mapImg.setPixel(x, height - y, 0, 0, 0);
                 ltmImg.setPixel(x, height - y, 0, 0, 0);
-            }
-            else
-            {
+            } else {
                 mapImg.setPixel(x, height - y, 127, 127, 127);
                 ltmImg.setPixel(x, height - y, 127, 127, 127);
             }
@@ -72,28 +63,25 @@ int main(int argc, char** argv)
     }
 
     // For each area cell, now mark the RGB value for the associated type
-    for(auto& area : map)
-    {
-        for(auto& cell : area->extent())
-        {
+    for (auto& area : map) {
+        for (auto& cell : area->extent()) {
             auto gridCell = utils::global_point_to_grid_cell_round(cell, grid);
 
-            switch(area->type())
-            {
-                case AreaType::path_segment:
-                    ltmImg.setPixel(gridCell.x, height - gridCell.y, 24, 145, 0);
-                    break;
+            switch (area->type()) {
+            case AreaType::path_segment:
+                ltmImg.setPixel(gridCell.x, height - gridCell.y, 24, 145, 0);
+                break;
 
-                case AreaType::decision_point:
-                    ltmImg.setPixel(gridCell.x, height - gridCell.y, 7, 55, 237);
-                    break;
+            case AreaType::decision_point:
+                ltmImg.setPixel(gridCell.x, height - gridCell.y, 7, 55, 237);
+                break;
 
-                case AreaType::destination:
-                    ltmImg.setPixel(gridCell.x, height - gridCell.y, 224, 6, 6);
-                    break;
-                default:
-                    // Ignore any others -- they shouldn't exit anyway
-                    break;
+            case AreaType::destination:
+                ltmImg.setPixel(gridCell.x, height - gridCell.y, 224, 6, 6);
+                break;
+            default:
+                // Ignore any others -- they shouldn't exit anyway
+                break;
             }
         }
     }

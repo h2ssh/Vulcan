@@ -8,18 +8,18 @@
 
 
 /**
-* \file     pacing.h
-* \author   Jong Jin Park
-* 
-* Declaration of PacingTask, which encapsulates a position of the target person.
-*/
+ * \file     pacing.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of PacingTask, which encapsulates a position of the target person.
+ */
 
 #ifndef MPEPC_PACING_TASK_H
 #define MPEPC_PACING_TASK_H
 
-#include "mpepc/metric_planner/task/task.h"
-#include "mpepc/metric_planner/task/params.h"
 #include "core/point.h"
+#include "mpepc/metric_planner/task/params.h"
+#include "mpepc/metric_planner/task/task.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 
@@ -33,54 +33,48 @@ namespace mpepc
 class PacingTask : public MetricPlannerTask
 {
     static const int32_t kPacingTaskID = 2;
-    
+
     /**
-    * Constructor for PacingTask.
-    * 
-    * \param    target          Target to be associated with the task
-    */
-    PacingTask(const Point<float>& target)
-    : MetricPlannerTask()
-    , target_(target)
-    {
-    }
-    
+     * Constructor for PacingTask.
+     *
+     * \param    target          Target to be associated with the task
+     */
+    PacingTask(const Point<float>& target) : MetricPlannerTask(), target_(target) { }
+
     /**
-    * getTarget retrieves the target associated with this task.
-    * 
-    * \return   Intial location of the person for the robot to follow or to pace with
-    */
+     * getTarget retrieves the target associated with this task.
+     *
+     * \return   Intial location of the person for the robot to follow or to pace with
+     */
     Point<float> getTarget(void) const { return target_; }
-    
+
     // MetricPlannerTask interface
-    virtual int32_t getId(void) const { return kPacingTaskID; } /* override */
-    virtual bool    isSafeToExecute(const ObstacleDistanceGrid& map); /* override */
-    
+    virtual int32_t getId(void) const { return kPacingTaskID; }    /* override */
+    virtual bool isSafeToExecute(const ObstacleDistanceGrid& map); /* override */
+
 protected:
-    
     // For serialization support, allow subclasses to default construct
     PacingTask(void) { }
-    
+
 private:
-    
     Point<float> target_;
-    
+
     // Serialization support
     friend class ::cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar & target_;
+        ar& target_;
     }
 };
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
 // Serialization support via smart pointer
 #include <cereal/types/polymorphic.hpp>
 
 CEREAL_REGISTER_TYPE(vulcan::mpepc::PacingTask)
 
-#endif // MPEPC_PACING_TASK_H
+#endif   // MPEPC_PACING_TASK_H

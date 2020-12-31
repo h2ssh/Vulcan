@@ -8,42 +8,42 @@
 
 
 /**
-* \file     local_topo_area_editor.cpp
-* \author   Collin Johnson
-*
-* Implementation of LocalTopoAreaEditor.
-*/
+ * \file     local_topo_area_editor.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of LocalTopoAreaEditor.
+ */
 
 #include "hssh/local_topological/training/local_topo_area_editor.h"
-#include "hssh/local_topological/params.h"
+#include "hssh/local_metric/lpm.h"
 #include "hssh/local_topological/area_detection/area_classifier.h"
-#include "hssh/local_topological/area_detection/voronoi_graph_builder.h"
 #include "hssh/local_topological/area_detection/gateways/filters.h"
 #include "hssh/local_topological/area_detection/gateways/gateway_locator.h"
 #include "hssh/local_topological/area_detection/labeling/area_creator.h"
 #include "hssh/local_topological/area_detection/labeling/area_graph.h"
 #include "hssh/local_topological/area_detection/labeling/area_proposal.h"
 #include "hssh/local_topological/area_detection/labeling/boundary.h"
-#include "hssh/local_topological/area_detection/labeling/invalid_area.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
 #include "hssh/local_topological/area_detection/labeling/hypothesis_graph.h"
-#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include "hssh/local_topological/area_detection/labeling/invalid_area.h"
+#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
 #include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include "hssh/local_topological/area_detection/voronoi_graph_builder.h"
 #include "hssh/local_topological/area_extent.h"
-#include "hssh/local_topological/local_topo_map.h"
 #include "hssh/local_topological/areas/decision_point.h"
 #include "hssh/local_topological/areas/destination.h"
 #include "hssh/local_topological/areas/path_segment.h"
-#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
-#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
-#include "hssh/local_metric/lpm.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/params.h"
 #include "utils/algorithm_ext.h"
 #include "utils/serialized_file_io.h"
 #include "utils/visibility_graph.h"
 #include <boost/accumulators/framework/accumulator_set.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/max.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
 #include <cassert>
 
@@ -52,8 +52,8 @@ namespace vulcan
 namespace hssh
 {
 
-void add_merge_boundaries(AreaHypothesis::BoundaryIter    boundaryIt,
-                          AreaHypothesis::BoundaryIter    boundaryEnd,
+void add_merge_boundaries(AreaHypothesis::BoundaryIter boundaryIt,
+                          AreaHypothesis::BoundaryIter boundaryEnd,
                           std::vector<AreaHypothesis*>::const_iterator hypBegin,
                           std::vector<AreaHypothesis*>::const_iterator hypEnd,
                           std::vector<const AreaHypothesisBoundary*>& toMerge);
@@ -116,21 +116,15 @@ std::vector<Gateway> LocalTopoAreaEditor::findMoreGateways(const std::vector<Gat
 {
     // Create the WeightedGateways for the initial loaded gateways
     std::vector<WeightedGateway> weighted;
-    std::transform(initialGateways.begin(),
-                   initialGateways.end(),
-                   std::back_inserter(weighted),
-                   [](auto& gwy) {
+    std::transform(initialGateways.begin(), initialGateways.end(), std::back_inserter(weighted), [](auto& gwy) {
         return WeightedGateway{gwy, 1000.0, false};
     });
 
     // Then find gateways with the locator
     auto located = findGateways();
 
-    std::transform(located.begin(),
-                   located.end(),
-                   std::back_inserter(weighted),
-                   [](auto& gwy) {
-                       return WeightedGateway{gwy, 1.0, false};
+    std::transform(located.begin(), located.end(), std::back_inserter(weighted), [](auto& gwy) {
+        return WeightedGateway{gwy, 1.0, false};
     });
 
     // Then filtered them by assigning a low weight to the generated gateways and a high weight to the provided gateways
@@ -163,14 +157,10 @@ void LocalTopoAreaEditor::constructHypotheses(const std::vector<Gateway>& gatewa
 {
     createIsovistsIfNeeded();
     areaGraph_.reset(new AreaGraph(voronoiBuilder_->getVoronoiSkeleton(), gateways));
-    hypothesisGraph_.reset(new HypothesisGraph(*areaGraph_,
-                                               &(voronoiBuilder_->getVoronoiSkeleton()),
-                                               isovistField_.get(),
-                                               starBuilder_));
-    initialHypothesisGraph_.reset(new HypothesisGraph(*areaGraph_,
-                                                      &(voronoiBuilder_->getVoronoiSkeleton()),
-                                                      isovistField_.get(),
-                                                      starBuilder_));
+    hypothesisGraph_.reset(
+      new HypothesisGraph(*areaGraph_, &(voronoiBuilder_->getVoronoiSkeleton()), isovistField_.get(), starBuilder_));
+    initialHypothesisGraph_.reset(
+      new HypothesisGraph(*areaGraph_, &(voronoiBuilder_->getVoronoiSkeleton()), isovistField_.get(), starBuilder_));
 
     initialHypotheses_.clear();
     initialHypotheses_.insert(initialHypotheses_.end(),
@@ -182,8 +172,7 @@ void LocalTopoAreaEditor::constructHypotheses(const std::vector<Gateway>& gatewa
 
 bool LocalTopoAreaEditor::labelArea(AreaHypothesis* area, HypothesisType label)
 {
-    if(!utils::contains(hypotheses_, area))
-    {
+    if (!utils::contains(hypotheses_, area)) {
         return false;
     }
 
@@ -193,14 +182,12 @@ bool LocalTopoAreaEditor::labelArea(AreaHypothesis* area, HypothesisType label)
         return h->amountContained(*area) == HypothesisContainment::complete;
     });
 
-    if(initialIt != initialHypotheses_.end())
-    {
+    if (initialIt != initialHypotheses_.end()) {
         (*initialIt)->setType(label);
     }
     // Sanity check that the hypothesis not found in the initial hypotheses is a member of mergedHypotheses. Otherwise,
     // it should be in initialHypothese
-    else
-    {
+    else {
         assert(!utils::contains_if(mergedHypotheses_, [area](const std::unique_ptr<AreaHypothesis>& h) {
             return h.get() == area;
         }));
@@ -215,10 +202,8 @@ std::size_t LocalTopoAreaEditor::labelRemainingAreas(HypothesisType label)
     // For each hypothesis that is a generic area, set the label to the provided type
     std::size_t numLabeled = 0;
 
-    for(auto& hyp : hypotheses_)
-    {
-        if(hyp->getType() == HypothesisType::kArea)
-        {
+    for (auto& hyp : hypotheses_) {
+        if (hyp->getType() == HypothesisType::kArea) {
             hyp->setType(label);
             ++numLabeled;
         }
@@ -240,17 +225,11 @@ bool LocalTopoAreaEditor::mergeAreas(const std::vector<AreaHypothesis*>& hypothe
     std::vector<const AreaHypothesisBoundary*> boundariesToMerge;
 
     // Using the full for-loop because the iterators are needed on the inside
-    for(auto hypIt = hypothesesToMerge.begin(), hypEnd = hypothesesToMerge.end(); hypIt != hypEnd; ++hypIt)
-    {
-        add_merge_boundaries((*hypIt)->beginBoundary(),
-                             (*hypIt)->endBoundary(),
-                             hypIt + 1,
-                             hypEnd,
-                             boundariesToMerge);
+    for (auto hypIt = hypothesesToMerge.begin(), hypEnd = hypothesesToMerge.end(); hypIt != hypEnd; ++hypIt) {
+        add_merge_boundaries((*hypIt)->beginBoundary(), (*hypIt)->endBoundary(), hypIt + 1, hypEnd, boundariesToMerge);
     }
 
-    if(!boundariesToMerge.empty())
-    {
+    if (!boundariesToMerge.empty()) {
         mergedHypotheses_.emplace_back(new AreaHypothesis(boundariesToMerge, hypothesesToMerge.front()->getType()));
         hypotheses_.push_back(mergedHypotheses_.back().get());
 
@@ -270,8 +249,7 @@ void LocalTopoAreaEditor::resetAreas(void)
 {
     resetStoredHypotheses();
 
-    for(auto& hyp : hypotheses_)
-    {
+    for (auto& hyp : hypotheses_) {
         hyp->setType(HypothesisType::kArea);
     }
 }
@@ -281,8 +259,7 @@ void LocalTopoAreaEditor::saveToLocalTopoMap(const std::string& filename) const
 {
     auto topoMap = constructLocalTopoMap();
 
-    if(topoMap && !utils::save_serializable_to_file(filename, *topoMap))
-    {
+    if (topoMap && !utils::save_serializable_to_file(filename, *topoMap)) {
         std::cerr << "ERROR:LocalTopoAreaEditor: Failed to save topo map to file " << filename << '\n';
     }
 }
@@ -290,27 +267,24 @@ void LocalTopoAreaEditor::saveToLocalTopoMap(const std::string& filename) const
 
 boost::optional<LocalTopoMap> LocalTopoAreaEditor::constructLocalTopoMap(void) const
 {
-    try
-    {
+    try {
         std::vector<AreaProposal> proposals =
-                hypothesisGraph_->createProposalsForCurrentHypotheses(voronoiBuilder_->getVoronoiSkeleton());
+          hypothesisGraph_->createProposalsForCurrentHypotheses(voronoiBuilder_->getVoronoiSkeleton());
 
         AreaBuilder builder(starBuilder_);
         LocalAreaVec areas;
         std::transform(proposals.begin(), proposals.end(), std::back_inserter(areas), [&](AreaProposal& p) {
-                return builder.buildArea(p, *lpm_, voronoiBuilder_->getVoronoiSkeleton(), *isovistField_);
+            return builder.buildArea(p, *lpm_, voronoiBuilder_->getVoronoiSkeleton(), *isovistField_);
         });
 
         LocalTopoMap topoMap(1,
-                            voronoiBuilder_->getVoronoiSkeleton().getTimestamp(),
-                            areas,
-                            voronoiBuilder_->getVoronoiSkeleton());
+                             voronoiBuilder_->getVoronoiSkeleton().getTimestamp(),
+                             areas,
+                             voronoiBuilder_->getVoronoiSkeleton());
         return topoMap;
-    }
-    catch(InvalidAreaException& e)
-    {
+    } catch (InvalidAreaException& e) {
         std::cout << "ERROR: LocalTopoAreaEditor: Failed to create LocalTopoMap for current hypotheses." << e.what()
-            << '\n';
+                  << '\n';
         return boost::none;
     }
 }
@@ -318,8 +292,7 @@ boost::optional<LocalTopoMap> LocalTopoAreaEditor::constructLocalTopoMap(void) c
 
 void LocalTopoAreaEditor::createIsovistsIfNeeded(void) const
 {
-    if(!isovistField_)
-    {
+    if (!isovistField_) {
         utils::isovist_options_t options;
         options.maxDistance = maxIsovistRange_;
         options.numRays = numIsovistRays_;
@@ -342,20 +315,17 @@ void LocalTopoAreaEditor::resetStoredHypotheses(void)
 }
 
 
-void add_merge_boundaries(AreaHypothesis::BoundaryIter    boundaryIt,
-                          AreaHypothesis::BoundaryIter    boundaryEnd,
+void add_merge_boundaries(AreaHypothesis::BoundaryIter boundaryIt,
+                          AreaHypothesis::BoundaryIter boundaryEnd,
                           std::vector<AreaHypothesis*>::const_iterator hypBegin,
                           std::vector<AreaHypothesis*>::const_iterator hypEnd,
                           std::vector<const AreaHypothesisBoundary*>& toMerge)
 {
-    for(; boundaryIt != boundaryEnd; ++boundaryIt)
-    {
-        for(auto hypIt = hypBegin; hypIt != hypEnd; ++hypIt)
-        {
+    for (; boundaryIt != boundaryEnd; ++boundaryIt) {
+        for (auto hypIt = hypBegin; hypIt != hypEnd; ++hypIt) {
             // Can break out of this loop if a match is found because the boundary can only have
             // one other hypothesis associated with it
-            if((*boundaryIt)->containsHypothesis(*hypIt))
-            {
+            if ((*boundaryIt)->containsHypothesis(*hypIt)) {
                 toMerge.push_back(*boundaryIt);
                 break;
             }
@@ -364,5 +334,5 @@ void add_merge_boundaries(AreaHypothesis::BoundaryIter    boundaryIt,
 }
 
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

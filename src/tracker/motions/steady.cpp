@@ -8,18 +8,18 @@
 
 
 /**
-* \file     steady.cpp
-* \author   Collin Johnson
-*
-* Definition of SteadyMotion.
-*/
+ * \file     steady.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of SteadyMotion.
+ */
 
 #include "tracker/motions/steady.h"
-#include "tracker/motions/visitor.h"
 #include "tracker/laser_object.h"
+#include "tracker/motions/visitor.h"
 #include "tracker/object_state.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 #define DEBUG_STATE
 
@@ -94,5 +94,5 @@ Position SteadyMotion::estimateFuturePosition(int deltaTimeMs) const
     return estimatedPos;
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

@@ -8,30 +8,30 @@
 
 
 /**
-* \file     evaluate_labels.cpp
-* \author   Collin Johnson
-*
-* evaluate_labels is a simple program that generates a heat map of a ground-truth and labeled LocalTopoMap. Simple
-* statistics are calculated for the heat map and saved to a file.
-*/
+ * \file     evaluate_labels.cpp
+ * \author   Collin Johnson
+ *
+ * evaluate_labels is a simple program that generates a heat map of a ground-truth and labeled LocalTopoMap. Simple
+ * statistics are calculated for the heat map and saved to a file.
+ */
 
-#include "hssh/local_topological/evaluation/heat_map.h"
-#include "hssh/local_topological/evaluation/topological_edit_distance.h"
-#include "hssh/local_topological/local_topo_map.h"
+#include "core/float_comparison.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/lpm_io.h"
 #include "hssh/local_topological/area.h"
 #include "hssh/local_topological/areas/decision_point.h"
 #include "hssh/local_topological/areas/destination.h"
 #include "hssh/local_topological/areas/path_segment.h"
-#include "hssh/local_metric/lpm.h"
-#include "hssh/local_metric/lpm_io.h"
-#include "core/float_comparison.h"
+#include "hssh/local_topological/evaluation/heat_map.h"
+#include "hssh/local_topological/evaluation/topological_edit_distance.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include "utils/command_line.h"
 #include "utils/serialized_file_io.h"
 #include <boost/accumulators/framework/accumulator_set.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/max.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
 #include <cassert>
 
@@ -48,7 +48,7 @@ enum LabelType : int8_t
     dest,
     decision,
     path,
-    other,  // types that don't matter -- skeleton, unknown, frontier
+    other,   // types that don't matter -- skeleton, unknown, frontier
 };
 
 
@@ -58,28 +58,28 @@ void calculate_and_save_cell_by_cell_stats(const LocalTopoMap& truth, const Loca
 LabelGrid create_label_grid(const LocalTopoMap& topoMap);
 
 /**
-* evaluate_labels takes four arguments: 'grouth-truth LTM' 'labeled LTM' 'num paths' 'output file'
-*
-* Each map is loaded from file and then a heat map with the desired number of paths is generated. Once the heat map is
-* created the following statistics are generated:
-*
-*   - conciseness : mean path length
-*   - mean conciseness-diff : mean difference between path lengths in ground-truth vs labeled map
-*   - std conciseness-diff : std of path length difference
-*
-* These statistics are saved to a file -- 'labeled LTM'.stats
-*
-* The file output is appended to the provided file. The results are saved as:
-*
-*   map_name num_paths mean_normalized_edit_dist var_normalized_edit_dist mean_raw_edit_dist var_raw_edit_dist \
-*       cell_success_rate num_cells num_correct num_dec_as_path num_dec_as_dest num_dest_as_dec num_dest_as_path \
-*       num_path_as_dest num_path_as_dec
-*/
+ * evaluate_labels takes four arguments: 'grouth-truth LTM' 'labeled LTM' 'num paths' 'output file'
+ *
+ * Each map is loaded from file and then a heat map with the desired number of paths is generated. Once the heat map is
+ * created the following statistics are generated:
+ *
+ *   - conciseness : mean path length
+ *   - mean conciseness-diff : mean difference between path lengths in ground-truth vs labeled map
+ *   - std conciseness-diff : std of path length difference
+ *
+ * These statistics are saved to a file -- 'labeled LTM'.stats
+ *
+ * The file output is appended to the provided file. The results are saved as:
+ *
+ *   map_name num_paths mean_normalized_edit_dist var_normalized_edit_dist mean_raw_edit_dist var_raw_edit_dist \
+ *       cell_success_rate num_cells num_correct num_dec_as_path num_dec_as_dest num_dest_as_dec num_dest_as_path \
+ *       num_path_as_dest num_path_as_dec
+ */
 int main(int argc, char** argv)
 {
-    if(argc < 5)
-    {
-        std::cout << "evaluate_labels: Expected command line: 'grouth-truth LTM' 'labeled LTM' 'num paths' 'output file'\n";
+    if (argc < 5) {
+        std::cout
+          << "evaluate_labels: Expected command line: 'grouth-truth LTM' 'labeled LTM' 'num paths' 'output file'\n";
         return -1;
     }
 
@@ -97,8 +97,7 @@ int main(int argc, char** argv)
     std::string statsFilename = argv[4];
     std::ofstream statsOut(statsFilename, std::ios::app);
 
-    if(!statsOut.is_open())
-    {
+    if (!statsOut.is_open()) {
         std::cerr << "ERROR: evaluate_labels: Failed to open file to save statistics:" << statsFilename << '\n';
         return -1;
     }
@@ -107,7 +106,7 @@ int main(int argc, char** argv)
 
     statsOut << argv[2] << ' ';
 
-//     calculate_and_save_heatmap_stats(heatMap, statsOut);
+    //     calculate_and_save_heatmap_stats(heatMap, statsOut);
     calculate_and_save_topological_edit_distance(heatMap, statsOut);
     calculate_and_save_cell_by_cell_stats(groundTruth, labeled, statsOut);
     statsOut << '\n';
@@ -125,8 +124,7 @@ void calculate_and_save_heatmap_stats(const LocalTopoHeatMap& heatMap, std::ostr
     const auto& truthStats = heatMap.groundTruthStats();
     const auto& labelStats = heatMap.labeledStats();
 
-    for(std::size_t n = 0, end = truthStats.paths.size(); n < end; ++n)
-    {
+    for (std::size_t n = 0, end = truthStats.paths.size(); n < end; ++n) {
         int truthPathLength = truthStats.paths[n].size();
         int labelPathLength = labelStats.paths[n].size();
 
@@ -135,22 +133,22 @@ void calculate_and_save_heatmap_stats(const LocalTopoHeatMap& heatMap, std::ostr
         diffAcc(std::abs(truthPathLength - labelPathLength));
     }
 
-//     out << "============ Heat Map Stats ==================\n"
-//         << "Truth Mean: " << mean(truthAcc) << '\n'
-//         << "Label Mean: " << mean(labelAcc) << '\n'
-//         << "Diff Mean: " << mean(diffAcc) << '\n'
-//         << "Diff Std: " << std::sqrt(variance(diffAcc)) << '\n'
-//         << "Diff Min: " << min(diffAcc) << '\n'
-//         << "Diff Max: " << max(diffAcc) << "\n\n";
+    //     out << "============ Heat Map Stats ==================\n"
+    //         << "Truth Mean: " << mean(truthAcc) << '\n'
+    //         << "Label Mean: " << mean(labelAcc) << '\n'
+    //         << "Diff Mean: " << mean(diffAcc) << '\n'
+    //         << "Diff Std: " << std::sqrt(variance(diffAcc)) << '\n'
+    //         << "Diff Min: " << min(diffAcc) << '\n'
+    //         << "Diff Max: " << max(diffAcc) << "\n\n";
 
 
     std::cout << "============ Heat Map Stats ==================\n"
-        << "Truth Mean: " << mean(truthAcc) << '\n'
-        << "Label Mean: " << mean(labelAcc) << '\n'
-        << "Diff Mean: " << mean(diffAcc) << '\n'
-        << "Diff Std: " << std::sqrt(variance(diffAcc)) << '\n'
-        << "Diff Min: " << min(diffAcc) << '\n'
-        << "Diff Max: " << max(diffAcc) << "\n\n";
+              << "Truth Mean: " << mean(truthAcc) << '\n'
+              << "Label Mean: " << mean(labelAcc) << '\n'
+              << "Diff Mean: " << mean(diffAcc) << '\n'
+              << "Diff Std: " << std::sqrt(variance(diffAcc)) << '\n'
+              << "Diff Min: " << min(diffAcc) << '\n'
+              << "Diff Max: " << max(diffAcc) << "\n\n";
 }
 
 
@@ -159,7 +157,7 @@ void calculate_and_save_topological_edit_distance(const LocalTopoHeatMap& heatMa
     // It looks like the unit in the VRF paper is 0.4m based on a comparison of the nodes on the image in the Intel map
     // with my version of the map that I'm using. It is a strange unit, but based on looking at pixels in the
     // figure and comparing against the known map, the unit appears to be 0.4m sampling along the skeleton.
-//     const double kRouteDistUnit = 0.25;
+    //     const double kRouteDistUnit = 0.25;
     const double kRouteDistUnit = 0.4;
 
     StatsAcc topoAcc;
@@ -170,23 +168,18 @@ void calculate_and_save_topological_edit_distance(const LocalTopoHeatMap& heatMa
     int zeroRouteErrorCount = 0;
     int totalRouteCount = 0;
 
-    for(std::size_t n = 0, end = truthStats.paths.size(); n < end; ++n)
-    {
-        if(std::abs(labelStats.paths[n].length() - truthStats.paths[n].length()) > 2.0)
-        {
+    for (std::size_t n = 0, end = truthStats.paths.size(); n < end; ++n) {
+        if (std::abs(labelStats.paths[n].length() - truthStats.paths[n].length()) > 2.0) {
             std::cerr << "Ignoring path with vastly different lengths. They took entirely different routes, which "
-                << "isn't what the topo edit distance is trying to evaluate:\n"
-                << "Truth:" << truthStats.paths[n] << '\n'
-                << "Label:" << labelStats.paths[n] << '\n';
-        }
-        else
-        {
+                      << "isn't what the topo edit distance is trying to evaluate:\n"
+                      << "Truth:" << truthStats.paths[n] << '\n'
+                      << "Label:" << labelStats.paths[n] << '\n';
+        } else {
             auto editDistance = topological_edit_distance(labelStats.paths[n], truthStats.paths[n], kRouteDistUnit);
             topoAcc(editDistance.topological);
             routeAcc(editDistance.route);
 
-            if(absolute_fuzzy_equal(editDistance.route, 0.0))
-            {
+            if (absolute_fuzzy_equal(editDistance.route, 0.0)) {
                 ++zeroRouteErrorCount;
             }
 
@@ -196,24 +189,22 @@ void calculate_and_save_topological_edit_distance(const LocalTopoHeatMap& heatMa
 
     double zeroErrorPercent = static_cast<double>(zeroRouteErrorCount) / totalRouteCount;
 
-    out << truthStats.paths.size() << ' ' << mean(topoAcc) << ' ' << variance(topoAcc) << ' '
-        << mean(routeAcc) << ' ' << variance(routeAcc) << ' ' << zeroErrorPercent << ' ';
+    out << truthStats.paths.size() << ' ' << mean(topoAcc) << ' ' << variance(topoAcc) << ' ' << mean(routeAcc) << ' '
+        << variance(routeAcc) << ' ' << zeroErrorPercent << ' ';
 
     std::cout << "============ Edit Distance Stats ==================\n"
-        << "Edit Topo Mean: " << mean(topoAcc) << '\n'
-        << "Edit Topo Std: " << std::sqrt(variance(topoAcc)) << '\n'
-        << "Edit Route Mean: " << mean(routeAcc) << '\n'
-        << "Edit Route Std: " << std::sqrt(variance(routeAcc)) << '\n'
-        << "Edit Route Zero Error: " << zeroErrorPercent << "\n\n";
+              << "Edit Topo Mean: " << mean(topoAcc) << '\n'
+              << "Edit Topo Std: " << std::sqrt(variance(topoAcc)) << '\n'
+              << "Edit Route Mean: " << mean(routeAcc) << '\n'
+              << "Edit Route Std: " << std::sqrt(variance(routeAcc)) << '\n'
+              << "Edit Route Zero Error: " << zeroErrorPercent << "\n\n";
 
-    for(std::size_t n = 0, end = truthStats.paths.size(); n < end; ++n)
-    {
+    for (std::size_t n = 0, end = truthStats.paths.size(); n < end; ++n) {
         auto editDistance = topological_edit_distance(labelStats.paths[n], truthStats.paths[n], kRouteDistUnit);
 
-        if(editDistance.topological == max(topoAcc))
-        {
+        if (editDistance.topological == max(topoAcc)) {
             std::cout << "Worst path:\nTruth: " << truthStats.paths[n] << " Length:" << truthStats.paths[n].length()
-                << "\nLabel: " << labelStats.paths[n] << " Length:" << labelStats.paths[n].length() << '\n';
+                      << "\nLabel: " << labelStats.paths[n] << " Length:" << labelStats.paths[n].length() << '\n';
         }
     }
 
@@ -241,43 +232,27 @@ void calculate_and_save_cell_by_cell_stats(const LocalTopoMap& truth, const Loca
     int numPathAsDecision = 0;
     int numPathAsDest = 0;
 
-    for(std::size_t y = 0; y < truthGrid.getHeightInCells(); ++y)
-    {
-        for(std::size_t x = 0; x < truthGrid.getWidthInCells(); ++x)
-        {
+    for (std::size_t y = 0; y < truthGrid.getHeightInCells(); ++y) {
+        for (std::size_t x = 0; x < truthGrid.getWidthInCells(); ++x) {
             // Skip any cells not valid in the ground-truth
-            if(truthGrid(x, y) == LabelType::other)
-            {
+            if (truthGrid(x, y) == LabelType::other) {
                 continue;
             }
 
             ++numTests;
-            if(truthGrid(x, y) == labelsGrid(x, y))
-            {
+            if (truthGrid(x, y) == labelsGrid(x, y)) {
                 ++numCorrectTests;
-            }
-            else if((truthGrid(x, y) == LabelType::decision) && (labelsGrid(x, y) == LabelType::dest))
-            {
+            } else if ((truthGrid(x, y) == LabelType::decision) && (labelsGrid(x, y) == LabelType::dest)) {
                 ++numDecisionAsDest;
-            }
-            else if((truthGrid(x, y) == LabelType::decision) && (labelsGrid(x, y) == LabelType::path))
-            {
+            } else if ((truthGrid(x, y) == LabelType::decision) && (labelsGrid(x, y) == LabelType::path)) {
                 ++numDecisionAsPath;
-            }
-            else if((truthGrid(x, y) == LabelType::dest) && (labelsGrid(x, y) == LabelType::path))
-            {
+            } else if ((truthGrid(x, y) == LabelType::dest) && (labelsGrid(x, y) == LabelType::path)) {
                 ++numDestAsPath;
-            }
-            else if((truthGrid(x, y) == LabelType::dest) && (labelsGrid(x, y) == LabelType::decision))
-            {
+            } else if ((truthGrid(x, y) == LabelType::dest) && (labelsGrid(x, y) == LabelType::decision)) {
                 ++numDestAsDecision;
-            }
-            else if((truthGrid(x, y) == LabelType::path) && (labelsGrid(x, y) == LabelType::dest))
-            {
+            } else if ((truthGrid(x, y) == LabelType::path) && (labelsGrid(x, y) == LabelType::dest)) {
                 ++numPathAsDest;
-            }
-            else if((truthGrid(x, y) == LabelType::path) && (labelsGrid(x, y) == LabelType::decision))
-            {
+            } else if ((truthGrid(x, y) == LabelType::path) && (labelsGrid(x, y) == LabelType::decision)) {
                 ++numPathAsDecision;
             }
         }
@@ -285,44 +260,34 @@ void calculate_and_save_cell_by_cell_stats(const LocalTopoMap& truth, const Loca
 
     double successRate = static_cast<double>(numCorrectTests) / numTests;
     std::cout << "============ Cell-by-Cell Stats ==================\n"
-        << "Cell success rate: " << successRate << '\n'
-        << "Total cells: " << numTests << '\n'
-        << "Num correct: " << numCorrectTests << '\n'
-        << "Decision as path:" << numDecisionAsPath << '\n'
-        << "Decision as dest:" << numDecisionAsDest << '\n'
-        << "Dest as path:" << numDestAsPath << '\n'
-        << "Dest as decision:" << numDestAsDecision << '\n'
-        << "Path as decision:" << numPathAsDecision << '\n'
-        << "Path as dest:" << numPathAsDest << "\n\n";
+              << "Cell success rate: " << successRate << '\n'
+              << "Total cells: " << numTests << '\n'
+              << "Num correct: " << numCorrectTests << '\n'
+              << "Decision as path:" << numDecisionAsPath << '\n'
+              << "Decision as dest:" << numDecisionAsDest << '\n'
+              << "Dest as path:" << numDestAsPath << '\n'
+              << "Dest as decision:" << numDestAsDecision << '\n'
+              << "Path as decision:" << numPathAsDecision << '\n'
+              << "Path as dest:" << numPathAsDest << "\n\n";
 
-    out << successRate << ' '
-        << numTests << ' '
-        << numCorrectTests << ' '
-        << numDecisionAsPath << ' '
-        << numDecisionAsDest << ' '
-        << numDestAsPath << ' '
-        << numDestAsDecision << ' '
-        << numPathAsDecision << ' '
+    out << successRate << ' ' << numTests << ' ' << numCorrectTests << ' ' << numDecisionAsPath << ' '
+        << numDecisionAsDest << ' ' << numDestAsPath << ' ' << numDestAsDecision << ' ' << numPathAsDecision << ' '
         << numPathAsDest << ' ';
 }
 
 
 LabelGrid create_label_grid(const LocalTopoMap& topoMap)
 {
-    LabelGrid grid(
-        topoMap.voronoiSkeleton().getWidthInCells(),
-        topoMap.voronoiSkeleton().getHeightInCells(),
-        0.05,
-        topoMap.voronoiSkeleton().getGlobalCenter()
-    );
+    LabelGrid grid(topoMap.voronoiSkeleton().getWidthInCells(),
+                   topoMap.voronoiSkeleton().getHeightInCells(),
+                   0.05,
+                   topoMap.voronoiSkeleton().getGlobalCenter());
 
     grid.reset(LabelType::other);
 
-    for(auto& area : topoMap)
-    {
+    for (auto& area : topoMap) {
         LabelType type = LabelType::other;
-        switch(area->type())
-        {
+        switch (area->type()) {
         case AreaType::decision_point:
             type = LabelType::decision;
             break;
@@ -337,8 +302,7 @@ LabelGrid create_label_grid(const LocalTopoMap& topoMap)
             std::cerr << "WARNING: create_label_grid: Unknown assigned area type. Not one of three allowed.\n";
         }
 
-        for(auto pos : area->extent())
-        {
+        for (auto pos : area->extent()) {
             auto cell = utils::global_point_to_grid_cell_round(pos, topoMap.voronoiSkeleton());
             grid(cell.x, cell.y) = type;
         }

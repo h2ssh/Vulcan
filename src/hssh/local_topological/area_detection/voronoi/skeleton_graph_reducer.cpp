@@ -8,37 +8,34 @@
 
 
 /**
-* \file     skeleton_graph_reducer.cpp
-* \author   Collin Johnson
-*
-* Definition of create_skeleton_graph_reducer factory.
-*/
+ * \file     skeleton_graph_reducer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_skeleton_graph_reducer factory.
+ */
 
 #include "hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h"
 #include "hssh/local_topological/area_detection/voronoi/all_paths_graph_reducer.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 namespace vulcan
 {
 namespace hssh
 {
-    
+
 // Static factory for creating reducers
 std::unique_ptr<SkeletonGraphReducer> create_skeleton_graph_reducer(const std::string& reducerName)
 {
-    if(reducerName == ALL_PATHS_GRAPH_REDUCER_TYPE)
-    {
+    if (reducerName == ALL_PATHS_GRAPH_REDUCER_TYPE) {
         return std::unique_ptr<SkeletonGraphReducer>(new AllPathsGraphReducer());
-    }
-    else
-    {
-        std::cerr<<"ERROR: Unknown SkeletonGraphReducer type: "<<reducerName<<std::endl;
+    } else {
+        std::cerr << "ERROR: Unknown SkeletonGraphReducer type: " << reducerName << std::endl;
         assert(false);
     }
-    
+
     return std::unique_ptr<SkeletonGraphReducer>();
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

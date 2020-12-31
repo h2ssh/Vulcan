@@ -8,12 +8,12 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of params structs for local_topo and load_local_toplogy_params() for
-* processing a ConfigFile.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of params structs for local_topo and load_local_toplogy_params() for
+ * processing a ConfigFile.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_PARAMS_H
 #define HSSH_LOCAL_TOPOLOGICAL_PARAMS_H
@@ -23,7 +23,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace hssh
 {
@@ -31,14 +34,14 @@ namespace hssh
 struct skeleton_builder_params_t
 {
     float coastalDistance;
-    int   maxIslandAreaInCells;
+    int maxIslandAreaInCells;
     float minDeadEndAngleSeparation;
 };
 
 struct skeleton_pruner_params_t
 {
     std::string reducerType;
-    float       minExitPointDistance;
+    float minExitPointDistance;
 };
 
 struct endpoint_validator_params_t
@@ -100,7 +103,7 @@ struct small_scale_star_builder_params_t
 {
     std::string starBuilderType;
 
-    beam_star_builder_params_t            beamBuilderParams;
+    beam_star_builder_params_t beamBuilderParams;
     path_similarity_star_builder_params_t similarityBuilderParams;
 };
 
@@ -113,22 +116,22 @@ struct area_tracker_params_t
 {
     float placeBoundaryOverlap;
     float stableExploredPercent;
-    int   minUpdatesForConfirmation;
-    int   maxMissesForRemoval;
+    int minUpdatesForConfirmation;
+    int maxMissesForRemoval;
 
     float placeBoundaryRadius;
 };
 
 /**
-* MCMCSamplingParams controls the internal behavior of the sampling algorithm. See the params for a description.
-*/
+ * MCMCSamplingParams controls the internal behavior of the sampling algorithm. See the params for a description.
+ */
 struct MCMCSamplingParams
 {
-    double failingConstraintLogProb = -3.0;     ///< Probability cost of a failing constraint
-    double repeatConfigDecreaseLogProb = -3.0;  ///< How much probability decrease for repeated states
+    double failingConstraintLogProb = -3.0;      ///< Probability cost of a failing constraint
+    double repeatConfigDecreaseLogProb = -3.0;   ///< How much probability decrease for repeated states
 
-    int maxIterations = 25;            ///< Maximum number of iterations to try to find a solution
-    int samplesPerIteration = 25;       ///< Number of change samples to draw per iteration
+    int maxIterations = 25;         ///< Maximum number of iterations to try to find a solution
+    int samplesPerIteration = 25;   ///< Number of change samples to draw per iteration
 };
 
 struct area_classifier_params_t
@@ -140,8 +143,8 @@ struct area_classifier_params_t
 
     // Params for AffordanceLabelingClassifier
     small_scale_star_builder_params_t starBuilderParams;
-    hypothesis_evaluator_params_t     evaluatorParams;
-    area_tracker_params_t             areaTrackerParams;
+    hypothesis_evaluator_params_t evaluatorParams;
+    area_tracker_params_t areaTrackerParams;
 
     double appropriatenessStrainWeight;
     double constraintStrainWeight;
@@ -154,9 +157,9 @@ struct area_classifier_params_t
 struct area_detector_params_t
 {
     std::string skeletonBuilderType;
-    bool        shouldBuildSkeleton;
-    bool        shouldComputeIsovists;
-    bool        shouldFindGateways;
+    bool shouldBuildSkeleton;
+    bool shouldComputeIsovists;
+    bool shouldFindGateways;
 
     float maxIsovistRange;
     int numIsovistRays;
@@ -165,9 +168,9 @@ struct area_detector_params_t
     std::string histogramMapName;
 
     skeleton_builder_params_t skeletonParams;
-    skeleton_pruner_params_t  prunerParams;
-    gateway_locator_params_t  locatorParams;
-    area_classifier_params_t  classifierParams;
+    skeleton_pruner_params_t prunerParams;
+    gateway_locator_params_t locatorParams;
+    area_classifier_params_t classifierParams;
 
     area_detector_params_t(const utils::ConfigFile& config);
 };
@@ -175,8 +178,8 @@ struct area_detector_params_t
 struct area_transition_detector_params_t
 {
     double minDistBetweenSameGatewayTransitions;
-    bool ignoreStaleMapTimestamps;      // flag for use with generating events from a ground-truth map to ignore the
-                                        // timestamp check necessary during incremental mapping
+    bool ignoreStaleMapTimestamps;   // flag for use with generating events from a ground-truth map to ignore the
+                                     // timestamp check necessary during incremental mapping
 };
 
 struct path_direction_detector_params_t
@@ -187,25 +190,25 @@ struct path_direction_detector_params_t
 struct event_detector_params_t
 {
     std::vector<std::string> detectorTypes;
-    float                    distanceBetweenTracePoses;
+    float distanceBetweenTracePoses;
 
     area_transition_detector_params_t transitionParams;
-    path_direction_detector_params_t  pathDirectionParams;
+    path_direction_detector_params_t pathDirectionParams;
 
     event_detector_params_t(const utils::ConfigFile& config);
 };
 
 struct local_topology_params_t
 {
-    area_detector_params_t  areaParams;
+    area_detector_params_t areaParams;
     event_detector_params_t eventParams;
 
-    std::string smallScaleSpaceType;    // what type of SmallScaleSpaceBoundary should be created?
+    std::string smallScaleSpaceType;   // what type of SmallScaleSpaceBoundary should be created?
 
     local_topology_params_t(const utils::ConfigFile& config);
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_PARAMS_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_PARAMS_H

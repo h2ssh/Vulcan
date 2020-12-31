@@ -8,22 +8,22 @@
 
 
 /**
-* \file     director.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalTopoDirector.
-*/
+ * \file     director.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalTopoDirector.
+ */
 
 #include "hssh/global_topological/director.h"
-#include "hssh/global_topological/topo_slam.h"
 #include "hssh/global_topological/commands/serialization.h"
+#include "hssh/global_topological/topo_slam.h"
 #include "system/debug_communicator.h"
 #include "system/module_communicator.h"
 #include "utils/auto_mutex.h"
 #include "utils/stub.h"
 #include "utils/timestamp.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 #define DEBUG_TIMING
 
@@ -64,36 +64,32 @@ system::TriggerStatus GlobalTopoDirector::waitForTrigger(void)
 
 system::UpdateStatus GlobalTopoDirector::runUpdate(system::ModuleCommunicator& communicator)
 {
-    std::size_t numCommands = queue_.numCommands(); // set a maximum size on the commands to ensure that something
-                                                    // sending a million commands doesn't hang the update
+    std::size_t numCommands = queue_.numCommands();   // set a maximum size on the commands to ensure that something
+                                                      // sending a million commands doesn't hang the update
 
     // Process any available commands
-    for(std::size_t n = 0; (n < numCommands) && queue_.hasNewCommand(); ++n)
-    {
+    for (std::size_t n = 0; (n < numCommands) && queue_.hasNewCommand(); ++n) {
         auto command = queue_.popCommand();
         assert(command);
         processCommand(*command);
     }
 
     // Process updated pose information if available
-    if(queue_.hasNewPose())
-    {
+    if (queue_.hasNewPose()) {
         slam_->updatePose(queue_.popPose());
     }
 
     int64_t updateStart = utils::system_time_us();
-    std::size_t numEvents = queue_.numEvents(); // set a maximum size on the commands to ensure that something
-                                                // sending a million events doesn't hang the update
+    std::size_t numEvents = queue_.numEvents();   // set a maximum size on the commands to ensure that something
+                                                  // sending a million events doesn't hang the update
     auto localMap = queue_.popLocalMap();
 
-    if(numEvents > 0)
-    {
+    if (numEvents > 0) {
         std::cout << "Processing " << numEvents << " events.\n";
     }
 
     // Process any available events
-    for(std::size_t n = 0; (n < numEvents) && queue_.hasNewEvent(); ++n)
-    {
+    for (std::size_t n = 0; (n < numEvents) && queue_.hasNewEvent(); ++n) {
         auto event = queue_.popEvent();
         assert(event);
         processEvent(*event, localMap);
@@ -102,13 +98,12 @@ system::UpdateStatus GlobalTopoDirector::runUpdate(system::ModuleCommunicator& c
     int64_t updateEnd = utils::system_time_us();
 
 #ifdef DEBUG_TIMING
-    if(haveDataToTransmit_)
-    {
+    if (haveDataToTransmit_) {
         std::cout << "INFO:GlobalTopoDirector:Update complete:" << ((updateEnd - updateStart) / 1000) << "ms\n";
     }
 #endif
 
-   transmitCalculatedOutput(communicator);
+    transmitCalculatedOutput(communicator);
 
     // global_topo_hssh should always be running
     return system::UpdateStatus::running;
@@ -163,8 +158,7 @@ void GlobalTopoDirector::processEvent(const LocalAreaEvent& event, const LocalTo
 
 void GlobalTopoDirector::transmitCalculatedOutput(system::ModuleCommunicator& communicator)
 {
-    if(!haveDataToTransmit_)
-    {
+    if (!haveDataToTransmit_) {
         return;
     }
 
@@ -177,5 +171,5 @@ void GlobalTopoDirector::transmitCalculatedOutput(system::ModuleCommunicator& co
     slam_->sendDebug(debug);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

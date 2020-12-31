@@ -13,14 +13,14 @@
 // *
 // * Declaration of RRTRenderer.
 // */
-// 
+//
 // #ifndef UI_COMPONENTS_RRT_RENDERER_H
 // #define UI_COMPONENTS_RRT_RENDERER_H
-// 
+//
 // #include <vector>
 // #include "ui/common/ui_color.h"
 // #include "ui/components/robot_trajectory_renderer.h"
-// 
+//
 // namespace vulcan
 // {
 // namespace math { template <typename T> class Rectangle; }
@@ -32,10 +32,10 @@
 //     struct debug_rrt_node_t;
 //     struct debug_rrt_edge_t;
 // }
-// 
+//
 // namespace ui
 // {
-// 
+//
 // /**
 // * RRTRenderer handles the task of rendering the RRT and associated information. The edges of
 // * the RRT are drawn as curved lines following the simulated trajectories. The nodes are triangles
@@ -46,14 +46,14 @@
 // class RRTRenderer
 // {
 // public:
-// 
+//
 //     /**
 //     * Constructor for RRTRenderer.
 //     *
 //     * Defaults to rendering everything.
 //     */
 //     RRTRenderer(void);
-// 
+//
 //     /**
 //     * setRenderColors sets the colors to use for rendering the RRT.
 //     */
@@ -63,7 +63,7 @@
 //                          const GLColor& targetColor,
 //                          const GLColor& goalPathColor,
 //                          const GLColor& goalRegionColor);
-// 
+//
 //     // Flags for turning on/off the various pieces of rendered information
 //     void showRRT           (bool show) { shouldDrawRRT        = show; }
 //     void showNodes         (bool show) { shouldDrawNodes      = show; }
@@ -71,28 +71,28 @@
 //     void showStartAndTarget(bool show) { shouldDrawStart      = show; }
 //     void showGoalPath      (bool show) { shouldDrawPath       = show; }
 //     void showGoalRegion    (bool show) { shouldDrawGoalRegion = show; }
-// 
+//
 //     // Do the actual drawing based on the configured
 //     void renderRRT(const mpepc::rrt_info_t& rrtInfo);
-// 
+//
 // private:
-// 
+//
 //     void drawRRT           (const mpepc::DebugRRT& rrt);
 //     void drawNodes         (const std::vector<mpepc::debug_rrt_node_t>& nodes);
 //     void drawEdges         (const std::vector<mpepc::debug_rrt_edge_t>& edges);
 //     void drawStartAndTarget(const pose_t& start, const pose_t& target);
 //     void drawGoalPath      (const std::vector<pose_t>& path);
 //     void drawGoalRegion    (const math::Rectangle<float>& region);
-// 
+//
 //     RobotTrajectoryRenderer trajectoryRenderer;
-// 
+//
 //     bool shouldDrawRRT;
 //     bool shouldDrawNodes;
 //     bool shouldDrawEdges;
 //     bool shouldDrawStart;
 //     bool shouldDrawPath;
 //     bool shouldDrawGoalRegion;
-// 
+//
 //     GLColor edgeColor;
 //     GLColor nodeColor;
 //     GLColor startColor;
@@ -100,8 +100,8 @@
 //     GLColor goalPathColor;
 //     GLColor goalRegionColor;
 // };
-// 
+//
 // }
 // }
-// 
+//
 // #endif // UI_COMPONENTS_RRT_RENDERER_H

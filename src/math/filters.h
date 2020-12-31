@@ -8,20 +8,20 @@
 
 
 /**
-* \file     filters.h
-* \author   Collin Johnson
-* 
-* Definition of filters for filtering values in a sequence.
-* 
-* The basic VectorFilter type is any Callable entity with signature:
-* 
-*   double(Iterator begin, Iterator end)
-* 
-* Defined filters here are:
-* 
-*   - MeanFilter    : find the mean of the range
-*   - MedianFilter  : find the median of the range
-*/
+ * \file     filters.h
+ * \author   Collin Johnson
+ *
+ * Definition of filters for filtering values in a sequence.
+ *
+ * The basic VectorFilter type is any Callable entity with signature:
+ *
+ *   double(Iterator begin, Iterator end)
+ *
+ * Defined filters here are:
+ *
+ *   - MeanFilter    : find the mean of the range
+ *   - MedianFilter  : find the median of the range
+ */
 
 #ifndef MATH_FILTERS_H
 #define MATH_FILTERS_H
@@ -36,15 +36,15 @@ namespace math
 {
 
 /**
-* VectorFilter defines the signature for any filter used on a range of values.
-*/
+ * VectorFilter defines the signature for any filter used on a range of values.
+ */
 template <typename T>
 using VectorFilter = std::function<T(typename std::vector<T>::const_iterator, typename std::vector<T>::const_iterator)>;
 
 
 /**
-* MeanFilter is a SequenceFilter that returns the mean of the value range.
-*/
+ * MeanFilter is a SequenceFilter that returns the mean of the value range.
+ */
 template <typename T>
 struct MeanFilter
 {
@@ -55,8 +55,8 @@ struct MeanFilter
 };
 
 /**
-* MedianFilter is a SequenceFilter that returns the median of the value range.
-*/
+ * MedianFilter is a SequenceFilter that returns the median of the value range.
+ */
 template <typename T>
 struct MedianFilter
 {
@@ -68,7 +68,7 @@ struct MedianFilter
 };
 
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_FILTERS_H
+#endif   // MATH_FILTERS_H

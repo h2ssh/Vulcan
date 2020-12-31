@@ -8,23 +8,23 @@
 
 
 /**
-* \file     area_detector.cpp
-* \author   Collin Johnson
-*
-* Definition of AreaDetector.
-*/
+ * \file     area_detector.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AreaDetector.
+ */
 
 #include "hssh/local_topological/area_detector.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/pose.h"
 #include "hssh/local_topological/area_detection/area_classifier.h"
 #include "hssh/local_topological/area_detection/gateways/gateway_locator.h"
-#include "hssh/local_topological/area_detection/voronoi_graph_builder.h"
 #include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/voronoi_graph_builder.h"
 #include "hssh/local_topological/cmd_line.h"
 #include "hssh/local_topological/debug_info.h"
 #include "hssh/local_topological/event_visitor.h"
 #include "hssh/local_topological/events/area_transition.h"
-#include "hssh/local_metric/lpm.h"
-#include "hssh/local_metric/pose.h"
 #include "system/debug_communicator.h"
 #include "utils/command_line.h"
 #include "utils/stub.h"
@@ -49,19 +49,17 @@ struct TransitionVisitor : public LocalAreaEventVisitor
     void visitAreaTransition(const AreaTransitionEvent& event)
     {
         auto transition = event.transitionGateway();
-        if(transition)
-        {
+        if (transition) {
             locator->assignTransitionGateway(*transition);
         }
 
         auto exitedArea = event.exitedArea();
-        if(exitedArea)
-        {
+        if (exitedArea) {
             locator->assignExitedAreaGateways(exitedArea->gateways());
         }
     }
 
-    void visitTurnAround(const TurnAroundEvent& event) { } // do nothing here
+    void visitTurnAround(const TurnAroundEvent& event) { }   // do nothing here
 };
 
 AreaDetector::AreaDetector(const utils::ConfigFile& config,
@@ -70,24 +68,24 @@ AreaDetector::AreaDetector(const utils::ConfigFile& config,
 {
     area_detector_params_t params(config);
 
-    if(cmdLine.argumentExists(kConstraintLogProbArg))
-    {
-        params.classifierParams.mcmcParams.failingConstraintLogProb = std::strtod(cmdLine.argumentValue(kConstraintLogProbArg).c_str(), 0);
+    if (cmdLine.argumentExists(kConstraintLogProbArg)) {
+        params.classifierParams.mcmcParams.failingConstraintLogProb =
+          std::strtod(cmdLine.argumentValue(kConstraintLogProbArg).c_str(), 0);
     }
 
-    if(cmdLine.argumentExists(kRepeatLogProbArg))
-    {
-        params.classifierParams.mcmcParams.repeatConfigDecreaseLogProb = std::strtod(cmdLine.argumentValue(kRepeatLogProbArg).c_str(), 0);
+    if (cmdLine.argumentExists(kRepeatLogProbArg)) {
+        params.classifierParams.mcmcParams.repeatConfigDecreaseLogProb =
+          std::strtod(cmdLine.argumentValue(kRepeatLogProbArg).c_str(), 0);
     }
 
-    if(cmdLine.argumentExists(kMaxIterationsArg))
-    {
-        params.classifierParams.mcmcParams.maxIterations = std::strtol(cmdLine.argumentValue(kMaxIterationsArg).c_str(), 0, 10);
+    if (cmdLine.argumentExists(kMaxIterationsArg)) {
+        params.classifierParams.mcmcParams.maxIterations =
+          std::strtol(cmdLine.argumentValue(kMaxIterationsArg).c_str(), 0, 10);
     }
 
-    if(cmdLine.argumentExists(kSamplesPerIterArg))
-    {
-        params.classifierParams.mcmcParams.samplesPerIteration = std::strtol(cmdLine.argumentValue(kSamplesPerIterArg).c_str(), 0, 10);
+    if (cmdLine.argumentExists(kSamplesPerIterArg)) {
+        params.classifierParams.mcmcParams.samplesPerIteration =
+          std::strtol(cmdLine.argumentValue(kSamplesPerIterArg).c_str(), 0, 10);
     }
 
     skeletonBuilder_.reset(new VoronoiSkeletonBuilder(params.skeletonParams, params.prunerParams));
@@ -96,7 +94,7 @@ AreaDetector::AreaDetector(const utils::ConfigFile& config,
 
     shouldBuildSkeleton_ = params.shouldBuildSkeleton;
     shouldComputeIsovists_ = params.shouldComputeIsovists;
-    shouldFindGateways_  = params.shouldFindGateways;
+    shouldFindGateways_ = params.shouldFindGateways;
 
     maxIsovistRange_ = params.maxIsovistRange;
     numIsovistRays_ = params.numIsovistRays;
@@ -111,8 +109,7 @@ AreaDetector::~AreaDetector(void)
 
 AreaDetectorResult AreaDetector::detectAreas(const LocalPose& pose, const LocalPerceptualMap& map)
 {
-    if(shouldBuildSkeleton_)
-    {
+    if (shouldBuildSkeleton_) {
         skeletonBuilder_->buildVoronoiSkeleton(map, pose.pose(), pointsOfInterest_);
         pointsOfInterest_.clear();
     }
@@ -124,35 +121,26 @@ AreaDetectorResult AreaDetector::detectAreas(const LocalPose& pose, const LocalP
 
     int64_t gatewayStart = utils::system_time_us();
     // If no isovist field should be constructed, pass it an empty cell vector instead of the Voronoi mask
-    auto isovistField = shouldComputeIsovists_ ?
-        VoronoiIsovistField(skeletonBuilder_->getVoronoiSkeleton(),
-                            IsovistLocation::REDUCED_SKELETON,
-                            options) :
-        VoronoiIsovistField(skeletonBuilder_->getVoronoiSkeleton(),
-                            CellVector(),
-                            options);
+    auto isovistField = shouldComputeIsovists_
+      ? VoronoiIsovistField(skeletonBuilder_->getVoronoiSkeleton(), IsovistLocation::REDUCED_SKELETON, options)
+      : VoronoiIsovistField(skeletonBuilder_->getVoronoiSkeleton(), CellVector(), options);
 
-    if(shouldFindGateways_)
-    {
+    if (shouldFindGateways_) {
         gatewayLocator_->locateGateways(skeletonBuilder_->getVoronoiSkeleton(), isovistField);
     }
     gatewayTotalTime_ += utils::system_time_us() - gatewayStart;
 
-    if(!gatewayLocator_->isTransitionGatewayValid())
-    {
+    if (!gatewayLocator_->isTransitionGatewayValid()) {
         ++gwyFailCount_;
 
         // If we fail too many times, then something is awry with the transition gateway, so toss it out.
-        if(gwyFailCount_ > 2)
-        {
+        if (gwyFailCount_ > 2) {
             // The transition is invalid so no gateways should remain between iterations
             gatewayLocator_->assignFinalGateways(std::vector<Gateway>());
             gatewayLocator_->discardMostRecentTransitionGateway();
         }
         return AreaDetectorResult(LabelingError::invalid_transition_gateway);
-    }
-    else
-    {
+    } else {
         gwyFailCount_ = 0;
     }
 
@@ -164,20 +152,17 @@ AreaDetectorResult AreaDetector::detectAreas(const LocalPose& pose, const LocalP
     parsingTotalTime_ += utils::system_time_us() - classifyStart;
     ++numUpdates_;
 
-    std::cout << "INFO:AreaDetector: Timing: Gateway: " << (gatewayTotalTime_ / numUpdates_ / 1000) << "ms Classify: "
-        << (parsingTotalTime_ / numUpdates_ / 1000) << "ms\n";
+    std::cout << "INFO:AreaDetector: Timing: Gateway: " << (gatewayTotalTime_ / numUpdates_ / 1000)
+              << "ms Classify: " << (parsingTotalTime_ / numUpdates_ / 1000) << "ms\n";
 
     // If the classification was successful, then create the LocalTopoMap and set the final set of gateways
-    if(classifyResult == LabelingError::success)
-    {
+    if (classifyResult == LabelingError::success) {
         auto areas = areaClassifier_->currentAreas();
         LocalTopoMap ltMap(1, map.getTimestamp(), areas.first, skeletonBuilder_->getVoronoiSkeleton(), areas.second);
         gatewayLocator_->assignFinalGateways(ltMap.gateways());
         populate_points_of_interest(ltMap, pointsOfInterest_);
         return AreaDetectorResult(ltMap);
-    }
-    else
-    {
+    } else {
         // Otherwise, classification failed, so no gateways should remain between iterations
         gatewayLocator_->assignFinalGateways(std::vector<Gateway>());
         return AreaDetectorResult(classifyResult);
@@ -194,8 +179,7 @@ void AreaDetector::processAreaEvents(const LocalAreaEventVec& events)
     TransitionVisitor visitor;
     visitor.locator = gatewayLocator_.get();
 
-    for(auto& e : events)
-    {
+    for (auto& e : events) {
         e->accept(visitor);
     }
 }
@@ -218,11 +202,10 @@ void AreaDetector::sendDebug(system::DebugCommunicator& communicator)
 void populate_points_of_interest(const LocalTopoMap& topoMap, std::vector<Point<float>>& points)
 {
     // All gateways are points of interest, so just use those
-    for(auto& gwy : topoMap.gateways())
-    {
+    for (auto& gwy : topoMap.gateways()) {
         points.push_back(gwy.center());
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

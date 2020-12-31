@@ -8,11 +8,11 @@
 
 
 /**
-* \file     serialization.h
-* \author   Collin Johnson
-*
-* Utility header to ensure all local area events are loaded for serialization purposes between modules.
-*/
+ * \file     serialization.h
+ * \author   Collin Johnson
+ *
+ * Utility header to ensure all local area events are loaded for serialization purposes between modules.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENTS_SERIALIZATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENTS_SERIALIZATION_H
@@ -20,4 +20,4 @@
 #include "hssh/local_topological/events/area_transition.h"
 #include "hssh/local_topological/events/turn_around.h"
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_EVENTS_SERIALIZATION_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_EVENTS_SERIALIZATION_H

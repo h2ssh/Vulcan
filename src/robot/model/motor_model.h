@@ -8,15 +8,15 @@
 
 
 /**
-* \file     motor_model.h
-* \author   Jong Jin Park and Paul Foster
-*
-*/
+ * \file     motor_model.h
+ * \author   Jong Jin Park and Paul Foster
+ *
+ */
 
 #include "core/drive_wheel.h"
 
 #ifndef MOTOR_MODEL_H
-#define MOTOR_MODEL_H
+    #define MOTOR_MODEL_H
 
 namespace vulcan
 {
@@ -33,8 +33,7 @@ drive_wheel_t motor_model(const drive_wheel_t& wheelState,
                           double alpha,
                           double* friction);
 
-} // robot
-} // vulcan
+}   // namespace robot
+}   // namespace vulcan
 
-#endif // MOTOR_MODEL_H
-
+#endif   // MOTOR_MODEL_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     heartbeat.h
-* \author   Collin Johnson
-* 
-* Declaration of Heartbeat sent out by a Module after every update.
-*/
+ * \file     heartbeat.h
+ * \author   Collin Johnson
+ *
+ * Declaration of Heartbeat sent out by a Module after every update.
+ */
 
 #ifndef SYSTEM_HEARTBEAT_H
 #define SYSTEM_HEARTBEAT_H
@@ -25,19 +25,17 @@ namespace system
 {
 
 /**
-* Heartbeat
-*/
+ * Heartbeat
+ */
 class Heartbeat
 {
 public:
-    
 private:
-    
     int64_t timestamp_;
-    
+
     // Serialization support
     friend class cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
@@ -45,7 +43,7 @@ private:
     }
 };
 
-}
-}
+}   // namespace system
+}   // namespace vulcan
 
-#endif // SYSTEM_HEARTBEAT_H
+#endif   // SYSTEM_HEARTBEAT_H

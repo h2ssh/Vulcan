@@ -28,8 +28,7 @@ int main(int argc, char** argv)
     const std::string kIMUName("imu_");
     const std::string kJoystickName("joystick_");
 
-    if(argc < 2)
-    {
+    if (argc < 2) {
         std::cout << "Expected input: motion_sensor_to_text 'log_filename'\n";
         return -1;
     }
@@ -51,11 +50,8 @@ void save_encoders(const sensors::SensorLog& log, const std::string& filename)
 {
     std::ofstream out(filename);
 
-    for(auto& encoders : boost::make_iterator_range(log.beginEncoders(), log.endEncoders()))
-    {
-        out << encoders.timestamp << ' '
-            << encoders.deltaLeftWheel << ' '
-            << encoders.deltaRightWheel << '\n';
+    for (auto& encoders : boost::make_iterator_range(log.beginEncoders(), log.endEncoders())) {
+        out << encoders.timestamp << ' ' << encoders.deltaLeftWheel << ' ' << encoders.deltaRightWheel << '\n';
     }
 }
 
@@ -64,13 +60,8 @@ void save_odometry(const sensors::SensorLog& log, const std::string& filename)
 {
     std::ofstream out(filename);
 
-    for(auto& odom : boost::make_iterator_range(log.beginOdometry(), log.endOdometry()))
-    {
-        out << odom.timestamp << ' '
-            << odom.x << ' '
-            << odom.y << ' '
-            << odom.theta << ' '
-            << odom.translation << ' '
+    for (auto& odom : boost::make_iterator_range(log.beginOdometry(), log.endOdometry())) {
+        out << odom.timestamp << ' ' << odom.x << ' ' << odom.y << ' ' << odom.theta << ' ' << odom.translation << ' '
             << odom.rotation << '\n';
     }
 }
@@ -80,10 +71,8 @@ void save_imu(const sensors::SensorLog& log, const std::string& filename)
 {
     std::ofstream out(filename);
 
-    for(auto& imu : boost::make_iterator_range(log.beginImu(), log.endImu()))
-    {
-        out << imu.timestamp << ' '
-            << imu.rotationalVelocity[IMU_YAW_INDEX] << '\n';
+    for (auto& imu : boost::make_iterator_range(log.beginImu(), log.endImu())) {
+        out << imu.timestamp << ' ' << imu.rotationalVelocity[IMU_YAW_INDEX] << '\n';
     }
 }
 
@@ -92,10 +81,7 @@ void save_joystick(const sensors::SensorLog& log, const std::string& filename)
 {
     std::ofstream out(filename);
 
-    for(auto& joystick : boost::make_iterator_range(log.beginCommandedJoystick(), log.endCommandedJoystick()))
-    {
-        out << joystick.timestamp << ' '
-            << joystick.forward << ' '
-            << joystick.left << '\n';
+    for (auto& joystick : boost::make_iterator_range(log.beginCommandedJoystick(), log.endCommandedJoystick())) {
+        out << joystick.timestamp << ' ' << joystick.forward << ' ' << joystick.left << '\n';
     }
 }

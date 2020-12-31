@@ -7,10 +7,10 @@
 */
 
 
-#include "system/module.h"
 #include "planner/goal/director.h"
-#include "utils/config_file.h"
+#include "system/module.h"
 #include "utils/command_line.h"
+#include "utils/config_file.h"
 #include <vector>
 
 using namespace vulcan;
@@ -23,7 +23,7 @@ int main(int argc, char** argv)
     utils::CommandLine commandLine(argc, argv, arguments);
     commandLine.verify();
 
-    utils::ConfigFile  config(commandLine.configName());
+    utils::ConfigFile config(commandLine.configName());
 
     system::Module<planner::GoalDirector> module(commandLine, config);
 

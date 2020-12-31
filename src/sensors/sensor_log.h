@@ -8,19 +8,19 @@
 
 
 /**
-* \file     sensor_log.h
-* \author   Collin Johnson
-*
-* Declaration of SensorLog.
-*/
+ * \file     sensor_log.h
+ * \author   Collin Johnson
+ *
+ * Declaration of SensorLog.
+ */
 
 #ifndef SENSORS_SENSOR_LOG_H
 #define SENSORS_SENSOR_LOG_H
 
-#include "core/laser_scan.h"
-#include "robot/commands.h"
 #include "core/imu_data.h"
+#include "core/laser_scan.h"
 #include "core/odometry.h"
+#include "robot/commands.h"
 
 namespace vulcan
 {
@@ -28,22 +28,21 @@ namespace sensors
 {
 
 /**
-* SensorLog is a utility for loading the contents of a sensor log into RAM. SensorLog exists to avoid needing to use
-* a logplayer to read all the sensor data from a log for processing, be it for doing calculations or converting to a
-* Matlab-friendly format.
-*
-* The data in SensorLog is sorted in order of ascending timestamps, so begin->timestamp < end->timestamp.
-*
-* A SensorLog instance is created by providing an LCM log. This log will be read and converted into the appropriate data
-* types. The various types can then be iterated over as desired.
-*
-* IMPORTANT: Calling any of the addXXXX methods will invalidate iterators of the same type. In general, you should just
-* provide the log file to the constructor and never need to touch the add methods.
-*/
+ * SensorLog is a utility for loading the contents of a sensor log into RAM. SensorLog exists to avoid needing to use
+ * a logplayer to read all the sensor data from a log for processing, be it for doing calculations or converting to a
+ * Matlab-friendly format.
+ *
+ * The data in SensorLog is sorted in order of ascending timestamps, so begin->timestamp < end->timestamp.
+ *
+ * A SensorLog instance is created by providing an LCM log. This log will be read and converted into the appropriate
+ * data types. The various types can then be iterated over as desired.
+ *
+ * IMPORTANT: Calling any of the addXXXX methods will invalidate iterators of the same type. In general, you should just
+ * provide the log file to the constructor and never need to touch the add methods.
+ */
 class SensorLog
 {
 public:
-
     using laser_iterator = std::vector<polar_laser_scan_t>::const_iterator;
     using imu_iterator = std::vector<imu_data_t>::const_iterator;
     using odom_iterator = std::vector<odometry_t>::const_iterator;
@@ -52,19 +51,19 @@ public:
     using command_iterator = std::vector<robot::commanded_velocity_t>::const_iterator;
 
     /**
-    * Default constructor for SensorLog.
-    *
-    * Create an empty log.
-    */
+     * Default constructor for SensorLog.
+     *
+     * Create an empty log.
+     */
     SensorLog(void);
 
     /**
-    * Constructor for SensorLog.
-    *
-    * Create a SensorLog containing all data in the provided LCM log.
-    *
-    * \param    logFilename         Name of the log to be loaded
-    */
+     * Constructor for SensorLog.
+     *
+     * Create a SensorLog containing all data in the provided LCM log.
+     *
+     * \param    logFilename         Name of the log to be loaded
+     */
     SensorLog(const std::string& logFilename);
 
     // Disable copying, because these logs can be huge. Only moves are allowed for sanity's sake
@@ -75,8 +74,8 @@ public:
     SensorLog& operator=(SensorLog&&) = default;
 
     /**
-    * name retrieves the name of the sensor log. It is just the end of the filename, not the full path.
-    */
+     * name retrieves the name of the sensor log. It is just the end of the filename, not the full path.
+     */
     std::string name(void) const { return name_; }
 
 
@@ -119,7 +118,6 @@ public:
     void addCommandedVelocity(const robot::commanded_velocity_t& command);
 
 private:
-
     std::string name_;
 
     std::vector<polar_laser_scan_t> frontLaser_;
@@ -131,7 +129,7 @@ private:
     std::vector<robot::commanded_velocity_t> velocityCommand_;
 };
 
-} // namespace sensors
-} // namespace vulcan
+}   // namespace sensors
+}   // namespace vulcan
 
-#endif // SENSORS_SENSOR_LOG_H
+#endif   // SENSORS_SENSOR_LOG_H

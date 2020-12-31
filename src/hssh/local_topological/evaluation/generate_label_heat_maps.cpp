@@ -7,11 +7,11 @@
 */
 
 
-#include "hssh/local_topological/area.h"
-#include "hssh/local_topological/local_topo_map.h"
-#include "hssh/local_topological/areas/serialization.h"
-#include "utils/serialized_file_io.h"
 #include "core/image.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/areas/serialization.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "utils/serialized_file_io.h"
 #include "vision/image_utils.h"
 #include <boost/filesystem.hpp>
 
@@ -22,8 +22,7 @@ int main(int argc, char** argv)
 {
     using namespace boost::filesystem;
 
-    if(argc < 3)
-    {
+    if (argc < 3) {
         std::cout << "Expected usage: generate_label_heat_maps 'directory_w_maps' 'base img name'\n";
         return -1;
     }
@@ -31,21 +30,17 @@ int main(int argc, char** argv)
     // Iterate through the directory and find all maps containing "_truth.ltm"
     std::vector<LocalTopoMap> maps;
 
-    for(directory_iterator dirIt(argv[1]), endIt; dirIt != endIt; ++dirIt)
-    {
+    for (directory_iterator dirIt(argv[1]), endIt; dirIt != endIt; ++dirIt) {
         auto path = dirIt->path();
-        if(path.string().find("_truth.ltm") != std::string::npos)
-        {
+        if (path.string().find("_truth.ltm") != std::string::npos) {
             LocalTopoMap newMap;
-            if(utils::load_serializable_from_file(path.string(), newMap))
-            {
+            if (utils::load_serializable_from_file(path.string(), newMap)) {
                 maps.push_back(std::move(newMap));
             }
         }
     }
 
-    if(maps.empty())
-    {
+    if (maps.empty()) {
         std::cerr << "ERROR: Failed to find any LTMs in " << argv[1] << '\n';
         return -1;
     }
@@ -63,16 +58,12 @@ int main(int argc, char** argv)
     utils::CellGrid<int8_t> decisionVotes(width, height, scale, center, 0);
 
     // For each map, tally the votes from each area
-    for(auto& map : maps)
-    {
-        for(auto& area : map)
-        {
-            for(auto& cell : area->extent())
-            {
+    for (auto& map : maps) {
+        for (auto& area : map) {
+            for (auto& cell : area->extent()) {
                 auto gridCell = utils::global_point_to_grid_cell_round(cell, pathVotes);
 
-                switch(area->type())
-                {
+                switch (area->type()) {
                 case AreaType::path_segment:
                     ++pathVotes(gridCell.x, gridCell.y);
                     break;
@@ -92,7 +83,7 @@ int main(int argc, char** argv)
         }
     }
 
-    double colorPerVote = 255.0 / maps.size();  // amount to add to color channel for a vote
+    double colorPerVote = 255.0 / maps.size();   // amount to add to color channel for a vote
     // Create two images from these maps.
     // The consensus image shows how much agreement there is about the label for a cell.
     // White cells have 100% agreement, gray cells have no agreement
@@ -100,22 +91,15 @@ int main(int argc, char** argv)
 
     Image conImg(width, height, Colorspace::MONO);
 
-    for(int y = 0; y < height; ++y)
-    {
-        for(int x = 0; x < width; ++x)
-        {
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
             // Find the max vote, which determines the consensus
             int maxVote = 0;
-            if((pathVotes(x, y) > destVotes(x, y)) && pathVotes(x, y) > decisionVotes(x, y))
-            {
+            if ((pathVotes(x, y) > destVotes(x, y)) && pathVotes(x, y) > decisionVotes(x, y)) {
                 maxVote = pathVotes(x, y);
-            }
-            else if(destVotes(x, y) > decisionVotes(x, y))
-            {
+            } else if (destVotes(x, y) > decisionVotes(x, y)) {
                 maxVote = destVotes(x, y);
-            }
-            else
-            {
+            } else {
                 maxVote = decisionVotes(x, y);
             }
             // No vote = gray
@@ -124,12 +108,9 @@ int main(int argc, char** argv)
             int color = std::min(255, static_cast<int>(consensus * colorPerVote));
 
             // Draw the boundary of the map as a black pixel
-            if(skeleton.getClassification(x, y) & (SKELETON_CELL_OCCUPIED | SKELETON_CELL_FRONTIER))
-            {
+            if (skeleton.getClassification(x, y) & (SKELETON_CELL_OCCUPIED | SKELETON_CELL_FRONTIER)) {
                 color = 255;
-            }
-            else if(skeleton.getClassification(x, y) & SKELETON_CELL_UNKNOWN)
-            {
+            } else if (skeleton.getClassification(x, y) & SKELETON_CELL_UNKNOWN) {
                 color = 127;
             }
 
@@ -143,28 +124,23 @@ int main(int argc, char** argv)
 
     Image voteImg(width, height, Colorspace::RGB);
 
-    for(int y = 0; y < height; ++y)
-    {
-        for(int x = 0; x < width; ++x)
-        {
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
             // Find the max vote, which determines the consensus
             int pathColor = std::min(255, static_cast<int>(pathVotes(x, y) * colorPerVote));
             int destColor = std::min(255, static_cast<int>(destVotes(x, y) * colorPerVote));
             int decisionColor = std::min(255, static_cast<int>(decisionVotes(x, y) * colorPerVote));
 
             // If we have votes, then change the color
-            if(pathColor + destColor + decisionColor > 0)
-            {
+            if (pathColor + destColor + decisionColor > 0) {
                 voteImg.setPixel(x, height - y, destColor, pathColor, decisionColor);
             }
             // Draw the boundary in black
-            else if(skeleton.getClassification(x, y) & (SKELETON_CELL_OCCUPIED | SKELETON_CELL_FRONTIER))
-            {
+            else if (skeleton.getClassification(x, y) & (SKELETON_CELL_OCCUPIED | SKELETON_CELL_FRONTIER)) {
                 voteImg.setPixel(x, height - y, 0, 0, 0);
             }
             // Draw the rest in gray
-            else
-            {
+            else {
                 voteImg.setPixel(x, height - y, 127, 127, 127);
             }
         }

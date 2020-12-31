@@ -8,11 +8,11 @@
 
 
 /**
-* \file     debug_info.h
-* \author   Collin Johnson
-* 
-* Definition of debug info structs for transmission to the DebugUI.
-*/
+ * \file     debug_info.h
+ * \author   Collin Johnson
+ *
+ * Definition of debug info structs for transmission to the DebugUI.
+ */
 
 #ifndef HSSH_GLOBAL_METRIC_DEBUG_INFO_H
 #define HSSH_GLOBAL_METRIC_DEBUG_INFO_H
@@ -27,16 +27,16 @@ namespace hssh
 {
 
 /**
-* global_metric_relocalization_info_t contains information from running the MetricRelocalizer.
-*/    
+ * global_metric_relocalization_info_t contains information from running the MetricRelocalizer.
+ */
 struct global_metric_relocalization_info_t
 {
     metric_relocalization_debug_info_t info;
 };
 
 /**
-* global_metric_localization_info_t contains information from running the particle filter.
-*/
+ * global_metric_localization_info_t contains information from running the particle filter.
+ */
 struct global_metric_localization_info_t
 {
     particle_filter_debug_info_t info;
@@ -46,19 +46,19 @@ struct global_metric_localization_info_t
 template <class Archive>
 void serialize(Archive& ar, global_metric_relocalization_info_t& info)
 {
-    ar (info.info);
+    ar(info.info);
 }
 
 template <class Archive>
 void serialize(Archive& ar, global_metric_localization_info_t& info)
 {
-    ar (info.info);
+    ar(info.info);
 }
-    
-}
-}
+
+}   // namespace hssh
+}   // namespace vulcan
 
 DEFINE_DEBUG_MESSAGE(hssh::global_metric_relocalization_info_t, ("DEBUG_HSSH_GLOBAL_METRIC_RELOCALIZATION_INFO"))
-DEFINE_DEBUG_MESSAGE(hssh::global_metric_localization_info_t,   ("DEBUG_HSSH_GLOBAL_METRIC_LOCALIZATION_INFO"))
+DEFINE_DEBUG_MESSAGE(hssh::global_metric_localization_info_t, ("DEBUG_HSSH_GLOBAL_METRIC_LOCALIZATION_INFO"))
 
-#endif // HSSH_GLOBAL_METRIC_DEBUG_INFO_H
+#endif   // HSSH_GLOBAL_METRIC_DEBUG_INFO_H

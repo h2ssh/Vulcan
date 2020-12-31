@@ -7,9 +7,9 @@
 */
 
 
-#include <string>
-#include "utils/config_file.h"
 #include "vision/vision_params.h"
+#include "utils/config_file.h"
+#include <string>
 
 
 using namespace vulcan;
@@ -46,25 +46,26 @@ const std::string INTENSITY_HISTOGRAM_HEADING("IntensityHistogramParameters");
 const std::string INTENSITY_BINS_KEY("intensity_bins");
 
 
-graph_based_segmenter_params_t load_graph_based_params(const vulcan::utils::ConfigFile& config, const std::string& heading);
+graph_based_segmenter_params_t load_graph_based_params(const vulcan::utils::ConfigFile& config,
+                                                       const std::string& heading);
 
-opponent_color_histogram_params_t         load_opponent_color_histogram_params        (const utils::ConfigFile& config);
-rgb_histogram_params_t                    load_rgb_histogram_params                   (const utils::ConfigFile& config);
+opponent_color_histogram_params_t load_opponent_color_histogram_params(const utils::ConfigFile& config);
+rgb_histogram_params_t load_rgb_histogram_params(const utils::ConfigFile& config);
 simple_color_constancy_histogram_params_t load_simple_color_constancy_histogram_params(const utils::ConfigFile& config);
-intensity_histogram_params_t              load_intensity_histogram_params             (const utils::ConfigFile& config);
+intensity_histogram_params_t load_intensity_histogram_params(const utils::ConfigFile& config);
 
 
 felzenszwalb_params_t vulcan::vision::load_felzenszwalb_params(const utils::ConfigFile& config)
 {
     felzenszwalb_params_t params;
-    
+
     params.graphParams = load_graph_based_params(config, FELZENSZWALB_HEADING);
-    
+
     params.k = config.getValueAsFloat(FELZENSZWALB_HEADING, K_KEY);
-    
+
     // Initial threshold is just k as all segments start with size 1
     params.graphParams.initialThreshold = params.k;
-    
+
     return params;
 }
 
@@ -72,17 +73,17 @@ felzenszwalb_params_t vulcan::vision::load_felzenszwalb_params(const utils::Conf
 wassenberg_params_t vulcan::vision::load_wassenberg_params(const utils::ConfigFile& config)
 {
     wassenberg_params_t params;
-    
+
     params.graphParams = load_graph_based_params(config, WASSENBERG_HEADING);
-    
-    params.minEdgeWeight    = config.getValueAsUInt32(WASSENBERG_HEADING, MIN_EDGE_WEIGHT_KEY);
-    params.maxEdgeWeight    = config.getValueAsUInt32(WASSENBERG_HEADING, MAX_EDGE_WEIGHT_KEY);
-    params.pixelSigma       = config.getValueAsFloat(WASSENBERG_HEADING, PIXEL_SIGMA_KEY);
+
+    params.minEdgeWeight = config.getValueAsUInt32(WASSENBERG_HEADING, MIN_EDGE_WEIGHT_KEY);
+    params.maxEdgeWeight = config.getValueAsUInt32(WASSENBERG_HEADING, MAX_EDGE_WEIGHT_KEY);
+    params.pixelSigma = config.getValueAsFloat(WASSENBERG_HEADING, PIXEL_SIGMA_KEY);
     params.creditMultiplier = config.getValueAsFloat(WASSENBERG_HEADING, CREDIT_MULTIPLIER_KEY);
-    
+
     // Just an arbitrary number larger than the maximum component distance so the credit calculation can work
     params.graphParams.initialThreshold = 1000.0;
-    
+
     return params;
 }
 
@@ -90,10 +91,10 @@ wassenberg_params_t vulcan::vision::load_wassenberg_params(const utils::ConfigFi
 image_segmenter_params_t vulcan::vision::load_image_segmenter_params(const utils::ConfigFile& config)
 {
     image_segmenter_params_t params;
-    
-    params.felzParams   = load_felzenszwalb_params(config);
+
+    params.felzParams = load_felzenszwalb_params(config);
     params.wassenParams = load_wassenberg_params(config);
-    
+
     return params;
 }
 
@@ -101,12 +102,12 @@ image_segmenter_params_t vulcan::vision::load_image_segmenter_params(const utils
 histogram_params_t vulcan::vision::load_historam_params(const utils::ConfigFile& config)
 {
     histogram_params_t params;
-    
+
     params.constancyParams = load_simple_color_constancy_histogram_params(config);
     params.intensityParams = load_intensity_histogram_params(config);
-    params.opponentParams  = load_opponent_color_histogram_params(config);
-    params.rgbParams       = load_rgb_histogram_params(config);
-    
+    params.opponentParams = load_opponent_color_histogram_params(config);
+    params.rgbParams = load_rgb_histogram_params(config);
+
     return params;
 }
 
@@ -114,10 +115,10 @@ histogram_params_t vulcan::vision::load_historam_params(const utils::ConfigFile&
 graph_based_segmenter_params_t load_graph_based_params(const utils::ConfigFile& config, const std::string& heading)
 {
     graph_based_segmenter_params_t params;
-    
-    params.sigma          = config.getValueAsFloat(heading, SIGMA_KEY);
+
+    params.sigma = config.getValueAsFloat(heading, SIGMA_KEY);
     params.minSegmentSize = config.getValueAsUInt32(heading, MIN_SIZE_KEY);
-    
+
     return params;
 }
 
@@ -125,11 +126,11 @@ graph_based_segmenter_params_t load_graph_based_params(const utils::ConfigFile& 
 opponent_color_histogram_params_t load_opponent_color_histogram_params(const utils::ConfigFile& config)
 {
     opponent_color_histogram_params_t params;
-    
+
     params.rgBins = config.getValueAsInt16(OPPONENT_COLOR_HEADING, RG_BINS_KEY);
     params.byBins = config.getValueAsInt16(OPPONENT_COLOR_HEADING, BY_BINS_KEY);
     params.wbBins = config.getValueAsInt16(OPPONENT_COLOR_HEADING, WB_BINS_KEY);
-    
+
     return params;
 }
 
@@ -137,11 +138,11 @@ opponent_color_histogram_params_t load_opponent_color_histogram_params(const uti
 rgb_histogram_params_t load_rgb_histogram_params(const utils::ConfigFile& config)
 {
     rgb_histogram_params_t params;
-    
+
     params.rBins = config.getValueAsInt16(RGB_HISTOGRAM_HEADING, R_BINS_KEY);
     params.gBins = config.getValueAsInt16(RGB_HISTOGRAM_HEADING, G_BINS_KEY);
     params.bBins = config.getValueAsInt16(RGB_HISTOGRAM_HEADING, B_BINS_KEY);
-    
+
     return params;
 }
 
@@ -149,10 +150,10 @@ rgb_histogram_params_t load_rgb_histogram_params(const utils::ConfigFile& config
 simple_color_constancy_histogram_params_t load_simple_color_constancy_histogram_params(const utils::ConfigFile& config)
 {
     simple_color_constancy_histogram_params_t params;
-    
+
     params.rPrimeBins = config.getValueAsInt16(SIMPLE_CONSTANCY_HEADING, R_PRIME_BINS_KEY);
     params.gPrimeBins = config.getValueAsInt16(SIMPLE_CONSTANCY_HEADING, G_PRIME_BINS_KEY);
-    
+
     return params;
 }
 
@@ -160,8 +161,8 @@ simple_color_constancy_histogram_params_t load_simple_color_constancy_histogram_
 intensity_histogram_params_t load_intensity_histogram_params(const utils::ConfigFile& config)
 {
     intensity_histogram_params_t params;
-    
+
     params.bins = config.getValueAsInt16(INTENSITY_HISTOGRAM_HEADING, INTENSITY_BINS_KEY);
-    
+
     return params;
 }

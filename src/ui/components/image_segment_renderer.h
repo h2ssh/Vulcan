@@ -8,49 +8,50 @@
 
 
 /**
-* \file     image_segment_renderer.h
-* \author   Collin Johnson
-*
-* Declaration of ImageSegmentRenderer.
-*/
+ * \file     image_segment_renderer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ImageSegmentRenderer.
+ */
 
 #ifndef UI_COMPONENTS_IMAGE_SEGMENT_RENDERER_H
 #define UI_COMPONENTS_IMAGE_SEGMENT_RENDERER_H
 
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 namespace vulcan
 {
-namespace vision { struct image_segment_t; }
+namespace vision
+{
+struct image_segment_t;
+}
 namespace ui
 {
 
 /**
-* ImageSegmentRenderer renders a set of image segments onto the screen as a translucent overlay.
-* The segment colors are assigned based on their average color.
-*/
+ * ImageSegmentRenderer renders a set of image segments onto the screen as a translucent overlay.
+ * The segment colors are assigned based on their average color.
+ */
 class ImageSegmentRenderer
 {
 public:
-
     /**
-    * Constructor for ImageSegmentRenderer.
-    */
+     * Constructor for ImageSegmentRenderer.
+     */
     ImageSegmentRenderer(void);
 
     /**
-    * setImageSegments set the image segments to be rendered.
-    */
+     * setImageSegments set the image segments to be rendered.
+     */
     void setImageSegments(const std::vector<vision::image_segment_t>& segments, int imageWidth, int imageHeight);
 
     /**
-    * renderImageSegments renders the current set of segments.
-    */
+     * renderImageSegments renders the current set of segments.
+     */
     void renderImageSegments(void);
 
 private:
-
     void initializeSegmentsTexture(int imageWidth, int imageHeight);
 
     void enableSegmentTexture(void);
@@ -80,7 +81,7 @@ private:
     std::vector<uint8_t> texture;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_IMAGE_SEGMENT_RENDERER_H
+#endif   // UI_COMPONENTS_IMAGE_SEGMENT_RENDERER_H

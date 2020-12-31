@@ -8,36 +8,34 @@
 
 
 /**
-* \file     place.cpp
-* \author   Collin Johnson
-* 
-* Definition of LocalPlace.
-*/
+ * \file     place.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalPlace.
+ */
 
 #include "hssh/local_topological/areas/place.h"
 
 namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
-    
+
 boost::optional<local_path_fragment_t> match_gateway_to_star(const Gateway& gateway, const SmallScaleStar& star);
 
 
-LocalPlace::LocalPlace(const SmallScaleStar&       star,
-                       const LocalPerceptualMap&   map,
-                       int                         id,
-                       const AreaExtent&           extent,
+LocalPlace::LocalPlace(const SmallScaleStar& star,
+                       const LocalPerceptualMap& map,
+                       int id,
+                       const AreaExtent& extent,
                        const std::vector<Gateway>& gateways)
 : LocalArea(id, extent, gateways)
 , star_(star)
 , map_(map)
 {
     // For each navigable path fragment in the small-scale star, create an associated transition affordance
-    for(auto& f : star_)
-    {
-        if(f.navigable)
-        {
+    for (auto& f : star_) {
+        if (f.navigable) {
             adjacent_.emplace_back(f.gateway, f.type);
         }
     }
@@ -49,28 +47,23 @@ boost::optional<TransitionAffordance> LocalPlace::affordanceForFragment(const lo
     // There is a 1-1 correspondence between path segment affordances and path fragments.
     // Iterate through the fragments and count how many navigable fragments occur before this fragment is found.
     // That will be the index into path segments
-    
+
     // If not navigable, then certainly no associated affordance
-    if(!fragment.navigable)
-    {
+    if (!fragment.navigable) {
         return boost::none;
     }
-    
+
     int numNavigableSoFar = 0;
-    
-    for(auto& f : star_)
-    {
+
+    for (auto& f : star_) {
         // If the fragment is found, the index will be the count of navigable fragments so far
-        if(f == fragment)
-        {
+        if (f == fragment) {
             return adjacent_[numNavigableSoFar];
-        }
-        else if(f.navigable)
-        {
+        } else if (f.navigable) {
             ++numNavigableSoFar;
         }
     }
-    
+
     // If the fragment isn't found, then there is no associated affordance
     return boost::none;
 }
@@ -84,8 +77,7 @@ boost::optional<local_path_fragment_t> LocalPlace::findGatewayFragment(const Gat
 
 void LocalPlace::visitAffordances(NavigationAffordanceVisitor& visitor) const
 {
-    for(auto& adj : adjacent_)
-    {
+    for (auto& adj : adjacent_) {
         adj.accept(visitor);
     }
 }
@@ -93,22 +85,18 @@ void LocalPlace::visitAffordances(NavigationAffordanceVisitor& visitor) const
 
 boost::optional<local_path_fragment_t> match_gateway_to_star(const Gateway& gateway, const SmallScaleStar& star)
 {
-    auto matchingFrag = std::find_if(star.begin(), star.end(), [&gateway](const local_path_fragment_t& frag) 
-    { 
+    auto matchingFrag = std::find_if(star.begin(), star.end(), [&gateway](const local_path_fragment_t& frag) {
         return frag.gateway.isSimilarTo(gateway) && frag.navigable;
     });
 
-    if(matchingFrag != star.end())
-    {
+    if (matchingFrag != star.end()) {
         return *matchingFrag;
-    }
-    else 
-    {
-        std::cerr << "WARNING::SmallScaleStar: Failed to find fragment associated with gateway " << gateway 
-            << " Star: " << star << '\n';
+    } else {
+        std::cerr << "WARNING::SmallScaleStar: Failed to find fragment associated with gateway " << gateway
+                  << " Star: " << star << '\n';
         return boost::none;
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

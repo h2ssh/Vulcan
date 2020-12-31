@@ -15,30 +15,30 @@
  *
  */
 #include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
-using std::vector;
 using cv::Mat_;
 using cv::Size;
+using std::vector;
 
-//Sector Type
-struct sector{
-	//sectors represent sectors of a circle, with a width from [0,2pi).
-	//If the endpoints are the same, it has width 0, i.e. a single angle.
-	//If valid==0 the sector is empty.
-	//All angles are interpreted as mod 2pi and the sector is the range 
-	//  from lo to hi in the positive direction.
-	//Sectors cannot represent a complete circle.
-	cv::Mat_<double> lo   ; //the low angle of the sector
-    cv::Mat_<double> hi   ; //the high angle of the sector
-    cv::Mat_<bool> valid  ; //whether the sector contains any angles
-    sector(){}
-	sector(Size s){
-		lo		= Mat_<double>(s);
-		hi		= Mat_<double>(s);
-		valid	= Mat_<bool>(s);
-	}
+// Sector Type
+struct sector
+{
+    // sectors represent sectors of a circle, with a width from [0,2pi).
+    // If the endpoints are the same, it has width 0, i.e. a single angle.
+    // If valid==0 the sector is empty.
+    // All angles are interpreted as mod 2pi and the sector is the range
+    //  from lo to hi in the positive direction.
+    // Sectors cannot represent a complete circle.
+    cv::Mat_<double> lo;    // the low angle of the sector
+    cv::Mat_<double> hi;    // the high angle of the sector
+    cv::Mat_<bool> valid;   // whether the sector contains any angles
+    sector() { }
+    sector(Size s)
+    {
+        lo = Mat_<double>(s);
+        hi = Mat_<double>(s);
+        valid = Mat_<bool>(s);
+    }
 };
-
-

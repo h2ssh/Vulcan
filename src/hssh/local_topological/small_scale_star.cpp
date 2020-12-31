@@ -8,11 +8,11 @@
 
 
 /**
-* \file     small_scale_star.cpp
-* \author   Collin Johnson
-*
-* Definition of SmallScaleStar.
-*/
+ * \file     small_scale_star.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of SmallScaleStar.
+ */
 
 #include "hssh/local_topological/small_scale_star.h"
 #include <cassert>
@@ -29,8 +29,7 @@ std::ostream& operator<<(std::ostream& out, const SmallScaleStar& star)
 {
     auto fragments = star.getAllFragments();
 
-    for(size_t n = 0; n < fragments.size(); ++n)
-    {
+    for (size_t n = 0; n < fragments.size(); ++n) {
         out << fragments[n].gateway << "->" << fragments[n].navigable << ':' << fragments[n].type << ' ';
     }
 
@@ -43,21 +42,16 @@ SmallScaleStar::SmallScaleStar(void)
 }
 
 
-SmallScaleStar::SmallScaleStar(const std::vector<local_path_fragment_t>& fragments)
-: fragments(fragments)
+SmallScaleStar::SmallScaleStar(const std::vector<local_path_fragment_t>& fragments) : fragments(fragments)
 {
-    if(!fragments.empty())
-    {
+    if (!fragments.empty()) {
         assert(!this->fragments.empty());
         assert(this->fragments.size() % 2 == 0);
 
-        for(size_t n = 0; n < this->fragments.size(); ++n)
-        {
+        for (size_t n = 0; n < this->fragments.size(); ++n) {
             this->fragments[n].fragmentId = n;
         }
-    }
-    else
-    {
+    } else {
         std::cerr << "WARNING: SmallScaleStar: Created a star with no path fragments!\n";
     }
 }
@@ -68,37 +62,32 @@ bool SmallScaleStar::operator==(const SmallScaleStar& rhs) const
     // For two small-scale stars to be the same, they must have the same number of path fragments and sequence
     // of navigable paths must be the same when moving clockwise around the star for some starting point
     // in each star's fragments
-    if(fragments.size() == rhs.fragments.size())
-    {
+    if (fragments.size() == rhs.fragments.size()) {
         bool equal = false;
 
-        for(size_t startIndex = 0; startIndex < rhs.fragments.size() && !equal; ++startIndex)
-        {
+        for (size_t startIndex = 0; startIndex < rhs.fragments.size() && !equal; ++startIndex) {
             size_t n = 0;
-            while((n < fragments.size()) && (fragments[n].navigable == rhs.fragments[(n+startIndex)%fragments.size()].navigable))
-            {
+            while ((n < fragments.size())
+                   && (fragments[n].navigable == rhs.fragments[(n + startIndex) % fragments.size()].navigable)) {
                 ++n;
             }
 
             // If made it all the way through the fragments, then a match was found for the sequence
-            if(n == fragments.size())
-            {
+            if (n == fragments.size()) {
                 equal = true;
             }
         }
 
 #ifdef DEBUG_EQUALITY
-        std::cout<<"DEBUG:Star==:lhs:";
-        for(size_t n = 0; n < fragments.size(); ++n)
-        {
-            std::cout<<fragments[n].navigable<<' ';
+        std::cout << "DEBUG:Star==:lhs:";
+        for (size_t n = 0; n < fragments.size(); ++n) {
+            std::cout << fragments[n].navigable << ' ';
         }
-        std::cout<<"rhs:";
-        for(size_t n = 0; n < rhs.fragments.size(); ++n)
-        {
-            std::cout<<rhs.fragments[n].navigable<<' ';
+        std::cout << "rhs:";
+        for (size_t n = 0; n < rhs.fragments.size(); ++n) {
+            std::cout << rhs.fragments[n].navigable << ' ';
         }
-        std::cout<<"Equal:"<<equal<<'\n';
+        std::cout << "Equal:" << equal << '\n';
 #endif
 
         return equal;
@@ -118,9 +107,8 @@ std::vector<local_path_fragment_t> SmallScaleStar::fragmentsLeftOf(const local_p
     std::vector<local_path_fragment_t> leftFragments;
     leftFragments.reserve(numLeftFragments);
 
-    for(int n = 1; n <= numLeftFragments; ++n)
-    {
-        leftFragments.push_back(fragments[(n+fragment.fragmentId)%fragments.size()]);
+    for (int n = 1; n <= numLeftFragments; ++n) {
+        leftFragments.push_back(fragments[(n + fragment.fragmentId) % fragments.size()]);
     }
 
     return leftFragments;
@@ -137,14 +125,10 @@ std::vector<local_path_fragment_t> SmallScaleStar::fragmentsRightOf(const local_
     std::vector<local_path_fragment_t> rightFragments;
     rightFragments.reserve(numRightFragments);
 
-    for(int n = 1; n <= numRightFragments; ++n)
-    {
-        if(fragment.fragmentId - n >= 0)
-        {
+    for (int n = 1; n <= numRightFragments; ++n) {
+        if (fragment.fragmentId - n >= 0) {
             rightFragments.push_back(fragments[fragment.fragmentId - n]);
-        }
-        else
-        {
+        } else {
             rightFragments.push_back(fragments[fragments.size() - 1 - (numRightFragments - n)]);
         }
     }
@@ -156,7 +140,7 @@ std::vector<local_path_fragment_t> SmallScaleStar::fragmentsRightOf(const local_
 local_path_fragment_t SmallScaleStar::otherFragmentOnPath(const local_path_fragment_t& fragment) const
 {
     assert(fragment.fragmentId < static_cast<int>(fragments.size()));
-    return fragments[(getNumPaths()+fragment.fragmentId)%fragments.size()];
+    return fragments[(getNumPaths() + fragment.fragmentId) % fragments.size()];
 }
 
 
@@ -164,10 +148,8 @@ std::size_t SmallScaleStar::getNumNavigableFragments(void) const
 {
     auto num = std::size_t{0};
 
-    for(auto& fragment : fragments)
-    {
-        if(fragment.navigable)
-        {
+    for (auto& fragment : fragments) {
+        if (fragment.navigable) {
             ++num;
         }
     }
@@ -178,20 +160,15 @@ std::size_t SmallScaleStar::getNumNavigableFragments(void) const
 
 local_star_path_t SmallScaleStar::getPath(std::size_t pathNum) const
 {
-    if(pathNum >= getNumPaths())
-    {
+    if (pathNum >= getNumPaths()) {
         local_path_fragment_t nonnavigable;
         nonnavigable.navigable = false;
         return local_star_path_t{{nonnavigable, nonnavigable}};
-    }
-    else
-    {
+    } else {
         local_star_path_t path;
         int nextFrag = 0;
-        for(auto& frag : fragments)
-        {
-            if(frag.pathId == static_cast<int>(pathNum))
-            {
+        for (auto& frag : fragments) {
+            if (frag.pathId == static_cast<int>(pathNum)) {
                 path[nextFrag] = frag;
                 ++nextFrag;
             }
@@ -202,16 +179,16 @@ local_star_path_t SmallScaleStar::getPath(std::size_t pathNum) const
 }
 
 
-bool SmallScaleStar::getPathFragment(int8_t pathIndex, path_fragment_direction_t direction, local_path_fragment_t& fragment)
+bool SmallScaleStar::getPathFragment(int8_t pathIndex,
+                                     path_fragment_direction_t direction,
+                                     local_path_fragment_t& fragment)
 {
     // Search through the path fragments to find one with the specified index and direction. That fragment becomes
     // the start index. currentIndex is the same as startIndex to begin with. next() increases the currentIndex
     // BEFORE determining the fragment.
 
-    for(size_t n = 0; n < fragments.size(); ++n)
-    {
-        if((fragments[n].pathId == pathIndex) && (fragments[n].direction == direction))
-        {
+    for (size_t n = 0; n < fragments.size(); ++n) {
+        if ((fragments[n].pathId == pathIndex) && (fragments[n].direction == direction)) {
             fragment = fragments[n];
             return true;
         }
@@ -220,5 +197,5 @@ bool SmallScaleStar::getPathFragment(int8_t pathIndex, path_fragment_direction_t
     return false;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

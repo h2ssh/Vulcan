@@ -8,11 +8,11 @@
 
 
 /**
-* \file     mathfwd.h
-* \author   Collin Johnson
-*
-* Forward declarations of the types in the math library.
-*/
+ * \file     mathfwd.h
+ * \author   Collin Johnson
+ *
+ * Forward declarations of the types in the math library.
+ */
 
 #ifndef MATH_MATHFWD_H
 #define MATH_MATHFWD_H
@@ -28,7 +28,7 @@ class Polygon;
 template <typename T>
 class Rectangle;
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_MATHFWD_H
+#endif   // MATH_MATHFWD_H

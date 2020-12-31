@@ -8,11 +8,11 @@
 
 
 /**
-* @file
-* @author   Collin Johnson
-*
-* Declaration of ObjectIntentionRenderer.
-*/
+ * @file
+ * @author   Collin Johnson
+ *
+ * Declaration of ObjectIntentionRenderer.
+ */
 
 #ifndef UI_COMPONENTS_OBJECT_INTENTION_RENDERER_H
 #define UI_COMPONENTS_OBJECT_INTENTION_RENDERER_H
@@ -21,40 +21,41 @@
 
 namespace vulcan
 {
-namespace tracker { class AreaIntentionEstimates; }
+namespace tracker
+{
+class AreaIntentionEstimates;
+}
 namespace ui
 {
 
 /**
-* Renderer for AreaIntentionEstimates. The renderer does the following:
-*
-*   - Each goal is renderer as a separate color.
-*   - Every one meter (configurable) the pose of the object is drawn with color the same
-*       as the most probable goal.
-*   - The full trajectory of the object is drawn.
-*/
+ * Renderer for AreaIntentionEstimates. The renderer does the following:
+ *
+ *   - Each goal is renderer as a separate color.
+ *   - Every one meter (configurable) the pose of the object is drawn with color the same
+ *       as the most probable goal.
+ *   - The full trajectory of the object is drawn.
+ */
 class ObjectIntentionRenderer
 {
 public:
-
     /**
-    * Create a renderer with the specified spacing between drawn poses.
-    *
-    * @param    distPerPose         Gap between the full pose rendering -- meters (optional, default =1m)
-    */
+     * Create a renderer with the specified spacing between drawn poses.
+     *
+     * @param    distPerPose         Gap between the full pose rendering -- meters (optional, default =1m)
+     */
     explicit ObjectIntentionRenderer(double distPerPose);
 
     /**
-    * Render the provided intentions.
-    */
+     * Render the provided intentions.
+     */
     void renderIntentions(const tracker::AreaIntentionEstimates& intentions);
 
 private:
-
     double distPerPose_;
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_OBJECT_INTENTION_RENDERER_H
+#endif   // UI_COMPONENTS_OBJECT_INTENTION_RENDERER_H

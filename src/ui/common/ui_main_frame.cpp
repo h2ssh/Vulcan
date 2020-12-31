@@ -8,17 +8,17 @@
 
 
 /**
-* \file     ui_main_frame.cpp
-* \author   Collin Johnson
-*
-* Definition of UIMainFrame abstract base class.
-*/
+ * \file     ui_main_frame.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of UIMainFrame abstract base class.
+ */
 
 #include "ui/common/ui_main_frame.h"
 #include "ui/common/ui_panel.h"
 #include "ui/components/open_gl_widget.h"
-#include <wx/aui/auibook.h>
 #include <iostream>
+#include <wx/aui/auibook.h>
 
 namespace vulcan
 {
@@ -26,13 +26,18 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(UIMainFrame, wxFrame)
-    EVT_PAINT(UIMainFrame::paint)
-    EVT_TIMER(TIMER_ID, UIMainFrame::timerFired)
-    EVT_CLOSE(UIMainFrame::close)
+EVT_PAINT(UIMainFrame::paint)
+EVT_TIMER(TIMER_ID, UIMainFrame::timerFired)
+EVT_CLOSE(UIMainFrame::close)
 END_EVENT_TABLE()
-    
 
-UIMainFrame::UIMainFrame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style)
+
+UIMainFrame::UIMainFrame(wxWindow* parent,
+                         wxWindowID id,
+                         const wxString& title,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style)
 : wxFrame(parent, id, title, pos, size, style)
 , panelNotebook_(nullptr)
 , numPushedPanels_(0)
@@ -45,8 +50,7 @@ UIMainFrame::~UIMainFrame(void)
 {
     assert(numPushedPanels_ >= 0);
     // Remove any remaining event handlers
-    while(numPushedPanels_ > 0)
-    {
+    while (numPushedPanels_ > 0) {
         PopEventHandler();
         --numPushedPanels_;
     }
@@ -56,8 +60,7 @@ UIMainFrame::~UIMainFrame(void)
 
 void UIMainFrame::subscribeConsumersViaCommunicator(void)
 {
-    for(auto& panel : panels_)
-    {
+    for (auto& panel : panels_) {
         panel->subscribe(communicator_);
     }
 }
@@ -65,8 +68,7 @@ void UIMainFrame::subscribeConsumersViaCommunicator(void)
 
 void UIMainFrame::setCommunicatorForProducers(void)
 {
-    for(auto& panel : panels_)
-    {
+    for (auto& panel : panels_) {
         panel->setConsumer(&communicator_);
     }
 }
@@ -74,42 +76,36 @@ void UIMainFrame::setCommunicatorForProducers(void)
 
 void UIMainFrame::initialize(wxAuiNotebook* notebook, int frameRate, OpenGLWidget* glWidget, wxStatusBar* statusBar)
 {
-    if(glWidget)
-    {
+    if (glWidget) {
         glContext = new wxGLContext(glWidget);
     }
-    
-    for(auto& panel : panels_)
-    {
+
+    for (auto& panel : panels_) {
         panel->setup(glContext, statusBar);
     }
-    
+
     subscribeConsumersViaCommunicator();
     setCommunicatorForProducers();
-    
-    if(notebook)
-    {
+
+    if (notebook) {
         panelNotebook_ = notebook;
-        
+
         Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &UIMainFrame::pageChanging, this, panelNotebook_->GetId());
-        Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED,  &UIMainFrame::pageChanged,  this, panelNotebook_->GetId());
-        
+        Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &UIMainFrame::pageChanged, this, panelNotebook_->GetId());
+
         auto panelIt = windowToPanel_.find(panelNotebook_->GetCurrentPage());
-        
-        if(panelIt != windowToPanel_.end())
-        {
+
+        if (panelIt != windowToPanel_.end()) {
             PushEventHandler(panelIt->second);
             ++numPushedPanels_;
         }
     }
-    
+
     setupRefreshTimer(frameRate);
-    
+
     // Everything else is initialized, so launch the thread to start reading data.
-    auto communicatorFunc = [this](bool killed) -> bool
-    {
-        if(!killed)
-        {
+    auto communicatorFunc = [this](bool killed) -> bool {
+        if (!killed) {
             communicator_.processIncoming();
         }
 
@@ -121,12 +117,10 @@ void UIMainFrame::initialize(wxAuiNotebook* notebook, int frameRate, OpenGLWidge
 
 void UIMainFrame::addPanel(UIPanel* panel, wxWindow* window)
 {
-    if(panel)
-    {
+    if (panel) {
         panels_.emplace_back(panel);
-        
-        if(window)
-        {
+
+        if (window) {
             windowToPanel_.insert(std::make_pair(window, panel));
         }
     }
@@ -137,8 +131,7 @@ void UIMainFrame::setupRefreshTimer(int frameRate)
 {
     int refreshRate = 100;
 
-    if(frameRate != 0)
-    {
+    if (frameRate != 0) {
         refreshRate = 1000 / frameRate;
     }
 
@@ -155,8 +148,7 @@ void UIMainFrame::paint(wxPaintEvent& event)
 
 void UIMainFrame::timerFired(wxTimerEvent& event)
 {
-    for(auto& panel : panels_)
-    {
+    for (auto& panel : panels_) {
         panel->update();
     }
 }
@@ -173,8 +165,7 @@ void UIMainFrame::close(wxCloseEvent& event)
 void UIMainFrame::pageChanging(wxAuiNotebookEvent& event)
 {
     std::cout << "Page changing from " << event.GetOldSelection() << '\n';
-    if(numPushedPanels_ > 0)
-    {
+    if (numPushedPanels_ > 0) {
         PopEventHandler();
         --numPushedPanels_;
     }
@@ -185,13 +176,12 @@ void UIMainFrame::pageChanged(wxAuiNotebookEvent& event)
 {
     std::cout << "Page changed to " << event.GetSelection() << '\n';
     auto panelIt = windowToPanel_.find(panelNotebook_->GetPage(event.GetSelection()));
-    
-    if(panelIt != windowToPanel_.end())
-    {
+
+    if (panelIt != windowToPanel_.end()) {
         PushEventHandler(panelIt->second);
         ++numPushedPanels_;
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     pose_distribution.cpp
-* \author   Collin Johnson
-*
-* Definition of pose_distribution_t.
-*/
+ * \file     pose_distribution.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of pose_distribution_t.
+ */
 
 #include "core/pose_distribution.h"
 #include "core/float_comparison.h"
@@ -27,19 +27,15 @@ pose_distribution_t pose_distribution_t::compound(const pose_distribution_t& ori
     newDist.y = origin.y + (x * std::sin(origin.theta)) + (y * std::cos(origin.theta));
     newDist.theta = angle_sum(origin.theta, theta);
 
-    Matrix jThis = {
-        { std::cos(origin.theta), -std::sin(origin.theta), 0.0 },
-        { std::sin(origin.theta), std::cos(origin.theta), 0.0 },
-        { 0.0, 0.0, 1.0 }
-    };
+    Matrix jThis = {{std::cos(origin.theta), -std::sin(origin.theta), 0.0},
+                    {std::sin(origin.theta), std::cos(origin.theta), 0.0},
+                    {0.0, 0.0, 1.0}};
 
-    Matrix jOrigin = {
-        { 1.0, 0.0, (-x * std::sin(origin.theta)) - (y * std::cos(origin.theta)) },
-        { 0.0, 1.0, (x * std::cos(origin.theta)) - (y * std::sin(origin.theta)) },
-        { 0.0, 0.0, 1.0 }
-    };
+    Matrix jOrigin = {{1.0, 0.0, (-x * std::sin(origin.theta)) - (y * std::cos(origin.theta))},
+                      {0.0, 1.0, (x * std::cos(origin.theta)) - (y * std::sin(origin.theta))},
+                      {0.0, 0.0, 1.0}};
 
-    Vector mean = { newDist.x, newDist.y, newDist. theta };
+    Vector mean = {newDist.x, newDist.y, newDist.theta};
     Matrix cov(3, 3);
     cov.zeros();
 
@@ -53,9 +49,8 @@ pose_distribution_t pose_distribution_t::compound(const pose_distribution_t& ori
 
 bool operator==(const pose_distribution_t& lhs, const pose_distribution_t& rhs)
 {
-    return absolute_fuzzy_equal(lhs.x, rhs.x) &&
-           absolute_fuzzy_equal(lhs.y, rhs.y) &&
-           absolute_fuzzy_equal(lhs.theta, rhs.theta);
+    return absolute_fuzzy_equal(lhs.x, rhs.x) && absolute_fuzzy_equal(lhs.y, rhs.y)
+      && absolute_fuzzy_equal(lhs.theta, rhs.theta);
 }
 
 
@@ -64,4 +59,4 @@ bool operator!=(const pose_distribution_t& lhs, const pose_distribution_t& rhs)
     return !(lhs == rhs);
 }
 
-} // namespace vulcan
+}   // namespace vulcan

@@ -20,23 +20,21 @@ namespace ui
 class DebugUIFrame;
 
 /**
-* DebugUIApp is where the main  
-*/
+ * DebugUIApp is where the main
+ */
 class DebugUIApp : public wxApp
 {
 public:
-    
     virtual bool OnInit(void);
-    virtual int  OnExit(void);
-    
+    virtual int OnExit(void);
+
 private:
-    
     DebugUIFrame* mainFrame;
 };
 
 DECLARE_APP(DebugUIApp)
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_DEBUG_UI_APP_H
+#endif   // UI_DEBUG_DEBUG_UI_APP_H

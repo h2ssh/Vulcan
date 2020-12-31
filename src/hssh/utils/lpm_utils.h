@@ -8,13 +8,13 @@
 
 
 /**
-* \file     lpm_utils.h
-* \author   Collin Johnson
-*
-* Declaration of the following functions:
-*
-*   - change_lpm_reference_frame
-*/
+ * \file     lpm_utils.h
+ * \author   Collin Johnson
+ *
+ * Declaration of the following functions:
+ *
+ *   - change_lpm_reference_frame
+ */
 
 #ifndef HSSH_UTILS_LPM_UTILS_H
 #define HSSH_UTILS_LPM_UTILS_H
@@ -29,20 +29,20 @@ namespace hssh
 class LocalPerceptualMap;
 
 /**
-* change_lpm_reference_frame updates the provided LPM to the new reference frame. The transform
-* between the current frame and the new reference frame is provided. To change the reference
-* frame two steps are required:
-*
-*   1) Rotate the map to the new orientation (-reference.theta)
-*   2) Update the location of the bottom left corner of the map in the new reference frame.
-*
-* \param[in]    lpm                 Map to be transformed
-* \param[in]    newReference        Location of the new reference frame in the current LPM
-* \return   A new LPM representing in the new reference frame.
-*/
+ * change_lpm_reference_frame updates the provided LPM to the new reference frame. The transform
+ * between the current frame and the new reference frame is provided. To change the reference
+ * frame two steps are required:
+ *
+ *   1) Rotate the map to the new orientation (-reference.theta)
+ *   2) Update the location of the bottom left corner of the map in the new reference frame.
+ *
+ * \param[in]    lpm                 Map to be transformed
+ * \param[in]    newReference        Location of the new reference frame in the current LPM
+ * \return   A new LPM representing in the new reference frame.
+ */
 LocalPerceptualMap change_lpm_reference_frame(const LocalPerceptualMap& lpm, const pose_t& newReference);
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_LPM_UTILS_H
+#endif   // HSSH_UTILS_LPM_UTILS_H

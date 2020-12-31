@@ -8,11 +8,11 @@
 
 
 /**
-* \file     fixed.cpp
-* \author   Collin Johnson
-*
-* Definition of FixedBoundary.
-*/
+ * \file     fixed.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of FixedBoundary.
+ */
 
 #include "hssh/local_topological/boundary/fixed.h"
 
@@ -30,5 +30,5 @@ boost::optional<SmallScaleSpaceBoundary::MapBoundary> FixedBoundary::computeBoun
     return boost::none;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

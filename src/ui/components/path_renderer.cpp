@@ -8,18 +8,18 @@
 
 
 /**
-* \file     path_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of PathRenderer.
-*/
+ * \file     path_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of PathRenderer.
+ */
 
 #include "ui/components/path_renderer.h"
+#include "mpepc/grid/navigation_grid_utils.h"
 #include "ui/common/default_colors.h"
 #include "ui/common/ui_color.h"
-#include "mpepc/grid/navigation_grid_utils.h"
-#include <boost/range/iterator_range.hpp>
 #include <GL/gl.h>
+#include <boost/range/iterator_range.hpp>
 
 namespace vulcan
 {
@@ -31,8 +31,7 @@ void PathRenderer::render(const mpepc::GridPath& path, double metersPerCell)
     vertices_.clear();
     vertices_.reserve(path.size() * 4);
 
-    for(auto& pos : boost::make_iterator_range(path.beginPosition(), path.endPosition()))
-    {
+    for (auto& pos : boost::make_iterator_range(path.beginPosition(), path.endPosition())) {
         vertices_.push_back(pos.x);
         vertices_.push_back(pos.y);
 
@@ -48,7 +47,7 @@ void PathRenderer::render(const mpepc::GridPath& path, double metersPerCell)
 
     dynamic_color().set(0.8);
 
-    glDisableClientState(GL_EDGE_FLAG_ARRAY);  // get rid of the things we aren't using for efficiency sake
+    glDisableClientState(GL_EDGE_FLAG_ARRAY);   // get rid of the things we aren't using for efficiency sake
     glDisableClientState(GL_INDEX_ARRAY);
     glDisableClientState(GL_SECONDARY_COLOR_ARRAY);
     glDisableClientState(GL_FOG_COORDINATE_ARRAY);
@@ -65,5 +64,5 @@ void PathRenderer::render(const mpepc::GridPath& path, double metersPerCell)
     glEnd();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

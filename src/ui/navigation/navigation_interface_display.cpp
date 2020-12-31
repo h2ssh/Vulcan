@@ -8,21 +8,21 @@
 
 
 /**
-* \file     navigation_interface_display.cpp
-* \author   Collin Johnson
-*
-* Definition of NavigationInterfaceDisplay.
-*/
+ * \file     navigation_interface_display.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of NavigationInterfaceDisplay.
+ */
 
 #include "ui/navigation/navigation_interface_display.h"
 #include "ui/common/default_colors.h"
 #include "ui/common/gl_shapes.h"
+#include "ui/components/dynamic_object_renderer.h"
 #include "ui/components/gateways_renderer.h"
+#include "ui/components/local_area_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
 #include "ui/components/robot_renderer.h"
 #include "ui/components/robot_trajectory_renderer.h"
-#include "ui/components/occupancy_grid_renderer.h"
-#include "ui/components/dynamic_object_renderer.h"
-#include "ui/components/local_area_renderer.h"
 
 namespace vulcan
 {
@@ -33,12 +33,12 @@ const GLColor& action_color(hssh::AreaType type);
 
 
 NavigationInterfaceDisplay::NavigationInterfaceDisplay(wxWindow* parent,
-                                                   wxWindowID id,
-                                                   const wxPoint& pos,
-                                                   const wxSize& size,
-                                                   long style,
-                                                   const wxString& name,
-                                                   const wxPalette& palette)
+                                                       wxWindowID id,
+                                                       const wxPoint& pos,
+                                                       const wxSize& size,
+                                                       long style,
+                                                       const wxString& name,
+                                                       const wxPalette& palette)
 : GridBasedDisplayWidget(parent, id, pos, size, style, name, palette)
 , mode_(NavigationInterfaceMode::drive)
 , hoverAction_(0)
@@ -58,9 +58,11 @@ NavigationInterfaceDisplay::NavigationInterfaceDisplay(wxWindow* parent,
     gatewayRenderer_->setRenderColors(gatewayColor, gatewayColor, gatewayColor);
 
     // Copy the colors used from debug_ui.cfg
-    std::vector<GLColor> trajectoryColors = { GLColor(37, 212, 18, 125),
-                                              GLColor(5, 5, 184, 125),
-                                              GLColor(229, 1, 1, 125),};
+    std::vector<GLColor> trajectoryColors = {
+      GLColor(37, 212, 18, 125),
+      GLColor(5, 5, 184, 125),
+      GLColor(229, 1, 1, 125),
+    };
     interpolator_.setColors(trajectoryColors);
 }
 
@@ -73,8 +75,7 @@ NavigationInterfaceDisplay::~NavigationInterfaceDisplay(void)
 
 void NavigationInterfaceDisplay::setMode(NavigationInterfaceMode mode)
 {
-    if(mode == NavigationInterfaceMode::select)
-    {
+    if (mode == NavigationInterfaceMode::select) {
         // Center the camera on the map
         setCameraFocalPoint(map_.getGlobalCenter());
 
@@ -86,13 +87,10 @@ void NavigationInterfaceDisplay::setMode(NavigationInterfaceMode mode)
         setCameraPosition(math::SphericalPoint(relativePos.rho, relativePos.phi, 0));
     }
 
-    if(mode != NavigationInterfaceMode::drive)
-    {
+    if (mode != NavigationInterfaceMode::drive) {
         enablePanning();
         enableScrolling();
-    }
-    else
-    {
+    } else {
         disablePanning();
         disableScrolling();
     }
@@ -105,8 +103,7 @@ void NavigationInterfaceDisplay::setPose(const pose_t& pose)
 {
     pose_ = pose;
 
-    if(mode_ == NavigationInterfaceMode::drive)
-    {
+    if (mode_ == NavigationInterfaceMode::drive) {
         // Lock the position of the robot in the center of the map with the robot pointing toward the top of the screen
         setCameraFocalPoint(pose.toPoint());
         setViewRegion(15.0f, 15.0f);
@@ -119,8 +116,7 @@ void NavigationInterfaceDisplay::setPose(const pose_t& pose)
 
 void NavigationInterfaceDisplay::setLPM(const hssh::LocalPerceptualMap& lpm)
 {
-    if(lpm.getId() != map_.getId())
-    {
+    if (lpm.getId() != map_.getId()) {
         map_ = lpm;
         haveNewMap_ = true;
     }
@@ -146,8 +142,7 @@ void NavigationInterfaceDisplay::setDecisions(const std::vector<planner::Decisio
 
 void NavigationInterfaceDisplay::renderWidget(void)
 {
-    if(haveNewMap_)
-    {
+    if (haveNewMap_) {
         mapRenderer_->setGrid(map_);
         haveNewMap_ = false;
     }
@@ -157,41 +152,35 @@ void NavigationInterfaceDisplay::renderWidget(void)
     robotRenderer_->renderRobot(pose_);
     drawActions(actions_);
 
-    if(shouldShowAreas_)
-    {
+    if (shouldShowAreas_) {
         areaRenderer_->renderLocalTopoMap(topoMap_);
 
-        if(auto hoverArea = topoMap_.areaWithId(hoverArea_))
-        {
+        if (auto hoverArea = topoMap_.areaWithId(hoverArea_)) {
             areaRenderer_->renderLocalArea(*hoverArea);
         }
 
-        if(auto selectedArea = topoMap_.areaWithId(selectedArea_))
-        {
+        if (auto selectedArea = topoMap_.areaWithId(selectedArea_)) {
             areaRenderer_->renderLocalArea(*selectedArea);
         }
     }
 
-    if(auto goalArea = topoMap_.areaWithId(goalId_))
-    {
+    if (auto goalArea = topoMap_.areaWithId(goalId_)) {
         areaRenderer_->renderLocalArea(*goalArea);
     }
 
-    if(shouldShowObjects_)
-    {
+    if (shouldShowObjects_) {
         objectRenderer_->renderCollectionStateEstimates(objects_);
     }
 
-    if(shouldShowTrajectories_)
-    {
+    if (shouldShowTrajectories_) {
         // Use a fixed scale for displaying the trajectories
-        for(auto& traj : trajectories_)
-        {
+        for (auto& traj : trajectories_) {
             const float kMinTrajectoryCost = -3.0f;
-            const float kMaxTrajectoryCost =  0.5f;
-            trajectoryRenderer_->renderTrajectory(traj.poses,
-                                                  interpolator_.calculateColor((traj.expectedCost - kMinTrajectoryCost)
-                                                    / (kMaxTrajectoryCost - kMinTrajectoryCost)));
+            const float kMaxTrajectoryCost = 0.5f;
+            trajectoryRenderer_->renderTrajectory(
+              traj.poses,
+              interpolator_.calculateColor((traj.expectedCost - kMinTrajectoryCost)
+                                           / (kMaxTrajectoryCost - kMinTrajectoryCost)));
         }
     }
 }
@@ -200,23 +189,19 @@ void NavigationInterfaceDisplay::renderWidget(void)
 void NavigationInterfaceDisplay::drawActions(const std::vector<planner::Decision>& actions)
 {
     // All actions have an arrow outline
-    for(auto& a : actions)
-    {
+    for (auto& a : actions) {
         drawDecision(a, 0.66f);
     }
 
     // If there is a hover action, it will have a lightly-filled center
-    if((hoverAction_ < actions.size()) && (hoverAction_ != selectedAction_))
-    {
+    if ((hoverAction_ < actions.size()) && (hoverAction_ != selectedAction_)) {
         drawDecision(actions[hoverAction_], 0.8f);
     }
 
     // If there is a selected action, it will have a darkly-filled center
-    if(selectedAction_ < actions.size())
-    {
+    if (selectedAction_ < actions.size()) {
         drawDecision(actions[selectedAction_], 1.0f);
     }
-
 }
 
 
@@ -226,11 +211,9 @@ void NavigationInterfaceDisplay::drawDecision(const planner::Decision& decision,
 
     action_color(decision.areaType()).set(alpha);
 
-    if(decision.isAbsolute())
-    {
+    if (decision.isAbsolute()) {
         gl_draw_large_arrow_polygon_line(decision.position(), kArrowLength, decision.orientation(), 3.0f);
-    }
-    else // should be drawn relative to robot
+    } else   // should be drawn relative to robot
     {
         auto relativePos = rotate(Point<double>(0.5, 0.0), decision.orientation());
         gl_draw_large_arrow_polygon_line(pose_.toPoint() + relativePos, kArrowLength, decision.orientation(), 3.0f);
@@ -246,8 +229,7 @@ Point<int> NavigationInterfaceDisplay::convertWorldToGrid(const Point<float>& wo
 
 const GLColor& action_color(hssh::AreaType type)
 {
-    switch(type)
-    {
+    switch (type) {
     case hssh::AreaType::path_segment:
         return path_color();
 
@@ -262,5 +244,5 @@ const GLColor& action_color(hssh::AreaType type)
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

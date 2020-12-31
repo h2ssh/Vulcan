@@ -8,11 +8,11 @@
 
 
 /**
-* \file     kmeans.cpp
-* \author   Collin Johnson
-*
-* Definition of kmeans_1d_linear.
-*/
+ * \file     kmeans.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of kmeans_1d_linear.
+ */
 
 #include "math/clustering.h"
 #include <algorithm>
@@ -30,7 +30,7 @@ namespace math
 template <class Data>
 using DataIt = typename std::vector<Data>::const_iterator;
 
-template<class Data>
+template <class Data>
 struct kmeans_data_t
 {
     std::vector<int> clusterSizes;
@@ -65,7 +65,10 @@ Point<float>& operator/=(Point<float>& p, int num)
     return p;
 }
 
-inline double distance(double value, double mean) { return (value - mean) * (value - mean); }
+inline double distance(double value, double mean)
+{
+    return (value - mean) * (value - mean);
+}
 
 
 clustering_result_t kmeans_1d_linear(std::vector<double>::const_iterator begin,
@@ -74,17 +77,17 @@ clustering_result_t kmeans_1d_linear(std::vector<double>::const_iterator begin,
                                      int maxIterations)
 {
     int dataSize = std::distance(begin, end);
-    kMax = std::min(kMax, dataSize);    // can't have more clusters than data!
+    kMax = std::min(kMax, dataSize);   // can't have more clusters than data!
 
     std::vector<kmeans_data_t<double>> attemptedMeans;
-    for(int k = 1; k <= kMax; ++k)
-    {
+    for (int k = 1; k <= kMax; ++k) {
         attemptedMeans.push_back(run_kmeans<double>(begin, end, k, maxIterations, distance));
     }
 
-    auto minMeanIt = std::min_element(attemptedMeans.begin(), attemptedMeans.end(), [](const auto& lhs, const auto& rhs) {
-        return lhs.totalError < rhs.totalError;
-    });
+    auto minMeanIt =
+      std::min_element(attemptedMeans.begin(), attemptedMeans.end(), [](const auto& lhs, const auto& rhs) {
+          return lhs.totalError < rhs.totalError;
+      });
 
     // Convert the kmeans_data_t to a clustering_result_t
     clustering_result_t results;
@@ -93,10 +96,11 @@ clustering_result_t kmeans_1d_linear(std::vector<double>::const_iterator begin,
     results.assignedCluster = std::move(minMeanIt->assignments);
 
 #ifdef DEBUG_RESULTS
-    std::cout << "INFO: kmeans_1d_linear: Cluster results:\nNum clusters:" << results.numClusters << " Cluster sizes:\n";
-    for(std::size_t n = 0; n < minMeanIt->means.size(); ++n)
-    {
-        std::cout << std::setprecision(5) << std::setw(5) << minMeanIt->means[n] << "->" << results.clusterSizes[n] << '\n';
+    std::cout << "INFO: kmeans_1d_linear: Cluster results:\nNum clusters:" << results.numClusters
+              << " Cluster sizes:\n";
+    for (std::size_t n = 0; n < minMeanIt->means.size(); ++n) {
+        std::cout << std::setprecision(5) << std::setw(5) << minMeanIt->means[n] << "->" << results.clusterSizes[n]
+                  << '\n';
     }
 #endif
 
@@ -121,8 +125,7 @@ clustering_result_t kmeans_2d_fixed(std::vector<Point<float>>::const_iterator be
 
 #ifdef DEBUG_RESULTS
     std::cout << "INFO: kmeans_2d_fixed: Cluster results:\nNum clusters:" << results.numClusters << " Cluster sizes:\n";
-    for(std::size_t n = 0; n < means.means.size(); ++n)
-    {
+    for (std::size_t n = 0; n < means.means.size(); ++n) {
         std::cout << std::setprecision(5) << std::setw(5) << means.means[n] << "->" << results.clusterSizes[n] << '\n';
     }
 #endif
@@ -140,8 +143,7 @@ kmeans_data_t<Data> run_kmeans(DataIt<Data> begin, DataIt<Data> end, int k, int 
     int numChanges = 0;
     int numIterations = 0;
 
-    do
-    {
+    do {
         numChanges = assign_means(begin, end, means, dist);
         calculate_means(begin, end, means);
         ++numIterations;
@@ -150,26 +152,23 @@ kmeans_data_t<Data> run_kmeans(DataIt<Data> begin, DataIt<Data> end, int k, int 
         print_means(means);
 #endif
 
-    } while((numChanges > 0) && (numIterations <= maxIterations));
+    } while ((numChanges > 0) && (numIterations <= maxIterations));
 
     // Once complete, sum the error amongst all the means
-    for(std::size_t n = 0, size = std::distance(begin, end); n < size; ++n)
-    {
+    for (std::size_t n = 0, size = std::distance(begin, end); n < size; ++n) {
         means.totalError += dist(*(begin + n), means.means[means.assignments[n]]);
     }
 
     // If any cluster is empty, spike the error
-    for(std::size_t n = 0; n < means.clusterSizes.size(); ++n)
-    {
-        if(means.clusterSizes[n] == 0)
-        {
+    for (std::size_t n = 0; n < means.clusterSizes.size(); ++n) {
+        if (means.clusterSizes[n] == 0) {
             means.totalError += 1000000.0;
         }
     }
 
 #ifdef DEBUG_KMEANS
     std::cout << "INFO: kmeans_1d: k:" << k << " Error:" << means.totalError << " Num iterations:" << numIterations
-        << '\n';
+              << '\n';
     print_means(means);
 #endif
 
@@ -189,8 +188,7 @@ void initialize_means(DataIt<Data> begin, DataIt<Data> end, int k, kmeans_data_t
     // Assign values taken at a uniform increment through the data
     int increment = std::distance(begin, end) / k;
 
-    for(int n = 0; n < k; ++n)
-    {
+    for (int n = 0; n < k; ++n) {
         means.means[n] = *(begin + (increment * n));
     }
 }
@@ -200,15 +198,12 @@ void calculate_means(DataIt<Data> begin, DataIt<Data> end, kmeans_data_t<Data>& 
 {
     std::fill(means.means.begin(), means.means.end(), Data{});
 
-    for(std::size_t n = 0, size = std::distance(begin, end); n < size; ++n)
-    {
+    for (std::size_t n = 0, size = std::distance(begin, end); n < size; ++n) {
         means.means[means.assignments[n]] += *(begin + n);
     }
 
-    for(std::size_t n = 0; n < means.means.size(); ++n)
-    {
-        if(means.clusterSizes[n] > 0)
-        {
+    for (std::size_t n = 0; n < means.means.size(); ++n) {
+        if (means.clusterSizes[n] > 0) {
             means.means[n] /= means.clusterSizes[n];
         }
     }
@@ -222,11 +217,9 @@ int assign_means(DataIt<Data> begin, DataIt<Data> end, kmeans_data_t<Data>& mean
 
     int numChanged = 0;
 
-    for(std::size_t n = 0, size = std::distance(begin, end); n < size; ++n)
-    {
+    for (std::size_t n = 0, size = std::distance(begin, end); n < size; ++n) {
         int newAssignment = closest_mean(*(begin + n), means, dist);
-        if(newAssignment != means.assignments[n])
-        {
+        if (newAssignment != means.assignments[n]) {
             means.assignments[n] = newAssignment;
             ++numChanged;
         }
@@ -252,11 +245,10 @@ int closest_mean(Data data, const kmeans_data_t<Data>& means, DistFunc dist)
 template <class Data>
 void print_means(const kmeans_data_t<Data>& means)
 {
-    for(std::size_t n = 0; n < means.means.size(); ++n)
-    {
+    for (std::size_t n = 0; n < means.means.size(); ++n) {
         std::cout << std::setprecision(5) << std::setw(5) << means.means[n] << "->" << means.clusterSizes[n] << '\n';
     }
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

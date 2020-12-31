@@ -8,13 +8,13 @@
 
 
 /**
-* \file     local_area_tasks.cpp
-* \author   Collin Johnson
-* 
-* Definition of utility functions for dealing with LocalAreas for planning:
-* 
-*   - create_navigation_task_for_local_area
-*/
+ * \file     local_area_tasks.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of utility functions for dealing with LocalAreas for planning:
+ *
+ *   - create_navigation_task_for_local_area
+ */
 
 #include "planner/utils/local_area_tasks.h"
 #include "hssh/local_topological/area.h"
@@ -33,18 +33,16 @@ std::unique_ptr<mpepc::NavigationTask> create_navigation_task_for_local_area(con
     std::vector<position_t> viablePositions;
     viablePositions.reserve(targetArea.extent().size());
     std::copy(targetArea.extent().begin(), targetArea.extent().end(), std::back_inserter(viablePositions));
-    
+
     // Sort in ascending distance from the center of the area, thus preferring to be as close as possible to
     // the middle
-    std::sort(viablePositions.begin(),
-              viablePositions.end(),
-              [&targetArea](position_t lhs, position_t rhs) {
-                  return distance_between_points(lhs, targetArea.center().toPoint())
-                    < distance_between_points(rhs, targetArea.center().toPoint());
-              });
-    
+    std::sort(viablePositions.begin(), viablePositions.end(), [&targetArea](position_t lhs, position_t rhs) {
+        return distance_between_points(lhs, targetArea.center().toPoint())
+          < distance_between_points(rhs, targetArea.center().toPoint());
+    });
+
     return std::unique_ptr<mpepc::NavigationTask>(new mpepc::NavigationTask(viablePositions));
 }
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan

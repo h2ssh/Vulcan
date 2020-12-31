@@ -8,10 +8,10 @@
 
 
 #include "ui/components/grid_based_display_widget.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include "core/point.h"
 #include "ui/common/gl_utilities.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 
 namespace vulcan
@@ -30,9 +30,9 @@ GridBasedDisplayWidget::GridBasedDisplayWidget(wxWindow* parent,
                                                long style,
                                                const wxString& name,
                                                const wxPalette& palette)
-    : OpenGLWidget(parent, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name, palette)
-    , statusBar(0)
-    , leftWasDownOnLastEvent(false)
+: OpenGLWidget(parent, id, pos, size, style | wxFULL_REPAINT_ON_RESIZE, name, palette)
+, statusBar(0)
+, leftWasDownOnLastEvent(false)
 {
     pushMouseHandler(this);
 }
@@ -52,7 +52,7 @@ void GridBasedDisplayWidget::setStatusBar(wxStatusBar* status)
 
 void GridBasedDisplayWidget::setGridDimensions(float width, float height)
 {
-    displayedGridWidth  = width;
+    displayedGridWidth = width;
     displayedGridHeight = height;
 
     setMaxViewDimensions(width, height);
@@ -73,8 +73,7 @@ void GridBasedDisplayWidget::disableScrolling(void)
 
 GLEventStatus GridBasedDisplayWidget::handleMouseMoved(const GLMouseEvent& event)
 {
-    if(statusBar)
-    {
+    if (statusBar) {
         displayMousePositionOnStatusBar(event);
     }
 
@@ -86,12 +85,12 @@ GLEventStatus GridBasedDisplayWidget::handleMouseMoved(const GLMouseEvent& event
 // Various event handlers
 void GridBasedDisplayWidget::displayMousePositionOnStatusBar(const GLMouseEvent& event)
 {
-    auto cell       = convertWorldToGrid(event.glCoords);
+    auto cell = convertWorldToGrid(event.glCoords);
     wxString status;
     status.Printf(wxT("Global:(%.2f,%.2f)   Cell:(%i,%i) "), event.glCoords.x, event.glCoords.y, cell.x, cell.y);
     status.Append(printCellInformation(cell));
     statusBar->SetStatusText(status);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

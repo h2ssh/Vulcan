@@ -8,19 +8,19 @@
 
 
 /**
-* @file
-* @author   Collin Johnson
-*
-* Definition of ObjectIntentionRenderer.
-*/
+ * @file
+ * @author   Collin Johnson
+ *
+ * Definition of ObjectIntentionRenderer.
+ */
 
 #include "ui/components/object_intention_renderer.h"
-#include "ui/common/color_generator.h"
-#include "ui/common/gl_shapes.h"
-#include "ui/common/ui_color.h"
 #include "tracker/dynamic_object_visitor.h"
 #include "tracker/evaluation/intention_evaluator.h"
 #include "tracker/objects/rigid.h"
+#include "ui/common/color_generator.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/ui_color.h"
 #include <GL/gl.h>
 
 namespace vulcan
@@ -52,16 +52,14 @@ struct GoalRenderer : boost::static_visitor<>
 };
 
 
-ObjectIntentionRenderer::ObjectIntentionRenderer(double distPerPose)
-: distPerPose_(distPerPose)
+ObjectIntentionRenderer::ObjectIntentionRenderer(double distPerPose) : distPerPose_(distPerPose)
 {
 }
 
 
 void ObjectIntentionRenderer::renderIntentions(const tracker::AreaIntentionEstimates& intentions)
 {
-    if(intentions.empty())
-    {
+    if (intentions.empty()) {
         return;
     }
 
@@ -72,8 +70,7 @@ void ObjectIntentionRenderer::renderIntentions(const tracker::AreaIntentionEstim
     black.set();
     glLineWidth(2.0f);
     glBegin(GL_LINE_STRIP);
-    for(auto& est : intentions)
-    {
+    for (auto& est : intentions) {
         glVertex2f(est.objPose.x, est.objPose.y);
     }
     glEnd();
@@ -81,21 +78,18 @@ void ObjectIntentionRenderer::renderIntentions(const tracker::AreaIntentionEstim
     // Draw the destinations
     auto dests = intentions.destinations();
     GoalRenderer renderer;
-    for(std::size_t n = 0; n < dests.size(); ++n)
-    {
+    for (std::size_t n = 0; n < dests.size(); ++n) {
         renderer.color = colors[n];
         dests[n].apply_visitor(renderer);
     }
 
     double distToNext = 0.0;
     pose_t lastPose = intentions.begin()->objPose;
-    for(auto& est : intentions)
-    {
+    for (auto& est : intentions) {
         distToNext -= distance_between_points(lastPose.toPoint(), est.objPose.toPoint());
         lastPose = est.objPose;
 
-        if(distToNext < 0.0)
-        {
+        if (distToNext < 0.0) {
             colors[est.maxProbIndex].set();
             gl_draw_filled_triangle(est.objPose.toPoint(), 0.25, 0.45, est.objPose.theta);
 
@@ -105,5 +99,5 @@ void ObjectIntentionRenderer::renderIntentions(const tracker::AreaIntentionEstim
     glEnd();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

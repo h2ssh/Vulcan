@@ -8,11 +8,11 @@
 
 
 /**
-* \file     topological_map.cpp
-* \author   Collin Johnson
-*
-* Definition of TopologicalMap.
-*/
+ * \file     topological_map.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TopologicalMap.
+ */
 
 #include "hssh/global_topological/topological_map.h"
 #include "hssh/global_topological/chi.h"
@@ -34,15 +34,15 @@ namespace hssh
 bool exited_through_same_gateway(const TopologicalVisit& visit);
 
 
-std::pair<TopologicalMap::Ptr, GlobalLocation> TopologicalMap::CreateTopologicalMap(
-    const TopologicalVisit& initialVisit)
+std::pair<TopologicalMap::Ptr, GlobalLocation>
+  TopologicalMap::CreateTopologicalMap(const TopologicalVisit& initialVisit)
 {
     Ptr map(new TopologicalMap(next_id()));
     GlobalLocation initialLocation;
     initialLocation.areaId = kFrontierId;
     initialLocation.areaType = initialVisit.localArea()->type();
     auto location = map->addConcreteArea(initialLocation, initialVisit);
-    location.pathDirection = TopoDirection::plus;       // just assume moving in the plus direction
+    location.pathDirection = TopoDirection::plus;   // just assume moving in the plus direction
 
     return std::make_pair(map, location);
 }
@@ -98,8 +98,7 @@ std::pair<TopologicalMap::Ptr, GlobalLocation> TopologicalMap::addArea(const Glo
     // Replace the previous saved transition with the updated transition that includes the correct area on the
     //  other side.
 
-    if(location.areaId != kFrontierId)
-    {
+    if (location.areaId != kFrontierId) {
         return std::make_pair(nullptr, GlobalLocation());
     }
 
@@ -129,8 +128,7 @@ std::pair<TopologicalMap::Ptr, GlobalLocation> TopologicalMap::closeLoop(const G
     // Remove any existing frontier transitions from the replaced transitions.
     // Update information for the newly entered area.
 
-    if(location.areaId != kFrontierId)
-    {
+    if (location.areaId != kFrontierId) {
         return std::make_pair(nullptr, GlobalLocation());
     }
 
@@ -156,7 +154,8 @@ std::pair<TopologicalMap::Ptr, GlobalLocation> TopologicalMap::closeLoop(const G
     numErased += utils::erase_remove(newMap->frontiers_, location.entryTransition);
     numErased += utils::erase_remove(newMap->frontiers_, loopTrans);
 
-    std::cout << "Creating loop between " << location.entryTransition << " and " << loopTrans << " Erased:" << numErased << '\n';
+    std::cout << "Creating loop between " << location.entryTransition << " and " << loopTrans << " Erased:" << numErased
+              << '\n';
 
     auto newLocation = newMap->locationInMap(loopArea, newTransition);
     newMap->incorporateVisit(newLocation, visit);
@@ -171,8 +170,7 @@ TopologicalMap::Ptr TopologicalMap::revisitArea(const GlobalLocation& location, 
     // Create a copy of the map.
     //
 
-    if(!hasArea(location.areaId))
-    {
+    if (!hasArea(location.areaId)) {
         return nullptr;
     }
 
@@ -187,17 +185,13 @@ TopologicalMap::Ptr TopologicalMap::revisitArea(const GlobalLocation& location, 
 void TopologicalMap::incorporateVisit(const GlobalLocation& location, const TopologicalVisit& visit)
 {
     // If the areas aren't the same type, then there's nothing to be done.
-    if(location.areaType != visit.localArea()->type())
-    {
+    if (location.areaType != visit.localArea()->type()) {
         return;
     }
 
-    if(location.areaType == AreaType::path_segment)
-    {
+    if (location.areaType == AreaType::path_segment) {
         updatePathSegment(location, visit);
-    }
-    else
-    {
+    } else {
         updatePlace(location, visit);
     }
 }
@@ -235,8 +229,7 @@ GlobalLocation TopologicalMap::addConcreteArea(const GlobalLocation& location, c
     auto newLocation = location;
     newLocation.areaId = newArea.id();
 
-    if(shouldUpdateEntry)
-    {
+    if (shouldUpdateEntry) {
         newLocation.entryTransition = newTransition;
     }
 
@@ -245,44 +238,33 @@ GlobalLocation TopologicalMap::addConcreteArea(const GlobalLocation& location, c
 #endif
 
     // Convert the LocalArea into the appropriate type of global area -- either GlobalPathSegment or GlobalPlace.
-    if(location.areaType == AreaType::path_segment)
-    {
-        bool isExplored = location.entryTransition.valid()
-            && !exited_through_same_gateway(visit);
+    if (location.areaType == AreaType::path_segment) {
+        bool isExplored = location.entryTransition.valid() && !exited_through_same_gateway(visit);
         auto newSegment = create_global_path_segment_from_local_path_segment(newArea,
-                                                               visit.entryEvent().transitionGateway(),
-                                                               *visit.localArea(),
-                                                               isExplored);
+                                                                             visit.entryEvent().transitionGateway(),
+                                                                             *visit.localArea(),
+                                                                             isExplored);
         // Need to replace the entry transition from the fresh area with the entry transition linking with the
         // existing map
-        if(shouldUpdateEntry)
-        {
+        if (shouldUpdateEntry) {
             newSegment.first.replaceTransition(newSegment.second, newTransition);
         }
         addPathSegmentFrontiers(newSegment.first);
         segments_[newArea.id()] = std::make_shared<GlobalPathSegment>(newSegment.first);
 
         // For the path, need to update the path direction
-        if(newSegment.first.minusTransition() == newTransition)
-        {
-            newLocation.pathDirection = TopoDirection::plus;    // entered at minus so moving in plus
-        }
-        else if(newSegment.first.plusTransition() == newTransition)
-        {
+        if (newSegment.first.minusTransition() == newTransition) {
+            newLocation.pathDirection = TopoDirection::plus;   // entered at minus so moving in plus
+        } else if (newSegment.first.plusTransition() == newTransition) {
             newLocation.pathDirection = TopoDirection::minus;   // entered at plus so moving in minus
+        } else {
+            newLocation.pathDirection = TopoDirection::null;   // entered from a sequence, so no direction yet
         }
-        else
-        {
-            newLocation.pathDirection = TopoDirection::null;    // entered from a sequence, so no direction yet
-        }
-    }
-    else // if(location.areaType == AreaType::decision_point || location.areaType == AreaType::destination)
+    } else   // if(location.areaType == AreaType::decision_point || location.areaType == AreaType::destination)
     {
-        auto newPlace = create_global_place_from_local_place(newArea,
-                                                 visit.entryEvent().transitionGateway(),
-                                                 *visit.localArea());
-        if(shouldUpdateEntry)
-        {
+        auto newPlace =
+          create_global_place_from_local_place(newArea, visit.entryEvent().transitionGateway(), *visit.localArea());
+        if (shouldUpdateEntry) {
             newPlace.first.replaceTransition(newPlace.second, newTransition);
         }
         addPlaceFrontiers(newPlace.first);
@@ -306,28 +288,22 @@ GlobalLocation TopologicalMap::addConcreteArea(const GlobalLocation& location, c
 
 void TopologicalMap::addPathSegmentFrontiers(const GlobalPathSegment& segment)
 {
-    if(segment.minusTransition().isFrontier())
-    {
+    if (segment.minusTransition().isFrontier()) {
         frontiers_.push_back(segment.minusTransition());
     }
 
-    if(segment.plusTransition().isFrontier())
-    {
+    if (segment.plusTransition().isFrontier()) {
         frontiers_.push_back(segment.plusTransition());
     }
 
-    for(auto& t : segment.leftSequence())
-    {
-        if(t.isFrontier())
-        {
+    for (auto& t : segment.leftSequence()) {
+        if (t.isFrontier()) {
             frontiers_.push_back(t);
         }
     }
 
-    for(auto& t : segment.rightSequence())
-    {
-        if(t.isFrontier())
-        {
+    for (auto& t : segment.rightSequence()) {
+        if (t.isFrontier()) {
             frontiers_.push_back(t);
         }
     }
@@ -337,10 +313,8 @@ void TopologicalMap::addPathSegmentFrontiers(const GlobalPathSegment& segment)
 void TopologicalMap::addPlaceFrontiers(const GlobalPlace& place)
 {
     // Iterate through all transitions in the place. If the transition is a frontier, add it to the set of frontiers
-    for(auto& t : place.cycle())
-    {
-        if(t.isFrontier())
-        {
+    for (auto& t : place.cycle()) {
+        if (t.isFrontier()) {
             frontiers_.push_back(t);
         }
     }
@@ -353,33 +327,30 @@ void TopologicalMap::updatePathSegment(const GlobalLocation& location, const Top
     auto exitEvent = visit.exitEvent();
 
     // Nothing to do if the segment doesn't exist or there wasn't actual an exit that occurred
-    if(!segment || !exitEvent)
-    {
+    if (!segment || !exitEvent) {
         return;
     }
 
     // Check if we exited from the same transition that we entered from. If so, then don't update the path segment
     // TODO: The logic can be smarter than this to determine if the new visit produced new information not included
     // in prior visits
-    if(exited_through_same_gateway(visit))
-    {
+    if (exited_through_same_gateway(visit)) {
         return;
     }
 
     const LocalPathSegment* localSegment = static_cast<const LocalPathSegment*>(visit.localArea());
     auto newSegment = create_global_path_segment_from_local_path_segment(
-        current_area(location),
-        visit.entryEvent().transitionGateway(),
-        *localSegment,
-        true);  // would only be getting here if we have a valid location and didn't loop on self, so explored
+      current_area(location),
+      visit.entryEvent().transitionGateway(),
+      *localSegment,
+      true);   // would only be getting here if we have a valid location and didn't loop on self, so explored
 
     // Otherwise, get the lambda from the path segment and add it to the stored lambdas
     Lambda lambda = localSegment->lambda();
     // Lambda runs plus to minus in local frame, so might need to invert measurement if plus and minus are reversed
     // in the new path -- must update lambda before adjtusing the segment transitions
-    if((segment->plusTransition() == location.entryTransition)
-        != (newSegment.first.plusTransition() == newSegment.second))
-    {
+    if ((segment->plusTransition() == location.entryTransition)
+        != (newSegment.first.plusTransition() == newSegment.second)) {
         lambda = lambda.invert();
     }
 
@@ -387,15 +358,11 @@ void TopologicalMap::updatePathSegment(const GlobalLocation& location, const Top
 
     // Create the new segment
     // If a frontier segment, then need to replace the frontier end with a non-frontier from the updated segment
-    if(segment->isFrontier() && location.entryTransition.valid())
-    {
+    if (segment->isFrontier() && location.entryTransition.valid()) {
         auto newEnd = opposite_end(newSegment.first, newSegment.second);
         auto oldEnd = opposite_end(*segment, location.entryTransition);
 
-        std::replace(frontiers_.begin(),
-                     frontiers_.end(),
-                     oldEnd,
-                     newEnd);
+        std::replace(frontiers_.begin(), frontiers_.end(), oldEnd, newEnd);
 
         // Swap out the transition to whatever new end has been detected
         segment->replaceTransition(oldEnd, newEnd);
@@ -403,8 +370,7 @@ void TopologicalMap::updatePathSegment(const GlobalLocation& location, const Top
     // Otherwise if not a valid entry, then we're in the situation where potentially both end are frontiers,
     // so just replace them because this either has no effect, since we didn't drive through either end, so they
     // won't have been otherwise updated, or it makes them non-frontier, which is needed for successful mapping
-    else if(!location.entryTransition.valid())
-    {
+    else if (!location.entryTransition.valid()) {
         std::replace(frontiers_.begin(),
                      frontiers_.end(),
                      segment->plusTransition(),
@@ -416,7 +382,7 @@ void TopologicalMap::updatePathSegment(const GlobalLocation& location, const Top
 
         segment->replaceTransition(segment->plusTransition(), newSegment.first.plusTransition());
         segment->replaceTransition(segment->minusTransition(), newSegment.first.minusTransition());
-        assert(segment->isFrontier());  // only went out one side, so must still be a frontier
+        assert(segment->isFrontier());   // only went out one side, so must still be a frontier
     }
 }
 
@@ -425,12 +391,11 @@ void TopologicalMap::updatePlace(const GlobalLocation& location, const Topologic
 {
     auto placeIt = places_.find(location.areaId);
 
-    if(placeIt != places_.end())
-    {
+    if (placeIt != places_.end()) {
         placeIt->second->changeMetricId(placeIt->second->metricPlaceId(), visit.localArea()->id());
     }
-//     PRINT_PRETTY_STUB();
-//     std::cout << "TODO: Handle incorporating data from multiple visits into a GlobalPlace.\n";
+    //     PRINT_PRETTY_STUB();
+    //     std::cout << "TODO: Handle incorporating data from multiple visits into a GlobalPlace.\n";
 }
 
 
@@ -439,13 +404,11 @@ void TopologicalMap::updateTransition(const GlobalTransition& oldTrans, const Gl
     // For each area associated with the old transition, if the area is a non-frontier, then replace it with
     // the new transition.
 
-    if(hasArea(oldTrans.plusArea().id()))
-    {
+    if (hasArea(oldTrans.plusArea().id())) {
         replaceTransitionForArea(oldTrans.plusArea(), oldTrans, newTrans);
     }
 
-    if(hasArea(oldTrans.minusArea().id()))
-    {
+    if (hasArea(oldTrans.minusArea().id())) {
         replaceTransitionForArea(oldTrans.minusArea(), oldTrans, newTrans);
     }
 }
@@ -454,10 +417,9 @@ void TopologicalMap::updateTransition(const GlobalTransition& oldTrans, const Gl
 GlobalLocation TopologicalMap::locationInMap(const GlobalArea& area, const GlobalTransition& entry) const
 {
     // If on a path segment, then need to get the specific segment location
-    if(area.type() == AreaType::path_segment)
-    {
+    if (area.type() == AreaType::path_segment) {
         const GlobalPathSegment* segment = getPathSegment(area.id());
-        assert(segment);        // the map is constructed in invalid way if a transition leads to an undefined area
+        assert(segment);   // the map is constructed in invalid way if a transition leads to an undefined area
         return segment->locationOnSegment(entry);
     }
     // Otherwise, it is just a simple location with entry + area
@@ -469,14 +431,11 @@ bool TopologicalMap::replaceTransitionForArea(const GlobalArea& area,
                                               const GlobalTransition& oldTrans,
                                               const GlobalTransition& newTrans)
 {
-    if(area.type() == AreaType::path_segment)
-    {
+    if (area.type() == AreaType::path_segment) {
         auto segment = getModifiableSegment(area.id());
         assert(segment);
         return segment->replaceTransition(oldTrans, newTrans);
-    }
-    else
-    {
+    } else {
         auto place = getModifiablePlace(area.id());
         assert(place);
         return place->replaceTransition(oldTrans, newTrans);
@@ -485,20 +444,18 @@ bool TopologicalMap::replaceTransitionForArea(const GlobalArea& area,
 
 
 pose_distribution_t TopologicalMap::estimateReferenceFrame(const GlobalArea& exitedArea,
-                                                                  const GlobalTransition& exitTransition)
+                                                           const GlobalTransition& exitTransition)
 {
     // If the exitedArea is a path segment, then use the lambda value from the other end to get the estimated location
     // of this area. If there's a frontier at the other end, then it'll just assign 0,0,0 to start, but that's fine.
     // This estimate serves only to make the optimization more efficient by providing a good guess for new areas
 
     // If there's no exited area, then must be the initial area, so it has the default pose
-    if((exitedArea.id() == kInvalidId) || (exitedArea.id() == kFrontierId))
-    {
+    if ((exitedArea.id() == kInvalidId) || (exitedArea.id() == kFrontierId)) {
         return pose_distribution_t(0.0f, 0.0f, 0.0f, INFINITY, INFINITY, INFINITY);
     }
     // If a place was exited, then just use the previous reference frame as the guess
-    if(exitedArea.type() != AreaType::path_segment)
-    {
+    if (exitedArea.type() != AreaType::path_segment) {
         return referenceFrame(exitedArea.id());
     }
 
@@ -508,22 +465,19 @@ pose_distribution_t TopologicalMap::estimateReferenceFrame(const GlobalArea& exi
 
     GlobalArea otherArea;
 
-    if(segment->plusTransition() == exitTransition)
-    {
+    if (segment->plusTransition() == exitTransition) {
         otherArea = segment->minusTransition().otherArea(exitedArea);
 
         // Lambda is the transform from plus to minus. If we entered from the minus area, then the lambda needs
         // to be inverted to compute the relative motion along the path segment
         lambda = lambda.invert();
-    }
-    else // if(segment->minusTransition() == exitTransition)
+    } else   // if(segment->minusTransition() == exitTransition)
     {
         otherArea = segment->plusTransition().otherArea(exitedArea);
     }
 
     // If there isn't an other place, then again just assume at the origin
-    if((otherArea.id() == kInvalidId) || (otherArea.id() == kFrontierId))
-    {
+    if ((otherArea.id() == kInvalidId) || (otherArea.id() == kFrontierId)) {
         return pose_distribution_t(0.0f, 0.0f, 0.0f, INFINITY, INFINITY, INFINITY);
     }
 
@@ -549,13 +503,10 @@ GlobalPathSegment* TopologicalMap::getModifiableSegment(Id id)
 
 void TopologicalMap::duplicateArea(GlobalArea area)
 {
-    if(is_place_type(area.type()))
-    {
+    if (is_place_type(area.type())) {
         auto newPlace = std::make_shared<GlobalPlace>(*getPlace(area.id()));
         places_[area.id()] = newPlace;
-    }
-    else if(area.type() == AreaType::path_segment)
-    {
+    } else if (area.type() == AreaType::path_segment) {
         auto newSegment = std::make_shared<GlobalPathSegment>(*getPathSegment(area.id()));
         segments_[area.id()] = newSegment;
     }
@@ -566,8 +517,7 @@ bool exited_through_same_gateway(const TopologicalVisit& visit)
 {
     auto exitEvent = visit.exitEvent();
 
-    if(!exitEvent)
-    {
+    if (!exitEvent) {
         return false;
     }
 
@@ -576,5 +526,5 @@ bool exited_through_same_gateway(const TopologicalVisit& visit)
     return entryGwy && exitGwy && entryGwy->isSimilarTo(*exitGwy);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

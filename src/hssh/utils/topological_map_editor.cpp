@@ -8,11 +8,11 @@
 
 
 /**
-* \file     topological_map_editor.cpp
-* \author   Collin Johnson
-*
-* Definition of TopologicalMapEditor.
-*/
+ * \file     topological_map_editor.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TopologicalMapEditor.
+ */
 
 #include "hssh/utils/topological_map_editor.h"
 
@@ -22,8 +22,8 @@ namespace hssh
 {
 
 TopologicalMapEditor::TopologicalMapEditor(MetricMapCache& manager, size_t undoSteps)
-                                    : manager(manager)
-                                    , maxHistorySize(undoSteps)
+: manager(manager)
+, maxHistorySize(undoSteps)
 {
 }
 
@@ -36,7 +36,6 @@ bool TopologicalMapEditor::loadInitialMap(const std::string& filename)
 
 void TopologicalMapEditor::createNewMap(void)
 {
-
 }
 
 
@@ -48,14 +47,12 @@ bool TopologicalMapEditor::saveMap(const std::string& filename)
 
 uint32_t TopologicalMapEditor::addPlace(const LocalPlace& place, const pose_t& transform)
 {
-
 }
 
 
 bool TopologicalMapEditor::deletePlace(uint32_t id)
 {
-    if(unattachedPlaces.find(id) != unattachedPlaces.end())
-    {
+    if (unattachedPlaces.find(id) != unattachedPlaces.end()) {
         unattachedPlaces.erase(id);
         return true;
     }
@@ -64,34 +61,32 @@ bool TopologicalMapEditor::deletePlace(uint32_t id)
 }
 
 
-bool TopologicalMapEditor::connectPlaces(uint32_t placeId, uint32_t otherPlaceId, uint32_t fragmentId, uint32_t otherFragmentId)
+bool TopologicalMapEditor::connectPlaces(uint32_t placeId,
+                                         uint32_t otherPlaceId,
+                                         uint32_t fragmentId,
+                                         uint32_t otherFragmentId)
 {
-
 }
 
 
 bool TopologicalMapEditor::undo(void)
 {
-
 }
 
 
 bool TopologicalMapEditor::redo(void)
 {
-
 }
 
 
 const std::vector<GlobalPlace>& TopologicalMapEditor::getPlaces(void) const
 {
-
 }
 
 
 const std::vector<GlobalPath>& TopologicalMapEditor::getPaths(void) const
 {
-
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

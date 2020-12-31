@@ -7,8 +7,8 @@
 */
 
 
-#include <cmath>
 #include "ui/common/gl_texture_helpers.h"
+#include <cmath>
 
 namespace vulcan
 {
@@ -17,27 +17,31 @@ namespace ui
 
 uint8_t* create_texture(uint16_t width, uint16_t height, uint8_t bytesPerTexel)
 {
-    uint16_t textureWidth  = round_to_power_of_two(width);
+    uint16_t textureWidth = round_to_power_of_two(width);
     uint16_t textureHeight = round_to_power_of_two(height);
-    
+
     return new uint8_t[textureWidth * textureHeight * bytesPerTexel];
 }
 
 
 void free_textures(uint8_t** textures, uint8_t numTextures)
 {
-    for(int n = numTextures; --n >= 0;)
-    {
+    for (int n = numTextures; --n >= 0;) {
         delete textures[n];
         textures[n] = 0;
     }
 }
 
 
-void initialize_texture(GLuint textureName, uint8_t* data, uint16_t width, uint16_t height, GLint internalFormat, GLenum displayFormat)
+void initialize_texture(GLuint textureName,
+                        uint8_t* data,
+                        uint16_t width,
+                        uint16_t height,
+                        GLint internalFormat,
+                        GLenum displayFormat)
 {
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    
+
     glBindTexture(GL_TEXTURE_2D, textureName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -47,10 +51,15 @@ void initialize_texture(GLuint textureName, uint8_t* data, uint16_t width, uint1
 }
 
 
-void initialize_texture_16(GLuint textureName, uint16_t* data, uint16_t width, uint16_t height, GLint internalFormat, GLenum displayFormat)
+void initialize_texture_16(GLuint textureName,
+                           uint16_t* data,
+                           uint16_t width,
+                           uint16_t height,
+                           GLint internalFormat,
+                           GLenum displayFormat)
 {
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    
+
     glBindTexture(GL_TEXTURE_2D, textureName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -90,106 +99,126 @@ void set_sub_texture_16(uint16_t* texture, uint16_t width, uint16_t height, GLin
 }
 
 
-void draw_one_texture_on_rectangle(float bottomLeftX, float bottomLeftY, float rectWidth, float rectHeight, float textureWidth, float textureHeight)
+void draw_one_texture_on_rectangle(float bottomLeftX,
+                                   float bottomLeftY,
+                                   float rectWidth,
+                                   float rectHeight,
+                                   float textureWidth,
+                                   float textureHeight)
 {
-    glBegin(GL_QUADS);  // grid is a series of quadrilaterals
-    
+    glBegin(GL_QUADS);   // grid is a series of quadrilaterals
+
     glTexCoord2f(0.0, 0.0);
     glVertex2f(bottomLeftX, bottomLeftY);
-    
+
     glTexCoord2f(textureWidth, 0.0);
-    glVertex2f(bottomLeftX+rectWidth, bottomLeftY);
-    
+    glVertex2f(bottomLeftX + rectWidth, bottomLeftY);
+
     glTexCoord2f(textureWidth, textureHeight);
-    glVertex2f(bottomLeftX+rectWidth, bottomLeftY+rectHeight);
-    
+    glVertex2f(bottomLeftX + rectWidth, bottomLeftY + rectHeight);
+
     glTexCoord2f(0.0, textureHeight);
-    glVertex2f(bottomLeftX, bottomLeftY+rectHeight);
-    
+    glVertex2f(bottomLeftX, bottomLeftY + rectHeight);
+
     glEnd();
 }
 
 
-void draw_two_textures_on_rectangle(float bottomLeftX, float bottomLeftY, float rectWidth, float rectHeight, float textureWidth, float textureHeight)
+void draw_two_textures_on_rectangle(float bottomLeftX,
+                                    float bottomLeftY,
+                                    float rectWidth,
+                                    float rectHeight,
+                                    float textureWidth,
+                                    float textureHeight)
 {
-    glBegin(GL_QUADS);  // grid is a series of quadrilaterals
-    
+    glBegin(GL_QUADS);   // grid is a series of quadrilaterals
+
     glMultiTexCoord2f(GL_TEXTURE0, 0.0, 0.0);
     glMultiTexCoord2f(GL_TEXTURE1, 0.0, 0.0);
     glVertex2f(bottomLeftX, bottomLeftY);
-    
+
     glMultiTexCoord2f(GL_TEXTURE0, textureWidth, 0.0);
     glMultiTexCoord2f(GL_TEXTURE1, textureWidth, 0.0);
-    glVertex2f(bottomLeftX+rectWidth, bottomLeftY);
-    
+    glVertex2f(bottomLeftX + rectWidth, bottomLeftY);
+
     glMultiTexCoord2f(GL_TEXTURE0, textureWidth, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE1, textureWidth, textureHeight);
-    glVertex2f(bottomLeftX+rectWidth, bottomLeftY+rectHeight);
-    
+    glVertex2f(bottomLeftX + rectWidth, bottomLeftY + rectHeight);
+
     glMultiTexCoord2f(GL_TEXTURE0, 0.0, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE1, 0.0, textureHeight);
-    glVertex2f(bottomLeftX, bottomLeftY+rectHeight);
-    
+    glVertex2f(bottomLeftX, bottomLeftY + rectHeight);
+
     glEnd();
 }
 
 
-void draw_three_textures_on_rectangle(float bottomLeftX, float bottomLeftY, float rectWidth, float rectHeight, float textureWidth, float textureHeight)
+void draw_three_textures_on_rectangle(float bottomLeftX,
+                                      float bottomLeftY,
+                                      float rectWidth,
+                                      float rectHeight,
+                                      float textureWidth,
+                                      float textureHeight)
 {
-    glBegin(GL_QUADS);  // grid is a series of quadrilaterals
-    
+    glBegin(GL_QUADS);   // grid is a series of quadrilaterals
+
     glMultiTexCoord2f(GL_TEXTURE0, 0.0, 0.0);
     glMultiTexCoord2f(GL_TEXTURE1, 0.0, 0.0);
     glMultiTexCoord2f(GL_TEXTURE2, 0.0, 0.0);
     glVertex2f(bottomLeftX, bottomLeftY);
-    
+
     glMultiTexCoord2f(GL_TEXTURE0, textureWidth, 0.0);
     glMultiTexCoord2f(GL_TEXTURE1, textureWidth, 0.0);
     glMultiTexCoord2f(GL_TEXTURE2, textureWidth, 0.0);
-    glVertex2f(bottomLeftX+rectWidth, bottomLeftY);
-    
+    glVertex2f(bottomLeftX + rectWidth, bottomLeftY);
+
     glMultiTexCoord2f(GL_TEXTURE0, textureWidth, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE1, textureWidth, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE2, textureWidth, textureHeight);
-    glVertex2f(bottomLeftX+rectWidth, bottomLeftY+rectHeight);
-    
+    glVertex2f(bottomLeftX + rectWidth, bottomLeftY + rectHeight);
+
     glMultiTexCoord2f(GL_TEXTURE0, 0.0, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE1, 0.0, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE2, 0.0, textureHeight);
-    glVertex2f(bottomLeftX, bottomLeftY+rectHeight);
-    
+    glVertex2f(bottomLeftX, bottomLeftY + rectHeight);
+
     glEnd();
 }
 
 
-void draw_four_textures_on_rectangle(float bottomLeftX, float bottomLeftY, float rectWidth, float rectHeight, float textureWidth, float textureHeight)
+void draw_four_textures_on_rectangle(float bottomLeftX,
+                                     float bottomLeftY,
+                                     float rectWidth,
+                                     float rectHeight,
+                                     float textureWidth,
+                                     float textureHeight)
 {
-    glBegin(GL_QUADS);  // grid is a series of quadrilaterals
-    
+    glBegin(GL_QUADS);   // grid is a series of quadrilaterals
+
     glMultiTexCoord2f(GL_TEXTURE0, 0.0, 0.0);
     glMultiTexCoord2f(GL_TEXTURE1, 0.0, 0.0);
     glMultiTexCoord2f(GL_TEXTURE2, 0.0, 0.0);
     glMultiTexCoord2f(GL_TEXTURE3, 0.0, 0.0);
     glVertex2f(bottomLeftX, bottomLeftY);
-    
+
     glMultiTexCoord2f(GL_TEXTURE0, textureWidth, 0.0);
     glMultiTexCoord2f(GL_TEXTURE1, textureWidth, 0.0);
     glMultiTexCoord2f(GL_TEXTURE2, textureWidth, 0.0);
     glMultiTexCoord2f(GL_TEXTURE3, textureWidth, 0.0);
-    glVertex2f(bottomLeftX+rectWidth, bottomLeftY);
-    
+    glVertex2f(bottomLeftX + rectWidth, bottomLeftY);
+
     glMultiTexCoord2f(GL_TEXTURE0, textureWidth, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE1, textureWidth, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE2, textureWidth, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE3, textureWidth, textureHeight);
-    glVertex2f(bottomLeftX+rectWidth, bottomLeftY+rectHeight);
-    
+    glVertex2f(bottomLeftX + rectWidth, bottomLeftY + rectHeight);
+
     glMultiTexCoord2f(GL_TEXTURE0, 0.0, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE1, 0.0, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE2, 0.0, textureHeight);
     glMultiTexCoord2f(GL_TEXTURE3, 0.0, textureHeight);
-    glVertex2f(bottomLeftX, bottomLeftY+rectHeight);
-    
+    glVertex2f(bottomLeftX, bottomLeftY + rectHeight);
+
     glEnd();
 }
 
@@ -202,5 +231,5 @@ uint16_t round_to_power_of_two(uint16_t value)
     return static_cast<uint16_t>(lrint(pow(2, lrint(ceil(log2(value))))));
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

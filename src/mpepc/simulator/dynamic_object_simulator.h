@@ -8,12 +8,12 @@
 
 
 /**
-* \file     dynamic_object_simulator.h
-* \author   Jong Jin Park
-*
-* Declaration of the DynamicObjectSimulator
-*
-*/
+ * \file     dynamic_object_simulator.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of the DynamicObjectSimulator
+ *
+ */
 
 #ifndef MPEPC_DYNAMIC_OBJECT_SIMULATOR_H
 #define MPEPC_DYNAMIC_OBJECT_SIMULATOR_H
@@ -31,49 +31,48 @@ namespace mpepc
 class ObstacleDistanceGrid;
 
 /**
-* DynamicObjectSimulator estimates future trajectories of dynamic objects based on the estimated state of the robot
-* and the information of the static environment.
-*
-* In simulations, objects use MPC-like lookahead-and-choose-velocity strategy to avoid collision. We probaly could use
-* more sophisticated motion models (especially for pedestrians).
-*/
+ * DynamicObjectSimulator estimates future trajectories of dynamic objects based on the estimated state of the robot
+ * and the information of the static environment.
+ *
+ * In simulations, objects use MPC-like lookahead-and-choose-velocity strategy to avoid collision. We probaly could use
+ * more sophisticated motion models (especially for pedestrians).
+ */
 class DynamicObjectSimulator
 {
 public:
-
     /**
-    * Constructor for DynamicObjectSimulator.
-    *
-    * \param    params          parameters for the simulator.
-    */
+     * Constructor for DynamicObjectSimulator.
+     *
+     * \param    params          parameters for the simulator.
+     */
     DynamicObjectSimulator(const dynamic_object_simulator_params_t& params);
 
     // set time step and time horizon
-    void setTimeStep  (float timeStep)   { simulatorTimeStep_    = timeStep; };
+    void setTimeStep(float timeStep) { simulatorTimeStep_ = timeStep; };
     void setTimeLength(float timeLength) { trajectoryTimeLength_ = timeLength; };
 
     void setModeQuasiStatic(bool tf) { shouldIgnoreObjectVelocities_ = tf; };
 
     /**
-    * estimateObjectTrajectories initialize the state variables and estimate trajectories of dynamic objects of interest for the given duration specified in the parameters.
-    *
-    * \param[in,out] objects        Dynamic objects around the robot
-    * \param         robotState     the most recent state of the robot received by the metric planner.
-    * \param         map            a grid map contianing the minimum distance to the nearest static obstacle in the map
-    * \param         startTimeUs    start time of the estimated trajectory in microseconds.
-    */
+     * estimateObjectTrajectories initialize the state variables and estimate trajectories of dynamic objects of
+     * interest for the given duration specified in the parameters.
+     *
+     * \param[in,out] objects        Dynamic objects around the robot
+     * \param         robotState     the most recent state of the robot received by the metric planner.
+     * \param         map            a grid map contianing the minimum distance to the nearest static obstacle in the
+     * map \param         startTimeUs    start time of the estimated trajectory in microseconds.
+     */
     void estimateObjectTrajectories(std::vector<dynamic_object_trajectory_t>& objects,
-                                    const motion_state_t&              robotState,
-                                    const ObstacleDistanceGrid&               map,
-                                    int64_t                                   startTimeUs);
+                                    const motion_state_t& robotState,
+                                    const ObstacleDistanceGrid& map,
+                                    int64_t startTimeUs);
 
 private:
-
     float simulatorTimeStep_;
     float trajectoryTimeLength_;
-    bool  shouldIgnoreObjectVelocities_;
+    bool shouldIgnoreObjectVelocities_;
 
-    std::vector<dynamic_object_state_t> predictedRobotTraj_;    // velocity is unit vector
+    std::vector<dynamic_object_state_t> predictedRobotTraj_;   // velocity is unit vector
 
     dynamic_object_simulator_params_t params_;
 
@@ -89,16 +88,16 @@ private:
 
     // Object controller model
     Point<float> objectVelocityDecider(const dynamic_object_state_t& objectState,
-                                             float objectRadius,
-                                             const ObstacleDistanceGrid& map,
-                                             const dynamic_object_state_t* robotState,
-                                             const Point<float>& preferredVel,
-                                             const pose_t* objectGoal,
-                                             float timeElapsed,
-                                             float timeStep);
+                                       float objectRadius,
+                                       const ObstacleDistanceGrid& map,
+                                       const dynamic_object_state_t* robotState,
+                                       const Point<float>& preferredVel,
+                                       const pose_t* objectGoal,
+                                       float timeElapsed,
+                                       float timeStep);
 };
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_DYNAMIC_OBJECT_SIMULATOR_H
+#endif   // MPEPC_DYNAMIC_OBJECT_SIMULATOR_H

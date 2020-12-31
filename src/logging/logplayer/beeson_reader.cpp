@@ -14,8 +14,7 @@ namespace vulcan
 namespace logplayer
 {
 
-BeesonReader::BeesonReader(const data_channels_t& channels)
-                    : LogReader(channels)
+BeesonReader::BeesonReader(const data_channels_t& channels) : LogReader(channels)
 {
 }
 
@@ -25,5 +24,5 @@ bool BeesonReader::convertLogToFrames(const std::string& filename)
     return false;
 }
 
-}
-}
+}   // namespace logplayer
+}   // namespace vulcan

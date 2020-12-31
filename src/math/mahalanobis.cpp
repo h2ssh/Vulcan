@@ -7,9 +7,9 @@
 */
 
 
-#include <cmath>
-#include "core/multivariate_gaussian.h"
 #include "math/mahalanobis.h"
+#include "core/multivariate_gaussian.h"
+#include <cmath>
 
 namespace vulcan
 {
@@ -19,7 +19,7 @@ namespace math
 float mahalanobis_distance(const MultivariateGaussian& gaussian, const Vector& vector)
 {
     Vector delta = vector - gaussian.getMean();
-    Vector maha  = arma::trans(delta) * arma::inv(gaussian.getCovariance()) * delta;
+    Vector maha = arma::trans(delta) * arma::inv(gaussian.getCovariance()) * delta;
 
     return sqrt(maha(0));
 }
@@ -27,8 +27,8 @@ float mahalanobis_distance(const MultivariateGaussian& gaussian, const Vector& v
 
 float mahalanobis_distance(float mean, float variance, float value)
 {
-    return sqrt(pow(value-mean, 2) / variance);
+    return sqrt(pow(value - mean, 2) / variance);
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan

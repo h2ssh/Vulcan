@@ -8,15 +8,15 @@
 
 
 /**
-* \file     localizer.cpp
-* \author   Collin Johnson
-*
-* Definition of create_localizer factory.
-*/
+ * \file     localizer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_localizer factory.
+ */
 
+#include "hssh/metrical/localization/localizer.h"
 #include <cassert>
 #include <iostream>
-#include "hssh/metrical/localization/localizer.h"
 
 namespace vulcan
 {
@@ -25,18 +25,18 @@ namespace hssh
 
 boost::shared_ptr<Localizer> create_localizer(const std::string& localizerName, const localization_params_t& params)
 {
-//     if(localizerName == "mcl")
-//     {
-//         return boost::shared_ptr<Localizer>(new MCLLocalizer(params));
-//     }
-//     else
-//     {
-//         std::cerr<<"ERROR: localizerName matched no known localizers: "<<localizerName<<std::endl;
-//         assert(false);
-//     }
-    
+    //     if(localizerName == "mcl")
+    //     {
+    //         return boost::shared_ptr<Localizer>(new MCLLocalizer(params));
+    //     }
+    //     else
+    //     {
+    //         std::cerr<<"ERROR: localizerName matched no known localizers: "<<localizerName<<std::endl;
+    //         assert(false);
+    //     }
+
     return boost::shared_ptr<Localizer>();
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

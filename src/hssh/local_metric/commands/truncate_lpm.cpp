@@ -8,11 +8,11 @@
 
 
 /**
-* \file     truncate_lpm.h
-* \author   Collin Johnson
-* 
-* Declaration of TruncateLpmCommand.
-*/
+ * \file     truncate_lpm.h
+ * \author   Collin Johnson
+ *
+ * Declaration of TruncateLpmCommand.
+ */
 
 #include "hssh/local_metric/commands/truncate_lpm.h"
 #include "hssh/metrical/mapping/mapper.h"
@@ -27,12 +27,12 @@ TruncateLpmCommand::TruncateLpmCommand(const std::string& source, const math::Re
 , boundary_(boundary)
 {
 }
-    
 
-void TruncateLpmCommand::issue(const metric_slam_data_t& data, 
-                               Localizer&   localizer, 
-                               Mapper&                   mapper, 
-                               MetricRelocalizer&        relocalizer) const
+
+void TruncateLpmCommand::issue(const metric_slam_data_t& data,
+                               Localizer& localizer,
+                               Mapper& mapper,
+                               MetricRelocalizer& relocalizer) const
 {
     mapper.truncateMap(boundary_);
 }
@@ -43,5 +43,5 @@ void TruncateLpmCommand::print(std::ostream& out) const
     out << "TruncateLpmCommand from " << source() << ": Boundary:" << boundary_;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

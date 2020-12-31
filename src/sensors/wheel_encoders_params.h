@@ -8,11 +8,11 @@
 
 
 /**
-* \file     wheel_encoders_params.h
-* \author   Collin Johnson
-*
-* Declaration of params structs for the classes dealing with encoders and odometry.
-*/
+ * \file     wheel_encoders_params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of params structs for the classes dealing with encoders and odometry.
+ */
 
 #ifndef SENSORS_WHEEL_ENCODERS_PARAMS_H
 #define SENSORS_WHEEL_ENCODERS_PARAMS_H
@@ -21,7 +21,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace sensors
 {
@@ -48,19 +51,19 @@ struct wheel_encoders_params_t
 {
     std::string encoderType;
 
-    robot_encoder_configuration_t  configuration;
+    robot_encoder_configuration_t configuration;
     phidget_encoder_board_params_t phidgetParams;
 };
 
 /**
-* load_wheel_encoders_params loads the parameters for the wheel encoders drivers.
-*
-* \param    config          ConfigFile containing the parameters
-* \return   Struct parsed from the config file.
-*/
+ * load_wheel_encoders_params loads the parameters for the wheel encoders drivers.
+ *
+ * \param    config          ConfigFile containing the parameters
+ * \return   Struct parsed from the config file.
+ */
 wheel_encoders_params_t load_wheel_encoders_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace sensors
+}   // namespace vulcan
 
-#endif // SENSORS_WHEEL_ENCODERS_PARAMS_H
+#endif   // SENSORS_WHEEL_ENCODERS_PARAMS_H

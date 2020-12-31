@@ -40,11 +40,11 @@ navtexture_params_t load_navtexture_params(const utils::ConfigFile& config)
     navtexture_params_t params;
 
     params.trainingDataFile = config.getValueAsString(NAV_TEXTURE_HEADING, TRAINING_FILE_KEY);
-    params.rawFeaturesFile  = config.getValueAsString(NAV_TEXTURE_HEADING, RAW_FILE_KEY);
+    params.rawFeaturesFile = config.getValueAsString(NAV_TEXTURE_HEADING, RAW_FILE_KEY);
     params.predictModelFile = config.getValueAsString(NAV_TEXTURE_HEADING, MODEL_FILE_KEY);
-    
+
     params.identifierParams = load_identifier_params(config);
-    
+
     return params;
 }
 
@@ -52,24 +52,24 @@ navtexture_params_t load_navtexture_params(const utils::ConfigFile& config)
 image_object_identifier_params_t load_identifier_params(const utils::ConfigFile& config)
 {
     image_object_identifier_params_t params;
-    
-    params.segmenterType   = config.getValueAsString(OBJECT_IDENTIFIER_HEADING, SEGMENTER_TYPE_KEY);
+
+    params.segmenterType = config.getValueAsString(OBJECT_IDENTIFIER_HEADING, SEGMENTER_TYPE_KEY);
     params.segmenterParams = load_image_segmenter_params(config);
 
-    params.histogramType    = config.getValueAsString(OBJECT_IDENTIFIER_HEADING, HISTOGRAM_TYPE_KEY);
-    params.histogramParams  = load_historam_params(config);
-    
-    params.numSegmentClusters      = config.getValueAsInt16(OBJECT_IDENTIFIER_HEADING, NUM_CLUSTERS_KEY);
+    params.histogramType = config.getValueAsString(OBJECT_IDENTIFIER_HEADING, HISTOGRAM_TYPE_KEY);
+    params.histogramParams = load_historam_params(config);
+
+    params.numSegmentClusters = config.getValueAsInt16(OBJECT_IDENTIFIER_HEADING, NUM_CLUSTERS_KEY);
     params.maxClusteringIterations = config.getValueAsInt16(OBJECT_IDENTIFIER_HEADING, MAX_ITERATIONS_KEY);
 
-    params.maxLaserDistance  = config.getValueAsFloat(OBJECT_IDENTIFIER_HEADING, LASER_DIST_KEY);
+    params.maxLaserDistance = config.getValueAsFloat(OBJECT_IDENTIFIER_HEADING, LASER_DIST_KEY);
     params.minDynamicMatches = config.getValueAsInt16(OBJECT_IDENTIFIER_HEADING, DYNAMIC_MATCH_KEY);
-    
-    params.homographyFile  = config.getValueAsString(OBJECT_IDENTIFIER_HEADING, HOMOGRAPHY_FILE_KEY);
+
+    params.homographyFile = config.getValueAsString(OBJECT_IDENTIFIER_HEADING, HOMOGRAPHY_FILE_KEY);
     params.calibrationFile = config.getValueAsString(OBJECT_IDENTIFIER_HEADING, CALIBRATION_FILE_KEY);
-    
+
     return params;
 }
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     univariate_distribution_estimator.h
-* \author   Collin Johnson
-* 
-* Definition of UnivariateDistributionEstimator interface.
-*/
+ * \file     univariate_distribution_estimator.h
+ * \author   Collin Johnson
+ *
+ * Definition of UnivariateDistributionEstimator interface.
+ */
 
 #ifndef MATH_UNIVARIATE_DISTRIBUTION_ESTIMATOR_H
 #define MATH_UNIVARIATE_DISTRIBUTION_ESTIMATOR_H
@@ -24,33 +24,33 @@ namespace vulcan
 {
 namespace math
 {
-    
+
 class UnivariateDistribution;
 
 /**
-* UnivariateDistributionEstimator is an interface for classes that estimate the parameters of a univariate distribution from
-* a collection of samples.
-* 
-* The estimator has a single method that estimates a UnivariateDistribution from the provided data.
-*/
+ * UnivariateDistributionEstimator is an interface for classes that estimate the parameters of a univariate distribution
+ * from a collection of samples.
+ *
+ * The estimator has a single method that estimates a UnivariateDistribution from the provided data.
+ */
 class UnivariateDistributionEstimator
 {
 public:
-    
     virtual ~UnivariateDistributionEstimator(void) { }
-    
+
     /**
-    * estimateDistribution estimates a new UnivariateDistribution from a collection of data.
-    * 
-    * \param    dataBegin           Start iterator of the data
-    * \param    dataEnd             Beyond-the-end iterator for the data
-    * \return   An instance of UnivariateDistribution estimated from the provided data.
-    */
-    virtual std::unique_ptr<UnivariateDistribution> estimateDistribution(const std::vector<double>::const_iterator dataBegin,
-                                                                         const std::vector<double>::const_iterator dataEnd) const = 0;
+     * estimateDistribution estimates a new UnivariateDistribution from a collection of data.
+     *
+     * \param    dataBegin           Start iterator of the data
+     * \param    dataEnd             Beyond-the-end iterator for the data
+     * \return   An instance of UnivariateDistribution estimated from the provided data.
+     */
+    virtual std::unique_ptr<UnivariateDistribution>
+      estimateDistribution(const std::vector<double>::const_iterator dataBegin,
+                           const std::vector<double>::const_iterator dataEnd) const = 0;
 };
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_UNIVARIATE_DISTRIBUTION_ESTIMATOR_H
+#endif   // MATH_UNIVARIATE_DISTRIBUTION_ESTIMATOR_H

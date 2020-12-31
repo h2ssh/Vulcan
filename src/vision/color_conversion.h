@@ -18,12 +18,24 @@ namespace vision
 {
 
 /** convertPixelColorspace converts a pixel between various colorspaces. */
-void convertPixelColorspace(unsigned char fromA, unsigned char fromB, unsigned char fromC, unsigned char& toA, unsigned char& toB, unsigned char& toC, Colorspace from, Colorspace to);
+void convertPixelColorspace(unsigned char fromA,
+                            unsigned char fromB,
+                            unsigned char fromC,
+                            unsigned char& toA,
+                            unsigned char& toB,
+                            unsigned char& toC,
+                            Colorspace from,
+                            Colorspace to);
 
 /** convertImageColorspace converts a pixel between various colorspaces. */
-void convertImageColorspace(unsigned char* from, unsigned char* to, unsigned int width, unsigned int height, Colorspace csFrom, Colorspace csTo);
+void convertImageColorspace(unsigned char* from,
+                            unsigned char* to,
+                            unsigned int width,
+                            unsigned int height,
+                            Colorspace csFrom,
+                            Colorspace csTo);
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan
 
-#endif // SENSORS_VISION_COLOR_CONVERSION_H
+#endif   // SENSORS_VISION_COLOR_CONVERSION_H

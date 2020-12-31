@@ -8,11 +8,11 @@
 
 
 /**
-* \file     logical_interface_app.h
-* \author   Collin Johnson
-*
-* Declaration of LogicalInterfaceApp, which launches the HSSH Logical Interface.
-*/
+ * \file     logical_interface_app.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LogicalInterfaceApp, which launches the HSSH Logical Interface.
+ */
 
 #ifndef UI_LOGICAL_LOGICAL_INTERFACE_APP_H
 #define UI_LOGICAL_LOGICAL_INTERFACE_APP_H
@@ -27,24 +27,22 @@ namespace ui
 class LogicalInterfaceFrame;
 
 /**
-* LogicalInterfaceApp is where the main function for the logical interface UI is implemented, per
-* the wxWidgets way of doing things.
-*/
+ * LogicalInterfaceApp is where the main function for the logical interface UI is implemented, per
+ * the wxWidgets way of doing things.
+ */
 class LogicalInterfaceApp : public wxApp
 {
 public:
-
     virtual bool OnInit(void);
-    virtual int  OnExit(void);
+    virtual int OnExit(void);
 
 private:
-
-    LogicalInterfaceFrame*   mainFrame;
+    LogicalInterfaceFrame* mainFrame;
 };
 
 DECLARE_APP(LogicalInterfaceApp)
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_LOGICAL_LOGICAL_INTERFACE_APP_H
+#endif   // UI_LOGICAL_LOGICAL_INTERFACE_APP_H

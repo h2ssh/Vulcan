@@ -8,16 +8,16 @@
 
 
 /**
-* \file     params.cpp
-* \author   Collin Johnson
-*
-* Definition of load_goal_params and associate functions for turning a config file
-* into params structs.
-*/
+ * \file     params.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of load_goal_params and associate functions for turning a config file
+ * into params structs.
+ */
 
 #include "planner/goal/params.h"
-#include <cassert>
 #include "utils/config_file.h"
+#include <cassert>
 
 namespace vulcan
 {
@@ -31,5 +31,5 @@ goal_params_t load_goal_params(const utils::ConfigFile& config)
     return params;
 }
 
-} // namespace planner
-} // namespace vulcanh
+}   // namespace planner
+}   // namespace vulcan

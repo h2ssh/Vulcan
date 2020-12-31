@@ -8,27 +8,27 @@
 
 
 /**
-* \file     lazy_generator.cpp
-* \author   Collin Johnson
-* 
-* Definition of LazyGenerator.
-*/
+ * \file     lazy_generator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LazyGenerator.
+ */
 
 #include "hssh/global_topological/mapping/lazy_generator.h"
 #include "utils/stub.h"
 
 namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
 
 double LazyGenerator::computeChildLogLikelihood(const TopologicalState& parent,
-                                                const TopologicalState& child, 
+                                                const TopologicalState& child,
                                                 const TopologicalVisit& visit)
 {
     PRINT_PRETTY_STUB();
     return 0.0;
 }
-    
-} // namespace hssh
-} // namespace vulcan
+
+}   // namespace hssh
+}   // namespace vulcan

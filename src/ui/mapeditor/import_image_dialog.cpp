@@ -8,11 +8,11 @@
 
 
 /**
-* \file     import_image_dialog.cpp
-* \author   Collin Johnson
-*
-* Implementation of ImportImageDialog.
-*/
+ * \file     import_image_dialog.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of ImportImageDialog.
+ */
 
 #include "ui/mapeditor/import_image_dialog.h"
 #include "hssh/local_metric/lpm.h"
@@ -23,17 +23,15 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 BEGIN_EVENT_TABLE(ImportImageDialog, ImportImageDialogBase)
-    EVT_BUTTON(ID_SELECT_IMAGE_BUTTON, ImportImageDialog::selectImagePressed)
-    EVT_BUTTON(ID_IMPORT_IMAGE_BUTTON, ImportImageDialog::importPressed)
-    EVT_CLOSE(ImportImageDialog::cancelledDialog)
+EVT_BUTTON(ID_SELECT_IMAGE_BUTTON, ImportImageDialog::selectImagePressed)
+EVT_BUTTON(ID_IMPORT_IMAGE_BUTTON, ImportImageDialog::importPressed)
+EVT_CLOSE(ImportImageDialog::cancelledDialog)
 END_EVENT_TABLE()
 
 
-ImportImageDialog::ImportImageDialog(wxWindow* parent)
-: ImportImageDialogBase(parent)
-, haveValidParameters(false)
+ImportImageDialog::ImportImageDialog(wxWindow* parent) : ImportImageDialogBase(parent), haveValidParameters(false)
 {
     SetEscapeId(ID_CANCEL_IMPORT_BUTTON);
 }
@@ -41,20 +39,18 @@ ImportImageDialog::ImportImageDialog(wxWindow* parent)
 
 hssh::LocalPerceptualMap ImportImageDialog::getImportedLPM(void) const
 {
-    if(!haveValidParameters)
-    {
-        std::cerr<<"ERROR::ImportImage: Invalid parameters for importing. Cannot create LPM.\n";
+    if (!haveValidParameters) {
+        std::cerr << "ERROR::ImportImage: Invalid parameters for importing. Cannot create LPM.\n";
         return hssh::LocalPerceptualMap();
     }
-    
+
     hssh::image_import_properties_t properties = createImportPropertiesFromInput();
-    
+
     hssh::LocalPerceptualMap lpm;
-    if(!hssh::import_lpm_from_image(fullImagePath, properties, lpm))
-    {
-        std::cerr<<"ERROR::ImportImage: Failed to load LPM: "<<fullImagePath<<'\n';
+    if (!hssh::import_lpm_from_image(fullImagePath, properties, lpm)) {
+        std::cerr << "ERROR::ImportImage: Failed to load LPM: " << fullImagePath << '\n';
     }
-    
+
     return lpm;
 }
 
@@ -62,33 +58,33 @@ hssh::LocalPerceptualMap ImportImageDialog::getImportedLPM(void) const
 bool ImportImageDialog::validateUserInput(void)
 {
     double scale = 0.0;
-    if(!cellScaleText->GetValue().ToDouble(&scale) || (scale <= 0.0))
-    {
-        std::cerr<<"ERROR::ImportImage: Invalid scale value:"<<scale<<". Scale must be greater than 0.0\n";
+    if (!cellScaleText->GetValue().ToDouble(&scale) || (scale <= 0.0)) {
+        std::cerr << "ERROR::ImportImage: Invalid scale value:" << scale << ". Scale must be greater than 0.0\n";
         return false;
     }
-    
-    long freeThreshold     = 0;
+
+    long freeThreshold = 0;
     long occupiedThreshold = 0;
-    
-    if(!freeThresholdText->GetValue().ToLong(&freeThreshold) || (freeThreshold <= 0) || (freeThreshold > 255))
-    {
-        std::cerr<<"ERROR::ImportImage: Invalid free threshold:"<<freeThreshold<<" Threshold must be in range (0, 255].\n";
+
+    if (!freeThresholdText->GetValue().ToLong(&freeThreshold) || (freeThreshold <= 0) || (freeThreshold > 255)) {
+        std::cerr << "ERROR::ImportImage: Invalid free threshold:" << freeThreshold
+                  << " Threshold must be in range (0, 255].\n";
         return false;
     }
-    
-    if(!occupiedThresholdText->GetValue().ToLong(&occupiedThreshold) || (occupiedThreshold < 0) || (occupiedThreshold >= 255))
-    {
-        std::cerr<<"ERROR::ImportImage: Invalid occupied threshold:"<<freeThreshold<<" Threshold must be in range [0, 255).\n";
+
+    if (!occupiedThresholdText->GetValue().ToLong(&occupiedThreshold) || (occupiedThreshold < 0)
+        || (occupiedThreshold >= 255)) {
+        std::cerr << "ERROR::ImportImage: Invalid occupied threshold:" << freeThreshold
+                  << " Threshold must be in range [0, 255).\n";
         return false;
     }
-    
-    if(occupiedThreshold >= freeThreshold)
-    {
-        std::cerr<<"ERROR::ImportImage: Invalid thresholds. Occupied must be less than free. Free:"<<freeThreshold<<" Occupied:"<<occupiedThreshold<<'\n';
+
+    if (occupiedThreshold >= freeThreshold) {
+        std::cerr << "ERROR::ImportImage: Invalid thresholds. Occupied must be less than free. Free:" << freeThreshold
+                  << " Occupied:" << occupiedThreshold << '\n';
         return false;
     }
-    
+
     return true;
 }
 
@@ -97,13 +93,13 @@ hssh::image_import_properties_t ImportImageDialog::createImportPropertiesFromInp
 {
     hssh::image_import_properties_t properties;
     long threshold = 0;
-    
+
     cellScaleText->GetValue().ToDouble(&(properties.scale));
     freeThresholdText->GetValue().ToLong(&threshold);
     properties.freeThreshold = threshold;
     occupiedThresholdText->GetValue().ToLong(&threshold);
     properties.occupiedThreshold = threshold;
-    
+
     return properties;
 }
 
@@ -111,9 +107,8 @@ hssh::image_import_properties_t ImportImageDialog::createImportPropertiesFromInp
 void ImportImageDialog::selectImagePressed(wxCommandEvent& event)
 {
     wxFileDialog loadDialog(this, wxT("Select PGM file..."), wxT(""), wxT(""), wxT("*.pgm"), wxFD_OPEN);
-    
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+
+    if (loadDialog.ShowModal() == wxID_OK) {
         imageFilenameText->SetValue(loadDialog.GetFilename());
         fullImagePath = std::string(loadDialog.GetPath().mb_str());
     }
@@ -123,7 +118,7 @@ void ImportImageDialog::selectImagePressed(wxCommandEvent& event)
 void ImportImageDialog::importPressed(wxCommandEvent& event)
 {
     haveValidParameters = validateUserInput();
-    
+
     EndModal(haveValidParameters ? wxID_OK : wxID_CANCEL);
 }
 
@@ -133,5 +128,5 @@ void ImportImageDialog::cancelledDialog(wxCloseEvent& event)
     haveValidParameters = false;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

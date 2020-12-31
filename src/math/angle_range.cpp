@@ -8,11 +8,11 @@
 
 
 /**
-* \file     angle_range.cpp
-* \author   Collin Johnson
-*
-* Definition of angle_range_t for representing a continuous range of angles as a start and extent.
-*/
+ * \file     angle_range.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of angle_range_t for representing a continuous range of angles as a start and extent.
+ */
 
 #include "math/angle_range.h"
 #include <iostream>
@@ -28,5 +28,5 @@ std::ostream& operator<<(std::ostream& out, const angle_range_t& range)
     return out;
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

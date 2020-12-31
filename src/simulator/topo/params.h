@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of params structs for the topo_map_simulator module and the function for loading the parameters.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of params structs for the topo_map_simulator module and the function for loading the parameters.
+ */
 
 #ifndef SIMULATOR_TOPO_PARAMS_H
 #define SIMULATOR_TOPO_PARAMS_H
@@ -21,7 +21,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace simulator
 {
@@ -37,15 +40,15 @@ struct topo_map_simulator_params_t
 };
 
 /**
-* load_topo_map_simulator_params loads the parameters for the topo_map_simulator module from
-* the provided configuration file.
-*
-* \param    config              ConfigFile with the parameters to load
-* \return   Parameters pulled from the config file.
-*/
+ * load_topo_map_simulator_params loads the parameters for the topo_map_simulator module from
+ * the provided configuration file.
+ *
+ * \param    config              ConfigFile with the parameters to load
+ * \return   Parameters pulled from the config file.
+ */
 topo_map_simulator_params_t load_topo_map_simulator_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace simulator
+}   // namespace vulcan
 
-#endif // SIMULATOR_TOPO_PARAMS_H
+#endif   // SIMULATOR_TOPO_PARAMS_H

@@ -8,13 +8,13 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* Definition of IMU support functions:
-*
-*   - interpolate_imu
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * Definition of IMU support functions:
+ *
+ *   - interpolate_imu
+ */
 
 #include "core/imu_data.h"
 #include "core/angle_functions.h"
@@ -39,17 +39,13 @@ std::pair<imu_data_t, imu_data_t> interpolate_imu_data(const imu_data_t& before,
     interpolatedIMU.timeDelta = timeDeltaUs;
     interpolatedIMU.gravityMagnitude = after.gravityMagnitude;
 
-    for(int n = 0; n < 3; ++n)
-    {
-        interpolatedIMU.acceleration[n] = math::linear_interpolation(before.acceleration[n],
-                                                                     after.acceleration[n],
-                                                                     interpolationRatio);
-        interpolatedIMU.rotationalVelocity[n] = math::linear_interpolation(before.rotationalVelocity[n],
-                                                                           after.rotationalVelocity[n],
-                                                                           interpolationRatio);
-        interpolatedIMU.orientation[n] = wrap_to_pi(math::linear_interpolation(before.orientation[n],
-                                                                                     after.orientation[n],
-                                                                                     interpolationRatio));
+    for (int n = 0; n < 3; ++n) {
+        interpolatedIMU.acceleration[n] =
+          math::linear_interpolation(before.acceleration[n], after.acceleration[n], interpolationRatio);
+        interpolatedIMU.rotationalVelocity[n] =
+          math::linear_interpolation(before.rotationalVelocity[n], after.rotationalVelocity[n], interpolationRatio);
+        interpolatedIMU.orientation[n] =
+          wrap_to_pi(math::linear_interpolation(before.orientation[n], after.orientation[n], interpolationRatio));
     }
 
     imu_data_t newAfterIMU = after;
@@ -59,4 +55,4 @@ std::pair<imu_data_t, imu_data_t> interpolate_imu_data(const imu_data_t& before,
     return std::make_pair(interpolatedIMU, newAfterIMU);
 }
 
-} // namespace vulcan
+}   // namespace vulcan

@@ -8,12 +8,12 @@
 
 
 /**
-* \file     params.cpp
-* \author   Collin Johnson
-*
-* Definition of load_decision_planner_params and other various functions for parsing a ConfigFile
-* into a usable set of parameters.
-*/
+ * \file     params.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of load_decision_planner_params and other various functions for parsing a ConfigFile
+ * into a usable set of parameters.
+ */
 
 #include "planner/decision/params.h"
 #include "utils/config_file.h"
@@ -27,10 +27,10 @@ const std::string PLANNER_HEADING("DecisionPlannerParameters");
 const std::string HANDLER_TYPE_KEY("handler_type");
 
 const std::string HANDLER_CHAIN_HEADING("DecisionTargetHandlerChainParameters");
-const std::string HANDLER_SEQUENCE_KEY ("handler_sequence");
+const std::string HANDLER_SEQUENCE_KEY("handler_sequence");
 
-decision_planner_params_t              load_planner_params      (const utils::ConfigFile& config);
-decision_target_handler_params_t       load_handler_params      (const utils::ConfigFile& config);
+decision_planner_params_t load_planner_params(const utils::ConfigFile& config);
+decision_target_handler_params_t load_handler_params(const utils::ConfigFile& config);
 decision_target_handler_chain_params_t load_handler_chain_params(const utils::ConfigFile& config);
 
 
@@ -48,7 +48,7 @@ decision_planner_params_t load_planner_params(const utils::ConfigFile& config)
 {
     decision_planner_params_t params;
 
-    params.handlerType   = config.getValueAsString(PLANNER_HEADING, HANDLER_TYPE_KEY);
+    params.handlerType = config.getValueAsString(PLANNER_HEADING, HANDLER_TYPE_KEY);
     params.handlerParams = load_handler_params(config);
 
     return params;
@@ -74,5 +74,5 @@ decision_target_handler_chain_params_t load_handler_chain_params(const utils::Co
     return params;
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

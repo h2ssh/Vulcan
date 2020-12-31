@@ -8,11 +8,11 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* Definition of independent_t_test.
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * Definition of independent_t_test.
+ */
 
 #include "math/t_test.h"
 #include <boost/math/distributions/students_t.hpp>
@@ -36,28 +36,28 @@ t_test_results_t independent_t_test(const t_test_sample_t& sampleA, const t_test
 
     int dofA = sampleA.numSamples - 1;
     int dofB = sampleB.numSamples - 1;
-    int dof  = dofA + dofB;
+    int dof = dofA + dofB;
 
     double pooledVariance = std::sqrt(((dofA * sampleA.variance) + (dofB * sampleB.variance)) / dof);
-    double tDenom         = pooledVariance * std::sqrt((1.0 / sampleA.numSamples) + (1.0 / sampleB.numSamples));
+    double tDenom = pooledVariance * std::sqrt((1.0 / sampleA.numSamples) + (1.0 / sampleB.numSamples));
 
     t_test_results_t results;
-    results.tValue     = (sampleA.mean - sampleB.mean) / tDenom;
+    results.tValue = (sampleA.mean - sampleB.mean) / tDenom;
     results.confidence = confidence;
 
     students_t dist(dof);
 
     results.pValueDifferent = cdf(complement(dist, std::abs(results.tValue)));
-    results.areDifferent    = results.pValueDifferent < (confidence / 2.0);
+    results.areDifferent = results.pValueDifferent < (confidence / 2.0);
 
     results.pValueGreater = cdf(complement(dist, results.tValue));
-    results.isGreater     = results.pValueGreater < confidence;
+    results.isGreater = results.pValueGreater < confidence;
 
     results.pValueLess = cdf(dist, results.tValue);
-    results.isLess     = results.pValueLess < confidence;
+    results.isLess = results.pValueLess < confidence;
 
     return results;
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

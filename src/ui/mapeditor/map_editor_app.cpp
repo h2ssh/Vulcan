@@ -8,10 +8,10 @@
 
 
 #include "ui/mapeditor/map_editor_app.h"
-#include "utils/config_file.h"
+#include "hssh/local_topological/params.h"
 #include "ui/common/ui_params.h"
 #include "ui/mapeditor/map_editor_frame.h"
-#include "hssh/local_topological/params.h"
+#include "utils/config_file.h"
 #include <iostream>
 
 
@@ -23,35 +23,32 @@ IMPLEMENT_APP(MapEditorApp)
 
 bool MapEditorApp::OnInit(void)
 {
-    if(argc < 3)
-    {
+    if (argc < 3) {
         std::cout << "Using default config files for map_editor: debug_ui.cfg local_topo_hssh.cfg  \n";
     }
 
     wxString configFilename("debug_ui.cfg");
     wxString localTopoFilename("local_topo_hssh.cfg");
-    
-    if(argc > 1)
-    {
+
+    if (argc > 1) {
         configFilename = argv[1];
     }
-    
-    if(argc > 2)
-    {
+
+    if (argc > 2) {
         localTopoFilename = argv[2];
     }
-    
+
     vulcan::utils::ConfigFile config(configFilename.ToStdString());
     vulcan::utils::ConfigFile localTopoConfig(localTopoFilename.ToStdString());
-    
+
     ui_params_t params = load_ui_params(config);
     hssh::local_topology_params_t localTopoParams{localTopoConfig};
-    
+
     mainFrame = new MapEditorFrame(params, localTopoParams);
-    
+
     mainFrame->Show(true);
     SetTopWindow(mainFrame);
-    
+
     return true;
 }
 

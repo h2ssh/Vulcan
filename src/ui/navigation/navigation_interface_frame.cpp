@@ -8,11 +8,11 @@
 
 
 /**
-* \file     navigation_interface_frame.cpp
-* \author   Collin Johnson
-* 
-* Definition of NavigationInterfaceFrame.
-*/
+ * \file     navigation_interface_frame.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of NavigationInterfaceFrame.
+ */
 
 #include "ui/navigation/navigation_interface_frame.h"
 #include "ui/navigation/goal_interface_control.h"
@@ -24,8 +24,7 @@ namespace vulcan
 namespace ui
 {
 
-NavigationInterfaceFrame::NavigationInterfaceFrame(void)
-: NavigationInterface(0)
+NavigationInterfaceFrame::NavigationInterfaceFrame(void) : NavigationInterface(0)
 {
     display->pushKeyboardHandler(this);
     setupNavigationDisplay();
@@ -41,11 +40,10 @@ NavigationInterfaceFrame::~NavigationInterfaceFrame(void)
 
 GLEventStatus NavigationInterfaceFrame::keyReleased(wxKeyEvent& key)
 {
-    if(key.GetKeyCode() == 'F')
-    {
+    if (key.GetKeyCode() == 'F') {
         ShowFullScreen(!IsFullScreen());
     }
-    
+
     return GLEventStatus::passthrough;
 }
 
@@ -64,5 +62,5 @@ void NavigationInterfaceFrame::setupNavigationDisplay(void)
     addPanel(navigationControl_, nullptr);
 }
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan

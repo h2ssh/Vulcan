@@ -8,11 +8,11 @@
 
 
 /**
-* \file     decision_action.cpp
-* \author   Collin Johnson
-* 
-* Definition of Decision.
-*/
+ * \file     decision_action.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of Decision.
+ */
 
 #include "planner/interface/decision.h"
 #include "system/module_communicator.h"
@@ -35,5 +35,5 @@ Decision::Decision(DecisionDirection direction,
 {
 }
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan

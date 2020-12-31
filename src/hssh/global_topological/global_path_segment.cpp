@@ -8,11 +8,11 @@
 
 
 /**
-* \file     global_path_segment.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalPathSegment.
-*/
+ * \file     global_path_segment.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalPathSegment.
+ */
 
 #include "hssh/global_topological/global_path_segment.h"
 #include "hssh/global_topological/global_location.h"
@@ -46,8 +46,8 @@ GlobalPathSegment::GlobalPathSegment(Id id,
 {
     initialLambda_ = lambda;
     lambdas_.push_back(lambda);
-    std::cout << "Path segment: " << id_ << " Set initial lambda: (" << initialLambda_.x << ','
-        << initialLambda_.y << ',' << initialLambda_.theta << ")\n";
+    std::cout << "Path segment: " << id_ << " Set initial lambda: (" << initialLambda_.x << ',' << initialLambda_.y
+              << ',' << initialLambda_.theta << ")\n";
 }
 
 
@@ -86,8 +86,7 @@ GlobalPathSegment GlobalPathSegment::reverse(void) const
                                haveExploredLambda_);
 
     // Copy over the other measured lambdas as well
-    for(size_t n = 1; n < lambdas_.size(); ++n)
-    {
+    for (size_t n = 1; n < lambdas_.size(); ++n) {
         reversed.addLambda(lambdas_[n].invert());
     }
 
@@ -97,21 +96,17 @@ GlobalPathSegment GlobalPathSegment::reverse(void) const
 
 bool GlobalPathSegment::replaceTransition(const GlobalTransition& oldTrans, const GlobalTransition& newTrans)
 {
-    if(oldTrans == minusTransition_)
-    {
+    if (oldTrans == minusTransition_) {
         minusTransition_ = newTrans;
         return true;
-    }
-    else if(oldTrans == plusTransition_)
-    {
+    } else if (oldTrans == plusTransition_) {
         plusTransition_ = newTrans;
         return true;
     }
 
     // Try replacing it in one of the sequences, since it wasn't an end transition -- transitions are globally unique
     // so it can't be on the left and right side!
-    return leftSequence_.replaceTransition(oldTrans, newTrans)
-        || rightSequence_.replaceTransition(oldTrans, newTrans);
+    return leftSequence_.replaceTransition(oldTrans, newTrans) || rightSequence_.replaceTransition(oldTrans, newTrans);
 }
 
 
@@ -120,13 +115,11 @@ GlobalLocation GlobalPathSegment::locationOnSegment(const GlobalTransition& entr
     auto direction = TopoDirection::null;
 
     // If the area is entered from the plus direction, heading in minus direction.
-    if(entry == plusTransition_)
-    {
+    if (entry == plusTransition_) {
         direction = TopoDirection::minus;
     }
     // If entered from minus, then heading to plus
-    else if(entry == minusTransition_)
-    {
+    else if (entry == minusTransition_) {
         direction = TopoDirection::plus;
     }
     // Otherwise, entered from a sequence, so there's no direction
@@ -138,56 +131,46 @@ GlobalLocation GlobalPathSegment::locationOnSegment(const GlobalTransition& entr
 
 void GlobalPathSegment::addLambda(const Lambda& lambda)
 {
-    if(isFrontier())
-    {
+    if (isFrontier()) {
         initialLambda_ = lambda;
         lambdas_[0] = lambda;
         std::cout << "Path segment: " << id_ << " Replaced initial frontier lambda: (" << initialLambda_.x << ','
-            << initialLambda_.y << ',' << initialLambda_.theta << ")\n";
+                  << initialLambda_.y << ',' << initialLambda_.theta << ")\n";
     }
 
-    if(!isFrontier())
-    {
-        if(!haveExploredLambda_)
-        {
+    if (!isFrontier()) {
+        if (!haveExploredLambda_) {
             lambdas_[0] = lambda;
             initialLambda_ = lambda;
             haveExploredLambda_ = true;
             std::cout << "Path segment " << id_ << ": Replaced lambda with explored lambda.\n";
-        }
-        else if(lambdas_.back() != lambda)
-        {
+        } else if (lambdas_.back() != lambda) {
             lambdas_.push_back(lambda);
         }
 
         std::cout << "Path segment " << id_ << " lambdas:\n";
-        for(auto& l : lambdas_)
-        {
+        for (auto& l : lambdas_) {
             std::cout << "(" << l.x << ',' << l.y << ',' << l.theta << ")\n";
         }
     }
 
-//     lambdas_[0] = lambda;
-//     initialLambda_.merge(lambda); lambdas_[0] = initialLambda_;
+    //     lambdas_[0] = lambda;
+    //     initialLambda_.merge(lambda); lambdas_[0] = initialLambda_;
 }
 
 
 GlobalTransition opposite_end(const GlobalPathSegment& segment, const GlobalTransition& end)
 {
-    if(segment.plusTransition() == end)
-    {
+    if (segment.plusTransition() == end) {
         return segment.minusTransition();
-    }
-    else if(segment.minusTransition() == end)
-    {
+    } else if (segment.minusTransition() == end) {
         return segment.plusTransition();
     }
     // The given transition wasn't actually an end!
-    else
-    {
+    else {
         return GlobalTransition();
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

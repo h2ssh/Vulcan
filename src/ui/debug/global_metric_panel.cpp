@@ -8,36 +8,36 @@
 
 
 /**
-* \file     global_metric_panel.cpp
-* \author   Collin Johnson
-* 
-* Definition of GlobalMetricPanel.
-*/
+ * \file     global_metric_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalMetricPanel.
+ */
 
 #include "ui/debug/global_metric_panel.h"
-#include "ui/debug/debug_ui.h"
-#include "ui/debug/global_metric_display_widget.h"
-#include "hssh/global_metric/messages.h"
 #include "hssh/global_metric/debug_info.h"
+#include "hssh/global_metric/messages.h"
 #include "hssh/local_metric/lpm.h"
 #include "hssh/local_metric/lpm_io.h"
 #include "hssh/metrical/relocalization/filter_initializer_impl.h"
 #include "hssh/metrical/relocalization/scan_matching_initializer.h"
 #include "system/module_communicator.h"
-#include <wx/filedlg.h>
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/global_metric_display_widget.h"
 #include <cassert>
+#include <wx/filedlg.h>
 
 namespace vulcan
 {
 namespace ui
 {
-    
+
 BEGIN_EVENT_TABLE(GlobalMetricPanel, wxEvtHandler)
-    EVT_BUTTON(ID_GLOBAL_METRIC_CAPTURE_LPM_BUTTON,  GlobalMetricPanel::captureLPMPressed)
-    EVT_BUTTON(ID_LOAD_LPM_FOR_GLOBAL_METRIC_BUTTON, GlobalMetricPanel::loadLPMPressed)
-    EVT_BUTTON(ID_LOAD_GLOBAL_METRIC_MAP_BUTTON,     GlobalMetricPanel::loadGMMPressed)
-    EVT_BUTTON(ID_SAVE_GLOBAL_MAP_BUTTON,            GlobalMetricPanel::saveGMMPressed)
-    EVT_BUTTON(ID_GLOBAL_METRIC_RELOCALIZE_BUTTON,   GlobalMetricPanel::relocalizePressed)
+EVT_BUTTON(ID_GLOBAL_METRIC_CAPTURE_LPM_BUTTON, GlobalMetricPanel::captureLPMPressed)
+EVT_BUTTON(ID_LOAD_LPM_FOR_GLOBAL_METRIC_BUTTON, GlobalMetricPanel::loadLPMPressed)
+EVT_BUTTON(ID_LOAD_GLOBAL_METRIC_MAP_BUTTON, GlobalMetricPanel::loadGMMPressed)
+EVT_BUTTON(ID_SAVE_GLOBAL_MAP_BUTTON, GlobalMetricPanel::saveGMMPressed)
+EVT_BUTTON(ID_GLOBAL_METRIC_RELOCALIZE_BUTTON, GlobalMetricPanel::relocalizePressed)
 END_EVENT_TABLE()
 
 
@@ -50,7 +50,7 @@ GlobalMetricPanel::GlobalMetricPanel(const global_metric_panel_widgets_t& widget
     assert(widgets_.mapNameText);
     assert(widgets_.relocalizeButton);
     assert(widgets_.saveMapButton);
-    
+
     widgets_.saveMapButton->Disable();
     widgets_.relocalizeButton->Disable();
 }
@@ -65,10 +65,10 @@ void GlobalMetricPanel::setup(wxGLContext* context, wxStatusBar* statusBar)
 
 void GlobalMetricPanel::subscribe(system::ModuleCommunicator& producer)
 {
-    producer.subscribeTo<hssh::GlobalMetricMap>                    (this);
-    producer.subscribeTo<hssh::GlobalPose>                         (this);
-    producer.subscribeTo<hssh::LocalPerceptualMap>                 (this);
-    producer.subscribeTo<hssh::global_metric_localization_info_t>  (this);
+    producer.subscribeTo<hssh::GlobalMetricMap>(this);
+    producer.subscribeTo<hssh::GlobalPose>(this);
+    producer.subscribeTo<hssh::LocalPerceptualMap>(this);
+    producer.subscribeTo<hssh::global_metric_localization_info_t>(this);
     producer.subscribeTo<hssh::global_metric_relocalization_info_t>(this);
 }
 
@@ -113,8 +113,7 @@ void GlobalMetricPanel::handleData(const hssh::GlobalPose& pose, const std::stri
 
 void GlobalMetricPanel::handleData(const hssh::LocalPerceptualMap& map, const std::string& channel)
 {
-    if(shouldSaveLPM_)
-    {
+    if (shouldSaveLPM_) {
         createGlobalMapFromLPM(map);
         shouldSaveLPM_ = false;
     }
@@ -136,13 +135,12 @@ void GlobalMetricPanel::handleData(const hssh::global_metric_localization_info_t
 void GlobalMetricPanel::loadMap(const std::string& filename)
 {
     map_.reset(new hssh::GlobalMetricMap());
-    
-    if(!map_->loadFromFile(filename))
-    {
+
+    if (!map_->loadFromFile(filename)) {
         std::cerr << "ERROR: GlobalMetricPanel: loadMap failed for file: " << filename << '\n';
         return;
     }
-    
+
     haveMap_ = true;
     updateUIWithNewMap();
 }
@@ -151,7 +149,7 @@ void GlobalMetricPanel::loadMap(const std::string& filename)
 void GlobalMetricPanel::updateUIWithNewMap(void)
 {
     assert(haveMap_);
-    
+
     // Now that the map is loaded, fill in the text control and turn on the relocalize and save buttons
     widgets_.display->setMap(map_);
     widgets_.mapNameText->SetValue(map_->name());
@@ -163,14 +161,13 @@ void GlobalMetricPanel::updateUIWithNewMap(void)
 void GlobalMetricPanel::saveMap(const std::string& filename)
 {
     assert(map_);
-    
+
     // Ensure the saved map name matches the user-specified name of the map
     auto textName = widgets_.mapNameText->GetValue();
-    
+
     hssh::GlobalMetricMap toSave(std::string(textName.mb_str()), *map_);
-    
-    if(!toSave.saveToFile(filename))
-    {
+
+    if (!toSave.saveToFile(filename)) {
         std::cerr << "ERROR: GlobalMetricPanel: saveMap failed for file: " << filename << '\n';
     }
 }
@@ -179,10 +176,10 @@ void GlobalMetricPanel::saveMap(const std::string& filename)
 void GlobalMetricPanel::startRelocalization(void)
 {
     assert(map_);
-    
+
     hssh::global_metric_relocalization_request_message_t request;
-    request.map         = *map_;
-//     request.initializer = std::make_shared<hssh::FreeSpaceFilterInitializer>(3, 10);
+    request.map = *map_;
+    //     request.initializer = std::make_shared<hssh::FreeSpaceFilterInitializer>(3, 10);
     request.initializer = std::make_shared<hssh::ScanMatchingInitializer>();
     consumer_->sendMessage(request);
 }
@@ -207,18 +204,17 @@ void GlobalMetricPanel::loadLPMPressed(wxCommandEvent& event)
 {
     wxFileDialog loadDialog(widgets_.display,
                             ("Load LPM..."),
-                            "",     // default directory
-                            "",     // default filename
+                            "",   // default directory
+                            "",   // default filename
                             "Local Perceptual Map (*.lpm)|*.lpm",
                             wxFD_OPEN);
-    
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+
+    if (loadDialog.ShowModal() == wxID_OK) {
         wxString path = loadDialog.GetPath();
-        
+
         hssh::LocalPerceptualMap lpm;
         hssh::load_lpm_1_0(std::string(path.mb_str()), lpm);
-        
+
         createGlobalMapFromLPM(lpm);
     }
 }
@@ -228,13 +224,12 @@ void GlobalMetricPanel::loadGMMPressed(wxCommandEvent& event)
 {
     wxFileDialog loadDialog(widgets_.display,
                             ("Load GMM..."),
-                            "",     // default directory
-                            "",     // default filename
+                            "",   // default directory
+                            "",   // default filename
                             "Global Metric Map (*.gmm)|*.gmm",
                             wxFD_OPEN);
-    
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+
+    if (loadDialog.ShowModal() == wxID_OK) {
         wxString path = loadDialog.GetPath();
         loadMap(std::string(path.mb_str()));
     }
@@ -245,13 +240,12 @@ void GlobalMetricPanel::saveGMMPressed(wxCommandEvent& event)
 {
     wxFileDialog saveDialog(widgets_.display,
                             ("Save Global Metric Map..."),
-                            "",     // default directory
-                            "",     // default filename
+                            "",   // default directory
+                            "",   // default filename
                             "Global Metric Map (*.gmm)|*.gmm",
-                            wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-    
-    if((saveDialog.ShowModal() == wxID_OK) && map_)
-    {
+                            wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if ((saveDialog.ShowModal() == wxID_OK) && map_) {
         wxString path = saveDialog.GetPath();
         saveMap(std::string(path.mb_str()));
     }
@@ -263,6 +257,6 @@ void GlobalMetricPanel::relocalizePressed(wxCommandEvent& event)
     assert(haveMap_);
     startRelocalization();
 }
-    
-} // namespace ui
-} // namespace vulcan
+
+}   // namespace ui
+}   // namespace vulcan

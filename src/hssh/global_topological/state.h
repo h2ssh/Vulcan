@@ -8,11 +8,11 @@
 
 
 /**
-* \file     topological_state.h
-* \author   Collin Johnson
-*
-* Declaration of TopologicalState.
-*/
+ * \file     topological_state.h
+ * \author   Collin Johnson
+ *
+ * Declaration of TopologicalState.
+ */
 
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_STATE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_STATE_H
@@ -31,15 +31,15 @@ namespace hssh
 {
 
 /**
-* TopologicalState represents a possible topological state of the robot. The state contains:
-*
-*   - a unique identifier to be used for identifying the state in the TreeOfMaps
-*   - a topological map representing the robot's knowledge of the environment
-*   - the probability distribution for the map
-*   - the location of the robot within this topological map
-*   - the depth of the current visit being handled
-*   - the number of events incorporated from the current visit
-*/
+ * TopologicalState represents a possible topological state of the robot. The state contains:
+ *
+ *   - a unique identifier to be used for identifying the state in the TreeOfMaps
+ *   - a topological map representing the robot's knowledge of the environment
+ *   - the probability distribution for the map
+ *   - the location of the robot within this topological map
+ *   - the depth of the current visit being handled
+ *   - the number of events incorporated from the current visit
+ */
 struct TopologicalState
 {
     Id id = kInvalidId;
@@ -55,20 +55,13 @@ struct TopologicalState
     template <class Archive>
     void serialize(Archive& ar, const unsigned int version)
     {
-        ar( id,
-            map,
-            probability,
-            location,
-            visitDepth,
-            numPlaceVisits,
-            visitEventCount
-        );
+        ar(id, map, probability, location, visitDepth, numPlaceVisits, visitEventCount);
     }
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
 DEFINE_SYSTEM_MESSAGE(hssh::TopologicalState, ("GLOBAL_TOPO_STATE"))
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_STATE_H
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_STATE_H

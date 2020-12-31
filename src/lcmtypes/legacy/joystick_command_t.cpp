@@ -8,30 +8,32 @@
 
 
 #include "lcmtypes/legacy/joystick_command_t.h"
-#include "robot/commands.h"
-#include "lcmtypes/subscription_manager.h"
 #include "lcmtypes/message_helpers.h"
+#include "lcmtypes/subscription_manager.h"
+#include "robot/commands.h"
 
 static vulcan::lcm::SubscriptionManager<vulcan_lcm_joystick_command_t, vulcan::robot::joystick_command_t> subscribers;
 
 
-void vulcan::lcm::convert_lcm_to_vulcan(const vulcan_lcm_joystick_command_t& joystickMessage, robot::joystick_command_t& joystick)
+void vulcan::lcm::convert_lcm_to_vulcan(const vulcan_lcm_joystick_command_t& joystickMessage,
+                                        robot::joystick_command_t& joystick)
 {
     joystick.timestamp = joystickMessage.timestamp;
 
     joystick.forward = joystickMessage.forward;
-    joystick.left    = joystickMessage.left;
-    joystick.gain    = joystickMessage.gain;
+    joystick.left = joystickMessage.left;
+    joystick.gain = joystickMessage.gain;
 }
 
 
-void vulcan::lcm::convert_vulcan_to_lcm(const robot::joystick_command_t& joystick, vulcan_lcm_joystick_command_t& joystickMessage)
+void vulcan::lcm::convert_vulcan_to_lcm(const robot::joystick_command_t& joystick,
+                                        vulcan_lcm_joystick_command_t& joystickMessage)
 {
     joystickMessage.timestamp = joystick.timestamp;
 
     joystickMessage.forward = joystick.forward;
-    joystickMessage.left    = joystick.left;
-    joystickMessage.gain    = joystick.gain;
+    joystickMessage.left = joystick.left;
+    joystickMessage.gain = joystick.gain;
 }
 
 
@@ -46,22 +48,24 @@ void vulcan::lcm::publish_data(lcm_t* lcm, const robot::joystick_command_t& joys
 }
 
 
-void vulcan::lcm::subscribe_to_message(lcm_t* lcm, void (*callback)(const robot::joystick_command_t&, const std::string&, void*), void* userdata, std::string channel)
+void vulcan::lcm::subscribe_to_message(lcm_t* lcm,
+                                       void (*callback)(const robot::joystick_command_t&, const std::string&, void*),
+                                       void* userdata,
+                                       std::string channel)
 {
     verify_channel(channel, JOYSTICK_COMMAND_CHANNEL, true);
 
     channel_subscriber_t<robot::joystick_command_t> newSubscriber(channel, userdata, callback);
 
-    if(!subscribers.isSubscribedToChannel(lcm, channel))
-    {
+    if (!subscribers.isSubscribedToChannel(lcm, channel)) {
         subscribers.addChannelSubscriber(lcm, newSubscriber);
 
-        vulcan_lcm_joystick_command_t_subscribe(lcm, channel.c_str(),
-                                                subscription_manager_callback<vulcan_lcm_joystick_command_t, robot::joystick_command_t>,
-                                                &subscribers);
-    }
-    else
-    {
+        vulcan_lcm_joystick_command_t_subscribe(
+          lcm,
+          channel.c_str(),
+          subscription_manager_callback<vulcan_lcm_joystick_command_t, robot::joystick_command_t>,
+          &subscribers);
+    } else {
         subscribers.addChannelSubscriber(lcm, newSubscriber);
     }
 }

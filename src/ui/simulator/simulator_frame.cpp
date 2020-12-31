@@ -8,15 +8,15 @@
 
 
 /**
-* \file     simulator_frame.cpp
-* \author   Collin Johnson and Zongtai Luo
-*
-* Definition of SimulatorFrame.
-*/
+ * \file     simulator_frame.cpp
+ * \author   Collin Johnson and Zongtai Luo
+ *
+ * Definition of SimulatorFrame.
+ */
 
 #include "ui/simulator/simulator_frame.h"
-#include "ui/simulator/simulator_robot_control.h"
 #include "ui/simulator/simulator_display.h"
+#include "ui/simulator/simulator_robot_control.h"
 #include "ui/simulator/simulator_robot_display.h"
 
 namespace vulcan
@@ -24,8 +24,7 @@ namespace vulcan
 namespace ui
 {
 
-SimulatorFrame::SimulatorFrame(void)
-: SimulatorUI(0)
+SimulatorFrame::SimulatorFrame(void) : SimulatorUI(0)
 {
     setupSimulatorUI();
     initialize(nullptr, 30, display, gridCellStatusBar);
@@ -36,21 +35,22 @@ SimulatorFrame::SimulatorFrame(void)
 
 
 SimulatorFrame::~SimulatorFrame(void)
-{}
+{
+}
 
 
 void SimulatorFrame::setupSimulatorUI(void)
 {
-	simulator_ui_panel_widgets_t widgets;
+    simulator_ui_panel_widgets_t widgets;
 
-	widgets.robot_display_ = robot_display;
-	widgets.ground_truth_display_ = display;
-	widgets.scriptNameText = simulatorScriptFileText;
-	widgets.robotConfigText = simulatorRobotConfigText;
-	
-	robot_control_ = new SimulatorRobotControl(widgets);
+    widgets.robot_display_ = robot_display;
+    widgets.ground_truth_display_ = display;
+    widgets.scriptNameText = simulatorScriptFileText;
+    widgets.robotConfigText = simulatorRobotConfigText;
+
+    robot_control_ = new SimulatorRobotControl(widgets);
     addPanel(robot_control_, nullptr);
 }
 
-}// ui
-}// vulcan
+}   // namespace ui
+}   // namespace vulcan

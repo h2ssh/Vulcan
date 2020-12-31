@@ -8,25 +8,25 @@
 
 
 /**
-* \file     isovist_orientation_gateway_generator.cpp
-* \author   Collin Johnson
-*
-* Definition of IsovistOrientationGatewayGenerator.
-*/
+ * \file     isovist_orientation_gateway_generator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of IsovistOrientationGatewayGenerator.
+ */
 
 #include "hssh/local_topological/area_detection/gateways/isovist_orientation_gateway_generator.h"
 #include "hssh/local_topological/area_detection/gateways/endpoint_validator.h"
 #include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
 #include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
 #include "hssh/local_topological/area_detection/gateways/isovist_maxima.h"
-#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
 #include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
 #include "hssh/types.h"
 #include "utils/algorithm_ext.h"
 #include "utils/ray_tracing.h"
-#include <boost/range/iterator_range.hpp>
-#include <boost/range/as_array.hpp>
 #include <boost/range/algorithm_ext.hpp>
+#include <boost/range/as_array.hpp>
+#include <boost/range/iterator_range.hpp>
 
 namespace vulcan
 {
@@ -35,11 +35,7 @@ namespace hssh
 
 double isovist_orientation(const utils::Isovist& isovist);
 bool is_shorter_gateway(const Gateway& lhs, const Gateway& rhs, cell_t maximumCell);
-bool is_shorter_gateway(const Line<int>& lhs,
-                        const Line<int>& rhs,
-                        cell_t lhsCell,
-                        cell_t rhsCell,
-                        cell_t maximumCell);
+bool is_shorter_gateway(const Line<int>& lhs, const Line<int>& rhs, cell_t lhsCell, cell_t rhsCell, cell_t maximumCell);
 bool is_better_gateway(const Gateway& lhs,
                        const Gateway& rhs,
                        cell_t lhsCell,
@@ -47,19 +43,19 @@ bool is_better_gateway(const Gateway& lhs,
                        position_value_t maximumValue);
 
 
-IsovistOrientationGatewayGenerator::IsovistOrientationGatewayGenerator(const isovist_orientation_gateway_generator_params_t& params)
+IsovistOrientationGatewayGenerator::IsovistOrientationGatewayGenerator(
+  const isovist_orientation_gateway_generator_params_t& params)
 : nextGatewayId_(0)
 , params_(params)
 {
 }
 
 
-std::vector<WeightedGateway> IsovistOrientationGatewayGenerator::generateGateways(
-    const std::vector<WeightedGateway>& priorGateways,
-    const VoronoiIsovistField& isovists,
-    const VoronoiSkeletonGrid& grid,
-    const EndpointValidator& validator
-)
+std::vector<WeightedGateway>
+  IsovistOrientationGatewayGenerator::generateGateways(const std::vector<WeightedGateway>& priorGateways,
+                                                       const VoronoiIsovistField& isovists,
+                                                       const VoronoiSkeletonGrid& grid,
+                                                       const EndpointValidator& validator)
 {
     VoronoiEdges edges(grid, SKELETON_CELL_REDUCED_SKELETON);
     VoronoiIsovistGradients gradients(edges);
@@ -67,15 +63,14 @@ std::vector<WeightedGateway> IsovistOrientationGatewayGenerator::generateGateway
 
     VoronoiIsovistMaxima maxima(gradients, edges, grid, params_.numAboveMean, params_.saveGradientData);
 
-    gradients_     = &gradients;
-    isovists_      = &isovists;
-    grid_          = &grid;
-    validator_     = &validator;
+    gradients_ = &gradients;
+    isovists_ = &isovists;
+    grid_ = &grid;
+    validator_ = &validator;
     sourceToSkeleton_ = extract_source_cells(grid, SKELETON_CELL_REDUCED_SKELETON);
 
     // Create new gateways for every new maximum
-    for(auto& maximum : maxima)
-    {
+    for (auto& maximum : maxima) {
         createGatewaysForMaximum(maximum);
     }
 
@@ -87,14 +82,12 @@ void IsovistOrientationGatewayGenerator::createGatewaysForMaximum(const isovist_
 {
     extractEdgeCellsForMaximum(maximum);
 
-    const double kAngleSearchRange = M_PI / 4.0;    // search +/- 45 degrees from where the minimum is
+    const double kAngleSearchRange = M_PI / 4.0;   // search +/- 45 degrees from where the minimum is
 
     std::vector<WeightedGateway> possibleGateways;
-    for(auto& c : maximumCells_)
-    {
+    for (auto& c : maximumCells_) {
         // Skip cells that don't have a gradient because their weight will be invalid
-        if((c.value == 0.0) || !isovists_->contains(c.position))
-        {
+        if ((c.value == 0.0) || !isovists_->contains(c.position)) {
             continue;
         }
 
@@ -104,17 +97,17 @@ void IsovistOrientationGatewayGenerator::createGatewaysForMaximum(const isovist_
         double bestNormal = isoOrientation;
         position_value_t bestCell = c;
 
-        for(double orientation = -kAngleSearchRange; orientation < kAngleSearchRange; orientation += M_PI / 180.0f)
-        {
+        for (double orientation = -kAngleSearchRange; orientation < kAngleSearchRange; orientation += M_PI / 180.0f) {
             auto cellGateway = gateway_boundary_line_at_cell(c.position, orientation + isoOrientation, *grid_);
 
-            if(cellGateway  // must have found a gateway for the cell
-//                 && validator_->isValidGateway(*cellGateway) // and it must be valid
-                && (!bestGateway || is_shorter_gateway(*cellGateway,
-                                                       *bestGateway,
-                                                       c.position,
-                                                       bestCell.position,
-                                                       maximum.maximum.position))) // and if shorter, it's the new best
+            if (cellGateway   // must have found a gateway for the cell
+                              //                 && validator_->isValidGateway(*cellGateway) // and it must be valid
+                && (!bestGateway
+                    || is_shorter_gateway(*cellGateway,
+                                          *bestGateway,
+                                          c.position,
+                                          bestCell.position,
+                                          maximum.maximum.position)))   // and if shorter, it's the new best
             {
                 bestGateway = cellGateway;
                 bestNormal = orientation + isoOrientation;
@@ -122,25 +115,17 @@ void IsovistOrientationGatewayGenerator::createGatewaysForMaximum(const isovist_
             }
         }
 
-        if(bestGateway)
-        {
-            auto g = create_gateway_at_cell(bestCell.position,
-                                            bestNormal,
-                                            nextGatewayId_,
-                                            *grid_);
-            if(g)
-            {
-                possibleGateways.push_back({*g,
-                                            std::abs(bestCell.value),
-                                            false});
+        if (bestGateway) {
+            auto g = create_gateway_at_cell(bestCell.position, bestNormal, nextGatewayId_, *grid_);
+            if (g) {
+                possibleGateways.push_back({*g, std::abs(bestCell.value), false});
             }
         }
     }
 
     double meanDist = 0.0;
     double sumDistWeights = 0.0;
-    for(auto& c : maximumCells_)
-    {
+    for (auto& c : maximumCells_) {
         meanDist += c.value * grid_->getMetricDistance(c.position.x, c.position.y);
         sumDistWeights += c.value;
     }
@@ -149,53 +134,52 @@ void IsovistOrientationGatewayGenerator::createGatewaysForMaximum(const isovist_
     std::sort(possibleGateways.begin(),
               possibleGateways.end(),
               [meanDist](const WeightedGateway& lhs, const WeightedGateway& rhs) -> bool {
-        // If the differences are approximately the same, then take the gateway with the higher weight.
-        // Otherwise opt for the gateway with the closest distance to the mean.
-        double lhsDiff = std::abs(lhs.gateway.length() - meanDist) / lhs.weight;
-        double rhsDiff = std::abs(rhs.gateway.length() - meanDist) / rhs.weight;
-        return (absolute_fuzzy_equal(lhsDiff, rhsDiff) && lhs.weight > rhs.weight) ||
-            (lhsDiff < rhsDiff);
-    });
+                  // If the differences are approximately the same, then take the gateway with the higher weight.
+                  // Otherwise opt for the gateway with the closest distance to the mean.
+                  double lhsDiff = std::abs(lhs.gateway.length() - meanDist) / lhs.weight;
+                  double rhsDiff = std::abs(rhs.gateway.length() - meanDist) / rhs.weight;
+                  return (absolute_fuzzy_equal(lhsDiff, rhsDiff) && lhs.weight > rhs.weight) || (lhsDiff < rhsDiff);
+              });
 
     auto bestGatewayIt = possibleGateways.begin();
 
-//     double isoOrientation = isovist_orientation(isovists_->at(maximum.maximum.position));
-//     for(double orientation = -kAngleSearchRange; orientation < kAngleSearchRange; orientation += 0.01)
-//     {
-//         auto cellGateway = create_gateway_at_cell(maximum.maximum.position, orientation + isoOrientation, nextGatewayId_, *grid_);
-//         if(cellGateway
-//             && validator_->isValidGateway(*cellGateway)
-//             && (!haveBest || is_shorter_gateway(*cellGateway, *bestGateway, maximum.maximum.position)))
-//         {
-//             bestGateway = cellGateway;
-//             haveBest = true;
-//         }
-//     }
-//
-//     for(auto& c : maximumCells_)
-//     {
-//         double isoOrientation = isovist_orientation(isovists_->at(c));
-//
-//         for(double orientation = -kAngleSearchRange; orientation < kAngleSearchRange; orientation += 0.01)
-//         {
-//             auto cellGateway = create_gateway_at_cell(c, orientation + isoOrientation, nextGatewayId_, *grid_);
-//
-//             if(cellGateway
-//                 && validator_->isValidGateway(*cellGateway)
-//                 && (!haveBest || is_better_gateway(*cellGateway, *bestGateway, c, bestGatewayCell, maximum.maximum)))
-//             {
-//                 bestGateway = cellGateway;
-//                 bestGatewayCell = c;
-//                 haveBest = true;
-//             }
-//         }
-//     }
+    //     double isoOrientation = isovist_orientation(isovists_->at(maximum.maximum.position));
+    //     for(double orientation = -kAngleSearchRange; orientation < kAngleSearchRange; orientation += 0.01)
+    //     {
+    //         auto cellGateway = create_gateway_at_cell(maximum.maximum.position, orientation + isoOrientation,
+    //         nextGatewayId_, *grid_); if(cellGateway
+    //             && validator_->isValidGateway(*cellGateway)
+    //             && (!haveBest || is_shorter_gateway(*cellGateway, *bestGateway, maximum.maximum.position)))
+    //         {
+    //             bestGateway = cellGateway;
+    //             haveBest = true;
+    //         }
+    //     }
+    //
+    //     for(auto& c : maximumCells_)
+    //     {
+    //         double isoOrientation = isovist_orientation(isovists_->at(c));
+    //
+    //         for(double orientation = -kAngleSearchRange; orientation < kAngleSearchRange; orientation += 0.01)
+    //         {
+    //             auto cellGateway = create_gateway_at_cell(c, orientation + isoOrientation, nextGatewayId_, *grid_);
+    //
+    //             if(cellGateway
+    //                 && validator_->isValidGateway(*cellGateway)
+    //                 && (!haveBest || is_better_gateway(*cellGateway, *bestGateway, c, bestGatewayCell,
+    //                 maximum.maximum)))
+    //             {
+    //                 bestGateway = cellGateway;
+    //                 bestGatewayCell = c;
+    //                 haveBest = true;
+    //             }
+    //         }
+    //     }
 
     ++nextGatewayId_;
 
     // Now that the gateway has been found, do the expensive normal calculation
-    if(bestGatewayIt != possibleGateways.end())
-    {
+    if (bestGatewayIt != possibleGateways.end()) {
         gatewayHypotheses_.push_back({bestGatewayIt->gateway, std::abs(maximum.totalChange), false});
     }
 }
@@ -207,8 +191,7 @@ void IsovistOrientationGatewayGenerator::extractEdgeCellsForMaximum(const isovis
     edgeCells_.clear();
     extract_edge_from_skeleton(maximum.maximum.position, *grid_, edgeCells_);
 
-    if(edgeCells_.size() < 3)
-    {
+    if (edgeCells_.size() < 3) {
         return;
     }
     // Ignore the junctions at either end of the edge
@@ -217,18 +200,15 @@ void IsovistOrientationGatewayGenerator::extractEdgeCellsForMaximum(const isovis
 
     maximumCells_.clear();
     // Sort the maximum cells in order along the edge
-    for(auto c : edgeCells_)
-    {
+    for (auto c : edgeCells_) {
         // See if this edge cell is part of the maximum
-        auto maxIt = std::find_if(maximum.skeletonCells.begin(),
-                                  maximum.skeletonCells.end(),
-                                  [c](const position_value_t& pv) {
-            return pv.position == c;
-        });
+        auto maxIt =
+          std::find_if(maximum.skeletonCells.begin(), maximum.skeletonCells.end(), [c](const position_value_t& pv) {
+              return pv.position == c;
+          });
 
         // If so, then add it to the maximum cells
-        if(maxIt != maximum.skeletonCells.end())
-        {
+        if (maxIt != maximum.skeletonCells.end()) {
             maximumCells_.push_back(*maxIt);
         }
     }
@@ -238,27 +218,24 @@ void IsovistOrientationGatewayGenerator::extractEdgeCellsForMaximum(const isovis
     // of clutter or other noise sources
     // Start growing the front
     bool madeChange = !maximumCells_.empty();
-    while(madeChange)
-    {
+    while (madeChange) {
         madeChange = false;
         cell_t growCell = maximumCells_.front().position;
         auto growValue = gradients_->gradientAt(growCell).value;
 
-        for(auto source : boost::make_iterator_range(grid_->beginSourceCells(growCell),
-                                                     grid_->endSourceCells(growCell)))
-        {
-            for(auto& skel : sourceToSkeleton_[source])
-            {
+        for (auto source :
+             boost::make_iterator_range(grid_->beginSourceCells(growCell), grid_->endSourceCells(growCell))) {
+            for (auto& skel : sourceToSkeleton_[source]) {
                 bool onSameEdge = utils::contains(edgeCells_, skel);
                 bool isAdded = utils::contains_if(maximumCells_, [skel](const position_value_t& pv) {
                     return pv.position == skel;
                 });
                 auto gradient = gradients_->gradientAt(skel);
 
-                if(onSameEdge       // only grow along the same edge
-                    && !isAdded     // don't add duplicates
-                    && (gradient.value * growValue > 0) // don't cross any zero crossings of the gradient
-                    && (std::abs(gradient.value) <= std::abs(growValue))) // only allow lower gradients
+                if (onSameEdge                            // only grow along the same edge
+                    && !isAdded                           // don't add duplicates
+                    && (gradient.value * growValue > 0)   // don't cross any zero crossings of the gradient
+                    && (std::abs(gradient.value) <= std::abs(growValue)))   // only allow lower gradients
                 {
                     maximumCells_.push_front(gradient);
                     madeChange = true;
@@ -269,27 +246,24 @@ void IsovistOrientationGatewayGenerator::extractEdgeCellsForMaximum(const isovis
 
     // Then grow at the back
     madeChange = !maximumCells_.empty();
-    while(madeChange)
-    {
+    while (madeChange) {
         madeChange = false;
         cell_t growCell = maximumCells_.back().position;
         auto growValue = gradients_->gradientAt(growCell).value;
 
-        for(auto source : boost::make_iterator_range(grid_->beginSourceCells(growCell),
-            grid_->endSourceCells(growCell)))
-        {
-            for(auto& skel : sourceToSkeleton_[source])
-            {
+        for (auto source :
+             boost::make_iterator_range(grid_->beginSourceCells(growCell), grid_->endSourceCells(growCell))) {
+            for (auto& skel : sourceToSkeleton_[source]) {
                 bool onSameEdge = utils::contains(edgeCells_, skel);
                 bool isAdded = utils::contains_if(maximumCells_, [skel](const position_value_t& pv) {
                     return pv.position == skel;
                 });
                 auto gradient = gradients_->gradientAt(skel);
 
-                if(onSameEdge       // only grow along the same edge
-                    && !isAdded     // don't add duplicates
-                    && (gradient.value * growValue > 0) // don't cross any zero crossings of the gradient
-                    && (std::abs(gradient.value) <= std::abs(growValue))) // only allow lower gradients
+                if (onSameEdge                            // only grow along the same edge
+                    && !isAdded                           // don't add duplicates
+                    && (gradient.value * growValue > 0)   // don't cross any zero crossings of the gradient
+                    && (std::abs(gradient.value) <= std::abs(growValue)))   // only allow lower gradients
                 {
                     maximumCells_.push_back(gradient);
                     madeChange = true;
@@ -318,29 +292,22 @@ bool is_shorter_gateway(const Gateway& lhs, const Gateway& rhs, cell_t maximumCe
     double lhsLength = length(lhs.cellBoundary());
     double rhsLength = length(rhs.cellBoundary());
 
-    if(lhsLength == rhsLength)
-    {
+    if (lhsLength == rhsLength) {
         return distance_between_points(lhs.skeletonCell(), maximumCell)
-            < distance_between_points(rhs.skeletonCell(), maximumCell);
+          < distance_between_points(rhs.skeletonCell(), maximumCell);
     }
 
     return lhsLength < rhsLength;
 }
 
 
-bool is_shorter_gateway(const Line<int>& lhs,
-                        const Line<int>& rhs,
-                        cell_t lhsCell,
-                        cell_t rhsCell,
-                        cell_t maximumCell)
+bool is_shorter_gateway(const Line<int>& lhs, const Line<int>& rhs, cell_t lhsCell, cell_t rhsCell, cell_t maximumCell)
 {
     double lhsLength = length(lhs);
     double rhsLength = length(rhs);
 
-    if(lhsLength == rhsLength)
-    {
-        return distance_between_points(lhsCell, maximumCell)
-            < distance_between_points(rhsCell, maximumCell);
+    if (lhsLength == rhsLength) {
+        return distance_between_points(lhsCell, maximumCell) < distance_between_points(rhsCell, maximumCell);
     }
 
     return lhsLength < rhsLength;
@@ -358,5 +325,5 @@ bool is_better_gateway(const Gateway& lhs,
     return lhsScore < rhsScore;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

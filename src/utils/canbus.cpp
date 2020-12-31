@@ -8,18 +8,18 @@
 
 
 /**
-* \file     canbus.cpp
-* \author   Collin Johnson, Philip McKenna
-*
-* Definition of CanBus.
-*/
+ * \file     canbus.cpp
+ * \author   Collin Johnson, Philip McKenna
+ *
+ * Definition of CanBus.
+ */
 
 #include "utils/canbus.h"
 #include <cassert>
+#include <cstdlib>
+#include <fcntl.h>   // O_RDWR
 #include <iostream>
 #include <libpcan.h>
-#include <cstdlib>
-#include <fcntl.h>    // O_RDWR
 
 namespace vulcan
 {
@@ -29,9 +29,7 @@ namespace utils
 void print_error_message(int errorNumber);
 
 
-CanBus::CanBus(const std::string& dev, int baud)
-    : device(dev)
-    , busHandle(0)
+CanBus::CanBus(const std::string& dev, int baud) : device(dev), busHandle(0)
 {
     openCanBus(baud);
 }
@@ -111,10 +109,9 @@ void CanBus::closeCanBus(void)
 
 void print_error_message(int errorNumber)
 {
-	switch(errorNumber)
-	{
+    switch (errorNumber) {
     case CAN_ERR_OK:
-        //std::cout << "NO error!\n";
+        // std::cout << "NO error!\n";
         break;
     case CAN_ERR_XMTFULL:
         std::cout << "transmit buffer full\n";
@@ -161,9 +158,9 @@ void print_error_message(int errorNumber)
     default:
         std::cout << "Unknown Error!\n";
         break;
-	}
-	return;
+    }
+    return;
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

@@ -15,9 +15,9 @@
 */
 
 #include "ui/debug/tracker_panel.h"
+#include "system/module_communicator.h"
 #include "ui/debug/debug_ui.h"
 #include "ui/debug/tracker_display_widget.h"
-#include "system/module_communicator.h"
 #include <cassert>
 
 namespace vulcan
@@ -26,19 +26,19 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(TrackerPanel, wxEvtHandler)
-    EVT_CHECKBOX(ID_TRACKER_FOLLOW_ROBOT_BOX, TrackerPanel::followRobotChecked)
-    EVT_CHECKBOX(ID_SHOW_LASER_OBJECTS_BOX, TrackerPanel::showLaserObjectsChecked)
-    EVT_CHECKBOX(ID_SHOW_LASER_OBJECT_POINTS_BOX, TrackerPanel::showLaserPointsChecked)
-    EVT_CHECKBOX(ID_SHOW_LASER_UNCERTAINTY_BOX, TrackerPanel::showLaserUncertaintyChecked)
-    EVT_RADIOBOX(ID_LASER_OBJ_BOUNDARY_RADIO, TrackerPanel::boundaryToShowChanged)
-    EVT_CHECKBOX(ID_SHOW_TRACKED_OBJECTS_BOX, TrackerPanel::showTrackedObjectsChecked)
-    EVT_CHECKBOX(ID_SHOW_TRACKED_ACCELERATION_BOX, TrackerPanel::showAccelerationChecked)
-    EVT_RADIOBOX(ID_RIGID_OBJECT_STATE_RADIO, TrackerPanel::rigidObjectStateToShowChanged)
-    EVT_RADIOBOX(ID_TRACKING_UNCERTAINTY_RADIO, TrackerPanel::trackingUncertaintyToShowChanged)
-    EVT_CHECKBOX(ID_SHOW_RECENT_OBJECT_TRAJECTORY_BOX, TrackerPanel::showRecentTrajectoryChecked)
-    EVT_RADIOBOX(ID_OBJECT_GOALS_TO_SHOW_RADIO, TrackerPanel::goalToShowChanged)
-    EVT_TOGGLEBUTTON(ID_EVALUATE_OBJECT_GOALS_BUTTON, TrackerPanel::evaluateGoalsPressed)
-    EVT_RADIOBOX(ID_MOTION_PREDICTIONS_TO_SHOW_RADIO, TrackerPanel::predictedTrajToShowChanged)
+EVT_CHECKBOX(ID_TRACKER_FOLLOW_ROBOT_BOX, TrackerPanel::followRobotChecked)
+EVT_CHECKBOX(ID_SHOW_LASER_OBJECTS_BOX, TrackerPanel::showLaserObjectsChecked)
+EVT_CHECKBOX(ID_SHOW_LASER_OBJECT_POINTS_BOX, TrackerPanel::showLaserPointsChecked)
+EVT_CHECKBOX(ID_SHOW_LASER_UNCERTAINTY_BOX, TrackerPanel::showLaserUncertaintyChecked)
+EVT_RADIOBOX(ID_LASER_OBJ_BOUNDARY_RADIO, TrackerPanel::boundaryToShowChanged)
+EVT_CHECKBOX(ID_SHOW_TRACKED_OBJECTS_BOX, TrackerPanel::showTrackedObjectsChecked)
+EVT_CHECKBOX(ID_SHOW_TRACKED_ACCELERATION_BOX, TrackerPanel::showAccelerationChecked)
+EVT_RADIOBOX(ID_RIGID_OBJECT_STATE_RADIO, TrackerPanel::rigidObjectStateToShowChanged)
+EVT_RADIOBOX(ID_TRACKING_UNCERTAINTY_RADIO, TrackerPanel::trackingUncertaintyToShowChanged)
+EVT_CHECKBOX(ID_SHOW_RECENT_OBJECT_TRAJECTORY_BOX, TrackerPanel::showRecentTrajectoryChecked)
+EVT_RADIOBOX(ID_OBJECT_GOALS_TO_SHOW_RADIO, TrackerPanel::goalToShowChanged)
+EVT_TOGGLEBUTTON(ID_EVALUATE_OBJECT_GOALS_BUTTON, TrackerPanel::evaluateGoalsPressed)
+EVT_RADIOBOX(ID_MOTION_PREDICTIONS_TO_SHOW_RADIO, TrackerPanel::predictedTrajToShowChanged)
 END_EVENT_TABLE()
 
 tracker::BoundaryType boundary_selection_to_type(int selection);
@@ -47,8 +47,7 @@ TrackingUncertainty uncertainty_radio_to_type(int selection);
 PredictionType prediction_radio_to_type(int selection);
 
 
-TrackerPanel::TrackerPanel(const ui_params_t& params, const tracker_panel_widgets_t& widgets)
-: widgets_(widgets)
+TrackerPanel::TrackerPanel(const ui_params_t& params, const tracker_panel_widgets_t& widgets) : widgets_(widgets)
 {
     assert(widgets_.displayWidget);
     assert(widgets_.showLaserObjectsBox);
@@ -70,12 +69,11 @@ TrackerPanel::TrackerPanel(const ui_params_t& params, const tracker_panel_widget
     widgets_.displayWidget->showTrackedObjects(widgets_.showTrackedObjectsBox->IsChecked());
     widgets_.displayWidget->showAccleration(widgets_.showAccelerationBox->IsChecked());
     widgets_.displayWidget->setTrackingUncertaintyToShow(
-        uncertainty_radio_to_type(widgets_.uncertaintyToShowRadio->GetSelection()));
+      uncertainty_radio_to_type(widgets_.uncertaintyToShowRadio->GetSelection()));
     widgets_.displayWidget->showRecentTrajectory(widgets_.showRecentTrajBox->IsChecked());
-    widgets_.displayWidget->setGoalPredictionToShow(
-        prediction_radio_to_type(widgets_.goalToShowRadio->GetSelection()));
+    widgets_.displayWidget->setGoalPredictionToShow(prediction_radio_to_type(widgets_.goalToShowRadio->GetSelection()));
     widgets_.displayWidget->setTrajectoryPredictionToShow(
-        prediction_radio_to_type(widgets_.predictionToShowRadio->GetSelection()));
+      prediction_radio_to_type(widgets_.predictionToShowRadio->GetSelection()));
     widgets_.displayWidget->setWidgetParams(params);
 }
 
@@ -89,10 +87,10 @@ void TrackerPanel::setup(wxGLContext* context, wxStatusBar* statusBar)
 
 void TrackerPanel::subscribe(system::ModuleCommunicator& producer)
 {
-    producer.subscribeTo<hssh::LocalPerceptualMap>        (widgets_.displayWidget);
+    producer.subscribeTo<hssh::LocalPerceptualMap>(widgets_.displayWidget);
     producer.subscribeTo<tracker::DynamicObjectCollection>(widgets_.displayWidget);
-    producer.subscribeTo<tracker::LaserObjectCollection>  (widgets_.displayWidget);
-    producer.subscribeTo<motion_state_t>           (widgets_.displayWidget);
+    producer.subscribeTo<tracker::LaserObjectCollection>(widgets_.displayWidget);
+    producer.subscribeTo<motion_state_t>(widgets_.displayWidget);
 }
 
 
@@ -105,8 +103,7 @@ void TrackerPanel::setConsumer(system::ModuleCommunicator* consumer)
 void TrackerPanel::update(void)
 {
     long durationMs = 0;
-    if(widgets_.predictedTrajDurationText->GetValue().ToLong(&durationMs) && (durationMs > 0))
-    {
+    if (widgets_.predictedTrajDurationText->GetValue().ToLong(&durationMs) && (durationMs > 0)) {
         widgets_.displayWidget->setPredictedTrajectoryDuration(durationMs);
     }
 
@@ -206,8 +203,7 @@ void TrackerPanel::predictedTrajToShowChanged(wxCommandEvent& event)
 
 tracker::BoundaryType boundary_selection_to_type(int selection)
 {
-    switch(selection)
-    {
+    switch (selection) {
     case 0:
         return tracker::BoundaryType::best;
     case 1:
@@ -232,8 +228,7 @@ RigidObjectState rigid_state_to_type(int selection)
         slow,
     };
 
-    switch(selection)
-    {
+    switch (selection) {
     case fast:
         return RigidObjectState::fast;
 
@@ -259,8 +254,7 @@ TrackingUncertainty uncertainty_radio_to_type(int selection)
         none,
     };
 
-    switch(selection)
-    {
+    switch (selection) {
     case position:
         return TrackingUncertainty::position;
 
@@ -292,8 +286,7 @@ PredictionType prediction_radio_to_type(int selection)
         none,
     };
 
-    switch(selection)
-    {
+    switch (selection) {
     case best:
         return PredictionType::best;
 
@@ -312,5 +305,5 @@ PredictionType prediction_radio_to_type(int selection)
     return PredictionType::none;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

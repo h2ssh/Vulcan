@@ -8,20 +8,20 @@
 
 
 /**
-* \file     compression_test.cpp
-* \author   Collin Johnson
-*
-* Unit tests for ensuring the compression and decompression work correctly.
-*/
+ * \file     compression_test.cpp
+ * \author   Collin Johnson
+ *
+ * Unit tests for ensuring the compression and decompression work correctly.
+ */
 
 #include "utils/compression.h"
-#include <gtest/gtest.h>
 #include <boost/fusion/include/for_each.hpp>
 #include <boost/fusion/include/vector.hpp>
+#include <gtest/gtest.h>
 #include <random>
+#include <tuple>
 #include <typeindex>
 #include <typeinfo>
-#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -54,9 +54,9 @@ struct RoundtripChecker
                           std::back_inserter(decompressedSequence));
 
         EXPECT_EQ(initialSequence.size(), decompressedSequence.size())
-            << "Ratio:" << sameValueRatio << " Type:" << type_name(std::type_index(typeid(T)));
+          << "Ratio:" << sameValueRatio << " Type:" << type_name(std::type_index(typeid(T)));
         EXPECT_EQ(initialSequence, decompressedSequence)
-            << "Ratio:" << sameValueRatio << " Type:" << type_name(std::type_index(typeid(T)));
+          << "Ratio:" << sameValueRatio << " Type:" << type_name(std::type_index(typeid(T)));
     }
 };
 
@@ -102,10 +102,10 @@ struct CompressionChecker
 
         double compressionRatio = sequenceLength / static_cast<double>(compressedSequence.size());
 
-        std::cout << "Compression ratio for " << type_name(std::type_index(typeid(T))) << ':'
-            << compressionRatio << '\n';
+        std::cout << "Compression ratio for " << type_name(std::type_index(typeid(T))) << ':' << compressionRatio
+                  << '\n';
         EXPECT_EQ(expectRatioAboveOne, compressionRatio > 1.0)
-            << "Ratio:" << sameValueRatio << " Type:" << type_name(std::type_index(typeid(T)));
+          << "Ratio:" << sameValueRatio << " Type:" << type_name(std::type_index(typeid(T)));
     }
 };
 
@@ -144,12 +144,10 @@ std::vector<T> generate_random_sequence(std::size_t length, double sameValueRati
     T nextVal = 0;
     double diffValRatio = 1.0 - sameValueRatio;
 
-    for(std::size_t n = 0; n < length; ++n)
-    {
+    for (std::size_t n = 0; n < length; ++n) {
         // The range of the distribution is [0, 1). Thus, if diffVal == 0, this condition never fires and a uniform
         // sequence is created, and if diffVal == 1, it always fires and a completely random sequence is created
-        if(dist(rd) < diffValRatio)
-        {
+        if (dist(rd) < diffValRatio) {
             // If the sampled number is less than the ratio of different to same values, then iterate the next value
             // being added to the distribution
             ++nextVal;
@@ -165,8 +163,7 @@ std::vector<T> generate_random_sequence(std::size_t length, double sameValueRati
 std::string type_name(std::type_index index)
 {
     static std::unordered_map<std::type_index, std::string> typeNames;
-    if(typeNames.empty())
-    {
+    if (typeNames.empty()) {
         typeNames[std::type_index(typeid(int8_t))] = "int8_t";
         typeNames[std::type_index(typeid(uint8_t))] = "uint8_t";
         typeNames[std::type_index(typeid(int16_t))] = "int16_t";

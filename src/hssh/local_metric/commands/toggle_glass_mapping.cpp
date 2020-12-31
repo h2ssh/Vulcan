@@ -8,11 +8,11 @@
 
 
 /**
-* \file     toggle_glass_mapping.cpp
-* \author   Collin Johnson
-*
-* Definition of ToggleGlassMapping.
-*/
+ * \file     toggle_glass_mapping.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ToggleGlassMapping.
+ */
 
 #include "hssh/local_metric/commands/toggle_glass_mapping.h"
 #include "hssh/metrical/mapping/mapper.h"
@@ -26,7 +26,6 @@ ToggleGlassMapping::ToggleGlassMapping(bool shouldMap, const std::string& source
 : LocalMetricCommand(source)
 , shouldMap_(shouldMap)
 {
-
 }
 
 // LocalMetricCommand interface
@@ -41,9 +40,9 @@ void ToggleGlassMapping::issue(const metric_slam_data_t& data,
 
 void ToggleGlassMapping::print(std::ostream& out) const
 {
-    out << "INFO: ToggleGlassMapping: Turning glass mapping " << (shouldMap_ ? "on" : "off")
-        << " via " << source() << '\n';
+    out << "INFO: ToggleGlassMapping: Turning glass mapping " << (shouldMap_ ? "on" : "off") << " via " << source()
+        << '\n';
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

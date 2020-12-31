@@ -8,15 +8,15 @@
 
 
 /**
-* \file     mpepc_log.cpp
-* \author   Jong Jin Park
-*
-* Definition of MPEPCLog.
-*/
+ * \file     mpepc_log.cpp
+ * \author   Jong Jin Park
+ *
+ * Definition of MPEPCLog.
+ */
 
 #include "mpepc/evaluation/mpepc_log.h"
-#include "tracker/objects/serialization.h"
 #include "system/module_communicator.h"
+#include "tracker/objects/serialization.h"
 #include "utils/algorithm_ext.h"
 #include <algorithm>
 #include <limits>
@@ -43,9 +43,7 @@ MPEPCLog::MPEPCLog(void)
 }
 
 
-MPEPCLog::MPEPCLog(const std::string& logFilename)
-: name_(logFilename)
-, startTime_(std::numeric_limits<int64_t>::max())
+MPEPCLog::MPEPCLog(const std::string& logFilename) : name_(logFilename), startTime_(std::numeric_limits<int64_t>::max())
 {
     // Load all values from the provided LCM log. The LCM callbacks instance that will interact with LCM and callback
     // to add the values to the sensor log.
@@ -54,7 +52,9 @@ MPEPCLog::MPEPCLog(const std::string& logFilename)
     // lcm-logplayer. The interesting command is setting speed=0, which causes the log to playback as fast as it can
     // be read, as opposed to waiting between messages. Info on speed=0 can be found in lcm/lcm_file.c.
     std::ostringstream logProviderUrl;
-    logProviderUrl << "file://" << logFilename << "?speed=0"; // default mode is read mode, but have to read LCM code carefully to actually know that
+    logProviderUrl
+      << "file://" << logFilename
+      << "?speed=0";   // default mode is read mode, but have to read LCM code carefully to actually know that
     // provide url for both system and debug messages.
     comm_ = std::make_unique<system::ModuleCommunicator>(logProviderUrl.str(), logProviderUrl.str());
 
@@ -67,8 +67,7 @@ MPEPCLog::MPEPCLog(const std::string& logFilename)
 
     // Process just the first message to grab some timing information
     bool haveMessage = true;
-    while((duration_ == 0) && haveMessage)
-    {
+    while ((duration_ == 0) && haveMessage) {
         haveMessage = comm_->processIncoming() == 0;
     }
 
@@ -82,12 +81,10 @@ int MPEPCLog::loadTimeRange(int64_t begin, int64_t end)
     // Keep reading messages until the processIncoming doesn't return success, indicating that there's no data left
     bool haveMessage = true;
     int numProcessed = 0;
-    while((end == -1 || endTime_ < end) && haveMessage)
-    {
+    while ((end == -1 || endTime_ < end) && haveMessage) {
         haveMessage = comm_->processIncoming() == 0;
 
-        if(haveMessage)
-        {
+        if (haveMessage) {
             ++numProcessed;
         }
     }
@@ -171,7 +168,6 @@ MPEPCLog::motion_state_iterator MPEPCLog::endMotionState(int64_t timeUs) const
 }
 
 
-
 MPEPCLog::joystick_iterator MPEPCLog::beginCommandedJoystick(int64_t timeUs) const
 {
     return beginDuration(joystickCommand_.begin(), joystickCommand_.end(), timeUs, startTime_);
@@ -222,13 +218,13 @@ void MPEPCLog::addMPEPCInfo(const mpepc::trajectory_planner_debug_info_t& debugI
     lessDebugInfo.trajectories.clear();
     lessDebugInfo.trajectoryToInitialState.clear();
     lessDebugInfo.coarseOptimizerOutput = mpepc::robot_trajectory_debug_info_t();
-    lessDebugInfo.localOptimizerOutput  = mpepc::robot_trajectory_debug_info_t();
+    lessDebugInfo.localOptimizerOutput = mpepc::robot_trajectory_debug_info_t();
 
     mpepcInfo_.push_back(lessDebugInfo);
     mpepcInfo_.back().updateEndTimeUs -= baseTime_;
     mpepcInfo_.back().updateStartTimeUs -= baseTime_;
     mpepcInfo_.back().planReleaseTimeUs -= baseTime_;
-//     mpepcInfo_.push_back(debugInfo);
+    //     mpepcInfo_.push_back(debugInfo);
     updateTime(mpepcInfo_.back().planReleaseTimeUs);
 }
 
@@ -306,30 +302,25 @@ void MPEPCLog::setTimeBase(int64_t timebase)
     startTime_ -= timebase;
     endTime_ -= timebase;
 
-    for(auto& m : mpepcInfo_)
-    {
+    for (auto& m : mpepcInfo_) {
         m.updateEndTimeUs -= timebase;
         m.updateStartTimeUs -= timebase;
         m.planReleaseTimeUs -= timebase;
     }
 
-    for(auto& s : motionState_)
-    {
+    for (auto& s : motionState_) {
         s.timestamp -= timebase;
     }
 
-    for(auto& c : joystickCommand_)
-    {
+    for (auto& c : joystickCommand_) {
         c.timestamp -= timebase;
     }
 
-    for(auto& i : imuData_)
-    {
+    for (auto& i : imuData_) {
         i.timestamp -= timebase;
     }
 
-    for(auto& objs : objects_)
-    {
+    for (auto& objs : objects_) {
         objs.setTimestamp(objs.timestamp() - timebase);
     }
 }
@@ -354,5 +345,5 @@ Iter endDuration(Iter begin, Iter end, int64_t time, int64_t start)
     });
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

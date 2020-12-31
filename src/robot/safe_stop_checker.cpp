@@ -8,11 +8,11 @@
 
 
 /**
-* \file     safe_stop_checker.cpp
-* \author   Collin Johnson
-*
-* Definition of SafeStopChecker.
-*/
+ * \file     safe_stop_checker.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of SafeStopChecker.
+ */
 
 #include "robot/safe_stop_checker.h"
 
@@ -21,19 +21,16 @@ namespace vulcan
 namespace robot
 {
 
-SafeStopChecker::SafeStopChecker(const safe_stop_checker_params_t& params)
-    : params(params)
+SafeStopChecker::SafeStopChecker(const safe_stop_checker_params_t& params) : params(params)
 {
-
 }
 
 
-motion_command_t SafeStopChecker::adjustCommandIfNeeded(const motion_command_t&                command,
+motion_command_t SafeStopChecker::adjustCommandIfNeeded(const motion_command_t& command,
                                                         const std::vector<Point<float>>& scanPoints,
-                                                        proximity_warning_indices_t&           warningIndices)
+                                                        proximity_warning_indices_t& warningIndices)
 {
-
 }
 
-}
-}
+}   // namespace robot
+}   // namespace vulcan

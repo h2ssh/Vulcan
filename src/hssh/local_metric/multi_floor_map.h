@@ -8,11 +8,11 @@
 
 
 /**
-* \file     multi_floor_map.h
-* \author   Collin Johnson
-*
-* Declaration of MultiFloorMap.
-*/
+ * \file     multi_floor_map.h
+ * \author   Collin Johnson
+ *
+ * Declaration of MultiFloorMap.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_MULTI_FLOOR_MAP_H
 #define HSSH_LOCAL_METRIC_MULTI_FLOOR_MAP_H
@@ -26,43 +26,20 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 const int NOT_ON_ELEVATOR_ID = -1;
 
 /**
-* MultiFloorMap
-*/
+ * MultiFloorMap
+ */
 class MultiFloorMap
 {
 public:
-
     /**
-    * Default constructor for MultiFloorMap.
-    */
-    MultiFloorMap(void)
-        : currentFloor(-1)
-        , currentElevator(NOT_ON_ELEVATOR_ID)
-    { }
+     * Default constructor for MultiFloorMap.
+     */
+    MultiFloorMap(void) : currentFloor(-1), currentElevator(NOT_ON_ELEVATOR_ID) { }
 
-    /**
-    * Constructor for MultiFloorMap.
-    *
-    * \param    currentFloor        Id of the current floor
-    * \param    currentElevator     Id of the current elevator (-1 if none)
-    * \param    floors              Floors in the map
-    * \param    elevators           Elevators in the map
-    */
-    MultiFloorMap(int                                           currentFloor,
-                  int                                           currentElevator,
-                  const std::vector<std::shared_ptr<Floor>>&    floors,
-                  const std::vector<std::shared_ptr<Elevator>>& elevators)
-        : currentFloor(currentFloor)
-        , currentElevator(currentElevator)
-        , floors(floors)
-        , elevators(elevators)
-    {
-    }
-    
     /**
      * Constructor for MultiFloorMap.
      *
@@ -71,49 +48,66 @@ public:
      * \param    floors              Floors in the map
      * \param    elevators           Elevators in the map
      */
-    MultiFloorMap(int                                           currentFloor,
-                  int                                           currentElevator,
-                  const std::map<int, std::shared_ptr<Floor>>&  floors,
+    MultiFloorMap(int currentFloor,
+                  int currentElevator,
+                  const std::vector<std::shared_ptr<Floor>>& floors,
                   const std::vector<std::shared_ptr<Elevator>>& elevators)
-        : currentFloor(currentFloor)
-        , currentElevator(currentElevator)
-        , elevators(elevators)
+    : currentFloor(currentFloor)
+    , currentElevator(currentElevator)
+    , floors(floors)
+    , elevators(elevators)
     {
-        for(auto& floor : floors)
-        {
+    }
+
+    /**
+     * Constructor for MultiFloorMap.
+     *
+     * \param    currentFloor        Id of the current floor
+     * \param    currentElevator     Id of the current elevator (-1 if none)
+     * \param    floors              Floors in the map
+     * \param    elevators           Elevators in the map
+     */
+    MultiFloorMap(int currentFloor,
+                  int currentElevator,
+                  const std::map<int, std::shared_ptr<Floor>>& floors,
+                  const std::vector<std::shared_ptr<Elevator>>& elevators)
+    : currentFloor(currentFloor)
+    , currentElevator(currentElevator)
+    , elevators(elevators)
+    {
+        for (auto& floor : floors) {
             this->floors.push_back(floor.second);
         }
     }
 
     /**
-    * getCurrentFloor retrieves the id of the current floor.
-    */
+     * getCurrentFloor retrieves the id of the current floor.
+     */
     int getCurrentFloor(void) const { return currentFloor; }
 
     /**
-    * getCurrentElevator retrieves the id of the current elevator.
-    */
+     * getCurrentElevator retrieves the id of the current elevator.
+     */
     int getCurrentElevator(void) const { return currentElevator; }
 
     /**
-    * getFloors retrieves all the floors.
-    */
+     * getFloors retrieves all the floors.
+     */
     const std::vector<std::shared_ptr<Floor>>& getFloors(void) const { return floors; }
 
     /**
-    * getElevators retrieves all the elevators.
-    */
+     * getElevators retrieves all the elevators.
+     */
     const std::vector<std::shared_ptr<Elevator>>& getElevators(void) const { return elevators; }
 
 private:
-
-    int                                    currentFloor;
-    int                                    currentElevator;
-    std::vector<std::shared_ptr<Floor>>    floors;
+    int currentFloor;
+    int currentElevator;
+    std::vector<std::shared_ptr<Floor>> floors;
     std::vector<std::shared_ptr<Elevator>> elevators;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_METRIC_MULTI_FLOOR_MAP_H
+#endif   // HSSH_LOCAL_METRIC_MULTI_FLOOR_MAP_H

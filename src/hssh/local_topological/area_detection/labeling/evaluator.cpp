@@ -8,11 +8,11 @@
 
 
 /**
-* \file     evaluator.cpp
-* \author   Collin Johnson
-*
-* Implementation of AreaHypothesisEvaluator.
-*/
+ * \file     evaluator.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of AreaHypothesisEvaluator.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/evaluator.h"
 #include "hssh/local_topological/area_detection/labeling/boundary.h"
@@ -44,9 +44,8 @@ AreaHypothesisEvaluator::~AreaHypothesisEvaluator(void)
 
 double AreaHypothesisEvaluator::calculateLikelihood(const HypothesisFeatures& features, HypothesisType type) const
 {
-    switch(type)
-    {
-    case HypothesisType::kArea:      // treat the area like a path so the initial assignment will still have an evaluation
+    switch (type) {
+    case HypothesisType::kArea:   // treat the area like a path so the initial assignment will still have an evaluation
     case HypothesisType::kPath:
         return pathSegmentLikelihood(features);
 
@@ -122,5 +121,5 @@ double AreaHypothesisEvaluator::decisionPointLikelihood(const HypothesisFeatures
     return distribution.decision;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

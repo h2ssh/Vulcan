@@ -7,22 +7,20 @@
 */
 
 
+#include "vision/spin_image.h"
+#include "core/image.h"
 #include <algorithm>
 #include <iostream>
-#include "core/image.h"
-#include "vision/spin_image.h"
 
 
 using namespace vulcan;
 using namespace vulcan::vision;
 
 
-
-
-SpinImage::SpinImage(const Image& image, const Point<int16_t>& center, int radius, int intensityBins) :
-                values((radius+1)*intensityBins, 0),
-                radius(radius),
-                intensityBins(intensityBins)
+SpinImage::SpinImage(const Image& image, const Point<int16_t>& center, int radius, int intensityBins)
+: values((radius + 1) * intensityBins, 0)
+, radius(radius)
+, intensityBins(intensityBins)
 {
     buildSpinImage(image, center);
 }
@@ -30,10 +28,10 @@ SpinImage::SpinImage(const Image& image, const Point<int16_t>& center, int radiu
 
 void SpinImage::calculate(const Image& image, const Point<int16_t>& center, int radius, int intensityBins)
 {
-    this->radius        = radius;
+    this->radius = radius;
     this->intensityBins = intensityBins;
 
-    values.resize((radius+1)*intensityBins, 0);
+    values.resize((radius + 1) * intensityBins, 0);
     std::fill(values.begin(), values.end(), 0);
 
     buildSpinImage(image, center);
@@ -50,20 +48,16 @@ void SpinImage::buildSpinImage(const Image& image, const Point<int16_t>& center)
 {
     int totalValues = 0;
 
-    int width  = image.getWidth();
+    int width = image.getWidth();
     int height = image.getHeight();
 
-    for(int y = -radius; y <= radius; ++y)
-    {
-        if((center.y + y < 0) || (center.y + y >= height))
-        {
+    for (int y = -radius; y <= radius; ++y) {
+        if ((center.y + y < 0) || (center.y + y >= height)) {
             continue;
         }
 
-        for(int x = -radius; x <= radius; ++x)
-        {
-            if((center.x + x < 0) || (center.x + x >= width))
-            {
+        for (int x = -radius; x <= radius; ++x) {
+            if ((center.x + x < 0) || (center.x + x >= width)) {
                 continue;
             }
 
@@ -79,20 +73,19 @@ int SpinImage::calculatePixelBin(int x, int y, const Point<int16_t>& center, con
 {
     int addValue = 0;
 
-    float binDivider = 256.0f/intensityBins;
+    float binDivider = 256.0f / intensityBins;
 
     uint8_t pixel[3];
-    int     dist  = ceil(sqrt(y*y + x*x));
-    float   value = 0.0f;
+    int dist = ceil(sqrt(y * y + x * x));
+    float value = 0.0f;
 
-    if(dist <= radius)
-    {
-        image.getPixel(center.x+x, center.y+y, pixel[0], pixel[1], pixel[2]);
+    if (dist <= radius) {
+        image.getPixel(center.x + x, center.y + y, pixel[0], pixel[1], pixel[2]);
         value = (static_cast<float>(pixel[0]) + pixel[1] + pixel[2]) / 3.0f;
 
         int bin = value / binDivider;
 
-        values[dist*intensityBins + bin] += 1;
+        values[dist * intensityBins + bin] += 1;
 
         addValue = 1;
     }
@@ -103,13 +96,11 @@ int SpinImage::calculatePixelBin(int x, int y, const Point<int16_t>& center, con
 
 void SpinImage::normalizeValues(int totalValues)
 {
-    if(!totalValues)
-    {
+    if (!totalValues) {
         return;
     }
 
-    for(size_t n = 0; n < values.size(); ++n)
-    {
+    for (size_t n = 0; n < values.size(); ++n) {
         values[n] /= totalValues;
     }
 }

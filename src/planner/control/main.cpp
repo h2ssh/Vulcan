@@ -10,8 +10,8 @@
 #include "planner/control/director.h"
 #include "planner/control/planner.h"
 #include "system/module.h"
-#include "utils/config_file.h"
 #include "utils/command_line.h"
+#include "utils/config_file.h"
 #include <vector>
 
 
@@ -25,11 +25,12 @@ int main(int argc, char** argv)
     utils::CommandLine commandLine(argc, argv, arguments);
     commandLine.verify();
 
-    utils::ConfigFile  config(commandLine.configName());
+    utils::ConfigFile config(commandLine.configName());
 
     std::unique_ptr<planner::ControlPlanner> controlPlanner(new planner::ControlPlanner);
-    std::unique_ptr<planner::ControlPlannerDirector> director(new planner::ControlPlannerDirector(std::move(controlPlanner)));
-    
+    std::unique_ptr<planner::ControlPlannerDirector> director(
+      new planner::ControlPlannerDirector(std::move(controlPlanner)));
+
     system::Module<planner::ControlPlannerDirector> module(std::move(director), commandLine, config);
 
     module.run();

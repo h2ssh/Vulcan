@@ -8,11 +8,11 @@
 
 
 /**
-* \file     edit_distance_test.cpp
-* \author   Collin Johnson
-*
-* edit_distance_test implements simple unit tests to check the sanity of the edit distance implementation.
-*/
+ * \file     edit_distance_test.cpp
+ * \author   Collin Johnson
+ *
+ * edit_distance_test implements simple unit tests to check the sanity of the edit distance implementation.
+ */
 
 #include "utils/edit_distance.h"
 #include <gtest/gtest.h>

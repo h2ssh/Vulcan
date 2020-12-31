@@ -10,8 +10,8 @@
 #ifndef SENSORS_VISION_HOMOGRAPHY_H
 #define SENSORS_VISION_HOMOGRAPHY_H
 
-#include <iosfwd>
 #include "core/point.h"
+#include <iosfwd>
 
 namespace vulcan
 {
@@ -19,11 +19,11 @@ namespace vision
 {
 
 /**
-* homography_matrix_t contains the matrix values for computing the perspective transformation
-* between two planes. The intended use for this ability is converting between image and world
-* coordinates, allowing pixels to be mapped into the world frame and metric points to be mapped
-* to a pixel in an image.
-*/
+ * homography_matrix_t contains the matrix values for computing the perspective transformation
+ * between two planes. The intended use for this ability is converting between image and world
+ * coordinates, allowing pixels to be mapped into the world frame and metric points to be mapped
+ * to a pixel in an image.
+ */
 struct homography_matrix_t
 {
     // The following naming convention exists here:
@@ -52,22 +52,22 @@ struct homography_matrix_t
 };
 
 // IO operators for homography_matrix_t
-std::istream& operator>>(std::istream& in, homography_matrix_t&        matrix);
+std::istream& operator>>(std::istream& in, homography_matrix_t& matrix);
 std::ostream& operator<<(std::ostream& out, const homography_matrix_t& matrix);
 
 /**
-* world_to_image_coordinates converts a world coordinate to pixel coordinates in the camera using the provided
-* homography matrix.
-*/
+ * world_to_image_coordinates converts a world coordinate to pixel coordinates in the camera using the provided
+ * homography matrix.
+ */
 Point<float> world_to_image_coordinates(const Point<float>& world, const homography_matrix_t& homography);
 
 /**
  * image_to_world_coordinates converts an image coordinate to world coordinates in the camera using the provided
  * homography matrix.
-*/
+ */
 Point<float> image_to_world_coordinates(const Point<int16_t>& image, const homography_matrix_t& homography);
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan
 
-#endif // SENSORS_VISION_HOMOGRAPHY_H
+#endif   // SENSORS_VISION_HOMOGRAPHY_H

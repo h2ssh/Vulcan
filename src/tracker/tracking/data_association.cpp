@@ -8,11 +8,11 @@
 
 
 /**
-* \file     data_association.cpp
-* \author   Collin Johnson
-* 
-* Definition of create_data_association_strategy factory.
-*/
+ * \file     data_association.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_data_association_strategy factory.
+ */
 
 #include "tracker/tracking/data_association.h"
 #include "tracker/tracking/max_likelihood_association.h"
@@ -26,16 +26,15 @@ namespace tracker
 std::unique_ptr<DataAssociationStrategy> create_data_association_strategy(const std::string& type,
                                                                           const utils::ConfigFile& config)
 {
-    if(type == kNearestNeighborAssociationType)
-    {
+    if (type == kNearestNeighborAssociationType) {
         nearest_neighbor_params_t params(config);
         return std::unique_ptr<DataAssociationStrategy>(new NearestNeighborAssociation(params));
     }
-    
+
     std::cerr << "ERROR: create_data_association_strategy: Unknown strategy type:" << type << '\n';
     assert(false);
     return std::unique_ptr<DataAssociationStrategy>();
 }
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan

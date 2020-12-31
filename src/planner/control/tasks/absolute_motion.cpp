@@ -8,17 +8,17 @@
 
 
 /**
-* \file     absolute_motion.cpp
-* \author   Collin Johnson
-*
-* Definition of AbsoluteMotionTask.
-*/
+ * \file     absolute_motion.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AbsoluteMotionTask.
+ */
 
 #include "planner/control/tasks/absolute_motion.h"
-#include "planner/control/state.h"
 #include "mpepc/metric_planner/task/navigation.h"
 #include "mpepc/metric_planner/task/rotate.h"
 #include "mpepc/metric_planner/task/wait.h"
+#include "planner/control/state.h"
 #include "utils/ray_tracing.h"
 #include "utils/timestamp.h"
 #include <cassert>
@@ -37,16 +37,11 @@ AbsoluteMotionTask::AbsoluteMotionTask(AbsoluteMotion motion, double speed, int3
 , speed_(speed)
 , sentTask_(false)
 {
-    if(motion_ == AbsoluteMotion::turn_left)
-    {
+    if (motion_ == AbsoluteMotion::turn_left) {
         outgoingTask_ = std::make_shared<mpepc::RotateTask>(mpepc::RotationMode::turn_left);
-    }
-    else if(motion_ == AbsoluteMotion::turn_right)
-    {
+    } else if (motion_ == AbsoluteMotion::turn_right) {
         outgoingTask_ = std::make_shared<mpepc::RotateTask>(mpepc::RotationMode::turn_right);
-    }
-    else if(motion_ == AbsoluteMotion::stop)
-    {
+    } else if (motion_ == AbsoluteMotion::stop) {
         outgoingTask_ = std::make_shared<mpepc::WaitTask>();
     }
 }
@@ -56,9 +51,8 @@ void AbsoluteMotionTask::activate(const ControlState& state)
 {
     // Activation only has meaning for the go straight task, as it needs to find the pose to command. Other tasks
     // all handle their business in the constructor
-    
-    if(motion_ != AbsoluteMotion::go_straight)
-    {
+
+    if (motion_ != AbsoluteMotion::go_straight) {
         return;
     }
 
@@ -86,16 +80,14 @@ int AbsoluteMotionTask::pushSubTasks(ControlTaskStack& stack)
 ControlTaskResult AbsoluteMotionTask::doExecute(const ControlState& state)
 {
     // If close to the goal, then try to find a new goal
-    if((motion_ == AbsoluteMotion::go_straight)
-        && (distance_between_points(state.pose.pose().toPoint(), targetPose_.toPoint()) < 1.0))
-    {
+    if ((motion_ == AbsoluteMotion::go_straight)
+        && (distance_between_points(state.pose.pose().toPoint(), targetPose_.toPoint()) < 1.0)) {
         pose_t newTarget = select_straight_ahead_pose(startPose_, state);
 
-        std::cout << "Searching for new target. New pose:" << state.pose.pose() << " Start pose:" << startPose_ 
-            << " Old target:" << targetPose_ << " New target:" << newTarget << '\n';
+        std::cout << "Searching for new target. New pose:" << state.pose.pose() << " Start pose:" << startPose_
+                  << " Old target:" << targetPose_ << " New target:" << newTarget << '\n';
         // If a new target exists, then go to the new pose
-        if(newTarget != targetPose_)
-        {
+        if (newTarget != targetPose_) {
             std::cout << "Found new target!\n";
             targetPose_ = newTarget;
             outgoingTask_ = std::make_shared<mpepc::NavigationTask>(targetPose_);
@@ -103,59 +95,49 @@ ControlTaskResult AbsoluteMotionTask::doExecute(const ControlState& state)
         }
     }
 
-    if(sentTask_)
-    {
-        return { taskStatus(state), nullptr };
+    if (sentTask_) {
+        return {taskStatus(state), nullptr};
     }
 
     sentTask_ = true;
-    return { taskStatus(state), outgoingTask_ };
+    return {taskStatus(state), outgoingTask_};
 }
 
 
 ControlTaskStatus AbsoluteMotionTask::taskStatus(const ControlState& state) const
 {
-    ControlTaskProgress progress = ControlTaskProgress::failed; // Failure by default, unless otherwise indicated
-    
+    ControlTaskProgress progress = ControlTaskProgress::failed;   // Failure by default, unless otherwise indicated
+
     // Fallback into this state as the default via value_or()
-    if(!state.metricPlannerStatus.is_initialized())
-    {
+    if (!state.metricPlannerStatus.is_initialized()) {
         progress = ControlTaskProgress::executing;
-    }
-    else if(state.metricPlannerStatus.get().status == mpepc::ACTIVE_NORMAL)
-    {
+    } else if (state.metricPlannerStatus.get().status == mpepc::ACTIVE_NORMAL) {
         progress = ControlTaskProgress::executing;
     }
     // Guaranteed to be a value at this point
-    else if((state.metricPlannerStatus.get().status == mpepc::IDLE) 
-        || (state.metricPlannerStatus.get().status == mpepc::PAUSED))
-    {
+    else if ((state.metricPlannerStatus.get().status == mpepc::IDLE)
+             || (state.metricPlannerStatus.get().status == mpepc::PAUSED)) {
         progress = ControlTaskProgress::waiting;
-    }
-    else if(state.metricPlannerStatus.get().status == mpepc::SUCCESS_REACHED_POSE)
-    {
+    } else if (state.metricPlannerStatus.get().status == mpepc::SUCCESS_REACHED_POSE) {
         progress = ControlTaskProgress::completed;
     }
-    
+
     // If success, send out the success result
-    if(progress != ControlTaskProgress::failed)
-    {
+    if (progress != ControlTaskProgress::failed) {
         return ControlTaskStatus(utils::system_time_us(), id(), progress);
     }
-    
+
     // Otherwise, search for why the error occurred
     ControlTaskError error;
-    
-    if((state.metricPlannerStatus.get().status == mpepc::FAILURE_CANNOT_FIND_SOLUTION)
-        || (state.metricPlannerStatus.get().status == mpepc::FAILURE_UNABLE_TO_PROGRESS))
-    {
+
+    if ((state.metricPlannerStatus.get().status == mpepc::FAILURE_CANNOT_FIND_SOLUTION)
+        || (state.metricPlannerStatus.get().status == mpepc::FAILURE_UNABLE_TO_PROGRESS)) {
         error = ControlTaskError::target_unreachable;
-    }
-    else // if(state.metricPlannerStatus.get().status == mpepc::FAILURE_CANNOT_ASSIGN_TASK)
+    } else   // if(state.metricPlannerStatus.get().status == mpepc::FAILURE_CANNOT_ASSIGN_TASK)
     {
         error = ControlTaskError::target_invalid;
     }
-    
+
     return ControlTaskStatus(utils::system_time_us(), id(), error);
 }
 
@@ -176,39 +158,40 @@ pose_t select_straight_ahead_pose(const pose_t& startPose, const ControlState& s
 
     double maxDist = 0.0;
     double maxHeading = 0.0;
-    
-    for(float heading = -0.15f; heading <= 0.15f; heading += 0.01f)
-    {
+
+    for (float heading = -0.15f; heading <= 0.15f; heading += 0.01f) {
         Point<double> frontRightCorner(kRobotFrontLength, -kRobotWidth);
         frontRightCorner = homogeneous_transform(frontRightCorner,
-                                                    state.pose.pose().x,
-                                                    state.pose.pose().y,
-                                                    state.pose.pose().theta + heading);
+                                                 state.pose.pose().x,
+                                                 state.pose.pose().y,
+                                                 state.pose.pose().theta + heading);
 
         Point<double> frontLeftCorner(kRobotFrontLength, kRobotWidth);
         frontLeftCorner = homogeneous_transform(frontLeftCorner,
-                                                    state.pose.pose().x,
-                                                    state.pose.pose().y,
-                                                    state.pose.pose().theta + heading);
+                                                state.pose.pose().x,
+                                                state.pose.pose().y,
+                                                state.pose.pose().theta + heading);
 
-        // Find the pose to command the robot to by tracing a ray through the LPM until it hits a wall or the edge of the
-        // map. Backup from the collision by the front length of the robot to keep the goal from being inside the wall and
-        // thus unreachable by the robot and causing a planner failure
-        auto leftEndCell = utils::trace_ray_until_condition(utils::global_point_to_grid_point(frontLeftCorner, *state.map),
-                                                            startPose.theta,
-                                                            kTargetDistance,
-                                                            *state.map,
-                                                            [](const hssh::LocalPerceptualMap& lpm, Point<int> cell) {
-                                                                return lpm.getCellType(cell.x, cell.y) & (hssh::kUnsafeOccGridCell | hssh::kUnobservedOccGridCell);
-        });
+        // Find the pose to command the robot to by tracing a ray through the LPM until it hits a wall or the edge of
+        // the map. Backup from the collision by the front length of the robot to keep the goal from being inside the
+        // wall and thus unreachable by the robot and causing a planner failure
+        auto leftEndCell = utils::trace_ray_until_condition(
+          utils::global_point_to_grid_point(frontLeftCorner, *state.map),
+          startPose.theta,
+          kTargetDistance,
+          *state.map,
+          [](const hssh::LocalPerceptualMap& lpm, Point<int> cell) {
+              return lpm.getCellType(cell.x, cell.y) & (hssh::kUnsafeOccGridCell | hssh::kUnobservedOccGridCell);
+          });
 
-        auto rightEndCell = utils::trace_ray_until_condition(utils::global_point_to_grid_point(frontRightCorner, *state.map),
-                                                            startPose.theta,
-                                                            kTargetDistance,
-                                                            *state.map,
-                                                            [](const hssh::LocalPerceptualMap& lpm, Point<int> cell) {
-            return lpm.getCellType(cell.x, cell.y) & (hssh::kUnsafeOccGridCell | hssh::kUnobservedOccGridCell);
-        });
+        auto rightEndCell = utils::trace_ray_until_condition(
+          utils::global_point_to_grid_point(frontRightCorner, *state.map),
+          startPose.theta,
+          kTargetDistance,
+          *state.map,
+          [](const hssh::LocalPerceptualMap& lpm, Point<int> cell) {
+              return lpm.getCellType(cell.x, cell.y) & (hssh::kUnsafeOccGridCell | hssh::kUnobservedOccGridCell);
+          });
 
         auto leftEndPoint = utils::grid_point_to_global_point(leftEndCell, *state.map);
         auto rightEndPoint = utils::grid_point_to_global_point(rightEndCell, *state.map);
@@ -217,30 +200,27 @@ pose_t select_straight_ahead_pose(const pose_t& startPose, const ControlState& s
         auto endPoint = leftEndPoint;
 
         // Take the minimum of the two distances as the safe distance to travel
-        if(distance_between_points(leftEndPoint, frontLeftCorner) >
-            distance_between_points(rightEndPoint, frontRightCorner))
-        {
+        if (distance_between_points(leftEndPoint, frontLeftCorner)
+            > distance_between_points(rightEndPoint, frontRightCorner)) {
             startPoint = frontRightCorner;
             endPoint = rightEndPoint;
         }
 
         double forwardDist = std::max(distance_between_points(startPoint, endPoint) - (kRobotFrontLength / 4.0), 0.0);
-        if((forwardDist * (1.0 - std::abs(heading))) > (maxDist * (1.0 - std::abs(maxHeading))))
-        {
+        if ((forwardDist * (1.0 - std::abs(heading))) > (maxDist * (1.0 - std::abs(maxHeading)))) {
             maxDist = forwardDist;
             maxHeading = heading;
         }
     }
 
     pose_t pose(state.pose.pose().x + maxDist * std::cos(startPose.theta + maxHeading),
-                       state.pose.pose().y + maxDist * std::sin(startPose.theta + maxHeading),
-                       startPose.theta + maxHeading);
+                state.pose.pose().y + maxDist * std::sin(startPose.theta + maxHeading),
+                startPose.theta + maxHeading);
 
-    std::cout << "Selected heading: " << maxHeading << " Dist:" << maxDist << '\n'
-        << "Selected pose:" << pose << '\n';
+    std::cout << "Selected heading: " << maxHeading << " Dist:" << maxDist << '\n' << "Selected pose:" << pose << '\n';
 
     return pose;
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

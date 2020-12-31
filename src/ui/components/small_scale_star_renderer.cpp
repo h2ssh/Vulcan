@@ -8,17 +8,17 @@
 
 
 /**
-* \file     small_scale_star_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of SmallScaleStarRenderer.
-*/
+ * \file     small_scale_star_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of SmallScaleStarRenderer.
+ */
 
 #include "ui/components/small_scale_star_renderer.h"
+#include "hssh/local_topological/small_scale_star.h"
 #include "ui/common/color_generator.h"
 #include "ui/common/default_colors.h"
 #include "ui/common/gl_shapes.h"
-#include "hssh/local_topological/small_scale_star.h"
 
 namespace vulcan
 {
@@ -31,14 +31,10 @@ void SmallScaleStarRenderer::render(const hssh::SmallScaleStar& star, Point<floa
 
     auto& colors = generateColors(star.getNumPaths());
 
-    for(auto& frag : star)
-    {
-        if(frag.type != hssh::AreaType::destination)
-        {
+    for (auto& frag : star) {
+        if (frag.type != hssh::AreaType::destination) {
             colors[frag.pathId].set();
-        }
-        else
-        {
+        } else {
             destination_color().set();
         }
 
@@ -53,21 +49,14 @@ void SmallScaleStarRenderer::renderRelative(const hssh::SmallScaleStar& star, Po
 
     auto& colors = generateColors(star.getNumPaths());
 
-    for(auto& frag : star)
-    {
-        if(frag.type != hssh::AreaType::destination)
-        {
+    for (auto& frag : star) {
+        if (frag.type != hssh::AreaType::destination) {
             colors[frag.pathId].set();
-        }
-        else
-        {
+        } else {
             destination_color().set();
         }
 
-        gl_draw_small_arrow(Point<float>(0.0, 0.0),
-                            0.5,
-                            angle_to_point(origin, frag.gateway.center()),
-                            kArrowWidth);
+        gl_draw_small_arrow(Point<float>(0.0, 0.0), 0.5, angle_to_point(origin, frag.gateway.center()), kArrowWidth);
     }
 }
 
@@ -77,10 +66,8 @@ const SmallScaleStarRenderer::StarColors& SmallScaleStarRenderer::generateColors
     // Clamp the paths to a reasonable range
     numPaths = std::min(std::max(0, numPaths), 30);
 
-    if(numPaths >= static_cast<int>(colors_.size()))
-    {
-        for(int n = colors_.size(); n <= numPaths; ++n)
-        {
+    if (numPaths >= static_cast<int>(colors_.size())) {
+        for (int n = colors_.size(); n <= numPaths; ++n) {
             colors_.push_back(generate_colors(n, 0.8, false));
         }
     }
@@ -88,5 +75,5 @@ const SmallScaleStarRenderer::StarColors& SmallScaleStarRenderer::generateColors
     return colors_[numPaths];
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

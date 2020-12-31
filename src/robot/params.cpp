@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.cpp
-* \author   Collin Johnson
-*
-* Definition of the parsers for the various params structs for the pieces of the robot_controller module.
-*/
+ * \file     params.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of the parsers for the various params structs for the pieces of the robot_controller module.
+ */
 
 #include "robot/params.h"
 #include "utils/config_file.h"
@@ -58,12 +58,12 @@ const std::string TURN_POSITIVE_ANG_VEL_KEY("turn_in_place_positive_angular_velo
 const std::string TURN_NEGATIVE_ANG_VEL_KEY("turn_in_place_negative_angular_velocity_ratio");
 
 
-motion_checker_params_t           load_motion_checker_params   (const utils::ConfigFile& config);
-command_filter_params_t           load_command_filter_params   (const utils::ConfigFile& config);
-proximity_checker_params_t        load_proximity_checker_params(const utils::ConfigFile& config);
-safe_stop_checker_params_t        load_safe_stop_checker_params(const utils::ConfigFile& config);
-wheelchair_params_t               load_wheelchair_params       (const utils::ConfigFile& config);
-wheelchair_joystick_calibration_t load_joystick_calibration    (const utils::ConfigFile& config);
+motion_checker_params_t load_motion_checker_params(const utils::ConfigFile& config);
+command_filter_params_t load_command_filter_params(const utils::ConfigFile& config);
+proximity_checker_params_t load_proximity_checker_params(const utils::ConfigFile& config);
+safe_stop_checker_params_t load_safe_stop_checker_params(const utils::ConfigFile& config);
+wheelchair_params_t load_wheelchair_params(const utils::ConfigFile& config);
+wheelchair_joystick_calibration_t load_joystick_calibration(const utils::ConfigFile& config);
 
 
 int load_command_period_ms(const utils::ConfigFile& config)
@@ -78,9 +78,9 @@ robot_controller_params_t load_robot_controller_params(const utils::ConfigFile& 
 
     params.commandPeriodMs = config.getValueAsInt32(CONTROLLER_HEADING, PERIOD_KEY);
 
-    params.filterParams  = load_command_filter_params(config);
+    params.filterParams = load_command_filter_params(config);
     params.checkerParams = load_motion_checker_params(config);
-    params.driverParams  = load_wheelchair_params(config);
+    params.driverParams = load_wheelchair_params(config);
 
     return params;
 }
@@ -100,9 +100,9 @@ motion_checker_params_t load_motion_checker_params(const utils::ConfigFile& conf
 {
     motion_checker_params_t params;
 
-    params.checkerType     = config.getValueAsString(CHECKER_HEADING, CHECKER_TYPE_KEY);
+    params.checkerType = config.getValueAsString(CHECKER_HEADING, CHECKER_TYPE_KEY);
     params.proximityParams = load_proximity_checker_params(config);
-    params.safeStopParams  = load_safe_stop_checker_params(config);
+    params.safeStopParams = load_safe_stop_checker_params(config);
 
     return params;
 }
@@ -112,9 +112,10 @@ proximity_checker_params_t load_proximity_checker_params(const utils::ConfigFile
 {
     proximity_checker_params_t params;
 
-    params.criticalBoundary = utils::create_rectangle_from_string(config.getValueAsString(PROXIMITY_HEADING, CRITICAL_BOUND_KEY));
+    params.criticalBoundary =
+      utils::create_rectangle_from_string(config.getValueAsString(PROXIMITY_HEADING, CRITICAL_BOUND_KEY));
 
-    params.warningRadius     = config.getValueAsFloat(PROXIMITY_HEADING, WARNING_RADIUS_KEY);
+    params.warningRadius = config.getValueAsFloat(PROXIMITY_HEADING, WARNING_RADIUS_KEY);
     params.minSlowdownFactor = config.getValueAsFloat(PROXIMITY_HEADING, MIN_SLOWDOWN_KEY);
     params.maxSlowdownFactor = config.getValueAsFloat(PROXIMITY_HEADING, MAX_SLOWDOWN_KEY);
 
@@ -127,7 +128,7 @@ proximity_checker_params_t load_proximity_checker_params(const utils::ConfigFile
 safe_stop_checker_params_t load_safe_stop_checker_params(const utils::ConfigFile& config)
 {
     safe_stop_checker_params_t params;
-    
+
     return params;
 }
 
@@ -137,9 +138,9 @@ wheelchair_params_t load_wheelchair_params(const utils::ConfigFile& config)
     wheelchair_params_t params;
 
     params.wheelchairType = config.getValueAsString(WHEELCHAIR_HEADING, WHEELCHAIR_TYPE_KEY);
-    params.joystickPort   = config.getValueAsString(WHEELCHAIR_HEADING, JOYSTICK_PORT_KEY);
+    params.joystickPort = config.getValueAsString(WHEELCHAIR_HEADING, JOYSTICK_PORT_KEY);
     params.controllerPort = config.getValueAsString(WHEELCHAIR_HEADING, CONTROLLER_PORT_KEY);
-    params.calibration    = load_joystick_calibration(config);
+    params.calibration = load_joystick_calibration(config);
 
     return params;
 }
@@ -152,14 +153,18 @@ wheelchair_joystick_calibration_t load_joystick_calibration(const utils::ConfigF
     calibration.positiveLinearVelocityRatio = config.getValueAsDouble(WHEELCHAIR_HEADING, POSITIVE_LINEAR_VEL_KEY);
     calibration.negativeLinearVelocityRatio = config.getValueAsDouble(WHEELCHAIR_HEADING, NEGATIVE_LINEAR_VEL_KEY);
 
-    calibration.translatingPositiveAngularVelocityRatio = config.getValueAsDouble(WHEELCHAIR_HEADING, TRANS_POSITIVE_ANG_VEL_KEY);
-    calibration.translatingNegativeAngularVelocityRatio = config.getValueAsDouble(WHEELCHAIR_HEADING, TRANS_NEGATIVE_ANG_VEL_KEY);
+    calibration.translatingPositiveAngularVelocityRatio =
+      config.getValueAsDouble(WHEELCHAIR_HEADING, TRANS_POSITIVE_ANG_VEL_KEY);
+    calibration.translatingNegativeAngularVelocityRatio =
+      config.getValueAsDouble(WHEELCHAIR_HEADING, TRANS_NEGATIVE_ANG_VEL_KEY);
 
-    calibration.turnInPlacePositiveAngularVelocityRatio = config.getValueAsDouble(WHEELCHAIR_HEADING, TURN_POSITIVE_ANG_VEL_KEY);
-    calibration.turnInPlaceNegativeAngularVelocityRatio = config.getValueAsDouble(WHEELCHAIR_HEADING, TURN_NEGATIVE_ANG_VEL_KEY);
+    calibration.turnInPlacePositiveAngularVelocityRatio =
+      config.getValueAsDouble(WHEELCHAIR_HEADING, TURN_POSITIVE_ANG_VEL_KEY);
+    calibration.turnInPlaceNegativeAngularVelocityRatio =
+      config.getValueAsDouble(WHEELCHAIR_HEADING, TURN_NEGATIVE_ANG_VEL_KEY);
 
     return calibration;
 }
 
-} // namespace robot
-} // namespace vulcan
+}   // namespace robot
+}   // namespace vulcan

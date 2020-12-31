@@ -8,11 +8,11 @@
 
 
 /**
-* \file     particle_sampler.cpp
-* \author   Collin Johnson
-* 
-* Definition of create_particle_sampler factory function.
-*/
+ * \file     particle_sampler.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_particle_sampler factory function.
+ */
 
 #include "hssh/metrical/localization/particle_sampler.h"
 #include "hssh/metrical/localization/adaptive_particle_filter.h"
@@ -20,26 +20,23 @@
 #include <cassert>
 #include <iostream>
 
-namespace vulcan 
+namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
-    
+
 std::unique_ptr<ParticleSampler> create_particle_sampler(const std::string& type)
 {
-    if(type == ADAPTIVE_PARTICLE_FILTER_TYPE)
-    {
+    if (type == ADAPTIVE_PARTICLE_FILTER_TYPE) {
         return std::unique_ptr<ParticleSampler>(new GaussianParticleSampler);
-    }
-    else if(type == VANILLA_PARTICLE_FILTER_TYPE)
-    {
+    } else if (type == VANILLA_PARTICLE_FILTER_TYPE) {
         return std::unique_ptr<ParticleSampler>(new LowDispersionSampler);
     }
-    
+
     std::cerr << "ERROR: create_particle_sampler: Unknown type: " << type << '\n';
     assert(false);
     return std::unique_ptr<ParticleSampler>();
 }
-    
-}
-}
+
+}   // namespace hssh
+}   // namespace vulcan

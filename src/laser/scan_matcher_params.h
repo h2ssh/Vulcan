@@ -14,7 +14,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace laser
 {
@@ -23,11 +26,11 @@ struct scan_matcher_params_t
 {
     uint16_t fineResolutionGridWidth;
     uint16_t fineResolutionGridHeight;
-    float    fineResolutionMetersPerCell;
-    float    coarseResolutionMetersPerCell;
+    float fineResolutionMetersPerCell;
+    float coarseResolutionMetersPerCell;
 
-    float    fineAngularSearchResolution;
-    float    coarseAngularSearchResolution;
+    float fineAngularSearchResolution;
+    float coarseAngularSearchResolution;
 
     float minXSearchArea;
     float minYSearchArea;
@@ -42,7 +45,7 @@ struct scan_matcher_params_t
 
 scan_matcher_params_t load_scan_matcher_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace laser
+}   // namespace vulcan
 
-#endif // LASER_SCAN_MATCHER_PARAMS_H
+#endif   // LASER_SCAN_MATCHER_PARAMS_H

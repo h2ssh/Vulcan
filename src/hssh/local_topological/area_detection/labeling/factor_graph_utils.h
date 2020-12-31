@@ -8,36 +8,36 @@
 
 
 /**
-* \file     factor_graph_utils.h
-* \author   Collin Johnson
-* 
-* Declaration of utility functions for factor graph processing:
-* 
-*   - should_send_message_on_edge : check if a new fresh message can be sent along the given edge
-*/
+ * \file     factor_graph_utils.h
+ * \author   Collin Johnson
+ *
+ * Declaration of utility functions for factor graph processing:
+ *
+ *   - should_send_message_on_edge : check if a new fresh message can be sent along the given edge
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_FACTOR_GRAPH_UTILS_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_FACTOR_GRAPH_UTILS_H
 
 #include "hssh/local_topological/area_detection/labeling/factor_edge.h"
 
-namespace vulcan 
+namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
 
 /**
-* should_send_message_on_edge checks if a message can be sent along the edge in the specified direction. A message
-* should be sent if no unset messages exist and at least one fresh message exists.
-* 
-* \param    edge            Edge to check if a message can be sent
-* \param    direction       Direction in which the message will be sent
-* \param    edges           All edges for the node
-* \return   True if no unset messages exist and at least one fresh message.
-*/
+ * should_send_message_on_edge checks if a message can be sent along the edge in the specified direction. A message
+ * should be sent if no unset messages exist and at least one fresh message exists.
+ *
+ * \param    edge            Edge to check if a message can be sent
+ * \param    direction       Direction in which the message will be sent
+ * \param    edges           All edges for the node
+ * \return   True if no unset messages exist and at least one fresh message.
+ */
 bool should_send_message_on_edge(FactorEdge* edge, MsgDir direction, const std::vector<FactorEdge*>& edges);
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_FACTOR_GRAPH_UTILS_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_FACTOR_GRAPH_UTILS_H

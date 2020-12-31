@@ -8,11 +8,11 @@
 
 
 /**
-* \file     gaussian_observation_model.cpp
-* \author   Collin Johnson
-*
-* Definition of GaussianObservationModel.
-*/
+ * \file     gaussian_observation_model.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GaussianObservationModel.
+ */
 
 #include "hssh/metrical/localization/gaussian_observation_model.h"
 #include "hssh/metrical/localization/params.h"
@@ -34,39 +34,36 @@ GaussianObservationModel::GaussianObservationModel(const gaussian_observation_mo
     assert(kStride_ > 0);
 
     double sigma = params.gaussianSigma;
-    double normalizer = 1.0 / (std::sqrt(2*M_PI)*sigma);
+    double normalizer = 1.0 / (std::sqrt(2 * M_PI) * sigma);
 
     double total = 0.0;
     int index = 0;
-    for(int y = -1; y <= 1; ++y)
-    {
-        for(int x = -1; x <= 1; ++x)
-        {
-            double rad = 0.05 * std::sqrt(x*x + y*y);
-            gaussian_[index] = normalizer * std::exp(-0.5*rad*rad / (sigma*sigma));
+    for (int y = -1; y <= 1; ++y) {
+        for (int x = -1; x <= 1; ++x) {
+            double rad = 0.05 * std::sqrt(x * x + y * y);
+            gaussian_[index] = normalizer * std::exp(-0.5 * rad * rad / (sigma * sigma));
             total += gaussian_[index];
             ++index;
         }
     }
 
-    for(auto& val : gaussian_)
-    {
+    for (auto& val : gaussian_) {
         val /= total;
     }
 }
 
 
-void GaussianObservationModel::initializeModel(const laser::laser_scan_lines_t&  scan,
+void GaussianObservationModel::initializeModel(const laser::laser_scan_lines_t& scan,
                                                const MultivariateGaussian& proposalDistribution)
 {
     // Nothing to initialize
 }
 
 
-double GaussianObservationModel::sampleLikelihood(const particle_t&                 sample,
-                                                  const laser::laser_scan_lines_t&  scan,
-                                                  const OccupancyGrid&              map,
-                                                  particle_filter_debug_info_t*     debug)
+double GaussianObservationModel::sampleLikelihood(const particle_t& sample,
+                                                  const laser::laser_scan_lines_t& scan,
+                                                  const OccupancyGrid& map,
+                                                  particle_filter_debug_info_t* debug)
 {
     const double kMaxCost = map.getMaxCellCost();
 
@@ -74,30 +71,24 @@ double GaussianObservationModel::sampleLikelihood(const particle_t&             
     double maxTotalLikelihood = 0.0;
     laser::MovingLaserScan movingScan(scan.scan, sample.parent, sample.pose, kStride_);
 
-    for(std::size_t n = 0; n < movingScan.size(); ++n)
-    {
+    for (std::size_t n = 0; n < movingScan.size(); ++n) {
         const auto& ray = movingScan[n];
 
-        if((ray.range < kMaxDistance_) && (ray.range > 0.0))
-        {
+        if ((ray.range < kMaxDistance_) && (ray.range > 0.0)) {
             double rayCost = 0.0;
             int index = 0;
 
             auto gridPoint = utils::global_point_to_grid_cell(ray.endpoint, map);
 
             // Convolve the 3x3 square centered on the ray's endpoint in the grid
-            for(int y = gridPoint.y-1; y <= gridPoint.y+1; ++y)
-            {
-                for(int x = gridPoint.x-1; x <= gridPoint.x+1; ++x)
-                {
-                    if(map.isCellInGrid(Point<int>(x, y)))
-                    {
+            for (int y = gridPoint.y - 1; y <= gridPoint.y + 1; ++y) {
+                for (int x = gridPoint.x - 1; x <= gridPoint.x + 1; ++x) {
+                    if (map.isCellInGrid(Point<int>(x, y))) {
                         cell_type_t pointType = map.getCellTypeNoCheck(x, y);
                         int cost = map.getCostNoCheck(x, y);
 
                         // Unobserved cells always have 0 cost
-                        if(pointType & ~kUnobservedOccGridCell)
-                        {
+                        if (pointType & ~kUnobservedOccGridCell) {
                             // Otherwise the accumulated cost is scaled by the Gaussian to determine how much it
                             // changes the particular ray's additive cost
                             rayCost += gaussian_[index] * cost;
@@ -121,5 +112,5 @@ double GaussianObservationModel::sampleLikelihood(const particle_t&             
     return (totalLikelihood > 0.0) ? (totalLikelihood / maxTotalLikelihood) : (1.0 / (kMaxCost * movingScan.size()));
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

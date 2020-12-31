@@ -8,11 +8,11 @@
 
 
 /**
-* \file     goal.cpp
-* \author   Collin Johnson
-* 
-* Definition of Goal.
-*/
+ * \file     goal.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of Goal.
+ */
 
 #include "planner/interface/goal.h"
 
@@ -20,7 +20,7 @@ namespace vulcan
 {
 namespace planner
 {
-    
+
 const std::string kGlobalMetricType("gmm");
 const std::string kGlobalTopoType("gtm");
 const std::string kLocalTopoType("ltm");
@@ -29,22 +29,17 @@ pose_t load_pose(std::istream& in);
 hssh::LocalArea::Id load_local_area(std::istream& in);
 // hssh::GlobalArea::Id load_global_area(std::istream& in);
 
-Goal::Goal(void)
-: name_("DEFAULT CONSTRUCTOR")
+Goal::Goal(void) : name_("DEFAULT CONSTRUCTOR")
 {
 }
 
-    
-Goal::Goal(const std::string& name, const pose_t& pose)
-: name_(name)
-, globalPose_(pose)
+
+Goal::Goal(const std::string& name, const pose_t& pose) : name_(name), globalPose_(pose)
 {
 }
 
-    
-Goal::Goal(const std::string& name, hssh::LocalArea::Id area)
-: name_(name)
-, localArea_(area)
+
+Goal::Goal(const std::string& name, hssh::LocalArea::Id area) : name_(name), localArea_(area)
 {
 }
 
@@ -53,42 +48,33 @@ std::istream& operator>>(std::istream& in, Goal& g)
 {
     std::string goalLine;
     std::getline(in, goalLine);
-    
+
     std::istringstream inStr(goalLine);
     inStr >> g.name_;
-    
-    for(auto& c : g.name_)
-    {
-        if(c == '_')
-        {
+
+    for (auto& c : g.name_) {
+        if (c == '_') {
             c = ' ';
         }
     }
-    
+
     std::string typeDesc;
-    while(true)
-    {
+    while (true) {
         inStr >> typeDesc;
-        
-        if(inStr.eof())
-        {
+
+        if (inStr.eof()) {
             break;
         }
-        
-        if(typeDesc == kGlobalMetricType)
-        {
+
+        if (typeDesc == kGlobalMetricType) {
             g.setGlobalPose(load_pose(inStr));
-        }
-        else if(typeDesc == kGlobalTopoType)
-        {
+        } else if (typeDesc == kGlobalTopoType) {
             // TODO
-        }
-        else if(typeDesc == kLocalTopoType)
-        {
+        } else if (typeDesc == kLocalTopoType) {
             g.setLocalArea(load_local_area(inStr));
         }
     }
-    
+
     return in;
 }
 
@@ -96,27 +82,23 @@ std::istream& operator>>(std::istream& in, Goal& g)
 std::ostream& operator<<(std::ostream& out, const Goal& g)
 {
     std::string goalName = g.name();
-    for(auto& c : goalName)
-    {
-        if(isspace(c))
-        {
+    for (auto& c : goalName) {
+        if (isspace(c)) {
             c = '_';
         }
     }
-    
+
     out << goalName << ' ';
-    
-    if(g.globalPose())
-    {
-        out << kGlobalMetricType << ' ' << g.globalPose()->x << ' ' << g.globalPose()->y << ' ' 
-            << g.globalPose()->theta << ' ';
+
+    if (g.globalPose()) {
+        out << kGlobalMetricType << ' ' << g.globalPose()->x << ' ' << g.globalPose()->y << ' ' << g.globalPose()->theta
+            << ' ';
     }
-    
-    if(g.localArea())
-    {
+
+    if (g.localArea()) {
         out << kLocalTopoType << ' ' << g.localArea().get() << ' ';
     }
-    
+
     out << '\n';
     return out;
 }
@@ -137,5 +119,5 @@ hssh::LocalArea::Id load_local_area(std::istream& in)
     return id;
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

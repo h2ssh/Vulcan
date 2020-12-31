@@ -8,11 +8,11 @@
 
 
 /**
-* \file     planner.cpp
-* \author   Collin Johnson
-* 
-* Definition of ControlPlanner.
-*/
+ * \file     planner.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ControlPlanner.
+ */
 
 #include "planner/control/planner.h"
 #include "planner/control/command.h"
@@ -23,24 +23,24 @@ namespace vulcan
 {
 namespace planner
 {
-    
+
 ControlPlanner::ControlPlanner(void)
 {
 }
 
 
 void ControlPlanner::assignTask(const ControlCommand& command, const ControlState& state)
-{   
+{
     std::cout << "INFO:ControlPlanner: Starting to execute command from " << command.source() << " issued at "
-        << command.timestamp() << "\nClearing " << taskStack_.size() << " previous tasks.\n";
-        
+              << command.timestamp() << "\nClearing " << taskStack_.size() << " previous tasks.\n";
+
     // Clear out any previous tasks that remained
     taskStack_.clear();
-    
+
     // Activate the task and push any required subtasks
-    currentTask_ = command.task();    
+    currentTask_ = command.task();
     activateTask(*currentTask_, state);
-    
+
     // Handle the current task after all subtasks have completed
     taskStack_.push_back(currentTask_);
 }
@@ -49,28 +49,25 @@ void ControlPlanner::assignTask(const ControlCommand& command, const ControlStat
 ControlTaskResult ControlPlanner::executeTask(const ControlState& state)
 {
     // If there are no tasks, then currently waiting for a new one
-    if(taskStack_.empty())
-    {
+    if (taskStack_.empty()) {
         ControlTaskResult result;
         result.status = ControlTaskStatus(state.pose.timestamp(), kInvalidTaskStatusId, ControlTaskProgress::waiting);
     }
-    
+
     // Execute the task, providing the most recent state
     auto& task = taskStack_.front();
     auto result = task->execute(state);
-    
+
     // If the task has finished, then pop it off the stack, activate the next task, if available
-    if((result.status.progress() == ControlTaskProgress::completed) 
-        || (result.status.progress() == ControlTaskProgress::failed))
-    {
+    if ((result.status.progress() == ControlTaskProgress::completed)
+        || (result.status.progress() == ControlTaskProgress::failed)) {
         taskStack_.pop_front();
-        
-        if(!taskStack_.empty())
-        {
+
+        if (!taskStack_.empty()) {
             activateTask(*(taskStack_.front()), state);
         }
     }
-    
+
     return result;
 }
 
@@ -84,15 +81,13 @@ bool ControlPlanner::haveTask(void) const
 void ControlPlanner::activateTask(ControlTask& task, const ControlState& state)
 {
     task.activate(state);
-    
-    if(task.hasSubTask())
-    {
+
+    if (task.hasSubTask()) {
         int numSubtasks = task.pushSubTasks(taskStack_);
-        
+
         std::cout << "Added " << numSubtasks << " subtasks.\n";
     }
-    
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

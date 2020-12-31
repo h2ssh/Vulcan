@@ -8,29 +8,29 @@
 
 
 /**
-* \file     area_labels.cpp
-* \author   Collin Johnson
-*
-* Definition of save_map_labels and load_map_labels.
-*/
+ * \file     area_labels.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of save_map_labels and load_map_labels.
+ */
 
 #include "hssh/local_topological/training/area_labels.h"
-#include "hssh/local_topological/training/local_topo_area_editor.h"
-#include "hssh/local_topological/training/labeled_area_data.h"
-#include "hssh/local_topological/area.h"
-#include "hssh/local_topological/area_extent.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
-#include "hssh/local_topological/area_detection/labeling/boundary.h"
 #include "hssh/local_metric/lpm.h"
 #include "hssh/local_metric/lpm_io.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/training/labeled_area_data.h"
+#include "hssh/local_topological/training/local_topo_area_editor.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "hssh/types.h"
 #include "utils/algorithm_ext.h"
 #include "utils/serialized_file_io.h"
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <cstring>
 #include <fstream>
 #include <sstream>
-#include <cstring>
 
 namespace vulcan
 {
@@ -57,9 +57,8 @@ LabeledAreaData create_labeled_data(const std::string& mapName, HypIter begin, H
 CellTypes create_cell_types(const LocalPerceptualMap& lpm, HypIter begin, HypIter end);
 void save_cell_types(std::ofstream& out, const CellTypes& cells);
 CellTypes load_cell_types(std::ifstream& in);
-HypothesisType assign_hypothesis_label(const AreaHypothesis& hyp,
-                                       const LocalPerceptualMap& map,
-                                       const CellTypes& cellToType);
+HypothesisType
+  assign_hypothesis_label(const AreaHypothesis& hyp, const LocalPerceptualMap& map, const CellTypes& cellToType);
 HypothesisType hyp_type_from_area_type(const LocalArea& area, const LocalArea& adjArea);
 
 ////////////////// MapName implementation ///////////////////////////////////
@@ -68,8 +67,7 @@ std::string MapName::toMapName(void) const
 {
     std::string mapName = building + floor;
 
-    if(!incrementalNum.empty())
-    {
+    if (!incrementalNum.empty()) {
         mapName += "_";
         mapName += incrementalNum;
     }
@@ -108,8 +106,7 @@ MapLabels save_map_labels(const LocalPerceptualMap& lpm,
         save_cell_types(cellOut, cellTypes);
     }
 
-    if(!gateways.empty())
-    {
+    if (!gateways.empty()) {
         utils::save_serializable_to_file(full_filename(mapName, mapDirectory, kGatewayExtension), gateways);
         auto features = create_labeled_gateway_data(mapName, gateways, editor);
         std::ofstream out(full_filename(mapName, mapDirectory, kGatewayFeatExtension + kFeatureExtension));
@@ -124,9 +121,7 @@ MapLabels save_map_labels(const LocalPerceptualMap& lpm,
 }
 
 
-MapLabels load_map_labels(const std::string& mapName,
-                          const std::string& mapDirectory,
-                          LocalTopoAreaEditor& editor)
+MapLabels load_map_labels(const std::string& mapName, const std::string& mapDirectory, LocalTopoAreaEditor& editor)
 {
     MapLabels labels;
     labels.name = parse_map_name(mapName);
@@ -145,8 +140,7 @@ MapLabels load_map_labels(const std::string& mapName,
     std::ifstream bndFeatIn(full_filename(mapName, mapDirectory, kBoundaryFeatExtension + kFeatureExtension));
 
     // If the feature files exist:
-    if(simplifiedIn.is_open() && initialIn.is_open() && gwyFeatIn.is_open() && bndFeatIn.is_open())
-    {
+    if (simplifiedIn.is_open() && initialIn.is_open() && gwyFeatIn.is_open() && bndFeatIn.is_open()) {
         std::cout << "INFO: load_map_labels: Found stored features for " << mapName << '\n';
 
         // Attempt to load the data
@@ -155,27 +149,22 @@ MapLabels load_map_labels(const std::string& mapName,
         gwyFeatIn >> labels.gatewayData;
         bndFeatIn >> labels.boundaryData;
 
-        bool haveInitial = !labels.initialData.empty()
-            && (labels.initialData.version() == current_hypothesis_features_version());
-        bool haveSimple = !labels.simplifiedData.empty()
-            && (labels.simplifiedData.version() == current_hypothesis_features_version());
-        bool haveGateway = !labels.gatewayData.empty()
-            && (labels.gatewayData.version() == current_gateway_features_version());
+        bool haveInitial =
+          !labels.initialData.empty() && (labels.initialData.version() == current_hypothesis_features_version());
+        bool haveSimple =
+          !labels.simplifiedData.empty() && (labels.simplifiedData.version() == current_hypothesis_features_version());
+        bool haveGateway =
+          !labels.gatewayData.empty() && (labels.gatewayData.version() == current_gateway_features_version());
         bool haveBoundary = !labels.boundaryData.empty();
 
         // If the features saved are still valid, then data will exist and is thus valid
-        if(haveInitial && haveSimple && haveGateway && haveBoundary)
-        {
+        if (haveInitial && haveSimple && haveGateway && haveBoundary) {
             std::cout << "Stored features were still valid for initial, simplified, gateways, and boundaries.\n";
             return labels;
-        }
-        else
-        {
+        } else {
             std::cout << "Didn't find up-to-date feature data for all learned classifiers.\n";
         }
-    }
-    else
-    {
+    } else {
         std::cout << "INFO: load_map_labels: Failed to find all needed saved features for " << mapName << '\n';
     }
 
@@ -193,8 +182,7 @@ bool compute_gateway_features(MapLabels& map)
     utils::load_serializable_from_file(full_filename(mapName, map.directory, kGatewayExtension), gateways);
 
     // If there weren't gateways, then they'll need to be computed
-    if(gateways.empty())
-    {
+    if (gateways.empty()) {
         std::cerr << "WARNING: compute_gateway_features: Didn't find saved gateways for " << mapName << '\n';
         return false;
     }
@@ -215,10 +203,9 @@ bool compute_area_and_boundary_features(MapLabels& map)
 
     std::ifstream cellIn(full_filename(mapName, map.directory, kCellExtension));
 
-    if(!cellIn.is_open())
-    {
-        std::cerr << "WARNING: compute_area_and_boundary_features: Didn't find saved cell information for "
-            << mapName << " Checked in " << full_filename(mapName, map.directory, kCellExtension) << std::endl;
+    if (!cellIn.is_open()) {
+        std::cerr << "WARNING: compute_area_and_boundary_features: Didn't find saved cell information for " << mapName
+                  << " Checked in " << full_filename(mapName, map.directory, kCellExtension) << std::endl;
         assert(false);
         return false;
     }
@@ -237,14 +224,13 @@ bool compute_area_and_boundary_features(MapLabels& map)
     std::cout << "INFO: load_map_labels: Found saved cells labels for " << mapName << '\n';
     CellTypes cellToType = load_cell_types(cellIn);
 
-    for(auto& hyp : boost::make_iterator_range(map.editor->beginInitialHypotheses(), map.editor->endInitialHypotheses()))
-    {
+    for (auto& hyp :
+         boost::make_iterator_range(map.editor->beginInitialHypotheses(), map.editor->endInitialHypotheses())) {
         auto type = assign_hypothesis_label(*hyp, *map.lpm, cellToType);
         hyp->setType(type);
     }
 
-    for(auto& hyp : *map.editor)
-    {
+    for (auto& hyp : *map.editor) {
         auto type = assign_hypothesis_label(*hyp, *map.lpm, cellToType);
         hyp->setType(type);
     }
@@ -255,9 +241,8 @@ bool compute_area_and_boundary_features(MapLabels& map)
     int numSimplified = std::distance(map.editor->begin(), map.editor->end());
     assert(numInitial >= numSimplified);
 
-    map.initialData = create_labeled_data(mapName,
-                                          map.editor->beginInitialHypotheses(),
-                                          map.editor->endInitialHypotheses());
+    map.initialData =
+      create_labeled_data(mapName, map.editor->beginInitialHypotheses(), map.editor->endInitialHypotheses());
     map.simplifiedData = create_labeled_data(mapName, map.editor->begin(), map.editor->end());
     map.boundaryData = create_labeled_boundary_data(mapName, *map.editor);
 
@@ -291,25 +276,21 @@ LabelsFile load_labels_file(const std::string& labelsFile, const local_topology_
     std::string directory;
     std::ifstream in(labelsFile);
 
-    while(!in.eof())
-    {
+    while (!in.eof()) {
         in >> name >> directory;
 
-        if(in.good())
-        {
+        if (in.good()) {
             std::cout << "INFO: LocalTopoEditor: Loading data for " << name << " in " << directory << '\n';
             auto editor = std::make_shared<LocalTopoAreaEditor>(localTopoParams);
             auto mapLabels = load_map_labels(name, directory, *editor);
             mapLabels.editor = editor;
 
             // If there's no incremental number, then it is a full map
-            if(mapLabels.name.incrementalNum.empty())
-            {
+            if (mapLabels.name.incrementalNum.empty()) {
                 labels.fullMaps[mapLabels.name.building].push_back(mapLabels);
             }
             // Otherwise add it to the incremental maps
-            else
-            {
+            else {
                 labels.incrementalMaps[mapLabels.name.building].push_back(mapLabels);
             }
         }
@@ -325,32 +306,27 @@ LabelsFile load_labels_directory(const std::string& directory, const local_topol
 
     LabelsFile labels;
 
-    if(!bfs::is_directory(directory))
-    {
+    if (!bfs::is_directory(directory)) {
         std::cerr << "ERROR: load_labels_directory: " << directory << " is not a directory.\n";
         return labels;
     }
 
-    for(bfs::directory_entry& file : bfs::directory_iterator(directory))
-    {
+    for (bfs::directory_entry& file : bfs::directory_iterator(directory)) {
         auto path = file.path();
 
-        if(path.extension() == ".lpm")
-        {
+        if (path.extension() == ".lpm") {
             std::cout << "INFO: load_labels_directory: Loading data for " << path.filename() << " in "
-                << path.parent_path() << '\n';
+                      << path.parent_path() << '\n';
             auto editor = std::make_shared<LocalTopoAreaEditor>(localTopoParams);
             auto mapLabels = load_map_labels(path.stem().string(), directory, *editor);
             mapLabels.editor = editor;
 
             // If there's no incremental number, then it is a full map
-            if(mapLabels.name.incrementalNum.empty())
-            {
+            if (mapLabels.name.incrementalNum.empty()) {
                 labels.fullMaps[mapLabels.name.building].push_back(mapLabels);
             }
             // Otherwise add it to the incremental maps
-            else
-            {
+            else {
                 labels.incrementalMaps[mapLabels.name.building].push_back(mapLabels);
             }
         }
@@ -378,10 +354,8 @@ MapName parse_map_name(const std::string& mapName)
     // The building contains everything up to the first numeric character
     std::size_t start = 0;
     std::size_t end = mapName.length();
-    for(std::size_t n = start; n < mapName.length(); ++n)
-    {
-        if(isdigit(mapName[n]))
-        {
+    for (std::size_t n = start; n < mapName.length(); ++n) {
+        if (isdigit(mapName[n])) {
             end = n;
             break;
         }
@@ -389,33 +363,25 @@ MapName parse_map_name(const std::string& mapName)
 
     MapName name;
 
-    if(end == 1 && mapName[0] == '_')
-    {
+    if (end == 1 && mapName[0] == '_') {
         std::cerr << "ERROR: load_map_labels: Invalid map name. Can't end with underscore.\n";
         return name;
     }
 
     // If the last character before the digit was an underscore, then there's no floor number
-    if(end == 0)
-    {
+    if (end == 0) {
         name.building = mapName;
-    }
-    else if(mapName[end - 1] == '_')
-    {
+    } else if (mapName[end - 1] == '_') {
         --end;
         name.building = mapName.substr(start, end - start);
         start = end;
-    }
-    else
-    {
+    } else {
         name.building = mapName.substr(start, end - start);
         start = end;
         end = mapName.length();
         // The floor contains everything after the building until an underscore is encountered
-        for(std::size_t n = start; n < mapName.length(); ++n)
-        {
-            if(mapName[n] == '_')
-            {
+        for (std::size_t n = start; n < mapName.length(); ++n) {
+            if (mapName[n] == '_') {
                 end = n;
                 break;
             }
@@ -423,17 +389,15 @@ MapName parse_map_name(const std::string& mapName)
     }
 
     // If the end has changed, then there was a floor number
-    if(start != end)
-    {
+    if (start != end) {
         name.floor = mapName.substr(start, end - start);
     }
 
     // If start isn't the end of the map name and the search stopped at an underscore, then we found an incremental
     // map number
     start = end;
-    if(start != mapName.length())
-    {
-        name.incrementalNum = mapName.substr(start + 1); // skip the _
+    if (start != mapName.length()) {
+        name.incrementalNum = mapName.substr(start + 1);   // skip the _
     }
 
     std::cout << "Building:" << name.building << " Floor:" << name.floor << " Incr:" << name.incrementalNum << '\n';
@@ -445,9 +409,8 @@ LabeledAreaData create_labeled_data(const std::string& mapName, HypIter begin, H
 {
     LabeledAreaData data;
 
-    for(auto& hyp : boost::make_iterator_range(begin, end))
-    {
-        data.addExample(mapName, { hyp->getType(), hyp->features() });
+    for (auto& hyp : boost::make_iterator_range(begin, end)) {
+        data.addExample(mapName, {hyp->getType(), hyp->features()});
     }
 
     return data;
@@ -458,19 +421,16 @@ CellTypes create_cell_types(const LocalPerceptualMap& lpm, HypIter begin, HypIte
 {
     CellTypes cells;
 
-    for(auto& hyp : boost::make_iterator_range(begin, end))
-    {
+    for (auto& hyp : boost::make_iterator_range(begin, end)) {
         // Iterate through every cell in the hypothesis extent
-        for(auto& cell : hyp->extent())
-        {
+        for (auto& cell : hyp->extent()) {
             // Round it to the nearest grid coordinate to avoid subtle truncation errors
             auto gridCoords = utils::global_point_to_grid_cell_round(cell, lpm);
 
             // If the cell is already stored, that means it is on the boundary of two areas. These cells should be
             // removed so they don't unduly influence the area on either side
             auto cellIt = cells.find(gridCoords);
-            if(cellIt != cells.end())
-            {
+            if (cellIt != cells.end()) {
                 cells.erase(cellIt);
             }
 
@@ -485,8 +445,7 @@ CellTypes create_cell_types(const LocalPerceptualMap& lpm, HypIter begin, HypIte
 
 void save_cell_types(std::ofstream& out, const CellTypes& cells)
 {
-    for(auto c : cells)
-    {
+    for (auto c : cells) {
         out << c.first.x << ' ' << c.first.y << ' ' << c.second << '\n';
     }
 }
@@ -496,14 +455,12 @@ CellTypes load_cell_types(std::ifstream& in)
 {
     CellTypes cells;
 
-    while(in.good())
-    {
+    while (in.good()) {
         cell_t cell;
         HypothesisType type;
         in >> cell.x >> cell.y >> type;
 
-        if(in.good())
-        {
+        if (in.good()) {
             cells.insert(std::make_pair(cell, type));
         }
     }
@@ -512,63 +469,53 @@ CellTypes load_cell_types(std::ifstream& in)
 }
 
 
-HypothesisType assign_hypothesis_label(const AreaHypothesis& hyp,
-                                             const LocalPerceptualMap& map,
-                                             const CellTypes& cellToType)
+HypothesisType
+  assign_hypothesis_label(const AreaHypothesis& hyp, const LocalPerceptualMap& map, const CellTypes& cellToType)
 {
     int totalCells = 0;
     int numDecision = 0;
     int numDest = 0;
     int numPath = 0;
 
-    for(auto cell : hyp.extent())
-    {
+    for (auto cell : hyp.extent()) {
         auto gridCell = utils::global_point_to_grid_cell_round(cell, map);
         auto typeIt = cellToType.find(gridCell);
 
-        if(typeIt != cellToType.end())
-        {
+        if (typeIt != cellToType.end()) {
             ++totalCells;
 
-            switch(typeIt->second)
-            {
-                case HypothesisType::kDecision:
-                    ++numDecision;
-                    break;
-                case HypothesisType::kDest:
-                    ++numDest;
-                    break;
-                case HypothesisType::kPath:
-                    ++numPath;
-                    break;
-                default:
-                    std::cout << "Invalid label for cell: " << gridCell << '\n';
+            switch (typeIt->second) {
+            case HypothesisType::kDecision:
+                ++numDecision;
+                break;
+            case HypothesisType::kDest:
+                ++numDest;
+                break;
+            case HypothesisType::kPath:
+                ++numPath;
+                break;
+            default:
+                std::cout << "Invalid label for cell: " << gridCell << '\n';
             }
         }
     }
 
-    if(totalCells == 0)
-    {
+    if (totalCells == 0) {
         std::cerr << "ERROR: No cells found for hypothesis at "
-            << hyp.extent().rectangleBoundary(math::ReferenceFrame::GLOBAL) << '\n';
+                  << hyp.extent().rectangleBoundary(math::ReferenceFrame::GLOBAL) << '\n';
         return HypothesisType::kArea;
     }
 
     std::cout << "INFO: Distribution for hypothesis at " << hyp.extent().rectangleBoundary(math::ReferenceFrame::GLOBAL)
-        << ":\nDecision:   " << (static_cast<float>(numDecision) / totalCells)
-        << "\nDestination: " << (static_cast<float>(numDest) / totalCells)
-        << "\nPath:        " << (static_cast<float>(numPath) / totalCells) << '\n';
+              << ":\nDecision:   " << (static_cast<float>(numDecision) / totalCells)
+              << "\nDestination: " << (static_cast<float>(numDest) / totalCells)
+              << "\nPath:        " << (static_cast<float>(numPath) / totalCells) << '\n';
 
-    if(numPath >= numDecision && numPath >= numDest)
-    {
+    if (numPath >= numDecision && numPath >= numDest) {
         return HypothesisType::kPath;
-    }
-    else if(numDecision >= numDest)
-    {
+    } else if (numDecision >= numDest) {
         return HypothesisType::kDecision;
-    }
-    else
-    {
+    } else {
         return HypothesisType::kDest;
     }
 }
@@ -581,15 +528,14 @@ LabeledGatewayData create_labeled_gateway_data(const std::string& mapName,
     // Create a LabeledGatewayFeatures instance for each of the features in skeleton features.
     // If the associated cell is a skeleton cell in gateways, then it should be marked as a gateway
 
-    const int kGatewayNeighborDist = 5;     // how many cells away to consider a potentially similar gateway?
-    const double kMaxNormalDiff = 0.02;     // how much difference in angle normals is allowed?
+    const int kGatewayNeighborDist = 5;   // how many cells away to consider a potentially similar gateway?
+    const double kMaxNormalDiff = 0.02;   // how much difference in angle normals is allowed?
 
     auto features = editor.computeGatewayFeatures();
     const auto& isovists = editor.isovistField();
 
     LabeledGatewayData data;
-    for(auto& f : features)
-    {
+    for (auto& f : features) {
         LabeledGatewayFeatures example;
         example.features = f.second;
         example.cell = f.first;
@@ -599,16 +545,18 @@ LabeledGatewayData create_labeled_gateway_data(const std::string& mapName,
 
         auto neighborIt = std::find_if(gateways.begin(), gateways.end(), [&](const Gateway& g) {
             return (std::abs(f.first.x - g.skeletonCell().x) < kGatewayNeighborDist)
-                && (std::abs(f.first.y - g.skeletonCell().y) < kGatewayNeighborDist);
+              && (std::abs(f.first.y - g.skeletonCell().y) < kGatewayNeighborDist);
         });
 
         // See if the neighbor gateway and this cell have a similar MinNormDiff because that indicates if
         // in the direction of opening or moving down the hall. Since boundaries are flexible, allow some
         // of this slop in the ground-truth to create a more defined difference
-        if(neighborIt != gateways.end() && isovists.contains(f.first) && isovists.contains(neighborIt->skeletonCell()))
-        {
-            example.isGateway = std::abs(isovists.at(f.first).scalar(utils::Isovist::kMinNormalDiff)
-                - isovists.at(neighborIt->skeletonCell()).scalar(utils::Isovist::kMinNormalDiff)) < kMaxNormalDiff;
+        if (neighborIt != gateways.end() && isovists.contains(f.first)
+            && isovists.contains(neighborIt->skeletonCell())) {
+            example.isGateway =
+              std::abs(isovists.at(f.first).scalar(utils::Isovist::kMinNormalDiff)
+                       - isovists.at(neighborIt->skeletonCell()).scalar(utils::Isovist::kMinNormalDiff))
+              < kMaxNormalDiff;
         }
 
         data.addExample(mapName, example);
@@ -626,13 +574,10 @@ LabeledBoundaryData create_labeled_boundary_data(const std::string& mapName, con
     // the is-off gateway examples, which are also counted to get a proper prior distribution.
     std::unordered_set<const AreaHypothesisBoundary*> allBoundaries;
 
-    for(auto& hyp : editor)
-    {
+    for (auto& hyp : editor) {
         // For each boundary, find the neighbor areas and mark the types in the data
-        for(auto& bnd : boost::make_iterator_range(hyp->beginBoundary(), hyp->endBoundary()))
-        {
-            if(allBoundaries.find(bnd) != allBoundaries.end())
-            {
+        for (auto& bnd : boost::make_iterator_range(hyp->beginBoundary(), hyp->endBoundary())) {
+            if (allBoundaries.find(bnd) != allBoundaries.end()) {
                 continue;
             }
 
@@ -651,14 +596,11 @@ LabeledBoundaryData create_labeled_boundary_data(const std::string& mapName, con
     // Now go through the initial hypotheses. All boundaries that aren't still on had a merge happen and
     // thus were false positives that were turned off
 
-    for(auto& hyp : boost::make_iterator_range(editor.beginInitialHypotheses(), editor.endInitialHypotheses()))
-    {
+    for (auto& hyp : boost::make_iterator_range(editor.beginInitialHypotheses(), editor.endInitialHypotheses())) {
         // For each boundary, find the neighbor areas and mark the types in the data
-        for(auto& bnd : boost::make_iterator_range(hyp->beginBoundary(), hyp->endBoundary()))
-        {
+        for (auto& bnd : boost::make_iterator_range(hyp->beginBoundary(), hyp->endBoundary())) {
             // If the boundary has been processed, then ignore it
-            if(allBoundaries.find(bnd) != allBoundaries.end())
-            {
+            if (allBoundaries.find(bnd) != allBoundaries.end()) {
                 continue;
             }
 
@@ -667,8 +609,7 @@ LabeledBoundaryData create_labeled_boundary_data(const std::string& mapName, con
             // We're only trying to figure out what the internal off-gateway distributions are
             // if something is strange in the initial hypotheses and the boundary is in a strange
             // state, just ignore it.
-            if(hyp->getType() == otherHyp->getType())
-            {
+            if (hyp->getType() == otherHyp->getType()) {
                 LabeledBoundaryFeatures feat;
                 feat.types[0] = bnd->getBoundaryType(hyp);
                 feat.types[1] = bnd->getBoundaryType(otherHyp);
@@ -689,10 +630,9 @@ bool reconstruct_ltm_from_labels(MapLabels& map)
     auto mapName = map.name.toMapName();
     std::ifstream cellIn(full_filename(mapName, map.directory, kCellExtension));
 
-    if(!cellIn.is_open())
-    {
-        std::cerr << "ERROR: reconstruct_ltm_from_labels: Didn't find saved cell information for "
-            << mapName << " Checked in " << full_filename(mapName, map.directory, kCellExtension) << std::endl;
+    if (!cellIn.is_open()) {
+        std::cerr << "ERROR: reconstruct_ltm_from_labels: Didn't find saved cell information for " << mapName
+                  << " Checked in " << full_filename(mapName, map.directory, kCellExtension) << std::endl;
         return false;
     }
 
@@ -700,10 +640,9 @@ bool reconstruct_ltm_from_labels(MapLabels& map)
     // Need to first get the gateways for the map.
     std::vector<Gateway> gateways;
     // Always attempt to load gateways first. Don't want to compute them unless absolutely necessary.
-    if(!utils::load_serializable_from_file(full_filename(mapName, map.directory, kGatewayExtension), gateways))
-    {
-        std::cerr << "ERROR: reconstruct_ltm_from_labels: Failed to find gateways for " << mapName
-            << " at " << full_filename(mapName, map.directory, kGatewayExtension) << '\n';
+    if (!utils::load_serializable_from_file(full_filename(mapName, map.directory, kGatewayExtension), gateways)) {
+        std::cerr << "ERROR: reconstruct_ltm_from_labels: Failed to find gateways for " << mapName << " at "
+                  << full_filename(mapName, map.directory, kGatewayExtension) << '\n';
         return false;
     }
 
@@ -712,14 +651,13 @@ bool reconstruct_ltm_from_labels(MapLabels& map)
     std::cout << "INFO: load_map_labels: Found saved cells labels for " << mapName << '\n';
     CellTypes cellToType = load_cell_types(cellIn);
 
-    for(auto& hyp : boost::make_iterator_range(map.editor->beginInitialHypotheses(), map.editor->endInitialHypotheses()))
-    {
+    for (auto& hyp :
+         boost::make_iterator_range(map.editor->beginInitialHypotheses(), map.editor->endInitialHypotheses())) {
         auto type = assign_hypothesis_label(*hyp, *map.lpm, cellToType);
         hyp->setType(type);
     }
 
-    for(auto& hyp : *map.editor)
-    {
+    for (auto& hyp : *map.editor) {
         auto type = assign_hypothesis_label(*hyp, *map.lpm, cellToType);
         hyp->setType(type);
     }
@@ -733,19 +671,18 @@ bool reconstruct_ltm_from_labels(MapLabels& map)
 
 HypothesisType hyp_type_from_area_type(const LocalArea& area, const LocalArea& adjArea)
 {
-    switch(area.type())
-    {
+    switch (area.type()) {
     case AreaType::decision_point:
         return HypothesisType::kDecision;
     case AreaType::destination:
         return HypothesisType::kDest;
     case AreaType::path_segment:
         return area.isEndpoint(adjArea) ? HypothesisType::kPathEndpoint : HypothesisType::kPathDest;
-    case AreaType::place:       // intentional fall-through
-    case AreaType::area:        // intentional fall-through
-    case AreaType::path:        // intentional fall-through
-    case AreaType::dead_end:    // intentional fall-through
-    case AreaType::frontier:    // intentional fall-through
+    case AreaType::place:      // intentional fall-through
+    case AreaType::area:       // intentional fall-through
+    case AreaType::path:       // intentional fall-through
+    case AreaType::dead_end:   // intentional fall-through
+    case AreaType::frontier:   // intentional fall-through
     default:
         assert(!"Invalid area type for boundary data!");
     }
@@ -753,5 +690,5 @@ HypothesisType hyp_type_from_area_type(const LocalArea& area, const LocalArea& a
     return HypothesisType::kArea;
 }
 
-} // namespace ui
-} // nmaespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

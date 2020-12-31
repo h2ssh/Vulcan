@@ -8,17 +8,17 @@
 
 
 /**
-* \file     object_factory.cpp
-* \author   Collin Johnson
-*
-* Definition of TrackingObjectFactory.
-*/
+ * \file     object_factory.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TrackingObjectFactory.
+ */
 
 #include "tracker/tracking/object_factory.h"
+#include "tracker/motions/classifier.h"
 #include "tracker/tracking/data_association.h"
 #include "tracker/tracking/object.h"
 #include "tracker/tracking/object_set.h"
-#include "tracker/motions/classifier.h"
 #include <iostream>
 
 namespace vulcan
@@ -43,9 +43,7 @@ TrackingObjectFactory::~TrackingObjectFactory(void)
 std::unique_ptr<TrackingObject> TrackingObjectFactory::createTrackingObject(const LaserObject& object)
 {
     ++nextId_;
-    return std::make_unique<TrackingObject>(nextId_,
-                                            object,
-                                            std::make_unique<ObjectMotionClassifier>(*classifier_));
+    return std::make_unique<TrackingObject>(nextId_, object, std::make_unique<ObjectMotionClassifier>(*classifier_));
 }
 
 
@@ -54,5 +52,5 @@ std::unique_ptr<TrackingObjectSet> TrackingObjectFactory::createTrackingObjectSe
     return std::unique_ptr<TrackingObjectSet>(new TrackingObjectSet(associationStrategy_->clone()));
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

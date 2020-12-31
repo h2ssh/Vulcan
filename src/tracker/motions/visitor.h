@@ -8,11 +8,11 @@
 
 
 /**
-* \file     visitor.h
-* \author   Collin Johnson
-* 
-* Declaration of ObjectMotionVisitor interface.
-*/
+ * \file     visitor.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ObjectMotionVisitor interface.
+ */
 
 #ifndef TRACKER_MOTIONS_OBJECT_MOTION_VISITOR_H
 #define TRACKER_MOTIONS_OBJECT_MOTION_VISITOR_H
@@ -21,28 +21,27 @@ namespace vulcan
 {
 namespace tracker
 {
-    
+
 class StridingMotion;
 class SteadyMotion;
 class FixedEndpointMotion;
 class StationaryMotion;
 
 /**
-* ObjectMotionVisitor is an interface for a visitor of the ObjectMotion hierarchy.
-*/
+ * ObjectMotionVisitor is an interface for a visitor of the ObjectMotion hierarchy.
+ */
 class ObjectMotionVisitor
 {
 public:
+    virtual ~ObjectMotionVisitor(void) { }
 
-    virtual ~ObjectMotionVisitor(void) {}
-    
-    virtual void visitStriding     (const StridingMotion&      motion) = 0;
-    virtual void visitSteady       (const SteadyMotion&        motion) = 0;
+    virtual void visitStriding(const StridingMotion& motion) = 0;
+    virtual void visitSteady(const SteadyMotion& motion) = 0;
     virtual void visitFixedEndpoint(const FixedEndpointMotion& motion) = 0;
-    virtual void visitStationary   (const StationaryMotion&    motion) = 0;
+    virtual void visitStationary(const StationaryMotion& motion) = 0;
 };
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_MOTIONS_OBJECT_MOTION_VISITOR_H
+#endif   // TRACKER_MOTIONS_OBJECT_MOTION_VISITOR_H

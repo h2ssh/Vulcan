@@ -8,18 +8,18 @@
 
 
 /**
-* \file     rigid.cpp
-* \author   Collin Johnson
-* 
-* Definition of RigidObject.
-*/
+ * \file     rigid.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of RigidObject.
+ */
 
 #include "tracker/objects/rigid.h"
 #include "tracker/dynamic_object_visitor.h"
 
 namespace vulcan
 {
-namespace tracker 
+namespace tracker
 {
 
 RigidObject::RigidObject(ObjectId id, int64_t timestamp, const SteadyMotion& motion, const ObjectBoundary& boundary)
@@ -40,5 +40,5 @@ void RigidObject::accept(DynamicObjectVisitor& visitor) const
     visitor.visitRigid(*this);
 }
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan

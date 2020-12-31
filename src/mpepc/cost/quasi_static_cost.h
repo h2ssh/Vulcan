@@ -8,23 +8,23 @@
 
 
 /**
-* \file     quasi_static_cost.h
-* \author   Collin Johnson
-* 
-* Declaration of a cost function for costs associated with dynamic objects being treated as quasi-static.
-*/
+ * \file     quasi_static_cost.h
+ * \author   Collin Johnson
+ *
+ * Declaration of a cost function for costs associated with dynamic objects being treated as quasi-static.
+ */
 
 #ifndef MPEPC_COSTS_QUASI_STATIC_COST_H
 #define MPEPC_COSTS_QUASI_STATIC_COST_H
 
-#include "mpepc/types.h"
 #include "mpepc/cost/cost_map.h"
+#include "mpepc/types.h"
 
 namespace vulcan
 {
 namespace mpepc
 {
-    
+
 struct quasi_static_cost_params_t
 {
     float costRadius;
@@ -33,17 +33,17 @@ struct quasi_static_cost_params_t
 };
 
 /**
-* quasi_static_cost adds a small amount of cost to the cost map that is associated with dynamic objects in the
-* environment. Each quasi-static point is the center of some object. These points are expanded by a fixed amount and
-* falloff to zero cost. Then, a linear amount of cost attaching the object to the robot frame is added in order to
-* eliminate the local minimum created right in front of an object.
-*/
+ * quasi_static_cost adds a small amount of cost to the cost map that is associated with dynamic objects in the
+ * environment. Each quasi-static point is the center of some object. These points are expanded by a fixed amount and
+ * falloff to zero cost. Then, a linear amount of cost attaching the object to the robot frame is added in order to
+ * eliminate the local minimum created right in front of an object.
+ */
 void quasi_static_cost(const std::vector<Point<float>>& quasiStaticPoints,
-                       const quasi_static_cost_params_t& params, 
-                       const planning_environment_t& env, 
+                       const quasi_static_cost_params_t& params,
+                       const planning_environment_t& env,
                        CostMap& costs);
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_COSTS_QUASI_STATIC_COST_H
+#endif   // MPEPC_COSTS_QUASI_STATIC_COST_H

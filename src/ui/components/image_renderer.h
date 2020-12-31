@@ -10,6 +10,8 @@
 #ifndef UI_COMPONENTS_IMAGE_RENDERER_H
 #define UI_COMPONENTS_IMAGE_RENDERER_H
 
+#include <cstdint>
+
 namespace vulcan
 {
 class Image;
@@ -18,24 +20,22 @@ namespace ui
 {
 
 /**
-* ImageRenderer renders an image in the current OpenGL context.
-*/
+ * ImageRenderer renders an image in the current OpenGL context.
+ */
 class ImageRenderer
 {
 public:
-
     /**
-    * Constructor for ImageRenderer.
-    */
+     * Constructor for ImageRenderer.
+     */
     ImageRenderer(void);
 
     /**
-    * renderImage renders the provided image to the screen.
-    */
+     * renderImage renders the provided image to the screen.
+     */
     void renderImage(const Image& image);
 
 private:
-
     void initializeImageTexture(const Image& image);
 
     void enableImageTexture(const Image& image);
@@ -49,11 +49,11 @@ private:
     uint16_t textureWidth;
     uint16_t textureHeight;
 
-    GLuint   textureName;
+    unsigned int textureName;
     uint8_t* texture;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_IMAGE_RENDERER_H
+#endif   // UI_COMPONENTS_IMAGE_RENDERER_H

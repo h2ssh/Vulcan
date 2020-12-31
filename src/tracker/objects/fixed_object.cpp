@@ -8,11 +8,11 @@
 
 
 /**
-* \file     fixed_object.cpp
-* \author   Collin Johnson
-* 
-* Definition of FixedObject.
-*/
+ * \file     fixed_object.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of FixedObject.
+ */
 
 #include "tracker/objects/fixed_object.h"
 #include "tracker/laser_object.h"
@@ -29,7 +29,7 @@ void FixedObject::updateModel(const LaserObject& object)
     state_.motion.x = model_.movingPosition().x;
     state_.motion.y = model_.movingPosition().y;
     state_.boundary = model_.boundary();
-    
+
     // Calculate the velocity based on the updated trajectory
     auto velocity = estimateVelocity(object.timestamp());
     state_.motion.xVel = velocity.x;
@@ -87,5 +87,5 @@ FixedObject::FixedObject(int64_t timestamp, const FixedObjectModel& model)
 }
 
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

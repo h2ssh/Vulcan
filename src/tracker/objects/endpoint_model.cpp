@@ -8,11 +8,11 @@
 
 
 /**
-* \file     endpoint_model.cpp
-* \author   Collin Johnson
-* 
-* Definition of EndpointModel.
-*/
+ * \file     endpoint_model.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of EndpointModel.
+ */
 
 #include "tracker/objects/endpoint_model.h"
 #include "math/geometry/shape_fitting.h"
@@ -24,12 +24,12 @@
 
 namespace vulcan
 {
-namespace tracker 
+namespace tracker
 {
 
 const std::size_t kMinModelData = 10;
 
-    
+
 EndpointModel::EndpointModel(double maxRadius)
 : haveNewMeasurements_(false)
 , type_(EndpointType::undetermined)
@@ -65,15 +65,13 @@ EndpointType EndpointModel::type(void) const
 Position EndpointModel::position(void) const
 {
     updateModelIfNeeded();
-    
+
     // If the endpoint is stationary, then the position is the mean of all measurements.
-    if(type_ == EndpointType::stationary)
-    {
+    if (type_ == EndpointType::stationary) {
         return pointEstimate_;
     }
     // Otherwise, the endpoint is currently located at the last of the measured positions.
-    else
-    {
+    else {
         return currentPosition_;
     }
 }
@@ -94,7 +92,6 @@ Arc EndpointModel::estimatedArc(void) const
 }
 
 
-
 float EndpointModel::distanceRange(void) const
 {
     return distance_between_points(positionExtrema_[0], positionExtrema_[1]);
@@ -110,8 +107,7 @@ Line<float> EndpointModel::estimatedSegment(void) const
 
 void EndpointModel::addPositionMeasurement(Position position)
 {
-    if(changeExtremaIfNeeded(position) || measurements_.empty())
-    {
+    if (changeExtremaIfNeeded(position) || measurements_.empty()) {
         xStats_(position.x);
         yStats_(position.y);
         measurements_.push_back(position);
@@ -134,24 +130,22 @@ std::array<float, 2> EndpointModel::calculateAssociationScores(const Endpoints& 
     //  - undetermined/sliding - distance from last position
     //  - stationary           - distance from mean position
     //  - rotating             - distance from arc boundary
-    
+
     std::array<float, 2> scores;
-    
-    if(type_ == EndpointType::rotating)
-    {
-        scores[0] = std::abs(distance_between_points(circleEstimate_.center(), measurements_[0]) - 
-            circleEstimate_.radius());
-        scores[1] = std::abs(distance_between_points(circleEstimate_.center(), measurements_[1]) - 
-            circleEstimate_.radius());
+
+    if (type_ == EndpointType::rotating) {
+        scores[0] =
+          std::abs(distance_between_points(circleEstimate_.center(), measurements_[0]) - circleEstimate_.radius());
+        scores[1] =
+          std::abs(distance_between_points(circleEstimate_.center(), measurements_[1]) - circleEstimate_.radius());
     }
     // position returns last measurement for sliding, but the mean position for stationary
     // so it can be used for both cases
-    else
-    {
+    else {
         scores[0] = distance_between_points(measurements[0], position());
         scores[1] = distance_between_points(measurements[1], position());
     }
-    
+
     return scores;
 }
 
@@ -162,20 +156,17 @@ bool EndpointModel::changeExtremaIfNeeded(Position position)
     // the extrema, then an extrema needs to be changed
 
     float posToZero = distance_between_points(position, positionExtrema_[0]);
-    float posToOne  = distance_between_points(position, positionExtrema_[1]);
+    float posToOne = distance_between_points(position, positionExtrema_[1]);
     float zeroToOne = distance_between_points(positionExtrema_[0], positionExtrema_[1]);
 
     bool isExtrema = false;
 
-    if(posToZero > zeroToOne)
-    {
+    if (posToZero > zeroToOne) {
         positionExtrema_[1] = position;
-        isExtrema           = true;
-    }
-    else if(posToOne > zeroToOne)
-    {
+        isExtrema = true;
+    } else if (posToOne > zeroToOne) {
         positionExtrema_[0] = position;
-        isExtrema           = true;
+        isExtrema = true;
     }
 
     return isExtrema;
@@ -185,53 +176,48 @@ bool EndpointModel::changeExtremaIfNeeded(Position position)
 void EndpointModel::updateModelIfNeeded(void) const
 {
     using namespace boost::accumulators;
-    
+
     const double kMinVariance = 1e-4;
 
-    if(haveNewMeasurements_)
-    {
+    if (haveNewMeasurements_) {
         // If enough data exists to estimate the different types of endpoints
-        if(measurements_.size() >= kMinModelData)
-        {
+        if (measurements_.size() >= kMinModelData) {
             // And there is enough variation in the data to get a meaningful estimate
-            if((variance(xStats_) > kMinVariance) || (variance(yStats_) > kMinVariance))
-            {
+            if ((variance(xStats_) > kMinVariance) || (variance(yStats_) > kMinVariance)) {
                 // Estimate the three types of endpoint
                 estimatePoint();
                 estimateLine();
                 estimateArc();
-                
+
                 // And decide which is the best fit for the current data
                 determineType();
             }
             // Otherwise the endpoint must be stationary because there's no variation in the data
-            else
-            {
+            else {
                 estimatePoint();
                 type_ = EndpointType::stationary;
             }
         }
         // Otherwise the endpoint type can't be determined yet
-        else
-        {
+        else {
             type_ = EndpointType::undetermined;
         }
-        
+
         haveNewMeasurements_ = false;
-    }    
+    }
 }
 
 
 void EndpointModel::estimatePoint(void) const
 {
     using namespace boost::accumulators;
-    
+
     pointEstimate_ = Position(mean(xStats_), mean(yStats_));
-//     pointError_ = std::accumulate(measurements_.begin(), measurements_.end(), 0.0,
-//                                   [this](double total, const Point<float>& p)
-//                                   {
-//                                       return total + distance_between_points(p, pointEstimate_);
-//                                   });    
+    //     pointError_ = std::accumulate(measurements_.begin(), measurements_.end(), 0.0,
+    //                                   [this](double total, const Point<float>& p)
+    //                                   {
+    //                                       return total + distance_between_points(p, pointEstimate_);
+    //                                   });
     pointError_ = variance(xStats_) + variance(yStats_);
 }
 
@@ -239,13 +225,12 @@ void EndpointModel::estimatePoint(void) const
 void EndpointModel::estimateLine(void) const
 {
     assert(measurements_.size() > 2);
-    
+
     lineEstimate_ = math::total_least_squares(measurements_.begin(), measurements_.end());
-    lineError_ = std::accumulate(measurements_.begin(), measurements_.end(), 0.0,
-                                 [this](double total, const Point<float>& p)
-                                 {
-                                     return total + distance_to_line_segment(p, lineEstimate_);
-                                 });
+    lineError_ =
+      std::accumulate(measurements_.begin(), measurements_.end(), 0.0, [this](double total, const Point<float>& p) {
+          return total + distance_to_line_segment(p, lineEstimate_);
+      });
 }
 
 
@@ -253,19 +238,15 @@ void EndpointModel::estimateArc(void) const
 {
     const double kMinRadius = 0.05;
     const double kMaxRadius = 1.5;
-    
+
     assert(measurements_.size() > 2);
-    
-    circleEstimate_ = math::minimum_geometric_error_circle(measurements_.begin(), 
-                                                        measurements_.end(),
-                                                        kMinRadius,
-                                                        kMaxRadius);
-    circleError_ = std::accumulate(measurements_.begin(), measurements_.end(), 0.0,
-                                [this](double total, const Point<float>& p)
-                                {
-                                    return total + std::abs(distance_between_points(p, circleEstimate_.center())
-                                        - circleEstimate_.radius());
-                                });
+
+    circleEstimate_ =
+      math::minimum_geometric_error_circle(measurements_.begin(), measurements_.end(), kMinRadius, kMaxRadius);
+    circleError_ =
+      std::accumulate(measurements_.begin(), measurements_.end(), 0.0, [this](double total, const Point<float>& p) {
+          return total + std::abs(distance_between_points(p, circleEstimate_.center()) - circleEstimate_.radius());
+      });
 }
 
 
@@ -273,53 +254,45 @@ void EndpointModel::determineType(void) const
 {
     // The type is the one with the least error fitting the points
     // The arc also can't have too large a radius because a large radius arc will fit a line very very well
-    if(distanceRange() < kMaxStationaryExtremaDistance)
-    {
+    if (distanceRange() < kMaxStationaryExtremaDistance) {
         type_ = EndpointType::stationary;
-    }
-    else if((circleEstimate_.radius() < kMaxRadius_) && (circleError_ < lineError_))
-    {
+    } else if ((circleEstimate_.radius() < kMaxRadius_) && (circleError_ < lineError_)) {
         type_ = EndpointType::rotating;
-    }
-    else if((length(lineEstimate_) < 2.0*kMaxRadius_) &&  (lineError_ < circleError_))
-    {
+    } else if ((length(lineEstimate_) < 2.0 * kMaxRadius_) && (lineError_ < circleError_)) {
         type_ = EndpointType::sliding;
-    }
-    else
-    {
+    } else {
         type_ = EndpointType::invalid;
     }
-    
+
 #ifdef DEBUG_TYPE
     std::cout << "DEBUG: EndpointModel::determineType: \n"
               << " Position: " << currentPosition_ << '\n'
               << " arc:      " << arcEstimate_ << '\n'
-              << " arcError: " << arcError_  << '\n'
+              << " arcError: " << arcError_ << '\n'
               << " line:     " << lineEstimate_ << '\n'
               << " lineError:" << lineError_ << '\n'
               << " meanError:" << pointError_ << '\n'
               << " Dist:     " << distanceRange() << '\n'
               << " Type:     " << type_ << '\n';
-#endif 
+#endif
 }
 
 
 std::ostream& operator<<(std::ostream& out, EndpointType type)
 {
-    switch(type)
-    {
+    switch (type) {
     case EndpointType::undetermined:
         out << "undetermined";
         break;
-        
+
     case EndpointType::stationary:
         out << "stationary";
         break;
-        
+
     case EndpointType::sliding:
         out << "sliding";
         break;
-        
+
     case EndpointType::rotating:
         out << "rotating";
         break;
@@ -328,9 +301,9 @@ std::ostream& operator<<(std::ostream& out, EndpointType type)
         out << "invalid";
         break;
     }
-    
+
     return out;
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

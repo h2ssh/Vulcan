@@ -7,10 +7,7 @@
 */
 
 
-#include "system/module.h"
 #include "hssh/global_topological/director.h"
-#include "hssh/global_topological/params.h"
-#include "hssh/global_topological/topo_slam.h"
 #include "hssh/global_topological/localization/localizer.h"
 #include "hssh/global_topological/mapping/generator_queue.h"
 #include "hssh/global_topological/mapping/generator_queue_impl.h"
@@ -21,11 +18,14 @@
 #include "hssh/global_topological/mapping/map_optimizer.h"
 #include "hssh/global_topological/mapping/prior_evaluator.h"
 #include "hssh/global_topological/mapping/probability_evaluator.h"
+#include "hssh/global_topological/params.h"
+#include "hssh/global_topological/topo_slam.h"
 #include "hssh/global_topological/utils/event_log_runner.h"
 #include "hssh/local_topological/areas/serialization.h"
 #include "hssh/local_topological/events/serialization.h"
-#include "utils/config_file.h"
+#include "system/module.h"
 #include "utils/command_line.h"
+#include "utils/config_file.h"
 #include "utils/stub.h"
 #include <vector>
 
@@ -41,14 +41,12 @@ const std::string kResultsArg("results");
 // Initialize the global_topo_hssh via dependency injection
 std::unique_ptr<TopologicalSLAM> create_topo_slam(const utils::ConfigFile& config,
                                                   const utils::CommandLine& commandLine);
-std::unique_ptr<GeneratorQueue> create_queue(const utils::ConfigFile& config,
-                                                       const utils::CommandLine& commandLine);
+std::unique_ptr<GeneratorQueue> create_queue(const utils::ConfigFile& config, const utils::CommandLine& commandLine);
 std::unique_ptr<HypothesisGeneratorFactory> create_generator(const utils::ConfigFile& config,
                                                              const utils::CommandLine& commandLine);
 std::unique_ptr<TopologicalLocalizer> create_localizer(const utils::ConfigFile& config,
                                                        const utils::CommandLine& commandLine);
-std::unique_ptr<MapOptimizer> create_optimizer(const utils::ConfigFile& config,
-                                               const utils::CommandLine& commandLine);
+std::unique_ptr<MapOptimizer> create_optimizer(const utils::ConfigFile& config, const utils::CommandLine& commandLine);
 std::unique_ptr<HypothesisProbabilityEvaluator> create_evaluator(const utils::ConfigFile& config,
                                                                  const utils::CommandLine& commandLine);
 
@@ -58,34 +56,27 @@ int main(int argc, char** argv)
     std::vector<utils::command_line_argument_t> arguments;
     arguments.push_back({utils::kConfigFileArgument, "Configuration file controlling the module behavior", true, ""});
     arguments.push_back({kFromLogArg, "Run the module using the provided stability log, rather than LCM.", true, ""});
-    arguments.push_back({kInteractiveArg, "Run the stability log mode interactively, (hit entered to go to next event)", true, ""});
+    arguments.push_back(
+      {kInteractiveArg, "Run the stability log mode interactively, (hit entered to go to next event)", true, ""});
     arguments.push_back({kPosesArg, "Run the module with these poses", true, ""});
     arguments.push_back({kEventsArg, "Run the module with these events", true, ""});
     arguments.push_back({kResultsArg, "Run the module with these events", true, "topo_slam_results.txt"});
 
     utils::CommandLine commandLine(argc, argv, arguments);
-    if(!commandLine.verify())
-    {
+    if (!commandLine.verify()) {
         return 1;
     }
 
     utils::ConfigFile config(commandLine.configName());
-    auto director = std::make_unique<GlobalTopoDirector>(create_topo_slam(config, commandLine),
-                                                         commandLine,
-                                                         config);
+    auto director = std::make_unique<GlobalTopoDirector>(create_topo_slam(config, commandLine), commandLine, config);
 
-    if(commandLine.argumentExists(kFromLogArg))
-    {
+    if (commandLine.argumentExists(kFromLogArg)) {
         EventLogRunner runner(commandLine.argumentValue(kFromLogArg));
         runner.run(*director, commandLine.argumentExists(kInteractiveArg));
-    }
-    else if(commandLine.argumentExists(kPosesArg) && commandLine.argumentExists(kEventsArg))
-    {
+    } else if (commandLine.argumentExists(kPosesArg) && commandLine.argumentExists(kEventsArg)) {
         EventLogRunner runner(commandLine.argumentValue(kEventsArg), commandLine.argumentValue(kPosesArg));
         runner.run(*director, commandLine.argumentExists(kInteractiveArg));
-    }
-    else
-    {
+    } else {
         system::Module<GlobalTopoDirector> module(std::move(director), commandLine, config);
         module.run();
     }
@@ -106,23 +97,19 @@ std::unique_ptr<TopologicalSLAM> create_topo_slam(const utils::ConfigFile& confi
 }
 
 
-std::unique_ptr<GeneratorQueue> create_queue(const utils::ConfigFile& config,
-                                             const utils::CommandLine& commandLine)
+std::unique_ptr<GeneratorQueue> create_queue(const utils::ConfigFile& config, const utils::CommandLine& commandLine)
 {
     generator_queue_params_t params(config);
 
-    if(params.queueType == kExhaustiveGeneratorQueueType)
-    {
+    if (params.queueType == kExhaustiveGeneratorQueueType) {
         return std::make_unique<ExhaustiveGeneratorQueue>();
-    }
-    else if(params.queueType == kLazyGeneratorQueueType)
-    {
+    } else if (params.queueType == kLazyGeneratorQueueType) {
         return std::make_unique<LazyGeneratorQueue>();
     }
 
     std::cerr << "ERROR: create_queue: Unknown queue type: " << params.queueType << " Known types:\n"
-        << '\t' << kExhaustiveGeneratorQueueType << '\n'
-        << '\t' << kLazyGeneratorQueueType << '\n';
+              << '\t' << kExhaustiveGeneratorQueueType << '\n'
+              << '\t' << kLazyGeneratorQueueType << '\n';
     return std::unique_ptr<GeneratorQueue>();
 }
 
@@ -132,18 +119,15 @@ std::unique_ptr<HypothesisGeneratorFactory> create_generator(const utils::Config
 {
     hypothesis_generator_params_t params(config);
 
-    if(params.generatorType == kExhaustiveGeneratorType)
-    {
+    if (params.generatorType == kExhaustiveGeneratorType) {
         return std::make_unique<ExhaustiveGeneratorFactory>();
-    }
-    else if(params.generatorType == kLazyGeneratorType)
-    {
+    } else if (params.generatorType == kLazyGeneratorType) {
         return std::make_unique<LazyGeneratorFactory>();
     }
 
     std::cerr << "ERROR: create_generator: Unknown generator type: " << params.generatorType << " Known types:\n"
-        << '\t' << kExhaustiveGeneratorType << '\n'
-        << '\t' << kLazyGeneratorType << '\n';
+              << '\t' << kExhaustiveGeneratorType << '\n'
+              << '\t' << kLazyGeneratorType << '\n';
     return std::unique_ptr<HypothesisGeneratorFactory>();
 }
 
@@ -156,8 +140,7 @@ std::unique_ptr<TopologicalLocalizer> create_localizer(const utils::ConfigFile& 
 }
 
 
-std::unique_ptr<MapOptimizer> create_optimizer(const utils::ConfigFile& config,
-                                               const utils::CommandLine& commandLine)
+std::unique_ptr<MapOptimizer> create_optimizer(const utils::ConfigFile& config, const utils::CommandLine& commandLine)
 {
     map_optimizer_params_t params(config);
     return create_map_optimizer(params.type, params);
@@ -170,31 +153,27 @@ std::unique_ptr<HypothesisProbabilityEvaluator> create_evaluator(const utils::Co
     hypothesis_probability_evaluator_params_t params(config);
 
     std::string evaluatorString = params.likelihoodEvaluators;
-    auto commaPosition   = evaluatorString.find(',');
+    auto commaPosition = evaluatorString.find(',');
     std::string evaluatorType;
 
     std::vector<std::unique_ptr<HypothesisLikelihoodEvaluator>> likelihoodEvaluators;
 
-    std::cout<<"INFO:HypothesisProbabilityEvaluator:Loading likelihood evaluators:\n";
-    while(evaluatorString.length() > 0)
-    {
+    std::cout << "INFO:HypothesisProbabilityEvaluator:Loading likelihood evaluators:\n";
+    while (evaluatorString.length() > 0) {
         evaluatorType = evaluatorString.substr(0, commaPosition);
         likelihoodEvaluators.push_back(create_hypothesis_likelihood_evaluator(evaluatorType, params));
 
         std::cout << evaluatorType << '\n';
 
-        if(commaPosition != std::string::npos)
-        {
-            evaluatorString = evaluatorString.substr(commaPosition+1);
-            commaPosition = evaluatorString.find(',', commaPosition+1);
-        }
-        else
-        {
+        if (commaPosition != std::string::npos) {
+            evaluatorString = evaluatorString.substr(commaPosition + 1);
+            commaPosition = evaluatorString.find(',', commaPosition + 1);
+        } else {
             break;
         }
     }
 
-    return std::make_unique<HypothesisProbabilityEvaluator>(std::move(likelihoodEvaluators),
-                                                            create_hypothesis_prior_evaluator(params.priorEvaluator,
-                                                                                              params));
+    return std::make_unique<HypothesisProbabilityEvaluator>(
+      std::move(likelihoodEvaluators),
+      create_hypothesis_prior_evaluator(params.priorEvaluator, params));
 }

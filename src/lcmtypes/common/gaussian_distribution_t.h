@@ -20,13 +20,13 @@ class MultivariateGaussian;
 namespace lcm
 {
 
-MultivariateGaussian convert_lcm_to_vulcan(const vulcan_lcm_gaussian_distribution_t& gaussianMessage); 
-void                       convert_lcm_to_vulcan(const vulcan_lcm_gaussian_distribution_t& gaussianMessage, MultivariateGaussian& gaussian);
-void                       convert_vulcan_to_lcm(const MultivariateGaussian& gaussian, vulcan_lcm_gaussian_distribution_t& gaussianMessage);
+MultivariateGaussian convert_lcm_to_vulcan(const vulcan_lcm_gaussian_distribution_t& gaussianMessage);
+void convert_lcm_to_vulcan(const vulcan_lcm_gaussian_distribution_t& gaussianMessage, MultivariateGaussian& gaussian);
+void convert_vulcan_to_lcm(const MultivariateGaussian& gaussian, vulcan_lcm_gaussian_distribution_t& gaussianMessage);
 
 void free_gaussian_message(vulcan_lcm_gaussian_distribution_t& gaussianMessage);
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_GAUSSIAN_DISTRIBUTION_T_H
+#endif   // LCMTYPES_GAUSSIAN_DISTRIBUTION_T_H

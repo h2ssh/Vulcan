@@ -8,11 +8,11 @@
 
 
 /**
-* \file     kld_sample_size_calculator.h
-* \author   Collin Johnson
-*
-* Declaration of KLDSampleSizeCalculator.
-*/
+ * \file     kld_sample_size_calculator.h
+ * \author   Collin Johnson
+ *
+ * Declaration of KLDSampleSizeCalculator.
+ */
 
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_KLD_SAMPLE_SIZE_CALCULATOR_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_KLD_SAMPLE_SIZE_CALCULATOR_H
@@ -42,72 +42,70 @@ namespace hssh
 class KLDSampleSizeCalculator
 {
 public:
-
     /**
-    * Constructor for KLDSampleSizeCalculator.
-    */
+     * Constructor for KLDSampleSizeCalculator.
+     */
     KLDSampleSizeCalculator(const kld_sampling_params_t& params);
 
     /**
-    * Destructor for KLDSampleSizeCalculator.
-    */
+     * Destructor for KLDSampleSizeCalculator.
+     */
     ~KLDSampleSizeCalculator(void);
 
     /**
-    * startNewCalculation resets the state of the calculator for a new
-    * sample size calculation.
-    *
-    * The bins are centered around the provided sample. The sample should be the
-    * mean of the prior or some value located close to the middle of the expected
-    * posterior distribution in order to make sure the samples don't fall outside
-    * the volume of bins that are maintained.
-    *
-    * \param    meanSample          Sample near the mean of the prior
-    */
+     * startNewCalculation resets the state of the calculator for a new
+     * sample size calculation.
+     *
+     * The bins are centered around the provided sample. The sample should be the
+     * mean of the prior or some value located close to the middle of the expected
+     * posterior distribution in order to make sure the samples don't fall outside
+     * the volume of bins that are maintained.
+     *
+     * \param    meanSample          Sample near the mean of the prior
+     */
     void startNewCalculation(const particle_t& meanSample);
 
     /**
-    * addSample adds a new sample to the sampling bins. The sample size is adjusted
-    * accordingly.
-    *
-    * \param    sample              New sample in the proposal distribution
-    */
+     * addSample adds a new sample to the sampling bins. The sample size is adjusted
+     * accordingly.
+     *
+     * \param    sample              New sample in the proposal distribution
+     */
     void addSample(const particle_t& sample);
 
     /**
-    * currentNumberOfSamplesNeeded retrieves the current value for the number of samples
-    * needed, given the previous samples drawn.
-    */
+     * currentNumberOfSamplesNeeded retrieves the current value for the number of samples
+     * needed, given the previous samples drawn.
+     */
     std::size_t currentNumberOfSamplesNeeded(void) const;
 
     /**
-    * haveDrawnEnoughSamples checks to see if enough samples have been generated to
-    * satisfactorially cover the posterior distribution.
-    *
-    * \param    numSamples          Number of samples generated so far
-    * \return   True if sampling can be stopped. False if sampling needs to continue.
-    */
+     * haveDrawnEnoughSamples checks to see if enough samples have been generated to
+     * satisfactorially cover the posterior distribution.
+     *
+     * \param    numSamples          Number of samples generated so far
+     * \return   True if sampling can be stopped. False if sampling needs to continue.
+     */
     bool haveDrawnEnoughSamples(std::size_t numSamples) const;
 
 private:
-
     // No copying allowed!
     KLDSampleSizeCalculator(const KLDSampleSizeCalculator& copy) = delete;
     void operator=(const KLDSampleSizeCalculator& rhs) = delete;
 
     bool addSampleToBins(const particle_t& sample);
-    
+
     int binIndex(int xBin, int yBin, int thetaBin)
     {
-        return xBin + yBin*params.numXBins + thetaBin*params.numXBins*params.numYBins;
+        return xBin + yBin * params.numXBins + thetaBin * params.numXBins * params.numYBins;
     }
 
     // the bins in the current calculation have calculationID. this is used
     // to avoid the need to reset the sampleBins at the start of each calculation,
     // which would be necessary if a bool flag was used
     char* sampleBins;
-    char  calculationID;
-    int   numFilledBins;
+    char calculationID;
+    int numFilledBins;
 
     particle_t centerSample;
 
@@ -116,7 +114,7 @@ private:
     kld_sampling_params_t params;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_METRICAL_LOCALIZATION_KLD_SAMPLE_SIZE_CALCULATOR_H
+#endif   // HSSH_UTILS_METRICAL_LOCALIZATION_KLD_SAMPLE_SIZE_CALCULATOR_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     serialization.h
-* \author   Collin Johnson
-*
-* Utility header to include to ensure all necessary files for map and area serialization are included.
-*/
+ * \file     serialization.h
+ * \author   Collin Johnson
+ *
+ * Utility header to include to ensure all necessary files for map and area serialization are included.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_SERIALIZATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_SERIALIZATION_H
@@ -22,4 +22,4 @@
 #include "hssh/local_topological/areas/path_segment.h"
 #include "hssh/local_topological/areas/place.h"
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREAS_SERIALIZATION_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREAS_SERIALIZATION_H

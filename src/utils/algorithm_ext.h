@@ -8,14 +8,14 @@
 
 
 /**
-* \file     algorithm_ext.h
-* \author   Collin Johnson
-*
-* Definition of some common idioms for dealing with STL containers:
-*
-*   - erase_remove/erase_remove_if : call .erase on the container with the result of std::remove/remove_if
-*   - contains/contains_if : check if the value is inside the provided container using std::find
-*/
+ * \file     algorithm_ext.h
+ * \author   Collin Johnson
+ *
+ * Definition of some common idioms for dealing with STL containers:
+ *
+ *   - erase_remove/erase_remove_if : call .erase on the container with the result of std::remove/remove_if
+ *   - contains/contains_if : check if the value is inside the provided container using std::find
+ */
 
 #ifndef UTILS_ALGORITHM_EXT_H
 #define UTILS_ALGORITHM_EXT_H
@@ -29,12 +29,12 @@ namespace utils
 {
 
 /**
-* erase_remove uses the erase-remove idiom to efficiently erase elements from a container. The provided container
-* must have MoveAssignable iterators. Associative containers don't meet this criteria.
-*
-* \param    c           Container to remove value from
-* \param    value       Value to be removed
-*/
+ * erase_remove uses the erase-remove idiom to efficiently erase elements from a container. The provided container
+ * must have MoveAssignable iterators. Associative containers don't meet this criteria.
+ *
+ * \param    c           Container to remove value from
+ * \param    value       Value to be removed
+ */
 template <class Container, class T>
 int erase_remove(Container& c, T&& value)
 {
@@ -48,12 +48,12 @@ int erase_remove(Container& c, T&& value)
 
 
 /**
-* erase_remove_if uses the erase-remove idiom to efficiently erase elements from a container. The provided container
-* must have MoveAssignable iterators. Associative containers don't meet this criteria.
-*
-* \param    c           Container to remove value from
-* \param    unary       Unary operation to use for deciding if the value should be removed
-*/
+ * erase_remove_if uses the erase-remove idiom to efficiently erase elements from a container. The provided container
+ * must have MoveAssignable iterators. Associative containers don't meet this criteria.
+ *
+ * \param    c           Container to remove value from
+ * \param    unary       Unary operation to use for deciding if the value should be removed
+ */
 template <class Container, class UnaryOp>
 int erase_remove_if(Container& c, UnaryOp&& op)
 {
@@ -67,12 +67,12 @@ int erase_remove_if(Container& c, UnaryOp&& op)
 
 
 /**
-* erase_unique uses the erase-remove idiom to efficiently erase adjacent elements that are the same from a container.
-* The provided container must have MoveAssignable iterators. Associative containers don't meet this criteria.
-*
-* \param    c           Container to remove non-unique values from
-* \return   Number of elements erased.
-*/
+ * erase_unique uses the erase-remove idiom to efficiently erase adjacent elements that are the same from a container.
+ * The provided container must have MoveAssignable iterators. Associative containers don't meet this criteria.
+ *
+ * \param    c           Container to remove non-unique values from
+ * \return   Number of elements erased.
+ */
 template <class Container>
 int erase_unique(Container& c)
 {
@@ -86,14 +86,14 @@ int erase_unique(Container& c)
 
 
 /**
-* contains uses std::find to determine if a container contains the provided value. The equivalent operation is:
-*
-*   std::find(container.begin(), container.end(), value) != container.end().
-*
-* \param    c           Container to search
-* \param    value       Value to search for
-* \return   True if the value is contained in the provided container.
-*/
+ * contains uses std::find to determine if a container contains the provided value. The equivalent operation is:
+ *
+ *   std::find(container.begin(), container.end(), value) != container.end().
+ *
+ * \param    c           Container to search
+ * \param    value       Value to search for
+ * \return   True if the value is contained in the provided container.
+ */
 template <class Container, class T>
 bool contains(const Container& c, T&& value)
 {
@@ -102,14 +102,14 @@ bool contains(const Container& c, T&& value)
 
 
 /**
-* contains_if uses std::find_if to determine if a container contains the provided value. The equivalent operation is:
-*
-*   std::find_if(container.begin(), container.end(), op) != container.end().
-*
-* \param    c           Container to search
-* \param    op          Unary operation to use for deciding if the value is in the container
-* \return   True if the unary condition is satisfied by a value in the container.
-*/
+ * contains_if uses std::find_if to determine if a container contains the provided value. The equivalent operation is:
+ *
+ *   std::find_if(container.begin(), container.end(), op) != container.end().
+ *
+ * \param    c           Container to search
+ * \param    op          Unary operation to use for deciding if the value is in the container
+ * \return   True if the unary condition is satisfied by a value in the container.
+ */
 template <class Container, class UnaryOp>
 bool contains_if(const Container& c, UnaryOp&& op)
 {
@@ -118,29 +118,27 @@ bool contains_if(const Container& c, UnaryOp&& op)
 
 
 /**
-* contains_any checks to see if any of the values in c are contained within the container values. The operation is
-* equivalent to seeing if c contains any value in values.
-*
-* \param    c           Container to search
-* \param    values      Values to search for
-* \return   True if the value is contained in the provided container.
-*/
+ * contains_any checks to see if any of the values in c are contained within the container values. The operation is
+ * equivalent to seeing if c contains any value in values.
+ *
+ * \param    c           Container to search
+ * \param    values      Values to search for
+ * \return   True if the value is contained in the provided container.
+ */
 template <class Container, class Values>
 bool contains_any(const Container& c, Values&& value)
 {
-    for(auto& v : value)
-    {
+    for (auto& v : value) {
         // As sson as a value is found, then finished
-        if(contains(c, v))
-        {
+        if (contains(c, v)) {
             return true;
         }
     }
-    
+
     return false;
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan
 
-#endif // UTILS_ALGORITHM_EXT_H
+#endif   // UTILS_ALGORITHM_EXT_H

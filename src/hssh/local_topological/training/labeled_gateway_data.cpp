@@ -8,19 +8,19 @@
 
 
 /**
-* \file     labeled_gateway_data.cpp
-* \author   Collin Johnson
-* 
-* Definition of LabeledGatewayFeatures.
-*/
+ * \file     labeled_gateway_data.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LabeledGatewayFeatures.
+ */
 
 #include "hssh/local_topological/training/labeled_gateway_data.h"
 
 namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
-    
+
 bool operator==(const LabeledGatewayFeatures& lhs, const LabeledGatewayFeatures& rhs)
 {
     return (lhs.isGateway == rhs.isGateway) && (lhs.features == rhs.features);
@@ -33,10 +33,10 @@ bool operator!=(const LabeledGatewayFeatures& lhs, const LabeledGatewayFeatures&
 }
 
 /*
-* The format for LabeledGatewayFeatures is:
-* 
-*   is_gateway cell features
-*/
+ * The format for LabeledGatewayFeatures is:
+ *
+ *   is_gateway cell features
+ */
 std::ostream& operator<<(std::ostream& out, const LabeledGatewayFeatures& example)
 {
     out << example.isGateway << ' ' << example.cell.x << ' ' << example.cell.y << ' ' << example.features;
@@ -49,6 +49,6 @@ std::istream& operator>>(std::istream& in, LabeledGatewayFeatures& example)
     in >> example.isGateway >> example.cell.x >> example.cell.y >> example.features;
     return in;
 }
-    
-} // namespace hssh 
-} // namespace vulcan
+
+}   // namespace hssh
+}   // namespace vulcan

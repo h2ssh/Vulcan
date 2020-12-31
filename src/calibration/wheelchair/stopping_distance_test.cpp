@@ -8,11 +8,11 @@
 
 
 /**
-* \file     stopping_distance_test.cpp
-* \author   Collin Johnson
-*
-* Definition of StoppingDistanceTest.
-*/
+ * \file     stopping_distance_test.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of StoppingDistanceTest.
+ */
 
 #include "calibration/wheelchair/stopping_distance_test.h"
 
@@ -22,6 +22,5 @@ namespace calibration
 {
 
 
-
 }
-}
+}   // namespace vulcan

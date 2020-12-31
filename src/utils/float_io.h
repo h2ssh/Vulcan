@@ -8,22 +8,22 @@
 
 
 /**
-* \file     float_io.h
-* \author   Collin Johnson
-*
-* Helper functions for dealing with saving/loading floating point values to/from a stream.
-*/
+ * \file     float_io.h
+ * \author   Collin Johnson
+ *
+ * Helper functions for dealing with saving/loading floating point values to/from a stream.
+ */
 
 #ifndef UTILS_FLOAT_IO_H
 #define UTILS_FLOAT_IO_H
 
+#include <cstdlib>
 #include <iomanip>
 #include <istream>
 #include <limits>
 #include <ostream>
 #include <string>
 #include <type_traits>
-#include <cstdlib>
 
 namespace vulcan
 {
@@ -31,8 +31,8 @@ namespace utils
 {
 
 /**
-* save_floating_point saves a floating point number to the provided stream. A space is added after the number.
-*/
+ * save_floating_point saves a floating point number to the provided stream. A space is added after the number.
+ */
 template <typename T>
 void save_floating_point(std::ostream& out, T val)
 {
@@ -41,8 +41,8 @@ void save_floating_point(std::ostream& out, T val)
 }
 
 /**
-* load_floating_point loads a floating point number from a stream.
-*/
+ * load_floating_point loads a floating point number from a stream.
+ */
 inline double load_floating_point(std::istream& in)
 {
     // The best way to read a floating point is to read the full string and then use strtod because it correctly handles
@@ -52,7 +52,7 @@ inline double load_floating_point(std::istream& in)
     return std::strtod(str.c_str(), nullptr);
 }
 
-}
-}
+}   // namespace utils
+}   // namespace vulcan
 
-#endif // UTILS_FLOAT_IO_H
+#endif   // UTILS_FLOAT_IO_H

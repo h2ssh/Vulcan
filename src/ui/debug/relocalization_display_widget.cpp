@@ -8,19 +8,19 @@
 
 
 /**
-* \file     relocalization_display_widget.cpp
-* \author   Collin Johnson
-*
-* Definition of RelocalizationDisplayWidget.
-*/
+ * \file     relocalization_display_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of RelocalizationDisplayWidget.
+ */
 
 #include "ui/debug/relocalization_display_widget.h"
-#include "ui/components/occupancy_grid_renderer.h"
-#include "ui/components/laser_scan_renderer.h"
-#include "ui/components/particles_renderer.h"
-#include "ui/components/robot_renderer.h"
 #include "ui/common/gl_shapes.h"
 #include "ui/common/ui_params.h"
+#include "ui/components/laser_scan_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/particles_renderer.h"
+#include "ui/components/robot_renderer.h"
 #include "utils/auto_mutex.h"
 
 namespace vulcan
@@ -54,7 +54,7 @@ void RelocalizationDisplayWidget::setWidgetParams(const ui_params_t& params)
 void RelocalizationDisplayWidget::setMap(const std::shared_ptr<hssh::OccupancyGrid>& map)
 {
     std::unique_lock<std::mutex> autoLock(dataLock_);
-    map_        = map;
+    map_ = map;
     haveNewMap_ = true;
 }
 
@@ -62,9 +62,9 @@ void RelocalizationDisplayWidget::setMap(const std::shared_ptr<hssh::OccupancyGr
 void RelocalizationDisplayWidget::setRelocalizationInfo(const hssh::metric_relocalization_debug_info_t& info)
 {
     std::unique_lock<std::mutex> autoLock(dataLock_);
-    
-    particleInfo_     = info.particleFilterInfo;
-    meanPose_         = info.pose;
+
+    particleInfo_ = info.particleFilterInfo;
+    meanPose_ = info.pose;
     initialParticles_ = info.initialParticles;
 }
 
@@ -72,7 +72,7 @@ void RelocalizationDisplayWidget::setRelocalizationInfo(const hssh::metric_reloc
 void RelocalizationDisplayWidget::setInitializerRegion(const math::Rectangle<float>& rectangle)
 {
     std::unique_lock<std::mutex> autoLock(dataLock_);
-    
+
     regionInitializerRectangle_ = rectangle;
 }
 
@@ -83,8 +83,7 @@ void RelocalizationDisplayWidget::renderWidget(void)
 
     renderMap();
 
-    if(shouldShowInitialRegion_)
-    {
+    if (shouldShowInitialRegion_) {
         renderInitialization();
     }
 }
@@ -98,26 +97,22 @@ Point<int> RelocalizationDisplayWidget::convertWorldToGrid(const Point<float>& w
 
 void RelocalizationDisplayWidget::renderMap(void)
 {
-    if(haveNewMap_)
-    {
+    if (haveNewMap_) {
         mapRenderer_->setGrid(*map_);
         haveNewMap_ = false;
     }
 
     mapRenderer_->renderGrid();
 
-    if(shouldShowLaser_)
-    {
+    if (shouldShowLaser_) {
         scanRenderer_->renderScan(particleInfo_.scan, meanPose_.toPose());
     }
 
-    if(shouldShowError_)
-    {
+    if (shouldShowError_) {
         gl_draw_gaussian_distribution(meanPose_.uncertainty, 3.0f, GLColor(0.0f, 0.9f, 0.25f, 0.75f), 2.0f);
     }
 
-    if(shouldShowParticles_)
-    {
+    if (shouldShowParticles_) {
         particlesRenderer_->renderParticles(particleInfo_.particles);
     }
 }
@@ -129,9 +124,9 @@ void RelocalizationDisplayWidget::renderInitialization(void)
     gl_draw_filled_rectangle(regionInitializerRectangle_);
     initialRegionColor.set();
     gl_draw_line_rectangle(regionInitializerRectangle_, 2.0f);
-    
+
     particlesRenderer_->renderParticles(initialParticles_);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

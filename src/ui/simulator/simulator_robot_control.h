@@ -8,41 +8,59 @@
 
 
 /**
-* \file     simulator_robot_control.h
-* \author   Collin Johnson Zongtai Luo
-* 
-* Declaration of SimulatorRobotControl.
-*/
+ * \file     simulator_robot_control.h
+ * \author   Collin Johnson Zongtai Luo
+ *
+ * Declaration of SimulatorRobotControl.
+ */
 
 #ifndef UI_SIMULATOR_SIMULATOR_ROBOT_CONTROL_H
 #define UI_SIMULATOR_SIMULATOR_ROBOT_CONTROL_H
 
-#include <wx/wx.h>
 #include "ui/common/gl_event.h"
 #include "ui/common/ui_panel.h"
+#include <wx/wx.h>
 
-#include "ui/common/metric_path_creator.h" // maybe needed for compiling
-#include "ui/simulator/simulator_robot_group_receiver.h"
-#include "planner/interface/navigation_interface.h"
-#include "hssh/local_topological/local_topo_map.h"
-#include "hssh/local_topological/location.h"
 #include "hssh/local_metric/lpm.h"
 #include "hssh/local_metric/pose.h"
-#include "mpepc/trajectory/trajectory_planner_info.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/location.h"
 #include "mpepc/metric_planner/messages.h"
-#include "tracker/dynamic_object_collection.h"
-#include "utils/locked_double_buffer.h"
+#include "mpepc/trajectory/trajectory_planner_info.h"
+#include "planner/interface/navigation_interface.h"
 #include "simulator/robot_group.h"
+#include "tracker/dynamic_object_collection.h"
+#include "ui/common/metric_path_creator.h"   // maybe needed for compiling
+#include "ui/simulator/simulator_robot_group_receiver.h"
+#include "utils/locked_double_buffer.h"
 // #include "simulator/simulator_robot_group_message.h"
 
 namespace vulcan
 {
-namespace hssh { class LocalPose; }
-namespace hssh { class LocalPerceptualMap; }
-namespace hssh { class LocalTopoMap; }
-namespace hssh { class LocalLocation; }
-namespace mpepc { struct trajectory_planner_debug_info_t; }
-namespace tracker { class DynamicObjectCollection; }
+namespace hssh
+{
+class LocalPose;
+}
+namespace hssh
+{
+class LocalPerceptualMap;
+}
+namespace hssh
+{
+class LocalTopoMap;
+}
+namespace hssh
+{
+class LocalLocation;
+}
+namespace mpepc
+{
+struct trajectory_planner_debug_info_t;
+}
+namespace tracker
+{
+class DynamicObjectCollection;
+}
 namespace ui
 {
 
@@ -61,30 +79,30 @@ struct simulator_ui_panel_widgets_t
 
 
 /**
-* SimulatorRobotControl controls the NavigationInterface and SimulatorRobotDisplay, feeding the appropriate
-* data into both classes. The control handles delegation of Decision and Goal interfcaes to the Goal and Decision
-* controls. It decides what data is shown on the screen.
-* 
-* SimulatorRobotControl uses keyboard control to determine the displayed data:
-* 
-*   - Space : pause the robot's motion
-*   - O : display dynamic objects
-*   - T : display planner trajectories
-*/
-class SimulatorRobotControl : public UIPanel, 
-                              public GLKeyboardHandler,
-                              public GLMouseHandler
+ * SimulatorRobotControl controls the NavigationInterface and SimulatorRobotDisplay, feeding the appropriate
+ * data into both classes. The control handles delegation of Decision and Goal interfcaes to the Goal and Decision
+ * controls. It decides what data is shown on the screen.
+ *
+ * SimulatorRobotControl uses keyboard control to determine the displayed data:
+ *
+ *   - Space : pause the robot's motion
+ *   - O : display dynamic objects
+ *   - T : display planner trajectories
+ */
+class SimulatorRobotControl
+: public UIPanel
+, public GLKeyboardHandler
+, public GLMouseHandler
 {
 public:
-    
     /**
-    * Constructor for SimulatorRobotControl,
-    */
+     * Constructor for SimulatorRobotControl,
+     */
     // SimulatorRobotControl(SimulatorRobotDisplay* display, const GoalInterfaceWidgets& goalWidgets);
     SimulatorRobotControl(const simulator_ui_panel_widgets_t& widgets);
 
     ~SimulatorRobotControl(void);
-    
+
     // UIPanel interface
     void setup(wxGLContext* context, wxStatusBar* statusBar) override;
     void subscribe(system::ModuleCommunicator& producer) override;
@@ -92,7 +110,7 @@ public:
     void update(void) override;
     void saveSettings(utils::ConfigFileWriter& config) override;
     void loadSettings(const utils::ConfigFile& config) override;
-    
+
     // Data handlers
     void handleData(const hssh::LocalTopoMap& map, const std::string& channel);
     void handleData(const hssh::LocalLocation& location, const std::string& channel);
@@ -101,11 +119,12 @@ public:
     void handleData(const mpepc::metric_planner_status_message_t& status, const std::string& channel);
     void handleData(const mpepc::trajectory_planner_debug_info_t& trajectories, const std::string& channel);
     void handleData(const tracker::DynamicObjectCollection& objects, const std::string& channel);
-    void handleData(const sim::simulator_robot_group_message_t& simulator_robot_group_message, const std::string& channel);
-    
+    void handleData(const sim::simulator_robot_group_message_t& simulator_robot_group_message,
+                    const std::string& channel);
+
     // GLKeyboardHandler interface
     GLEventStatus keyPressed(wxKeyEvent& key);
-    
+
 private:
     // control utils
     std::vector<pose_t> loadScriptPoses(std::string script_path);
@@ -139,7 +158,7 @@ private:
     void startSimulatorCaseThreePressed(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
-    
+
     // Buffer for the data coming in
     template <class T>
     using Buffer = utils::LockedDoubleBuffer<T>;
@@ -151,7 +170,7 @@ private:
     Buffer<tracker::DynamicObjectCollection> objects_;
     Buffer<mpepc::metric_planner_status_message_t> status_;
     Buffer<mpepc::trajectory_planner_debug_info_t> trajectories_;
-    
+
     bool haveMetricMap_;
     bool haveTopoMap_;
     bool haveLocation_;
@@ -165,7 +184,7 @@ private:
     // widgets for the ui
     simulator_ui_panel_widgets_t widgets_;
     planner::NavigationInterface interface_;
-    
+
     // mpepc pause
     bool isPaused_;
 
@@ -181,12 +200,12 @@ private:
 
     // Module Communicator
     system::ModuleCommunicator* consumer_;
-    
+
     // update buffer
     void loadNewData(void);
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DECISION_NAVIGATION_INTERFACE_CONTROL_H
+#endif   // UI_DECISION_NAVIGATION_INTERFACE_CONTROL_H

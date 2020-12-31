@@ -8,22 +8,26 @@
 
 
 /**
-* \file     localizer.h
-* \author   Collin Johnson and Jong Jin Park
-*
-* Declaration of Localizer abstract base class for subclasses that perform robot localization and a create_localizer() factory.
-*/
+ * \file     localizer.h
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Declaration of Localizer abstract base class for subclasses that perform robot localization and a create_localizer()
+ * factory.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_LOCALIZATION_LOCALIZER_H
 #define HSSH_LOCAL_METRIC_LOCALIZATION_LOCALIZER_H
 
-#include <boost/shared_ptr.hpp>
 #include "core/pose.h"
 #include "core/pose_distribution.h"
+#include <boost/shared_ptr.hpp>
 
 namespace vulcan
 {
-namespace robot { struct velocity_t; }
+namespace robot
+{
+struct velocity_t;
+}
 namespace hssh
 {
 
@@ -44,70 +48,64 @@ struct local_metric_debug_info_t;
 boost::shared_ptr<Localizer> create_localizer(const std::string& localizerName, const localization_params_t& params);
 
 /**
-* Localizer is an abstract base class that represents any of a number of potential localization methods for
-* the LPM. The Localizer takes all available sensor data and the map and produces an updated pose estimate
-* for the robot.
-*
-* A Localizer is created using a static factory declared in this header file.
-*/
+ * Localizer is an abstract base class that represents any of a number of potential localization methods for
+ * the LPM. The Localizer takes all available sensor data and the map and produces an updated pose estimate
+ * for the robot.
+ *
+ * A Localizer is created using a static factory declared in this header file.
+ */
 class Localizer
 {
 public:
-
-    virtual ~Localizer(void)
-    {
-    }
+    virtual ~Localizer(void) { }
 
     /**
-    * resetPoseEstimate resets the pose estimate to the provided pose. This method can be used to initialize
-    * the Localizer or to reset the Localizer when a new place is reached, for example.
-    *
-    * \param    pose            Pose to which the mean of the localization estimate should be set
-    */
+     * resetPoseEstimate resets the pose estimate to the provided pose. This method can be used to initialize
+     * the Localizer or to reset the Localizer when a new place is reached, for example.
+     *
+     * \param    pose            Pose to which the mean of the localization estimate should be set
+     */
     virtual void resetPoseEstimate(const pose_t& pose) = 0;
 
     /**
-    * updatePoseEstimate performs a localization update step.
-    *
-    * \param    sensorData      A chunk of sensor data
-    * \param    velocity        Current robot velocity
-    * \param    map             The map estimated from the maximum likelihood pose
-    * \param    debug           Debugging information about the localization state
-    */
-    virtual void updatePoseEstimate(const metric_slam_data_t&      sensorData, 
-                                    const velocity_t&   velocity,
-                                    const LocalPerceptualMap&  map, 
+     * updatePoseEstimate performs a localization update step.
+     *
+     * \param    sensorData      A chunk of sensor data
+     * \param    velocity        Current robot velocity
+     * \param    map             The map estimated from the maximum likelihood pose
+     * \param    debug           Debugging information about the localization state
+     */
+    virtual void updatePoseEstimate(const metric_slam_data_t& sensorData,
+                                    const velocity_t& velocity,
+                                    const LocalPerceptualMap& map,
                                     local_metric_debug_info_t& debug) = 0;
 
     /**
-    * changeReferenceFrame changes the reference frame from which the robot pose is estimated. The transform should
-    * first translate and then rotate to the new origin to get the correct pose.
-    *
-    * \param    referenceFrame      New reference frame for the map
-    */
+     * changeReferenceFrame changes the reference frame from which the robot pose is estimated. The transform should
+     * first translate and then rotate to the new origin to get the correct pose.
+     *
+     * \param    referenceFrame      New reference frame for the map
+     */
     virtual void changeReferenceFrame(const pose_t& referenceFrame) = 0;
 
     /**
-    * getPose retrieves the current maximum likelihood pose estimate.
-    */
+     * getPose retrieves the current maximum likelihood pose estimate.
+     */
     pose_t getPose(void) const { return currentPose; }
 
     /**
-    * getPoseDistribution retrieves the full distribution of the maximum likelihood pose estimate.
-    */
+     * getPoseDistribution retrieves the full distribution of the maximum likelihood pose estimate.
+     */
     pose_distribution_t getPoseDistribution(void) const { return currentPoseDistribution; }
 
 protected:
+    Localizer(void) { }
 
-    Localizer(void)
-    {
-    }
-
-    pose_t              currentPose;
+    pose_t currentPose;
     pose_distribution_t currentPoseDistribution;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_METRIC_LOCALIZATION_LOCALIZER_H
+#endif   // HSSH_LOCAL_METRIC_LOCALIZATION_LOCALIZER_H

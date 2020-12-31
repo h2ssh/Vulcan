@@ -8,11 +8,11 @@
 
 
 /**
-* \file     skeleton_graph_rasterization.h
-* \author   Collin Johnson
-*
-* Declaration of rasterize_graph_onto_grid for redrawing a skeleton graph onto the place grid.
-*/
+ * \file     skeleton_graph_rasterization.h
+ * \author   Collin Johnson
+ *
+ * Declaration of rasterize_graph_onto_grid for redrawing a skeleton graph onto the place grid.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_RASTERIZATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_RASTERIZATION_H
@@ -21,19 +21,19 @@
 
 namespace vulcan
 {
-    
+
 namespace hssh
 {
-    
+
 class VoronoiSkeletonGrid;
 
 /**
-* rasterize_graph_onto_grid takes a pruned skeleton graph and labels all
-* the cells that correspond to the vertices and edges as SKELETON_CELL_SKELETON.
-*/
+ * rasterize_graph_onto_grid takes a pruned skeleton graph and labels all
+ * the cells that correspond to the vertices and edges as SKELETON_CELL_SKELETON.
+ */
 void rasterize_graph_onto_grid(const SkeletonGraph& graph, VoronoiSkeletonGrid& grid);
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_RASTERIZATION_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_RASTERIZATION_H

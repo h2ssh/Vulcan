@@ -8,16 +8,16 @@
 
 
 /**
-* \file     area_extent_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of AreaExtentRenderer.
-*/
+ * \file     area_extent_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AreaExtentRenderer.
+ */
 
 #include "ui/components/area_extent_renderer.h"
+#include "hssh/local_topological/area_extent.h"
 #include "ui/common/gl_shapes.h"
 #include "ui/common/ui_color.h"
-#include "hssh/local_topological/area_extent.h"
 #include <GL/gl.h>
 
 namespace vulcan
@@ -32,8 +32,7 @@ void AreaExtentRenderer::renderExtentCells(const hssh::AreaExtent& extent,
     extentVertices_.clear();
     extentVertices_.reserve(extent.size() * 4);
 
-    for(auto& cell : extent)
-    {
+    for (auto& cell : extent) {
         extentVertices_.push_back(cell.x);
         extentVertices_.push_back(cell.y);
 
@@ -49,7 +48,7 @@ void AreaExtentRenderer::renderExtentCells(const hssh::AreaExtent& extent,
 
     color.set(0.75);
 
-    glDisableClientState(GL_EDGE_FLAG_ARRAY);  // get rid of the things we aren't using for efficiency sake
+    glDisableClientState(GL_EDGE_FLAG_ARRAY);   // get rid of the things we aren't using for efficiency sake
     glDisableClientState(GL_INDEX_ARRAY);
     glDisableClientState(GL_SECONDARY_COLOR_ARRAY);
     glDisableClientState(GL_FOG_COORDINATE_ARRAY);
@@ -76,7 +75,7 @@ void AreaExtentRenderer::renderExtentRectangle(const hssh::AreaExtent& extent, c
 
     color.set();
     gl_draw_line_rectangle(boundary, 2.0f);
-    
+
     glPointSize(3.0f);
     glBegin(GL_POINTS);
     glVertex2f(extent.center().x, extent.center().y);
@@ -95,5 +94,5 @@ void AreaExtentRenderer::renderExtentPolygon(const hssh::AreaExtent& extent, con
     gl_draw_line_polygon(boundary.vertices(), 2.0f);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

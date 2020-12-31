@@ -7,19 +7,19 @@
 */
 
 
+#include "vision/graph_based_segmenter.h"
+#include "core/image.h"
+#include "core/point.h"
+#include "utils/counting_sort.h"
+#include "utils/timestamp.h"
+#include "vision/felzenszwalb_segmenter.h"
+#include "vision/image_segment.h"
+#include "vision/wassenberg_segmenter.h"
+#include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <algorithm>
 #include <iostream>
 #include <map>
-#include "core/point.h"
-#include "utils/timestamp.h"
-#include "utils/counting_sort.h"
-#include "vision/image_segment.h"
-#include "core/image.h"
-#include "vision/felzenszwalb_segmenter.h"
-#include "vision/wassenberg_segmenter.h"
-#include "vision/graph_based_segmenter.h"
 
 #define DEBUG_TIME
 
@@ -31,15 +31,12 @@ namespace vision
 void update_image_segment(const Point<uint16_t>& pixel, bool border, const Image& image, image_segment_t& segment);
 
 
-boost::shared_ptr<GraphBasedSegmenter> create_graph_based_image_segmenter(const std::string&              type,
+boost::shared_ptr<GraphBasedSegmenter> create_graph_based_image_segmenter(const std::string& type,
                                                                           const image_segmenter_params_t& params)
 {
-    if(type == FELZENSZWALB_SEGMENTER_TYPE)
-    {
+    if (type == FELZENSZWALB_SEGMENTER_TYPE) {
         return boost::shared_ptr<GraphBasedSegmenter>(new FelzenszwalbSegmenter(params.felzParams));
-    }
-    else if(type == WASSENBERG_SEGMENTER_TYPE)
-    {
+    } else if (type == WASSENBERG_SEGMENTER_TYPE) {
         return boost::shared_ptr<GraphBasedSegmenter>(new WassenbergSegmenter(params.wassenParams));
     }
 
@@ -49,23 +46,23 @@ boost::shared_ptr<GraphBasedSegmenter> create_graph_based_image_segmenter(const 
 
 
 GraphBasedSegmenter::GraphBasedSegmenter(const graph_based_segmenter_params_t& params)
-                                    : gaussianFilter(params.sigma)
-                                    , numEdges(0)
-                                    , borderFlag(0)
-                                    , componentForest(0)
-                                    , params(params)
+: gaussianFilter(params.sigma)
+, numEdges(0)
+, borderFlag(0)
+, componentForest(0)
+, params(params)
 {
 }
 
 
 void GraphBasedSegmenter::findImageSegments(const Image& image, std::vector<image_segment_t>& segments)
 {
-    int64_t startTime      = 0;
+    int64_t startTime = 0;
     int64_t initializeTime = 0;
-    int64_t edgesTime      = 0;
-    int64_t segmentTime    = 0;
-    int64_t mergeTime      = 0;
-    int64_t extractTime    = 0;
+    int64_t edgesTime = 0;
+    int64_t segmentTime = 0;
+    int64_t mergeTime = 0;
+    int64_t extractTime = 0;
 
     startTime = utils::system_time_us();
     initializeSegmentation(image);
@@ -88,8 +85,9 @@ void GraphBasedSegmenter::findImageSegments(const Image& image, std::vector<imag
     extractTime = utils::system_time_us() - startTime;
 
 #ifdef DEBUG_TIME
-    std::cout<<"INFO: GraphBased timing:initialize:"<<initializeTime/1000<<" edges:"<<edgesTime/1000
-             <<" segment:"<<segmentTime/1000<<" merge:"<<mergeTime/1000<<" extract:"<<extractTime/1000<<'\n';
+    std::cout << "INFO: GraphBased timing:initialize:" << initializeTime / 1000 << " edges:" << edgesTime / 1000
+              << " segment:" << segmentTime / 1000 << " merge:" << mergeTime / 1000 << " extract:" << extractTime / 1000
+              << '\n';
 #endif
 }
 
@@ -99,8 +97,7 @@ void GraphBasedSegmenter::initializeSegmentation(const Image& image)
     unsigned int numImagePixels = image.getWidth() * image.getHeight();
 
     // Gaussian blur the source image and use the filtered image for the actual processing
-    if((image.getWidth() != filteredImage.getWidth()) || (image.getHeight() != filteredImage.getHeight()))
-    {
+    if ((image.getWidth() != filteredImage.getWidth()) || (image.getHeight() != filteredImage.getHeight())) {
         // Let the image operations handle the resizing
         filteredImage = image;
     }
@@ -113,8 +110,7 @@ void GraphBasedSegmenter::initializeSegmentation(const Image& image)
     numEdges = 0;
 
     // Setup the border flag for determining segment borders
-    if((borderFlag == 255) || (numImagePixels != borderPixels.size()))
-    {
+    if ((borderFlag == 255) || (numImagePixels != borderPixels.size())) {
         borderPixels.resize(numImagePixels, borderFlag);
         std::fill(borderPixels.begin(), borderPixels.end(), 0);
         borderFlag = 0;
@@ -123,20 +119,16 @@ void GraphBasedSegmenter::initializeSegmentation(const Image& image)
     ++borderFlag;
 
     components.resize(numImagePixels);
-    for(auto componentIt = components.begin(), endIt = components.end(); componentIt != endIt; ++componentIt)
-    {
-        componentIt->size      = 1;
-        componentIt->threshold = params.initialThreshold; // all components size 1
+    for (auto componentIt = components.begin(), endIt = components.end(); componentIt != endIt; ++componentIt) {
+        componentIt->size = 1;
+        componentIt->threshold = params.initialThreshold;   // all components size 1
     }
 
-    if((componentForest == 0) || (componentForest->size() < numImagePixels))
-    {
+    if ((componentForest == 0) || (componentForest->size() < numImagePixels)) {
         delete componentForest;
 
         componentForest = new utils::DisjointSetForest(numImagePixels);
-    }
-    else
-    {
+    } else {
         componentForest->reset();
     }
 }
@@ -145,21 +137,16 @@ void GraphBasedSegmenter::initializeSegmentation(const Image& image)
 void GraphBasedSegmenter::calculatePixelEdges(const Image& image)
 {
     // Create the edges
-    for(size_t y = 0; y < image.getHeight(); ++y)
-    {
-        for(size_t x = 0; x < image.getWidth(); ++x)
-        {
+    for (size_t y = 0; y < image.getHeight(); ++y) {
+        for (size_t x = 0; x < image.getWidth(); ++x) {
             connectPixelToAdjacent(x, y, image);
         }
     }
 
     // Sort them appropriately
-    if(image.getColorspace() == MONO)
-    {
+    if (image.getColorspace() == MONO) {
         utils::counting_sort<256>(unsortedEdges.begin(), unsortedEdges.end(), pixelEdges.begin());
-    }
-    else
-    {
+    } else {
         utils::counting_sort<768>(unsortedEdges.begin(), unsortedEdges.end(), pixelEdges.begin());
     }
 }
@@ -168,18 +155,15 @@ void GraphBasedSegmenter::calculatePixelEdges(const Image& image)
 void GraphBasedSegmenter::mergeSmallSegments(int startIndex)
 {
     // Go through all the edges and see what size set they belong to. If size < min, merge with adjacent
-    for(auto pixelIt = pixelEdges.begin()+startIndex, endIt = pixelEdges.end(); pixelIt != endIt; ++pixelIt)
-    {
+    for (auto pixelIt = pixelEdges.begin() + startIndex, endIt = pixelEdges.end(); pixelIt != endIt; ++pixelIt) {
         unsigned int componentA = componentForest->findSet(pixelIt->pixelA);
         unsigned int componentB = componentForest->findSet(pixelIt->pixelB);
 
-        if((componentA != componentB)                           &&
-            ((components[componentA].size < params.minSegmentSize) ||
-            (components[componentB].size  < params.minSegmentSize)))
-        {
+        if ((componentA != componentB)
+            && ((components[componentA].size < params.minSegmentSize)
+                || (components[componentB].size < params.minSegmentSize))) {
             mergeComponents(componentA, componentB);
-        }
-        else if(componentA != componentB) // unmerged edges signify the borders between two segments
+        } else if (componentA != componentB)   // unmerged edges signify the borders between two segments
         {
             borderPixels[pixelIt->pixelA] = borderFlag;
             borderPixels[pixelIt->pixelB] = borderFlag;
@@ -196,24 +180,21 @@ void GraphBasedSegmenter::extractImageSegments(const Image& image, std::vector<i
 
     segments.clear();
 
-    unsigned int component    = 0;
-    int          segmentIndex = 0;
+    unsigned int component = 0;
+    int segmentIndex = 0;
 
     Point<uint16_t> pixel;
 
-    for(pixel.y = 0; pixel.y < image.getHeight(); ++pixel.y)
-    {
-        for(pixel.x = 0; pixel.x < image.getWidth(); ++pixel.x)
-        {
-            unsigned int pixelIndex = pixel.y*image.getWidth() + pixel.x;
+    for (pixel.y = 0; pixel.y < image.getHeight(); ++pixel.y) {
+        for (pixel.x = 0; pixel.x < image.getWidth(); ++pixel.x) {
+            unsigned int pixelIndex = pixel.y * image.getWidth() + pixel.x;
             // Find the correct segment index. If none, add a new segment
             component = componentForest->findSet(pixelIndex);
 
             auto segmentIndexIt = componentToSegment.find(component);
 
             // Initialize a new segment
-            if(segmentIndexIt == componentToSegment.end())
-            {
+            if (segmentIndexIt == componentToSegment.end()) {
                 componentToSegment.insert(std::make_pair(component, nextSegment));
 
                 segments.push_back(image_segment_t());
@@ -222,19 +203,16 @@ void GraphBasedSegmenter::extractImageSegments(const Image& image, std::vector<i
 
                 segmentIndex = nextSegment;
                 ++nextSegment;
-            }
-            else
-            {
+            } else {
                 segmentIndex = segmentIndexIt->second;
             }
 
-            update_image_segment(pixel, borderPixels[pixelIndex]==borderFlag, image, segments[segmentIndex]);
+            update_image_segment(pixel, borderPixels[pixelIndex] == borderFlag, image, segments[segmentIndex]);
         }
     }
 
     // Take the summed pixel values and calculate the averages from them
-    for(auto segmentIt = segments.begin(), endIt = segments.end(); segmentIt != endIt; ++segmentIt)
-    {
+    for (auto segmentIt = segments.begin(), endIt = segments.end(); segmentIt != endIt; ++segmentIt) {
         segmentIt->averageColor[0] /= segmentIt->pixels.size();
         segmentIt->averageColor[1] /= segmentIt->pixels.size();
         segmentIt->averageColor[2] /= segmentIt->pixels.size();
@@ -247,49 +225,44 @@ void GraphBasedSegmenter::connectPixelToAdjacent(size_t x, size_t y, const Image
     // Use 4-way connected graph
     bool useMonoWeight = image.getColorspace() == MONO;
 
-    size_t width  = image.getWidth();
+    size_t width = image.getWidth();
     size_t height = image.getHeight();
 
-    if(x < width - 1)
-    {
+    if (x < width - 1) {
         pixel_edge_t newEdge;
-        newEdge.pixelA = x   + y*width;
-        newEdge.pixelB = x+1 + y*width;
-        newEdge.value  = useMonoWeight ? monoPixelWeight(newEdge, image) : rgbPixelWeight(newEdge, image);
+        newEdge.pixelA = x + y * width;
+        newEdge.pixelB = x + 1 + y * width;
+        newEdge.value = useMonoWeight ? monoPixelWeight(newEdge, image) : rgbPixelWeight(newEdge, image);
 
         unsortedEdges[numEdges++] = newEdge;
     }
 
-    if(x > 0)
-    {
+    if (x > 0) {
         pixel_edge_t newEdge;
-        newEdge.pixelA = x   + y*width;
-        newEdge.pixelB = x-1 + y*width;
-        newEdge.value  = useMonoWeight ? monoPixelWeight(newEdge, image) : rgbPixelWeight(newEdge, image);
+        newEdge.pixelA = x + y * width;
+        newEdge.pixelB = x - 1 + y * width;
+        newEdge.value = useMonoWeight ? monoPixelWeight(newEdge, image) : rgbPixelWeight(newEdge, image);
 
         unsortedEdges[numEdges++] = newEdge;
     }
 
-    if(y < height - 1)
-    {
+    if (y < height - 1) {
         pixel_edge_t newEdge;
-        newEdge.pixelA = x + y*width;
-        newEdge.pixelB = x + (y+1)*width;
-        newEdge.value  = useMonoWeight ? monoPixelWeight(newEdge, image) : rgbPixelWeight(newEdge, image);
+        newEdge.pixelA = x + y * width;
+        newEdge.pixelB = x + (y + 1) * width;
+        newEdge.value = useMonoWeight ? monoPixelWeight(newEdge, image) : rgbPixelWeight(newEdge, image);
 
         unsortedEdges[numEdges++] = newEdge;
     }
 
-    if(y > 0)
-    {
+    if (y > 0) {
         pixel_edge_t newEdge;
-        newEdge.pixelA = x + y*width;
-        newEdge.pixelB = x + (y-1)*width;
-        newEdge.value  = useMonoWeight ? monoPixelWeight(newEdge, image) : rgbPixelWeight(newEdge, image);
+        newEdge.pixelA = x + y * width;
+        newEdge.pixelB = x + (y - 1) * width;
+        newEdge.value = useMonoWeight ? monoPixelWeight(newEdge, image) : rgbPixelWeight(newEdge, image);
 
         unsortedEdges[numEdges++] = newEdge;
     }
-
 }
 
 
@@ -297,15 +270,12 @@ unsigned int GraphBasedSegmenter::mergeComponents(unsigned int componentA, unsig
 {
     unsigned int mergedComponent = componentForest->setUnion(componentA, componentB);
 
-    if(mergedComponent != componentA)
-    {
+    if (mergedComponent != componentA) {
         components[componentB].size += components[componentA].size;
-        components[componentA].size  = 0;
-    }
-    else
-    {
+        components[componentA].size = 0;
+    } else {
         components[componentA].size += components[componentB].size;
-        components[componentB].size  = 0;
+        components[componentB].size = 0;
     }
 
     return mergedComponent;
@@ -317,15 +287,15 @@ float GraphBasedSegmenter::rgbPixelWeight(const pixel_edge_t& edge, const Image&
     // RGB weight is simply the distance in RGB space
 
     unsigned char* pixels = image.getPixelBuffer();
-    int redA   = pixels[3*edge.pixelA];
-    int greenA = pixels[3*edge.pixelA+1];
-    int blueA  = pixels[3*edge.pixelA+2];
+    int redA = pixels[3 * edge.pixelA];
+    int greenA = pixels[3 * edge.pixelA + 1];
+    int blueA = pixels[3 * edge.pixelA + 2];
 
-    int redB   = pixels[3*edge.pixelB];
-    int greenB = pixels[3*edge.pixelB+1];
-    int blueB  = pixels[3*edge.pixelB+2];
+    int redB = pixels[3 * edge.pixelB];
+    int greenB = pixels[3 * edge.pixelB + 1];
+    int blueB = pixels[3 * edge.pixelB + 2];
 
-    return sqrt(pow(redA-redB, 2) + pow(greenA-greenB, 2) + pow(blueA-blueB,2));
+    return sqrt(pow(redA - redB, 2) + pow(greenA - greenB, 2) + pow(blueA - blueB, 2));
 }
 
 
@@ -353,11 +323,11 @@ void update_image_segment(const Point<uint16_t>& pixel, bool border, const Image
 
     segment.pixels.push_back(pixel);
 
-    if(border || (pixel.x == 0) || (pixel.x == image.getWidth()-1) || (pixel.y == 0) || (pixel.y == image.getHeight()-1))
-    {
+    if (border || (pixel.x == 0) || (pixel.x == image.getWidth() - 1) || (pixel.y == 0)
+        || (pixel.y == image.getHeight() - 1)) {
         segment.boundaryPixels.push_back(pixel);
     }
 }
 
-} // namespace vision
-} // namespace vulcan
+}   // namespace vision
+}   // namespace vulcan

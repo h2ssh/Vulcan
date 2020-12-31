@@ -8,11 +8,11 @@
 
 
 /**
-* \file     univariate_gaussian.cpp
-* \author   Collin Johnson
-*
-* Definition of UnivariateGaussianDistribution.
-*/
+ * \file     univariate_gaussian.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of UnivariateGaussianDistribution.
+ */
 
 #include "math/univariate_gaussian.h"
 #include <cassert>
@@ -56,7 +56,7 @@ double UnivariateGaussianDistribution::sample(void) const
 
 double UnivariateGaussianDistribution::likelihood(double value) const
 {
-    return normalizer_ * std::exp(-std::pow(value-mean_, 2.0) / (2.0*variance_));
+    return normalizer_ * std::exp(-std::pow(value - mean_, 2.0) / (2.0 * variance_));
 }
 
 
@@ -75,5 +75,5 @@ bool UnivariateGaussianDistribution::load(std::istream& in)
     return in.good();
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan

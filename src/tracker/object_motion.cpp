@@ -8,16 +8,16 @@
 
 
 /**
-* \file     object_motion.cpp
-* \author   Collin Johnson
-*
-* Definition of ObjectMotion.
-*/
+ * \file     object_motion.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ObjectMotion.
+ */
 
 #include "tracker/object_motion.h"
 #include "tracker/laser_object.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 namespace vulcan
 {
@@ -26,8 +26,7 @@ namespace tracker
 
 std::ostream& operator<<(std::ostream& out, ObjectMotionStatus status)
 {
-    switch(status)
-    {
+    switch (status) {
     case ObjectMotionStatus::invalid:
         out << "invalid";
         break;
@@ -55,29 +54,27 @@ ObjectMotion::ObjectMotion(Position position, velocity_t velocity)
 {
 }
 
-    
+
 Position ObjectMotion::estimatePositionAt(int deltaTimeMs) const
 {
     // Enforce the preconditions
     // Calculate the position at the appropriate time
     assert(deltaTimeMs >= 0);
-    
+
     return estimateFuturePosition(deltaTimeMs);
 }
 
 
-std::vector<Position> ObjectMotion::estimateTrajectoryFor(int durationMs, 
-                                                            int stepMs, 
-                                                            int startOffsetMs) const
+std::vector<Position> ObjectMotion::estimateTrajectoryFor(int durationMs, int stepMs, int startOffsetMs) const
 {
     // Enforce the preconditions
-    // Calculate the number of number of steps 
+    // Calculate the number of number of steps
     // Calculate the position for each step
     assert(durationMs >= stepMs);
     assert(stepMs > 0);
     assert(startOffsetMs >= 0);
     assert(stepMs <= durationMs);
-    
+
     int numSteps = std::max(durationMs / stepMs, 1);
     return estimateFutureTrajectory(numSteps, stepMs, startOffsetMs);
 }
@@ -96,25 +93,22 @@ ObjectMotionStatus ObjectMotion::updateModel(const LaserObject& detectedObject)
     {
         trajectory_.pop_front();
     }*/
-    
+
     return modelStatus();
 }
 
 
-std::vector<Position> ObjectMotion::estimateFutureTrajectory(int numSteps, 
-                                                             int stepMs,
-                                                             int startOffsetMs) const
+std::vector<Position> ObjectMotion::estimateFutureTrajectory(int numSteps, int stepMs, int startOffsetMs) const
 {
     std::vector<Position> trajectory;
     trajectory.reserve(numSteps);
-    
-    for(int n = 0; n < numSteps; ++n)
-    {
-        trajectory.emplace_back(estimateFuturePosition(startOffsetMs + stepMs*n));
+
+    for (int n = 0; n < numSteps; ++n) {
+        trajectory.emplace_back(estimateFuturePosition(startOffsetMs + stepMs * n));
     }
-    
+
     return trajectory;
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

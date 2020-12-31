@@ -16,27 +16,25 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 class MapEditorFrame;
 
 /**
-* MapEditorApp is where the main function is called.
-*/
+ * MapEditorApp is where the main function is called.
+ */
 class MapEditorApp : public wxApp
 {
 public:
-    
     virtual bool OnInit(void);
-    virtual int  OnExit(void);
-    
+    virtual int OnExit(void);
+
 private:
-    
     MapEditorFrame* mainFrame;
 };
 
 DECLARE_APP(MapEditorApp)
-    
-}
-}
 
-#endif // UI_MAPEDITOR_MAP_EDITOR_APP_H
+}   // namespace ui
+}   // namespace vulcan
+
+#endif   // UI_MAPEDITOR_MAP_EDITOR_APP_H

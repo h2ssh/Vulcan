@@ -25,8 +25,7 @@ void Histogram2D::addValue(double x, double y)
 {
     values_.emplace_back(x, y);
     auto bin = utils::global_point_to_grid_cell(Point<double>(x, y), bins_);
-    if(bins_.isCellInGrid(bin))
-    {
+    if (bins_.isCellInGrid(bin)) {
         ++bins_(bin.x, bin.y);
     }
 }
@@ -35,19 +34,16 @@ void Histogram2D::addValue(double x, double y)
 bool Histogram2D::normalize(void)
 {
     // Ignore if there are no values yet
-    if(values_.empty() || isNormalized_)
-    {
+    if (values_.empty() || isNormalized_) {
         std::cerr << "WARNING: Histogram2D: Ignore request for normalization. Already normalized? " << isNormalized_
-            << '\n';
+                  << '\n';
         return false;
     }
 
     // Divide all bins by the total number of values to get the percent of time a particular value is
     // occupied
-    for(std::size_t y = 0; y < bins_.getHeightInCells(); ++y)
-    {
-        for(std::size_t x = 0; x < bins_.getWidthInCells(); ++x)
-        {
+    for (std::size_t y = 0; y < bins_.getHeightInCells(); ++y) {
+        for (std::size_t x = 0; x < bins_.getWidthInCells(); ++x) {
             bins_(x, y) /= values_.size();
         }
     }
@@ -61,10 +57,8 @@ double Histogram2D::max(void) const
 {
     double max = 0.0;
 
-    for(std::size_t y = 0; y < bins_.getHeightInCells(); ++y)
-    {
-        for(std::size_t x = 0; x < bins_.getWidthInCells(); ++x)
-        {
+    for (std::size_t y = 0; y < bins_.getHeightInCells(); ++y) {
+        for (std::size_t x = 0; x < bins_.getWidthInCells(); ++x) {
             max = std::max(bins_(x, y), max);
         }
     }
@@ -85,17 +79,15 @@ void Histogram2D::plot(const std::string& title,
                        const std::string& yLabel,
                        double maxCbrange)
 {
-//     std::vector<std::vector<boost::tuple<double, double, double>>> data2d(bins_.getHeightInCells());
+    //     std::vector<std::vector<boost::tuple<double, double, double>>> data2d(bins_.getHeightInCells());
     std::vector<std::vector<double>> data2d(bins_.getHeightInCells());
     // Convert the bins to appropriate 2d data
-    for(std::size_t y = 0; y < bins_.getHeightInCells(); ++y)
-    {
+    for (std::size_t y = 0; y < bins_.getHeightInCells(); ++y) {
         data2d[y].resize(bins_.getWidthInCells());
         auto& row = data2d[y];
-        for(std::size_t x = 0; x < bins_.getWidthInCells(); ++x)
-        {
+        for (std::size_t x = 0; x < bins_.getWidthInCells(); ++x) {
             row[x] = bins_(x, y);
-//             row[x] = boost::make_tuple(double(x), double(y), bins_(x, y));
+            //             row[x] = boost::make_tuple(double(x), double(y), bins_(x, y));
         }
     }
 
@@ -110,7 +102,7 @@ void Histogram2D::plot(const std::string& title,
     plot << "set title '" << title << "'\n";
     plot << "set x2label '" << xLabel << "'\n";
     plot << "set ylabel '" << yLabel << "'\n";
-    plot << "set yrange [" << yMax << ":" << yMin << "]\n"; // intentionally flip y-axis
+    plot << "set yrange [" << yMax << ":" << yMin << "]\n";   // intentionally flip y-axis
     plot << "set xrange [" << xMin << ":" << xMax << "]\n";
     plot << "set x2range [" << xMin << ":" << xMax << "]\n";
     plot << "set cbrange [0:" << maxCbrange << "]\n";
@@ -118,13 +110,12 @@ void Histogram2D::plot(const std::string& title,
     plot << "set x2tics\n";
 
     plot << "plot '-' binary "
-        << " dx=" << bins_.metersPerCell() << " dy=" << bins_.metersPerCell()
-        << plot.binFmt2d(data2d, "array") << " with image notitle"
-        << std::endl;
+         << " dx=" << bins_.metersPerCell() << " dy=" << bins_.metersPerCell() << plot.binFmt2d(data2d, "array")
+         << " with image notitle" << std::endl;
     plot.sendBinary2d(data2d);
 
     sleep(1);
 }
 
-} // namespace utils
-} // namepace vulcan
+}   // namespace utils
+}   // namespace vulcan

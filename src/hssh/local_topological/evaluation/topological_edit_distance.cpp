@@ -8,11 +8,11 @@
 
 
 /**
-* \file     topological_edit_distance.cpp
-* \author   Collin Johnson
-*
-* Definition of topological_edit_distance function.
-*/
+ * \file     topological_edit_distance.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of topological_edit_distance function.
+ */
 
 #include "hssh/local_topological/evaluation/topological_edit_distance.h"
 #include "hssh/local_topological/local_topo_route.h"
@@ -28,9 +28,8 @@ std::string route_to_route_string(const LocalTopoRoute& route, double routeUnitD
 char area_type_to_char(const AreaType& type);
 
 
-topo_edit_dist_t topological_edit_distance(const LocalTopoRoute& routeA,
-                                           const LocalTopoRoute& routeB,
-                                           double routeUnitDistance)
+topo_edit_dist_t
+  topological_edit_distance(const LocalTopoRoute& routeA, const LocalTopoRoute& routeB, double routeUnitDistance)
 {
     utils::edit_distance_weights_t topoWeight;
     topoWeight.substitution = 10000.0;
@@ -62,14 +61,10 @@ std::string route_to_route_string(const LocalTopoRoute& route, double routeUnitD
 {
     std::string routeString;
 
-    for(const LocalTopoRouteVisit& visit : route)
-    {
-        if(useRaw)
-        {
+    for (const LocalTopoRouteVisit& visit : route) {
+        if (useRaw) {
             routeString += area_type_to_char(visit.area().type());
-        }
-        else
-        {
+        } else {
             std::fill_n(std::back_inserter(routeString),
                         (visit.distance() / routeUnitDistance) + 1,
                         area_type_to_char(visit.area().type()));
@@ -82,8 +77,7 @@ std::string route_to_route_string(const LocalTopoRoute& route, double routeUnitD
 
 char area_type_to_char(const AreaType& type)
 {
-    switch(type)
-    {
+    switch (type) {
     case AreaType::decision_point:
         return 'j';
 
@@ -101,5 +95,5 @@ char area_type_to_char(const AreaType& type)
     return 'f';
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

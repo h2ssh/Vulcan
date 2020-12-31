@@ -8,24 +8,24 @@
 
 
 /**
-* \file     area_extent.cpp
-* \author   Collin Johnson
-*
-* Definition of AreaExtent.
-*/
+ * \file     area_extent.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AreaExtent.
+ */
 
 #include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
 #include "hssh/local_topological/gateway.h"
 #include "hssh/local_topological/voronoi_skeleton_grid.h"
-#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
-#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
 #include "math/geometry/convex_hull.h"
 #include "math/geometry/shape_fitting.h"
-#include "utils/ray_tracing.h"
 #include "utils/algorithm_ext.h"
+#include "utils/ray_tracing.h"
+#include <cassert>
 #include <deque>
 #include <numeric>
-#include <cassert>
 
 namespace vulcan
 {
@@ -44,9 +44,9 @@ struct extent_search_state_t
 
 float discretized_polygon_perimeter(const math::Polygon<double>& polygon, const VoronoiSkeletonGrid& grid);
 
-std::tuple<float, float> flood_fill_extent(const std::vector<Gateway>&      gateways,
-                                           CellVector                       startCells,
-                                           const VoronoiSkeletonGrid&       grid,
+std::tuple<float, float> flood_fill_extent(const std::vector<Gateway>& gateways,
+                                           CellVector startCells,
+                                           const VoronoiSkeletonGrid& grid,
                                            std::vector<Point<double>>& cells);
 int extent_side_of_gateway(const Gateway& gateway, CellVector& startCells, const VoronoiSkeletonGrid& grid);
 void add_gateway_boundary_cells_to_queue(const Gateway& gateway, extent_search_state_t& state);
@@ -81,22 +81,20 @@ AreaExtent::AreaExtent(const std::vector<const AreaExtent*>& extents)
     // Calculate the merged properties -- area, perimeter, frontier ratio
     std::size_t numCells = 0;
     float frontierPerimeter = 0.0f;
-    for(auto& e : extents)
-    {
+    for (auto& e : extents) {
         assert(e);
-        numCells          += e->cells_.size();
+        numCells += e->cells_.size();
         frontierPerimeter += e->perimeter_ * e->frontierRatio_;
-        perimeter_        += e->perimeter_;
-        area_             += e->area_;
-        cellsPerMeter_     = e->cellsPerMeter_;
+        perimeter_ += e->perimeter_;
+        area_ += e->area_;
+        cellsPerMeter_ = e->cellsPerMeter_;
     }
 
     frontierRatio_ = frontierPerimeter / perimeter_;
 
     // Copy the cells from each of the extents
     cells_.reserve(numCells);
-    for(auto& e : extents)
-    {
+    for (auto& e : extents) {
         cells_.insert(cells_.end(), e->cells_.begin(), e->cells_.end());
     }
 
@@ -110,8 +108,8 @@ AreaExtent::AreaExtent(const std::vector<const AreaExtent*>& extents)
 
 
 AreaExtent::AreaExtent(const std::vector<Gateway>& gateways,
-                       const CellVector&           skeletonCells,
-                       const VoronoiSkeletonGrid&  grid)
+                       const CellVector& skeletonCells,
+                       const VoronoiSkeletonGrid& grid)
 : havePolygon_(false)
 , perimeter_(0.0f)
 , area_(0.0f)
@@ -121,11 +119,12 @@ AreaExtent::AreaExtent(const std::vector<Gateway>& gateways,
     growExtent(gateways, skeletonCells, grid);
 
     // Sanity check for easier debugging if somehow one of the flood fills leaks out of the area.
-    if(area_ > 100.0f)
-    {
+    if (area_ > 100.0f) {
         int numToShow = std::min(skeletonCells.size(), 5ul);
         std::cout << "INFO:AreaExtent: Found a big area:" << area_ << "m^2. Start cells:\n";
-        std::copy(skeletonCells.begin(), skeletonCells.begin() + numToShow, std::ostream_iterator<cell_t>(std::cout, ","));
+        std::copy(skeletonCells.begin(),
+                  skeletonCells.begin() + numToShow,
+                  std::ostream_iterator<cell_t>(std::cout, ","));
         std::cout << '\n';
     }
 }
@@ -158,44 +157,41 @@ extent_compactness_t AreaExtent::compactness(void) const
     compactness.ndc = (numCells - (perimInCells / 4)) / (numCells - std::sqrt(numCells));
 
     /**
-    * Actual vs. min/max comparisons require:
-    *
-    * P_max = 2 * (area + 1)  for eight-way connected
-    * P_min = three cases with: int rta = sqrt(numCells)
-    *
-    *   if rta * rta == numCells:
-    *       4 * rta
-    *   if rta * rta + rta < a:
-    *       4(rta + 1)
-    *   if rta * rta + rta > a:
-    *       4rta + 2
-    *
-    * A_max = two cases based on rta:
-    *   if rta * rta == numCells:
-    *       (perim / 4) ^ 2
-    *   else
-    *       ((perim^2 / 4) - 1) / 4
-    *
-    * A_min = (perim - 2) / 2
-    */
+     * Actual vs. min/max comparisons require:
+     *
+     * P_max = 2 * (area + 1)  for eight-way connected
+     * P_min = three cases with: int rta = sqrt(numCells)
+     *
+     *   if rta * rta == numCells:
+     *       4 * rta
+     *   if rta * rta + rta < a:
+     *       4(rta + 1)
+     *   if rta * rta + rta > a:
+     *       4rta + 2
+     *
+     * A_max = two cases based on rta:
+     *   if rta * rta == numCells:
+     *       (perim / 4) ^ 2
+     *   else
+     *       ((perim^2 / 4) - 1) / 4
+     *
+     * A_min = (perim - 2) / 2
+     */
 
-    double aMin = (perimInCells - 2) / 2.0;     // cells in a single line, each cell would contribute 2 cells to
-                                                // perimeter except ends, which would add three, hence subtracing 2
-    double pMax = 2.0 * (numCells - 1);         // same logic, as with a-min. lined out cells each are two minus a
-                                                // couple to take care of the ends
+    double aMin = (perimInCells - 2) / 2.0;   // cells in a single line, each cell would contribute 2 cells to
+                                              // perimeter except ends, which would add three, hence subtracing 2
+    double pMax = 2.0 * (numCells - 1);       // same logic, as with a-min. lined out cells each are two minus a
+                                              // couple to take care of the ends
     int rta = std::sqrt(numCells);
 
-    double pMin = 4.0 * rta;                    // minimum perim would be a square, so sqrt(area) would be side length
-    double aMax = std::pow(perimInCells / 4, 2.0);  // max area also a square, so it would have size length perim/4
+    double pMin = 4.0 * rta;   // minimum perim would be a square, so sqrt(area) would be side length
+    double aMax = std::pow(perimInCells / 4, 2.0);   // max area also a square, so it would have size length perim/4
 
     // Make minor corrections if not even number of cells under consideration
-    if(rta * rta != numCells)
-    {
-        if((rta * rta) + rta > numCells)
-        {
+    if (rta * rta != numCells) {
+        if ((rta * rta) + rta > numCells) {
             pMin = (4.0 * rta) + 2;
-        }
-        else // if((rta * rta) + rta  < numCells
+        } else   // if((rta * rta) + rta  < numCells
         {
             pMin = 4.0 * (rta + 1);
         }
@@ -214,18 +210,14 @@ extent_compactness_t AreaExtent::compactness(void) const
 
 math::Polygon<double> AreaExtent::polygonBoundary(math::ReferenceFrame frame) const
 {
-    if(!havePolygon_)
-    {
-        polygon_     = math::convex_hull<double>(cells_.cbegin(), cells_.cend());
+    if (!havePolygon_) {
+        polygon_ = math::convex_hull<double>(cells_.cbegin(), cells_.cend());
         havePolygon_ = true;
     }
 
-    if(frame == math::ReferenceFrame::GLOBAL)
-    {
+    if (frame == math::ReferenceFrame::GLOBAL) {
         return polygon_;
-    }
-    else
-    {
+    } else {
         auto poly = polygon_;
         poly.rotate(-center_.theta);
         poly.translate(-center_.x, -center_.y);
@@ -236,12 +228,9 @@ math::Polygon<double> AreaExtent::polygonBoundary(math::ReferenceFrame frame) co
 
 math::Rectangle<double> AreaExtent::rectangleBoundary(math::ReferenceFrame frame) const
 {
-    if(frame == math::ReferenceFrame::GLOBAL)
-    {
+    if (frame == math::ReferenceFrame::GLOBAL) {
         return rectangle_;
-    }
-    else
-    {
+    } else {
         auto rect = rectangle_;
         rect.rotate(-center_.theta);
         rect.translate(-center_.x, -center_.y);
@@ -266,20 +255,17 @@ bool AreaExtent::contains(const Point<double>& point, math::ReferenceFrame frame
 {
     auto pointInAreaFrame = point;
 
-    if(frame == math::ReferenceFrame::LOCAL)
-    {
+    if (frame == math::ReferenceFrame::LOCAL) {
         pointInAreaFrame = transform(point, center_.x, center_.y, center_.theta);
     }
 
     // If it isn't within the rectangle, then it can't be in the area for sure.
-    if(!rectangle_.contains(pointInAreaFrame))
-    {
+    if (!rectangle_.contains(pointInAreaFrame)) {
         return false;
     }
 
-    if(!havePolygon_)
-    {
-        polygon_     = math::convex_hull<double>(cells_.cbegin(), cells_.cend());
+    if (!havePolygon_) {
+        polygon_ = math::convex_hull<double>(cells_.cbegin(), cells_.cend());
         havePolygon_ = true;
     }
 
@@ -294,13 +280,9 @@ bool AreaExtent::cellContains(const Point<double>& position) const
     assert(cellsPerMeter_ > 0.0);
     double metersPerCell = (1.0 / cellsPerMeter_) + kError;
 
-    for(auto cell : cells_)
-    {
-        if(((position.x - cell.x) >= -kError)
-            && ((position.x - cell.x) <= metersPerCell)
-            && ((position.y - cell.y) >= -kError)
-            && ((position.y - cell.y) <= metersPerCell))
-        {
+    for (auto cell : cells_) {
+        if (((position.x - cell.x) >= -kError) && ((position.x - cell.x) <= metersPerCell)
+            && ((position.y - cell.y) >= -kError) && ((position.y - cell.y) <= metersPerCell)) {
             return true;
         }
     }
@@ -310,8 +292,8 @@ bool AreaExtent::cellContains(const Point<double>& position) const
 
 
 void AreaExtent::growExtent(const std::vector<Gateway>& gateways,
-                            const CellVector&           skeletonCells,
-                            const VoronoiSkeletonGrid&  grid)
+                            const CellVector& skeletonCells,
+                            const VoronoiSkeletonGrid& grid)
 {
     std::tie(perimeter_, frontierRatio_) = flood_fill_extent(gateways, skeletonCells, grid, cells_);
     area_ = cells_.size() * grid.metersPerCell() * grid.metersPerCell();
@@ -323,12 +305,11 @@ void AreaExtent::growExtent(const std::vector<Gateway>& gateways,
 
 void AreaExtent::calculateCenter(void)
 {
-    auto centerPos = std::accumulate(cells_.begin(), cells_.end(), Point<double>(0.0,0.0));
+    auto centerPos = std::accumulate(cells_.begin(), cells_.end(), Point<double>(0.0, 0.0));
 
-    if(!cells_.empty())
-    {
-        center_.x     = centerPos.x / cells_.size();
-        center_.y     = centerPos.y / cells_.size();
+    if (!cells_.empty()) {
+        center_.x = centerPos.x / cells_.size();
+        center_.y = centerPos.y / cells_.size();
         center_.theta = 0.0f;
 
         // Round to the nearest cell-unit
@@ -340,7 +321,7 @@ void AreaExtent::calculateCenter(void)
 
 void AreaExtent::calculateBoundaries(void)
 {
-//     polygon_   = math::convex_hull(cells_);
+    //     polygon_   = math::convex_hull(cells_);
     rectangle_ = math::axis_aligned_bounding_rectangle<double>(cells_.cbegin(), cells_.cend());
 }
 
@@ -349,8 +330,7 @@ float discretized_polygon_perimeter(const math::Polygon<double>& polygon, const 
 {
     CellVector cells;
 
-    for(auto vertIt = polygon.begin(), endIt = polygon.end() - 1; vertIt != endIt; ++vertIt)
-    {
+    for (auto vertIt = polygon.begin(), endIt = polygon.end() - 1; vertIt != endIt; ++vertIt) {
         auto nextIt = vertIt + 1;
         auto vertCell = utils::global_point_to_grid_cell_round(*vertIt, grid);
         auto nextCell = utils::global_point_to_grid_cell_round(*nextIt, grid);
@@ -364,9 +344,9 @@ float discretized_polygon_perimeter(const math::Polygon<double>& polygon, const 
 }
 
 
-std::tuple<float, float> flood_fill_extent(const std::vector<Gateway>&      gateways,
-                                           CellVector                       startCells,
-                                           const VoronoiSkeletonGrid&       grid,
+std::tuple<float, float> flood_fill_extent(const std::vector<Gateway>& gateways,
+                                           CellVector startCells,
+                                           const VoronoiSkeletonGrid& grid,
                                            std::vector<Point<double>>& cells)
 {
     extent_search_state_t state;
@@ -375,15 +355,13 @@ std::tuple<float, float> flood_fill_extent(const std::vector<Gateway>&      gate
     float perimeter = 0.0f;
 
     // Add the cells along the gateway boundary to the queue
-    for(auto& g : gateways)
-    {
+    for (auto& g : gateways) {
         add_gateway_boundary_cells_to_queue(g, state);
         perimeter += gateway_cell_perimeter(g, grid.metersPerCell());
     }
 
     // Add the cells adjacent to each boundary to the queue
-    for(auto& g : gateways)
-    {
+    for (auto& g : gateways) {
         add_boundary_adjacent_cells_to_queue(g, extent_side_of_gateway(g, startCells, grid), state);
     }
 
@@ -394,12 +372,10 @@ std::tuple<float, float> flood_fill_extent(const std::vector<Gateway>&      gate
         return state.boundaryCells.find(cell) != state.boundaryCells.end();
     });
 
-    for(auto& c : startCells)
-    {
+    for (auto& c : startCells) {
         // Only enqueue cells that aren't marked state.visited. The visited cells here are on the gateway boundary.
         // Need to not enqueue those, otherwise we'll be jumping across the gateway to our doom
-        if(state.visited.find(c) == state.visited.end())
-        {
+        if (state.visited.find(c) == state.visited.end()) {
             state.queue.push_back(c);
         }
     }
@@ -410,24 +386,20 @@ std::tuple<float, float> flood_fill_extent(const std::vector<Gateway>&      gate
     float cellPerimeter = 0.0f;
     float cellFrontier = 0.0f;
 
-    while(!state.queue.empty())
-    {
+    while (!state.queue.empty()) {
         cell_t next = state.queue.front();
         state.queue.pop_front();
 
         // If on the map boundary, don't expand it
-        if(is_on_map_boundary(next, state))
-        {
+        if (is_on_map_boundary(next, state)) {
             std::tie(cellPerimeter, cellFrontier) = perimeter_stats(next, *state.grid);
         }
         // Otherwise treat skeleton
-        else if(state.grid->getClassification(next) & SKELETON_CELL_SKELETON)
-        {
+        else if (state.grid->getClassification(next) & SKELETON_CELL_SKELETON) {
             std::tie(cellPerimeter, cellFrontier) = expand_skeleton_cell(next, state);
         }
         // and free cells differently
-        else
-        {
+        else {
             std::tie(cellPerimeter, cellFrontier) = expand_cell(next, state);
         }
 
@@ -440,12 +412,9 @@ std::tuple<float, float> flood_fill_extent(const std::vector<Gateway>&      gate
         return utils::grid_point_to_global_point(cell, grid);
     });
 
-    if(perimeter > 0.0f)
-    {
+    if (perimeter > 0.0f) {
         return std::make_tuple(perimeter, frontierPerimeter / perimeter);
-    }
-    else
-    {
+    } else {
         std::cerr << "WARNING: AreaExtent: Extent with no perimeter detected. Gateways:\n";
         std::copy(gateways.begin(), gateways.end(), std::ostream_iterator<Gateway>(std::cerr, ",  "));
         std::cerr << '\n';
@@ -471,8 +440,7 @@ void add_gateway_boundary_cells_to_queue(const Gateway& gateway, extent_search_s
 
 void add_boundary_adjacent_cells_to_queue(const Gateway& gateway, int extentSide, extent_search_state_t& state)
 {
-    if(extentSide == 0)
-    {
+    if (extentSide == 0) {
         std::cout << "ERROR: Can't determine which gateway cells to add. Gateway:" << gateway.boundary() << '\n';
         return;
     }
@@ -487,21 +455,16 @@ void add_boundary_adjacent_cells_to_queue(const Gateway& gateway, int extentSide
     double extentNormal = angle_sum(direction(gateway.boundary()), std::copysign(M_PI_2, extentSide));
     int xIncr = 0;
     int yIncr = 0;
-    if(std::abs(std::sin(extentNormal)) > 0.5)
-    {
+    if (std::abs(std::sin(extentNormal)) > 0.5) {
         yIncr = std::copysign(1.0, std::sin(extentNormal));
-    }
-    else
-    {
+    } else {
         xIncr = std::copysign(1.0, std::cos(extentNormal));
     }
 
-    for(auto cell : state.gatewayToBoundaryCells[gateway.id()])
-    {
+    for (auto cell : state.gatewayToBoundaryCells[gateway.id()]) {
         // Ignore cells that belong to multiple boundaries, as they will have different extent sides and likely
         // cause the extent to leak
-        if(is_on_another_boundary(cell, gateway.id(), state))
-        {
+        if (is_on_another_boundary(cell, gateway.id(), state)) {
             continue;
         }
 
@@ -509,18 +472,16 @@ void add_boundary_adjacent_cells_to_queue(const Gateway& gateway, int extentSide
         // to the search queue
         cell_t neighbor(cell.x + xIncr, cell.y + yIncr);
 
-        if((state.grid->getClassification(neighbor.x, neighbor.y) & SKELETON_CELL_FREE)
-            && (state.visited.find(neighbor) == state.visited.end()))
-        {
+        if ((state.grid->getClassification(neighbor.x, neighbor.y) & SKELETON_CELL_FREE)
+            && (state.visited.find(neighbor) == state.visited.end())) {
             state.visited.insert(neighbor);
             state.queue.push_back(neighbor);
 
             neighbor.x += xIncr;
             neighbor.y += yIncr;
 
-            if((state.grid->getClassification(neighbor.x, neighbor.y) & SKELETON_CELL_FREE)
-                && (state.visited.find(neighbor) == state.visited.end()))
-            {
+            if ((state.grid->getClassification(neighbor.x, neighbor.y) & SKELETON_CELL_FREE)
+                && (state.visited.find(neighbor) == state.visited.end())) {
                 state.visited.insert(neighbor);
                 state.queue.push_back(neighbor);
             }
@@ -537,35 +498,33 @@ int extent_side_of_gateway(const Gateway& gateway, CellVector& startCells, const
     // for. Take a winner once a threshold number of cells agree.
 
     std::sort(startCells.begin(), startCells.end(), [&gateway](cell_t lhs, cell_t rhs) {
-        return distance_to_line_segment(lhs, gateway.cellBoundary()) <
-            distance_to_line_segment(rhs, gateway.cellBoundary());
+        return distance_to_line_segment(lhs, gateway.cellBoundary())
+          < distance_to_line_segment(rhs, gateway.cellBoundary());
     });
 
     int extentSide = 0;
 
     assert(gateway.sizeCells() > 0);
 
-    for(auto cell : startCells)
-    {
+    for (auto cell : startCells) {
         extentSide += gateway.isCellToLeft(cell);
 
-        if(std::abs(extentSide) > kDecisionThreshold)
-        {
+        if (std::abs(extentSide) > kDecisionThreshold) {
             break;
         }
     }
 
-//     bool debug = (gateway.skeletonCell() == cell_t(562, 1276))
-//         || (gateway.skeletonCell() == cell_t(591, 1315));
-//
-//     if(debug)
-//     {
-//         std::cout << "Cells for gateway: " << gateway.skeletonCell() << " :: " << gateway.cellBoundary() << ":\n";
-//         for(int n = 0; n < 20; ++n)
-//         {
-//             std::cout << startCells[n] << " left? " << gateway.isCellToLeft(startCells[n]) << '\n';
-//         }
-//     }
+    //     bool debug = (gateway.skeletonCell() == cell_t(562, 1276))
+    //         || (gateway.skeletonCell() == cell_t(591, 1315));
+    //
+    //     if(debug)
+    //     {
+    //         std::cout << "Cells for gateway: " << gateway.skeletonCell() << " :: " << gateway.cellBoundary() <<
+    //         ":\n"; for(int n = 0; n < 20; ++n)
+    //         {
+    //             std::cout << startCells[n] << " left? " << gateway.isCellToLeft(startCells[n]) << '\n';
+    //         }
+    //     }
 
     return extentSide;
 }
@@ -582,16 +541,11 @@ std::tuple<float, float> expand_cell(cell_t cell, extent_search_state_t& state)
     // Only expand to free cells as the skeleton within an area must intersect with the boundary and will already
     // be included in the starting cells at the boundary.
     NeighborArray neighbors;
-    int numNeighbors = neighbor_cells_equal_classification(cell,
-                                                           SKELETON_CELL_FREE,
-                                                           *state.grid,
-                                                           connectivity,
-                                                           neighbors);
-    for(int n = 0; n < numNeighbors; ++n)
-    {
-        if((state.visited.find(neighbors[n]) == state.visited.end())
-            && neighbor_is_closer_to_wall(cell, neighbors[n], *state.grid))
-        {
+    int numNeighbors =
+      neighbor_cells_equal_classification(cell, SKELETON_CELL_FREE, *state.grid, connectivity, neighbors);
+    for (int n = 0; n < numNeighbors; ++n) {
+        if ((state.visited.find(neighbors[n]) == state.visited.end())
+            && neighbor_is_closer_to_wall(cell, neighbors[n], *state.grid)) {
             state.visited.insert(neighbors[n]);
             state.queue.push_back(neighbors[n]);
         }
@@ -611,11 +565,9 @@ std::tuple<float, float> expand_skeleton_cell(cell_t skeleton, extent_search_sta
                                                           neighbors);
     bool isBoundarySkeleton = has_boundary_neighbor(skeleton, state);
 
-    for(int n = 0; n < numNeighbors; ++n)
-    {
-        if((state.visited.find(neighbors[n]) == state.visited.end())
-            && (!has_boundary_neighbor(neighbors[n], state) || !isBoundarySkeleton))
-        {
+    for (int n = 0; n < numNeighbors; ++n) {
+        if ((state.visited.find(neighbors[n]) == state.visited.end())
+            && (!has_boundary_neighbor(neighbors[n], state) || !isBoundarySkeleton)) {
             state.visited.insert(neighbors[n]);
             state.queue.push_back(neighbors[n]);
         }
@@ -630,7 +582,8 @@ std::tuple<float, float> perimeter_stats(cell_t cell, const VoronoiSkeletonGrid&
     // A cell is on the parameter if it is neighbors with an unknown or occupied cell. If the cell also has a frontier,
     // then it's a frontier as well. Count just the number of cells to avoid big changes in perimeter that depend
     // on map rotation.
-    int numOccupied = num_neighbor_cells_with_classification(cell, SKELETON_CELL_OCCUPIED | SKELETON_CELL_UNKNOWN, grid, FOUR_WAY);
+    int numOccupied =
+      num_neighbor_cells_with_classification(cell, SKELETON_CELL_OCCUPIED | SKELETON_CELL_UNKNOWN, grid, FOUR_WAY);
     int numFrontier = num_neighbor_cells_with_classification(cell, SKELETON_CELL_FRONTIER, grid, FOUR_WAY);
     return std::make_tuple((numOccupied > 0) ? grid.metersPerCell() : 0.0f,
                            (numFrontier > 0) ? grid.metersPerCell() : 0.0f);
@@ -641,8 +594,7 @@ bool neighbor_is_closer_to_wall(cell_t cell, cell_t neighbor, const VoronoiSkele
 {
     // A neighbor is closer to the wall if the parent is a skeleton cell.
     // Or its distance from the wall is less than the parent's distance from the wall
-    bool isCloserToWall = grid.getObstacleDistance(neighbor.x, neighbor.y) <
-        grid.getObstacleDistance(cell.x, cell.y);
+    bool isCloserToWall = grid.getObstacleDistance(neighbor.x, neighbor.y) < grid.getObstacleDistance(cell.x, cell.y);
     bool isCellSkeleton = grid.getClassification(cell.x, cell.y) & SKELETON_CELL_SKELETON;
 
     return isCloserToWall || isCellSkeleton;
@@ -654,9 +606,9 @@ bool has_boundary_neighbor(cell_t cell, extent_search_state_t& state)
     // Confirm that none of the four-way connected neighbors is along the boundary. This keeps cells from skipping
     // across the boundary near the skeleton.
     return (state.boundaryCells.find(cell_t(cell.x + 1, cell.y)) != state.boundaryCells.end())
-        || (state.boundaryCells.find(cell_t(cell.x - 1, cell.y)) != state.boundaryCells.end())
-        || (state.boundaryCells.find(cell_t(cell.x, cell.y + 1)) != state.boundaryCells.end())
-        || (state.boundaryCells.find(cell_t(cell.x, cell.y - 1)) != state.boundaryCells.end());
+      || (state.boundaryCells.find(cell_t(cell.x - 1, cell.y)) != state.boundaryCells.end())
+      || (state.boundaryCells.find(cell_t(cell.x, cell.y + 1)) != state.boundaryCells.end())
+      || (state.boundaryCells.find(cell_t(cell.x, cell.y - 1)) != state.boundaryCells.end());
 }
 
 
@@ -664,21 +616,17 @@ bool is_on_map_boundary(cell_t cell, extent_search_state_t& state)
 {
     // Either hitting the edge of the map or the skeleton is hitting frontier, in which case that also is the edge
     // of the visible map
-    return (cell.x == 0)
-        || (cell.y == 0)
-        || (cell.x == static_cast<int>(state.grid->getWidthInCells() - 1))
-        || (cell.y == static_cast<int>(state.grid->getHeightInCells() - 1))
-        || (state.grid->getClassification(cell) & SKELETON_CELL_FRONTIER);
+    return (cell.x == 0) || (cell.y == 0) || (cell.x == static_cast<int>(state.grid->getWidthInCells() - 1))
+      || (cell.y == static_cast<int>(state.grid->getHeightInCells() - 1))
+      || (state.grid->getClassification(cell) & SKELETON_CELL_FRONTIER);
 }
 
 
 bool is_on_another_boundary(cell_t cell, int boundaryId, extent_search_state_t& state)
 {
     // Check all sets of boundary cells that aren't the current boundary to see if this cell is on another boundary
-    for(auto& cells : state.gatewayToBoundaryCells)
-    {
-        if((cells.first != boundaryId) && utils::contains(cells.second, cell))
-        {
+    for (auto& cells : state.gatewayToBoundaryCells) {
+        if ((cells.first != boundaryId) && utils::contains(cells.second, cell)) {
             return true;
         }
     }
@@ -687,5 +635,5 @@ bool is_on_another_boundary(cell_t cell, int boundaryId, extent_search_state_t& 
     return is_on_map_boundary(cell, state);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

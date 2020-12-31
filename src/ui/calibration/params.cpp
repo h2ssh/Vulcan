@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.cpp
-* \author   Collin Johnson
-*
-* Definition of load_calibration_ui_params and associated helper functions.
-*/
+ * \file     params.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of load_calibration_ui_params and associated helper functions.
+ */
 
 #include "ui/calibration/params.h"
 
@@ -24,8 +24,7 @@ namespace ui
 
 calibration_ui_params_t load_calibration_ui_params(const utils::ConfigFile& config)
 {
-
 }
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan

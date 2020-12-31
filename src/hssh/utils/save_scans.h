@@ -8,14 +8,14 @@
 
 
 /**
-* \file     save_scans.h
-* \author   Paul Foster
-* 
-* Functions to allow saving the scans used in mapping to file
-* 
-*   - accumulate_scan  :  stores a copy of the scan to a list of scans used
-*   - save_scans       :  dumps the stored scans to disk
-*/
+ * \file     save_scans.h
+ * \author   Paul Foster
+ *
+ * Functions to allow saving the scans used in mapping to file
+ *
+ *   - accumulate_scan  :  stores a copy of the scan to a list of scans used
+ *   - save_scans       :  dumps the stored scans to disk
+ */
 
 #ifndef HSSH_UTILS_SAVE_SCANS_H
 #define HSSH_UTILS_SAVE_SCANS_H
@@ -32,20 +32,20 @@ struct map_update_data_t;
 
 
 /**
-* accumulate_scan
-* 
-* \param    scan      Maximum number of features to consider
-*/
+ * accumulate_scan
+ *
+ * \param    scan      Maximum number of features to consider
+ */
 void accumulate_scan(const map_update_data_t& scan);
 
 /**
-* save_scans
-* 
-* \param    filename File to save to
-*/
+ * save_scans
+ *
+ * \param    filename File to save to
+ */
 void save_scans(const std::string& filename);
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_SAVE_SCANS_H
+#endif   // HSSH_UTILS_SAVE_SCANS_H

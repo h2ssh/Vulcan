@@ -8,11 +8,11 @@
 
 
 /**
-* \file     object_tracker.cpp
-* \author   Collin Johnson
-*
-* Definition of ObjectTracker.
-*/
+ * \file     object_tracker.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ObjectTracker.
+ */
 
 #include "tracker/object_tracker.h"
 #include "tracker/laser_object_collection.h"
@@ -31,22 +31,22 @@ namespace tracker
 
 ////////////////// object_tracker_params_t /////////////////////////
 
-const std::string TRACKER_HEADING      ("ObjectTrackerParameters");
-const std::string ASSOCIATION_TYPE_KEY ("data_association_type");
-const std::string MAX_MERGE_KEY        ("max_merge_distance_m");
-const std::string MAX_TRACK_TIME_KEY   ("max_tracking_time_ms");
-const std::string MAX_RADIUS_KEY       ("max_object_radius_m");
-const std::string MIN_RADIUS_KEY       ("min_object_radius_m");
-const std::string FALLOFF_GAIN_KEY     ("propagation_falloff_gain");
+const std::string TRACKER_HEADING("ObjectTrackerParameters");
+const std::string ASSOCIATION_TYPE_KEY("data_association_type");
+const std::string MAX_MERGE_KEY("max_merge_distance_m");
+const std::string MAX_TRACK_TIME_KEY("max_tracking_time_ms");
+const std::string MAX_RADIUS_KEY("max_object_radius_m");
+const std::string MIN_RADIUS_KEY("min_object_radius_m");
+const std::string FALLOFF_GAIN_KEY("propagation_falloff_gain");
 
 object_tracker_params_t::object_tracker_params_t(const utils::ConfigFile& config)
 {
     dataAssociationType = config.getValueAsString(TRACKER_HEADING, ASSOCIATION_TYPE_KEY);
-    maxMergeDistance          = config.getValueAsFloat(TRACKER_HEADING, MAX_MERGE_KEY);
-    maxTrackingTime           = config.getValueAsInt32(TRACKER_HEADING, MAX_TRACK_TIME_KEY) * 1000l;
-    maxObjectRadius           = config.getValueAsFloat(TRACKER_HEADING, MAX_RADIUS_KEY);
-    minObjectRadius           = config.getValueAsFloat(TRACKER_HEADING, MIN_RADIUS_KEY);
-    propagationFalloffGain    = config.getValueAsFloat(TRACKER_HEADING, FALLOFF_GAIN_KEY);
+    maxMergeDistance = config.getValueAsFloat(TRACKER_HEADING, MAX_MERGE_KEY);
+    maxTrackingTime = config.getValueAsInt32(TRACKER_HEADING, MAX_TRACK_TIME_KEY) * 1000l;
+    maxObjectRadius = config.getValueAsFloat(TRACKER_HEADING, MAX_RADIUS_KEY);
+    minObjectRadius = config.getValueAsFloat(TRACKER_HEADING, MIN_RADIUS_KEY);
+    propagationFalloffGain = config.getValueAsFloat(TRACKER_HEADING, FALLOFF_GAIN_KEY);
 }
 
 //////////////////// ObjectTracker ////////////////////////////////
@@ -66,8 +66,7 @@ ObjectTracker::~ObjectTracker(void)
 }
 
 
-TrackingObjectSet ObjectTracker::trackObjects(const LaserObjectCollection& objects,
-                                              LaserObjectCollection* finalObjects)
+TrackingObjectSet ObjectTracker::trackObjects(const LaserObjectCollection& objects, LaserObjectCollection* finalObjects)
 {
     lastUpdateTime_ = objects.timestamp();
 
@@ -104,22 +103,18 @@ void ObjectTracker::trackNewClusters(const LaserObjectCollection& objects, Laser
     // and then the TrackingObject is updated.
     // Don't pay attention to multiple TrackingObjects matching a single LaserObject. That case naturally works out
     // as the TrackingObjects that aren't updated just fade away
-    int numAdded   = 0;
+    int numAdded = 0;
     int numUpdated = 0;
 
     std::unordered_multimap<TrackingObject*, const LaserObject*> trackingToLaser;
 
-    for(auto& laserObj : objects)
-    {
+    for (auto& laserObj : objects) {
         auto matchedObject = objectSet_->findObject(laserObj);
 
-        if(matchedObject)
-        {
+        if (matchedObject) {
             trackingToLaser.insert(std::make_pair(matchedObject, &laserObj));
             ++numUpdated;
-        }
-        else
-        {
+        } else {
             addObjectForClusterToSet(laserObj);
             ++numAdded;
         }
@@ -129,45 +124,42 @@ void ObjectTracker::trackNewClusters(const LaserObjectCollection& objects, Laser
     std::vector<TrackingObject*> invalidTrackedObjects;
     std::vector<LaserObject> finalLaserObjects;
     // Go through the tracking objects
-    for(auto& trackingObj : *objectSet_)
-    {
+    for (auto& trackingObj : *objectSet_) {
         // Find all matching laser objects
         auto laserMatches = trackingToLaser.equal_range(trackingObj.get());
         int numMatches = std::distance(laserMatches.first, laserMatches.second);
 
         // If two objects match, then two legs likely split apart and need to be re-grouped into a single object
-//         if(numMatches == 2)
-        if(numMatches > 1)
-        {
+        //         if(numMatches == 2)
+        if (numMatches > 1) {
             toMerge.resize(numMatches);
-            std::transform(laserMatches.first, laserMatches.second, toMerge.begin(),
-                           [](const std::pair<TrackingObject*, const LaserObject*>& o) { return o.second; });
+            std::transform(laserMatches.first,
+                           laserMatches.second,
+                           toMerge.begin(),
+                           [](const std::pair<TrackingObject*, const LaserObject*>& o) {
+                               return o.second;
+                           });
 
             LaserObject mergedObject(toMerge);
             auto finalObject = trackingObj->updateModel(mergedObject);
 
-            if(mergedObjects)
-            {
+            if (mergedObjects) {
                 finalLaserObjects.push_back(finalObject);
             }
         }
         // If there's a single match, update the model using the matched laser object
-        else if(numMatches == 1)
-        {
+        else if (numMatches == 1) {
             auto finalObject = trackingObj->updateModel(*laserMatches.first->second);
 
-            if(mergedObjects)
-            {
+            if (mergedObjects) {
                 finalLaserObjects.push_back(finalObject);
             }
         }
         // If more than two objects match, the existing tracking object is in some sort of invalid state, likely because
         // it was created from an incorrectly. In this case, the tracked object should be removed and it should be
         // turned back into individual objects
-        else if(numMatches > 2)
-        {
-            for(auto& laserObj : boost::make_iterator_range(laserMatches.first, laserMatches.second))
-            {
+        else if (numMatches > 2) {
+            for (auto& laserObj : boost::make_iterator_range(laserMatches.first, laserMatches.second)) {
                 addObjectForClusterToSet(*laserObj.second, trackingObj.get());
                 ++numAdded;
             }
@@ -176,19 +168,17 @@ void ObjectTracker::trackNewClusters(const LaserObjectCollection& objects, Laser
         }
     }
 
-    for(auto& invalid : invalidTrackedObjects)
-    {
+    for (auto& invalid : invalidTrackedObjects) {
         objectSet_->removeObject(invalid);
     }
 
-    if(mergedObjects)
-    {
+    if (mergedObjects) {
         *mergedObjects = LaserObjectCollection(finalLaserObjects, objects.laserId(), objects.timestamp());
     }
 
 #ifdef DEBUG_TRACKING
     std::cout << "Matched: " << numUpdated << " Added:" << numAdded << " Invalid:" << invalidTrackedObjects.size()
-        << '\n';
+              << '\n';
 #endif
 }
 
@@ -196,13 +186,10 @@ void ObjectTracker::trackNewClusters(const LaserObjectCollection& objects, Laser
 void ObjectTracker::addObjectForClusterToSet(const LaserObject& cluster, TrackingObject* parent)
 {
     // Otherwise create a new object via the factory
-    if (parent)
-    {
+    if (parent) {
         // Spawn
         std::cout << "Want to spawn from " << parent->boundary().circleApproximation() << '\n';
-    }
-    else
-    {
+    } else {
         objectSet_->addObject(trackingObjectFactory_->createTrackingObject(cluster));
     }
 }
@@ -217,5 +204,5 @@ void ObjectTracker::removeOldObjects(void)
 #endif
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

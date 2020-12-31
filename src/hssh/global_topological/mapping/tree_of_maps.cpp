@@ -8,15 +8,15 @@
 
 
 /**
-* \file     tree_of_maps.cpp
-* \author   Collin Johnson
-*
-* Definition of TreeOfMaps.
-*/
+ * \file     tree_of_maps.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TreeOfMaps.
+ */
 
 #include "hssh/global_topological/mapping/tree_of_maps.h"
-#include "hssh/global_topological/mapping/probability_heuristics.h"
 #include "hssh/global_topological/debug/hypothesis_tree.h"
+#include "hssh/global_topological/mapping/probability_heuristics.h"
 #include "utils/algorithm_ext.h"
 #include "utils/stub.h"
 #include <boost/range/adaptor/map.hpp>
@@ -29,8 +29,7 @@ namespace hssh
 bool TreeOfMaps::addRootState(StatePtr&& root)
 {
     // Can't change the root if any states exist
-    if(!states_.empty())
-    {
+    if (!states_.empty()) {
         return false;
     }
 
@@ -38,8 +37,7 @@ bool TreeOfMaps::addRootState(StatePtr&& root)
     auto success = states_.insert(std::make_pair(rootId, TreeNode(rootId, 0, -1, std::move(root))));
 
     // If the state was inserted, then increment the id and create a new depth.
-    if(success.second)
-    {
+    if (success.second) {
         depth_ = 0;
         rootId_ = rootId;
 
@@ -48,9 +46,7 @@ bool TreeOfMaps::addRootState(StatePtr&& root)
         // The root starts as complete and a leaf
         leaves_.push_back(rootNode.state.get());
         complete_.push_back(rootNode.state.get());
-    }
-    else
-    {
+    } else {
         std::cerr << "ERROR: TreeOfMaps: Failed to add the root state!\n";
     }
 
@@ -64,22 +60,18 @@ bool TreeOfMaps::addChildState(Id parentId, StatePtr&& child)
     auto node = nodeWithId(parentId);
 
     // If the state doesn't exist, fail away
-    if(!node)
-    {
+    if (!node) {
         std::cout << "Failed to find parent!\n";
         return false;
     }
 
     // Create a node for the child state
     auto childId = child->id;
-    auto success = states_.insert(std::make_pair(childId, TreeNode(childId,
-                                                                   node->depth + 1,
-                                                                   parentId,
-                                                                   std::move(child))));
+    auto success =
+      states_.insert(std::make_pair(childId, TreeNode(childId, node->depth + 1, parentId, std::move(child))));
 
     // If the state couldn't be created, then fail.
-    if(!success.second)
-    {
+    if (!success.second) {
         std::cout << "Failed to create child tree node.\n";
         return false;
     }
@@ -87,10 +79,9 @@ bool TreeOfMaps::addChildState(Id parentId, StatePtr&& child)
     const auto& childNode = success.first->second;
 
     // If the parent is no longer a leaf, then remove it from the set of leaves
-    if(node->childIds.empty() && !node->hadChildren)
-    {
+    if (node->childIds.empty() && !node->hadChildren) {
         int numRemoved = utils::erase_remove(leaves_, node->state.get());
-        assert(numRemoved == 1);    // the node must be a leaf, so ensure the variant held
+        assert(numRemoved == 1);   // the node must be a leaf, so ensure the variant held
     }
 
     // Save the parent->child link
@@ -100,16 +91,13 @@ bool TreeOfMaps::addChildState(Id parentId, StatePtr&& child)
     leaves_.push_back(childNode.state.get());
 
     // If this child is deeper than previous complete nodes, update the depth.
-    if(depth_ < childNode.depth)
-    {
+    if (depth_ < childNode.depth) {
         depth_ = childNode.depth;
         // All existing complete hypotheses are no longer complete
         complete_.clear();
         // The new node is now the only complete node
         complete_.push_back(childNode.state.get());
-    }
-    else if(childNode.depth == depth_)
-    {
+    } else if (childNode.depth == depth_) {
         complete_.push_back(childNode.state.get());
     }
 
@@ -129,8 +117,7 @@ bool TreeOfMaps::changeRootState(Id id)
 
     auto newRoot = nodeWithId(id);
 
-    if(!newRoot)
-    {
+    if (!newRoot) {
         return false;
     }
 
@@ -148,8 +135,7 @@ bool TreeOfMaps::changeRootState(Id id)
     int depthChange = newRoot->depth;
     depth_ -= depthChange;
 
-    for(auto& node : boost::adaptors::values(states_))
-    {
+    for (auto& node : boost::adaptors::values(states_)) {
         node.depth -= depthChange;
     }
 
@@ -167,8 +153,7 @@ int TreeOfMaps::numChildren(Id id) const
 
 int TreeOfMaps::pruneState(Id id)
 {
-    if(id == rootId_)
-    {
+    if (id == rootId_) {
         std::cerr << "WARNING: TreeOfMaps: Attempted to prune the root state!\n";
         return 0;
     }
@@ -178,37 +163,33 @@ int TreeOfMaps::pruneState(Id id)
     // Also remove from complete and leaves as needed
     auto node = nodeWithId(id);
 
-    if(!node)
-    {
+    if (!node) {
         return 0;
     }
 
     Id parentId = node->parentId;
 
-    if(!removeChild(parentId, id))
-    {
+    if (!removeChild(parentId, id)) {
         return 0;
     }
 
-    int numRemoved = 1;     // remove the child at this point
-    preorderTraversal(node, [&numRemoved,this](TreeNode& node) {
+    int numRemoved = 1;   // remove the child at this point
+    preorderTraversal(node, [&numRemoved, this](TreeNode& node) {
         numRemoved += 1;
         utils::erase_remove(complete_, node.state.get());
         utils::erase_remove(leaves_, node.state.get());
-        states_.erase(node.id);     // WARNING: node reference invalidated at this point
+        states_.erase(node.id);   // WARNING: node reference invalidated at this point
     });
 
     // If no complete nodes exist, then the depth has been reduced by 1 and new complete nodes must be found
-    if(complete_.empty())
-    {
+    if (complete_.empty()) {
         std::cout << "Erased all complete maps. Rebuilding leaves.\n";
         --depth_;
         findLeaves();
     }
 
     // If our parent no longer has children prune it too
-    if(states_[parentId].childIds.empty())
-    {
+    if (states_[parentId].childIds.empty()) {
         numRemoved += pruneState(parentId);
     }
 
@@ -219,16 +200,13 @@ int TreeOfMaps::pruneState(Id id)
 void TreeOfMaps::pruneIncompleteLeaves(void)
 {
     std::vector<Id> toErase;
-    for(auto& leaf : leaves_)
-    {
-        if(states_[leaf->id].childIds.empty())
-        {
+    for (auto& leaf : leaves_) {
+        if (states_[leaf->id].childIds.empty()) {
             toErase.push_back(leaf->id);
         }
     }
 
-    for(auto& id : toErase)
-    {
+    for (auto& id : toErase) {
         pruneState(id);
     }
 }
@@ -247,8 +225,7 @@ HypothesisTree TreeOfMaps::toHypothesisTree(const ProbabilityHeuristics& heurist
     findLeaves();
 
     std::vector<hypothesis_tree_node_t> nodes;
-    for(auto& n : boost::adaptors::values(states_))
-    {
+    for (auto& n : boost::adaptors::values(states_)) {
         hypothesis_tree_node_t node;
         node.id = n.id;
         node.depth = n.depth;
@@ -288,8 +265,7 @@ bool TreeOfMaps::removeChild(Id parent, Id child)
 {
     // If there is a parent node, then remove this reference to the child
     auto parentNode = nodeWithId(parent);
-    if(parentNode)
-    {
+    if (parentNode) {
         return utils::erase_remove(parentNode->childIds, child) > 0;
     }
 
@@ -302,23 +278,20 @@ void TreeOfMaps::findLeaves(void)
     leaves_.clear();
     complete_.clear();
 
-    for(auto& node : boost::adaptors::values(states_))
-    {
-        if(is_leaf(node))
-        {
+    for (auto& node : boost::adaptors::values(states_)) {
+        if (is_leaf(node)) {
             leaves_.push_back(node.state.get());
         }
 
-        if(node.depth == depth_)
-        {
-//             assert(is_leaf(node));
+        if (node.depth == depth_) {
+            //             assert(is_leaf(node));
             complete_.push_back(node.state.get());
         }
     }
 
     std::cout << "Found " << leaves_.size() << " leaves and " << complete_.size() << " complete maps at depth "
-        << depth_ << '\n';
+              << depth_ << '\n';
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

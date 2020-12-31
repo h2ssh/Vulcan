@@ -8,11 +8,11 @@
 
 
 /**
-* \file     goal_monitor.h
-* \author   Collin Johnson
-*
-* Declaration of GoalMonitor.
-*/
+ * \file     goal_monitor.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GoalMonitor.
+ */
 
 #ifndef PLANNER_GOAL_GOAL_MONITOR_H
 #define PLANNER_GOAL_GOAL_MONITOR_H
@@ -22,7 +22,10 @@
 
 namespace vulcan
 {
-namespace hssh { struct GlobalLocation; }
+namespace hssh
+{
+struct GlobalLocation;
+}
 
 namespace planner
 {
@@ -30,55 +33,53 @@ namespace planner
 class GoalProgress;
 
 /**
-* GoalMonitor monitors the progress of the robot as it moves along its planned route.
-* Each time an updated map arrived with a new robot state, it is checked against the expected
-* position of the robot in the route. If the robot goes off its route, or the route cannot
-* be navigated, i.e. path is blocked, an error is raised so replanning can happen.
-*
-* The progress is stored in a GoalProgress instance that indicates where the robot has been,
-* where it is now, and where it is going.
-*/
+ * GoalMonitor monitors the progress of the robot as it moves along its planned route.
+ * Each time an updated map arrived with a new robot state, it is checked against the expected
+ * position of the robot in the route. If the robot goes off its route, or the route cannot
+ * be navigated, i.e. path is blocked, an error is raised so replanning can happen.
+ *
+ * The progress is stored in a GoalProgress instance that indicates where the robot has been,
+ * where it is now, and where it is going.
+ */
 class GoalMonitor
 {
 public:
-
     /**
-    * setRouteToMonitor sets the current route being traversed by the robot.
-    */
+     * setRouteToMonitor sets the current route being traversed by the robot.
+     */
     void setRouteToMonitor(const GoalRoute& route);
 
     /**
-    * updateProgress updates the progress of the robot along the current route.
-    *
-    * \param    state           State of the robot within the current map
-    */
+     * updateProgress updates the progress of the robot along the current route.
+     *
+     * \param    state           State of the robot within the current map
+     */
     void updateProgress(const hssh::GlobalLocation& state);
 
     /**
-    * finishedRoute checks to see if the robot has finished navigating the currently
-    * executing route.
-    */
+     * finishedRoute checks to see if the robot has finished navigating the currently
+     * executing route.
+     */
     bool finishedRoute(void) const { return remaining.empty(); }
 
     /**
-    * getRouteProgress retrieves the current progress of the robot moving along the route.
-    */
+     * getRouteProgress retrieves the current progress of the robot moving along the route.
+     */
     GoalProgress getRouteProgress(void) const;
 
 private:
-
     void updatePathSegmentProgress(const hssh::GlobalLocation& state);
-    void updatePlaceProgress      (const hssh::GlobalLocation& state);
-    void activateNextRouteElement (void);
+    void updatePlaceProgress(const hssh::GlobalLocation& state);
+    void activateNextRouteElement(void);
 
     GoalRoute route;
 
     std::vector<goal_route_element_t> visited;
-    goal_route_element_t              active;
+    goal_route_element_t active;
     std::vector<goal_route_element_t> remaining;
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_GOAL_GOAL_MONITOR_H
+#endif   // PLANNER_GOAL_GOAL_MONITOR_H

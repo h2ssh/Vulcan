@@ -8,12 +8,12 @@
 
 
 /**
-* \file     serialization.h
-* \author   Collin Johnson
-*
-* A convenience header for all tasks that might be arriving, but aren't otherwise explicitly included in the
-* metric_planner. Just include this header to automatically enable receiving all possible MetricPlannerTask subclasses.
-*/
+ * \file     serialization.h
+ * \author   Collin Johnson
+ *
+ * A convenience header for all tasks that might be arriving, but aren't otherwise explicitly included in the
+ * metric_planner. Just include this header to automatically enable receiving all possible MetricPlannerTask subclasses.
+ */
 
 #ifndef MPEPC_METRIC_PLANNER_TASKS_SERIALIZATION_H
 #define MPEPC_METRIC_PLANNER_TASKS_SERIALIZATION_H
@@ -22,4 +22,4 @@
 #include "mpepc/metric_planner/task/rotate.h"
 #include "mpepc/metric_planner/task/wait.h"
 
-#endif // MPEPC_METRIC_PLANNER_TASKS_SERIALIZATION_H
+#endif   // MPEPC_METRIC_PLANNER_TASKS_SERIALIZATION_H

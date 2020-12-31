@@ -8,24 +8,24 @@
 
 
 /**
-* \file     glass_map_renderer.cpp
-* \author   Collin Johnson
-*
-* Implementation of GlassMapRenderer.
-*/
+ * \file     glass_map_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of GlassMapRenderer.
+ */
 
 #include "ui/components/glass_map_renderer.h"
-#include "ui/components/cell_grid_renderer.h"
-#include "ui/components/occupancy_grid_renderer.h"
+#include "hssh/metrical/mapping/glass_map_utils.h"
+#include "hssh/metrical/mapping/glass_walls.h"
+#include "hssh/types.h"
 #include "ui/common/color_generator.h"
 #include "ui/common/default_colors.h"
 #include "ui/common/gl_arrays_helpers.h"
 #include "ui/common/gl_shapes.h"
-#include "hssh/types.h"
-#include "hssh/metrical/mapping/glass_map_utils.h"
-#include "hssh/metrical/mapping/glass_walls.h"
-#include <boost/range/iterator_range.hpp>
+#include "ui/components/cell_grid_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
 #include <GL/gl.h>
+#include <boost/range/iterator_range.hpp>
 #include <cassert>
 #include <cmath>
 
@@ -54,8 +54,8 @@ void GlassMapRenderer::setRenderColors(const GLColor& occupiedColor,
                                        const GLColor& angleColor)
 {
     this->occupiedColor = occupiedColor;
-    this->motionColor   = motionColor;
-    this->angleColor    = angleColor;
+    this->motionColor = motionColor;
+    this->angleColor = angleColor;
 
     mapRenderer_->setOccupiedColor(occupiedColor);
     mapRenderer_->setDynamicColor(motionColor);
@@ -65,8 +65,7 @@ void GlassMapRenderer::setRenderColors(const GLColor& occupiedColor,
 void GlassMapRenderer::setGlassMap(hssh::GlassMap& map)
 {
     // Only load the glass angles if they are being drawn because it is a slow operation
-    if(shouldDrawAngles)
-    {
+    if (shouldDrawAngles) {
         createMapAngles(map);
     }
 
@@ -82,25 +81,20 @@ void GlassMapRenderer::setGlassMap(hssh::GlassMap& map)
 
 void GlassMapRenderer::renderGrid(void)
 {
-    if(!initialized)
-    {
+    if (!initialized) {
         return;
     }
 
-    if(shouldShowIntensity)
-    {
+    if (shouldShowIntensity) {
         intensityRenderer_->renderGrid(true);
-    }
-    else
-    {
+    } else {
         mapRenderer_->renderGrid();
     }
 
     angleColor.set();
     gl_draw_line_rectangle(activeBoundary_);
 
-    if(shouldDrawAngles)
-    {
+    if (shouldDrawAngles) {
         drawAngles();
     }
 }
@@ -109,14 +103,12 @@ void GlassMapRenderer::renderGrid(void)
 void GlassMapRenderer::renderAngleBins(int x, int y, hssh::GlassMap& map)
 {
     // Ignore any cells that aren't in the map
-    if(!map.isCellInGrid(x, y))
-    {
+    if (!map.isCellInGrid(x, y)) {
         return;
     }
 
     // Recenter the active region so the cell is loaded
-    if(!map.isCellInActiveRegion(x, y))
-    {
+    if (!map.isCellInActiveRegion(x, y)) {
         map.recenterActiveRegion(utils::grid_point_to_global_point(Point<float>(x, y), map));
         activeBoundary_ = map.activeRegionInMeters();
     }
@@ -129,47 +121,43 @@ void GlassMapRenderer::renderAngleBins(int x, int y, hssh::GlassMap& map)
     const float width = 2.0f;
     const float height = 2.0f;
 
-    glMatrixMode (GL_MODELVIEW);
-    glPushMatrix ();
-    glLoadIdentity ();
-    glMatrixMode (GL_PROJECTION);
-    glPushMatrix ();
-    glLoadIdentity ();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
 
     float binWidth = width / map.numAngleBins();
-    float binHeight = height / 20.0f;  // draw the bins as 1/20 of the screen
+    float binHeight = height / 20.0f;   // draw the bins as 1/20 of the screen
 
     assert(map.beginBin(x, y) != map.endBin(x, y));
 
     glBegin(GL_QUADS);
-    for(int n = 0; n < map.numAngleBins(); ++n)
-    {
+    for (int n = 0; n < map.numAngleBins(); ++n) {
         auto bin = *(map.beginBin(x, y) + n);
         // Set the color to gray, white, or black, depending on the odds. Don't have intermediate values because each
         // bin is usually hit only a few times
         float color = std::min(0.5 + 2.0 * std::abs(bin / 127.0), 1.0);
 
         // Draw hits as red
-        if(bin > 0)
-        {
+        if (bin > 0) {
             glColor4f(color, 0.0, 0.0, 1.0f);
         }
         // Draw misses as blue
-        else if(bin < 0)
-        {
+        else if (bin < 0) {
             glColor4f(0.0, 0.0, color, 1.0f);
         }
         // Use white for unknown
-        else
-        {
+        else {
             glColor4f(1.0, 1.0, 1.0, 1.0f);
         }
 
 
-        glVertex2f(origin.x + n*binWidth, origin.y);
-        glVertex2f(origin.x + n*binWidth, origin.y + binHeight);
-        glVertex2f(origin.x + (n+1)*binWidth, origin.y + binHeight);
-        glVertex2f(origin.x + (n+1)*binWidth, origin.y);
+        glVertex2f(origin.x + n * binWidth, origin.y);
+        glVertex2f(origin.x + n * binWidth, origin.y + binHeight);
+        glVertex2f(origin.x + (n + 1) * binWidth, origin.y + binHeight);
+        glVertex2f(origin.x + (n + 1) * binWidth, origin.y);
     }
     glEnd();
 
@@ -183,9 +171,9 @@ void GlassMapRenderer::renderAngleBins(int x, int y, hssh::GlassMap& map)
     glVertex2f(origin.x, origin.y + binHeight);
     glEnd();
 
-    glPopMatrix ();
-    glMatrixMode (GL_MODELVIEW);
-    glPopMatrix ();
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
 }
 
 
@@ -195,8 +183,7 @@ void GlassMapRenderer::renderWalls(const std::vector<hssh::GlassWall>& walls)
 
     glLineWidth(3.0f);
     glBegin(GL_LINES);
-    for(std::size_t n = 0; n < walls.size(); ++n)
-    {
+    for (std::size_t n = 0; n < walls.size(); ++n) {
         colors[n % 4].set();
         glVertex2f(walls[n].wall().a.x, walls[n].wall().a.y);
         glVertex2f(walls[n].wall().b.x, walls[n].wall().b.y);
@@ -205,25 +192,21 @@ void GlassMapRenderer::renderWalls(const std::vector<hssh::GlassWall>& walls)
 
     glPointSize(2.0f);
     glBegin(GL_POINTS);
-    for(std::size_t n = 0; n < walls.size(); ++n)
-    {
+    for (std::size_t n = 0; n < walls.size(); ++n) {
         colors[n % 4].set();
-        for(auto p : walls[n])
-        {
+        for (auto p : walls[n]) {
             glVertex2f(p.x, p.y);
         }
     }
     glEnd();
 
-    for(std::size_t n = 0; n < walls.size(); ++n)
-    {
+    for (std::size_t n = 0; n < walls.size(); ++n) {
         colors[n % 4].set();
         auto center = walls[n].wall().a + walls[n].wall().b;
         center.x /= 2;
         center.y /= 2;
         double lineNormal = direction(normal(walls[n].wall()));
-        if(angle_diff_abs(lineNormal, walls[n].normal()) > M_PI_2)
-        {
+        if (angle_diff_abs(lineNormal, walls[n].normal()) > M_PI_2) {
             lineNormal += M_PI;
         }
         gl_draw_small_arrow(center, 0.5f, lineNormal);
@@ -234,8 +217,7 @@ void GlassMapRenderer::renderWalls(const std::vector<hssh::GlassWall>& walls)
 
 void GlassMapRenderer::drawAngles(void)
 {
-    switch(anglesToDraw)
-    {
+    switch (anglesToDraw) {
     case GlassAnglesToDraw::normal:
         drawNormals();
         break;
@@ -249,21 +231,19 @@ void GlassMapRenderer::drawAngles(void)
 
 void GlassMapRenderer::drawNormals(void)
 {
-    if(!angleLineVertices_.empty())
-    {
+    if (!angleLineVertices_.empty()) {
         angleColor.set();
         glLineWidth(0.5f);
-        draw_gl_array(angleLineVertices_.data(), 2, angleLineVertices_.size()/2, GL_LINES);
+        draw_gl_array(angleLineVertices_.data(), 2, angleLineVertices_.size() / 2, GL_LINES);
     }
 }
 
 
 void GlassMapRenderer::drawRanges(void)
 {
-    if(!angleRangeVertices_.empty())
-    {
+    if (!angleRangeVertices_.empty()) {
         angleColor.set();
-        draw_gl_array(angleRangeVertices_.data(), 2, angleRangeVertices_.size()/2, GL_TRIANGLES);
+        draw_gl_array(angleRangeVertices_.data(), 2, angleRangeVertices_.size() / 2, GL_TRIANGLES);
 
         // Draw the normals on top of the range to make their direction easier to see
         auto pushColor = angleColor;
@@ -288,20 +268,16 @@ void GlassMapRenderer::createMapAngles(hssh::GlassMap& glass)
     // For each valid range, create two lines pointing from center of cell along start and start+range directions
     Point<double> center;
 
-    for(std::size_t y = 0; y < glass.getHeightInCells(); ++y)
-    {
-        for(std::size_t x = 0; x < glass.getWidthInCells(); ++x)
-        {
+    for (std::size_t y = 0; y < glass.getHeightInCells(); ++y) {
+        for (std::size_t x = 0; x < glass.getWidthInCells(); ++x) {
             // Ignore all visited cells and non-hit cells
-            if((visited.find(hssh::cell_t(x, y)) != visited.end()))
-            {
+            if ((visited.find(hssh::cell_t(x, y)) != visited.end())) {
                 continue;
             }
 
             center = utils::grid_point_to_global_point(Point<int>(x, y), glass);
 
-            if(!glass.isCellInActiveRegion(x, y))
-            {
+            if (!glass.isCellInActiveRegion(x, y)) {
                 center.x += 3.0;
                 center.y += 3.0;
                 glass.recenterActiveRegion(center);
@@ -311,27 +287,23 @@ void GlassMapRenderer::createMapAngles(hssh::GlassMap& glass)
             auto activeRegion = glass.activeRegionInCells();
             hssh::cell_t region;
 
-            for(region.y = 0; region.y < activeRegion.height(); ++region.y)
-            {
-                for(region.x = 0; region.x < activeRegion.width(); ++region.x)
-                {
+            for (region.y = 0; region.y < activeRegion.height(); ++region.y) {
+                for (region.x = 0; region.x < activeRegion.width(); ++region.x) {
                     hssh::cell_t cell = region + activeRegion.bottomLeft;
 
-                    if(visited.find(cell) != visited.end())
-                    {
+                    if (visited.find(cell) != visited.end()) {
                         continue;
                     }
 
                     visited.insert(cell);
 
                     // Ignore non-hit cells
-                    if(flattened.getCost(cell + glassToFlatOffset) < 255)
-                    {
+                    if (flattened.getCost(cell + glassToFlatOffset) < 255) {
                         continue;
                     }
 
                     center = utils::grid_point_to_global_point(cell, glass);
-                    center.x += glass.metersPerCell() / 2.0;  // center the normal in the middle of the cell
+                    center.x += glass.metersPerCell() / 2.0;   // center the normal in the middle of the cell
                     center.y += glass.metersPerCell() / 2.0;
 
                     addNormal(cell, center, glass);
@@ -350,8 +322,8 @@ void GlassMapRenderer::addNormal(Point<int> cell, Point<double> cellCenter, cons
 
     angleLineVertices_.push_back(cellCenter.x);
     angleLineVertices_.push_back(cellCenter.y);
-    angleLineVertices_.push_back(cellCenter.x + std::cos(normal)*normalLength);
-    angleLineVertices_.push_back(cellCenter.y + std::sin(normal)*normalLength);
+    angleLineVertices_.push_back(cellCenter.x + std::cos(normal) * normalLength);
+    angleLineVertices_.push_back(cellCenter.y + std::sin(normal) * normalLength);
 }
 
 
@@ -363,12 +335,12 @@ void GlassMapRenderer::addRange(Point<int> cell, Point<double> cellCenter, const
     angleRangeVertices_.push_back(cellCenter.x);
     angleRangeVertices_.push_back(cellCenter.y);
     // Draw the start and end of the range
-    angleRangeVertices_.push_back(cellCenter.x + std::cos(range.start)*normalLength);
-    angleRangeVertices_.push_back(cellCenter.y + std::sin(range.start)*normalLength);
+    angleRangeVertices_.push_back(cellCenter.x + std::cos(range.start) * normalLength);
+    angleRangeVertices_.push_back(cellCenter.y + std::sin(range.start) * normalLength);
 
-    angleRangeVertices_.push_back(cellCenter.x + std::cos(range.start + range.extent)*normalLength);
-    angleRangeVertices_.push_back(cellCenter.y + std::sin(range.start + range.extent)*normalLength);
+    angleRangeVertices_.push_back(cellCenter.x + std::cos(range.start + range.extent) * normalLength);
+    angleRangeVertices_.push_back(cellCenter.y + std::sin(range.start + range.extent) * normalLength);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

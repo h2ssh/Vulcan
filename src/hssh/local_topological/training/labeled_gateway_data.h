@@ -8,11 +8,11 @@
 
 
 /**
-* \file     labeled_gateway_data.h
-* \author   Collin Johnson
-* 
-* Declaration of LabeledGatewayData and LabeledGatewayFeatures.
-*/
+ * \file     labeled_gateway_data.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LabeledGatewayData and LabeledGatewayFeatures.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_TRAINING_LABELED_GATEWAY_DATA_H
 #define HSSH_LOCAL_TOPOLOGICAL_TRAINING_LABELED_GATEWAY_DATA_H
@@ -25,10 +25,10 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 /**
-* LabeledGatewayFeatures contains a labeled example of the features calculated for an area.
-*/
+ * LabeledGatewayFeatures contains a labeled example of the features calculated for an area.
+ */
 struct LabeledGatewayFeatures
 {
     bool isGateway;
@@ -37,36 +37,35 @@ struct LabeledGatewayFeatures
 };
 
 /**
-* LabeledGatewayData contains a set of labeled areas and their features for one or more completed maps. The data is
-* organized both on a per-map and a complete basis. The data consists of a sequence of LabeledGatewayFeatures, each of which
-* contains the extracted HypothesisFeatures for an area along with its hand-assigned label. The data is intended to be
-* used for training and testing purposes for a HypothesisFeaturesClassifier.
-*/
+ * LabeledGatewayData contains a set of labeled areas and their features for one or more completed maps. The data is
+ * organized both on a per-map and a complete basis. The data consists of a sequence of LabeledGatewayFeatures, each of
+ * which contains the extracted HypothesisFeatures for an area along with its hand-assigned label. The data is intended
+ * to be used for training and testing purposes for a HypothesisFeaturesClassifier.
+ */
 class LabeledGatewayData : public TopoTrainingData<LabeledGatewayFeatures>
 {
 public:
-    
     LabeledGatewayData(const TopoTrainingData<LabeledGatewayFeatures>& features)
     : TopoTrainingData<LabeledGatewayFeatures>(features)
     {
     }
-    
+
     LabeledGatewayData(void) = default;
 };
 
 // Operators
 
 /**
-* Equality operator. Equal when the type and features match.
-*/
+ * Equality operator. Equal when the type and features match.
+ */
 bool operator==(const LabeledGatewayFeatures& lhs, const LabeledGatewayFeatures& rhs);
 bool operator!=(const LabeledGatewayFeatures& lhs, const LabeledGatewayFeatures& rhs);
 
 
 std::ostream& operator<<(std::ostream& out, const LabeledGatewayFeatures& example);
 std::istream& operator>>(std::istream& in, LabeledGatewayFeatures& example);
-    
-} // namespace hssh 
-} // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_TRAINING_LABELED_GATEWAY_DATA_H
+}   // namespace hssh
+}   // namespace vulcan
+
+#endif   // HSSH_LOCAL_TOPOLOGICAL_TRAINING_LABELED_GATEWAY_DATA_H

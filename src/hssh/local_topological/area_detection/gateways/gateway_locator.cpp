@@ -8,11 +8,11 @@
 
 
 /**
-* \file     visibility_gradient_locator.cpp
-* \author   Collin Johnson
-*
-* Definition of GatewayLocator.
-*/
+ * \file     visibility_gradient_locator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GatewayLocator.
+ */
 
 #include "hssh/local_topological/area_detection/gateways/gateway_locator.h"
 #include "hssh/local_topological/area_detection/gateways/endpoint_validator.h"
@@ -35,7 +35,7 @@ namespace hssh
 {
 
 const double kTransitionWeight = 1000000.0;
-const double kExitedWeight     = 100000.0;
+const double kExitedWeight = 100000.0;
 
 std::vector<Gateway> weighted_to_normal(const std::vector<WeightedGateway>& weighted);
 
@@ -47,8 +47,7 @@ GatewayLocator::GatewayLocator(const gateway_locator_params_t& params, const std
 }
 
 
-GatewayLocator::GatewayLocator(std::unique_ptr<GatewayGenerator>&& generator)
-: generator_(std::move(generator))
+GatewayLocator::GatewayLocator(std::unique_ptr<GatewayGenerator>&& generator) : generator_(std::move(generator))
 {
 }
 
@@ -64,16 +63,14 @@ void GatewayLocator::locateGateways(const VoronoiSkeletonGrid& grid, const Voron
     priorGateways_ = filter_out_of_map_gateways(finalGateways_, grid);
     bool haveTransition = adjustPriorsForNewMap(grid);
 
-    EndpointValidator validator(grid);//, params_.validatorParams);
+    EndpointValidator validator(grid);   //, params_.validatorParams);
 
     generatedGateways_ = generator_->generateGateways(priorGateways_, isovistField, grid, validator);
     filteredGateways_ = filter_generated_gateways(generatedGateways_, grid);
 
-    if(haveTransition)
-    {
+    if (haveTransition) {
         bool haveFoundTransition = false;
-        for(auto& gwy : filteredGateways_)
-        {
+        for (auto& gwy : filteredGateways_) {
             haveFoundTransition |= gwy.isTransition;
         }
 
@@ -103,18 +100,16 @@ void GatewayLocator::discardMostRecentTransitionGateway(void)
 void GatewayLocator::assignFinalGateways(const std::vector<Gateway>& gateways)
 {
     // For the final gateways, remove any gateways that aren't in this final set of gateways
-    finalGateways_= filteredGateways_;
+    finalGateways_ = filteredGateways_;
     utils::erase_remove_if(finalGateways_, [&gateways](const WeightedGateway& g) {
         return !utils::contains(gateways, g.gateway);
     });
 
-    for(auto& gwy : gateways)
-    {
+    for (auto& gwy : gateways) {
         bool inFinal = utils::contains_if(finalGateways_, [&gwy](const auto& finalGwy) {
             return gwy.isSimilarTo(finalGwy.gateway);
         });
-        if(!inFinal)
-        {
+        if (!inFinal) {
             std::cout << "Added final gateway: " << gwy.boundary() << '\n';
             finalGateways_.emplace_back(WeightedGateway{gwy, 1.0, false});
         }
@@ -138,19 +133,15 @@ void GatewayLocator::assignTransitionGateway(const Gateway& transition)
 
 void GatewayLocator::assignExitedAreaGateways(const std::vector<Gateway>& gateways)
 {
-    for(auto& gwy : gateways)
-    {
+    for (auto& gwy : gateways) {
         auto finalIt = std::find_if(finalGateways_.begin(), finalGateways_.end(), [&gwy](const auto& finalGwy) {
             return gwy.isSimilarTo(finalGwy.gateway);
         });
 
-        if((finalIt != finalGateways_.end()) && !finalIt->isTransition)
-        {
-            finalIt->gateway = gwy;     // update the gateway position in case it isn't the same
+        if ((finalIt != finalGateways_.end()) && !finalIt->isTransition) {
+            finalIt->gateway = gwy;   // update the gateway position in case it isn't the same
             finalIt->weight = kExitedWeight;
-        }
-        else
-        {
+        } else {
             finalGateways_.push_back(WeightedGateway{gwy, kExitedWeight, false});
         }
     }
@@ -188,39 +179,30 @@ bool GatewayLocator::adjustPriorsForNewMap(const VoronoiSkeletonGrid& skeleton)
     bool haveTransition = false;
 
     // Transform each gateway that doesn't have a valid boundary into a gateway with a valid boundary
-    for(auto& g : priorGateways_)
-    {
-        if(!is_gateway_boundary_valid(g.gateway, skeleton))
-        {
+    for (auto& g : priorGateways_) {
+        if (!is_gateway_boundary_valid(g.gateway, skeleton)) {
             // Try to create a new gateway boundary
             auto newGateway = adjust_gateway_for_new_skeleton(g.gateway, skeleton, 15);
             // If a new boundary was successfully found, replace the old gateway boundary with the new one
-            if(newGateway)
-            {
+            if (newGateway) {
                 g.gateway = *newGateway;
 
-                if(g.isTransition)
-                {
+                if (g.isTransition) {
                     std::cout << "INFO: GatewayLocator: Adjusted transition gateway:" << g.gateway
-                        << " skel:" << g.gateway.skeletonCell() << '\n';
+                              << " skel:" << g.gateway.skeletonCell() << '\n';
                     isTransitionValid_ = true;
                     haveTransition = true;
                 }
-            }
-            else
-            {
-                if(g.isTransition)
-                {
-                    std::cerr << "WARNING: GatewayLocator: Failed to adjust previous transition gateway:"
-                        << g.gateway << " skel:" << g.gateway.skeletonCell() << '\n';
+            } else {
+                if (g.isTransition) {
+                    std::cerr << "WARNING: GatewayLocator: Failed to adjust previous transition gateway:" << g.gateway
+                              << " skel:" << g.gateway.skeletonCell() << '\n';
                     isTransitionValid_ = false;
                 }
             }
-        }
-        else if(g.isTransition)
-        {
+        } else if (g.isTransition) {
             std::cout << "INFO: GatewayLocator: Found transition gateway:" << g.gateway
-                << " skel:" << g.gateway.skeletonCell() << '\n';
+                      << " skel:" << g.gateway.skeletonCell() << '\n';
             isTransitionValid_ = true;
             haveTransition = true;
         }
@@ -235,18 +217,15 @@ bool GatewayLocator::adjustPriorsForNewMap(const VoronoiSkeletonGrid& skeleton)
 }
 
 
-
 std::vector<Gateway> weighted_to_normal(const std::vector<WeightedGateway>& weighted)
 {
     std::vector<Gateway> gateways;
-    for(auto& w : weighted)
-    {
+    for (auto& w : weighted) {
         gateways.emplace_back(w.gateway);
     }
 
     return gateways;
-
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

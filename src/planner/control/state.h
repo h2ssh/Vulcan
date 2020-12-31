@@ -8,11 +8,11 @@
 
 
 /**
-* \file     state.h
-* \author   Collin Johnson
-* 
-* Definition of ControlState
-*/
+ * \file     state.h
+ * \author   Collin Johnson
+ *
+ * Definition of ControlState
+ */
 
 #ifndef PLANNER_CONTROL_STATE_H
 #define PLANNER_CONTROL_STATE_H
@@ -28,19 +28,19 @@ namespace planner
 {
 
 /**
-* ControlState agglomerates all inputs and state needed for running a ControlTask.
-*/
+ * ControlState agglomerates all inputs and state needed for running a ControlTask.
+ */
 struct ControlState
 {
     hssh::LocalPose pose;
     const hssh::LocalPerceptualMap* map;
-    
+
     boost::optional<mpepc::metric_planner_status_message_t> metricPlannerStatus;
-    
+
     // TODO: What additional state is needed?
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_CONTROL_STATE_H
+#endif   // PLANNER_CONTROL_STATE_H

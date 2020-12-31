@@ -8,20 +8,20 @@
 
 
 /**
-* \file     floor.h
-* \author   Collin Johnson
-*
-* Declaration of Floor.
-*/
+ * \file     floor.h
+ * \author   Collin Johnson
+ *
+ * Declaration of Floor.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_MULTIFLOOR_FLOOR_H
 #define HSSH_LOCAL_METRIC_MULTIFLOOR_FLOOR_H
 
 #include "hssh/local_metric/lpm.h"
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 namespace vulcan
 {
@@ -32,75 +32,73 @@ namespace hssh
 class Elevator;
 
 /**
-* Floor represents a floor of a building. A floor consists of an LPM, either saved in memory or on disk, an id,
-* and a set of Elevators. The Elevators connect this Floor to other Floors.
-*/
+ * Floor represents a floor of a building. A floor consists of an LPM, either saved in memory or on disk, an id,
+ * and a set of Elevators. The Elevators connect this Floor to other Floors.
+ */
 class Floor
 {
 public:
-
     /**
-    * Constructor for Floor.
-    *
-    * \param    id              Id of the floor
-    * \param    lpmFile         File in which to save/load the associated LPM
-    */
+     * Constructor for Floor.
+     *
+     * \param    id              Id of the floor
+     * \param    lpmFile         File in which to save/load the associated LPM
+     */
     Floor(int32_t id, const std::string& lpmFile);
 
     /**
-    * Constructor for Floor.
-    *
-    * \param    id              Id of the floor
-    * \param    lpm             LPM for the floor
-    * \param    lpmFile         File in which to save/load the associated LPM
-    */
+     * Constructor for Floor.
+     *
+     * \param    id              Id of the floor
+     * \param    lpm             LPM for the floor
+     * \param    lpmFile         File in which to save/load the associated LPM
+     */
     Floor(int32_t id, const LocalPerceptualMap& lpm, const std::string& lpmFile);
 
     /**
-    * Destructor for Floor.
-    */
+     * Destructor for Floor.
+     */
     ~Floor(void);
 
     /**
-    * isOnKnownElevator checks to see if the robot has entered a known elevator.
-    *
-    * \param    pose            Pose of robot on the elevator
-    * \return   The elevator the robot is on. Otherwise, a null elevator pointer.
-    */
+     * isOnKnownElevator checks to see if the robot has entered a known elevator.
+     *
+     * \param    pose            Pose of robot on the elevator
+     * \return   The elevator the robot is on. Otherwise, a null elevator pointer.
+     */
     std::shared_ptr<Elevator> isOnKnownElevator(const pose_t& pose) const;
 
     /**
-    * addElevator adds a new Elevator to the Floor.
-    *
-    * \param    elevator        Elevator to be added
-    */
+     * addElevator adds a new Elevator to the Floor.
+     *
+     * \param    elevator        Elevator to be added
+     */
     void addElevator(const std::shared_ptr<Elevator>& elevator);
 
     /**
-    * updateLPM updates the LPM associated with the floor.
-    *
-    * \param    lpm             New LPM model for the floor
-    */
+     * updateLPM updates the LPM associated with the floor.
+     *
+     * \param    lpm             New LPM model for the floor
+     */
     void updateLPM(const LocalPerceptualMap& lpm);
 
     // Accessors
 
-    int32_t                   getId(void)      const { return id; }
-    const LocalPerceptualMap& getLPM(void)     const { return lpm; }
-    std::string               getLPMName(void) const { return lpmFile; }
-    
+    int32_t getId(void) const { return id; }
+    const LocalPerceptualMap& getLPM(void) const { return lpm; }
+    std::string getLPMName(void) const { return lpmFile; }
+
     std::vector<std::shared_ptr<Elevator>> getElevators(void) const { return elevators; }
 
 private:
-
-    int32_t            id;
+    int32_t id;
     LocalPerceptualMap lpm;
-    std::string        lpmFile;
+    std::string lpmFile;
 
     std::vector<std::shared_ptr<Elevator>> elevators;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_METRIC_MULTIFLOOR_FLOOR_H
+#endif   // HSSH_LOCAL_METRIC_MULTIFLOOR_FLOOR_H

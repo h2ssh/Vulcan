@@ -8,11 +8,11 @@
 
 
 /**
-* \file     gaussian_observation_model.h
-* \author   Collin Johnson
-*
-* Declaration of GaussianObservationModel.
-*/
+ * \file     gaussian_observation_model.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GaussianObservationModel.
+ */
 
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_GAUSSIAN_OBSERVATION_MODEL_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_GAUSSIAN_OBSERVATION_MODEL_H
@@ -30,23 +30,22 @@ struct gaussian_observation_model_params_t;
 const std::string kGaussianModelType("gaussian");
 
 /**
-* GaussianObservationModel is an observation model that creates a small Gaussian blob of radius 1 centered around
-* the endpoint of the ray. The Gaussian is convolved with the grid for centered at each ray endpoint to determine the
-* likelihood of the laser scan.
-*
-* This observational model produces a less peaked distribution that the normal endpoint observation model. This model
-* is particularly suited for relocalizing because it provides a flatter distribution that doesn't require an already
-* precise pose estimate to create suitable particles for sampling.
-*/
+ * GaussianObservationModel is an observation model that creates a small Gaussian blob of radius 1 centered around
+ * the endpoint of the ray. The Gaussian is convolved with the grid for centered at each ray endpoint to determine the
+ * likelihood of the laser scan.
+ *
+ * This observational model produces a less peaked distribution that the normal endpoint observation model. This model
+ * is particularly suited for relocalizing because it provides a flatter distribution that doesn't require an already
+ * precise pose estimate to create suitable particles for sampling.
+ */
 class GaussianObservationModel : public ObservationModel
 {
 public:
-
     /**
-    * Constructor for GaussianObservationModel.
-    *
-    * \param    params          Parameters controlling the model
-    */
+     * Constructor for GaussianObservationModel.
+     *
+     * \param    params          Parameters controlling the model
+     */
     GaussianObservationModel(const gaussian_observation_model_params_t& params);
 
     // ObservationModel interface
@@ -58,13 +57,12 @@ public:
                                     particle_filter_debug_info_t* debug);
 
 private:
-
     const float kMaxDistance_;
     const int kStride_;
     std::array<double, 9> gaussian_;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_METRICAL_LOCALIZATION_GAUSSIAN_OBSERVATION_MODEL_H
+#endif   // HSSH_UTILS_METRICAL_LOCALIZATION_GAUSSIAN_OBSERVATION_MODEL_H

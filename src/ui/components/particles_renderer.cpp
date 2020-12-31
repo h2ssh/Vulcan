@@ -8,19 +8,19 @@
 
 
 /**
-* \file     particles_renderer.h
-* \author   Collin Johnson
-*
-* Definition of ParticlesRenderer.
-*/
+ * \file     particles_renderer.h
+ * \author   Collin Johnson
+ *
+ * Definition of ParticlesRenderer.
+ */
 
 #include "ui/components/particles_renderer.h"
-#include "ui/common/color_interpolator.h"
 #include "hssh/metrical/localization/debug_info.h"
 #include "hssh/metrical/localization/particle.h"
+#include "ui/common/color_interpolator.h"
+#include <GL/gl.h>
 #include <algorithm>
 #include <iostream>
-#include <GL/gl.h>
 
 namespace vulcan
 {
@@ -35,8 +35,7 @@ void ParticlesRenderer::setRenderColor(const GLColor& color)
 
 void ParticlesRenderer::renderParticles(const std::vector<hssh::particle_t>& particles)
 {
-    if(particles.empty())
-    {
+    if (particles.empty()) {
         return;
     }
 
@@ -47,9 +46,8 @@ void ParticlesRenderer::renderParticles(const std::vector<hssh::particle_t>& par
     glPointSize(3.0f);
 
     glBegin(GL_POINTS);
-    for(auto particleIt = particles.begin(), particleEnd = particles.end(); particleIt != particleEnd; ++particleIt)
-    {
-        GLColor particleColor = interpolator.calculateColor(particleIt->weight/maxWeight);
+    for (auto particleIt = particles.begin(), particleEnd = particles.end(); particleIt != particleEnd; ++particleIt) {
+        GLColor particleColor = interpolator.calculateColor(particleIt->weight / maxWeight);
         particleColor.set();
         glVertex2f(particleIt->pose.x, particleIt->pose.y);
     }
@@ -57,17 +55,14 @@ void ParticlesRenderer::renderParticles(const std::vector<hssh::particle_t>& par
 }
 
 
-void ParticlesRenderer::renderParticleScores(const pose_t& pose, 
-                                             hssh::particle_grid_score_t& scores,
-                                             double maxScore)
+void ParticlesRenderer::renderParticleScores(const pose_t& pose, hssh::particle_grid_score_t& scores, double maxScore)
 {
     LinearColorInterpolator interpolator(GLColor(0.0f, 0.0f, 1.0f, 0.75f), GLColor(1.0f, 0.0f, 0.0f, 0.75f));
-    
+
     glLineWidth(0.75f);
-    
+
     glBegin(GL_LINES);
-    for(std::size_t n = 0; n < scores.scores.size(); ++n)
-    {
+    for (std::size_t n = 0; n < scores.scores.size(); ++n) {
         GLColor particleColor = interpolator.calculateColor(scores.scores[n] / maxScore);
         particleColor.set();
         glVertex2f(pose.x, pose.y);
@@ -76,5 +71,5 @@ void ParticlesRenderer::renderParticleScores(const pose_t& pose,
     glEnd();
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

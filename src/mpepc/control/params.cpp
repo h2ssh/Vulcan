@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.cpp
-* \author   Jong Jin Park
-*
-* Definition of parsers for the various parameters structs for the controllers.
-*/
+ * \file     params.cpp
+ * \author   Jong Jin Park
+ *
+ * Definition of parsers for the various parameters structs for the controllers.
+ */
 
 #include "mpepc/control/params.h"
 #include "utils/config_file.h"
@@ -26,29 +26,29 @@ namespace mpepc
 {
 
 const std::string kKinematicControlLawHeading("KinematicControlLawParameters");
-const std::string kK1Key                     ("k1");
-const std::string kK2Key                     ("k2");
-const std::string kBetaKey                   ("beta");
-const std::string kLambdaKey                 ("lambda");
-const std::string kSlowdownRadiusKey         ("slowdown_radius");
-const std::string KConvergeRadiusKey         ("convergence_radius");
-const std::string KConvergeAngleKey          ("convergence_angle");
-const std::string kConvergeTimeKey           ("convergence_time_ms");
-const std::string kTurnInPlaceVelKey         ("turn_in_place_velocity");
-const std::string kMaxLinVelKey              ("maximum_linear_velocity");
-const std::string kMaxAngVelKey              ("maximum_angular_velocity");
+const std::string kK1Key("k1");
+const std::string kK2Key("k2");
+const std::string kBetaKey("beta");
+const std::string kLambdaKey("lambda");
+const std::string kSlowdownRadiusKey("slowdown_radius");
+const std::string KConvergeRadiusKey("convergence_radius");
+const std::string KConvergeAngleKey("convergence_angle");
+const std::string kConvergeTimeKey("convergence_time_ms");
+const std::string kTurnInPlaceVelKey("turn_in_place_velocity");
+const std::string kMaxLinVelKey("maximum_linear_velocity");
+const std::string kMaxAngVelKey("maximum_angular_velocity");
 
 const std::string kJoystickControlLawHeading("JoystickControlLawParameters");
-const std::string kModifyJoystickAxisKey    ("should_modify_joystick_axis");
-const std::string kAxisRotationKey          ("axis_rotation");
-const std::string kLeftBiasKey              ("left_bias");
-const std::string kUseAdaptiveParamsKey     ("use_adaptive_params");
-const std::string kMaxControlEffortKey      ("maximum_control_effort");
-const std::string kLinearVelocityPGainKey   ("linear_velocity_p_gain");
-const std::string kLinearVelocityDGainKey   ("linear_velocity_d_gain");
-const std::string kAngularVelocityPGainKey  ("angular_velocity_p_gain");
-const std::string kAngularVelocityDGainKey  ("angular_velocity_d_gain");
-const std::string kDebugOutputKey           ("debug_outputs");
+const std::string kModifyJoystickAxisKey("should_modify_joystick_axis");
+const std::string kAxisRotationKey("axis_rotation");
+const std::string kLeftBiasKey("left_bias");
+const std::string kUseAdaptiveParamsKey("use_adaptive_params");
+const std::string kMaxControlEffortKey("maximum_control_effort");
+const std::string kLinearVelocityPGainKey("linear_velocity_p_gain");
+const std::string kLinearVelocityDGainKey("linear_velocity_d_gain");
+const std::string kAngularVelocityPGainKey("angular_velocity_p_gain");
+const std::string kAngularVelocityDGainKey("angular_velocity_d_gain");
+const std::string kDebugOutputKey("debug_outputs");
 
 
 kinematic_control_law_params_t::kinematic_control_law_params_t(const utils::ConfigFile& config)
@@ -75,7 +75,7 @@ joystick_control_law_params_t::joystick_control_law_params_t(const utils::Config
 : shouldModifyJoystickAxis(config.getValueAsBool(kJoystickControlLawHeading, kModifyJoystickAxisKey))
 , axisRotation(config.getValueAsFloat(kJoystickControlLawHeading, kAxisRotationKey))
 , leftBias(config.getValueAsFloat(kJoystickControlLawHeading, kLeftBiasKey))
-, useAdaptiveParams(config.getValueAsBool (kJoystickControlLawHeading, kUseAdaptiveParamsKey))
+, useAdaptiveParams(config.getValueAsBool(kJoystickControlLawHeading, kUseAdaptiveParamsKey))
 , maxControlEffort(config.getValueAsFloat(kJoystickControlLawHeading, kMaxControlEffortKey))
 , linearVelocityPGain(config.getValueAsFloat(kJoystickControlLawHeading, kLinearVelocityPGainKey))
 , linearVelocityDGain(config.getValueAsFloat(kJoystickControlLawHeading, kLinearVelocityDGainKey))
@@ -85,11 +85,11 @@ joystick_control_law_params_t::joystick_control_law_params_t(const utils::Config
 {
     assert(maxControlEffort > -1.0f);
     assert(maxControlEffort < 100.0f);
-    assert(linearVelocityPGain  >= 0.0f);
-    assert(linearVelocityDGain  >= 0.0f);
+    assert(linearVelocityPGain >= 0.0f);
+    assert(linearVelocityDGain >= 0.0f);
     assert(angularVelocityPGain >= 0.0f);
     assert(angularVelocityDGain >= 0.0f);
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

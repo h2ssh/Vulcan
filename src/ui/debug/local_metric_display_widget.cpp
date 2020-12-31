@@ -8,27 +8,27 @@
 
 
 /**
-* \file     local_metric_display_widget.cpp
-* \author   Collin Johnson
-*
-* Definition of LocalMetricDisplayWidget.
-*/
+ * \file     local_metric_display_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalMetricDisplayWidget.
+ */
 
 #include "ui/debug/local_metric_display_widget.h"
-#include "utils/auto_mutex.h"
-#include "ui/common/gl_utilities.h"
+#include "core/odometry.h"
 #include "ui/common/gl_shapes.h"
-#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/common/gl_utilities.h"
 #include "ui/components/glass_map_renderer.h"
 #include "ui/components/laser_scan_renderer.h"
 #include "ui/components/lines_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
 #include "ui/components/particles_renderer.h"
 #include "ui/components/pose_trace_renderer.h"
 #include "ui/components/robot_renderer.h"
-#include "core/odometry.h"
-#include <boost/range/iterator_range.hpp>
+#include "utils/auto_mutex.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <boost/range/iterator_range.hpp>
 #include <cassert>
 
 namespace vulcan
@@ -37,11 +37,11 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(LocalMetricDisplayWidget, GridBasedDisplayWidget)
-    EVT_MOTION(LocalMetricDisplayWidget::handleMouseMoved)
-    EVT_LEFT_DOWN(LocalMetricDisplayWidget::handleMouseDown)
-    EVT_LEFT_UP(LocalMetricDisplayWidget::handleMouseUp)
-    EVT_RIGHT_DOWN(LocalMetricDisplayWidget::handleMouseDown)
-    EVT_RIGHT_UP(LocalMetricDisplayWidget::handleMouseUp)
+EVT_MOTION(LocalMetricDisplayWidget::handleMouseMoved)
+EVT_LEFT_DOWN(LocalMetricDisplayWidget::handleMouseDown)
+EVT_LEFT_UP(LocalMetricDisplayWidget::handleMouseUp)
+EVT_RIGHT_DOWN(LocalMetricDisplayWidget::handleMouseDown)
+EVT_RIGHT_UP(LocalMetricDisplayWidget::handleMouseUp)
 END_EVENT_TABLE()
 
 
@@ -113,7 +113,7 @@ void LocalMetricDisplayWidget::setWidgetParams(const lpm_display_params_t& param
     particlesRenderer->setRenderColor(params.particlesColor);
 
     laserData[kFrontLaserId].color = params.frontLaserColor;
-    laserData[kBackLaserId].color  = params.backLaserColor;
+    laserData[kBackLaserId].color = params.backLaserColor;
 
     this->params = params;
 }
@@ -123,12 +123,9 @@ void LocalMetricDisplayWidget::centerOnRobot(bool center)
 {
     shouldCenterOnRobot = center;
 
-    if(shouldCenterOnRobot)
-    {
+    if (shouldCenterOnRobot) {
         disableScrolling();
-    }
-    else
-    {
+    } else {
         enableScrolling();
     }
 }
@@ -136,12 +133,9 @@ void LocalMetricDisplayWidget::centerOnRobot(bool center)
 
 void LocalMetricDisplayWidget::showLaserLines(bool show)
 {
-    if(show)
-    {
+    if (show) {
         laserRenderer->doRenderLines();
-    }
-    else
-    {
+    } else {
         laserRenderer->doNotRenderLines();
     }
 }
@@ -218,8 +212,7 @@ void LocalMetricDisplayWidget::showGlassWalls(bool show)
 
     shouldShowGlassWalls = show;
 
-    if(haveGlass)
-    {
+    if (haveGlass) {
         glassWalls = hssh::predict_glass_walls(glass);
     }
 }
@@ -230,8 +223,7 @@ void LocalMetricDisplayWidget::showGlassAngles(bool show)
     glassRenderer->showAngles(show);
 
     // If wasn't showing the angles and now am, then reload the glass map.
-    if(!shouldShowGlassAngles && show)
-    {
+    if (!shouldShowGlassAngles && show) {
         haveNewGlass = true;
     }
 
@@ -247,8 +239,7 @@ void LocalMetricDisplayWidget::setAnglesToShow(GlassAnglesToDraw angles)
 
 void LocalMetricDisplayWidget::flattenGlassMap(int flattenThreshold)
 {
-    if(haveGlass)
-    {
+    if (haveGlass) {
         glass.flattenFullMap(flattenThreshold);
         haveNewGlass = true;
     }
@@ -257,8 +248,7 @@ void LocalMetricDisplayWidget::flattenGlassMap(int flattenThreshold)
 
 void LocalMetricDisplayWidget::filterDynamicObjectsFromGlass(int highlyVisibleThreshold)
 {
-    if(haveGlass)
-    {
+    if (haveGlass) {
         glass.filterDynamicObjectsFromFullMap(highlyVisibleThreshold);
         haveNewGlass = true;
     }
@@ -277,12 +267,9 @@ void LocalMetricDisplayWidget::rotateLPM(float radians)
 
 Point<int> LocalMetricDisplayWidget::convertWorldToGrid(const Point<float>& world) const
 {
-    if(mapToShow == LocalMetricMapType::GLASS)
-    {
+    if (mapToShow == LocalMetricMapType::GLASS) {
         return utils::global_point_to_grid_cell(world, glass);
-    }
-    else
-    {
+    } else {
         return utils::global_point_to_grid_cell(world, grid);
     }
 }
@@ -292,20 +279,18 @@ void LocalMetricDisplayWidget::handleData(const polar_laser_scan_t& scan, const 
 {
     utils::AutoMutex lock(dataLock);
 
-    haveScan            = true;
+    haveScan = true;
     mostRecentLaserTime = scan.timestamp;
 
-    if(scan.laserId >= 0 && scan.laserId < kNumLasers)
-    {
+    if (scan.laserId >= 0 && scan.laserId < kNumLasers) {
         laserData[scan.laserId].rawScan = scan;
     }
 
     // Only have intensity if something is greater than 0.
-    bool hasIntensity = !scan.intensities.empty()
-        && (*std::max_element(scan.intensities.begin(), scan.intensities.end()) > 0);
+    bool hasIntensity =
+      !scan.intensities.empty() && (*std::max_element(scan.intensities.begin(), scan.intensities.end()) > 0);
 
-    if(hasIntensity && shouldShowIntensityPlots)
-    {
+    if (hasIntensity && shouldShowIntensityPlots) {
         auto& plot = laserData[scan.laserId].plot;
 
         plot << "set yrange [0:16384]\n";
@@ -319,8 +304,7 @@ void LocalMetricDisplayWidget::handleData(const laser::MovingLaserScan& scan, co
 {
     utils::AutoMutex lock(dataLock);
 
-    if(scan.laserId() >= 0 && scan.laserId() < kNumLasers)
-    {
+    if (scan.laserId() >= 0 && scan.laserId() < kNumLasers) {
         laserData[scan.laserId()].mappingScan = scan;
     }
 }
@@ -330,8 +314,7 @@ void LocalMetricDisplayWidget::handleData(const laser::ReflectedLaserScan& scan,
 {
     utils::AutoMutex lock(dataLock);
 
-    if(scan.laserId() >= 0 && scan.laserId() < kNumLasers)
-    {
+    if (scan.laserId() >= 0 && scan.laserId() < kNumLasers) {
         laserData[scan.laserId()].reflectedScan = scan;
     }
 }
@@ -341,19 +324,18 @@ void LocalMetricDisplayWidget::handleData(const laser::laser_scan_lines_t& scanL
 {
     utils::AutoMutex lock(dataLock);
 
-    if(scanLines.scan.laserId >= 0 && scanLines.scan.laserId < kNumLasers)
-    {
+    if (scanLines.scan.laserId >= 0 && scanLines.scan.laserId < kNumLasers) {
         laserData[scanLines.scan.laserId].scanLines = scanLines;
     }
 }
 
 
-void LocalMetricDisplayWidget::handleData(const robot::proximity_warning_indices_t& proximityIndices, const std::string& channel)
+void LocalMetricDisplayWidget::handleData(const robot::proximity_warning_indices_t& proximityIndices,
+                                          const std::string& channel)
 {
     utils::AutoMutex lock(dataLock);
 
-    if((proximityIndices.laserId >= 0) && (proximityIndices.laserId < kNumLasers))
-    {
+    if ((proximityIndices.laserId >= 0) && (proximityIndices.laserId < kNumLasers)) {
         laserData[proximityIndices.laserId].proximity = proximityIndices;
     }
 }
@@ -363,7 +345,7 @@ void LocalMetricDisplayWidget::handleData(const hssh::LocalPerceptualMap& grid, 
 {
     utils::AutoMutex lock(dataLock);
 
-    this->grid  = grid;
+    this->grid = grid;
     haveNewGrid = true;
 
     setGridDimensions(grid.getWidthInMeters(), grid.getHeightInMeters());
@@ -376,7 +358,7 @@ void LocalMetricDisplayWidget::handleData(const hssh::GlassMap& glass, const std
 
     this->glass = glass;
     haveNewGlass = true;
-    haveGlass    = true;
+    haveGlass = true;
 }
 
 
@@ -384,13 +366,12 @@ void LocalMetricDisplayWidget::handleData(const pose_t& pose, const std::string&
 {
     utils::AutoMutex lock(dataLock);
 
-    if(updateTrace(pose, poseTrace))
-    {
+    if (updateTrace(pose, poseTrace)) {
         poseTraceRenderer->setPoseTrace(poseTrace);
     }
 
     this->pose = pose;
-    havePose   = true;
+    havePose = true;
 }
 
 
@@ -406,30 +387,28 @@ void LocalMetricDisplayWidget::handleData(const motion_state_t& motion, const st
 {
     utils::AutoMutex lock(dataLock);
 
-    motionState                = motion;
+    motionState = motion;
     stateEstimatorDistribution = motion.poseDistribution;
     motionStateTrace.push_back(motion.pose);
 
-    if(updateTrace(pose_t(motionState.pose.x, motionState.pose.y, motionState.pose.theta), motionStateTrace))
-    {
+    if (updateTrace(pose_t(motionState.pose.x, motionState.pose.y, motionState.pose.theta), motionStateTrace)) {
         motionTraceRenderer->setPoseTrace(motionStateTrace);
     }
 
-    if(!havePose)
-    {
-        pose.x     = motion.pose.x;
-        pose.y     = motion.pose.y;
+    if (!havePose) {
+        pose.x = motion.pose.x;
+        pose.y = motion.pose.y;
         pose.theta = motion.pose.theta;
 
-        if(shouldCenterOnRobot)
-        {
+        if (shouldCenterOnRobot) {
             setCameraFocalPoint(Point<float>(pose.x, pose.y));
         }
     }
 }
 
 
-void LocalMetricDisplayWidget::handleData(const hssh::local_metric_localization_debug_info_t& particles, const std::string& channel)
+void LocalMetricDisplayWidget::handleData(const hssh::local_metric_localization_debug_info_t& particles,
+                                          const std::string& channel)
 {
     utils::AutoMutex lock(dataLock);
 
@@ -441,41 +420,34 @@ void LocalMetricDisplayWidget::renderWidget(void)
 {
     utils::AutoMutex lock(dataLock);
 
-    if(shouldCenterOnRobot)
-    {
+    if (shouldCenterOnRobot) {
         setCameraFocalPoint(Point<float>(pose.x, pose.y));
     }
 
     // Order matters here! It was chosen based on visual appeal.
-    if(haveNewGrid)
-    {
+    if (haveNewGrid) {
         gridRenderer->setGrid(grid);
         haveNewGrid = false;
     }
 
-    if(haveNewGlass)
-    {
+    if (haveNewGlass) {
         glassRenderer->setGlassMap(glass);
         haveNewGlass = false;
     }
 
-    switch(mapToShow)
-    {
+    switch (mapToShow) {
     case LocalMetricMapType::LPM:
         gridRenderer->renderGrid();
         break;
 
-    case LocalMetricMapType::GLASS:
-        {
-            glassRenderer->renderGrid();
-            glassRenderer->renderAngleBins(glassCell_.x, glassCell_.y, glass);
+    case LocalMetricMapType::GLASS: {
+        glassRenderer->renderGrid();
+        glassRenderer->renderAngleBins(glassCell_.x, glassCell_.y, glass);
 
-            if(shouldShowGlassWalls)
-            {
-                glassRenderer->renderWalls(glassWalls);
-            }
+        if (shouldShowGlassWalls) {
+            glassRenderer->renderWalls(glassWalls);
         }
-        break;
+    } break;
 
     case LocalMetricMapType::NONE:
         break;
@@ -483,80 +455,73 @@ void LocalMetricDisplayWidget::renderWidget(void)
 
     robotRenderer->renderRobot(pose);
 
-    if(shouldShowUncertaintyEllipse)
-    {
+    if (shouldShowUncertaintyEllipse) {
         gl_draw_gaussian_distribution(poseDistribution.uncertainty, 3.0f, params.traceColor, 2.0f);
     }
 
-    if(haveScan && (laserToShow_ != LaserToShowType::none))
-    {
-        for(auto& data : laserData)
-        {
+    if (haveScan && (laserToShow_ != LaserToShowType::none)) {
+        for (auto& data : laserData) {
             // Only draw the laser scan if it was received recently. Otherwise, it is stale and should just disappear.
-            if(std::abs(mostRecentLaserTime - data.rawScan.timestamp) > 500000)
-            {
+            if (std::abs(mostRecentLaserTime - data.rawScan.timestamp) > 500000) {
                 continue;
             }
 
             laserRenderer->setRenderColors(data.color, params.intensityLaserColor);
 
-            switch(laserToShow_)
-            {
-                case LaserToShowType::raw:
-                    laserRenderer->renderScan(data.rawScan, data.proximity, pose);
-                    break;
-                case LaserToShowType::mapping:
-                    laserRenderer->renderScan(data.mappingScan);
-                    break;
-                case LaserToShowType::reflected:
-                    laserRenderer->renderScan(data.reflectedScan);
-                    break;
-                case LaserToShowType::none:
-                    break;
-                default:
-                    assert(false);
+            switch (laserToShow_) {
+            case LaserToShowType::raw:
+                laserRenderer->renderScan(data.rawScan, data.proximity, pose);
+                break;
+            case LaserToShowType::mapping:
+                laserRenderer->renderScan(data.mappingScan);
+                break;
+            case LaserToShowType::reflected:
+                laserRenderer->renderScan(data.reflectedScan);
+                break;
+            case LaserToShowType::none:
+                break;
+            default:
+                assert(false);
             }
         }
     }
 
-    if(shouldShowExtractedLines)
-    {
-        for(auto& data : laserData)
-        {
+    if (shouldShowExtractedLines) {
+        for (auto& data : laserData) {
             extractedLinesRenderer->setRenderColor(data.color);
             extractedLinesRenderer->renderLines(data.scanLines.lines, pose, 4.0f);
         }
     }
 
-    if(shouldShowPoseTrace)
-    {
+    if (shouldShowPoseTrace) {
         poseTraceRenderer->renderTrace();
     }
 
-    if(shouldShowMotionTrace)
-    {
+    if (shouldShowMotionTrace) {
         motionTraceRenderer->renderTrace();
 
-        if(shouldShowUncertaintyEllipse)
-        {
-            gl_draw_gaussian_distribution(stateEstimatorDistribution.uncertainty, 3.0f, params.odometryTraceColor, 2.0f);
+        if (shouldShowUncertaintyEllipse) {
+            gl_draw_gaussian_distribution(stateEstimatorDistribution.uncertainty,
+                                          3.0f,
+                                          params.odometryTraceColor,
+                                          2.0f);
         }
     }
 
-    if(shouldShowParticles)
-    {
-        if((particleMode != NOT_IN_VIEW_MODE) && (selectedParticleId < particles.particleScores.size()))
-        {
+    if (shouldShowParticles) {
+        if ((particleMode != NOT_IN_VIEW_MODE) && (selectedParticleId < particles.particleScores.size())) {
             double maxScore = 1e-5;
-            for(auto& score : particles.particleScores)
-            {
+            for (auto& score : particles.particleScores) {
                 maxScore = std::max(maxScore, *std::max_element(score.scores.begin(), score.scores.end()));
             }
 
             particlesRenderer->renderParticleScores(particles.particles[selectedParticleId].pose,
                                                     particles.particleScores[selectedParticleId],
                                                     maxScore);
-            gl_draw_gaussian_distribution(particles.proposalDistribution, 3.0f, GLColor(0.0f, 0.9f, 0.25f, 0.75f), 2.0f);
+            gl_draw_gaussian_distribution(particles.proposalDistribution,
+                                          3.0f,
+                                          GLColor(0.0f, 0.9f, 0.25f, 0.75f),
+                                          2.0f);
         }
 
         particlesRenderer->renderParticles(particles.particles);
@@ -569,21 +534,14 @@ std::string LocalMetricDisplayWidget::printCellInformation(Point<int> cell)
     std::ostringstream infoOut;
 
     // In Glass mode, the cell is in GlassMap coordinates
-    if(haveGlass && (mapToShow == GLASS))
-    {
-        if(glass.isCellInGrid(cell))
-        {
+    if (haveGlass && (mapToShow == GLASS)) {
+        if (glass.isCellInGrid(cell)) {
             int hitCount = 0;
             int missCount = 0;
-            for(int val : boost::make_iterator_range(glass.beginBin(cell.x, cell.y),
-                                                     glass.endBin(cell.x, cell.y)))
-            {
-                if(val > 0)
-                {
+            for (int val : boost::make_iterator_range(glass.beginBin(cell.x, cell.y), glass.endBin(cell.x, cell.y))) {
+                if (val > 0) {
                     ++hitCount;
-                }
-                else if(val < 0)
-                {
+                } else if (val < 0) {
                     ++missCount;
                 }
             }
@@ -594,8 +552,7 @@ std::string LocalMetricDisplayWidget::printCellInformation(Point<int> cell)
         const auto& intensity = glass.intensityMap();
         auto intensityCell = cell + glass.glassToFlatMapOffset();
 
-        if(intensity.isCellInGrid(intensityCell))
-        {
+        if (intensity.isCellInGrid(intensityCell)) {
             infoOut << " Intensity: " << intensity(intensityCell.x, intensityCell.y);
         }
     }
@@ -604,13 +561,11 @@ std::string LocalMetricDisplayWidget::printCellInformation(Point<int> cell)
 }
 
 
-
 void LocalMetricDisplayWidget::handleMouseDown(wxMouseEvent& event)
 {
     particleMode = event.ControlDown() ? particleMode : NOT_IN_VIEW_MODE;
 
-    if(event.ControlDown())
-    {
+    if (event.ControlDown()) {
         handleParticleMouseEvent(event);
     }
 
@@ -622,8 +577,7 @@ void LocalMetricDisplayWidget::handleMouseUp(wxMouseEvent& event)
 {
     particleMode = event.ControlDown() ? particleMode : NOT_IN_VIEW_MODE;
 
-    if(event.ControlDown())
-    {
+    if (event.ControlDown()) {
         handleParticleMouseEvent(event);
     }
 
@@ -635,12 +589,10 @@ void LocalMetricDisplayWidget::handleMouseMoved(wxMouseEvent& event)
 {
     particleMode = event.ControlDown() ? particleMode : NOT_IN_VIEW_MODE;
 
-    if(event.ControlDown())
-    {
+    if (event.ControlDown()) {
         handleParticleMouseEvent(event);
 
-        if(haveGlass)
-        {
+        if (haveGlass) {
             glassCell_ = utils::global_point_to_grid_cell(mousePosition(), glass);
         }
     }
@@ -653,41 +605,35 @@ void LocalMetricDisplayWidget::handleParticleMouseEvent(wxMouseEvent& event)
 {
     wxSize size = GetSize();
 
-    Point<int>   screenPosition(event.GetX(), size.GetHeight()-event.GetY());
+    Point<int> screenPosition(event.GetX(), size.GetHeight() - event.GetY());
     Point<float> worldPosition = convert_screen_to_world_coordinates(screenPosition, getCameraPosition());
 
     int closestParticle = findClosestParticle(worldPosition);
 
-    if(event.LeftDown())
-    {
+    if (event.LeftDown()) {
         selectedParticleId = closestParticle;
-        particleMode       = SELECTED_PARTICLE;
-    }
-    else if(event.LeftUp() || (particleMode != SELECTED_PARTICLE))
-    {
+        particleMode = SELECTED_PARTICLE;
+    } else if (event.LeftUp() || (particleMode != SELECTED_PARTICLE)) {
         selectedParticleId = closestParticle;
-        particleMode       = HOVERING;
+        particleMode = HOVERING;
     }
 }
 
 
 int LocalMetricDisplayWidget::findClosestParticle(const Point<float>& worldPosition)
 {
-    if(particles.particles.empty())
-    {
+    if (particles.particles.empty()) {
         return 0;
     }
 
-    float closest      = distance_between_points(worldPosition, particles.particles[0].pose.toPoint());
-    int   closestIndex = 0;
+    float closest = distance_between_points(worldPosition, particles.particles[0].pose.toPoint());
+    int closestIndex = 0;
 
-    for(size_t n = 1; n < particles.particles.size(); ++n)
-    {
+    for (size_t n = 1; n < particles.particles.size(); ++n) {
         float distance = distance_between_points(worldPosition, particles.particles[n].pose.toPoint());
 
-        if(distance < closest)
-        {
-            closest      = distance;
+        if (distance < closest) {
+            closest = distance;
             closestIndex = n;
         }
     }
@@ -701,17 +647,14 @@ bool LocalMetricDisplayWidget::updateTrace(const pose_t& pose, std::deque<pose_t
     bool didUpdateTrace = false;
     pose_t lastTracePose(0, 0, 0);
 
-    if(trace.size() > 0)
-    {
+    if (trace.size() > 0) {
         lastTracePose = trace[0];
     }
 
-    if(fabs(lastTracePose.x - pose.x) > 0.05 || fabs(lastTracePose.y - pose.y) > 0.05)
-    {
+    if (fabs(lastTracePose.x - pose.x) > 0.05 || fabs(lastTracePose.y - pose.y) > 0.05) {
         trace.push_front(pose);
 
-        if(trace.size() > maxTraceLength)
-        {
+        if (trace.size() > maxTraceLength) {
             trace.pop_back();
         }
 
@@ -721,5 +664,5 @@ bool LocalMetricDisplayWidget::updateTrace(const pose_t& pose, std::deque<pose_t
     return didUpdateTrace;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

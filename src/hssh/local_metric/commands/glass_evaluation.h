@@ -8,11 +8,11 @@
 
 
 /**
-* \file     glass_evaluation.h
-* \author   Collin Johnson and Paul Foster
-* 
-* Declaration of GlassEvaluationCommand.
-*/
+ * \file     glass_evaluation.h
+ * \author   Collin Johnson and Paul Foster
+ *
+ * Declaration of GlassEvaluationCommand.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_GLASS_EVALUATION_H
 #define HSSH_LOCAL_METRIC_COMMANDS_GLASS_EVALUATION_H
@@ -26,54 +26,50 @@ namespace hssh
 {
 
 /**
-* GlassEvaluationCommand
-*/
+ * GlassEvaluationCommand
+ */
 class GlassEvaluationCommand : public LocalMetricCommand
 {
 public:
-    
     // Factories for creating the messages
     static std::unique_ptr<GlassEvaluationCommand> CreateSaveScansMessage(std::string source, std::string filename);
     static std::unique_ptr<GlassEvaluationCommand> CreateSavePosesMessage(std::string source, std::string filename);
     static std::unique_ptr<GlassEvaluationCommand> CreateSaveMapMessage(std::string source, std::string filename);
-    
+
     // LocalMetricCommand interface
-    void issue(const metric_slam_data_t& data, 
-               Localizer& localizer, 
-               Mapper& mapper, 
+    void issue(const metric_slam_data_t& data,
+               Localizer& localizer,
+               Mapper& mapper,
                MetricRelocalizer& relocalizer) const override;
     void print(std::ostream& out) const override;
 
 private:
-    
     enum Command
     {
         kSaveMap,
         kSavePoses,
         kSaveScans,
     };
-    
+
     Command command_;
     std::string filename_;
-    
+
     GlassEvaluationCommand(Command command, std::string filename, std::string source);
-    
+
     // Serialization support
     GlassEvaluationCommand(void) { }
 
     friend class cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( cereal::base_class<LocalMetricCommand>(this),
-            command_,
-            filename_);
+        ar(cereal::base_class<LocalMetricCommand>(this), command_, filename_);
     }
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
 // Serialization support for smart pointers
 #include <cereal/archives/binary.hpp>
@@ -81,4 +77,4 @@ private:
 
 CEREAL_REGISTER_TYPE(vulcan::hssh::GlassEvaluationCommand)
 
-#endif // HSSH_LOCAL_METRIC_COMMANDS_GLASS_EVALUATION_H
+#endif   // HSSH_LOCAL_METRIC_COMMANDS_GLASS_EVALUATION_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     set_map.h
-* \author   Collin Johnson
-* 
-* Declaration of SetMapCommand.
-*/
+ * \file     set_map.h
+ * \author   Collin Johnson
+ *
+ * Declaration of SetMapCommand.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_SET_MAP_H
 #define HSSH_LOCAL_METRIC_COMMANDS_SET_MAP_H
@@ -26,53 +26,50 @@ namespace hssh
 {
 
 /**
-* SetMapCommand sets the map being used by local_metric_hssh without updating the relocalization.
-* 
-* This command should be used whenever manual annotations are made to an LPM while the robot is currently building the
-* map. The main flow is:
-* 
-*   - Capture an LPM via the MapEditor
-*   - Annotate it with the tools
-*   - Send it back to local_metric_hssh with the updated annotations
-*/
+ * SetMapCommand sets the map being used by local_metric_hssh without updating the relocalization.
+ *
+ * This command should be used whenever manual annotations are made to an LPM while the robot is currently building the
+ * map. The main flow is:
+ *
+ *   - Capture an LPM via the MapEditor
+ *   - Annotate it with the tools
+ *   - Send it back to local_metric_hssh with the updated annotations
+ */
 class SetMapCommand : public LocalMetricCommand
 {
 public:
-    
     /**
-    * Constructor for SetMapCommand.
-    * 
-    * \param    map         Map to be set
-    * \param    source      Source of the command (for informational purposes, optional)
-    */
+     * Constructor for SetMapCommand.
+     *
+     * \param    map         Map to be set
+     * \param    source      Source of the command (for informational purposes, optional)
+     */
     explicit SetMapCommand(LocalPerceptualMap map, const std::string& source = "");
-    
+
     // LocalMetricCommand interface
-    void issue(const metric_slam_data_t& data, 
-               Localizer& localizer, 
-               Mapper& mapper, 
+    void issue(const metric_slam_data_t& data,
+               Localizer& localizer,
+               Mapper& mapper,
                MetricRelocalizer& relocalizer) const override;
     void print(std::ostream& out) const override;
 
 private:
-
     LocalPerceptualMap lpm_;
-    
+
     // For serialization support
     SetMapCommand(void) { }
-    
+
     friend class cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( cereal::base_class<LocalMetricCommand>(this),
-            lpm_);
+        ar(cereal::base_class<LocalMetricCommand>(this), lpm_);
     }
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
 // Serialization support for smart pointers
 #include <cereal/archives/binary.hpp>
@@ -80,4 +77,4 @@ private:
 
 CEREAL_REGISTER_TYPE(vulcan::hssh::SetMapCommand)
 
-#endif // HSSH_LOCAL_METRIC_COMMANDS_SET_MAP_H
+#endif   // HSSH_LOCAL_METRIC_COMMANDS_SET_MAP_H

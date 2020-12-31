@@ -8,18 +8,18 @@
 
 
 /**
-* \file     type_distribution.h
-* \author   Collin Johnson
-*
-* Declaration of HypothesisTypeDistribution and BoundaryTypeDistribution.
-*/
+ * \file     type_distribution.h
+ * \author   Collin Johnson
+ *
+ * Declaration of HypothesisTypeDistribution and BoundaryTypeDistribution.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_TYPE_DISTRIBUTION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_TYPE_DISTRIBUTION_H
 
+#include "core/matrix.h"
 #include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
 #include "hssh/types.h"
-#include "core/matrix.h"
 
 namespace vulcan
 {
@@ -32,51 +32,40 @@ const int kDestIdx = 2;
 const int kPathEndIdx = 3;
 
 /**
-* HypothesisTypeDistribution stores the appropriateness distribution for the type of a particular AreaHypothesis. The
-* distribution stores the appropriateness of a type being a path, decision, or destination.
-*/
+ * HypothesisTypeDistribution stores the appropriateness distribution for the type of a particular AreaHypothesis. The
+ * distribution stores the appropriateness of a type being a path, decision, or destination.
+ */
 struct HypothesisTypeDistribution
 {
-    double path = 1.0 / 3.0;            ///< Appropriateness of the hypothesis being a path segment
-    double destination = 1.0 / 3.0;     ///< Appropriateness of the hypothesis being a destination
-    double decision = 1.0 / 3.0;        ///< Appropriateness of the hypothesis being a decision point
+    double path = 1.0 / 3.0;          ///< Appropriateness of the hypothesis being a path segment
+    double destination = 1.0 / 3.0;   ///< Appropriateness of the hypothesis being a destination
+    double decision = 1.0 / 3.0;      ///< Appropriateness of the hypothesis being a decision point
 
     HypothesisType mostAppropriate(void) const
     {
-        if((path > destination) && (path > decision))
-        {
+        if ((path > destination) && (path > decision)) {
             return HypothesisType::kPath;
-        }
-        else if(destination > decision)
-        {
+        } else if (destination > decision) {
             return HypothesisType::kDest;
-        }
-        else
-        {
+        } else {
             return HypothesisType::kDecision;
         }
     }
 
     double maxAppropriateness(void) const
     {
-        if(path > destination && path > decision)
-        {
+        if (path > destination && path > decision) {
             return path;
-        }
-        else if(destination > path && destination > decision)
-        {
+        } else if (destination > path && destination > decision) {
             return destination;
-        }
-        else
-        {
+        } else {
             return decision;
         }
     }
 
     double typeAppropriateness(HypothesisType type) const
     {
-        switch(type)
-        {
+        switch (type) {
         case HypothesisType::kDecision:
             return decision;
 
@@ -95,8 +84,7 @@ struct HypothesisTypeDistribution
     {
         double total = path + destination + decision;
 
-        if(total > 0.0)
-        {
+        if (total > 0.0) {
             path /= total;
             destination /= total;
             decision /= total;
@@ -105,21 +93,20 @@ struct HypothesisTypeDistribution
 };
 
 /**
-* BoundaryTypeDistribution represents the 4x4 matrix of possible combinations of area types for an area boundary. The
-* indices into the matrix can be obtained via the typeIdx(HypothesisType) method.
-*/
+ * BoundaryTypeDistribution represents the 4x4 matrix of possible combinations of area types for an area boundary. The
+ * indices into the matrix can be obtained via the typeIdx(HypothesisType) method.
+ */
 struct BoundaryTypeDistribution
 {
-    Matrix posModel;  // 4x4 -- gateway on prior
-    Matrix negModel;  // 4x4 -- gateway off prior
+    Matrix posModel;   // 4x4 -- gateway on prior
+    Matrix negModel;   // 4x4 -- gateway off prior
 
     /**
-    * typeIdx converts a hypothesis type to the corresponding index into the distribution matrix.
-    */
+     * typeIdx converts a hypothesis type to the corresponding index into the distribution matrix.
+     */
     int typeIdx(HypothesisType type) const
     {
-        switch(type)
-        {
+        switch (type) {
         case HypothesisType::kPathDest:
             return kPathIdx;
         case HypothesisType::kDecision:
@@ -137,8 +124,7 @@ struct BoundaryTypeDistribution
 
     int typeIdx(AreaType type) const
     {
-        switch(type)
-        {
+        switch (type) {
         case AreaType::path_segment:
             return kPathIdx;
         case AreaType::decision_point:
@@ -154,7 +140,7 @@ struct BoundaryTypeDistribution
 };
 
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_TYPE_DISTRIBUTION_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_TYPE_DISTRIBUTION_H

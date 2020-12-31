@@ -8,19 +8,19 @@
 
 
 /**
-* \file     lpm_panel_text_updater.h
-* \author   Collin Johnson
-*
-* Declaration of LocalMetricPanelTextUpdater.
-*/
+ * \file     lpm_panel_text_updater.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LocalMetricPanelTextUpdater.
+ */
 
 #ifndef UI_DEBUG_LPM_PANEL_TEXT_UPDATER_H
 #define UI_DEBUG_LPM_PANEL_TEXT_UPDATER_H
 
 #include "ui/common/ui_forward_declarations.h"
 #include "utils/mutex.h"
-#include <wx/string.h>
 #include <string>
+#include <wx/string.h>
 
 class wxStaticText;
 
@@ -39,7 +39,7 @@ struct local_metric_panel_text_widgets_t
     wxStaticText* imuOrientation;
     wxStaticText* leftWheel;
     wxStaticText* rightWheel;
-    
+
     local_metric_panel_text_widgets_t(void)
     : pose(0)
     , velocity(0)
@@ -54,23 +54,21 @@ struct local_metric_panel_text_widgets_t
 };
 
 /**
-* LocalMetricPanelTextUpdater takes LPM and sensor data that is displayed in text form, and
-* updates the displayed text when new data arrives.
-*/
+ * LocalMetricPanelTextUpdater takes LPM and sensor data that is displayed in text form, and
+ * updates the displayed text when new data arrives.
+ */
 class LocalMetricPanelTextUpdater
 {
 public:
-
     LocalMetricPanelTextUpdater(const local_metric_panel_text_widgets_t& widgets);
 
     void update(void);
 
-    virtual void handleData(const imu_data_t&         imuData,  const std::string& channel);
-    virtual void handleData(const motion_state_t&       motion,   const std::string& channel);
-    virtual void handleData(const robot::commanded_velocity_t& command,  const std::string& channel);
+    virtual void handleData(const imu_data_t& imuData, const std::string& channel);
+    virtual void handleData(const motion_state_t& motion, const std::string& channel);
+    virtual void handleData(const robot::commanded_velocity_t& command, const std::string& channel);
 
 private:
-
     wxString poseString_;
     wxString velocityString_;
     wxString commandString_;
@@ -85,7 +83,7 @@ private:
     utils::Mutex displayLock_;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_LPM_PANEL_TEXT_UPDATER_H
+#endif   // UI_DEBUG_LPM_PANEL_TEXT_UPDATER_H

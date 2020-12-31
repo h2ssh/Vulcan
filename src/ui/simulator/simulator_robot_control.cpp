@@ -8,24 +8,24 @@
 
 
 /**
-* \file     simulator_robot_control.cpp
-* \author   Collin Johnson and Zongtai Luo
-*
-* Definition of SimulatorRobotControl.
-*/
+ * \file     simulator_robot_control.cpp
+ * \author   Collin Johnson and Zongtai Luo
+ *
+ * Definition of SimulatorRobotControl.
+ */
 #include <cstdio>
 #include <cstdlib>
 
-#include "ui/simulator/simulator_robot_control.h"
-#include "ui/simulator/simulator_robot_display.h"
-#include "ui/simulator/simulator_display.h"
-#include "ui/simulator/simulator_ui.h"
-#include "planner/interface/navigation_interface.h"
-#include "mpepc/metric_planner/task/navigation.h"
 #include "mpepc/metric_planner/messages.h"
 #include "mpepc/metric_planner/script/script.h"
+#include "mpepc/metric_planner/task/navigation.h"
 #include "mpepc/motion_controller/messages.h"
+#include "planner/interface/navigation_interface.h"
 #include "system/module_communicator.h"
+#include "ui/simulator/simulator_display.h"
+#include "ui/simulator/simulator_robot_control.h"
+#include "ui/simulator/simulator_robot_display.h"
+#include "ui/simulator/simulator_ui.h"
 #include "utils/timestamp.h"
 #include <cassert>
 
@@ -35,32 +35,34 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(SimulatorRobotControl, wxEvtHandler)
-    EVT_BUTTON  (ID_SIMULATOR_SELECT_DESTINATION_POSE_BUTTON,      SimulatorRobotControl::selectDestinationPosePressed)
-    EVT_BUTTON  (ID_SIMULATOR_SEND_DESITNATION_POSE_BUTTON,        SimulatorRobotControl::sendDestinationPosePressed)
-    EVT_BUTTON  (ID_SIMULATOR_CANCEL_DESTINATION_POSE_BUTTON,      SimulatorRobotControl::cancelDestinationPosePressed)
-    // Waypoints control
-    EVT_BUTTON  (ID_SIMULATOR_LOAD_SCRIPT_BUTTON,                  SimulatorRobotControl::loadScriptPressed)
-    EVT_BUTTON  (ID_SIMULATOR_SEND_SCRIPT_BUTTON,                  SimulatorRobotControl::sendWaypointsPressed)
-    EVT_BUTTON  (ID_SIMULATOR_SKIP_WAYPOINT_BUTTON,                SimulatorRobotControl::skipWaypointPressed)
-    EVT_BUTTON  (ID_SIMULATOR_CANCEL_FOLLOWING_BUTTON,             SimulatorRobotControl::stopWaypointsPressed)
-    EVT_BUTTON  (ID_SIMULATOR_LOOP_WAYPOINTS_BUTTON,               SimulatorRobotControl::loopWaypointsPressed)
-    // Add Robot Control
-    EVT_BUTTON  (ID_SIMULATOR_ADD_ROBOT_SELECT_POSE_BUTTON,        SimulatorRobotControl::addRobotSelectPosePressed) //remeber to initilize the robot receiver in simulator display as well as the robot object in simulator main
-    EVT_BUTTON  (ID_SIMULATOR_ADD_ROBOT_SET_POSE_BUTTON,           SimulatorRobotControl::addRobotSetPosePressed)
-    EVT_BUTTON  (ID_SIMULATOR_LOAD_CONFIG_BUTTON,                  SimulatorRobotControl::loadRobotConfigPressed)
-    EVT_BUTTON  (ID_SIMULATOR_ADD_ROBOT_BUTTON,                    SimulatorRobotControl::addRobotPressed)
-    // Robot Control
-    // EVT_BUTTON  (ID_SIMULATOR_PAUSE_ALL_ROBOT_BUTTON,              SimulatorRobotControl::pauseAllRobotPressed)
-    // EVT_BUTTON  (ID_SIMULATOR_SELECT_ROBOT_PAUSE_BUTTON,           SimulatorRobotControl::pauseSelectRobotPressed)
-    // Simulator Control
-    EVT_BUTTON  (ID_START_NEC_MODULAR_BUTTON,                      SimulatorRobotControl::startNecModularPressed)
-    EVT_BUTTON  (ID_SIMULATOR_CASE_ONE_START_BUTTON,               SimulatorRobotControl::startSimulatorCaseOnePressed)
-    EVT_BUTTON  (ID_SIMULATOR_CASE_TWO_START_BUTTON,               SimulatorRobotControl::startSimulatorCaseTwoPressed)
-    EVT_BUTTON  (ID_SIMULATOR_CASE_THREE_START_BUTTON,             SimulatorRobotControl::startSimulatorCaseThreePressed)
+EVT_BUTTON(ID_SIMULATOR_SELECT_DESTINATION_POSE_BUTTON, SimulatorRobotControl::selectDestinationPosePressed)
+EVT_BUTTON(ID_SIMULATOR_SEND_DESITNATION_POSE_BUTTON, SimulatorRobotControl::sendDestinationPosePressed)
+EVT_BUTTON(ID_SIMULATOR_CANCEL_DESTINATION_POSE_BUTTON, SimulatorRobotControl::cancelDestinationPosePressed)
+// Waypoints control
+EVT_BUTTON(ID_SIMULATOR_LOAD_SCRIPT_BUTTON, SimulatorRobotControl::loadScriptPressed)
+EVT_BUTTON(ID_SIMULATOR_SEND_SCRIPT_BUTTON, SimulatorRobotControl::sendWaypointsPressed)
+EVT_BUTTON(ID_SIMULATOR_SKIP_WAYPOINT_BUTTON, SimulatorRobotControl::skipWaypointPressed)
+EVT_BUTTON(ID_SIMULATOR_CANCEL_FOLLOWING_BUTTON, SimulatorRobotControl::stopWaypointsPressed)
+EVT_BUTTON(ID_SIMULATOR_LOOP_WAYPOINTS_BUTTON, SimulatorRobotControl::loopWaypointsPressed)
+// Add Robot Control
+EVT_BUTTON(ID_SIMULATOR_ADD_ROBOT_SELECT_POSE_BUTTON,
+           SimulatorRobotControl::addRobotSelectPosePressed)   // remeber to initilize the robot receiver in simulator
+                                                               // display as well as the robot object in simulator main
+EVT_BUTTON(ID_SIMULATOR_ADD_ROBOT_SET_POSE_BUTTON, SimulatorRobotControl::addRobotSetPosePressed)
+EVT_BUTTON(ID_SIMULATOR_LOAD_CONFIG_BUTTON, SimulatorRobotControl::loadRobotConfigPressed)
+EVT_BUTTON(ID_SIMULATOR_ADD_ROBOT_BUTTON, SimulatorRobotControl::addRobotPressed)
+// Robot Control
+// EVT_BUTTON  (ID_SIMULATOR_PAUSE_ALL_ROBOT_BUTTON,              SimulatorRobotControl::pauseAllRobotPressed)
+// EVT_BUTTON  (ID_SIMULATOR_SELECT_ROBOT_PAUSE_BUTTON,           SimulatorRobotControl::pauseSelectRobotPressed)
+// Simulator Control
+EVT_BUTTON(ID_START_NEC_MODULAR_BUTTON, SimulatorRobotControl::startNecModularPressed)
+EVT_BUTTON(ID_SIMULATOR_CASE_ONE_START_BUTTON, SimulatorRobotControl::startSimulatorCaseOnePressed)
+EVT_BUTTON(ID_SIMULATOR_CASE_TWO_START_BUTTON, SimulatorRobotControl::startSimulatorCaseTwoPressed)
+EVT_BUTTON(ID_SIMULATOR_CASE_THREE_START_BUTTON, SimulatorRobotControl::startSimulatorCaseThreePressed)
 END_EVENT_TABLE()
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
 
 namespace vulcan
@@ -144,26 +146,20 @@ void SimulatorRobotControl::update(void)
 
     loadNewData();
 
-    if(isSelectingDestinationPose_)
-    {
+    if (isSelectingDestinationPose_) {
         widgets_.robot_display_->setHoverDestinationPose(destinationPoseSelector_->getHoverTarget());
 
-        if(destinationPoseSelector_->hasSelectedTarget())
-        {
+        if (destinationPoseSelector_->hasSelectedTarget()) {
             widgets_.robot_display_->setDestinationPose(destinationPoseSelector_->getSelectedTarget());
         }
-
     }
 
-    if(isSelectingGlobalDestinationPose_)
-    {
+    if (isSelectingGlobalDestinationPose_) {
         widgets_.ground_truth_display_->setHoverDestinationPose(destinationPoseSelector_->getHoverTarget());
 
-        if(destinationPoseSelector_->hasSelectedTarget())
-        {
+        if (destinationPoseSelector_->hasSelectedTarget()) {
             widgets_.ground_truth_display_->setDestinationPose(destinationPoseSelector_->getSelectedTarget());
         }
-
     }
 
     widgets_.robot_display_->Refresh();
@@ -209,15 +205,14 @@ void SimulatorRobotControl::handleData(const hssh::LocalPerceptualMap& map, cons
 }
 
 
-void SimulatorRobotControl::handleData(const mpepc::metric_planner_status_message_t& status,
-                                            const std::string& channel)
+void SimulatorRobotControl::handleData(const mpepc::metric_planner_status_message_t& status, const std::string& channel)
 {
     status_ = status;
 }
 
 
 void SimulatorRobotControl::handleData(const mpepc::trajectory_planner_debug_info_t& trajectories,
-                                          const std::string& channel)
+                                       const std::string& channel)
 {
     trajectories_ = trajectories;
 }
@@ -231,42 +226,36 @@ void SimulatorRobotControl::handleData(const tracker::DynamicObjectCollection& o
 
 void SimulatorRobotControl::loadNewData(void)
 {
-    if(topoMap_.hasData())
-    {
+    if (topoMap_.hasData()) {
         topoMap_.swapBuffers();
         widgets_.robot_display_->setAreas(topoMap_);
         haveTopoMap_ = true;
     }
 
-    if(location_.hasData())
-    {
+    if (location_.hasData()) {
         location_.swapBuffers();
         haveLocation_ = true;
     }
 
-    if(map_.hasData())
-    {
+    if (map_.hasData()) {
         map_.swapBuffers();
         widgets_.robot_display_->setLPM(map_);
         widgets_.ground_truth_display_->setLPM(map_);
         haveMetricMap_ = true;
     }
 
-    if(objects_.hasData())
-    {
+    if (objects_.hasData()) {
         objects_.swapBuffers();
         widgets_.robot_display_->setObjects(objects_);
     }
 
-    if(trajectories_.hasData())
-    {
+    if (trajectories_.hasData()) {
         trajectories_.swapBuffers();
         widgets_.robot_display_->setTrajectories(trajectories_);
         widgets_.ground_truth_display_->setTrajectories(trajectories_);
     }
 
-    if(pose_.hasData())
-    {
+    if (pose_.hasData()) {
         pose_.swapBuffers();
         widgets_.robot_display_->setPose(pose_);
         widgets_.ground_truth_display_->setPose(pose_);
@@ -282,8 +271,7 @@ std::vector<pose_t> SimulatorRobotControl::loadScriptPoses(std::string script_pa
 
     std::vector<pose_t> loadedTargets;
 
-    for(auto& task : script)
-    {
+    for (auto& task : script) {
         auto targets = task.getTargets();
         loadedTargets.insert(loadedTargets.end(), targets.begin(), targets.end());
     }
@@ -296,19 +284,15 @@ GLEventStatus SimulatorRobotControl::keyPressed(wxKeyEvent& key)
 {
     GLEventStatus status = GLEventStatus::capture;
 
-    if(key.GetKeyCode() == WXK_SPACE)
-    {
-        if(isPaused_)
-        {
+    if (key.GetKeyCode() == WXK_SPACE) {
+        if (isPaused_) {
             mpepc::metric_planner_command_message_t resumeMessage;
             resumeMessage.timestamp = utils::system_time_us();
             resumeMessage.command = mpepc::RESUME;
             consumer_->sendMessage(resumeMessage);
 
             isPaused_ = false;
-        }
-        else
-        {
+        } else {
             mpepc::metric_planner_command_message_t pauseMessage;
             pauseMessage.timestamp = utils::system_time_us();
             pauseMessage.command = mpepc::PAUSE;
@@ -316,17 +300,11 @@ GLEventStatus SimulatorRobotControl::keyPressed(wxKeyEvent& key)
 
             isPaused_ = true;
         }
-    }
-    else if(key.GetKeyCode() == 'O')
-    {
+    } else if (key.GetKeyCode() == 'O') {
         widgets_.robot_display_->toggleObjects();
-    }
-    else if(key.GetKeyCode() == 'T')
-    {
+    } else if (key.GetKeyCode() == 'T') {
         widgets_.robot_display_->toggleTrajectories();
-    }
-    else
-    {
+    } else {
         status = GLEventStatus::passthrough;
     }
 
@@ -348,17 +326,16 @@ void SimulatorRobotControl::selectDestinationPosePressed(wxCommandEvent& event)
 
 void SimulatorRobotControl::sendDestinationPosePressed(wxCommandEvent& event)
 {
-    if(isSelectingDestinationPose_)
-    {
+    if (isSelectingDestinationPose_) {
         isSelectingDestinationPose_ = false;
         widgets_.robot_display_->clearHoverDestinationPose();
         widgets_.robot_display_->removeMouseHandler(destinationPoseSelector_.get());
     }
 
-    if(destinationPoseSelector_->hasSelectedTarget())
-    {
+    if (destinationPoseSelector_->hasSelectedTarget()) {
         // Send the destination pose to the planner for execution
-        std::shared_ptr<mpepc::MetricPlannerTask> task(new mpepc::NavigationTask(destinationPoseSelector_->getSelectedTarget()));
+        std::shared_ptr<mpepc::MetricPlannerTask> task(
+          new mpepc::NavigationTask(destinationPoseSelector_->getSelectedTarget()));
         consumer_->sendMessage<std::shared_ptr<mpepc::MetricPlannerTask>>(task);
     }
 }
@@ -366,8 +343,7 @@ void SimulatorRobotControl::sendDestinationPosePressed(wxCommandEvent& event)
 
 void SimulatorRobotControl::cancelDestinationPosePressed(wxCommandEvent& event)
 {
-    if(isSelectingDestinationPose_)
-    {
+    if (isSelectingDestinationPose_) {
         isSelectingDestinationPose_ = false;
         widgets_.robot_display_->removeMouseHandler(destinationPoseSelector_.get());
     }
@@ -375,12 +351,12 @@ void SimulatorRobotControl::cancelDestinationPosePressed(wxCommandEvent& event)
     widgets_.robot_display_->clearDestinationPose();
 
     mpepc::metric_planner_command_message_t plannerMessage;
-    plannerMessage.command   = mpepc::CANCEL;
+    plannerMessage.command = mpepc::CANCEL;
     plannerMessage.timestamp = utils::system_time_us();
     consumer_->sendMessage(plannerMessage);
 
     mpepc::motion_controller_command_message_t controllerMessage;
-    controllerMessage.command   = mpepc::MOTION_CONTROLLER_CANCEL;
+    controllerMessage.command = mpepc::MOTION_CONTROLLER_CANCEL;
     controllerMessage.timestamp = utils::system_time_us();
     consumer_->sendMessage(controllerMessage);
 }
@@ -388,13 +364,17 @@ void SimulatorRobotControl::cancelDestinationPosePressed(wxCommandEvent& event)
 
 void SimulatorRobotControl::loadScriptPressed(wxCommandEvent& event)
 {
-    wxFileDialog loadDialog(widgets_.robot_display_, wxT("Select planner script file..."), wxT(""), wxT(""), wxT("*.spt"), wxFD_OPEN);
+    wxFileDialog loadDialog(widgets_.robot_display_,
+                            wxT("Select planner script file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.spt"),
+                            wxFD_OPEN);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         widgets_.scriptNameText->SetValue(loadDialog.GetFilename());
         wxString path = loadDialog.GetPath();
-        scriptPath_   = std::string(path.mb_str());
+        scriptPath_ = std::string(path.mb_str());
 
         widgets_.robot_display_->setDestinationPoses(loadScriptPoses(scriptPath_));
     }
@@ -403,8 +383,7 @@ void SimulatorRobotControl::loadScriptPressed(wxCommandEvent& event)
 
 void SimulatorRobotControl::sendWaypointsPressed(wxCommandEvent& event)
 {
-    if(!scriptPath_.empty())
-    {
+    if (!scriptPath_.empty()) {
         consumer_->sendMessage(mpepc::MetricPlannerScript(scriptPath_));
     }
 }
@@ -413,7 +392,7 @@ void SimulatorRobotControl::sendWaypointsPressed(wxCommandEvent& event)
 void SimulatorRobotControl::skipWaypointPressed(wxCommandEvent& event)
 {
     mpepc::metric_planner_command_message_t plannerMessage;
-    plannerMessage.command   = mpepc::SCRIPT_NEXT_TASK;
+    plannerMessage.command = mpepc::SCRIPT_NEXT_TASK;
     plannerMessage.timestamp = utils::system_time_us();
     consumer_->sendMessage(plannerMessage);
 }
@@ -422,7 +401,7 @@ void SimulatorRobotControl::skipWaypointPressed(wxCommandEvent& event)
 void SimulatorRobotControl::stopWaypointsPressed(wxCommandEvent& event)
 {
     mpepc::metric_planner_command_message_t plannerMessage;
-    plannerMessage.command   = mpepc::SCRIPT_STOP;
+    plannerMessage.command = mpepc::SCRIPT_STOP;
     plannerMessage.timestamp = utils::system_time_us();
     consumer_->sendMessage(plannerMessage);
 }
@@ -431,7 +410,7 @@ void SimulatorRobotControl::stopWaypointsPressed(wxCommandEvent& event)
 void SimulatorRobotControl::loopWaypointsPressed(wxCommandEvent& event)
 {
     mpepc::metric_planner_command_message_t plannerMessage;
-    plannerMessage.command   = mpepc::SCRIPT_LOOP;
+    plannerMessage.command = mpepc::SCRIPT_LOOP;
     plannerMessage.timestamp = utils::system_time_us();
     consumer_->sendMessage(plannerMessage);
 }
@@ -451,18 +430,17 @@ void SimulatorRobotControl::addRobotSelectPosePressed(wxCommandEvent& event)
 
 void SimulatorRobotControl::addRobotSetPosePressed(wxCommandEvent& event)
 {
-    if(isSelectingGlobalDestinationPose_)
-    {
+    if (isSelectingGlobalDestinationPose_) {
         isSelectingGlobalDestinationPose_ = false;
         widgets_.ground_truth_display_->clearHoverDestinationPose();
         widgets_.ground_truth_display_->removeMouseHandler(destinationPoseSelector_.get());
     }
 
-    if(destinationPoseSelector_->hasSelectedTarget())
-    {
+    if (destinationPoseSelector_->hasSelectedTarget()) {
         simulator_robot_group_message_.pose_ = destinationPoseSelector_->getSelectedTarget();
 
-        std::cout<<"the pose is "<<simulator_robot_group_message_.pose_.x<<" and "<<simulator_robot_group_message_.pose_.y<<"\n";
+        std::cout << "the pose is " << simulator_robot_group_message_.pose_.x << " and "
+                  << simulator_robot_group_message_.pose_.y << "\n";
 
         addRobotPoseCheck = true;
     }
@@ -471,15 +449,19 @@ void SimulatorRobotControl::addRobotSetPosePressed(wxCommandEvent& event)
 
 void SimulatorRobotControl::loadRobotConfigPressed(wxCommandEvent& event)
 {
-    wxFileDialog loadDialog(widgets_.robot_display_, wxT("Select robot config file..."), wxT(""), wxT(""), wxT("*.cfg"), wxFD_OPEN);
+    wxFileDialog loadDialog(widgets_.robot_display_,
+                            wxT("Select robot config file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.cfg"),
+                            wxFD_OPEN);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         widgets_.robotConfigText->SetValue(loadDialog.GetFilename());
         wxString path = loadDialog.GetFilename();
         std::string config_name = std::string(path.mb_str());
 
-        std::cout<<config_name<<"\n";
+        std::cout << config_name << "\n";
 
         simulator_robot_group_message_.robot_config_ = config_name;
 
@@ -490,8 +472,7 @@ void SimulatorRobotControl::loadRobotConfigPressed(wxCommandEvent& event)
 
 void SimulatorRobotControl::addRobotPressed(wxCommandEvent& event)
 {
-    if ( addRobotPoseCheck && addRobotConfigCheck )
-    {
+    if (addRobotPoseCheck && addRobotConfigCheck) {
         widgets_.ground_truth_display_->clearDestinationPose();
 
         consumer_->sendMessage(simulator_robot_group_message_);
@@ -503,10 +484,8 @@ void SimulatorRobotControl::addRobotPressed(wxCommandEvent& event)
 
         addRobotPoseCheck = false;
         addRobotConfigCheck = false;
-    }
-    else
-    {
-        std::cout<<"Please select both config file and starting pose.\n";
+    } else {
+        std::cout << "Please select both config file and starting pose.\n";
     }
 }
 
@@ -539,5 +518,5 @@ void SimulatorRobotControl::startSimulatorCaseThreePressed(wxCommandEvent& event
 }
 
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

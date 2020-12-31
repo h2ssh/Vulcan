@@ -9,11 +9,11 @@
 
 #include "lcmtypes/common/gaussian_distribution_t.h"
 #include "core/matrix.h"
-#include "core/vector.h"
 #include "core/multivariate_gaussian.h"
-#include "lcmtypes/subscription_manager.h"
+#include "core/vector.h"
 #include "lcmtypes/common/matrix_t.h"
 #include "lcmtypes/common/vector_t.h"
+#include "lcmtypes/subscription_manager.h"
 #include <cassert>
 
 
@@ -26,10 +26,10 @@ MultivariateGaussian convert_lcm_to_vulcan(const vulcan_lcm_gaussian_distributio
 {
     Vector mean(gaussianMessage.mean.length);
     Matrix covariance(gaussianMessage.covariance.num_rows, gaussianMessage.covariance.num_columns);
-    
+
     lcm_vector_to_vulcan_vector(gaussianMessage.mean, mean);
     lcm_matrix_to_vulcan_matrix(gaussianMessage.covariance, covariance);
-    
+
     return MultivariateGaussian(mean, covariance);
 }
 
@@ -47,7 +47,7 @@ void convert_lcm_to_vulcan(const vulcan_lcm_gaussian_distribution_t& gaussianMes
 
 void convert_vulcan_to_lcm(const MultivariateGaussian& gaussian, vulcan_lcm_gaussian_distribution_t& gaussianMessage)
 {
-    Vector mean       = gaussian.getMean();
+    Vector mean = gaussian.getMean();
     Matrix covariance = gaussian.getCovariance();
 
     allocate_lcm_vector(gaussianMessage.mean, mean.n_rows);
@@ -64,5 +64,5 @@ void free_gaussian_message(vulcan_lcm_gaussian_distribution_t& gaussianMessage)
     free_lcm_matrix(gaussianMessage.covariance);
 }
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan

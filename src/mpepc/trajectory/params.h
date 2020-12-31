@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.h
-* \author   Jong Jin Park
-*
-* Declaration of params struct for TraejctoryPlanner.
-*/
+ * \file     params.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of params struct for TraejctoryPlanner.
+ */
 
 #ifndef MPEPC_TRAJECTORY_PLANNER_PARAMS_H
 #define MPEPC_TRAJECTORY_PLANNER_PARAMS_H
@@ -23,7 +23,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace mpepc
 {
@@ -35,7 +38,7 @@ struct mpepc_optimizer_params_t
     bool useGlobalOptimizer;
     bool useLocalOptimizer;
 
-    bool   useChanceConstraint;
+    bool useChanceConstraint;
     double minAcceptableChance;
 
     double minRadius;
@@ -71,7 +74,7 @@ struct mpepc_optimizer_params_t
     double deltaGradientStepSize;
     double gainGradientStepSize;
 
-    mpepc_optimizer_params_t(void) {};
+    mpepc_optimizer_params_t(void){};
     mpepc_optimizer_params_t(const utils::ConfigFile& config);
 };
 
@@ -81,18 +84,18 @@ struct trajectory_evaluator_params_t
     float timeBetweenSamples;
 
     // dynamic object options
-    bool   useFixedObjectRadius;
+    bool useFixedObjectRadius;
     double fixedObjectRadius;
 
     // consider all objects vs single important object
-    bool   shouldConsiderOnlyTheClosestObject;
+    bool shouldConsiderOnlyTheClosestObject;
 
     // underestimation of distances if needed
     double minStaticPassingRadius;
     double minDynamicPassingRadius;
 
     // chance constraint
-    bool   useChanceConstraint;
+    bool useChanceConstraint;
     double minAcceptableSurvivability;
 
     // uncertainty computation
@@ -109,7 +112,7 @@ struct trajectory_evaluator_params_t
     double angularAccelerationActionWeight;
 
     // collision cost computation
-    bool   shouldConsiderCollisionArea;
+    bool shouldConsiderCollisionArea;
     double baseCostOfCollision;
     double velocityWeightOfCollision;
     double collisionAreaWeight;
@@ -117,25 +120,25 @@ struct trajectory_evaluator_params_t
     // path cost computation
     double angularTravelWeightForPathCost;
 
-    trajectory_evaluator_params_t(void) {};
+    trajectory_evaluator_params_t(void){};
     trajectory_evaluator_params_t(const utils::ConfigFile& config);
 };
 
 struct trajectory_planner_params_t
 {
-    robot_simulator_params_t        simulatorParams;
-    trajectory_evaluator_params_t   evaluatorParams;
+    robot_simulator_params_t simulatorParams;
+    trajectory_evaluator_params_t evaluatorParams;
     robot::collision_model_params_t robotBodyParams;
-    mpepc_optimizer_params_t        optimizerParams;
+    mpepc_optimizer_params_t optimizerParams;
 
-    trajectory_planner_params_t(void) {};
+    trajectory_planner_params_t(void){};
     trajectory_planner_params_t(const utils::ConfigFile& config,
                                 const utils::ConfigFile& controllerConfig,
                                 const utils::ConfigFile& robotConfig);
 };
 
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_TRAJECTORY_PLANNER_PARAMS_H
+#endif   // MPEPC_TRAJECTORY_PLANNER_PARAMS_H

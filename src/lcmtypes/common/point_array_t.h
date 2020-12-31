@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_POINT_ARRAY_T_H
 #define LCMTYPES_POINT_ARRAY_T_H
 
-#include "lcmtypes/vulcan_lcm_point_array_t.h"
 #include "core/point.h"
+#include "lcmtypes/vulcan_lcm_point_array_t.h"
 #include <type_traits>
 #include <vector>
 
@@ -33,9 +33,8 @@ template <typename message_t, typename T>
 void convert_lcm_to_vulcan(const message_t& pointsMessage, std::vector<Point<T>>& points)
 {
     points.resize(pointsMessage.num_points);
-    
-    for(int i = points.size(); --i >= 0;)
-    {
+
+    for (int i = points.size(); --i >= 0;) {
         points[i].x = pointsMessage.points[i].x;
         points[i].y = pointsMessage.points[i].y;
     }
@@ -55,11 +54,10 @@ template <typename T, typename message_t>
 void convert_vulcan_to_lcm(const std::vector<Point<T>>& points, message_t& pointsMessage)
 {
     pointsMessage.num_points = points.size();
-    
+
     allocate_point_array_message(pointsMessage);
-    
-    for(int i = 0; i < pointsMessage.num_points; ++i)
-    {
+
+    for (int i = 0; i < pointsMessage.num_points; ++i) {
         pointsMessage.points[i].x = points[i].x;
         pointsMessage.points[i].y = points[i].y;
     }
@@ -70,11 +68,10 @@ template <typename point_t, typename message_t, class PointIter>
 void convert_vulcan_to_lcm(PointIter begin, PointIter end, message_t& pointsMessage)
 {
     pointsMessage.num_points = std::distance(begin, end);
-    
+
     allocate_point_array_message(pointsMessage);
-    
-    for(int i = 0; i < pointsMessage.num_points; ++i, ++begin)
-    {
+
+    for (int i = 0; i < pointsMessage.num_points; ++i, ++begin) {
         pointsMessage.points[i].x = begin->x;
         pointsMessage.points[i].y = begin->y;
     }
@@ -84,10 +81,10 @@ void convert_vulcan_to_lcm(PointIter begin, PointIter end, message_t& pointsMess
 template <typename message_t>
 void free_point_array_message(message_t& pointsMessage)
 {
-    delete [] pointsMessage.points;
+    delete[] pointsMessage.points;
 }
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_POINT_ARRAY_T_H
+#endif   // LCMTYPES_POINT_ARRAY_T_H

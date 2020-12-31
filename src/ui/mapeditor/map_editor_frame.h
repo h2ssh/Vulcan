@@ -8,11 +8,11 @@
 
 
 /**
-* \file     map_editor_frame.h
-* \author   Collin Johnson
-* 
-* Definition of MapEditorFrame.
-*/
+ * \file     map_editor_frame.h
+ * \author   Collin Johnson
+ *
+ * Definition of MapEditorFrame.
+ */
 
 #ifndef UI_MAPEDITOR_MAP_EDITOR_FRAME_H
 #define UI_MAPEDITOR_MAP_EDITOR_FRAME_H
@@ -22,47 +22,48 @@
 
 namespace vulcan
 {
-namespace hssh { struct local_topology_params_t; }
+namespace hssh
+{
+struct local_topology_params_t;
+}
 namespace ui
 {
-    
-class  MetricEditorPanel;
-class  LocalTopoEditorPanel;
-class  GlobalTopoEditorPanel;
+
+class MetricEditorPanel;
+class LocalTopoEditorPanel;
+class GlobalTopoEditorPanel;
 struct ui_params_t;
-    
+
 /**
-* MapEditorFrame
-*/
+ * MapEditorFrame
+ */
 class MapEditorFrame : public EditorFrame
 {
 public:
-    
     /**
-    * Constructor for MapEditorFrame.
-    * 
-    * \param    params              Parameters governing the behavior of the UI
-    * \param    localTopoParams     Parameters for doing the local topo editing
-    */
+     * Constructor for MapEditorFrame.
+     *
+     * \param    params              Parameters governing the behavior of the UI
+     * \param    localTopoParams     Parameters for doing the local topo editing
+     */
     MapEditorFrame(const ui_params_t& params, const hssh::local_topology_params_t& localTopoParams);
-    
+
     /**
-    * Destructor for MapEditorFrame.
-    */
+     * Destructor for MapEditorFrame.
+     */
     virtual ~MapEditorFrame(void);
-    
+
 private:
-    
-    void setupMetricPanel    (const ui_params_t& params);
-    void setupLocalTopoPanel (const ui_params_t& params, const hssh::local_topology_params_t& localTopoParams);
+    void setupMetricPanel(const ui_params_t& params);
+    void setupLocalTopoPanel(const ui_params_t& params, const hssh::local_topology_params_t& localTopoParams);
     void setupGlobalTopoPanel(const ui_params_t& params);
-    
-    MetricEditorPanel*     metricPanel_;
-    LocalTopoEditorPanel*  localTopoPanel_;
+
+    MetricEditorPanel* metricPanel_;
+    LocalTopoEditorPanel* localTopoPanel_;
     GlobalTopoEditorPanel* globalTopoPanel_;
 };
-    
-}
-}
 
-#endif // UI_MAPEDITOR_MAP_EDITOR_FRAME_H 
+}   // namespace ui
+}   // namespace vulcan
+
+#endif   // UI_MAPEDITOR_MAP_EDITOR_FRAME_H

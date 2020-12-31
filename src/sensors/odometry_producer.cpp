@@ -7,16 +7,16 @@
 */
 
 
+#include "core/odometry.h"
+#include "sensors/odometry_estimator.h"
+#include "system/module_communicator.h"
+#include "utils/command_line.h"
+#include "utils/config_file.h"
+#include "utils/repeated_task.h"
+#include "utils/timestamp.h"
 #include <cassert>
 #include <fstream>
 #include <iostream>
-#include "utils/config_file.h"
-#include "utils/command_line.h"
-#include "utils/timestamp.h"
-#include "utils/repeated_task.h"
-#include "system/module_communicator.h"
-#include "sensors/odometry_estimator.h"
-#include "core/odometry.h"
 #include <unistd.h>
 
 using namespace vulcan;
@@ -36,23 +36,26 @@ const std::string DEFAULT_RATE("50");
 
 
 void display_help_if_needed(const utils::CommandLine& commandLine);
-void produce_odometry(std::unique_ptr<sensors::OdometryEstimator>& estimator, int updateRate, const std::string& channel, const std::string& logName);
+void produce_odometry(std::unique_ptr<sensors::OdometryEstimator>& estimator,
+                      int updateRate,
+                      const std::string& channel,
+                      const std::string& logName);
 void log_odometry(const odometry_t& odometry, std::ofstream& log);
 
 
 /**
-* odometry_producer uses wheel encoders to calculate dead reckoning odometry for the robot.
-* Odometry data is sent out at 50Hz by default, but can be changed on the command-line.
-*
-* The command-line arguments for odometry_producer are:
-*
-*   -h/--help                   Display this help message
-*   --type 'estimator'          Type of OdometryEstimator to create (default = wheel_encoders)
-*   --channel 'name'            Channel on which to publish the odometry data (optional, default = SENSOR_ODOMETRY)
-*   --config-file 'filename'    Name of the configuration file for the encoders driver
-*   --update-rate 'hz'          Hertz at which odometry data should be transmitted (optional, default = 50)
-*   --log-file    'filename'    Filename of log in which to store the odometry data (optional)
-*/
+ * odometry_producer uses wheel encoders to calculate dead reckoning odometry for the robot.
+ * Odometry data is sent out at 50Hz by default, but can be changed on the command-line.
+ *
+ * The command-line arguments for odometry_producer are:
+ *
+ *   -h/--help                   Display this help message
+ *   --type 'estimator'          Type of OdometryEstimator to create (default = wheel_encoders)
+ *   --channel 'name'            Channel on which to publish the odometry data (optional, default = SENSOR_ODOMETRY)
+ *   --config-file 'filename'    Name of the configuration file for the encoders driver
+ *   --update-rate 'hz'          Hertz at which odometry data should be transmitted (optional, default = 50)
+ *   --log-file    'filename'    Filename of log in which to store the odometry data (optional)
+ */
 int main(int argc, char** argv)
 {
     utils::CommandLine commandLine(argc, argv);
@@ -61,12 +64,15 @@ int main(int argc, char** argv)
 
     utils::ConfigFile config(commandLine.argumentValue(CONFIG_FILE));
 
-    std::unique_ptr<sensors::OdometryEstimator> estimator = sensors::create_odometry_estimator(commandLine.argumentValue(TYPE, DEFAULT_TYPE),
-                                                                                               config);
+    std::unique_ptr<sensors::OdometryEstimator> estimator =
+      sensors::create_odometry_estimator(commandLine.argumentValue(TYPE, DEFAULT_TYPE), config);
 
     int updateRate = atoi(commandLine.argumentValue(UPDATE_RATE, DEFAULT_RATE).c_str());
 
-    produce_odometry(estimator, updateRate, commandLine.argumentValue(CHANNEL, DEFAULT_CHANNEL), commandLine.argumentValue(LOG_FILE));
+    produce_odometry(estimator,
+                     updateRate,
+                     commandLine.argumentValue(CHANNEL, DEFAULT_CHANNEL),
+                     commandLine.argumentValue(LOG_FILE));
 
     return 0;
 }
@@ -74,53 +80,57 @@ int main(int argc, char** argv)
 
 void display_help_if_needed(const utils::CommandLine& commandLine)
 {
-    bool needHelp = commandLine.argumentExists(HELP_LONG)  ||
-                    commandLine.argumentExists(HELP_SHORT) ||
-                    !commandLine.argumentExists(CONFIG_FILE);
+    bool needHelp = commandLine.argumentExists(HELP_LONG) || commandLine.argumentExists(HELP_SHORT)
+      || !commandLine.argumentExists(CONFIG_FILE);
 
-    if(needHelp)
-    {
-        std::cout<<"The command-line arguments for odometry_producer are:\n"
-                 <<'\n'
-                 <<"   -h/--help                   Display this help message\n"
-                 <<"   --type 'estimator'          Type of OdometryEstimator to create (default = wheel_encoders)\n"
-                 <<"   --channel 'name'            Channel on which to publish the odometry data (default = SENSOR_ODOMETRY)\n"
-                 <<"   --config-file 'filename'    Name of the configuration file for the encoders driver\n"
-                 <<"   --update-rate 'hz'          Hertz at which odometry data should be transmitted (optional, default = 50)\n"
-                 <<"   --log-file    'filename'    Filename of log in which to store the odometry data (optional)"
-                 <<std::endl;
+    if (needHelp) {
+        std::cout << "The command-line arguments for odometry_producer are:\n"
+                  << '\n'
+                  << "   -h/--help                   Display this help message\n"
+                  << "   --type 'estimator'          Type of OdometryEstimator to create (default = wheel_encoders)\n"
+                  << "   --channel 'name'            Channel on which to publish the odometry data (default = "
+                     "SENSOR_ODOMETRY)\n"
+                  << "   --config-file 'filename'    Name of the configuration file for the encoders driver\n"
+                  << "   --update-rate 'hz'          Hertz at which odometry data should be transmitted (optional, "
+                     "default = 50)\n"
+                  << "   --log-file    'filename'    Filename of log in which to store the odometry data (optional)"
+                  << std::endl;
 
         exit(0);
     }
 }
 
 
-void produce_odometry(std::unique_ptr<sensors::OdometryEstimator>& estimator, int updateRate, const std::string& channel, const std::string& logName)
+void produce_odometry(std::unique_ptr<sensors::OdometryEstimator>& estimator,
+                      int updateRate,
+                      const std::string& channel,
+                      const std::string& logName)
 {
-    system::ModuleCommunicator    communicator;
+    system::ModuleCommunicator communicator;
     system::ModuleCommunicator transmitter;
-    odometry_t            odometry;
+    odometry_t odometry;
 
     std::ofstream log;
 
-    if(!logName.empty())
-    {
+    if (!logName.empty()) {
         log.open(logName);
     }
 
     int64_t sleepTime = utils::sec_to_usec(1.0 / updateRate);
 
-    int64_t startTime   = utils::system_time_us();
-    int64_t deltaTime   = 0;
-    int     numReadings = 0;
-    
+    int64_t startTime = utils::system_time_us();
+    int64_t deltaTime = 0;
+    int numReadings = 0;
+
     estimator->initialize(communicator);
-    
-    auto communicatorFunc = [&communicator](bool stopping) -> bool { communicator.processIncoming(); return false; };
+
+    auto communicatorFunc = [&communicator](bool stopping) -> bool {
+        communicator.processIncoming();
+        return false;
+    };
     utils::RepeatedTask producerTask(communicatorFunc);
 
-    while(true)
-    {
+    while (true) {
         odometry = estimator->update();
 
         estimator->send(transmitter);
@@ -128,17 +138,16 @@ void produce_odometry(std::unique_ptr<sensors::OdometryEstimator>& estimator, in
         deltaTime = utils::system_time_us() - startTime;
         ++numReadings;
 
-        if(deltaTime > utils::sec_to_usec(1))
-        {
-            std::cout << "Odometry update rate: " << (static_cast<float>(numReadings)*vulcan::utils::usec_to_sec(deltaTime))
-                << " Hz" << std::endl;
+        if (deltaTime > utils::sec_to_usec(1)) {
+            std::cout << "Odometry update rate: "
+                      << (static_cast<float>(numReadings) * vulcan::utils::usec_to_sec(deltaTime)) << " Hz"
+                      << std::endl;
 
             numReadings = 0;
-            startTime   = utils::system_time_us();
+            startTime = utils::system_time_us();
         }
 
-        if(log.is_open())
-        {
+        if (log.is_open()) {
             log_odometry(odometry, log);
         }
 
@@ -149,5 +158,4 @@ void produce_odometry(std::unique_ptr<sensors::OdometryEstimator>& estimator, in
 
 void log_odometry(const odometry_t& odometry, std::ofstream& log)
 {
-
 }

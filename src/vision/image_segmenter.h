@@ -23,43 +23,42 @@ struct image_segmenter_params_t;
 struct image_segment_t;
 
 /**
-* ImageSegmenter is an abstract base class for an image processing algorithm that accepts a full image as
-* input and produces a set of image_segment_t, which represent connected components of the image
-* using some definition of connected as determined by the particular algorithm.
-*/
+ * ImageSegmenter is an abstract base class for an image processing algorithm that accepts a full image as
+ * input and produces a set of image_segment_t, which represent connected components of the image
+ * using some definition of connected as determined by the particular algorithm.
+ */
 class ImageSegmenter
 {
 public:
-
     virtual ~ImageSegmenter(void) { }
 
     /**
-    * segmentImage finds the connected components in an image and creates a set of image_segment_t
-    * to represent these components. The image segments are bounded by a convex hull polygon to give
-    * a loose bound of the area encompassed.
-    */
+     * segmentImage finds the connected components in an image and creates a set of image_segment_t
+     * to represent these components. The image segments are bounded by a convex hull polygon to give
+     * a loose bound of the area encompassed.
+     */
     void segmentImage(const Image& image, std::vector<image_segment_t>& segments);
 
 protected:
-
     /**
-    * findImageSegments searches through the image to find the connected components that form
-    * a segmentation of the image. The calculation of the bounding polygon is handled in the
-    * base class, so findImageSegments only needs to determine the pixels and boundary pixels
-    * for each segment.
-    */
+     * findImageSegments searches through the image to find the connected components that form
+     * a segmentation of the image. The calculation of the bounding polygon is handled in the
+     * base class, so findImageSegments only needs to determine the pixels and boundary pixels
+     * for each segment.
+     */
     virtual void findImageSegments(const Image& image, std::vector<image_segment_t>& segments) = 0;
 };
 
 
 /**
-* create_image_segmenter is a factory for creating an implementation of the ImageSegmenter base class.
-* The type created is based on the provided string.
-*/
-boost::shared_ptr<ImageSegmenter> create_image_segmenter(const std::string& type, const image_segmenter_params_t& params);
+ * create_image_segmenter is a factory for creating an implementation of the ImageSegmenter base class.
+ * The type created is based on the provided string.
+ */
+boost::shared_ptr<ImageSegmenter> create_image_segmenter(const std::string& type,
+                                                         const image_segmenter_params_t& params);
 
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan
 
-#endif // SENSORS_VISION_IMAGE_SEGMENTER_H
+#endif   // SENSORS_VISION_IMAGE_SEGMENTER_H

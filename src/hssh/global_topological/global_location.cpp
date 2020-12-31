@@ -8,11 +8,11 @@
 
 
 /**
-* \file     global_location.cpp
-* \author   Collin Johnson
-*
-* Definition of constructors and operators for GlobalLocation.
-*/
+ * \file     global_location.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of constructors and operators for GlobalLocation.
+ */
 
 #include "hssh/global_topological/global_location.h"
 #include <ostream>
@@ -67,11 +67,10 @@ GlobalArea current_area(const GlobalLocation& location)
 std::ostream& operator<<(std::ostream& out, const GlobalLocation& state)
 {
     out << state.areaType << " :: " << state.areaId << " via " << state.entryTransition.id();
-    if(state.areaType == AreaType::path_segment)
-    {
+    if (state.areaType == AreaType::path_segment) {
         out << " facing " << state.pathDirection << '\n';
     }
-    
+
     return out;
 }
 
@@ -87,5 +86,5 @@ bool operator!=(const GlobalLocation& lhs, const GlobalLocation& rhs)
     return !(lhs == rhs);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

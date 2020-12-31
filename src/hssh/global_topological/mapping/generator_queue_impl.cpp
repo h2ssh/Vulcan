@@ -8,18 +8,18 @@
 
 
 /**
-* \file     generator_queue_impl.cpp
-* \author   Collin Johnson
-*
-* Definition of GeneratorQueue subclasses:
-*
-*   - ExhaustiveGeneratorQueue
-*   - LazyGeneratorQueue
-*/
+ * \file     generator_queue_impl.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GeneratorQueue subclasses:
+ *
+ *   - ExhaustiveGeneratorQueue
+ *   - LazyGeneratorQueue
+ */
 
 #include "hssh/global_topological/mapping/generator_queue_impl.h"
-#include "hssh/global_topological/mapping/hypothesis_generator.h"
 #include "hssh/global_topological/map_probability.h"
+#include "hssh/global_topological/mapping/hypothesis_generator.h"
 
 namespace vulcan
 {
@@ -60,8 +60,7 @@ void LazyGeneratorQueue::doUpdateCompleteDepth(int depth)
 void LazyGeneratorQueue::doUpdateCompleteProbability(const TopoMapProbability& probability)
 {
     // If a new map is completed, reassign the best posterior to amongst the best of the previous best and new map
-    if(probability.logPosterior > bestPosterior_)
-    {
+    if (probability.logPosterior > bestPosterior_) {
         std::cout << "Better posterior..." << bestPosterior_ << " -> " << probability.logPosterior << '\n';
         bestPosterior_ = std::max(probability.logPosterior, bestPosterior_);
     }
@@ -75,5 +74,5 @@ bool LazyGeneratorQueue::shouldGenerateMap(const HypothesisGenerator& generator)
     return generator.logProbability() >= bestPosterior_;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

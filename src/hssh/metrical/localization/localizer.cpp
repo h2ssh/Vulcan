@@ -8,18 +8,18 @@
 
 
 /**
-* \file     localizer.cpp
-* \author   Collin Johnson
-* 
-* Definition of make_localizer.
-*/
+ * \file     localizer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of make_localizer.
+ */
 
 #include "hssh/metrical/localization/localizer.h"
-#include "hssh/metrical/localization/params.h"
 #include "hssh/metrical/localization/known_pose_localizer.h"
 #include "hssh/metrical/localization/monte_carlo.h"
-#include <iostream>
+#include "hssh/metrical/localization/params.h"
 #include <cassert>
+#include <iostream>
 
 namespace vulcan
 {
@@ -28,19 +28,16 @@ namespace hssh
 
 std::unique_ptr<Localizer> make_localizer(const localizer_params_t& params)
 {
-    if(params.type == kKnownPoseType)
-    {
+    if (params.type == kKnownPoseType) {
         return std::unique_ptr<Localizer>(new KnownPoseLocalizer);
-    }
-    else if(params.type == kMonteCarloType)
-    {
+    } else if (params.type == kMonteCarloType) {
         return std::unique_ptr<Localizer>(new MonteCarloLocalization(params.monteCarloParams));
     }
-    
+
     std::cerr << "ERROR: make_localizer: Unknown localizer type:" << params.type << '\n';
     assert(false);
     return std::unique_ptr<Localizer>();
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

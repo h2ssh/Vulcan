@@ -10,45 +10,43 @@
 #ifndef SENSORS_VISION_WASSENBERG_SEGMENTER_H
 #define SENSORS_VISION_WASSENBERG_SEGMENTER_H
 
-#include <string>
-#include "vision/vision_params.h"
 #include "vision/graph_based_segmenter.h"
+#include "vision/vision_params.h"
+#include <string>
 
 namespace vulcan
 {
 namespace vision
 {
-    
+
 const std::string WASSENBERG_SEGMENTER_TYPE("wassenberg");
 
 /**
-* WassenbergSegmenter is an image segmentation algorithm described in
-* "An Efficient Parallel Algorithm for Graph-Based Image Segmentation" by
-* Wassenberg, et. al 2009.
-*/
+ * WassenbergSegmenter is an image segmentation algorithm described in
+ * "An Efficient Parallel Algorithm for Graph-Based Image Segmentation" by
+ * Wassenberg, et. al 2009.
+ */
 class WassenbergSegmenter : public GraphBasedSegmenter
 {
 public:
-    
     /**
-    * Constructor for WassenbergSegmenter.
-    */
+     * Constructor for WassenbergSegmenter.
+     */
     WassenbergSegmenter(const wassenberg_params_t& params);
-    
+
 private:
-    
     virtual int segmentGraph(void);
-    
-    int  mergeLowWeightEdges(void);
+
+    int mergeLowWeightEdges(void);
     void calculateComponentsCredit(void);
     void mergeWithEdgeHeuristic(int startingEdgeIndex);
-    
+
     float findPotentialMergeCredit(int componentA, int componentB);
-    
+
     wassenberg_params_t params;
 };
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan
 
-#endif // SENSORS_VISION_WASSENBERG_SEGMENTER_H
+#endif   // SENSORS_VISION_WASSENBERG_SEGMENTER_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     map.cpp
-* \author   Collin Johnson
-* 
-* Definition of GlobalMetricMap.
-*/
+ * \file     map.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalMetricMap.
+ */
 
 #include "hssh/global_metric/map.h"
 #include <cereal/archives/portable_binary.hpp>
@@ -22,19 +22,16 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 int32_t GlobalMetricMap::nextId_ = 0;
 
-    
-GlobalMetricMap::GlobalMetricMap(void)
-: id_(-1)
-, name_("default constructed")
+
+GlobalMetricMap::GlobalMetricMap(void) : id_(-1), name_("default constructed")
 {
 }
 
 
-GlobalMetricMap::GlobalMetricMap(const std::string&   name,
-                                 const OccupancyGrid& map)
+GlobalMetricMap::GlobalMetricMap(const std::string& name, const OccupancyGrid& map)
 : OccupancyGrid(map)
 , id_(nextId_++)
 , name_(name)
@@ -45,17 +42,14 @@ GlobalMetricMap::GlobalMetricMap(const std::string&   name,
 bool GlobalMetricMap::saveToFile(const std::string& filename) const
 {
     std::ofstream out(filename, std::ios_base::binary);
-    
-    if(out.good())
-    {
+
+    if (out.good()) {
         cereal::PortableBinaryOutputArchive ar(out);
         ar(*this);
-    }
-    else
-    {
+    } else {
         std::cerr << "ERROR: GlobalMetricMap::saveToFile(" << filename << ")\n";
     }
-    
+
     return out.good();
 }
 
@@ -63,19 +57,16 @@ bool GlobalMetricMap::saveToFile(const std::string& filename) const
 bool GlobalMetricMap::loadFromFile(const std::string& filename)
 {
     std::ifstream in(filename, std::ios_base::binary);
-    
-    if(in.good())
-    {
+
+    if (in.good()) {
         cereal::PortableBinaryInputArchive ar(in);
         ar(*this);
-    }
-    else
-    {
+    } else {
         std::cerr << "ERROR: GlobalMetricMap::loadFromFile(" << filename << ")\n";
     }
-    
+
     return in.good();
 }
-    
-}
-}
+
+}   // namespace hssh
+}   // namespace vulcan

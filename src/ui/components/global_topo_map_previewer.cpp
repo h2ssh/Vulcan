@@ -8,18 +8,18 @@
 
 
 /**
-* \file     global_topo_map_previewer.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalTopoMapPreviewer.
-*/
+ * \file     global_topo_map_previewer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalTopoMapPreviewer.
+ */
 
 #include "ui/components/global_topo_map_previewer.h"
-#include "ui/components/graph_view_topological_map_renderer.h"
-#include "ui/common/gl_shapes.h"
-#include "ui/common/color_generator.h"
-#include "hssh/global_topological/topological_map.h"
 #include "hssh/global_topological/mapping/tree_of_maps.h"
+#include "hssh/global_topological/topological_map.h"
+#include "ui/common/color_generator.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/components/graph_view_topological_map_renderer.h"
 #include <GL/gl.h>
 
 namespace vulcan
@@ -30,7 +30,7 @@ namespace ui
 const int EMPTY_CELL_ID = -1;
 
 GlobalTopoMapPreviewer::GlobalTopoMapPreviewer(int rows, int columns, TopologicalMapRenderer* renderer)
-    : mapRenderer(renderer)
+: mapRenderer(renderer)
 {
     setGridDimensions(rows, columns);
 }
@@ -41,14 +41,14 @@ void GlobalTopoMapPreviewer::setBoundary(const Point<int>& bottomLeft, int width
     this->bottomLeft = bottomLeft;
 
     // Make sure one pixel is allocated to each row and column -- makes other handling easier
-    this->width      = (width  > numColumns) ? width  : numColumns;
-    this->height     = (height > numRows)    ? height : numRows;
+    this->width = (width > numColumns) ? width : numColumns;
+    this->height = (height > numRows) ? height : numRows;
 }
 
 
 void GlobalTopoMapPreviewer::setGridDimensions(int rows, int columns)
 {
-    numRows    = (rows    > 0) ? rows    : 1;
+    numRows = (rows > 0) ? rows : 1;
     numColumns = (columns > 0) ? columns : 1;
 
     // reset the boundary to ensure it satisifies the invariants now that the grid dimensions are different and the
@@ -58,12 +58,10 @@ void GlobalTopoMapPreviewer::setGridDimensions(int rows, int columns)
     cells.clear();
 
     std::vector<GLColor> cellColors = generate_colors(numRows * numColumns);
-    auto                 colorIt    = cellColors.begin();
+    auto colorIt = cellColors.begin();
 
-    for(int row = 0; row < numRows; ++row)
-    {
-        for(int column = 0; column < numColumns; ++column)
-        {
+    for (int row = 0; row < numRows; ++row) {
+        for (int column = 0; column < numColumns; ++column) {
             cells.insert(std::make_pair(grid_cell_t(row, column), preview_cell_contents_t(*colorIt)));
             ++colorIt;
         }
@@ -73,8 +71,7 @@ void GlobalTopoMapPreviewer::setGridDimensions(int rows, int columns)
 
 bool GlobalTopoMapPreviewer::setMap(int id, grid_cell_t cell)
 {
-    if(!isValidCell(cell))
-    {
+    if (!isValidCell(cell)) {
         return false;
     }
 
@@ -86,10 +83,8 @@ bool GlobalTopoMapPreviewer::setMap(int id, grid_cell_t cell)
 
 grid_cell_t GlobalTopoMapPreviewer::addMap(int id)
 {
-    for(auto cellIt = cells.begin(), cellEnd = cells.end(); cellIt != cellEnd; ++cellIt)
-    {
-        if(cellIt->second.mapId == EMPTY_CELL_ID)
-        {
+    for (auto cellIt = cells.begin(), cellEnd = cells.end(); cellIt != cellEnd; ++cellIt) {
+        if (cellIt->second.mapId == EMPTY_CELL_ID) {
             cellIt->second.mapId = id;
             return cellIt->first;
         }
@@ -101,8 +96,7 @@ grid_cell_t GlobalTopoMapPreviewer::addMap(int id)
 
 void GlobalTopoMapPreviewer::clearCell(grid_cell_t cell)
 {
-    if(isValidCell(cell))
-    {
+    if (isValidCell(cell)) {
         cells[cell].mapId = EMPTY_CELL_ID;
     }
 }
@@ -110,8 +104,7 @@ void GlobalTopoMapPreviewer::clearCell(grid_cell_t cell)
 
 void GlobalTopoMapPreviewer::clearAllCells(void)
 {
-    for(auto cellIt = cells.begin(), cellEnd = cells.end(); cellIt != cellEnd; ++cellIt)
-    {
+    for (auto cellIt = cells.begin(), cellEnd = cells.end(); cellIt != cellEnd; ++cellIt) {
         cellIt->second.mapId = EMPTY_CELL_ID;
     }
 }
@@ -122,18 +115,16 @@ grid_cell_t GlobalTopoMapPreviewer::getCellUnderCursor(const Point<int>& cursorP
     grid_cell_t cell;
 
     int columnWidth = width / numColumns;
-    int rowHeight   = height / numRows;
+    int rowHeight = height / numRows;
 
     cell.column = (cursorPosition.x - bottomLeft.x) / columnWidth;
-    cell.row    = (cursorPosition.y - bottomLeft.y) / rowHeight;
+    cell.row = (cursorPosition.y - bottomLeft.y) / rowHeight;
 
-    if((cell.column < 0) || (cell.column >= numColumns))
-    {
+    if ((cell.column < 0) || (cell.column >= numColumns)) {
         cell.column = -1;
     }
 
-    if((cell.row < 0) || (cell.row >= numRows))
-    {
+    if ((cell.row < 0) || (cell.row >= numRows)) {
         cell.row = -1;
     }
 
@@ -143,8 +134,7 @@ grid_cell_t GlobalTopoMapPreviewer::getCellUnderCursor(const Point<int>& cursorP
 
 preview_cell_contents_t GlobalTopoMapPreviewer::getContents(grid_cell_t cell) const
 {
-    if(isValidCell(cell))
-    {
+    if (isValidCell(cell)) {
         return cells.find(cell)->second;
     }
 
@@ -156,10 +146,8 @@ std::vector<preview_cell_contents_t> GlobalTopoMapPreviewer::getActiveCellsConte
 {
     std::vector<preview_cell_contents_t> active;
 
-    for(auto cellIt = cells.begin(), cellEnd = cells.end(); cellIt != cellEnd; ++cellIt)
-    {
-        if(cellIt->second.mapId >= 0)
-        {
+    for (auto cellIt = cells.begin(), cellEnd = cells.end(); cellIt != cellEnd; ++cellIt) {
+        if (cellIt->second.mapId >= 0) {
             active.push_back(cellIt->second);
         }
     }
@@ -176,8 +164,7 @@ void GlobalTopoMapPreviewer::render(const hssh::TreeOfMaps& maps, const hssh::Me
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
 
-    for(auto cellIt = cells.begin(), cellEnd = cells.end(); cellIt != cellEnd; ++cellIt)
-    {
+    for (auto cellIt = cells.begin(), cellEnd = cells.end(); cellIt != cellEnd; ++cellIt) {
         renderCell(*cellIt, maps, places);
     }
 
@@ -194,35 +181,34 @@ void GlobalTopoMapPreviewer::renderCell(const std::pair<grid_cell_t, preview_cel
                                         const hssh::MetricMapCache& places)
 {
     int columnWidth = width / numColumns;
-    int rowHeight   = height / numRows;
+    int rowHeight = height / numRows;
 
-    Point<int> cellBottomLeft(bottomLeft.x + cell.first.column*columnWidth,
-                                    bottomLeft.y + cell.first.row*rowHeight);
+    Point<int> cellBottomLeft(bottomLeft.x + cell.first.column * columnWidth,
+                              bottomLeft.y + cell.first.row * rowHeight);
 
     glViewport(cellBottomLeft.x, cellBottomLeft.y, columnWidth, rowHeight);
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    math::Point3D<float> focalPoint(columnWidth/2.0f, rowHeight/2.0f);
+    math::Point3D<float> focalPoint(columnWidth / 2.0f, rowHeight / 2.0f);
 
     camera.setViewRegion(columnWidth, rowHeight);
     camera.setFocalPoint(focalPoint);
     camera.setupCamera(columnWidth, rowHeight);
 
     auto state = maps.stateWithId(cell.second.mapId);
-    if(state && state->map)
-    {
+    if (state && state->map) {
         math::Rectangle<float> boundary = mapRenderer->calculateRenderedBoundary(*state, places);
         Point<float> center(boundary.bottomLeft + boundary.topRight);
         center.x /= 2.0f;
         center.y /= 2.0f;
 
-        float widthScale  = columnWidth / boundary.width();
-        float heightScale = rowHeight   / boundary.height();
-        float scale       = (widthScale < heightScale) ? widthScale : heightScale;
+        float widthScale = columnWidth / boundary.width();
+        float heightScale = rowHeight / boundary.height();
+        float scale = (widthScale < heightScale) ? widthScale : heightScale;
         scale *= 0.9;
 
         glPushMatrix();
-        glTranslatef(focalPoint.x - center.x*scale, focalPoint.y - center.y*scale, 0.0);
+        glTranslatef(focalPoint.x - center.x * scale, focalPoint.y - center.y * scale, 0.0);
         glScalef(scale, scale, 1.0);
 
         mapRenderer->renderTopoMap(*state, places);
@@ -230,9 +216,7 @@ void GlobalTopoMapPreviewer::renderCell(const std::pair<grid_cell_t, preview_cel
         glPopMatrix();
 
         cell.second.borderColor.set();
-    }
-    else
-    {
+    } else {
         cell.second.borderColor.set(0.5);
     }
 
@@ -245,5 +229,5 @@ void GlobalTopoMapPreviewer::renderCell(const std::pair<grid_cell_t, preview_cel
     glEnd();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

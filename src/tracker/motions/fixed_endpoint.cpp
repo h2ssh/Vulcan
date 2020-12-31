@@ -8,26 +8,26 @@
 
 
 /**
-* \file     fixed_endpoint.cpp 
-* \author   Collin Johnson
-* 
-* Defintion of FixedEndpointMotion.
-*/
+ * \file     fixed_endpoint.cpp
+ * \author   Collin Johnson
+ *
+ * Defintion of FixedEndpointMotion.
+ */
 
 #include "tracker/motions/fixed_endpoint.h"
-#include "tracker/motions/visitor.h"
 #include "tracker/laser_object.h"
+#include "tracker/motions/visitor.h"
 #include "tracker/object_state.h"
 
 namespace vulcan
 {
 namespace tracker
 {
-    
+
 FixedEndpointMotion::FixedEndpointMotion(void)
 {
 }
-    
+
 
 bool FixedEndpointMotion::isPivoting(void) const
 {
@@ -55,16 +55,11 @@ std::unique_ptr<ObjectMotion> FixedEndpointMotion::clone(void) const
 
 ObjectMotionStatus FixedEndpointMotion::modelStatus(void) const
 {
-    if(model_.isUndetermined())
-    {
+    if (model_.isUndetermined()) {
         return ObjectMotionStatus::undetermined;
-    }
-    else if(model_.isValid())
-    {
+    } else if (model_.isValid()) {
         return ObjectMotionStatus::valid;
-    }
-    else 
-    {
+    } else {
         return ObjectMotionStatus::invalid;
     }
 }
@@ -83,5 +78,5 @@ Position FixedEndpointMotion::estimateFuturePosition(int deltaTimeMs) const
     return model_.position();
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

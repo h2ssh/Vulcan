@@ -8,11 +8,11 @@
 
 
 /**
-* \file     gl_movie_maker.cpp
-* \author   Collin Johnson
-*
-* Definition of GLMovieMaker.
-*/
+ * \file     gl_movie_maker.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GLMovieMaker.
+ */
 
 #include "ui/common/gl_movie_maker.h"
 
@@ -22,4 +22,4 @@ namespace ui
 {
 
 }
-}
+}   // namespace vulcan

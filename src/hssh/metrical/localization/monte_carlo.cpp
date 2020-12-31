@@ -8,16 +8,16 @@
 
 
 /**
-* \file     monte_carlo.cpp
-* \author   Collin Johnson
-*
-* Definition of MonteCarloLocalization.
-*/
+ * \file     monte_carlo.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of MonteCarloLocalization.
+ */
 
 #include "hssh/metrical/localization/monte_carlo.h"
-#include "hssh/metrical/localization/params.h"
-#include "hssh/metrical/localization/observation_model.h"
 #include "hssh/metrical/localization/motion_model.h"
+#include "hssh/metrical/localization/observation_model.h"
+#include "hssh/metrical/localization/params.h"
 #include "hssh/metrical/localization/particle_filter.h"
 #include "hssh/metrical/localization/particle_sampler.h"
 #include "hssh/metrical/localization/sample_set_distribution_calculator.h"
@@ -59,20 +59,20 @@ void MonteCarloLocalization::resetPoseEstimate(const pose_t& pose)
 }
 
 
-pose_distribution_t MonteCarloLocalization::updatePoseEstimate(const metric_slam_data_t&     data,
-                                                                      const OccupancyGrid&          map,
-                                                                      particle_filter_debug_info_t* debug)
+pose_distribution_t MonteCarloLocalization::updatePoseEstimate(const metric_slam_data_t& data,
+                                                               const OccupancyGrid& map,
+                                                               particle_filter_debug_info_t* debug)
 {
 #ifdef DEBUG_LOCALIZER_TIME
     int64_t startTime = utils::system_time_us();
 #endif
-    
+
     auto currentDistribution = filter_->updateFilter(data, map, debug);
 
 #ifdef DEBUG_LOCALIZER_TIME
-    std::cout<<"INFO:MonteCarloLocalization: filter time:"<<(utils::system_time_us()-startTime)/1000<<"ms\n";
+    std::cout << "INFO:MonteCarloLocalization: filter time:" << (utils::system_time_us() - startTime) / 1000 << "ms\n";
 #endif
-    
+
     return currentDistribution;
 }
 
@@ -82,5 +82,5 @@ void MonteCarloLocalization::changeReferenceFrame(const pose_t& referenceFrame)
     filter_->changeReferenceFrame(referenceFrame);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

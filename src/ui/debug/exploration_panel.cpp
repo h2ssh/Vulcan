@@ -8,20 +8,20 @@
 
 
 /**
-* \file     exploration_panel.cpp
-* \author   Collin Johnson
-* 
-* Definition of ExplorationPanel.
-*/
+ * \file     exploration_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ExplorationPanel.
+ */
 
 #include "ui/debug/exploration_panel.h"
-#include "ui/debug/debug_ui.h"
-#include "ui/debug/exploration_widget.h"
 #include "hssh/local_metric/lpm.h"
 #include "hssh/local_metric/pose.h"
 #include "mpepc/simulator/dynamic_object_trajectory.h"
 #include "mpepc/trajectory/trajectory_planner_info.h"
 #include "system/module_communicator.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/exploration_widget.h"
 #include "utils/auto_mutex.h"
 
 // Put event table in separate namespace to help KDevelop with parsing
@@ -31,11 +31,11 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(ExplorationPanel, wxEvtHandler)
-    EVT_CHECKBOX(ID_EXPLORATION_CENTER_ON_ROBOT_BOX, ExplorationPanel::centerOnRobotChanged)
+EVT_CHECKBOX(ID_EXPLORATION_CENTER_ON_ROBOT_BOX, ExplorationPanel::centerOnRobotChanged)
 END_EVENT_TABLE()
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
 
 namespace vulcan
@@ -153,5 +153,5 @@ void ExplorationPanel::centerOnRobotChanged(wxCommandEvent& event)
     widgets_.display->shouldCenterOnRobot(event.IsChecked());
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

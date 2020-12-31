@@ -7,13 +7,13 @@
 */
 
 
-#include <cstdlib>
-#include <string>
-#include <iostream>
+#include "robot/quantum_6000.h"
 #include "utils/command_line.h"
 #include "utils/thread.h"
 #include "utils/timestamp.h"
-#include "robot/quantum_6000.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 
 using vulcan::robot::Quantum6000;
@@ -36,20 +36,17 @@ int main(int argc, char** argv)
 
     vulcan::utils::Thread quantumThread;
 
-    Quantum6000 quantum(commandLine.argumentValue(BUS_A_PORT),
-                        commandLine.argumentValue(BUS_B_PORT));
+    Quantum6000 quantum(commandLine.argumentValue(BUS_A_PORT), commandLine.argumentValue(BUS_B_PORT));
 
 
     quantumThread.attachTask(&quantum);
 
     quantumThread.start();
-    
+
     usleep(5000000);
 
-    for(int n = 0; n < 3; ++n)
-    {
-        for(int i = 0; i < 300; ++i)
-        {
+    for (int n = 0; n < 3; ++n) {
+        for (int i = 0; i < 300; ++i) {
             vulcan::robot::joystick_command_t go;
             go.timestamp = vulcan::utils::system_time_us();
             go.gain = 100;
@@ -69,10 +66,10 @@ int main(int argc, char** argv)
         quantum.setJoystickCommand(stop);
         usleep(2000000);
     }
-    
+
     // Currently only testing that the passthrough is working
     char dummy;
-    std::cin>>dummy;
+    std::cin >> dummy;
     std::cout << "Entered:" << dummy << std::endl;
 
     quantumThread.kill();
@@ -83,14 +80,10 @@ int main(int argc, char** argv)
 
 void display_help_if_needed(const vulcan::utils::CommandLine& commandLine)
 {
-    bool helpNeeded = commandLine.argumentExists(HELP_SHORT) ||
-                      commandLine.argumentExists(HELP_LONG)  ||
-                      !commandLine.argumentExists(BUS_A_PORT) ||
-                      !commandLine.argumentExists(BUS_B_PORT);
+    bool helpNeeded = commandLine.argumentExists(HELP_SHORT) || commandLine.argumentExists(HELP_LONG)
+      || !commandLine.argumentExists(BUS_A_PORT) || !commandLine.argumentExists(BUS_B_PORT);
 
-    if(helpNeeded)
-    {
+    if (helpNeeded) {
         exit(1);
     }
-
 }

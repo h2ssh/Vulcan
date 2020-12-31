@@ -8,17 +8,17 @@
 
 
 /**
-* \file     skeleton_graph.h
-* \author   Collin Johnson
-*
-* Typedefs specifying the exact type of graph to be used for the skeleton graph.
-*/
+ * \file     skeleton_graph.h
+ * \author   Collin Johnson
+ *
+ * Typedefs specifying the exact type of graph to be used for the skeleton graph.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_H
 
-#include <cstdint>
 #include "math/graph/graph.h"
+#include <cstdint>
 
 namespace vulcan
 {
@@ -26,13 +26,13 @@ namespace hssh
 {
 
 const int MAX_ADJACENT_VERTICES = 8;
-    
+
 // All SkeletonGraphs have this form, so a typedef makes a lot of sense to hide the
 // unnecessary knowledge of the template parameters
-typedef math::Graph<uint16_t, MAX_ADJACENT_VERTICES>          SkeletonGraph;
+typedef math::Graph<uint16_t, MAX_ADJACENT_VERTICES> SkeletonGraph;
 typedef math::graph_vertex_t<uint16_t, MAX_ADJACENT_VERTICES> skeleton_graph_vertex_t;
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_H

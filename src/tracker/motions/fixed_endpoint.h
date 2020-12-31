@@ -8,11 +8,11 @@
 
 
 /**
-* \file     fixed_endpoint.h
-* \author   Collin Johnson
-* 
-* Declaration of FixedEndpointMotion.
-*/
+ * \file     fixed_endpoint.h
+ * \author   Collin Johnson
+ *
+ * Declaration of FixedEndpointMotion.
+ */
 
 #ifndef TRACKER_MOTIONS_FIXED_ENDPOINT_MOTION_H
 #define TRACKER_MOTIONS_FIXED_ENDPOINT_MOTION_H
@@ -22,52 +22,49 @@
 
 namespace vulcan
 {
-namespace tracker 
+namespace tracker
 {
 
 /**
-* FixedEndpointMotion
-*/
+ * FixedEndpointMotion
+ */
 class FixedEndpointMotion : public ObjectMotion
 {
 public:
-    
     /**
-    * Constructor for FixedEndpointMotion.
-    */
+     * Constructor for FixedEndpointMotion.
+     */
     FixedEndpointMotion(void);
-    
+
     /**
-    * model retrieves the model of the fixed object used to determine its motion.
-    */
+     * model retrieves the model of the fixed object used to determine its motion.
+     */
     const FixedObjectModel& model(void) const { return model_; }
-    
+
     /**
-    * isPivoting checks if the motion of the object is pivoting.
-    */
+     * isPivoting checks if the motion of the object is pivoting.
+     */
     bool isPivoting(void) const;
-    
+
     /**
-    * isSliding checks if the motion of the object is sliding.
-    */
+     * isSliding checks if the motion of the object is sliding.
+     */
     bool isSliding(void) const;
-    
+
     // ObjectMotion interface
     void accept(ObjectMotionVisitor& visitor) const override;
     std::unique_ptr<ObjectMotion> clone(void) const override;
 
 private:
-    
     FixedObjectModel model_;
-    
-    // ObjectMotion interface 
-    ObjectMotionStatus               modelStatus(void) const override;
+
+    // ObjectMotion interface
+    ObjectMotionStatus modelStatus(void) const override;
     object_motion_state_t updateMotionEstimate(const LaserObject& object) override;
-    Position                         estimateFuturePosition(int deltaTimeMs) const override;
+    Position estimateFuturePosition(int deltaTimeMs) const override;
 };
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_MOTIONS_FIXED_ENDPOINT_MOTION_H
-
+#endif   // TRACKER_MOTIONS_FIXED_ENDPOINT_MOTION_H

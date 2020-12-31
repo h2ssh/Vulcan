@@ -8,11 +8,11 @@
 
 
 /**
-* \file     metric_path_creator.cpp
-* \author   Collin Johnson
-*
-* Definition of MetricPathCreator.
-*/
+ * \file     metric_path_creator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of MetricPathCreator.
+ */
 
 #include "ui/common/metric_path_creator.h"
 #include "utils/timestamp.h"
@@ -28,9 +28,7 @@ namespace ui
 pose_t create_pose_from_positions(const Point<float>& position, const Point<float>& orientation);
 
 
-PoseSelector::PoseSelector(void)
-    : haveSelectedTarget(false)
-    , amSelectingTarget(false)
+PoseSelector::PoseSelector(void) : haveSelectedTarget(false), amSelectingTarget(false)
 {
 }
 
@@ -38,56 +36,55 @@ PoseSelector::PoseSelector(void)
 void PoseSelector::reset(void)
 {
     haveSelectedTarget = false;
-    amSelectingTarget  = false;
+    amSelectingTarget = false;
 }
 
 
 GLEventStatus PoseSelector::handleLeftMouseDown(const GLMouseEvent& event)
 {
-    amSelectingTarget  = true;
-    haveSelectedTarget = false; // start the selection process again, so any previous target is eliminated
+    amSelectingTarget = true;
+    haveSelectedTarget = false;   // start the selection process again, so any previous target is eliminated
 
-    targetPosition     = event.glCoords;
-    hoverTarget        = pose_t(targetPosition.x, targetPosition.y, 0); // The angle is assigned via the mouse motion
-    
+    targetPosition = event.glCoords;
+    hoverTarget = pose_t(targetPosition.x, targetPosition.y, 0);   // The angle is assigned via the mouse motion
+
     return event.leftIsDown ? GLEventStatus::capture : GLEventStatus::passthrough;
 }
 
 
 GLEventStatus PoseSelector::handleLeftMouseUp(const GLMouseEvent& event)
 {
-    if(amSelectingTarget)
-    {
+    if (amSelectingTarget) {
         selectedTarget = create_pose_from_positions(targetPosition, event.glCoords);
-        
-        amSelectingTarget  = false;
+
+        amSelectingTarget = false;
         haveSelectedTarget = true;
     }
-    
+
     return GLEventStatus::passthrough;
 }
 
 
 GLEventStatus PoseSelector::handleMouseMoved(const GLMouseEvent& event)
 {
-    if(amSelectingTarget)
-    {
+    if (amSelectingTarget) {
         // Keep a current waypoint up-to-date because it might be desired
         hoverTarget = create_pose_from_positions(targetPosition, event.glCoords);
-    }
-    else
-    {
+    } else {
         hoverTarget = pose_t(event.glCoords.x, event.glCoords.y, 0.0f);
     }
-    
+
     return event.leftIsDown ? GLEventStatus::capture : GLEventStatus::passthrough;
 }
 
 
 pose_t create_pose_from_positions(const Point<float>& position, const Point<float>& orientation)
 {
-    return pose_t(utils::system_time_us(), position.x, position.y, std::atan2(orientation.y-position.y, orientation.x-position.x));
+    return pose_t(utils::system_time_us(),
+                  position.x,
+                  position.y,
+                  std::atan2(orientation.y - position.y, orientation.x - position.x));
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_SENSORS_ODOMETRY_T_H
 #define LCMTYPES_SENSORS_ODOMETRY_T_H
 
-#include <string>
 #include "lcmtypes/vulcan_lcm_odometry_t.h"
+#include <string>
 
 namespace vulcan
 {
@@ -26,9 +26,12 @@ void convert_lcm_to_vulcan(const vulcan_lcm_odometry_t& odometryMessage, odometr
 void convert_vulcan_to_lcm(const odometry_t& odometry, vulcan_lcm_odometry_t& odometryMessage);
 
 void publish_data(lcm_t* lcm, const odometry_t& odometry, std::string channel = ODOMETRY_CHANNEL);
-void subscribe_to_message(lcm_t* lcm, void (*callback)(const odometry_t&, const std::string&, void*), void* userdata, std::string channel = ODOMETRY_CHANNEL);
+void subscribe_to_message(lcm_t* lcm,
+                          void (*callback)(const odometry_t&, const std::string&, void*),
+                          void* userdata,
+                          std::string channel = ODOMETRY_CHANNEL);
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_SENSORS_ODOMETRY_T_H
+#endif   // LCMTYPES_SENSORS_ODOMETRY_T_H

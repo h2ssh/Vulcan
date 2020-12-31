@@ -8,18 +8,18 @@
 
 
 /**
-* \file     place_view_topological_map_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of PlaceViewTopologicalMapRenderer.
-*/
+ * \file     place_view_topological_map_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of PlaceViewTopologicalMapRenderer.
+ */
 
 #include "ui/components/place_view_topological_map_renderer.h"
-#include <GL/gl.h>
-#include "ui/common/default_colors.h"
-#include "ui/common/gl_shapes.h"
 #include "hssh/global_topological/global_place.h"
 #include "hssh/local_topological/areas/place.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include <GL/gl.h>
 
 namespace vulcan
 {
@@ -31,20 +31,18 @@ void PlaceViewTopologicalMapRenderer::renderPlace(const map_place_info_t& place,
     // TODO: Fix this once the LocalAreas are being stored.
 
     // Need the metric map for drawing place view
-    if(place.metric)
-    {
+    if (place.metric) {
         glPushMatrix();
         glTranslatef(place.referenceFrame.x, place.referenceFrame.y, 0);
         glRotatef(place.referenceFrame.theta * 180.0f / M_PI, 0.0f, 0.0f, 1.0f);
 
-        std::cout << "Global rotation: " << place.referenceFrame.theta << " Local rotation: "
-            << place.metric->extent().center().theta << '\n';
+        std::cout << "Global rotation: " << place.referenceFrame.theta
+                  << " Local rotation: " << place.metric->extent().center().theta << '\n';
 
         auto boundary = place.metric->extent().rectangleBoundary();
-        boundary.rotate(place.metric->extent().center().theta); // rotate it back b/c global frame determines rotation
+        boundary.rotate(place.metric->extent().center().theta);   // rotate it back b/c global frame determines rotation
 
-        if(attributes == CURRENT_PLACE)
-        {
+        if (attributes == CURRENT_PLACE) {
             locationColor.set(0.5f);
             gl_draw_filled_rectangle(boundary);
         }
@@ -65,37 +63,29 @@ void PlaceViewTopologicalMapRenderer::renderPlace(const map_place_info_t& place,
 
 
 void PlaceViewTopologicalMapRenderer::renderPathSegment(const hssh::GlobalPathSegment& segment,
-                                                        const map_place_info_t&  plusPlace,
-                                                        const map_place_info_t&  minusPlace,
+                                                        const map_place_info_t& plusPlace,
+                                                        const map_place_info_t& minusPlace,
                                                         path_segment_attribute_t attributes)
 {
     const float BORDER_WIDTH = 3.0f;
 
-    pose_t plusLocation  = plusPlace.referenceFrame;
+    pose_t plusLocation = plusPlace.referenceFrame;
     pose_t minusLocation = minusPlace.referenceFrame;
 
-    if(plusPlace.topo->id() == hssh::kFrontierId)
-    {
+    if (plusPlace.topo->id() == hssh::kFrontierId) {
         plusLocation = minusLocation;
-    }
-    else if(minusPlace.topo->id() == hssh::kFrontierId)
-    {
+    } else if (minusPlace.topo->id() == hssh::kFrontierId) {
         minusLocation = plusLocation;
     }
 
     glLineWidth(BORDER_WIDTH);
     glBegin(GL_LINES);
 
-    if(plusPlace.topo->id() == hssh::kFrontierId || minusPlace.topo->id() == hssh::kFrontierId)
-    {
+    if (plusPlace.topo->id() == hssh::kFrontierId || minusPlace.topo->id() == hssh::kFrontierId) {
         frontierColor.set();
-    }
-    else if(attributes == CURRENT_PATH)
-    {
+    } else if (attributes == CURRENT_PATH) {
         locationColor.set();
-    }
-    else
-    {
+    } else {
         pathColor.set();
     }
 
@@ -105,5 +95,5 @@ void PlaceViewTopologicalMapRenderer::renderPathSegment(const hssh::GlobalPathSe
     glEnd();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

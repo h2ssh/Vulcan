@@ -8,11 +8,11 @@
 
 
 /**
-* \file     local_area_event_renderer.h
-* \author   Collin Johnson
-*
-* Declaration of LocalAreaEventRenderer.
-*/
+ * \file     local_area_event_renderer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LocalAreaEventRenderer.
+ */
 
 #ifndef UI_COMPONENTS_LOCAL_AREA_EVENT_RENDERER_H
 #define UI_COMPONENTS_LOCAL_AREA_EVENT_RENDERER_H
@@ -21,33 +21,35 @@
 
 namespace vulcan
 {
-namespace hssh { class LocalAreaEvent; }
+namespace hssh
+{
+class LocalAreaEvent;
+}
 namespace ui
 {
 
 /**
-* LocalAreaEventRenderer draws a LocalAreaEvent. The events are drawn in the following ways:
-*
-*   - AreaTransition : an arrow goes from the previous area, across the gateway, and into the new area.
-*   - TurnAround     : an arrow pointing from the turn around point towards the new direction of motion
-*/
+ * LocalAreaEventRenderer draws a LocalAreaEvent. The events are drawn in the following ways:
+ *
+ *   - AreaTransition : an arrow goes from the previous area, across the gateway, and into the new area.
+ *   - TurnAround     : an arrow pointing from the turn around point towards the new direction of motion
+ */
 class LocalAreaEventRenderer : public hssh::LocalAreaEventVisitor
 {
 public:
-
     /**
-    * renderEvent draws the event that has occurred.
-    *
-    * \param    event       Event to draw
-    */
+     * renderEvent draws the event that has occurred.
+     *
+     * \param    event       Event to draw
+     */
     void renderEvent(const hssh::LocalAreaEvent& event);
 
     // LocalAreaEventVisitor interface
     virtual void visitAreaTransition(const hssh::AreaTransitionEvent& event);
-    virtual void visitTurnAround    (const hssh::TurnAroundEvent&     event);
+    virtual void visitTurnAround(const hssh::TurnAroundEvent& event);
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_LOCAL_AREA_EVENT_RENDERER_H
+#endif   // UI_COMPONENTS_LOCAL_AREA_EVENT_RENDERER_H

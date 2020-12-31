@@ -8,30 +8,28 @@
 
 
 /**
-* \file     player_reader.cpp
-* \author   Collin Johnson
-* 
-* Definition of PlayerReader for reading Player/Stage log files.
-*/
+ * \file     player_reader.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of PlayerReader for reading Player/Stage log files.
+ */
 
 #include "logging/logplayer/player_reader.h"
 
-namespace vulcan 
+namespace vulcan
 {
 namespace logplayer
 {
-    
-PlayerReader::PlayerReader(const data_channels_t& channels)
-: LogReader(channels)
+
+PlayerReader::PlayerReader(const data_channels_t& channels) : LogReader(channels)
 {
-    
 }
 
 
-bool PlayerReader::convertLogToFrames(const std::string & filename)
+bool PlayerReader::convertLogToFrames(const std::string& filename)
 {
     return false;
 }
 
-} // namespace logplayer
-} // namespace vulcan
+}   // namespace logplayer
+}   // namespace vulcan

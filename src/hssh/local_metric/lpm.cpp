@@ -15,59 +15,58 @@ namespace vulcan
 {
 namespace hssh
 {
-    
-LocalPerceptualMap::LocalPerceptualMap(void)
-: timestamp(0)
-, mapId(-1)
-, frameIndex(0)
+
+LocalPerceptualMap::LocalPerceptualMap(void) : timestamp(0), mapId(-1), frameIndex(0)
 {
 }
-    
+
 
 LocalPerceptualMap::LocalPerceptualMap(const lpm_params_t& gridParams, const Point<float>& globalCenter)
-: OccupancyGrid(gridParams.width, gridParams.height, gridParams.scale, globalCenter, gridParams.occupiedCellCost, gridParams.freeCellCost)
+: OccupancyGrid(gridParams.width,
+                gridParams.height,
+                gridParams.scale,
+                globalCenter,
+                gridParams.occupiedCellCost,
+                gridParams.freeCellCost)
 , timestamp(0)
 , mapId(-1)
 , frameIndex(0)
 {
 }
-    
 
-LocalPerceptualMap::LocalPerceptualMap(std::size_t               widthInCells,
-                                       std::size_t               heightInCells, 
-                                       float                     cellsToMeters, 
+
+LocalPerceptualMap::LocalPerceptualMap(std::size_t widthInCells,
+                                       std::size_t heightInCells,
+                                       float cellsToMeters,
                                        const Point<float>& globalCenter,
-                                       uint8_t                   occupiedCellCost, 
-                                       uint8_t                   freeCellCost)
+                                       uint8_t occupiedCellCost,
+                                       uint8_t freeCellCost)
 : OccupancyGrid(widthInCells, heightInCells, cellsToMeters, globalCenter, occupiedCellCost, freeCellCost)
 , timestamp(0)
 , mapId(-1)
 , frameIndex(0)
 {
-    
 }
 
 
-LocalPerceptualMap::LocalPerceptualMap(const OccupancyGrid& grid)
-: OccupancyGrid(grid)
-, frameIndex(0)
+LocalPerceptualMap::LocalPerceptualMap(const OccupancyGrid& grid) : OccupancyGrid(grid), frameIndex(0)
 {
 }
 
 
 void LocalPerceptualMap::changeReferenceFrame(const pose_t& newReferenceFrame)
 {
-//     costGrid = utils::transform_grid(costGrid, INITIAL_CELL_COST, newReferenceFrame.x, newReferenceFrame.y, newReferenceFrame.theta);
-//     typeGrid = utils::transform_grid(typeGrid, kUnobservedOccGridCell, newReferenceFrame.x, newReferenceFrame.y, newReferenceFrame.theta);
-// 
-//     std::cout<<"Changing frame to "<<newReferenceFrame<<'\n';
-// 
-//     ++frameIndex;
-//     transformFromLastFrame = newReferenceFrame;
-    
+    //     costGrid = utils::transform_grid(costGrid, INITIAL_CELL_COST, newReferenceFrame.x, newReferenceFrame.y,
+    //     newReferenceFrame.theta); typeGrid = utils::transform_grid(typeGrid, kUnobservedOccGridCell,
+    //     newReferenceFrame.x, newReferenceFrame.y, newReferenceFrame.theta);
+    //
+    //     std::cout<<"Changing frame to "<<newReferenceFrame<<'\n';
+    //
+    //     ++frameIndex;
+    //     transformFromLastFrame = newReferenceFrame;
+
     std::cerr << "STUB!  LocalPerceptualMap::changeReferenceFrame\n";
 }
 
-}
-}
-
+}   // namespace hssh
+}   // namespace vulcan

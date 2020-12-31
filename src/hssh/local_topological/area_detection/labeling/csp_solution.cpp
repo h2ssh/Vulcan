@@ -8,23 +8,22 @@
 
 
 /**
-* \file     labeling_csp.cpp
-* \author   Collin Johnson
-*
-* Definition of CSPSolution.
-*/
+ * \file     labeling_csp.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of CSPSolution.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/csp_solution.h"
-#include "hssh/local_topological/area_detection/labeling/hypothesis_graph.h"
 #include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_graph.h"
 
 namespace vulcan
 {
 namespace hssh
 {
 
-CSPSolution::CSPSolution(ErrorCode error)
-: error_(error)
+CSPSolution::CSPSolution(ErrorCode error) : error_(error)
 {
 }
 
@@ -40,10 +39,8 @@ CSPSolution::CSPSolution(const std::vector<AreaLabel>& labels, double logProb)
 void CSPSolution::apply(HypothesisGraph& graph)
 {
     // Apply all the labels
-    for(auto& label : labels_)
-    {
-        for(auto& area : label.areaHypotheses)
-        {
+    for (auto& label : labels_) {
+        for (auto& area : label.areaHypotheses) {
             area->setType(label.label);
             area->setTypeDistribution(label.distribution);
         }
@@ -55,16 +52,12 @@ void CSPSolution::apply(HypothesisGraph& graph)
 
 std::ostream& operator<<(std::ostream& out, const CSPSolution& solution)
 {
-    if(solution.error_ == CSPSolution::successful)
-    {
-        std::cout << "CSPSolution: SUCCESS! Num areas: " << solution.labels_.size() << " Log-prob: "
-            << solution.logProb_;
-    }
-    else
-    {
+    if (solution.error_ == CSPSolution::successful) {
+        std::cout << "CSPSolution: SUCCESS! Num areas: " << solution.labels_.size()
+                  << " Log-prob: " << solution.logProb_;
+    } else {
         std::cout << "CSPSolution: ERROR! ";
-        switch(solution.error_)
-        {
+        switch (solution.error_) {
         case CSPSolution::too_many_attempts:
             std::cout << "too many attempts";
             break;
@@ -86,5 +79,5 @@ std::ostream& operator<<(std::ostream& out, const CSPSolution& solution)
     return out;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

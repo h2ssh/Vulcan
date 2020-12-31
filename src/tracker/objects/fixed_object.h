@@ -8,11 +8,11 @@
 
 
 /**
-* \file     fixed_object.h
-* \author   Collin Johnson
-* 
-* Declaration of FixedObject.
-*/
+ * \file     fixed_object.h
+ * \author   Collin Johnson
+ *
+ * Declaration of FixedObject.
+ */
 
 #ifndef TRACKER_OBJECTS_FIXED_OBJECT_H
 #define TRACKER_OBJECTS_FIXED_OBJECT_H
@@ -25,27 +25,26 @@
 
 namespace vulcan
 {
-namespace tracker 
+namespace tracker
 {
 
 /**
-* FixedObject is an abstract base class representing an object in the environment that moves around some fixed position.
-* Such fixed objects are typically door, either sliding or rotating, though other such objects surely exist.
-*
-* FixedObject implements most of the DynamicObject interface. The remaining methods that must be implemented by
-* subclasses are:
-*
-*   - estimateStateAt
-*   - clone
-*   - accept
-*/
+ * FixedObject is an abstract base class representing an object in the environment that moves around some fixed
+ * position. Such fixed objects are typically door, either sliding or rotating, though other such objects surely exist.
+ *
+ * FixedObject implements most of the DynamicObject interface. The remaining methods that must be implemented by
+ * subclasses are:
+ *
+ *   - estimateStateAt
+ *   - clone
+ *   - accept
+ */
 class FixedObject : public DynamicObject
 {
 public:
-    
     /**
-    * fixedPosition is the position on the object that is fixed to the environment.
-    */
+     * fixedPosition is the position on the object that is fixed to the environment.
+     */
     Position fixedPosition(void) const { return model_.fixedPosition(); }
 
     // DynamicObject interface
@@ -63,42 +62,40 @@ public:
 
 
 protected:
-    
     /**
-    * Default constructor for FixedObject.
-    */
+     * Default constructor for FixedObject.
+     */
     FixedObject(void) { }
-    
+
     /**
-    * Constructor for FixedObject.
-    * 
-    * \param    timestamp           Time at which the model was last updated
-    * \param    model               Current model of the object
-    */
+     * Constructor for FixedObject.
+     *
+     * \param    timestamp           Time at which the model was last updated
+     * \param    model               Current model of the object
+     */
     FixedObject(int64_t timestamp, const FixedObjectModel& model);
 
     /**
-    * model retrieves the underlying model of the object to be used by subclasses for knowing the current and future
-    * state of the object.
-    */
+     * model retrieves the underlying model of the object to be used by subclasses for knowing the current and future
+     * state of the object.
+     */
     const FixedObjectModel& model(void) const { return model_; }
-    
+
     /**
-    * estimateVelocity estimates the current velocity of the object. When called, the model() has already been updated
-    * with the most recent information from a LaserObject. Thus, the model() can be used for determining the object
-    * position at the current timestamp.
-    * 
-    * \param    timestamp           Current timestamp of the model
-    * \return   The current velocity estimate for the object.
-    */
+     * estimateVelocity estimates the current velocity of the object. When called, the model() has already been updated
+     * with the most recent information from a LaserObject. Thus, the model() can be used for determining the object
+     * position at the current timestamp.
+     *
+     * \param    timestamp           Current timestamp of the model
+     * \return   The current velocity estimate for the object.
+     */
     virtual velocity_t estimateVelocity(int64_t timestamp) const = 0;
 
 private:
-
-    int64_t          lastUpdateTime_;
-    int64_t          totalTimeSeen_;
+    int64_t lastUpdateTime_;
+    int64_t totalTimeSeen_;
     FixedObjectModel model_;
-    object_state_t   state_;
+    object_state_t state_;
     ObjectGoalDistribution goals_;
 
     // Serialization support
@@ -107,14 +104,11 @@ private:
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( lastUpdateTime_,
-            totalTimeSeen_,
-            model_,
-            goals_);
+        ar(lastUpdateTime_, totalTimeSeen_, model_, goals_);
     }
 };
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_OBJECTS_FIXED_OBJECT_H
+#endif   // TRACKER_OBJECTS_FIXED_OBJECT_H

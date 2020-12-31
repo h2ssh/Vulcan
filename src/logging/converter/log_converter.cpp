@@ -8,10 +8,10 @@
 
 
 /**
-* \file     log_converter.cpp
-* \author   Collin Johnson
-* 
-*/
+ * \file     log_converter.cpp
+ * \author   Collin Johnson
+ *
+ */
 
 #include "logging/converter/converters.h"
 
@@ -20,6 +20,6 @@ using namespace vulcan;
 int main(int argc, char** argv)
 {
     logging::convert_lcm_to_dpslam(argv[1], true);
-    
+
     return 0;
 }

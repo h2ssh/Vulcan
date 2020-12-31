@@ -8,11 +8,11 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* Declaration of z_test_results_t and binomial_proportion_z_test.
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * Declaration of z_test_results_t and binomial_proportion_z_test.
+ */
 
 #ifndef MATH_Z_TEST_H
 #define MATH_Z_TEST_H
@@ -23,18 +23,18 @@ namespace math
 {
 
 /**
-* Results for running an z-test on two sets of samples from a binomial distribution.
-*
-* Based on a provided confidence threshold, the summary provided details:
-*
-*   - Are means significantly different? (Two-tailed test)
-*   - Is sample A mean significantly less than sample B mean? (One-tailed test)
-*   - Is sample A mean significantly greater than sample B mean? (One-tailed test)
-*/
+ * Results for running an z-test on two sets of samples from a binomial distribution.
+ *
+ * Based on a provided confidence threshold, the summary provided details:
+ *
+ *   - Are means significantly different? (Two-tailed test)
+ *   - Is sample A mean significantly less than sample B mean? (One-tailed test)
+ *   - Is sample A mean significantly greater than sample B mean? (One-tailed test)
+ */
 struct z_test_results_t
 {
-    double zValue;          ///< Z-statistic computed for the samples
-    double confidence;      ///< Confidence value provided by caller
+    double zValue;       ///< Z-statistic computed for the samples
+    double confidence;   ///< Confidence value provided by caller
 
     // P-Values giving probability of difference between the distributions
     double pValueDifferent;
@@ -42,39 +42,38 @@ struct z_test_results_t
     double pValueGreater;
 
     // Conditions based on the p-values
-    bool areDifferent;      ///< Don't reject hypothesis they are different
-    bool isLess;            ///< Don't reject hypothesis that sample A mean is less than sample B mean
-    bool isGreater;         ///< Don't reject hypothesis that Sample A mean is greater than sample B mean
+    bool areDifferent;   ///< Don't reject hypothesis they are different
+    bool isLess;         ///< Don't reject hypothesis that sample A mean is less than sample B mean
+    bool isGreater;      ///< Don't reject hypothesis that Sample A mean is greater than sample B mean
 };
 
 /**
-* Description of samples for a z-test.
-*/
+ * Description of samples for a z-test.
+ */
 struct z_test_sample_t
 {
-    int numTrue;        // Number of true samples (must be <= numSamples)
+    int numTrue;   // Number of true samples (must be <= numSamples)
     int numSamples;
 };
 
 /**
-* Run a binomial proportion Z-test on two samples.
-*
-* See: http://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/binotest.htm
-*
-* \pre  sampleA.numSamples > 0
-* \pre  sampleB.numSamples > 0
-* \pre  sampleA.numTrue >= 0 && sampleA.numTrue <= numSamples
-* \pre  sampleB.numTrue >= 0 && sampleB.numTrue <= numSamples
-* \param    sampleA             Collection of samples
-* \param    sampleB             Collection of samples to compare against
-* \param    confidence          Confidence level for the prediction
-* \return   A z_test_results_t with the results of all possible hypotheses.
-*/
-z_test_results_t binomial_proportion_z_test(const z_test_sample_t& sampleA,
-                                            const z_test_sample_t& sampleB,
-                                            double confidence);
+ * Run a binomial proportion Z-test on two samples.
+ *
+ * See: http://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/binotest.htm
+ *
+ * \pre  sampleA.numSamples > 0
+ * \pre  sampleB.numSamples > 0
+ * \pre  sampleA.numTrue >= 0 && sampleA.numTrue <= numSamples
+ * \pre  sampleB.numTrue >= 0 && sampleB.numTrue <= numSamples
+ * \param    sampleA             Collection of samples
+ * \param    sampleB             Collection of samples to compare against
+ * \param    confidence          Confidence level for the prediction
+ * \return   A z_test_results_t with the results of all possible hypotheses.
+ */
+z_test_results_t
+  binomial_proportion_z_test(const z_test_sample_t& sampleA, const z_test_sample_t& sampleB, double confidence);
 
-} // namespace math
-} // namepace vulcan
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_Z_TEST_H
+#endif   // MATH_Z_TEST_H

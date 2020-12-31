@@ -8,16 +8,16 @@
 
 
 /**
-* \file     isovist_maxima.cpp
-* \author   Collin Johnson
-*
-* Definition of VoronoiIsovistMaxima.
-*/
+ * \file     isovist_maxima.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of VoronoiIsovistMaxima.
+ */
 
 #include "hssh/local_topological/area_detection/gateways/isovist_maxima.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
 #include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "math/savitzky_golay.h"
 #include "math/statistics.h"
 #include "utils/algorithm_ext.h"
@@ -55,10 +55,8 @@ VoronoiIsovistMaxima::VoronoiIsovistMaxima(const VoronoiIsovistGradients& gradie
 , gradients_(&gradients)
 , grid_(&grid)
 {
-    for(auto& e : edges)
-    {
-        if(e.size() >= 5)
-        {
+    for (auto& e : edges) {
+        if (e.size() >= 5) {
             calculateEdgeDerivatives(e.begin(), e.end());
             findMaximaAlongEdge(e.begin(), e.end(), 2);
         }
@@ -77,66 +75,55 @@ void VoronoiIsovistMaxima::calculateEdgeDerivatives(CellConstIter edgeBegin, Cel
 
     edgeDerivs_.resize(edgeGradients_.size());
 
-    if(edgeGradients_.size() >= 7)
-    {
+    if (edgeGradients_.size() >= 7) {
         math::savitzky_golay_first_deriv(edgeGradients_.begin(),
                                          edgeGradients_.end(),
                                          edgeDerivs_.begin(),
                                          math::SGWindowRadius::three);
-    }
-    else if(edgeGradients_.size() >= 5)
-    {
+    } else if (edgeGradients_.size() >= 5) {
         math::savitzky_golay_first_deriv(edgeGradients_.begin(),
                                          edgeGradients_.end(),
                                          edgeDerivs_.begin(),
                                          math::SGWindowRadius::two);
-    }
-    else
-    {
+    } else {
         std::adjacent_difference(edgeGradients_.begin(), edgeGradients_.end(), edgeDerivs_.begin());
         edgeDerivs_[0] = 0.0;
     }
 
     // Save the original data
-    if(saveData_)
-    {
+    if (saveData_) {
         std::ostringstream file;
-        file << "values_" << edgeBegin->x << '_' << (edgeEnd-1)->x << ".dat";
+        file << "values_" << edgeBegin->x << '_' << (edgeEnd - 1)->x << ".dat";
         std::ofstream out(file.str());
 
         int index = 0;
-        for(auto cell : boost::make_iterator_range(edgeBegin, edgeEnd))
-        {
+        for (auto cell : boost::make_iterator_range(edgeBegin, edgeEnd)) {
             out << index << ' ' << gradients_->gradientAt(cell).data << '\n';
             ++index;
         }
     }
 
     // Save the gradient
-    if(saveData_)
-    {
+    if (saveData_) {
         std::ostringstream file;
-        file << "gradients_" << edgeBegin->x << '_' << (edgeEnd-1)->x << ".dat";
+        file << "gradients_" << edgeBegin->x << '_' << (edgeEnd - 1)->x << ".dat";
         std::ofstream out(file.str());
 
         int index = 0;
-        for(auto& diff : edgeGradients_)
-        {
+        for (auto& diff : edgeGradients_) {
             out << index << ' ' << diff << '\n';
             ++index;
         }
     }
 
     // Save the derivate of the gradient
-    if(saveData_)
-    {
+    if (saveData_) {
         std::ostringstream file;
-        file << "deriv_" << edgeBegin->x << '_' << (edgeEnd-1)->x << ".dat";
+        file << "deriv_" << edgeBegin->x << '_' << (edgeEnd - 1)->x << ".dat";
         std::ofstream out(file.str());
 
         int index = 0;
-        for(auto& diff : edgeDerivs_)
-        {
+        for (auto& diff : edgeDerivs_) {
             out << index << ' ' << diff << '\n';
             ++index;
         }
@@ -156,22 +143,18 @@ void VoronoiIsovistMaxima::findMaximaAlongEdge(CellConstIter edgeBegin, CellCons
 
     const double meanGradient = math::mean(absGradients.begin(), absGradients.end());
 
-    int maximaStart      = 0;
-    int maximaEnd        = 0;
+    int maximaStart = 0;
+    int maximaEnd = 0;
     bool haveOppositeFlip = false;
     bool haveSameFlip = false;
 
     // The gradients are always positive as calculated. Thus, the start of a change will in the derivative will always
     // be positive to start.
-    for(std::size_t n = 0; n < edgeGradients_.size(); ++n)
-    {
-        if(std::signbit(edgeDerivs_[n]) != std::signbit(edgeDerivs_[n-1]))
-        {
-            if(std::signbit(edgeDerivs_[n]) == std::signbit(edgeGradients_[n]))
-            {
+    for (std::size_t n = 0; n < edgeGradients_.size(); ++n) {
+        if (std::signbit(edgeDerivs_[n]) != std::signbit(edgeDerivs_[n - 1])) {
+            if (std::signbit(edgeDerivs_[n]) == std::signbit(edgeGradients_[n])) {
                 haveSameFlip = true;
-            }
-            else // signs are different
+            } else   // signs are different
             {
                 haveOppositeFlip = true;
                 haveSameFlip = false;
@@ -179,23 +162,21 @@ void VoronoiIsovistMaxima::findMaximaAlongEdge(CellConstIter edgeBegin, CellCons
         }
 
         // If increasing again and was already increasing and decreasing, then end of change region has been found
-        bool isGradientEnd = std::signbit(edgeGradients_[n]) != std::signbit(edgeGradients_[n-1])
-            || (haveSameFlip && haveOppositeFlip);
-        bool isEndOfEdge   = n+1 == edgeGradients_.size();
-        if((isGradientEnd || isEndOfEdge))
-        {
-            maximaEnd = isEndOfEdge ? n+1 : n;
+        bool isGradientEnd =
+          std::signbit(edgeGradients_[n]) != std::signbit(edgeGradients_[n - 1]) || (haveSameFlip && haveOppositeFlip);
+        bool isEndOfEdge = n + 1 == edgeGradients_.size();
+        if ((isGradientEnd || isEndOfEdge)) {
+            maximaEnd = isEndOfEdge ? n + 1 : n;
 
             int outlierCount = std::count_if(absGradients.begin() + maximaStart,
                                              absGradients.begin() + maximaEnd,
                                              [&meanGradient](double gradient) {
-                return gradient > meanGradient;
-            });
+                                                 return gradient > meanGradient;
+                                             });
 
-            if(outlierCount >= numAboveMean_)
-            {
-                maxima_.push_back(create_local_maximum(edgeBegin+maximaStart,
-                                                       edgeBegin+maximaEnd,
+            if (outlierCount >= numAboveMean_) {
+                maxima_.push_back(create_local_maximum(edgeBegin + maximaStart,
+                                                       edgeBegin + maximaEnd,
                                                        edgeBegin,
                                                        edgeEnd,
                                                        *gradients_,
@@ -208,14 +189,12 @@ void VoronoiIsovistMaxima::findMaximaAlongEdge(CellConstIter edgeBegin, CellCons
         }
     }
 
-    if(saveData_)
-    {
+    if (saveData_) {
         std::ostringstream file;
-        file << "maxima_" << edgeBegin->x << '_' << (edgeEnd-1)->x << ".dat";
+        file << "maxima_" << edgeBegin->x << '_' << (edgeEnd - 1)->x << ".dat";
         std::ofstream out(file.str());
 
-        for(auto& maximum : boost::make_iterator_range(maxima_.begin() + maximaStartIndex, maxima_.end()))
-        {
+        for (auto& maximum : boost::make_iterator_range(maxima_.begin() + maximaStartIndex, maxima_.end())) {
             int index = std::distance(edgeBegin, std::find(edgeBegin, edgeEnd, maximum.maximum.position));
             out << index << ' ' << maximum.totalChange << '\n';
         }
@@ -237,42 +216,40 @@ isovist_local_maximum_t create_local_maximum(CellConstIter begin,
     maximum.totalChange = 0.0;
 
     CellSet maximaSources;
-    for(auto cell : boost::make_iterator_range(begin, end))
-    {
+    for (auto cell : boost::make_iterator_range(begin, end)) {
         maximaSources.insert(skeleton.beginSourceCells(cell), skeleton.endSourceCells(cell));
 
         maximum.skeletonCells.emplace_back(gradients.gradientAt(cell));
         maximum.totalChange += std::abs(maximum.skeletonCells.back().value);
     }
 
-    std::sort(maximum.skeletonCells.begin(), maximum.skeletonCells.end(), [](position_value_t lhs, position_value_t rhs) {
-        return std::abs(lhs.value) > std::abs(rhs.value);
-    });
+    std::sort(maximum.skeletonCells.begin(),
+              maximum.skeletonCells.end(),
+              [](position_value_t lhs, position_value_t rhs) {
+                  return std::abs(lhs.value) > std::abs(rhs.value);
+              });
 
     maximum.maximum = maximum.skeletonCells.front();
 
     // For each cell along the edge, if it shares all of the source cells, then it should be added to the cells for
     // the maxima, but not counted towards the total value
 
-    for(auto edgeCell : boost::make_iterator_range(beginEdgeCells + 1, endEdgeCells - 1))
-    {
+    for (auto edgeCell : boost::make_iterator_range(beginEdgeCells + 1, endEdgeCells - 1)) {
         // Only add cells that are not along the edge. Both edgeCells and maxima cells are sorted so they iterate in
         // the same order
-        if(edgeCell == *begin)
-        {
+        if (edgeCell == *begin) {
             ++begin;
             continue;
         }
 
         bool hasMaximaSource = true;
 
-        for(auto source : boost::make_iterator_range(skeleton.beginSourceCells(edgeCell), skeleton.endSourceCells(edgeCell)))
-        {
+        for (auto source :
+             boost::make_iterator_range(skeleton.beginSourceCells(edgeCell), skeleton.endSourceCells(edgeCell))) {
             hasMaximaSource &= maximaSources.find(source) != maximaSources.end();
         }
 
-        if(hasMaximaSource)
-        {
+        if (hasMaximaSource) {
             maximum.skeletonCells.emplace_back(gradients.gradientAt(edgeCell));
         }
     }
@@ -280,5 +257,5 @@ isovist_local_maximum_t create_local_maximum(CellConstIter begin,
     return maximum;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

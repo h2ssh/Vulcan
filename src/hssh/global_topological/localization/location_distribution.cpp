@@ -8,11 +8,11 @@
 
 
 /**
-* \file     location_distribution.cpp
-* \author   Collin Johnson
-* 
-* Definition of GlobalLocationDistribution.
-*/
+ * \file     location_distribution.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalLocationDistribution.
+ */
 
 #include "hssh/global_topological/localization/location_distribution.h"
 #include "core/float_comparison.h"
@@ -22,17 +22,16 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 GlobalLocationDistribution::GlobalLocationDistribution(const std::vector<WeightedGlobalLocation>& locations)
 : locations_(locations)
 {
     // Confirm the invariant holds
     double sumProb = 0.0;
-    for(auto& l : locations_)
-    {
+    for (auto& l : locations_) {
         sumProb += l.probability;
     }
-    
+
     assert(absolute_fuzzy_equal(sumProb, 1.0));
 }
 
@@ -42,5 +41,5 @@ GlobalLocationDistribution::GlobalLocationDistribution(const GlobalLocation& loc
     locations_.emplace_back(1.0, location);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

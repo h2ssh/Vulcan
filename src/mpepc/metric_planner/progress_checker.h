@@ -8,11 +8,11 @@
 
 
 /**
-* \file     progress_checker.h
-* \author   Jong Jin Park and Collin Johnson
-*
-* Declaration of ProgressChecker.
-*/
+ * \file     progress_checker.h
+ * \author   Jong Jin Park and Collin Johnson
+ *
+ * Declaration of ProgressChecker.
+ */
 
 #ifndef MPEPC_METRIC_PLANNER_PROGRESS_CHECKER_H
 #define MPEPC_METRIC_PLANNER_PROGRESS_CHECKER_H
@@ -25,27 +25,27 @@ namespace mpepc
 {
 
 /**
-* ProgressChecker
-*/
+ * ProgressChecker
+ */
 class ProgressChecker
 {
 public:
     void reset(void);
     void run(const motion_state_t& state);
 
-//         bool robotIsNotProgressingForSomeTime(void) { return robotIsStuckCounter_ > 10; };
+    //         bool robotIsNotProgressingForSomeTime(void) { return robotIsStuckCounter_ > 10; };
     bool robotIsNotProgressingForSomeTime(void) { return false; };
 
 private:
     int32_t progressCounter_;
     int32_t robotIsStuckCounter_;
-    bool    robotIsStuck_;
+    bool robotIsStuck_;
 
     velocity_t slowAverage_;
     velocity_t fastAverage_;
 };
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_METRIC_PLANNER_PROGRESS_CHECKER_H
+#endif   // MPEPC_METRIC_PLANNER_PROGRESS_CHECKER_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     metric_place_io.h
-* \author   Collin Johnson
-*
-* Declaration of MetricPlaceIO interface and create_metric_place_io factory function.
-*/
+ * \file     metric_place_io.h
+ * \author   Collin Johnson
+ *
+ * Declaration of MetricPlaceIO interface and create_metric_place_io factory function.
+ */
 
 #ifndef HSSH_UTILS_METRIC_PLACE_IO_H
 #define HSSH_UTILS_METRIC_PLACE_IO_H
@@ -28,47 +28,45 @@ class LocalPlaceOld;
 class MetricPlaceIO;
 
 /**
-* create_metric_place_io creates the necessary classes for doing reading and writing of metric
-* places.
-*
-* \param    type            Type of MetricPlaceWriter/Reader to create
-*/
-boost::shared_ptr<MetricPlaceIO> create_metric_place_io(const std::string& type,
-                                                        const std::string& directory,
-                                                        const std::string& basename);
+ * create_metric_place_io creates the necessary classes for doing reading and writing of metric
+ * places.
+ *
+ * \param    type            Type of MetricPlaceWriter/Reader to create
+ */
+boost::shared_ptr<MetricPlaceIO>
+  create_metric_place_io(const std::string& type, const std::string& directory, const std::string& basename);
 
 /**
-* MetricPlaceIO is an interface for classes capable of writing LocalPlaceOlds to disk and
-* reading LocalPlaceOlds from disk.
-*
-* The interface is two methods:
-*
-*   - LocalPlaceOld read(int placeId);
-*   - void       write(const LocalPlaceOld& place)
-*/
+ * MetricPlaceIO is an interface for classes capable of writing LocalPlaceOlds to disk and
+ * reading LocalPlaceOlds from disk.
+ *
+ * The interface is two methods:
+ *
+ *   - LocalPlaceOld read(int placeId);
+ *   - void       write(const LocalPlaceOld& place)
+ */
 class MetricPlaceIO
 {
 public:
-
-    virtual ~MetricPlaceIO(void) {}
+    virtual ~MetricPlaceIO(void) { }
 
     /**
-    * write saves the provided place on the robot's hard disk.
-    *
-    * \param    place       Place to be saved
-    */
+     * write saves the provided place on the robot's hard disk.
+     *
+     * \param    place       Place to be saved
+     */
     virtual void write(const LocalPlaceOld& place) = 0;
 
     /**
-    * read loads the place with the given ID from the robot's hard disk.
-    *
-    * \param   placeId     Id of the place to be loaded
-    * \return  LocalPlaceOld with the given id.
-    */
+     * read loads the place with the given ID from the robot's hard disk.
+     *
+     * \param   placeId     Id of the place to be loaded
+     * \return  LocalPlaceOld with the given id.
+     */
     virtual LocalPlaceOld read(int placeId) = 0;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_METRIC_PLACE_IO_H
+#endif   // HSSH_UTILS_METRIC_PLACE_IO_H

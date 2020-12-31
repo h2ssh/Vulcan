@@ -8,17 +8,17 @@
 
 
 /**
-* \file     boundary.cpp
-* \author   Collin Johnson
-*
-* Definition of functions for boundary probability distributions:
-*
-*/
+ * \file     boundary.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of functions for boundary probability distributions:
+ *
+ */
 
 #include "math/boundary.h"
-#include "math/truncated_gaussian_distribution.h"
 #include "core/angle_functions.h"
 #include "core/vector.h"
+#include "math/truncated_gaussian_distribution.h"
 #include <cassert>
 #include <cmath>
 
@@ -39,9 +39,7 @@ double heading_uncertainty(double vx, double vy, const Matrix& sigma)
 }
 
 
-angle_range_t boundary_heading_range(const Line<double>& boundary,
-                                     const Point<double>& position,
-                                     double heading)
+angle_range_t boundary_heading_range(const Line<double>& boundary, const Point<double>& position, double heading)
 {
     // The range goes from the first boundary endpoint to the second. Because it is a line segment, the extent can be
     // at most pi radians, so there's no worry about accidentally creating the wrong angle range.
@@ -56,29 +54,29 @@ double boundary_heading_probability(const angle_range_t& range, double sigma)
     assert(range.extent <= M_PI);
     assert(sigma > 0.0);
 
-//     std::cout << "Boundary probability: Range: " << range.start << " to " << (range.start + range.extent) << ": ";
+    //     std::cout << "Boundary probability: Range: " << range.start << " to " << (range.start + range.extent) << ":
+    //     ";
 
-    TruncatedGaussianDistribution dist(0.0, sigma*sigma, -M_PI, M_PI);
+    TruncatedGaussianDistribution dist(0.0, sigma * sigma, -M_PI, M_PI);
 
     // Wraparound will occur if start + extent > pi
-    if(range.start + range.extent > M_PI)
-    {
+    if (range.start + range.extent > M_PI) {
         auto wrappedEnd = wrap_to_pi(range.start + range.extent);
         // Computation is: (dist.cdf(M_PI) - dist.cdf(range.start)) + (dist.cdf(wrappedEnd) - dist.cdf(-M_PI));
         // but for truncated gaussian, dist.cdf(-M_PI) == 0.0, dist.cdf(M_PI) == 1.0
 
-//         std::cout << "wrapped: start:" << dist.cdf(range.start) << " end:" << dist.cdf(wrappedEnd) << '\n';
+        //         std::cout << "wrapped: start:" << dist.cdf(range.start) << " end:" << dist.cdf(wrappedEnd) << '\n';
 
         return 1.0 - dist.cdf(range.start) + dist.cdf(wrappedEnd);
     }
     // Otherwise can use simple CDF function and call it good
-    else
-    {
-//         std::cout << "start: " << dist.cdf(range.start) << " end:" << dist.cdf(range.start + range.extent) << '\n';
+    else {
+        //         std::cout << "start: " << dist.cdf(range.start) << " end:" << dist.cdf(range.start + range.extent) <<
+        //         '\n';
 
         return dist.cdf(range.start + range.extent) - dist.cdf(range.start);
     }
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

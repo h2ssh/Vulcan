@@ -8,11 +8,11 @@
 
 
 /**
-* \file     gl_movie_maker.h
-* \author   Collin Johnson
-*
-* Declaration of GLMovieMaker.
-*/
+ * \file     gl_movie_maker.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GLMovieMaker.
+ */
 
 #ifndef UI_COMMON_GL_MOVIE_MAKER_H
 #define UI_COMMON_GL_MOVIE_MAKER_H
@@ -25,20 +25,18 @@ namespace ui
 {
 
 /**
-* GLMovieMaker
-*/
+ * GLMovieMaker
+ */
 class GLMovieMaker : public GLBufferConsumer
 {
 public:
-
     // GLBufferConsumer interface
     virtual void handleBuffer(const Image& buffer);
 
 private:
-
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMMON_GL_MOVIE_MAKER_H
+#endif   // UI_COMMON_GL_MOVIE_MAKER_H

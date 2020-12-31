@@ -8,19 +8,19 @@
 
 
 /**
-* \file     learned_norm_cost.cpp
-* \author   Collin Johnson
-*
-* Definition of a cost function for costs associated with learned social norms in the environment.
-*/
+ * \file     learned_norm_cost.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of a cost function for costs associated with learned social norms in the environment.
+ */
 
 #include "mpepc/cost/social_cost.h"
-#include "mpepc/cost/cost_map.h"
-#include "mpepc/social/social_norm_utils.h"
-#include "mpepc/types.h"
 #include "hssh/local_topological/local_topo_map.h"
 #include "hssh/local_topological/local_topo_route.h"
 #include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "mpepc/cost/cost_map.h"
+#include "mpepc/social/social_norm_utils.h"
+#include "mpepc/types.h"
 #include "utils/algorithm_ext.h"
 #include <boost/range/iterator_range.hpp>
 
@@ -67,7 +67,7 @@ float normalized_cell_distance(const learned_cost_state_t& state,
                                cell_t gridCell,
                                int skelIdx,
                                const CellVector& skeleton);
-}
+}   // namespace
 
 
 void learned_norm_cost(const hssh::LocalTopoRoute& route,
@@ -78,8 +78,7 @@ void learned_norm_cost(const hssh::LocalTopoRoute& route,
                        learned_norm_info_t& norms)
 {
     // No learned norm cost if no topological map information
-    if(!env.ltm)
-    {
+    if (!env.ltm) {
         return;
     }
 
@@ -93,8 +92,7 @@ void learned_norm_cost(const hssh::LocalTopoRoute& route,
     state.env = &env;
     state.skeleton = &env.ltm->voronoiSkeleton();
 
-    for(auto& visit : route)
-    {
+    for (auto& visit : route) {
         // Construct the robot agent for the particular visit
         topo_agent_t robotAgent = create_agent_for_visit(visit, env.robotState);
 
@@ -107,15 +105,12 @@ void learned_norm_cost(const hssh::LocalTopoRoute& route,
 
         state.markedCells.clear();
 
-        if(visit.area().type() == AreaType::path_segment)
-        {
+        if (visit.area().type() == AreaType::path_segment) {
             PathSituation situation(robotAgent, norms.agents, params.numLateralBins, *env.ltm);
             state.response = find_situation_response(params, situation);
             skeleton_learned_cost(state);
             norms.pathSituations.push_back(situation);
-        }
-        else
-        {
+        } else {
             PlaceSituation situation(robotAgent, norms.agents, *env.ltm);
             state.response = find_situation_response(params, situation);
             skeleton_learned_cost(state);
@@ -134,8 +129,7 @@ void filter_unimportant_agents(position_t robot, std::vector<topo_agent_t>& othe
     const double kMaxImportantDist = 10.0;
 
     utils::erase_remove_if(otherAgents, [&robot, kMaxImportantDist](auto& other) {
-        return distance_between_points(robot, Point<float>(other.state.x, other.state.y))
-            > kMaxImportantDist;
+        return distance_between_points(robot, Point<float>(other.state.x, other.state.y)) > kMaxImportantDist;
     });
 }
 
@@ -153,24 +147,21 @@ topo_agent_t create_agent_for_visit(const hssh::LocalTopoRouteVisit& visit, cons
     agent.areaId = visit.area().id();
 
     // If there's an exit gateway, just use that
-    if(auto exitGateway = visit.exitGateway())
-    {
+    if (auto exitGateway = visit.exitGateway()) {
         agent.gatewayId = exitGateway->id();
     }
     // if there's not an exit, then just use the gateway furthest from the entry
-    else if(auto entryGateway = visit.entryGateway())
-    {
+    else if (auto entryGateway = visit.entryGateway()) {
         auto gateways = visit.area().gateways();
         auto maxIt = std::max_element(gateways.begin(), gateways.end(), [&entryGateway](auto& lhs, auto& rhs) {
             return squared_point_distance(lhs.center(), entryGateway->center())
-                < squared_point_distance(rhs.center(), entryGateway->center());
+              < squared_point_distance(rhs.center(), entryGateway->center());
         });
 
         agent.gatewayId = maxIt->id();
     }
     // Otherwise, there's no known gateway exit
-    else
-    {
+    else {
         agent.gatewayId = -1;
     }
 
@@ -181,10 +172,8 @@ topo_agent_t create_agent_for_visit(const hssh::LocalTopoRouteVisit& visit, cons
 const TopoSituationResponse* find_situation_response(const learned_norm_cost_params_t& params,
                                                      const PlaceSituation& situation)
 {
-    for(auto& response : params.responses)
-    {
-        if(response.isResponseForSituation(situation))
-        {
+    for (auto& response : params.responses) {
+        if (response.isResponseForSituation(situation)) {
             return &response;
         }
     }
@@ -196,10 +185,8 @@ const TopoSituationResponse* find_situation_response(const learned_norm_cost_par
 const TopoSituationResponse* find_situation_response(const learned_norm_cost_params_t& params,
                                                      const PathSituation& situation)
 {
-    for(auto& response : params.responses)
-    {
-        if(response.isResponseForSituation(situation))
-        {
+    for (auto& response : params.responses) {
+        if (response.isResponseForSituation(situation)) {
             return &response;
         }
     }
@@ -215,13 +202,11 @@ void skeleton_learned_cost(learned_cost_state_t& state)
 
     int nearestIdx = 0;
 
-    for(auto globalCell : state.area->extent())
-    {
+    for (auto globalCell : state.area->extent()) {
         auto gridCell = utils::global_point_to_grid_cell_round(globalCell, *state.skeleton);
 
         // If costs are assigned, don't add more cost
-        if(state.markedCells.find(gridCell) != state.markedCells.end())
-        {
+        if (state.markedCells.find(gridCell) != state.markedCells.end()) {
             continue;
         }
 
@@ -231,8 +216,7 @@ void skeleton_learned_cost(learned_cost_state_t& state)
         float normalizedDist = 0.0f;
 
         // If there are cells along the route, then area-type costs have valid values
-        if(!cellsAlongRoute.empty())
-        {
+        if (!cellsAlongRoute.empty()) {
             normalizedDist = normalized_cell_distance(state, gridCell, nearestIdx, cellsAlongRoute);
         }
 
@@ -244,8 +228,7 @@ void skeleton_learned_cost(learned_cost_state_t& state)
     }
 
     std::cout << "Situation response:" << *state.response << " dist:";
-    for(auto& dist : state.response->distribution())
-    {
+    for (auto& dist : state.response->distribution()) {
         printf(" %.3f", dist);
     }
     std::cout << '\n';
@@ -268,14 +251,12 @@ float normalized_cell_distance(const learned_cost_state_t& state,
     double distToSkel = distance_between_points(gridCell, skelCell) * state.skeleton->metersPerCell();
     double lateralDistance = pathRadius - distToSkel;
 
-    if(is_right_of_skeleton(gridCell, skelIdx, skeleton))
-    {
+    if (is_right_of_skeleton(gridCell, skelIdx, skeleton)) {
         // Right of the path it's the full distance minus the distance remaining to the nearest wall
         lateralDistance = pathRadius + distToSkel;
     }
 
-    if(pathRadius > 0.0)
-    {
+    if (pathRadius > 0.0) {
         lateralDistance = std::max(lateralDistance, 0.0);
         return std::min(lateralDistance / (2.0 * pathRadius), 1.0);
     }
@@ -283,7 +264,7 @@ float normalized_cell_distance(const learned_cost_state_t& state,
     return -1.0;
 }
 
-} // anonymous namespace
+}   // anonymous namespace
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

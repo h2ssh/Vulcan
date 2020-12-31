@@ -8,11 +8,11 @@
 
 
 /**
-* \file     exploration.h
-* \author   Collin Johnson
-*
-* Declaration of ExplorationAffordance.
-*/
+ * \file     exploration.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ExplorationAffordance.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_EXPLORATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_EXPLORATION_H
@@ -21,57 +21,54 @@
 #include "hssh/local_topological/frontier.h"
 #include <cereal/types/base_class.hpp>
 
-namespace vulcan 
+namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
-    
+
 /**
-* ExplorationAffordance describes a frontier in the the current area and how the robot can reach it. A frontier is an unexplored region,
-* so this affordance provides the robot with a means of completely exploring its current area by traveling to each of frontiers
-* encapsulated in the exploration affordance.
-*/
+ * ExplorationAffordance describes a frontier in the the current area and how the robot can reach it. A frontier is an
+ * unexplored region, so this affordance provides the robot with a means of completely exploring its current area by
+ * traveling to each of frontiers encapsulated in the exploration affordance.
+ */
 class ExplorationAffordance : public NavigationAffordance
 {
 public:
-    
     /**
-    * Default constructor for ExplorationAffordance.
-    */
+     * Default constructor for ExplorationAffordance.
+     */
     ExplorationAffordance(void);
-    
+
     /**
-    * Constructor for ExplorationAffordance.
-    *
-    * \param    frontier            Frontier the robot can explore
-    */
+     * Constructor for ExplorationAffordance.
+     *
+     * \param    frontier            Frontier the robot can explore
+     */
     ExplorationAffordance(const Frontier& frontier);
-    
+
     /**
-    * frontier retrieves the frontier associated with the affordance.
-    */
+     * frontier retrieves the frontier associated with the affordance.
+     */
     Frontier frontier(void) const { return frontier_; }
 
     // NavigationAffordance interface
     virtual void accept(NavigationAffordanceVisitor& visitor) const override;
-    
+
 private:
-    
     Frontier frontier_;
 
     // Serialization support
     friend class cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar (cereal::base_class<NavigationAffordance>(this),
-            frontier_);
+        ar(cereal::base_class<NavigationAffordance>(this), frontier_);
     }
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
 // Serialization support via smart pointer
 #include <cereal/archives/binary.hpp>
@@ -79,4 +76,4 @@ private:
 
 CEREAL_REGISTER_TYPE(vulcan::hssh::ExplorationAffordance)
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_EXPLORATION_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_EXPLORATION_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     lazy_generator.h
-* \author   Collin Johnson
-* 
-* Declaration of LazyGenerator subclass of HypothesisGenerator.
-*/
+ * \file     lazy_generator.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LazyGenerator subclass of HypothesisGenerator.
+ */
 
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_LAZY_GENERATOR_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_LAZY_GENERATOR_H
@@ -25,27 +25,24 @@ namespace hssh
 {
 
 /**
-* LazyGenerator is a subclass of HypothesisGenerator that lazily creates child hypotheses. The lazy expansion approach
-* considers the Chi layout of the map hypothesis. Using Chi, the estimated distance traveled, along with its
-* uncertainty creates a distribution over likely locations for the robot. Children are ordered according to this
-* distribution. Each time a child is created, the probability of the generator changes.
-*/
+ * LazyGenerator is a subclass of HypothesisGenerator that lazily creates child hypotheses. The lazy expansion approach
+ * considers the Chi layout of the map hypothesis. Using Chi, the estimated distance traveled, along with its
+ * uncertainty creates a distribution over likely locations for the robot. Children are ordered according to this
+ * distribution. Each time a child is created, the probability of the generator changes.
+ */
 class LazyGenerator : public HypothesisGenerator
 {
 public:
-    
-    using HypothesisGenerator::HypothesisGenerator; ///< Inherit the base class constructors -- nothing new is needed
+    using HypothesisGenerator::HypothesisGenerator;   ///< Inherit the base class constructors -- nothing new is needed
 
 private:
-    
     /////   HypothesisGenerator interface   /////
     double computeChildLogLikelihood(const TopologicalState& parent,
-                                     const TopologicalState& child, 
+                                     const TopologicalState& child,
                                      const TopologicalVisit& visit) override;
-
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_MAPPING_LAZY_GENERATOR_H
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_MAPPING_LAZY_GENERATOR_H

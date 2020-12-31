@@ -8,12 +8,12 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of params structs for the decision planner and the load_decision_planner_params function
-* for reading the parameters.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of params structs for the decision planner and the load_decision_planner_params function
+ * for reading the parameters.
+ */
 
 #ifndef PLANNER_DECISION_PARAMS_H
 #define PLANNER_DECISION_PARAMS_H
@@ -22,7 +22,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace planner
 {
@@ -50,15 +53,15 @@ struct decision_params_t
 };
 
 /**
-* load_decision_params loads the parameters for the decision planner from the provided
-* config file.
-*
-* \param    config          Config file with the saved parameters
-* \return   Parameters to use for the current instance of the decision planner.
-*/
+ * load_decision_params loads the parameters for the decision planner from the provided
+ * config file.
+ *
+ * \param    config          Config file with the saved parameters
+ * \return   Parameters to use for the current instance of the decision planner.
+ */
 decision_params_t load_decision_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_DECISION_PARAMS_H
+#endif   // PLANNER_DECISION_PARAMS_H

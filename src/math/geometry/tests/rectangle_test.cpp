@@ -8,11 +8,11 @@
 
 
 /**
-* \file     rectangle_test.cpp
-* \author   Collin Johnson
-*
-* Unit tests for ensuring proper functionality of the Rectangle shape.
-*/
+ * \file     rectangle_test.cpp
+ * \author   Collin Johnson
+ *
+ * Unit tests for ensuring proper functionality of the Rectangle shape.
+ */
 
 #include "math/geometry/rectangle.h"
 #include <gtest/gtest.h>

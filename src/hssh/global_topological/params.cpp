@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.cpp
-* \author   Collin Johnson
-*
-* Definition of the various parsers for the params structs for the global_topo_hssh module.
-*/
+ * \file     params.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of the various parsers for the params structs for the global_topo_hssh module.
+ */
 
 #include "hssh/global_topological/params.h"
 #include "utils/config_file.h"
@@ -34,27 +34,26 @@ const std::string HYP_GEN_HEADING("HypothesisGeneratorParameters");
 const std::string GEN_TYPE_KEY("generator_type");
 
 const std::string TOPOLOGICAL_MAPPER_HEADING("TopologicalMapperParameters");
-const std::string LOCALIZER_TYPE_KEY        ("localizer_type");
+const std::string LOCALIZER_TYPE_KEY("localizer_type");
 
 const std::string LAZY_EVALUATION_HEADING("LazyEvaluationMapperParameters");
-const std::string MIN_TO_EXPAND_KEY      ("min_hypotheses_to_expand");
-const std::string USE_HEURISTIC_KEY      ("use_heuristic");
+const std::string MIN_TO_EXPAND_KEY("min_hypotheses_to_expand");
+const std::string USE_HEURISTIC_KEY("use_heuristic");
 
 const std::string MAP_OPTIMIZER_HEADING("MapOptimizerParameters");
-const std::string OPTIMIZER_TYPE_KEY   ("optimizer_type");
+const std::string OPTIMIZER_TYPE_KEY("optimizer_type");
 
 const std::string LEV_MAR_OPTIMIZER_HEADING("LevMarOptimizerParameters");
-const std::string MAX_OPT_ITERS_KEY        ("max_iterations");
-const std::string MU_KEY                   ("initial_mu");
-const std::string STOP_THRESHOLD_KEY       ("stop_threshold");
+const std::string MAX_OPT_ITERS_KEY("max_iterations");
+const std::string MU_KEY("initial_mu");
+const std::string STOP_THRESHOLD_KEY("stop_threshold");
 
 const std::string PROBABILITY_EVALUATOR_HEADING("HypothesisProbabilityEvaluatorParameters");
-const std::string LIKELIHOOD_EVALUTORS_KEY     ("likelihood_evaluators");
-const std::string PRIOR_EVALUATOR_KEY          ("prior_evaluator");
+const std::string LIKELIHOOD_EVALUTORS_KEY("likelihood_evaluators");
+const std::string PRIOR_EVALUATOR_KEY("prior_evaluator");
 
 
-global_topo_params_t::global_topo_params_t(const utils::ConfigFile& config)
-: queueParams(config)
+global_topo_params_t::global_topo_params_t(const utils::ConfigFile& config) : queueParams(config)
 {
 }
 
@@ -70,7 +69,7 @@ lazy_evaluation_mapper_params_t load_lazy_evaluation_params(const utils::ConfigF
     lazy_evaluation_mapper_params_t params;
 
     params.minHypothesesToExpand = config.getValueAsUInt32(LAZY_EVALUATION_HEADING, MIN_TO_EXPAND_KEY);
-    params.useHeuristic          = config.getValueAsBool  (LAZY_EVALUATION_HEADING, USE_HEURISTIC_KEY);
+    params.useHeuristic = config.getValueAsBool(LAZY_EVALUATION_HEADING, USE_HEURISTIC_KEY);
 
     return params;
 }
@@ -107,37 +106,33 @@ hypothesis_probability_evaluator_params_t::hypothesis_probability_evaluator_para
 
 edge_length_evaluator_params_t::edge_length_evaluator_params_t(const utils::ConfigFile& config)
 {
-
 }
 
 
 lpm_match_evaluator_params_t::lpm_match_evaluator_params_t(const utils::ConfigFile& config)
 {
-
 }
 
 
-place_layout_compatibility_evaluator_params_t::place_layout_compatibility_evaluator_params_t(const utils::ConfigFile& config)
+place_layout_compatibility_evaluator_params_t::place_layout_compatibility_evaluator_params_t(
+  const utils::ConfigFile& config)
 {
-
 }
 
 
 chi_likelihood_evaluator_params_t::chi_likelihood_evaluator_params_t(const utils::ConfigFile& config)
 {
-
 }
 
 
 dirichlet_prior_evaluator_params_t::dirichlet_prior_evaluator_params_t(const utils::ConfigFile& config)
 {
-
 }
 
 
-bayesian_information_criterion_evaluator_params_t::bayesian_information_criterion_evaluator_params_t(const utils::ConfigFile& config)
+bayesian_information_criterion_evaluator_params_t::bayesian_information_criterion_evaluator_params_t(
+  const utils::ConfigFile& config)
 {
-
 }
 
 
@@ -155,5 +150,5 @@ lev_mar_optimizer_params_t::lev_mar_optimizer_params_t(const utils::ConfigFile& 
 {
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

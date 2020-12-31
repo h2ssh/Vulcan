@@ -21,33 +21,30 @@ namespace laser
 {
 
 /**
-* laser_scan_lines_t contains a laser scan and the lines that were found in the scan.
-* An additional array is included that contains the mapping of scan point to line segment
-* index. This mapping allows an algorithm to know the association between the raw points
-* and the lines they generate, allowing reasoning on both levels to occur. If a point has
-* no associated line, the index value will be -1.
-*/
+ * laser_scan_lines_t contains a laser scan and the lines that were found in the scan.
+ * An additional array is included that contains the mapping of scan point to line segment
+ * index. This mapping allows an algorithm to know the association between the raw points
+ * and the lines they generate, allowing reasoning on both levels to occur. If a point has
+ * no associated line, the index value will be -1.
+ */
 struct laser_scan_lines_t
 {
-    polar_laser_scan_t             scan;
+    polar_laser_scan_t scan;
     std::vector<Line<float>> lines;
-    std::vector<int16_t>           scanPointToLineIndices;
-    pose_t                  pose;            ///< Pose at which the scan associated with the lines was taken
+    std::vector<int16_t> scanPointToLineIndices;
+    pose_t pose;   ///< Pose at which the scan associated with the lines was taken
 };
 
 // Serialization support
 template <class Archive>
 void serialize(Archive& ar, laser_scan_lines_t& lines)
 {
-    ar (lines.scan,
-        lines.lines,
-        lines.scanPointToLineIndices,
-        lines.pose);
+    ar(lines.scan, lines.lines, lines.scanPointToLineIndices, lines.pose);
 }
 
-}
-}
+}   // namespace laser
+}   // namespace vulcan
 
 DEFINE_DEBUG_MESSAGE(laser::laser_scan_lines_t, ("DEBUG_LASER_SCAN_LINES"))
 
-#endif // SENSORS_LASER_LASER_SCAN_LINES_H
+#endif   // SENSORS_LASER_LASER_SCAN_LINES_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     beeson_reader.h
-* \author   Collin Johnson
-*
-* Declaration of BeesonReader.
-*/
+ * \file     beeson_reader.h
+ * \author   Collin Johnson
+ *
+ * Declaration of BeesonReader.
+ */
 
 #ifndef LOGPLAYER_BEESON_READER_H
 #define LOGPLAYER_BEESON_READER_H
@@ -26,28 +26,25 @@ namespace logplayer
 {
 
 /**
-* BeesonReader is a LogReader implementation capable of reading logs recorded by Patrick Beeson
-* and posted in the Radish repository fo robot logs.
-*/
+ * BeesonReader is a LogReader implementation capable of reading logs recorded by Patrick Beeson
+ * and posted in the Radish repository fo robot logs.
+ */
 class BeesonReader : public LogReader
 {
 public:
-
     /**
-    * Constructor for BeesonReader.
-    *
-    * \param    channels            Channels on which to transmit the data
-    */
+     * Constructor for BeesonReader.
+     *
+     * \param    channels            Channels on which to transmit the data
+     */
     BeesonReader(const data_channels_t& channels);
 
 private:
-    
     // LogReader interface
     bool convertLogToFrames(const std::string& filename) override;
-
 };
 
-}
-}
+}   // namespace logplayer
+}   // namespace vulcan
 
-#endif // LOGPLAYER_BEESON_READER_H
+#endif   // LOGPLAYER_BEESON_READER_H

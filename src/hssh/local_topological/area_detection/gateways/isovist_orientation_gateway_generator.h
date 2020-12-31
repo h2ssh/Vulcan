@@ -8,11 +8,11 @@
 
 
 /**
-* \file     isovist_orientation_gateway_generator.h
-* \author   Collin Johnson
-*
-* Declaration of IsovistOrientationGatewayGenerator.
-*/
+ * \file     isovist_orientation_gateway_generator.h
+ * \author   Collin Johnson
+ *
+ * Declaration of IsovistOrientationGatewayGenerator.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_ISOVIST_ORIENTATION_GATEWAY_GENERATOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_ISOVIST_ORIENTATION_GATEWAY_GENERATOR_H
@@ -26,24 +26,23 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 struct isovist_local_maximum_t;
 
 const std::string kIsovistOrientationGatewayGeneratorType("orientation");
 
 /**
-* IsovistOrientationGatewayGenerator generates gateways by finding the orientation associated with an isovist maximum
-* and using that to determine where the gateway should go.
-*/
+ * IsovistOrientationGatewayGenerator generates gateways by finding the orientation associated with an isovist maximum
+ * and using that to determine where the gateway should go.
+ */
 class IsovistOrientationGatewayGenerator : public GatewayGenerator
 {
 public:
-
     /**
-    * Constructor for IsovistOrientationGatewayGenerator.
-    *
-    * \param    params          Parameters for generating the gateways
-    */
+     * Constructor for IsovistOrientationGatewayGenerator.
+     *
+     * \param    params          Parameters for generating the gateways
+     */
     IsovistOrientationGatewayGenerator(const isovist_orientation_gateway_generator_params_t& params);
 
     // GatewayGenerator interface
@@ -51,14 +50,13 @@ public:
                                                   const VoronoiIsovistField& isovists,
                                                   const VoronoiSkeletonGrid& grid,
                                                   const EndpointValidator& validator) override;
-    
-private:
 
+private:
     int32_t nextGatewayId_;
     const VoronoiIsovistGradients* gradients_;
     const VoronoiIsovistField* isovists_;
     const VoronoiSkeletonGrid* grid_;
-    const EndpointValidator*   validator_;
+    const EndpointValidator* validator_;
 
     SourceToCellsMap sourceToSkeleton_;
     CellVector edgeCells_;
@@ -71,7 +69,7 @@ private:
     void extractEdgeCellsForMaximum(const isovist_local_maximum_t& maximum);
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_ISOVIST_ORIENTATION_GATEWAY_GENERATOR_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_ISOVIST_ORIENTATION_GATEWAY_GENERATOR_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     config_file_writer.cpp
-* \author   Collin Johnson
-* 
-* Definition of ConfigFileWriter.
-*/
+ * \file     config_file_writer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ConfigFileWriter.
+ */
 
 #include "utils/config_file_writer.h"
 
@@ -22,4 +22,4 @@ namespace utils
 {
 
 }
-}
+}   // namespace vulcan

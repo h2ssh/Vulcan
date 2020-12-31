@@ -11,16 +11,16 @@
 #define MATH_MATRIX_H
 
 #include <armadillo>
-#include <cereal/cereal.hpp>
 #include <cassert>
+#include <cereal/cereal.hpp>
 
 namespace vulcan
 {
 
-using Matrix    = arma::Mat<double>;
+using Matrix = arma::Mat<double>;
 using IntMatrix = arma::Mat<int>;
 
-}
+}   // namespace vulcan
 
 namespace cereal
 {
@@ -30,10 +30,8 @@ void save(Archive& ar, const arma::Mat<T>& m)
 {
     uint64_t numRows = m.n_rows;
     uint64_t numCols = m.n_cols;
-    ar( numRows,
-        numCols,
-        binary_data(const_cast<T*>(m.mem), numRows*numCols*sizeof(T)));
-    assert(numRows*numCols == m.n_elem);
+    ar(numRows, numCols, binary_data(const_cast<T*>(m.mem), numRows * numCols * sizeof(T)));
+    assert(numRows * numCols == m.n_elem);
 }
 
 template <class Archive, typename T>
@@ -42,17 +40,16 @@ void load(Archive& ar, arma::Mat<T>& m)
     uint64_t rows, cols;
     T* memory;
 
-    ar( rows,
-        cols);
+    ar(rows, cols);
 
-    memory = new T[rows*cols];
-    ar( binary_data(memory, rows*cols*sizeof(T)));
+    memory = new T[rows * cols];
+    ar(binary_data(memory, rows * cols * sizeof(T)));
 
     m = arma::Mat<T>(memory, rows, cols);
 
-    delete [] memory;
+    delete[] memory;
 }
 
-} // namespace vulcan
+}   // namespace cereal
 
-#endif // MATH_MATRIX_H
+#endif   // MATH_MATRIX_H

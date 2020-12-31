@@ -8,29 +8,29 @@
 
 
 /**
-* \file     types.h
-* \author   Collin Johnson
-*
-* Definition of types that are common to multiple levels of the HSSH:
-*
-* Grid types:
-*   - cell_t  : representation of a cell position
-*
-* Topological types:
-*   - AreaType      : enumeration of all possible area types
-*   - TopoDirection : direction of motion when moving along a path or crossing a transition.
-*/
+ * \file     types.h
+ * \author   Collin Johnson
+ *
+ * Definition of types that are common to multiple levels of the HSSH:
+ *
+ * Grid types:
+ *   - cell_t  : representation of a cell position
+ *
+ * Topological types:
+ *   - AreaType      : enumeration of all possible area types
+ *   - TopoDirection : direction of motion when moving along a path or crossing a transition.
+ */
 
 #ifndef HSSH_TYPES_H
 #define HSSH_TYPES_H
 
 #include "core/point.h"
 #include "core/point_util.h"
+#include <cassert>
+#include <cstdint>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <cassert>
-#include <cstdint>
 
 namespace vulcan
 {
@@ -39,7 +39,7 @@ namespace hssh
 
 //////////////////// Grid types ////////////////////////
 using cell_idx_t = int16_t;
-using cell_t     = Point<cell_idx_t>;
+using cell_t = Point<cell_idx_t>;
 
 using CellHash = PointHash<cell_idx_t>;
 
@@ -49,9 +49,9 @@ using CellToTypeMap = std::unordered_map<cell_t, T, CellHash>;
 using CellSet = std::unordered_set<cell_t, CellHash>;
 
 using CellToIntMap = CellToTypeMap<int>;
-using CellVector   = std::vector<cell_t>;
+using CellVector = std::vector<cell_t>;
 
-using CellIter      = CellVector::iterator;
+using CellIter = CellVector::iterator;
 using CellConstIter = CellVector::const_iterator;
 
 using CellRange = std::pair<CellIter, CellIter>;
@@ -60,9 +60,9 @@ using CellConstRange = std::pair<CellConstIter, CellConstIter>;
 /////////////////// Topology types ////////////////////
 
 /**
-* AreaType defines all possible types of areas exist within the HSSH. Anything that needs an identifier for the type of
-* area should use AreaType.
-*/
+ * AreaType defines all possible types of areas exist within the HSSH. Anything that needs an identifier for the type of
+ * area should use AreaType.
+ */
 enum class AreaType
 {
     area,
@@ -76,8 +76,8 @@ enum class AreaType
 };
 
 /**
-* is_place_type checks if the type is a place. Either destination or decision_point.
-*/
+ * is_place_type checks if the type is a place. Either destination or decision_point.
+ */
 constexpr bool is_place_type(AreaType type)
 {
     return (type == AreaType::decision_point) || (type == AreaType::destination);
@@ -86,8 +86,7 @@ constexpr bool is_place_type(AreaType type)
 
 inline std::ostream& operator<<(std::ostream& out, AreaType type)
 {
-    switch(type)
-    {
+    switch (type) {
     case AreaType::area:
         out << "area";
         break;
@@ -127,40 +126,23 @@ inline std::istream& operator>>(std::istream& in, AreaType& type)
     std::string str;
     in >> str;
 
-    if(str == "area")
-    {
+    if (str == "area") {
         type = AreaType::area;
-    }
-    else if(str == "place")
-    {
+    } else if (str == "place") {
         type = AreaType::place;
-    }
-    else if(str == "decision_point")
-    {
+    } else if (str == "decision_point") {
         type = AreaType::decision_point;
-    }
-    else if(str == "destination")
-    {
+    } else if (str == "destination") {
         type = AreaType::decision_point;
-    }
-    else if(str == "path_segment")
-    {
+    } else if (str == "path_segment") {
         type = AreaType::path_segment;
-    }
-    else if(str == "path")
-    {
+    } else if (str == "path") {
         type = AreaType::path;
-    }
-    else if(str == "dead_end")
-    {
+    } else if (str == "dead_end") {
         type = AreaType::dead_end;
-    }
-    else if(str == "frontier")
-    {
+    } else if (str == "frontier") {
         type = AreaType::frontier;
-    }
-    else
-    {
+    } else {
         assert(!"Unknown area type string");
         type = AreaType::area;
     }
@@ -169,11 +151,10 @@ inline std::istream& operator>>(std::istream& in, AreaType& type)
 }
 
 
-
 /**
-* TopoDirection defines the two topological directions that exist, plus and minus. The choice of plus and minus is
-* arbitrary -- it could just as easily be forward and backward -- the key is that there are two possibilities.
-*/
+ * TopoDirection defines the two topological directions that exist, plus and minus. The choice of plus and minus is
+ * arbitrary -- it could just as easily be forward and backward -- the key is that there are two possibilities.
+ */
 enum class TopoDirection
 {
     plus,
@@ -183,16 +164,15 @@ enum class TopoDirection
 
 
 /**
-* opposite_direction gets the topological direction that's the opposite of whatever direction is passed in. As there are
-* only two directions, plus and minus, plus->minus and minus->plus.
-*
-* \param    direction       Direction to get the opposite of
-* \return   minus if direction == plus or plus if direction == minus.
-*/
+ * opposite_direction gets the topological direction that's the opposite of whatever direction is passed in. As there
+ * are only two directions, plus and minus, plus->minus and minus->plus.
+ *
+ * \param    direction       Direction to get the opposite of
+ * \return   minus if direction == plus or plus if direction == minus.
+ */
 inline TopoDirection opposite_direction(TopoDirection direction)
 {
-    switch(direction)
-    {
+    switch (direction) {
     case TopoDirection::plus:
         return TopoDirection::minus;
 
@@ -202,10 +182,9 @@ inline TopoDirection opposite_direction(TopoDirection direction)
     case TopoDirection::null:
         return TopoDirection::null;
 
-    default: // shouldn't happen
-        assert((direction == TopoDirection::plus)
-            || (direction == TopoDirection::minus)
-            || (direction == TopoDirection::null));
+    default:   // shouldn't happen
+        assert((direction == TopoDirection::plus) || (direction == TopoDirection::minus)
+               || (direction == TopoDirection::null));
     }
 
     return TopoDirection::null;
@@ -214,8 +193,7 @@ inline TopoDirection opposite_direction(TopoDirection direction)
 
 inline std::ostream& operator<<(std::ostream& out, TopoDirection direction)
 {
-    switch(direction)
-    {
+    switch (direction) {
     case TopoDirection::plus:
         out << "plus";
         break;
@@ -230,15 +208,14 @@ inline std::ostream& operator<<(std::ostream& out, TopoDirection direction)
 
     default:
         out << "unknown";
-        assert(direction == TopoDirection::plus
-            || direction == TopoDirection::minus
-            || direction == TopoDirection::null);
+        assert(direction == TopoDirection::plus || direction == TopoDirection::minus
+               || direction == TopoDirection::null);
     }
 
     return out;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_TYPES_H
+#endif   // HSSH_TYPES_H

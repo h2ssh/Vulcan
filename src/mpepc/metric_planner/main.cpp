@@ -8,14 +8,14 @@
 
 
 /**
-* \file     main.cpp
-* \author   Collin Johnson
-*/
+ * \file     main.cpp
+ * \author   Collin Johnson
+ */
 
-#include "system/module.h"
 #include "mpepc/metric_planner/director.h"
-#include "utils/config_file.h"
+#include "system/module.h"
 #include "utils/command_line.h"
+#include "utils/config_file.h"
 #include <vector>
 
 using namespace vulcan;
@@ -26,16 +26,18 @@ int main(int argc, char** argv)
     arguments.push_back({utils::kConfigFileArgument, "Configuration file controlling the module behavior", true, ""});
     arguments.push_back({mpepc::kLessDebugInfoArgument, "Reduced amount of debug information output", true, ""});
     arguments.push_back({mpepc::kLocalTopoMapArgument, "Optional LocalTopoMap of the current environment", true, ""});
-    arguments.push_back({mpepc::kMetricMapArgument, "Optional initial LPM of the current environment. "
-        "Will be replaced once an LPM arrives from another module", true, ""});
+    arguments.push_back({mpepc::kMetricMapArgument,
+                         "Optional initial LPM of the current environment. "
+                         "Will be replaced once an LPM arrives from another module",
+                         true,
+                         ""});
 
     utils::CommandLine commandLine(argc, argv, arguments);
-    if(!commandLine.verify())
-    {
+    if (!commandLine.verify()) {
         return 1;
     }
 
-    utils::ConfigFile  config(commandLine.configName());
+    utils::ConfigFile config(commandLine.configName());
 
     system::Module<mpepc::MetricPlannerDirector> module(commandLine, config);
 

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     wheelchair_panel.cpp
-* \author   Collin Johnson
-*
-* Definition of WheelchairPanel.
-*/
+ * \file     wheelchair_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of WheelchairPanel.
+ */
 
 #include "ui/calibration/wheelchair_panel.h"
 
@@ -22,6 +22,5 @@ namespace ui
 {
 
 
-
 }
-}
+}   // namespace vulcan

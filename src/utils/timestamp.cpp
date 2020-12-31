@@ -7,18 +7,18 @@
 */
 
 
-#include <time.h>
 #include "utils/timestamp.h"
+#include <time.h>
 
 
 /**
-* system_time_us gets the system time of the machine in microseconds.
-*/
+ * system_time_us gets the system time of the machine in microseconds.
+ */
 int64_t vulcan::utils::system_time_us(void)
 {
-    struct  timespec currentTime;
-    
+    struct timespec currentTime;
+
     clock_gettime(CLOCK_REALTIME, &currentTime);
-    
-    return (currentTime.tv_sec*1000000ll) + (currentTime.tv_nsec/1000ll);
+
+    return (currentTime.tv_sec * 1000000ll) + (currentTime.tv_nsec / 1000ll);
 }

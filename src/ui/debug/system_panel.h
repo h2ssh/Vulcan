@@ -8,11 +8,11 @@
 
 
 /**
-* \file     system_panel.h
-* \author   Collin Johnson
-* 
-* Declaration of SystemPanel.
-*/
+ * \file     system_panel.h
+ * \author   Collin Johnson
+ *
+ * Declaration of SystemPanel.
+ */
 
 #ifndef UI_DEBUG_SYSTEM_PANEL_H
 #define UI_DEBUG_SYSTEM_PANEL_H
@@ -25,25 +25,23 @@ namespace ui
 {
 
 /**
-* SystemPanel
-*/
+ * SystemPanel
+ */
 class SystemPanel : public UIPanel
 {
 public:
-    
     // UIPanel interface
-    virtual void setup       (wxGLContext* context, wxStatusBar* statusBar);
-    virtual void subscribe   (system::ModuleCommunicator& producer);
-    virtual void setConsumer (system::ModuleCommunicator* consumer);
-    virtual void update      (void);
+    virtual void setup(wxGLContext* context, wxStatusBar* statusBar);
+    virtual void subscribe(system::ModuleCommunicator& producer);
+    virtual void setConsumer(system::ModuleCommunicator* consumer);
+    virtual void update(void);
     virtual void saveSettings(utils::ConfigFileWriter& config);
     virtual void loadSettings(const utils::ConfigFile& config);
 
 private:
-
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_SYSTEM_PANEL_H
+#endif   // UI_DEBUG_SYSTEM_PANEL_H

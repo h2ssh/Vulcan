@@ -8,11 +8,11 @@
 
 
 /**
-* \file     gaussian_creator.cpp
-* \author   Collin Johnson
-* 
-* Definition of GaussianCreator.
-*/
+ * \file     gaussian_creator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GaussianCreator.
+ */
 
 #include "ui/common/gaussian_creator.h"
 
@@ -20,10 +20,8 @@ namespace vulcan
 {
 namespace ui
 {
-    
-GaussianCreator::GaussianCreator(double xVariance, double yVariance, double thetaVariance)
-    : mean(3)
-    , covariance(3, 3)
+
+GaussianCreator::GaussianCreator(double xVariance, double yVariance, double thetaVariance) : mean(3), covariance(3, 3)
 {
     setVariances(xVariance, yVariance, thetaVariance);
     reset();
@@ -33,16 +31,16 @@ GaussianCreator::GaussianCreator(double xVariance, double yVariance, double thet
 void GaussianCreator::setVariances(double xVariance, double yVariance, double thetaVariance)
 {
     covariance.zeros();
-    covariance(0,0) = xVariance;
-    covariance(1,1) = yVariance;
-    covariance(2,2) = thetaVariance;
+    covariance(0, 0) = xVariance;
+    covariance(1, 1) = yVariance;
+    covariance(2, 2) = thetaVariance;
 }
 
 
 void GaussianCreator::reset(void)
 {
     gaussianIsDone = false;
-    
+
     mean.zeros();
 }
 
@@ -50,7 +48,7 @@ void GaussianCreator::reset(void)
 GLEventStatus GaussianCreator::handleLeftMouseDown(const GLMouseEvent& event)
 {
     thetaPosition = event.glCoords;
-    leftWasDown   = true;
+    leftWasDown = true;
 
     return GLEventStatus::capture;
 }
@@ -59,26 +57,24 @@ GLEventStatus GaussianCreator::handleLeftMouseDown(const GLMouseEvent& event)
 GLEventStatus GaussianCreator::handleLeftMouseUp(const GLMouseEvent& event)
 {
     gaussianIsDone = true;
-    
+
     return GLEventStatus::passthrough;
 }
 
 
 GLEventStatus GaussianCreator::handleMouseMoved(const GLMouseEvent& event)
 {
-    if(!event.leftIsDown)
-    {
+    if (!event.leftIsDown) {
         mean(0) = event.glCoords.x;
         mean(1) = event.glCoords.y;
-    }
-    else // if(event.leftIsDown)
+    } else   // if(event.leftIsDown)
     {
         mean(2) = angle_to_point(thetaPosition, event.glCoords);
         return GLEventStatus::capture;
     }
-    
+
     return GLEventStatus::passthrough;
 }
-    
-} // namespace ui
-} // namespace vulcan
+
+}   // namespace ui
+}   // namespace vulcan

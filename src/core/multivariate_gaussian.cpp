@@ -8,11 +8,11 @@
 
 
 /**
-* \file     multivariate_gaussian.cpp
-* \author   Collin Johnson
-*
-* Definition of MultivariateGaussian.
-*/
+ * \file     multivariate_gaussian.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of MultivariateGaussian.
+ */
 
 #include "core/multivariate_gaussian.h"
 #include <cassert>
@@ -20,16 +20,14 @@
 namespace vulcan
 {
 
-MultivariateGaussian::MultivariateGaussian(size_t dimensions)
-    : mean(dimensions)
-    , covariance(dimensions, dimensions)
+MultivariateGaussian::MultivariateGaussian(size_t dimensions) : mean(dimensions), covariance(dimensions, dimensions)
 {
 }
 
 
 MultivariateGaussian::MultivariateGaussian(const Vector& mean, const Matrix& covariance)
-    : mean(mean)
-    , covariance(covariance)
+: mean(mean)
+, covariance(covariance)
 {
     assert(covariance.is_finite());
     assert(mean.is_finite());
@@ -38,13 +36,12 @@ MultivariateGaussian::MultivariateGaussian(const Vector& mean, const Matrix& cov
 
 void MultivariateGaussian::setDistributionStatistics(const Vector& mean, const Matrix& covariance)
 {
-    this->mean       = mean;
+    this->mean = mean;
     this->covariance = covariance;
 
     // If the cholesky has already been computed for the distribution, chances are it will be used
     // again, so do the calculation right away
-    if(covarianceCholesky.n_rows > 0)
-    {
+    if (covarianceCholesky.n_rows > 0) {
         covarianceCholesky = chol(covariance);
         assert(covarianceCholesky.is_finite());
         assert(covarianceCholesky.n_elem > 0);
@@ -69,18 +66,18 @@ void MultivariateGaussian::prepareForSampling(void)
 
 double MultivariateGaussian::probability(const Vector& vector) const
 {
-//     double coeff = 1.0 / sqrt(2 * M_PI * arma::det(covariance));
+    //     double coeff = 1.0 / sqrt(2 * M_PI * arma::det(covariance));
     Vector error = vector - mean;
-//     return coeff * exp(-0.5*arma::as_scalar((arma::trans(error) * arma::inv(covariance) * error)));
+    //     return coeff * exp(-0.5*arma::as_scalar((arma::trans(error) * arma::inv(covariance) * error)));
     Matrix inv = arma::inv(covariance);
-    return exp(-0.5*arma::as_scalar((arma::trans(error) * inv * error)));
+    return exp(-0.5 * arma::as_scalar((arma::trans(error) * inv * error)));
 }
 
 
 double MultivariateGaussian::logPosterior(const Vector& vector) const
 {
     Vector error = vector - mean;
-    return -0.5*arma::as_scalar((arma::trans(error) * arma::inv(covariance) * error));
+    return -0.5 * arma::as_scalar((arma::trans(error) * arma::inv(covariance) * error));
 }
 
-} // namespace vulcan
+}   // namespace vulcan

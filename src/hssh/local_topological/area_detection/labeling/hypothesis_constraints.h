@@ -8,20 +8,20 @@
 
 
 /**
-* \file     hypothesis_constraints.h
-* \author   Collin Johnson
-*
-* Declaration of functions to check constraints for an AreaHypothesis in relation to its neighbors:
-*
-*   - satisfies_all_constraints : check if all constraints are satisfied
-*   - satisfies_path_alignment_constraint : one or two gateways aligned to the axis
-*   - satisifies_through_path_constraint : destinations can't have more than one path endpoint/decision point adjacent
-*   - satisfies_path_destination_constraint : areas adjacent to path not at endpoints must be destinations
-*   - satisfies_decision_constraint : intersecting paths or decisions must be a decision point
-*   - satisfies_complete_path_graph_constraint : paths + decision points must form a complete graph
-*
-* All constraints take a hypothesis to check + adjacent hypotheses.
-*/
+ * \file     hypothesis_constraints.h
+ * \author   Collin Johnson
+ *
+ * Declaration of functions to check constraints for an AreaHypothesis in relation to its neighbors:
+ *
+ *   - satisfies_all_constraints : check if all constraints are satisfied
+ *   - satisfies_path_alignment_constraint : one or two gateways aligned to the axis
+ *   - satisifies_through_path_constraint : destinations can't have more than one path endpoint/decision point adjacent
+ *   - satisfies_path_destination_constraint : areas adjacent to path not at endpoints must be destinations
+ *   - satisfies_decision_constraint : intersecting paths or decisions must be a decision point
+ *   - satisfies_complete_path_graph_constraint : paths + decision points must form a complete graph
+ *
+ * All constraints take a hypothesis to check + adjacent hypotheses.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CONSTRAINTS_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CONSTRAINTS_H
@@ -45,16 +45,16 @@ bool satisifies_through_path_constraint(const AreaHypothesis* hypothesis);
 bool satisfies_path_destination_constraint(const AreaHypothesis* hypothesis);
 
 /**
-* satisifies_decision_constraint is true if:
-*
-*   - The hypothesis has two or more intersecting paths and decision points
-*   - At least one incident path
-*/
+ * satisifies_decision_constraint is true if:
+ *
+ *   - The hypothesis has two or more intersecting paths and decision points
+ *   - At least one incident path
+ */
 bool satisfies_decision_constraint(const AreaHypothesis* hypothesis);
 
 bool satisfies_complete_path_graph_constraint(const AreaHypothesis* hypothesis);
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CONSTRAINTS_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CONSTRAINTS_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     parameter_estimator_test.cpp
-* \author   Collin Johnson
-*
-* Definition of ParameterEstimatorTest.
-*/
+ * \file     parameter_estimator_test.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ParameterEstimatorTest.
+ */
 
 #include "calibration/wheelchair/parameter_estimator_test.h"
 
@@ -22,4 +22,4 @@ namespace calibration
 {
 
 }
-}
+}   // namespace vulcan

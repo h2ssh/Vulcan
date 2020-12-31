@@ -8,11 +8,11 @@
 
 
 /**
-* \file     factor.cpp
-* \author   Collin Johnson
-*
-* Definition of Factor.
-*/
+ * \file     factor.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of Factor.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/factor.h"
 #include "hssh/local_topological/area_detection/labeling/factor_graph_utils.h"
@@ -40,33 +40,28 @@ Factor::Factor(int id, const std::vector<Variable*>& variables, const std::vecto
         return lhs->id() < rhs->id();
     });
 
-    for(auto& v : sortedVars)
-    {
+    for (auto& v : sortedVars) {
         vars_.push_back(v->id());
         varStates_.push_back(v->numStates());
     }
 
     std::vector<int> offsets;
     offsets.push_back(1);
-    for(std::size_t n = 1; n < varStates_.size(); ++n)
-    {
+    for (std::size_t n = 1; n < varStates_.size(); ++n) {
         offsets[n] = offsets[n - 1] * varStates_[n - 1];
     }
 
     // Fill out the var->index offset
     varStateIndex_.reserve(vars_.size());
-    for(std::size_t n = 0; n < vars_.size(); ++n)
-    {
+    for (std::size_t n = 0; n < vars_.size(); ++n) {
         varStateIndex_[vars_[n]] = offsets[n];
     }
 
-    for(auto v : sortedVars)
-    {
+    for (auto v : sortedVars) {
         assert(varStateIndex_.find(v->id()) != varStateIndex_.end());
     }
 
-    for(auto& prob : probs)
-    {
+    for (auto& prob : probs) {
         int index = state_index(prob.states, varStateIndex_);
         assert(index < static_cast<int>(stateProbs_.n_elem));
         stateProbs_(index) = prob.prob;
@@ -77,7 +72,9 @@ Factor::Factor(int id, const std::vector<Variable*>& variables, const std::vecto
 bool Factor::isComplete(void) const
 {
     // A msg is complete if there are no unset messages
-    return !utils::contains_if(edges_, [](FactorEdge* e) { return e->status(MsgDir::to_var) == MsgStatus::unset; });
+    return !utils::contains_if(edges_, [](FactorEdge* e) {
+        return e->status(MsgDir::to_var) == MsgStatus::unset;
+    });
 }
 
 
@@ -89,7 +86,9 @@ void Factor::addEdge(FactorEdge* edge)
     edges_.push_back(edge);
 
     // Maintain the same sorting as the variables
-    std::sort(edges_.begin(), edges_.end(), [](auto lhs, auto rhs) { return lhs->varId() < rhs->varId(); });
+    std::sort(edges_.begin(), edges_.end(), [](auto lhs, auto rhs) {
+        return lhs->varId() < rhs->varId();
+    });
 }
 
 
@@ -108,38 +107,33 @@ int Factor::sendMarginals(UpdateType type, UpdateRule rule)
     int numSent = 0;
     consumedEdges_.clear();
 
-    for(auto& edge : edges_)
-    {
+    for (auto& edge : edges_) {
         // If only one edges, there's always a message to send!
         Vector msg;
-        if((rule == UpdateRule::force) || should_send_message_on_edge(edge, MsgDir::to_factor, edges_))
-        {
+        if ((rule == UpdateRule::force) || should_send_message_on_edge(edge, MsgDir::to_factor, edges_)) {
             msg = computeEdgeMarginal(edge, type);
 #ifdef DEBUG_MSGS
             std::cout << "Preparing message for Var " << edge->varId() << " from Factor " << id_ << " with "
-                << edges_.size() << " edges...\n";
+                      << edges_.size() << " edges...\n";
         } else {
             std::cout << "Ignored sending messages Factor " << id_ << " with " << edges_.size() << " edges...\n";
 #endif
         }
 
         // If the message was set, then send it away
-        if(!msg.empty())
-        {
+        if (!msg.empty()) {
 #ifdef DEBUG_MSGS
             std::cout << msg << "message sent!\n";
 #endif
             msg /= arma::accu(msg);
             // If the message changed the edge value, it counts as being sent.
-            if(edge->setMessage(MsgDir::to_var, msg))
-            {
+            if (edge->setMessage(MsgDir::to_var, msg)) {
                 ++numSent;
             }
         }
     }
 
-    for(auto& e : consumedEdges_)
-    {
+    for (auto& e : consumedEdges_) {
         e->setStatus(MsgDir::to_factor, MsgStatus::stale);
     }
 
@@ -155,8 +149,7 @@ Vector Factor::computeEdgeMarginal(FactorEdge* edge, UpdateType type)
     // Accumulate all messages sent not including the edge to marginalize over
     std::vector<Vector> msgs;
     msgs.reserve(vars_.size());
-    for(auto e : edges_)
-    {
+    for (auto e : edges_) {
         msgs.push_back(e->message(MsgDir::to_factor));
         consumedEdges_.push_back(e);
     }
@@ -179,21 +172,16 @@ void Factor::sumRecursiveHelper(std::size_t idx,
                                 UpdateType type)
 {
     // Base case incorporate this state into the marginal computation
-    if(idx == vars_.size())
-    {
+    if (idx == vars_.size()) {
         updateMsgProduct(probIdx, product, varIdx, type);
     }
     // Skip if this is the variable in question
-    else if(idx == varIdx)
-    {
+    else if (idx == varIdx) {
         sumRecursiveHelper(idx + 1, probIdx, product, msgs, varIdx, type);
-    }
-    else
-    {
+    } else {
         // For each state for this variable, add on the offset into the stateProbs, accumulate the product, and
         // recurse to process the remaining values
-        for(int state = 0, num = varStates_[idx]; state < num; ++state)
-        {
+        for (int state = 0, num = varStates_[idx]; state < num; ++state) {
             sumRecursiveHelper(idx + 1,
                                probIdx + (state * varStateIndex_[vars_[idx]]),
                                product * msgs[idx](state),
@@ -207,24 +195,20 @@ void Factor::sumRecursiveHelper(std::size_t idx,
 
 void Factor::updateMsgProduct(int probIdx, double product, std::size_t varIdx, UpdateType type)
 {
-    for(int state = 0, end = varStates_[varIdx]; state < end; ++state)
-    {
+    for (int state = 0, end = varStates_[varIdx]; state < end; ++state) {
         int probIdxIncr = state * varStateIndex_[vars_[varIdx]];
         int factorIdx = probIdx + probIdxIncr;
 
-        if(type == UpdateType::sum)
-        {
+        if (type == UpdateType::sum) {
             msgProbs_(state) += stateProbs_(factorIdx) * product;
-        }
-        else if(type == UpdateType::max)
-        {
+        } else if (type == UpdateType::max) {
             msgProbs_(state) = std::max(stateProbs_(factorIdx) * product, msgProbs_(state));
         }
 
 #ifdef DEBUG_MSGS
         std::cout << "fact idx:" << factorIdx << " prob:" << stateProbs_(factorIdx) << " prod:" << product
-            << " state idx:" << state << " msg prob:" << msgProbs_(state) << '\n';
-#endif // DEBUG_MSGS
+                  << " state idx:" << state << " msg prob:" << msgProbs_(state) << '\n';
+#endif   // DEBUG_MSGS
     }
 }
 
@@ -232,13 +216,12 @@ void Factor::updateMsgProduct(int probIdx, double product, std::size_t varIdx, U
 int state_index(const std::vector<std::pair<int, int>>& states, const std::unordered_map<int, int>& varToOffset)
 {
     int index = 0;
-    for(auto st : states)
-    {
+    for (auto st : states) {
         index += varToOffset.at(st.first) * st.second;
     }
 
     return index;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

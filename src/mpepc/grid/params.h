@@ -8,53 +8,56 @@
 
 
 /**
-* \file     params.h
-* \author   Jong Jin Park and Collin Johnson
-*
-* Declaration of params structs for gridBuilders.
-*/
+ * \file     params.h
+ * \author   Jong Jin Park and Collin Johnson
+ *
+ * Declaration of params structs for gridBuilders.
+ */
 
 #ifndef MPEPC_GRID_BUILDER_PARAMS_H
 #define MPEPC_GRID_BUILDER_PARAMS_H
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace mpepc
 {
 
 struct obstacle_distance_grid_builder_params_t
 {
-    bool  isUnobservedObstacle;
+    bool isUnobservedObstacle;
     float maxObstacleDistance;
-    bool  shouldGrowObstacle;
+    bool shouldGrowObstacle;
     float growObstacleRadius;
-    
-    obstacle_distance_grid_builder_params_t(void) {};
+
+    obstacle_distance_grid_builder_params_t(void){};
     obstacle_distance_grid_builder_params_t(const utils::ConfigFile& config);
 };
 
 struct navigation_grid_builder_params_t
 {
-    bool  shouldPropagateObstacleCost;
+    bool shouldPropagateObstacleCost;
     float robotShortRadius;
     float robotLongRadius;
     float staticObstacleCostRadius;
     float staticObstacleCost;
-    
-    bool  shouldAddQuasiStaticObjects;
+
+    bool shouldAddQuasiStaticObjects;
     float quasiStaticTiming;
     float quasiStaticLength;
     float quasiStaticCostRadius;
     float quasiStaticCostPeak;
     float quasiStaticCostSlope;
-    
-    navigation_grid_builder_params_t(void) {};
+
+    navigation_grid_builder_params_t(void){};
     navigation_grid_builder_params_t(const utils::ConfigFile& config);
 };
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // METRIC_GRID_BUILDER_PARAMS_H
+#endif   // METRIC_GRID_BUILDER_PARAMS_H

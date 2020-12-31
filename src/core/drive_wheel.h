@@ -8,36 +8,34 @@
 
 
 /**
-* \file     drive_wheel.h
-* \author   Jong Jin Park
-*
-* Declaration of drive_wheel_t, which contains state variables for an individual drive wheel connected to a motor
-*/
+ * \file     drive_wheel.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of drive_wheel_t, which contains state variables for an individual drive wheel connected to a motor
+ */
 
 #ifndef ROBOT_DRIVE_WHEEL_H
 #define ROBOT_DRIVE_WHEEL_H
 
-#include <iosfwd>
 #include <cstdint>
+#include <iosfwd>
 
 namespace vulcan
 {
 
 /**
-* drive_wheel_t represents the current speed of and motor acceleration acting on a drive wheel.
-*/
+ * drive_wheel_t represents the current speed of and motor acceleration acting on a drive wheel.
+ */
 struct drive_wheel_t
 {
     int64_t timestamp;   ///< Time at which the speed was measured from encoder
-    float   speed;       ///< estimated linear speed of drive wheels
-    float   motorAccel;  ///< estimated acceleration of the linear speed resulting from the motor torque
+    float speed;         ///< estimated linear speed of drive wheels
+    float motorAccel;    ///< estimated acceleration of the linear speed resulting from the motor torque
 
-    // NOTE: motorAccel is not total acceleration. The total acceleration is a sum of acceleration from the motor, friction and other sources.
+    // NOTE: motorAccel is not total acceleration. The total acceleration is a sum of acceleration from the motor,
+    // friction and other sources.
 
-    explicit drive_wheel_t(float speed = 0, float motorAccel = 0)
-    : timestamp(0)
-    , speed(speed)
-    , motorAccel(motorAccel)
+    explicit drive_wheel_t(float speed = 0, float motorAccel = 0) : timestamp(0), speed(speed), motorAccel(motorAccel)
     {
     }
 
@@ -50,8 +48,8 @@ struct drive_wheel_t
 };
 
 /**
-* differential_drive_wheels_t holds the drive wheels information for a differentially-driven robot.
-*/
+ * differential_drive_wheels_t holds the drive wheels information for a differentially-driven robot.
+ */
 struct differential_drive_wheels_t
 {
     drive_wheel_t leftWheel;
@@ -67,18 +65,15 @@ std::ostream& operator<<(std::ostream& out, const drive_wheel_t& driveWheel);
 template <class Archive>
 void serialize(Archive& ar, drive_wheel_t& wheel)
 {
-    ar (wheel.timestamp,
-        wheel.speed,
-        wheel.motorAccel);
+    ar(wheel.timestamp, wheel.speed, wheel.motorAccel);
 }
 
 template <class Archive>
 void serialize(Archive& ar, differential_drive_wheels_t& wheels)
 {
-    ar (wheels.leftWheel,
-        wheels.rightWheel);
+    ar(wheels.leftWheel, wheels.rightWheel);
 }
 
-} // namespace vulcan
+}   // namespace vulcan
 
-#endif  // ROBOT_DRIVE_WHEEL_H
+#endif   // ROBOT_DRIVE_WHEEL_H

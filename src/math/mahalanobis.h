@@ -20,18 +20,18 @@ namespace math
 {
 
 /**
-* mahalanobis_distance calculates the Mahalanobis distance of a Vector from the provided Gaussian in terms
-* of the covariance of the Gaussian.
-*/
+ * mahalanobis_distance calculates the Mahalanobis distance of a Vector from the provided Gaussian in terms
+ * of the covariance of the Gaussian.
+ */
 float mahalanobis_distance(const MultivariateGaussian& gaussian, const Vector& vector);
 
 /**
-* mahalanobis_distance calculates the Mahalanobis distance of a value from another value in terms of the
-* provided variance.
-*/
+ * mahalanobis_distance calculates the Mahalanobis distance of a value from another value in terms of the
+ * provided variance.
+ */
 float mahalanobis_distance(float mean, float variance, float value);
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_MAHALANOBIS_H
+#endif   // MATH_MAHALANOBIS_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     exploration.cpp
-* \author   Collin Johnson
-*
-* Definition of ExplorationAffordance.
-*/
+ * \file     exploration.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ExplorationAffordance.
+ */
 
 #include "hssh/local_topological/affordances/exploration.h"
 #include "hssh/local_topological/affordance_visitor.h"
@@ -21,10 +21,9 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 ExplorationAffordance::ExplorationAffordance(void)
 {
-    
 }
 
 
@@ -40,5 +39,5 @@ void ExplorationAffordance::accept(NavigationAffordanceVisitor& visitor) const
     visitor.visitExploration(*this);
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

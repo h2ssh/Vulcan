@@ -8,25 +8,25 @@
 
 
 /**
-* \file     destination.cpp
-* \author   Collin Johnson
-*
-* Definition of LocalDestination.
-*/
+ * \file     destination.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalDestination.
+ */
 
 #include "hssh/local_topological/areas/destination.h"
 #include "hssh/local_topological/area_visitor.h"
 #include <sstream>
 
-namespace vulcan 
+namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
 
-LocalDestination::LocalDestination(const SmallScaleStar&       star,
-                                   const LocalPerceptualMap&   map,
-                                   int                         id,
-                                   const AreaExtent&           extent,
+LocalDestination::LocalDestination(const SmallScaleStar& star,
+                                   const LocalPerceptualMap& map,
+                                   int id,
+                                   const AreaExtent& extent,
                                    const std::vector<Gateway>& gateways)
 : LocalPlace(star, map, id, extent, gateways)
 {
@@ -46,5 +46,5 @@ void LocalDestination::accept(LocalAreaVisitor& visitor) const
     visitor.visitDestination(*this);
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

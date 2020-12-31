@@ -8,11 +8,11 @@
 
 
 /**
-* \file     labeled_boundary_data.cpp
-* \author   Collin Johnson
-*
-* Definition of required operators for LabeledBoundaryFeatures.
-*/
+ * \file     labeled_boundary_data.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of required operators for LabeledBoundaryFeatures.
+ */
 
 #include "hssh/local_topological/training/labeled_boundary_data.h"
 
@@ -46,5 +46,5 @@ std::istream& operator>>(std::istream& in, LabeledBoundaryFeatures& example)
     return in;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     transition.cpp
-* \author   Collin Johnson
-* 
-* Definition of TransitionAffordance.
-*/
+ * \file     transition.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TransitionAffordance.
+ */
 
 #include "hssh/local_topological/affordances/transition.h"
 #include "hssh/local_topological/affordance_visitor.h"
@@ -21,7 +21,7 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 TransitionAffordance::TransitionAffordance(void)
 {
 }
@@ -40,5 +40,5 @@ void TransitionAffordance::accept(NavigationAffordanceVisitor& visitor) const
     visitor.visitTransition(*this);
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

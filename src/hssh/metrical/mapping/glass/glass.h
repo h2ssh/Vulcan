@@ -7,7 +7,7 @@
 */
 
 
-/* 
+/*
  * File:   glass.h
  * Author: Paul Foster
  *
@@ -15,12 +15,10 @@
  */
 
 #ifndef GLASS_H
-#define	GLASS_H
+#define GLASS_H
 #include "glass_input.h"
 
-void updateFromLaserScan(vulcan::glass::LaserScan& laser, cv::Size & gridsize);
+void updateFromLaserScan(vulcan::glass::LaserScan& laser, cv::Size& gridsize);
 
 
-
-#endif	/* GLASS_H */
-
+#endif /* GLASS_H */

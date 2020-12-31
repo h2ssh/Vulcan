@@ -8,11 +8,11 @@
 
 
 /**
-* \file     local_topo_route.cpp
-* \author   Collin Johnson
-*
-* Definition of LocalTopoRoute and LocalTopoRouteVisit.
-*/
+ * \file     local_topo_route.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalTopoRoute and LocalTopoRouteVisit.
+ */
 
 #include "hssh/local_topological/local_topo_route.h"
 
@@ -22,7 +22,7 @@ namespace hssh
 {
 
 //////////////////// LocalTopoRouteVisit implementation ////////////////////////////
-    
+
 LocalTopoRouteVisit::LocalTopoRouteVisit(LocalArea::Ptr area,
                                          Point<float> entry,
                                          Point<float> exit,
@@ -42,8 +42,7 @@ LocalTopoRouteVisit::LocalTopoRouteVisit(LocalArea::Ptr area,
 
 //////////////////// LocalTopoRoute implementation ////////////////////////////////
 
-LocalTopoRoute::LocalTopoRoute(void)
-: length_(0.0)
+LocalTopoRoute::LocalTopoRoute(void) : length_(0.0)
 {
 }
 
@@ -57,21 +56,19 @@ void LocalTopoRoute::addVisit(const LocalTopoRouteVisit& visit)
 
 std::ostream& operator<<(std::ostream& out, const LocalTopoRoute& route)
 {
-    if(route.empty())
-    {
+    if (route.empty()) {
         return out;
     }
-    
+
     // Need to give the start point
     out << route.front().entryPoint() << " -> ";
-    
+
     // And then just exit points can be used
-    for(auto& visit : route)
-    {
+    for (auto& visit : route) {
         out << visit.exitPoint() << " -> ";
     }
     return out;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

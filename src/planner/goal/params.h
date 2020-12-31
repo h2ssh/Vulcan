@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of goal_params_t and load_goal_params function.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of goal_params_t and load_goal_params function.
+ */
 
 #ifndef PLANNER_GOAL_PARAMS_H
 #define PLANNER_GOAL_PARAMS_H
@@ -21,7 +21,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace planner
 {
@@ -31,15 +34,15 @@ struct goal_params_t
 };
 
 /**
-* load_goal_params loads the parameters for the global topo planner from
-* the provided config file.
-*
-* \param    config          Config file with the parameters
-* \return   Struct contained the parameters parsed from the config.
-*/
+ * load_goal_params loads the parameters for the global topo planner from
+ * the provided config file.
+ *
+ * \param    config          Config file with the parameters
+ * \return   Struct contained the parameters parsed from the config.
+ */
 goal_params_t load_goal_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_GOAL_PARAMS_H
+#endif   // PLANNER_GOAL_PARAMS_H

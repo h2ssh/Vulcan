@@ -8,25 +8,25 @@
 
 
 /**
-* \file     decision_point.cpp
-* \author   Collin Johnson
-*
-* Definition of LocalDecisionPoint.
-*/
+ * \file     decision_point.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalDecisionPoint.
+ */
 
 #include "hssh/local_topological/areas/decision_point.h"
 #include "hssh/local_topological/area_visitor.h"
 #include <sstream>
 
-namespace vulcan 
+namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
 
-LocalDecisionPoint::LocalDecisionPoint(const SmallScaleStar&       star,
-                                       const LocalPerceptualMap&   map,
-                                       int                         id,
-                                       const AreaExtent&           extent,
+LocalDecisionPoint::LocalDecisionPoint(const SmallScaleStar& star,
+                                       const LocalPerceptualMap& map,
+                                       int id,
+                                       const AreaExtent& extent,
                                        const std::vector<Gateway>& gateways)
 : LocalPlace(star, map, id, extent, gateways)
 {
@@ -46,5 +46,5 @@ void LocalDecisionPoint::accept(LocalAreaVisitor& visitor) const
     visitor.visitDecisionPoint(*this);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,19 +8,19 @@
 
 
 /**
-* \file     softmax.cpp
-* \author   Collin Johnson
-* 
-* Definition of functions for softmax regression and classification.
-*/
+ * \file     softmax.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of functions for softmax regression and classification.
+ */
 
 #include "math/softmax.h"
-#include <iostream>
-#include <future>
-#include <thread>
 #include <cassert>
+#include <future>
+#include <iostream>
+#include <thread>
 
-namespace vulcan 
+namespace vulcan
 {
 namespace math
 {
@@ -37,7 +37,8 @@ struct LambdaResult
     bool operator<(const LambdaResult& rhs)
     {
         // Tie goes to the result with a higher total probability for the correct answer
-        return (numCorrect > rhs.numCorrect) || (numCorrect == rhs.numCorrect && totalProbability > rhs.totalProbability);
+        return (numCorrect > rhs.numCorrect)
+          || (numCorrect == rhs.numCorrect && totalProbability > rhs.totalProbability);
     }
 };
 
@@ -46,96 +47,92 @@ struct LambdaResult
 double softmax_cost_and_gradient(const Vector& x, const Matrix& thetas, int y, Matrix& gradient);
 bool converged(const Matrix& prevCost, const Matrix& cost, double threshold);
 LambdaResult find_best_lambda(LambdaIter begin,
-                            LambdaIter end,
-                            const Matrix& trainingFeatures,
-                            const IntMatrix& trainingLabels,
-                            const Matrix& testFeatures,
-                            const IntMatrix& testLabels,
-                            const int numClasses,
-                            softmax_regression_options_t options);
+                              LambdaIter end,
+                              const Matrix& trainingFeatures,
+                              const IntMatrix& trainingLabels,
+                              const Matrix& testFeatures,
+                              const IntMatrix& testLabels,
+                              const int numClasses,
+                              softmax_regression_options_t options);
 LambdaResult softmax_regression_plus_test(const Matrix& trainingFeatures,
-                                         const IntMatrix& trainingLabels,
-                                         const Matrix& testFeatures,
-                                         const IntMatrix& testLabels,
-                                         const int numClasses,
-                                         const softmax_regression_options_t& options);
+                                          const IntMatrix& trainingLabels,
+                                          const Matrix& testFeatures,
+                                          const IntMatrix& testLabels,
+                                          const int numClasses,
+                                          const softmax_regression_options_t& options);
 
 
-
-Matrix softmax_regression(const Matrix& x, 
-                          const IntMatrix& y, 
-                          const int numClasses, 
+Matrix softmax_regression(const Matrix& x,
+                          const IntMatrix& y,
+                          const int numClasses,
                           const softmax_regression_options_t options)
 {
     const int kDimensions = x.n_rows;
     const int kNumExamples = x.n_cols;
-    
+
     std::array<Matrix, 2> thetas;
     thetas[0] = thetas[1] = Matrix(numClasses, kDimensions);
     thetas[0].zeros();
     thetas[1].zeros();
-    
+
     std::array<Matrix, 2> grads;
     grads[0] = grads[1] = Matrix(numClasses, kDimensions);
-    
+
     int prevIndex = 0;
     int currIndex = 1;
-    
+
     int numIterations = 0;
-    
+
     bool hasConverged = false;
 
     const double kRegularizeLambda = options.l2Lambda / kNumExamples;
     Matrix regularizationVector(numClasses, kDimensions);
-    
-    do
-    {
+
+    do {
         std::swap(prevIndex, currIndex);
-        
+
         auto& prevThetas = thetas[prevIndex];
         auto& currThetas = thetas[currIndex];
-        
+
         auto& prevGrad = grads[prevIndex];
         auto& currGrad = grads[currIndex];
-        
+
         currGrad.zeros();
-        
+
         double cost = 0.0;
-        
-        for(int n = 0; n < kNumExamples; ++n)
-        {
+
+        for (int n = 0; n < kNumExamples; ++n) {
             cost += softmax_cost_and_gradient(x.col(n), prevThetas, y(n, 0), currGrad);
         }
-        
+
         currGrad /= -kNumExamples;
         currGrad += prevThetas * options.weightDecay;
-        
+
         cost = (-cost / kNumExamples) + ((options.weightDecay / 2) * accu(prevThetas % prevThetas));
 
         regularizationVector = kRegularizeLambda * prevThetas;
-        regularizationVector.col(0).zeros();  // regularization doesn't apply to the first weight
-        
+        regularizationVector.col(0).zeros();   // regularization doesn't apply to the first weight
+
         // Apply L2 regularization in the gradient descent update step
-        currThetas   = prevThetas - (options.learningRate * (regularizationVector + currGrad));
+        currThetas = prevThetas - (options.learningRate * (regularizationVector + currGrad));
         hasConverged = converged(prevGrad, currGrad, options.convergenceThreshold);
-        
-        if((hasConverged || (numIterations % 1000 == 0)) && options.verbose)
-        {
-            std::cout << "Iteration " << numIterations << ": Converged? " << hasConverged << " Error:" << cost 
+
+        if ((hasConverged || (numIterations % 1000 == 0)) && options.verbose) {
+            std::cout << "Iteration " << numIterations << ": Converged? " << hasConverged << " Error:" << cost
                       << " Grad:" << accu(abs(currGrad)) << std::endl;
         }
-            
+
         ++numIterations;
-        
-    } while(!hasConverged && (numIterations < options.maxIterations || options.maxIterations == 0));
-    
+
+    } while (!hasConverged && (numIterations < options.maxIterations || options.maxIterations == 0));
+
     return thetas[currIndex];
 }
 
 
-Matrix softmax_regression_with_search(const Matrix&    features,
+Matrix softmax_regression_with_search(const Matrix& features,
                                       const IntMatrix& labels,
-                                      int              numClasses,
+                                      int numClasses,
                                       softmax_regression_options_t options,
                                       double lambdaMin,
                                       double lambdaMax,
@@ -147,7 +144,8 @@ Matrix softmax_regression_with_search(const Matrix&    features,
     const int kHoldoutRatio = 50;
     // minus 1 is here because the divide vs. mod. If n_cols % 50 == 0, it won't get there due to 0-based indexing, so
     // shift n_cols to show what the for-loop will see for column values below.
-    int numHoldouts = ((features.n_cols - 1) / kHoldoutRatio) + 1;          // use 2% of the data as holdout for determining best value of lambda
+    int numHoldouts = ((features.n_cols - 1) / kHoldoutRatio)
+      + 1;   // use 2% of the data as holdout for determining best value of lambda
     Matrix holdoutFeatures(features.n_rows, numHoldouts);
     IntMatrix holdoutLabels(numHoldouts, 1);
 
@@ -157,17 +155,13 @@ Matrix softmax_regression_with_search(const Matrix&    features,
     int holdoutIndex = 0;
     int trainingIndex = 0;
 
-    for(arma::uword n = 0; n < features.n_cols; ++n)
-    {
-        if(n % kHoldoutRatio == 0)
-        {
+    for (arma::uword n = 0; n < features.n_cols; ++n) {
+        if (n % kHoldoutRatio == 0) {
             assert(holdoutIndex < numHoldouts);
             holdoutFeatures.col(holdoutIndex) = features.col(n);
             holdoutLabels(holdoutIndex, 0) = labels(n, 0);
             ++holdoutIndex;
-        }
-        else
-        {
+        } else {
             trainingFeatures.col(trainingIndex) = features.col(n);
             trainingLabels(trainingIndex, 0) = labels(n, 0);
             ++trainingIndex;
@@ -176,10 +170,11 @@ Matrix softmax_regression_with_search(const Matrix&    features,
 
     // Create the lambdas that will be searched
     lambdaMin = std::max(lambdaMin, 0.0);
-    lambdaMax = std::max(lambdaMax, lambdaMin);     // can't have a negative lambda
+    lambdaMax = std::max(lambdaMax, lambdaMin);   // can't have a negative lambda
     lambdaStep = std::abs(lambdaStep);
 
-    std::size_t numLambdas = std::ceil((lambdaMax - lambdaMin) / lambdaStep) + 1;        // always search at least lambda = lambdaMin
+    std::size_t numLambdas =
+      std::ceil((lambdaMax - lambdaMin) / lambdaStep) + 1;   // always search at least lambda = lambdaMin
 
     // Create up to four threads for searching the space.
     std::size_t kMaxThreads = 4;
@@ -187,25 +182,25 @@ Matrix softmax_regression_with_search(const Matrix&    features,
     std::size_t lambdasPerThread = std::max((numLambdas / kNumThreads), std::size_t(1));
     numLambdas = kNumThreads * lambdasPerThread;
 
-    std::vector<double> lambdas(numLambdas);  // Run as many lambdas as possible to fill up full CPU time
-    std::iota(lambdas.begin(), lambdas.end(), 0.0);       // fill with [0, numLambdas]
+    std::vector<double> lambdas(numLambdas);          // Run as many lambdas as possible to fill up full CPU time
+    std::iota(lambdas.begin(), lambdas.end(), 0.0);   // fill with [0, numLambdas]
     std::transform(lambdas.begin(), lambdas.end(), lambdas.begin(), [lambdaStep, lambdaMin](double lambda) {
-       return (lambda * lambdaStep) + lambdaMin;  // convert integer index to the appropriate lambda value in [lambdaMin, lambdaMax]
+        return (lambda * lambdaStep)
+          + lambdaMin;   // convert integer index to the appropriate lambda value in [lambdaMin, lambdaMax]
     });
 
     std::cout << "INFO: softmax_regression_with_search: Performing search of lambdas [" << lambdas.front() << ','
-        << lambdas.back() << "] step:" << lambdaStep << " Training examples:" << trainingFeatures.n_cols
-        << " Holdouts:" << numHoldouts << '\n';
+              << lambdas.back() << "] step:" << lambdaStep << " Training examples:" << trainingFeatures.n_cols
+              << " Holdouts:" << numHoldouts << '\n';
 
     std::cout << "INFO: softmax_regression_with_search: Running search using " << kNumThreads << " threads with "
-        << lambdasPerThread << " lambdas per thread. Num lambdas:" << lambdas.size() << '\n';
+              << lambdasPerThread << " lambdas per thread. Num lambdas:" << lambdas.size() << '\n';
 
     // Launch the threads
     std::vector<std::future<LambdaResult>> asyncParams;
-    for(int n = 0; n < kNumThreads; ++n)
-    {
+    for (int n = 0; n < kNumThreads; ++n) {
         std::size_t start = lambdasPerThread * n;
-        std::size_t end   = std::min(lambdasPerThread * (n + 1), numLambdas);
+        std::size_t end = std::min(lambdasPerThread * (n + 1), numLambdas);
 
         asyncParams.push_back(std::async(std::launch::async,
                                          find_best_lambda,
@@ -216,14 +211,12 @@ Matrix softmax_regression_with_search(const Matrix&    features,
                                          holdoutFeatures,
                                          holdoutLabels,
                                          numClasses,
-                                         options
-        ));
+                                         options));
     }
 
     // Wait until all the tasks have finished
     std::vector<LambdaResult> results;
-    for(auto& f : asyncParams)
-    {
+    for (auto& f : asyncParams) {
         results.push_back(f.get());
     }
 
@@ -248,16 +241,16 @@ std::pair<int, double> softmax_max_likelihood(const Vector& features, const Matr
 Vector softmax_classify(const Vector& features, const Matrix& classifier)
 {
     Vector thetaDotX = classifier * features;
-    
+
     // To prevent overflow, subtract off the largest of the exponent values
     thetaDotX -= thetaDotX.max();
-    
+
     // e^trans(theta) * x
     thetaDotX = exp(thetaDotX);
-    
+
     // Normalize all the values
     thetaDotX /= sum(thetaDotX);
-    
+
     return thetaDotX;
 }
 
@@ -269,23 +262,23 @@ double softmax_cost_and_gradient(const Vector& x, const Matrix& thetas, int y, M
     Vector labels(thetas.n_rows);
     labels.zeros();
     labels(y) = 1;
-    
+
     Vector thetaDotX = thetas * x;
-    
+
     // To prevent overflow, subtract off the largest of the exponent values
     arma::uword maxIndex;
     thetaDotX -= thetaDotX.max(maxIndex);
-    
+
     // e^trans(theta) * x
     thetaDotX = exp(thetaDotX);
-    
+
     // Normalize all the values
     thetaDotX /= sum(thetaDotX);
-    
+
     // Add the cost for each of the theta vectors at the same time
     gradient += (labels - thetaDotX) * x.t();
-    
-//     std::cout << "Sample error:" << std::log(thetaDotX(y)) << " Est.prob:" << thetaDotX(y) << '\n';
+
+    //     std::cout << "Sample error:" << std::log(thetaDotX(y)) << " Est.prob:" << thetaDotX(y) << '\n';
     return std::log(thetaDotX(y));
 }
 
@@ -297,27 +290,24 @@ bool converged(const Matrix& prevCost, const Matrix& cost, double threshold)
 
 
 LambdaResult find_best_lambda(LambdaIter begin,
-                            LambdaIter end,
-                            const Matrix& trainingFeatures,
-                            const IntMatrix& trainingLabels,
-                            const Matrix& testFeatures,
-                            const IntMatrix& testLabels,
-                            const int numClasses,
-                            softmax_regression_options_t options)
+                              LambdaIter end,
+                              const Matrix& trainingFeatures,
+                              const IntMatrix& trainingLabels,
+                              const Matrix& testFeatures,
+                              const IntMatrix& testLabels,
+                              const int numClasses,
+                              softmax_regression_options_t options)
 {
     std::vector<LambdaResult> lambdaResults;
 
     std::for_each(begin, end, [&](double lambda) {
         options.l2Lambda = lambda;
-        lambdaResults.push_back(
-            softmax_regression_plus_test(
-                trainingFeatures,
-                trainingLabels,
-                testFeatures,
-                testLabels,
-                numClasses,
-                options
-        ));
+        lambdaResults.push_back(softmax_regression_plus_test(trainingFeatures,
+                                                             trainingLabels,
+                                                             testFeatures,
+                                                             testLabels,
+                                                             numClasses,
+                                                             options));
     });
 
     return *std::max_element(lambdaResults.begin(), lambdaResults.end());
@@ -325,11 +315,11 @@ LambdaResult find_best_lambda(LambdaIter begin,
 
 
 LambdaResult softmax_regression_plus_test(const Matrix& trainingFeatures,
-                                         const IntMatrix& trainingLabels,
-                                         const Matrix& testFeatures,
-                                         const IntMatrix& testLabels,
-                                         const int numClasses,
-                                         const softmax_regression_options_t& options)
+                                          const IntMatrix& trainingLabels,
+                                          const Matrix& testFeatures,
+                                          const IntMatrix& testLabels,
+                                          const int numClasses,
+                                          const softmax_regression_options_t& options)
 {
     // Calculate the classifier
     LambdaResult result;
@@ -339,22 +329,20 @@ LambdaResult softmax_regression_plus_test(const Matrix& trainingFeatures,
     result.totalProbability = 0.0;
 
     // Find the results
-    for(arma::uword n = 0; n < testFeatures.n_cols; ++n)
-    {
+    for (arma::uword n = 0; n < testFeatures.n_cols; ++n) {
         auto testResult = softmax_max_likelihood(testFeatures.col(n), result.classifier);
 
-        if(testResult.first == testLabels(n, 0))
-        {
+        if (testResult.first == testLabels(n, 0)) {
             ++result.numCorrect;
             result.totalProbability += testResult.second;
         }
     }
 
-    std::cout << "Softmax with lambda = " << result.lambda << ", correct = " << result.numCorrect << " prob = "
-        << result.totalProbability << '\n';
+    std::cout << "Softmax with lambda = " << result.lambda << ", correct = " << result.numCorrect
+              << " prob = " << result.totalProbability << '\n';
 
     return result;
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

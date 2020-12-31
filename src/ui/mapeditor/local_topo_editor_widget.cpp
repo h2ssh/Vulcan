@@ -8,20 +8,20 @@
 
 
 /**
-* \file     local_topo_editor_widget.cpp
-* \author   Collin Johnson
-* 
-* Implementation of LocalTopoEditorWidget.
-*/
+ * \file     local_topo_editor_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of LocalTopoEditorWidget.
+ */
 
 #include "ui/mapeditor/local_topo_editor_widget.h"
-#include "ui/components/area_subgraph_renderer.h"
-#include "ui/components/place_grid_renderer.h"
-#include "ui/components/gateways_renderer.h"
+#include "hssh/local_metric/lpm.h"
 #include "ui/common/default_colors.h"
 #include "ui/common/gl_shapes.h"
 #include "ui/common/ui_params.h"
-#include "hssh/local_metric/lpm.h"
+#include "ui/components/area_subgraph_renderer.h"
+#include "ui/components/gateways_renderer.h"
+#include "ui/components/place_grid_renderer.h"
 #include "utils/auto_mutex.h"
 
 namespace vulcan
@@ -57,11 +57,11 @@ LocalTopoEditorWidget::~LocalTopoEditorWidget(void)
 
 void LocalTopoEditorWidget::setParams(const ui_params_t& params)
 {
-    gatewayRenderer_->setRenderColors(params.localTopoParams.gatewayColor, 
-                                      params.localTopoParams.frontierColor, 
+    gatewayRenderer_->setRenderColors(params.localTopoParams.gatewayColor,
+                                      params.localTopoParams.frontierColor,
                                       GLColor());
-    
-    skeletonRenderer_->setRenderColors(params.localTopoParams.frontierColor, 
+
+    skeletonRenderer_->setRenderColors(params.localTopoParams.frontierColor,
                                        params.localTopoParams.skeletonCellColor,
                                        params.localTopoParams.reducedCellColor);
 }
@@ -114,13 +114,12 @@ Point<int> LocalTopoEditorWidget::convertWorldToGrid(const Point<float>& world) 
 void LocalTopoEditorWidget::renderWidget(void)
 {
     utils::AutoMutex autoLock(dataLock_);
-    
-    if(isDirtySkeleton_)
-    {
+
+    if (isDirtySkeleton_) {
         skeletonRenderer_->setGrid(skeleton_);
         isDirtySkeleton_ = false;
     }
-    
+
     skeletonRenderer_->renderGrid();
     renderAreas();
     renderGateways();
@@ -129,8 +128,7 @@ void LocalTopoEditorWidget::renderWidget(void)
 
 void LocalTopoEditorWidget::renderAreas(void) const
 {
-    for(auto& area : areas_)
-    {
+    for (auto& area : areas_) {
         areaRenderer_->renderHypothesis(*area, skeleton_.metersPerCell());
     }
 }
@@ -139,20 +137,18 @@ void LocalTopoEditorWidget::renderAreas(void) const
 void LocalTopoEditorWidget::renderGateways(void) const
 {
     gatewayRenderer_->renderGateways(gateways_);
-    
-    if(hoverGateway_)
-    {
+
+    if (hoverGateway_) {
         GLColor hoverColor(quasi_static_color());
         hoverColor.alpha(0.33);
         gatewayRenderer_->renderGateway(*hoverGateway_, false, &hoverColor);
     }
-    
-    if(selectedGateway_)
-    {
+
+    if (selectedGateway_) {
         GLColor selectedColor(hazard_color());
         gatewayRenderer_->renderGateway(*selectedGateway_, false, &selectedColor);
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

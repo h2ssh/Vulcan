@@ -8,11 +8,11 @@
 
 
 /**
-* \file     relocalize_in_lpm.h
-* \author   Collin Johnson
-* 
-* Declaration of RelocalizeInLpmCommand.
-*/
+ * \file     relocalize_in_lpm.h
+ * \author   Collin Johnson
+ *
+ * Declaration of RelocalizeInLpmCommand.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_RELOCALIZE_IN_LPM_H
 #define HSSH_LOCAL_METRIC_COMMANDS_RELOCALIZE_IN_LPM_H
@@ -28,52 +28,47 @@ namespace hssh
 {
 
 /**
-* RelocalizeInLpmCommand issues a command to relocalize in the specified LPM using the specified filter initializer.
-*/
+ * RelocalizeInLpmCommand issues a command to relocalize in the specified LPM using the specified filter initializer.
+ */
 class RelocalizeInLpmCommand : public LocalMetricCommand
 {
 public:
-    
     /**
-    * Constructor for RelocalizeInLpmCommand.
-    * 
-    * \param    source          Source module of the command
-    * \param    map             Map in which to relocalize 
-    * \param    initializer     Filter initializer to use for the relocalization
-    */
-    RelocalizeInLpmCommand(const std::string&                 source, 
-                           const LocalPerceptualMap&          map,
+     * Constructor for RelocalizeInLpmCommand.
+     *
+     * \param    source          Source module of the command
+     * \param    map             Map in which to relocalize
+     * \param    initializer     Filter initializer to use for the relocalization
+     */
+    RelocalizeInLpmCommand(const std::string& source,
+                           const LocalPerceptualMap& map,
                            std::shared_ptr<FilterInitializer> initializer);
-    
+
     // LocalMetricCommand interface
     void issue(const metric_slam_data_t& data,
-               Localizer&   localizer, 
-               Mapper&                   mapper, 
-               MetricRelocalizer&        relocalizer) const override;
+               Localizer& localizer,
+               Mapper& mapper,
+               MetricRelocalizer& relocalizer) const override;
     void print(std::ostream& out) const override;
 
 private:
-
-    LocalPerceptualMap map_;    
+    LocalPerceptualMap map_;
     std::shared_ptr<FilterInitializer> initializer_;
-    
+
     // Serialization support
     RelocalizeInLpmCommand(void) { }
-    
+
     friend class cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( cereal::base_class<LocalMetricCommand>(this),
-            map_,
-            initializer_);
+        ar(cereal::base_class<LocalMetricCommand>(this), map_, initializer_);
     }
-    
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
 // Serialization support for smart pointers
 #include <cereal/archives/binary.hpp>
@@ -81,4 +76,4 @@ private:
 
 CEREAL_REGISTER_TYPE(vulcan::hssh::RelocalizeInLpmCommand)
 
-#endif // HSSH_LOCAL_METRIC_COMMANDS_RELOCALIZE_IN_LPM_H
+#endif   // HSSH_LOCAL_METRIC_COMMANDS_RELOCALIZE_IN_LPM_H

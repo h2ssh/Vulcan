@@ -8,11 +8,11 @@
 
 
 /**
-* \file     motion_checker.cpp
-* \author   Collin Johnson
-*
-* Definition of create_motion_checker factory.
-*/
+ * \file     motion_checker.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_motion_checker factory.
+ */
 
 #include "robot/motion_checker.h"
 #include "robot/params.h"
@@ -28,16 +28,15 @@ namespace robot
 
 std::unique_ptr<MotionChecker> create_motion_checker(const motion_checker_params_t& params)
 {
-    if(params.checkerType == PROXIMITY_CHECKER_TYPE)
-    {
+    if (params.checkerType == PROXIMITY_CHECKER_TYPE) {
         return std::unique_ptr<MotionChecker>(new ProximityChecker(params.proximityParams));
     }
 
-    std::cerr<<"ERROR: create_motion_checker: Unknown checkerType: "<<params.checkerType<<std::endl;
+    std::cerr << "ERROR: create_motion_checker: Unknown checkerType: " << params.checkerType << std::endl;
     assert(false);
 
     return std::unique_ptr<MotionChecker>();
 }
 
-}
-}
+}   // namespace robot
+}   // namespace vulcan

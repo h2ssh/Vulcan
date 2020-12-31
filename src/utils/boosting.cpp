@@ -8,11 +8,11 @@
 
 
 /**
-* \file     boosting.h
-* \author   Collin Johnson
-*
-* Definition of AdaBoostClassifier.
-*/
+ * \file     boosting.h
+ * \author   Collin Johnson
+ *
+ * Definition of AdaBoostClassifier.
+ */
 
 #include "utils/boosting.h"
 #include "utils/float_io.h"
@@ -25,17 +25,13 @@ namespace utils
 {
 
 Vector initialize_weights(const IntVector& labels);
-void classify_examples(const IntVector& labels,
-                       const Matrix& features,
-                       const DecisionStump& stump,
-                       Vector& results);
+void classify_examples(const IntVector& labels, const Matrix& features, const DecisionStump& stump, Vector& results);
 double compute_stump_weight(const Vector& results, const Vector& weights);
 void reweight_examples(double stumpWeight, const Vector& results, Vector& weights);
 
 
-std::unique_ptr<AdaBoostClassifier> AdaBoostClassifier::LearnClassifier(const IntVector& labels,
-                                                                        const Matrix& features,
-                                                                        int maxClassifiers)
+std::unique_ptr<AdaBoostClassifier>
+  AdaBoostClassifier::LearnClassifier(const IntVector& labels, const Matrix& features, int maxClassifiers)
 {
     const int kNumStumps = maxClassifiers;
 
@@ -45,47 +41,36 @@ std::unique_ptr<AdaBoostClassifier> AdaBoostClassifier::LearnClassifier(const In
 
     int lastFeatIdx = -1;
 
-    for(int n = 0; n < kNumStumps; ++n)
-    {
+    for (int n = 0; n < kNumStumps; ++n) {
         std::vector<int> ignore;
-        if(lastFeatIdx != -1)
-        {
+        if (lastFeatIdx != -1) {
             ignore.push_back(lastFeatIdx);
         }
         auto newStump = DecisionStump::LearnStump(labels, weights, features, ignore);
 
-        if(newStump)
-        {
+        if (newStump) {
             classify_examples(labels, features, *newStump, results);
             double stumpWeight = compute_stump_weight(results, weights);
 
-            if(stumpWeight > 0.0)
-            {
+            if (stumpWeight > 0.0) {
                 reweight_examples(stumpWeight, results, weights);
                 newStump->setWeight(stumpWeight);
                 stumps.push_back(*newStump);
                 lastFeatIdx = newStump->featureIndex();
 
                 std::cout << "Created stump " << (n + 1) << " of " << kNumStumps << '\n';
-            }
-            else
-            {
+            } else {
                 std::cout << "Decision stump learning converged -- can't find another weak learner.\n";
                 break;
             }
-        }
-        else
-        {
+        } else {
             std::cerr << "WARNING: Failed to create a stump!\n";
         }
     }
 
-    if(!stumps.empty())
-    {
+    if (!stumps.empty()) {
         return std::unique_ptr<AdaBoostClassifier>(new AdaBoostClassifier(stumps));
-    }
-    else
-    {
+    } else {
         return nullptr;
     }
 }
@@ -102,15 +87,14 @@ double AdaBoostClassifier::classify(const Vector& features) const
 {
     double totalWeight = 0.0;
 
-    for(auto& stump : stumps_)
-    {
+    for (auto& stump : stumps_) {
         totalWeight += stump.classify(features);
     }
 
     // Logistic Correction from Friedman et al. (2000) to get a reasonably calibrated probability
     return 1.0 / (1.0 + std::exp(-2.0 * totalWeight));
 
-//     return 0.5 * ((totalWeight * weightNormalizer_) + 1.0);
+    //     return 0.5 * ((totalWeight * weightNormalizer_) + 1.0);
 }
 
 
@@ -125,21 +109,16 @@ bool AdaBoostClassifier::load(const std::string& filename)
 
     std::vector<DecisionStump> loadedStumps;
     std::string line;
-    while(loadedStumps.size() < static_cast<std::size_t>(numClassifiers))
-    {
-        if(std::getline(in, line))
-        {
+    while (loadedStumps.size() < static_cast<std::size_t>(numClassifiers)) {
+        if (std::getline(in, line)) {
             std::istringstream stumpIn(line);
             DecisionStump stump;
-            if(stump.load(stumpIn))
-            {
+            if (stump.load(stumpIn)) {
                 loadedStumps.push_back(stump);
             }
-        }
-        else
-        {
+        } else {
             std::cerr << "ERROR::AdaBoostClassifier: Expected to load " << numClassifiers << " stumps but only found "
-                << loadedStumps.size() << " stumps in " << filename << '\n';
+                      << loadedStumps.size() << " stumps in " << filename << '\n';
             return false;
         }
     }
@@ -154,22 +133,21 @@ bool AdaBoostClassifier::load(const std::string& filename)
 bool AdaBoostClassifier::save(const std::string& filename) const
 {
     /*
-    * The file format is:
-    *
-    *   num_classifiers
-    *   weak_classifier_0
-    *       .
-    *       .
-    *       .
-    *   weak_classifier_N
-    *   weightNormalizer_
-    */
+     * The file format is:
+     *
+     *   num_classifiers
+     *   weak_classifier_0
+     *       .
+     *       .
+     *       .
+     *   weak_classifier_N
+     *   weightNormalizer_
+     */
 
     std::ofstream out(filename);
 
     out << stumps_.size() << '\n';
-    for(auto& stump : stumps_)
-    {
+    for (auto& stump : stumps_) {
         stump.save(out);
         out << '\n';
     }
@@ -180,12 +158,10 @@ bool AdaBoostClassifier::save(const std::string& filename) const
 }
 
 
-AdaBoostClassifier::AdaBoostClassifier(std::vector<DecisionStump> stumps)
-: stumps_(std::move(stumps))
+AdaBoostClassifier::AdaBoostClassifier(std::vector<DecisionStump> stumps) : stumps_(std::move(stumps))
 {
     double totalWeight = 0.0;
-    for(auto& s : stumps_)
-    {
+    for (auto& s : stumps_) {
         totalWeight += s.weight();
     }
 
@@ -205,16 +181,14 @@ Vector initialize_weights(const IntVector& labels)
     std::cout << "Num pos examples:" << posIdx.n_elem << " Num neg examples:" << negIdx.n_elem << '\n';
 
     // If there are more positives than negatives, increase the weight for negative examples
-    if(posIdx.n_elem > negIdx.n_elem)
-    {
+    if (posIdx.n_elem > negIdx.n_elem) {
         double negWeight = static_cast<double>(posIdx.n_elem) / negIdx.n_elem;
         weights.elem(negIdx) *= negWeight;
 
         std::cout << "Applying weight to negative examples: " << negWeight << '\n';
     }
     // If there are more negatives than positives, increase the weight for positive examples
-    else if(posIdx.n_elem < negIdx.n_elem)
-    {
+    else if (posIdx.n_elem < negIdx.n_elem) {
         double posWeight = static_cast<double>(negIdx.n_elem) / posIdx.n_elem;
         weights.elem(posIdx) *= posWeight;
 
@@ -226,10 +200,7 @@ Vector initialize_weights(const IntVector& labels)
 }
 
 
-void classify_examples(const IntVector& labels,
-                       const Matrix& features,
-                       const DecisionStump& stump,
-                       Vector& results)
+void classify_examples(const IntVector& labels, const Matrix& features, const DecisionStump& stump, Vector& results)
 {
     int numPosCorrect = 0;
     int numNegCorrect = 0;
@@ -237,47 +208,33 @@ void classify_examples(const IntVector& labels,
     int numNegWrong = 0;
 
     // Mark = 1 for a correct label and -1 for an incorrect label
-    for(arma::uword n = 0; n < labels.n_elem; ++n)
-    {
+    for (arma::uword n = 0; n < labels.n_elem; ++n) {
         // Classification > 0 means it was a positive classification, so if positive and label was positive,
         // then a correct match was made
         double classification = stump.classify(features.col(n));
-        if(((classification > 0.0) && (labels(n) > 0))
-            || ((classification < 0.0) && (labels(n) < 0)))
-        {
+        if (((classification > 0.0) && (labels(n) > 0)) || ((classification < 0.0) && (labels(n) < 0))) {
             results(n) = 1.0;
-        }
-        else
-        {
+        } else {
             results(n) = -1.0;
         }
 
-        if(results(n) < 0)
-        {
-            if(labels(n) > 0)
-            {
+        if (results(n) < 0) {
+            if (labels(n) > 0) {
                 ++numPosWrong;
-            }
-            else
-            {
+            } else {
                 ++numNegWrong;
             }
-        }
-        else
-        {
-            if(labels(n) > 0)
-            {
+        } else {
+            if (labels(n) > 0) {
                 ++numPosCorrect;
-            }
-            else
-            {
+            } else {
                 ++numNegCorrect;
             }
         }
     }
 
     std::cout << "Stump got " << numPosCorrect << " of " << (numPosCorrect + numPosWrong) << " pos correct and "
-        << numNegCorrect << " of " << (numNegCorrect + numNegWrong) << " neg correct.";
+              << numNegCorrect << " of " << (numNegCorrect + numNegWrong) << " neg correct.";
 }
 
 
@@ -287,13 +244,10 @@ double compute_stump_weight(const Vector& results, const Vector& weights)
     double error = arma::accu(weights.elem(find(results < 0)));
     error /= arma::accu(weights);
 
-    if((error > 0.0) && (error < 1.0))
-    {
+    if ((error > 0.0) && (error < 1.0)) {
         std::cout << "Stump error rate:" << error << " Weight: " << std::log((1 - error) / error) << '\n';
         return 0.5 * std::log((1 - error) / error);
-    }
-    else
-    {
+    } else {
         std::cerr << "ERROR: Invalid error rate: " << error << " Shouldn't get all right or wrong.\n";
         return 0.0;
     }
@@ -307,5 +261,5 @@ void reweight_examples(double stumpWeight, const Vector& results, Vector& weight
     weights /= arma::accu(weights);
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

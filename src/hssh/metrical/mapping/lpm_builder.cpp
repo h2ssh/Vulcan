@@ -8,17 +8,17 @@
 
 
 /**
-* \file     lpm_builder.cpp
-* \author   Collin Johnson
-*
-* Definition of LPMBuilder.
-*/
+ * \file     lpm_builder.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LPMBuilder.
+ */
 
 #include "hssh/metrical/mapping/lpm_builder.h"
-#include "hssh/metrical/mapping/mapping_params.h"
 #include "core/laser_scan.h"
-#include "utils/tiled_cell_grid.h"
 #include "core/pose.h"
+#include "hssh/metrical/mapping/mapping_params.h"
+#include "utils/tiled_cell_grid.h"
 #include <cassert>
 
 namespace vulcan
@@ -26,8 +26,7 @@ namespace vulcan
 namespace hssh
 {
 
-LPMBuilder::LPMBuilder(const lpm_params_t& params, const pose_t& currentPose)
-: map(params, currentPose.toPoint())
+LPMBuilder::LPMBuilder(const lpm_params_t& params, const pose_t& currentPose) : map(params, currentPose.toPoint())
 {
     // On construction, erase the approximate area of the robot + blindspots from the map
     // NOTE: This could potentially erase obstacles that would then get filled in, but the opposite effect
@@ -40,10 +39,8 @@ LPMBuilder::LPMBuilder(const lpm_params_t& params, const pose_t& currentPose)
     Point<float> topRight(currentPose.x + 0.5, currentPose.y + 0.5);
     auto blCell = utils::global_point_to_grid_cell_round(bottomLeft, map);
     auto trCell = utils::global_point_to_grid_cell_round(topRight, map);
-    for(int y = blCell.y; y <= trCell.y; ++y)
-    {
-        for(int x = blCell.x; x <= trCell.x; ++x)
-        {
+    for (int y = blCell.y; y <= trCell.y; ++y) {
+        for (int x = blCell.x; x <= trCell.x; ++x) {
             map.setCost(Point<int>(x, y), 0);
         }
     }
@@ -64,24 +61,23 @@ void LPMBuilder::boundaryChanged(const math::Rectangle<float>& boundary)
 
 void LPMBuilder::update(const map_update_data_t& data)
 {
-    utils::boundary_intersection_t coords(map.getBoundary(),
-                                          data.scanRaster.getBoundary(),
-                                          map.cellsPerMeter(),
-                                          std::make_pair(map.getWidthInCells(), map.getHeightInCells()),
-                                          std::make_pair(data.scanRaster.getWidthInCells(), data.scanRaster.getHeightInCells()));
+    utils::boundary_intersection_t coords(
+      map.getBoundary(),
+      data.scanRaster.getBoundary(),
+      map.cellsPerMeter(),
+      std::make_pair(map.getWidthInCells(), map.getHeightInCells()),
+      std::make_pair(data.scanRaster.getWidthInCells(), data.scanRaster.getHeightInCells()));
 
     Point<int> lpmCell(coords.gridStartCell);
     Point<int> updateCell(coords.updateStartCell);
 
     map.setTimestamp(data.timestamp);
 
-    for(std::size_t y = 0; y < coords.updateHeight; ++y, ++lpmCell.y, ++updateCell.y)
-    {
-        lpmCell.x    = coords.gridStartCell.x;
+    for (std::size_t y = 0; y < coords.updateHeight; ++y, ++lpmCell.y, ++updateCell.y) {
+        lpmCell.x = coords.gridStartCell.x;
         updateCell.x = coords.updateStartCell.x;
 
-        for(std::size_t x = 0; x < coords.updateWidth; ++x, ++lpmCell.x, ++updateCell.x)
-        {
+        for (std::size_t x = 0; x < coords.updateWidth; ++x, ++lpmCell.x, ++updateCell.x) {
             map.updateCostNoCheck(lpmCell, data.scanRaster.getValueNoCheck(updateCell.x, updateCell.y));
         }
     }
@@ -93,5 +89,5 @@ void LPMBuilder::rotate(float radians)
     map.rotate(radians);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

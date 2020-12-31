@@ -8,13 +8,13 @@
 
 
 /**
-* \file     messages.h
-* \author   Collin Johnson
-* 
-* Definition of messages for controlling global_metric_hssh module:
-* 
-*   - global_metric_relocalization_request_message_t
-*/
+ * \file     messages.h
+ * \author   Collin Johnson
+ *
+ * Definition of messages for controlling global_metric_hssh module:
+ *
+ *   - global_metric_relocalization_request_message_t
+ */
 
 #ifndef HSSH_GLOBAL_METRIC_MESSAGES_H
 #define HSSH_GLOBAL_METRIC_MESSAGES_H
@@ -28,29 +28,29 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 /**
-* global_metric_relocalization_request_message_t requests the global_metric_hssh relocalize in a new map.
-* 
-* A request consists of the map in which to localize in and the method by which to initialize the 
-* relocalization particle filter.
-*/
+ * global_metric_relocalization_request_message_t requests the global_metric_hssh relocalize in a new map.
+ *
+ * A request consists of the map in which to localize in and the method by which to initialize the
+ * relocalization particle filter.
+ */
 struct global_metric_relocalization_request_message_t
 {
-    GlobalMetricMap                    map;
+    GlobalMetricMap map;
     std::shared_ptr<FilterInitializer> initializer;
 };
 
 template <class Archive>
 void serialize(Archive& ar, global_metric_relocalization_request_message_t& msg)
 {
-    ar( msg.map, 
-        msg.initializer);
-}
-    
-}
+    ar(msg.map, msg.initializer);
 }
 
-DEFINE_SYSTEM_MESSAGE(hssh::global_metric_relocalization_request_message_t, ("HSSH_GLOBAL_METRIC_RELOCALIZATION_REQUEST"))
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_GLOBAL_METRIC_MESSAGES_H
+DEFINE_SYSTEM_MESSAGE(hssh::global_metric_relocalization_request_message_t,
+                      ("HSSH_GLOBAL_METRIC_RELOCALIZATION_REQUEST"))
+
+#endif   // HSSH_GLOBAL_METRIC_MESSAGES_H

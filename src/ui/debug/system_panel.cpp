@@ -8,11 +8,11 @@
 
 
 /**
-* \file     system_panel.cpp
-* \author   Collin Johnson
-* 
-* Definition of SystemPanel.
-*/
+ * \file     system_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of SystemPanel.
+ */
 
 #include "ui/debug/system_panel.h"
 
@@ -20,41 +20,35 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 void SystemPanel::setup(wxGLContext* context, wxStatusBar* statusBar)
 {
-    
 }
 
 
 void SystemPanel::subscribe(system::ModuleCommunicator& producer)
 {
-    
 }
 
 
 void SystemPanel::setConsumer(system::ModuleCommunicator* consumer)
 {
-    
 }
 
 
 void SystemPanel::update(void)
 {
-    
 }
 
 
 void SystemPanel::saveSettings(utils::ConfigFileWriter& config)
 {
-    
 }
 
 
 void SystemPanel::loadSettings(const utils::ConfigFile& config)
 {
-    
 }
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan

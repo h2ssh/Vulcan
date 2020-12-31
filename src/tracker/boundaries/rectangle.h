@@ -8,11 +8,11 @@
 
 
 /**
-* \file     rectangle.h
-* \author   Collin Johnson
-*
-* Declaration of RectangleBoundary.
-*/
+ * \file     rectangle.h
+ * \author   Collin Johnson
+ *
+ * Declaration of RectangleBoundary.
+ */
 
 #ifndef TRACKER_BOUNDARIES_RECTANGLE_H
 #define TRACKER_BOUNDARIES_RECTANGLE_H
@@ -23,17 +23,15 @@ namespace tracker
 {
 
 /**
-* RectangleBoundary
-*/
+ * RectangleBoundary
+ */
 class RectangleBoundary
 {
 public:
-
 private:
-
 };
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_BOUNDARIES_RECTANGLE_H
+#endif   // TRACKER_BOUNDARIES_RECTANGLE_H

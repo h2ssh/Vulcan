@@ -8,11 +8,11 @@
 
 
 /**
-* \file     shapefwd.h
-* \author   Collin Johnson
-* 
-* Forward declarations of the Shape hierarchy.
-*/
+ * \file     shapefwd.h
+ * \author   Collin Johnson
+ *
+ * Forward declarations of the Shape hierarchy.
+ */
 
 #ifndef MATH_GEOMETRY_SHAPESFWD_h
 #define MATH_GEOMETRY_SHAPESFWD_h
@@ -37,7 +37,7 @@ class Circle;
 template <typename T>
 class Arc;
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_GEOMETRY_SHAPESFWD_h
+#endif   // MATH_GEOMETRY_SHAPESFWD_h

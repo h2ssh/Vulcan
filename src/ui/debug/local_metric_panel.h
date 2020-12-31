@@ -8,34 +8,34 @@
 
 
 /**
-* \file     local_metric_panel.h
-* \author   Collin Johnson
-*
-* Declaration of LocalMetricPanel.
-*/
+ * \file     local_metric_panel.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LocalMetricPanel.
+ */
 
 #ifndef UI_DEBUG_LOCAL_METRIC_PANEL_H
 #define UI_DEBUG_LOCAL_METRIC_PANEL_H
 
+#include "hssh/local_metric/lpm.h"
 #include "ui/common/metric_path_creator.h"
 #include "ui/common/ui_panel.h"
-#include "hssh/local_metric/lpm.h"
-#include <wx/wx.h>
 #include <memory>
+#include <wx/wx.h>
 
 namespace vulcan
 {
 namespace ui
 {
 
-class  LocalMetricPanelTextUpdater;
-class  LocalMetricDisplayWidget;
-class  GridCellSelector;
+class LocalMetricPanelTextUpdater;
+class LocalMetricDisplayWidget;
+class GridCellSelector;
 struct ui_params_t;
 
 struct local_metric_panel_widgets_t
 {
-    LocalMetricDisplayWidget*    lpmWidget = nullptr;
+    LocalMetricDisplayWidget* lpmWidget = nullptr;
     LocalMetricPanelTextUpdater* updater = nullptr;
 
     wxRadioBox* localizationModeCheck = nullptr;
@@ -53,38 +53,36 @@ struct local_metric_panel_widgets_t
     wxCheckBox* showWallsCheck = nullptr;
     wxCheckBox* showAnglesCheck = nullptr;
     wxRadioBox* anglesToShowRadio = nullptr;
-    wxSlider*   flattenThresholdSlider = nullptr;
-    wxSlider*   highlyVisibleThresholdSlider = nullptr;
+    wxSlider* flattenThresholdSlider = nullptr;
+    wxSlider* highlyVisibleThresholdSlider = nullptr;
     wxTextCtrl* rotationAngleText = nullptr;
-    wxFrame*    mainFrame = nullptr;
+    wxFrame* mainFrame = nullptr;
 };
 
 /**
-* LocalMetricPanel handles all the events for the LPM display panel. It also produces metric_waypoint_path_t
-* during the path creation mode.
-*/
+ * LocalMetricPanel handles all the events for the LPM display panel. It also produces metric_waypoint_path_t
+ * during the path creation mode.
+ */
 class LocalMetricPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for LocalMetricPanel.
-    */
+     * Constructor for LocalMetricPanel.
+     */
     LocalMetricPanel(const ui_params_t& params, const local_metric_panel_widgets_t& widgets);
 
     // UIPanel interface
-    virtual void setup       (wxGLContext* context, wxStatusBar* statusBar);
-    virtual void subscribe   (system::ModuleCommunicator& producer);
-    virtual void setConsumer (system::ModuleCommunicator* consumer);
-    virtual void update      (void);
+    virtual void setup(wxGLContext* context, wxStatusBar* statusBar);
+    virtual void subscribe(system::ModuleCommunicator& producer);
+    virtual void setConsumer(system::ModuleCommunicator* consumer);
+    virtual void update(void);
     virtual void saveSettings(utils::ConfigFileWriter& config);
     virtual void loadSettings(const utils::ConfigFile& config);
 
 private:
-
     local_metric_panel_widgets_t widgets;
     system::ModuleCommunicator* consumer;
-    
+
     // Event handlers
     void modeChanged(wxCommandEvent& event);
     void gridToShowChanged(wxCommandEvent& event);
@@ -105,7 +103,7 @@ private:
     void anglesToShowChanged(wxCommandEvent& event);
     void runFlattenMapPressed(wxCommandEvent& event);
     void runDynamicFilterPressed(wxCommandEvent& event);
-    
+
     void rotateLPMPressed(wxCommandEvent& event);
     void saveLPMPressed(wxCommandEvent& event);
     void saveGlassPressed(wxCommandEvent& event);
@@ -116,7 +114,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_LOCAL_METRIC_PANEL_H
+#endif   // UI_DEBUG_LOCAL_METRIC_PANEL_H

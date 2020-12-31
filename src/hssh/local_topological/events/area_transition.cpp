@@ -8,31 +8,31 @@
 
 
 /**
-* \file     area_transition.cpp
-* \author   Collin Johnson
-* 
-* Definition of AreaTransitionEvent.
-*/
+ * \file     area_transition.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AreaTransitionEvent.
+ */
 
 #include "hssh/local_topological/events/area_transition.h"
 #include "hssh/local_topological/area.h"
 #include "hssh/local_topological/event_visitor.h"
-#include <sstream>
 #include <cassert>
+#include <sstream>
 
 namespace vulcan
 {
 namespace hssh
 {
-    
-AreaTransitionEvent::AreaTransitionEvent(int64_t                    timestamp, 
-                                         const LocalPose&           pose,
-                                         std::shared_ptr<LocalArea> exited, 
-                                         std::shared_ptr<LocalArea> entered, 
-                                         const Gateway&             gateway)
+
+AreaTransitionEvent::AreaTransitionEvent(int64_t timestamp,
+                                         const LocalPose& pose,
+                                         std::shared_ptr<LocalArea> exited,
+                                         std::shared_ptr<LocalArea> entered,
+                                         const Gateway& gateway)
 : LocalAreaEvent(timestamp, pose, true)
 , entered_(entered)
-, exited_ (exited)
+, exited_(exited)
 , gateway_(gateway)
 {
     assert(exited_);
@@ -43,9 +43,7 @@ AreaTransitionEvent::AreaTransitionEvent(int64_t                    timestamp,
 }
 
 
-AreaTransitionEvent::AreaTransitionEvent(int64_t                    timestamp,
-                                         const LocalPose&           pose,
-                                         std::shared_ptr<LocalArea> entered)
+AreaTransitionEvent::AreaTransitionEvent(int64_t timestamp, const LocalPose& pose, std::shared_ptr<LocalArea> entered)
 : LocalAreaEvent(timestamp, pose, true)
 , entered_(entered)
 , gateway_(boost::none)
@@ -68,16 +66,15 @@ Id AreaTransitionEvent::enteredId(void) const
 
 
 void AreaTransitionEvent::accept(LocalAreaEventVisitor& visitor) const
-{ 
+{
     visitor.visitAreaTransition(*this);
 }
 
 
 std::string AreaTransitionEvent::description(void) const
-{ 
+{
     std::ostringstream str;
-    str << "AreaTransition " << sequenceId() 
-        << ": Exited " << (exited_? exited_->description() : "-1")
+    str << "AreaTransition " << sequenceId() << ": Exited " << (exited_ ? exited_->description() : "-1")
         << " Entered:" << entered_->description();
     return str.str();
 }
@@ -88,5 +85,5 @@ LocalAreaEventPtr AreaTransitionEvent::clone(void) const
     return LocalAreaEventPtr(new AreaTransitionEvent(*this));
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

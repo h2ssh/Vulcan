@@ -8,11 +8,11 @@
 
 
 /**
-* @file
-* @author   Collin Johnson
-*
-* Declaration of utility types and functions for evaluating the performance of MPEPC.
-*/
+ * @file
+ * @author   Collin Johnson
+ *
+ * Declaration of utility types and functions for evaluating the performance of MPEPC.
+ */
 
 #ifndef MPEPC_EVALUATION_UTILS_H
 #define MPEPC_EVALUATION_UTILS_H
@@ -48,7 +48,7 @@ std::string version_to_name(MPEPCVersion version);
 std::string version_to_public_name(MPEPCVersion version);
 
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_EVALUATION_UTILS_H
+#endif   // MPEPC_EVALUATION_UTILS_H

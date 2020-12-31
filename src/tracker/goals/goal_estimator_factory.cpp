@@ -8,11 +8,11 @@
 
 
 /**
-* \file     goal_estimator_factory.cpp
-* \author   Collin Johnson
-* 
-* Definition of GoalEstimatorFactory.
-*/
+ * \file     goal_estimator_factory.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GoalEstimatorFactory.
+ */
 
 #include "tracker/goals/goal_estimator_factory.h"
 #include "tracker/goals/ballistic_estimator.h"
@@ -32,7 +32,7 @@ GoalEstimatorFactory::GoalEstimatorFactory(const gateway_goal_estimator_params_t
 }
 
 
-std::unique_ptr<GoalEstimator> GoalEstimatorFactory::createGoalEstimator(const ObjectMotion& motion, 
+std::unique_ptr<GoalEstimator> GoalEstimatorFactory::createGoalEstimator(const ObjectMotion& motion,
                                                                          const tracking_environment_t& environment)
 {
     environment_ = &environment;
@@ -45,12 +45,9 @@ void GoalEstimatorFactory::visitStriding(const StridingMotion& motion)
 {
     // If we have a striding motion, then either ballistic or gateway depending on whether or not local topo map
     // is available
-    if(environment_->ltm)
-    {
+    if (environment_->ltm) {
         created_ = std::make_unique<GatewayGoalEstimator>(gatewayParams_);
-    }
-    else 
-    {
+    } else {
         created_ = std::make_unique<BallisticGoalEstimator>();
     }
 }
@@ -60,12 +57,9 @@ void GoalEstimatorFactory::visitSteady(const SteadyMotion& motion)
 {
     // If we have a steady motion, then either ballistic or gateway depending on whether or not local topo map
     // is available
-    if(environment_->ltm)
-    {
+    if (environment_->ltm) {
         created_ = std::make_unique<GatewayGoalEstimator>(gatewayParams_);
-    }
-    else 
-    {
+    } else {
         created_ = std::make_unique<BallisticGoalEstimator>();
     }
 }
@@ -84,5 +78,5 @@ void GoalEstimatorFactory::visitStationary(const StationaryMotion& motion)
     created_ = std::make_unique<BallisticGoalEstimator>();
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

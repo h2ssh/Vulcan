@@ -8,11 +8,11 @@
 
 
 /**
-* \file     labeled_area_data.h
-* \author   Collin Johnson
-* 
-* Declaration of LabeledAreaData.
-*/
+ * \file     labeled_area_data.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LabeledAreaData.
+ */
 
 #ifndef HSSH_AREA_DETECTION_LABELING_LABELED_AREA_DATA_H
 #define HSSH_AREA_DETECTION_LABELING_LABELED_AREA_DATA_H
@@ -25,13 +25,13 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 /**
-* LabeledFeatures contains a labeled example of the features calculated for an area.
-*/
+ * LabeledFeatures contains a labeled example of the features calculated for an area.
+ */
 struct LabeledFeatures
 {
-    HypothesisType     type;
+    HypothesisType type;
     HypothesisFeatures features;
 };
 
@@ -43,15 +43,15 @@ class LabeledAreaData : public TopoTrainingData<LabeledFeatures>
 };
 
 /**
-* Equality operator. Equal when the type and features match.
-*/
+ * Equality operator. Equal when the type and features match.
+ */
 bool operator==(const LabeledFeatures& lhs, const LabeledFeatures& rhs);
 bool operator!=(const LabeledFeatures& lhs, const LabeledFeatures& rhs);
 
 std::ostream& operator<<(std::ostream& out, const LabeledFeatures& example);
 std::istream& operator>>(std::istream& in, LabeledFeatures& example);
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_AREA_DETECTION_LABELING_LABELED_AREA_DATA_H
+#endif   // HSSH_AREA_DETECTION_LABELING_LABELED_AREA_DATA_H

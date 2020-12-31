@@ -8,11 +8,11 @@
 
 
 /**
-* \file     fixed_estimator.cpp
-* \author   Collin Johnson
-* 
-* Definition of FixedGoalEstimator.
-*/
+ * \file     fixed_estimator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of FixedGoalEstimator.
+ */
 
 #include "tracker/goals/fixed_estimator.h"
 #include "tracker/motions/fixed_endpoint.h"
@@ -36,7 +36,7 @@ ObjectGoalDistribution FixedGoalEstimator::estimateFixedEndpointGoal(const Fixed
 }
 
 
-ObjectGoalDistribution FixedGoalEstimator::estimateStationaryGoal(const StationaryMotion& motion) 
+ObjectGoalDistribution FixedGoalEstimator::estimateStationaryGoal(const StationaryMotion& motion)
 {
     // A stationary object is always stationary
     auto position = motion.position();
@@ -45,18 +45,18 @@ ObjectGoalDistribution FixedGoalEstimator::estimateStationaryGoal(const Stationa
 }
 
 
-ObjectGoalDistribution FixedGoalEstimator::estimateSteadyGoal(const SteadyMotion& motion) 
+ObjectGoalDistribution FixedGoalEstimator::estimateSteadyGoal(const SteadyMotion& motion)
 {
     assert(!"ERROR: GatewayGoalEstimator: Cannot estimate goals for SteadyMotion.\n");
     return ObjectGoalDistribution{};
 }
 
 
-ObjectGoalDistribution FixedGoalEstimator::estimateStridingGoal(const StridingMotion& motion) 
+ObjectGoalDistribution FixedGoalEstimator::estimateStridingGoal(const StridingMotion& motion)
 {
     assert(!"ERROR: GatewayGoalEstimator: Cannot estimate goals for StridingMotion.\n");
     return ObjectGoalDistribution{};
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

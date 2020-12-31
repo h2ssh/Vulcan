@@ -8,16 +8,16 @@
 
 
 /**
-* \file     func_ptr.h
-* \author   Collin Johnson
-* 
-* Definition of some helpful macros for dealing with function pointers and some examples of
-* the syntax, which I often forget.
-*/
+ * \file     func_ptr.h
+ * \author   Collin Johnson
+ *
+ * Definition of some helpful macros for dealing with function pointers and some examples of
+ * the syntax, which I often forget.
+ */
 
 #ifndef UTILS_FUNC_PTR_H
 #define UTILS_FUNC_PTR_H
 
-#define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
+#define CALL_MEMBER_FN(object, ptrToMember) ((object).*(ptrToMember))
 
-#endif // UTILS_FUNC_PTR_H
+#endif   // UTILS_FUNC_PTR_H

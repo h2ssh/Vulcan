@@ -7,19 +7,16 @@
 */
 
 
-#include <cassert>
 #include "lcmtypes/common/vector_t.h"
+#include <cassert>
 
 
 void vulcan::lcm::allocate_lcm_vector(vulcan_lcm_vector_t& vector, int length)
 {
-    if(length > 0)
-    {
+    if (length > 0) {
         vector.length = length;
         vector.vector = new double[length];
-    }
-    else
-    {
+    } else {
         vector.vector = 0;
         vector.length = 0;
     }
@@ -28,17 +25,15 @@ void vulcan::lcm::allocate_lcm_vector(vulcan_lcm_vector_t& vector, int length)
 
 void vulcan::lcm::free_lcm_vector(vulcan_lcm_vector_t& vector)
 {
-    if(vector.vector)
-    {
-        delete [] vector.vector;
+    if (vector.vector) {
+        delete[] vector.vector;
     }
 }
 
 
 void vulcan::lcm::vulcan_vector_to_lcm_vector(const Vector& vulcanVector, vulcan_lcm_vector_t& lcmVector)
 {
-    for(int i = lcmVector.length; --i >= 0;)
-    {
+    for (int i = lcmVector.length; --i >= 0;) {
         lcmVector.vector[i] = vulcanVector(i);
     }
 }
@@ -46,8 +41,7 @@ void vulcan::lcm::vulcan_vector_to_lcm_vector(const Vector& vulcanVector, vulcan
 
 void vulcan::lcm::lcm_vector_to_vulcan_vector(const vulcan_lcm_vector_t& lcmVector, Vector& vulcanVector)
 {
-    for(int i = lcmVector.length; --i >= 0;)
-    {
+    for (int i = lcmVector.length; --i >= 0;) {
         vulcanVector(i) = lcmVector.vector[i];
     }
 }

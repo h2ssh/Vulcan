@@ -8,11 +8,11 @@
 
 
 /**
-* \file     playground_display_widget.cpp
-* \author   Collin Johnson
-*
-* Definition of PlaygroundDisplayWidget.
-*/
+ * \file     playground_display_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of PlaygroundDisplayWidget.
+ */
 
 #include "ui/calibration/playground_display_widget.h"
 
@@ -21,5 +21,5 @@ namespace vulcan
 namespace ui
 {
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

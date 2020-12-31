@@ -18,32 +18,24 @@ namespace utils
 {
 
 /**
-* AutoMutex applies the RTTI idiom to a Mutex. The AutoMutex treats the mutex lock
-* as a resource. The lock is acquired when the AutoMutex is created and unlocked
-* when the AutoMutex is destroyed. Using the AutoMutex helps ensure that a lock
-* is never accidentally left locked, as it will only remain locked within the
-* scope in which it is declared.
-*/
+ * AutoMutex applies the RTTI idiom to a Mutex. The AutoMutex treats the mutex lock
+ * as a resource. The lock is acquired when the AutoMutex is created and unlocked
+ * when the AutoMutex is destroyed. Using the AutoMutex helps ensure that a lock
+ * is never accidentally left locked, as it will only remain locked within the
+ * scope in which it is declared.
+ */
 class AutoMutex
 {
 public:
+    AutoMutex(Mutex& mutexToLock) : mutex(mutexToLock) { mutex.lock(); }
 
-    AutoMutex(Mutex& mutexToLock) : mutex(mutexToLock)
-    {
-        mutex.lock();
-    }
+    ~AutoMutex(void) { mutex.unlock(); }
 
-    ~AutoMutex(void)
-    {
-        mutex.unlock();
-    }
-    
 private:
-    
     Mutex& mutex;
 };
 
-}
-}
+}   // namespace utils
+}   // namespace vulcan
 
-#endif // UTILS_AUTO_MUTEX_H
+#endif   // UTILS_AUTO_MUTEX_H

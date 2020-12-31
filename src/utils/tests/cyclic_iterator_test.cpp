@@ -8,15 +8,15 @@
 
 
 /**
-* \file     cyclic_iterator_test.cpp
-* \author   Collin Johnson
-*
-* cyclic_iterator_test is a test program that tests the functionality of cyclic_iterator.
-*/
+ * \file     cyclic_iterator_test.cpp
+ * \author   Collin Johnson
+ *
+ * cyclic_iterator_test is a test program that tests the functionality of cyclic_iterator.
+ */
 
 #include "utils/cyclic_iterator.h"
-#include <gtest/gtest.h>
 #include <algorithm>
+#include <gtest/gtest.h>
 #include <numeric>
 #include <vector>
 
@@ -40,8 +40,7 @@ TEST(CyclicIteratorTest, CanIterateNormalRange)
 
     auto cycIt = cyclicRange.first;
     std::size_t n = 0;
-    for(; (n < values.size()) && (cycIt != cyclicRange.second); ++n, ++cycIt)
-    {
+    for (; (n < values.size()) && (cycIt != cyclicRange.second); ++n, ++cycIt) {
         EXPECT_EQ(*cycIt, values[n]);
     }
     EXPECT_EQ(values.size(), n);
@@ -58,8 +57,7 @@ TEST(CyclicIteratorTest, IteratorWrapsAround)
 
     auto cycIt = cyclicRange.first;
     std::size_t n = 0;
-    for(; (n < values.size()) && (cycIt != cyclicRange.second); ++n, ++cycIt)
-    {
+    for (; (n < values.size()) && (cycIt != cyclicRange.second); ++n, ++cycIt) {
         EXPECT_EQ(*cycIt, values[(n + kOffset) % values.size()]);
     }
     EXPECT_EQ(values.size(), n);
@@ -77,8 +75,7 @@ TEST(CyclicIteratorTest, IteratorWrapsMultipleTimes)
 
     auto cycIt = cyclicRange.first;
     std::size_t n = 0;
-    for(; (cycIt != cyclicRange.second); ++n, ++cycIt)
-    {
+    for (; (cycIt != cyclicRange.second); ++n, ++cycIt) {
         EXPECT_EQ(*cycIt, values[(n + kOffset) % values.size()]);
     }
     EXPECT_EQ(values.size() * kNumCycles, n);

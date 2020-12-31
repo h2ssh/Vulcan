@@ -8,11 +8,11 @@
 
 
 /**
-* \file     isovist_voronoi_gateway_generator.cpp
-* \author   Collin Johnson
-*
-* Definition of IsovistVoronoiGatewayGenerator.
-*/
+ * \file     isovist_voronoi_gateway_generator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of IsovistVoronoiGatewayGenerator.
+ */
 
 #include "hssh/local_topological/area_detection/gateways/isovist_voronoi_gateway_generator.h"
 #include "hssh/local_topological/area_detection/gateways/endpoint_validator.h"
@@ -32,12 +32,12 @@ namespace vulcan
 namespace hssh
 {
 
-std::pair<cell_t, cell_t> select_straightest_gateway_boundary(cell_t                     source,
-                                                              cell_t                     skeleton,
+std::pair<cell_t, cell_t> select_straightest_gateway_boundary(cell_t source,
+                                                              cell_t skeleton,
                                                               const std::vector<cell_t>& skeletonCells,
-                                                              const EndpointValidator&   validator,
+                                                              const EndpointValidator& validator,
                                                               const VoronoiSkeletonGrid& grid);
-std::pair<cell_t, cell_t> select_straightest_gateway_from_sources(cell_t                     skeleton,
+std::pair<cell_t, cell_t> select_straightest_gateway_from_sources(cell_t skeleton,
                                                                   const std::vector<cell_t>& sourceCells,
                                                                   const VoronoiSkeletonGrid& grid);
 std::pair<cell_t, double> source_for_straightest_gateway(cell_t start,
@@ -56,10 +56,11 @@ IsovistVoronoiGatewayGenerator::IsovistVoronoiGatewayGenerator(const isovist_vor
 }
 
 
-std::vector<WeightedGateway> IsovistVoronoiGatewayGenerator::generateGateways(const std::vector<WeightedGateway>& priorGateways,
-                                                                              const VoronoiIsovistField& isovists,
-                                                                              const VoronoiSkeletonGrid& grid,
-                                                                              const EndpointValidator& validator)
+std::vector<WeightedGateway>
+  IsovistVoronoiGatewayGenerator::generateGateways(const std::vector<WeightedGateway>& priorGateways,
+                                                   const VoronoiIsovistField& isovists,
+                                                   const VoronoiSkeletonGrid& grid,
+                                                   const EndpointValidator& validator)
 {
     VoronoiEdges edges(grid, SKELETON_CELL_REDUCED_SKELETON);
     VoronoiIsovistGradients gradients(edges);
@@ -68,19 +69,18 @@ std::vector<WeightedGateway> IsovistVoronoiGatewayGenerator::generateGateways(co
     VoronoiIsovistMaxima maxima(gradients, edges, grid, params_.numAboveMean, params_.saveGradientData);
 
     initialGateways_.clear();
-    isovists_      = &isovists;
-    grid_          = &grid;
-    validator_     = &validator;
+    isovists_ = &isovists;
+    grid_ = &grid;
+    validator_ = &validator;
 
     sourceToCells_ = extract_source_cells(grid, SKELETON_CELL_REDUCED_SKELETON);
 
-    for(auto& maximum : maxima)
-    {
+    for (auto& maximum : maxima) {
         createGatewayForMaximumIfValid(maximum);
     }
 
     std::cout << "INFO: IsovistVoronoiGatewayGenerator: Maxima:" << maxima.size()
-        << " Num generated:" << initialGateways_.size() << '\n';
+              << " Num generated:" << initialGateways_.size() << '\n';
 
     return initialGateways_;
 }
@@ -90,8 +90,7 @@ bool IsovistVoronoiGatewayGenerator::createGatewayForMaximumIfValid(const isovis
 {
     proposeGatewaysForMaximum(maximum);
 
-    if(proposals_.empty())
-    {
+    if (proposals_.empty()) {
         return false;
     }
 
@@ -101,7 +100,7 @@ bool IsovistVoronoiGatewayGenerator::createGatewayForMaximumIfValid(const isovis
 
 #ifdef DEBUG_GATEWAYS
     std::cout << "DEBUG: GatewayGenerator: Best gateway for: " << maximum.maximum.position << "->"
-        << initialGateways_.back().gateway.boundary() << '\n';
+              << initialGateways_.back().gateway.boundary() << '\n';
 #endif
 
     return true;
@@ -116,15 +115,14 @@ void IsovistVoronoiGatewayGenerator::proposeGatewaysForMaximum(const isovist_loc
 
     // Find all valid source cells for gateways and all valid skeleton edge cells
 
-    for(auto& cell : maximum.skeletonCells)
-    {
+    for (auto& cell : maximum.skeletonCells) {
         // Find valid source cells associated with this skeleton cell
         std::copy_if(grid_->beginSourceCells(cell.position),
                      grid_->endSourceCells(cell.position),
                      std::back_inserter(sourceCells_),
                      [this](cell_t source) {
-            return validator_->isValidEndpoint(source);
-        });
+                         return validator_->isValidEndpoint(source);
+                     });
 
         // Store the cell itself for further gateway creation
         edgeCells_.push_back(cell.position);
@@ -133,72 +131,64 @@ void IsovistVoronoiGatewayGenerator::proposeGatewaysForMaximum(const isovist_loc
     utils::erase_unique(sourceCells_);
 
     // For each skeleton cell, find the best possible gateway
-    for(auto& cell : maximum.skeletonCells)
-    {
+    for (auto& cell : maximum.skeletonCells) {
         // Ignore any cells that fall on a junction because
-        if(num_neighbor_cells_with_classification(cell.position, SKELETON_CELL_REDUCED_SKELETON, *grid_, FOUR_THEN_EIGHT_WAY) > 2)
-        {
+        if (num_neighbor_cells_with_classification(cell.position,
+                                                   SKELETON_CELL_REDUCED_SKELETON,
+                                                   *grid_,
+                                                   FOUR_THEN_EIGHT_WAY)
+            > 2) {
             continue;
         }
 
         auto gateway = proposeGatewayForSkeletonCell(cell.position);
 
         // A gateway isn't guaranteed to be found
-        if(gateway)
-        {
+        if (gateway) {
             gateway->gradient = cell.value;
             proposals_.push_back(*gateway);
         }
     }
 
 #ifdef DEBUG_GATEWAYS
-    if(proposals_.empty())
-    {
-        std::cout<<"Found no gateways for maximum centered at "<<maximum.maximum.position<<'\n';
+    if (proposals_.empty()) {
+        std::cout << "Found no gateways for maximum centered at " << maximum.maximum.position << '\n';
     }
-#endif // DEBUG_GATEWAYS
+#endif   // DEBUG_GATEWAYS
 }
 
 
 boost::optional<IsovistVoronoiGatewayGenerator::proposed_gateway_t>
-IsovistVoronoiGatewayGenerator::proposeGatewayForSkeletonCell(cell_t skeletonCell)
+  IsovistVoronoiGatewayGenerator::proposeGatewayForSkeletonCell(cell_t skeletonCell)
 {
-    if((sourceCells_.size() < 2) || isInvalidSkeletonCell(skeletonCell))
-    {
+    if ((sourceCells_.size() < 2) || isInvalidSkeletonCell(skeletonCell)) {
         return boost::none;
     }
 
-    if(params_.useSkeletonBasedGateways)
-    {
+    if (params_.useSkeletonBasedGateways) {
         auto bestGateway = select_straightest_gateway_from_sources(skeletonCell, sourceCells_, *grid_);
 
-        if(isValidProposal(skeletonCell, bestGateway.first, bestGateway.second))
-        {
+        if (isValidProposal(skeletonCell, bestGateway.first, bestGateway.second)) {
             return proposed_gateway_t(bestGateway, skeletonCell);
         }
-    }
-    else if(params_.useSourceBasedGateways)
-    {
+    } else if (params_.useSourceBasedGateways) {
         // Go through each gateway and find the one with the highest score
         auto bestGateway = createProposalForSource(*(grid_->beginSourceCells(skeletonCell)), skeletonCell);
-        for(auto source : boost::make_iterator_range(grid_->beginSourceCells(skeletonCell) + 1, grid_->endSourceCells(skeletonCell)))
-        {
+        for (auto source : boost::make_iterator_range(grid_->beginSourceCells(skeletonCell) + 1,
+                                                      grid_->endSourceCells(skeletonCell))) {
             auto sourceGateway = createProposalForSource(source, skeletonCell);
 
-            if(sourceGateway)
-            {
-                if(!bestGateway || (sourceGateway->score() > bestGateway->score()))
-                {
+            if (sourceGateway) {
+                if (!bestGateway || (sourceGateway->score() > bestGateway->score())) {
                     bestGateway = sourceGateway;
                 }
             }
         }
 
         return bestGateway;
-    }
-    else
-    {
-        std::cerr << "ERROR: IsovistVoronoiGatewayGenerator: Invalid parameters. Must have one of gateway selection flags set to true.\n";
+    } else {
+        std::cerr << "ERROR: IsovistVoronoiGatewayGenerator: Invalid parameters. Must have one of gateway selection "
+                     "flags set to true.\n";
         assert(false);
     }
 
@@ -207,12 +197,11 @@ IsovistVoronoiGatewayGenerator::proposeGatewayForSkeletonCell(cell_t skeletonCel
 
 
 boost::optional<IsovistVoronoiGatewayGenerator::proposed_gateway_t>
-IsovistVoronoiGatewayGenerator::createProposalForSource(cell_t source, cell_t skeleton)
+  IsovistVoronoiGatewayGenerator::createProposalForSource(cell_t source, cell_t skeleton)
 {
     auto bestGateway = select_straightest_gateway_boundary(source, skeleton, edgeCells_, *validator_, *grid_);
 
-    if(isValidProposal(bestGateway.first, source, bestGateway.second))
-    {
+    if (isValidProposal(bestGateway.first, source, bestGateway.second)) {
         return proposed_gateway_t(std::make_pair(source, bestGateway.second), bestGateway.first);
     }
 
@@ -227,31 +216,24 @@ bool IsovistVoronoiGatewayGenerator::isInvalidSkeletonCell(cell_t skeleton)
     //  - no sources on difference sides of the skeleton (angle between them and skeleton < M_PI_2), or
     //  - no sources both valid endpoints
 
-    if(num_neighbor_cells_with_classification(skeleton, SKELETON_CELL_SKELETON, *grid_, FOUR_THEN_EIGHT_WAY) > 2)
-    {
+    if (num_neighbor_cells_with_classification(skeleton, SKELETON_CELL_SKELETON, *grid_, FOUR_THEN_EIGHT_WAY) > 2) {
         return true;
     }
 
-    for(auto sourceIt = grid_->beginSourceCells(skeleton), endIt = grid_->endSourceCells(skeleton);
-        sourceIt != endIt;
-        ++sourceIt)
-    {
+    for (auto sourceIt = grid_->beginSourceCells(skeleton), endIt = grid_->endSourceCells(skeleton); sourceIt != endIt;
+         ++sourceIt) {
         // Skip any sources that aren't valid. No point in searching the next ones
-        if(!validator_->isValidEndpoint(*sourceIt))
-        {
+        if (!validator_->isValidEndpoint(*sourceIt)) {
             continue;
         }
 
-        for(auto nextIt = sourceIt + 1; nextIt != endIt; ++nextIt)
-        {
-            if(!validator_->isValidEndpoint(*nextIt))
-            {
+        for (auto nextIt = sourceIt + 1; nextIt != endIt; ++nextIt) {
+            if (!validator_->isValidEndpoint(*nextIt)) {
                 continue;
             }
 
             // Both sources were valid, but are they on separate sides of the skeleton?
-            if(angle_between_points(*sourceIt, *nextIt, skeleton) > M_PI_2)
-            {
+            if (angle_between_points(*sourceIt, *nextIt, skeleton) > M_PI_2) {
                 return false;
             }
         }
@@ -265,8 +247,7 @@ bool IsovistVoronoiGatewayGenerator::isInvalidSkeletonCell(cell_t skeleton)
 bool IsovistVoronoiGatewayGenerator::isValidProposal(cell_t skeleton, cell_t sourceA, cell_t sourceB)
 {
     return (std::abs(angle_between_points(sourceA, sourceB, skeleton)) > params_.minGatewayStraightness)
-        && validator_->isValidEndpoint(sourceA)
-        && validator_->isValidEndpoint(sourceB);
+      && validator_->isValidEndpoint(sourceA) && validator_->isValidEndpoint(sourceB);
 }
 
 
@@ -281,22 +262,21 @@ Gateway IsovistVoronoiGatewayGenerator::toGateway(const proposed_gateway_t& prop
 }
 
 
-std::pair<cell_t, cell_t> select_straightest_gateway_boundary(cell_t                     source,
-                                                              cell_t                     skeleton,
+std::pair<cell_t, cell_t> select_straightest_gateway_boundary(cell_t source,
+                                                              cell_t skeleton,
                                                               const std::vector<cell_t>& skeletonCells,
-                                                              const EndpointValidator&   validator,
+                                                              const EndpointValidator& validator,
                                                               const VoronoiSkeletonGrid& grid)
 {
     double originalAngle = angle_to_point(source, skeleton);
 
-    auto   straightestBoundary = std::make_pair(source, 0.0);
+    auto straightestBoundary = std::make_pair(source, 0.0);
     cell_t straightestSkeleton;
 
-    for(auto cell : skeletonCells)
-    {
+    for (auto cell : skeletonCells) {
         // Skip all junctions. They aren't valid gateway boundaries
-        if(num_neighbor_cells_with_classification(cell, SKELETON_CELL_REDUCED_SKELETON, grid, FOUR_THEN_EIGHT_WAY) > 2)
-        {
+        if (num_neighbor_cells_with_classification(cell, SKELETON_CELL_REDUCED_SKELETON, grid, FOUR_THEN_EIGHT_WAY)
+            > 2) {
             continue;
         }
 
@@ -309,10 +289,10 @@ std::pair<cell_t, cell_t> select_straightest_gateway_boundary(cell_t            
 
         //         (sourceBoundary.second > straightestBoundary.second) ||
         //         (absolute_fuzzy_equal(sourceBoundary.second, straightestBoundary.second)
-        //         && distance_between_points(source, sourceBoundary.first) < distance_between_points(source, straightestBoundary.first)))
+        //         && distance_between_points(source, sourceBoundary.first) < distance_between_points(source,
+        //         straightestBoundary.first)))
 
-        if(sourceBoundary.second > straightestBoundary.second)
-        {
+        if (sourceBoundary.second > straightestBoundary.second) {
             straightestBoundary = sourceBoundary;
             straightestSkeleton = cell;
         }
@@ -322,7 +302,7 @@ std::pair<cell_t, cell_t> select_straightest_gateway_boundary(cell_t            
 }
 
 
-std::pair<cell_t, cell_t> select_straightest_gateway_from_sources(cell_t                     skeleton,
+std::pair<cell_t, cell_t> select_straightest_gateway_from_sources(cell_t skeleton,
                                                                   const std::vector<cell_t>& sourceCells,
                                                                   const VoronoiSkeletonGrid& grid)
 {
@@ -331,8 +311,7 @@ std::pair<cell_t, cell_t> select_straightest_gateway_from_sources(cell_t        
     std::pair<cell_t, cell_t> straightestBoundary;
     double maxScore = 0.0;
 
-    for(std::size_t n = 0; n < sourceCells.size(); ++n)
-    {
+    for (std::size_t n = 0; n < sourceCells.size(); ++n) {
         auto sourceBoundary = source_for_straightest_gateway(sourceCells[n],
                                                              skeleton,
                                                              sourceCells.begin() + n + 1,
@@ -340,8 +319,7 @@ std::pair<cell_t, cell_t> select_straightest_gateway_from_sources(cell_t        
                                                              angle_to_point(sourceCells[n], skeleton),
                                                              nullptr);
 
-        if(sourceBoundary.second > maxScore)
-        {
+        if (sourceBoundary.second > maxScore) {
             straightestBoundary = std::make_pair(sourceCells[n], sourceBoundary.first);
             maxScore = sourceBoundary.second;
         }
@@ -361,19 +339,16 @@ std::pair<cell_t, double> source_for_straightest_gateway(cell_t start,
     double maxScore = 0.0;
     cell_t maxCell;
 
-    for(auto source : boost::make_iterator_range(beginSources, endSources))
-    {
-        if(validator && !validator->isValidEndpoint(source))
-        {
+    for (auto source : boost::make_iterator_range(beginSources, endSources)) {
+        if (validator && !validator->isValidEndpoint(source)) {
             continue;
         }
 
         double sourceScore = gateway_score(start, source, skeleton, originalAngle);
 
-        if(sourceScore > maxScore)
-        {
+        if (sourceScore > maxScore) {
             maxScore = sourceScore;
-            maxCell  = source;
+            maxCell = source;
         }
     }
 
@@ -386,8 +361,8 @@ double gateway_score(cell_t start, cell_t end, cell_t skeleton, double originalA
     double skeletonDirection = angle_to_point(start, skeleton);
     double length = distance_between_points(start, skeleton) + distance_between_points(end, skeleton);
     double angle = angle_between_points(start, end, skeleton);
-    return (length > 0.0) ?  (1.0 - angle_diff_abs(originalAngle, skeletonDirection) / M_PI) * angle / length : 0.0;
+    return (length > 0.0) ? (1.0 - angle_diff_abs(originalAngle, skeletonDirection) / M_PI) * angle / length : 0.0;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

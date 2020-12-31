@@ -8,26 +8,26 @@
 
 
 /**
-* \file     planner_scripting_widget.cpp
-* \author   Collin Johnson
-* 
-* Implemenation of PlannerScriptingWidget.
-*/
+ * \file     planner_scripting_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Implemenation of PlannerScriptingWidget.
+ */
 
 #include "ui/debug/planner_scripting_widget.h"
+#include "hssh/local_metric/lpm.h"
 #include "ui/common/ui_params.h"
 #include "ui/components/occupancy_grid_renderer.h"
 #include "ui/components/pose_target_renderer.h"
 #include "ui/components/robot_renderer.h"
-#include "hssh/local_metric/lpm.h"
 #include "utils/auto_mutex.h"
 
 namespace vulcan
 {
 namespace ui
 {
-  
-    
+
+
 PlannerScriptingWidget::PlannerScriptingWidget(wxWindow* parent,
                                                wxWindowID id,
                                                const wxPoint& pos,
@@ -45,17 +45,17 @@ PlannerScriptingWidget::PlannerScriptingWidget(wxWindow* parent,
 
 void PlannerScriptingWidget::setParams(const ui_params_t& params)
 {
-    hoverColor    = params.scriptingParams.hoverColor;
+    hoverColor = params.scriptingParams.hoverColor;
     selectedColor = params.scriptingParams.selectedColor;
-    targetColor   = params.scriptingParams.finalizedColor;
-    arrowColor    = GLColor(0.0, 0.0, 0.0, targetColor.alpha());
+    targetColor = params.scriptingParams.finalizedColor;
+    arrowColor = GLColor(0.0, 0.0, 0.0, targetColor.alpha());
 }
 
 
 void PlannerScriptingWidget::setLPM(std::shared_ptr<hssh::LocalPerceptualMap> map)
 {
     utils::AutoMutex autoLock(lpmLock);
-    lpm        = map;
+    lpm = map;
     haveNewLPM = true;
 }
 
@@ -75,59 +75,54 @@ void PlannerScriptingWidget::setCompletedTargets(const std::vector<mpepc::named_
 void PlannerScriptingWidget::setHoverTarget(const pose_t& pose)
 {
     hoverTarget = pose;
-    haveHover   = true;
+    haveHover = true;
 }
 
 
 void PlannerScriptingWidget::setSelectedTarget(const pose_t& pose)
 {
     selectedTarget = pose;
-    haveSelected   = true;
+    haveSelected = true;
 }
 
 
 Point<int> PlannerScriptingWidget::convertWorldToGrid(const Point<float>& world) const
 {
-    if(lpm)
-    {
+    if (lpm) {
         return utils::global_point_to_grid_cell(world, *lpm);
     }
-    
+
     return Point<int>(0, 0);
 }
-    
+
 
 void PlannerScriptingWidget::renderWidget(void)
 {
-    if(haveNewLPM)
-    {
+    if (haveNewLPM) {
         utils::AutoMutex autoLock(lpmLock);
         lpmRenderer->setGrid(*lpm);
         haveNewLPM = false;
     }
-    
+
     lpmRenderer->renderGrid();
 
     robotRenderer_->renderRobot(currentPose_);
-    
+
     targetRenderer->setRenderColors(targetColor, arrowColor);
-    for(auto& target : targets)
-    {
+    for (auto& target : targets) {
         targetRenderer->renderTargetCircle(target.pose);
     }
-    
-    if(shouldShowHover && haveHover)
-    {
+
+    if (shouldShowHover && haveHover) {
         targetRenderer->setRenderColors(hoverColor, arrowColor);
         targetRenderer->renderTargetCircle(hoverTarget);
     }
-    
-    if(shouldShowSelected && haveSelected)
-    {
+
+    if (shouldShowSelected && haveSelected) {
         targetRenderer->setRenderColors(selectedColor, arrowColor);
         targetRenderer->renderTargetCircle(selectedTarget);
     }
 }
-    
-} // namespace ui
-} // namespace vulcan
+
+}   // namespace ui
+}   // namespace vulcan

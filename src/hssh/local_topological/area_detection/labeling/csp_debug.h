@@ -8,11 +8,11 @@
 
 
 /**
-* \file     csp_debug.h
-* \author   Collin Johnson
-*
-* Definition of CSPDebugInfo used for visualizing how the CSP search is solved.
-*/
+ * \file     csp_debug.h
+ * \author   Collin Johnson
+ *
+ * Definition of CSPDebugInfo used for visualizing how the CSP search is solved.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_DEBUG_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_DEBUG_H
@@ -30,8 +30,8 @@ namespace hssh
 {
 
 /**
-* CSPArea defines the state of an area being solved during the CSP search for a labeling.
-*/
+ * CSPArea defines the state of an area being solved during the CSP search for a labeling.
+ */
 struct CSPArea
 {
     math::Rectangle<float> boundary;
@@ -40,23 +40,24 @@ struct CSPArea
 };
 
 /**
-* CSPIteration defines an iteration of the CSP algorithm. It includes all areas that were failing constraints and the
-* area that was selected and updated.
-*/
+ * CSPIteration defines an iteration of the CSP algorithm. It includes all areas that were failing constraints and the
+ * area that was selected and updated.
+ */
 struct CSPIteration
 {
-    std::vector<HypothesisType> labels;         // label assigned to each extent
-    std::vector<double> strains;                // strain for each extent
-    std::vector<bool> isFailing;                // flag indicating if the particular extent belongs to a failing area
-    std::vector<Endpoints> pathEndpoints;       // endpoints for those areas that are path segments
-    std::vector<Line<double>> gateways;   // active gateways
-    std::vector<CSPArea> failedAreas;           // Areas with failed constraints
-    CSPArea updatedArea;                        // Area that was updated on this iteration
+    std::vector<HypothesisType> labels;     // label assigned to each extent
+    std::vector<double> strains;            // strain for each extent
+    std::vector<bool> isFailing;            // flag indicating if the particular extent belongs to a failing area
+    std::vector<Endpoints> pathEndpoints;   // endpoints for those areas that are path segments
+    std::vector<Line<double>> gateways;     // active gateways
+    std::vector<CSPArea> failedAreas;       // Areas with failed constraints
+    CSPArea updatedArea;                    // Area that was updated on this iteration
 };
 
 /**
-* CSPDebugInfo contains the results of the a CSP search. It includes each iteration of the search from beginning to end.
-*/
+ * CSPDebugInfo contains the results of the a CSP search. It includes each iteration of the search from beginning to
+ * end.
+ */
 struct CSPDebugInfo
 {
     std::vector<AreaExtent> extents;
@@ -68,33 +69,30 @@ struct CSPDebugInfo
 template <class Archive>
 void serialize(Archive& ar, CSPArea& area)
 {
-    ar( area.boundary,
-        area.oldType,
-        area.newType);
+    ar(area.boundary, area.oldType, area.newType);
 }
 
 template <class Archive>
 void serialize(Archive& ar, CSPIteration& iteration)
 {
-    ar( iteration.labels,
-        iteration.strains,
-        iteration.isFailing,
-        iteration.pathEndpoints,
-        iteration.gateways,
-        iteration.failedAreas,
-        iteration.updatedArea);
+    ar(iteration.labels,
+       iteration.strains,
+       iteration.isFailing,
+       iteration.pathEndpoints,
+       iteration.gateways,
+       iteration.failedAreas,
+       iteration.updatedArea);
 }
 
 template <class Archive>
 void serialize(Archive& ar, CSPDebugInfo& info)
 {
-    ar( info.extents,
-        info.iterations);
+    ar(info.extents, info.iterations);
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
 DEFINE_DEBUG_MESSAGE(hssh::CSPDebugInfo, ("HSSH_CSP_DEBUG_INFO"))
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_DEBUG_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_DEBUG_H

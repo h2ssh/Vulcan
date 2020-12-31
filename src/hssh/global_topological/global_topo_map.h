@@ -14,10 +14,9 @@ namespace vulcan
 {
 namespace hssh
 {
-    
-    
-    
-}
-}
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_TOPO_MAP_H
+
+}
+}   // namespace vulcan
+
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_TOPO_MAP_H

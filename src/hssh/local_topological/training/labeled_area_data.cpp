@@ -8,17 +8,17 @@
 
 
 /**
-* \file     labeled_area_data.cpp
-* \author   Collin Johnson
-* 
-* Definition of LabeledAreaData.
-*/
+ * \file     labeled_area_data.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LabeledAreaData.
+ */
 
 #include "hssh/local_topological/training/labeled_area_data.h"
+#include <cassert>
 #include <istream>
 #include <map>
 #include <ostream>
-#include <cassert>
 
 namespace vulcan
 {
@@ -28,10 +28,10 @@ namespace hssh
 //////////////////// Operators ////////////////////////
 
 /*
-* The format for LabeledFeatures is:
-* 
-*   type features (using HypothesisFeatures format)
-*/
+ * The format for LabeledFeatures is:
+ *
+ *   type features (using HypothesisFeatures format)
+ */
 std::ostream& operator<<(std::ostream& out, const LabeledFeatures& example)
 {
     out << static_cast<int>(example.type) << ' ' << example.features;
@@ -59,5 +59,5 @@ bool operator!=(const LabeledFeatures& lhs, const LabeledFeatures& rhs)
     return !(lhs == rhs);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

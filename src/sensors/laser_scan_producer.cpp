@@ -1,6 +1,6 @@
+#include "core/laser_scan.h"
 #include "core/pose.h"
 #include "sensors/laser_rangefinder.h"
-#include "core/laser_scan.h"
 
 #include "sensors/hokuyo_urg_laser.h"
 #include "system/module_communicator.h"
@@ -10,9 +10,9 @@
 #include "utils/config_file_utils.h"
 #include "utils/timestamp.h"
 
-#include <string>
 #include <iostream>
 #include <memory>
+#include <string>
 
 using namespace vulcan;
 
@@ -40,27 +40,27 @@ const std::string DEFAULT_ID("0");
 
 // ConfigFile heading and key definitions
 const std::string PRODUCER_HEADING("LaserScanProducerParameters");
-const std::string OFFSET_KEY      ("laser_offset");
-const std::string BOUNDARY_KEY    ("robot_boundary");
-const std::string INTENSITY_KEY   ("with_intensity");
-const std::string FIRST_VALID_KEY ("first_valid_index");
-const std::string LAST_VALID_KEY  ("last_valid_index");
-const std::string CHANNEL_KEY     ("channel");
-const std::string PORT_KEY        ("port");
-const std::string ID_KEY          ("id");
-const std::string MODEL_KEY       ("laser_model");
+const std::string OFFSET_KEY("laser_offset");
+const std::string BOUNDARY_KEY("robot_boundary");
+const std::string INTENSITY_KEY("with_intensity");
+const std::string FIRST_VALID_KEY("first_valid_index");
+const std::string LAST_VALID_KEY("last_valid_index");
+const std::string CHANNEL_KEY("channel");
+const std::string PORT_KEY("port");
+const std::string ID_KEY("id");
+const std::string MODEL_KEY("laser_model");
 
 
 struct laser_params_t
 {
-    pose_6dof_t     offset;
-    bool            withIntensity;
-    std::size_t     firstValidIndex;
-    std::size_t     lastValidIndex;
-    std::string     channel;
-    std::string     port;
-    std::string     model;
-    int             id;
+    pose_6dof_t offset;
+    bool withIntensity;
+    std::size_t firstValidIndex;
+    std::size_t lastValidIndex;
+    std::string channel;
+    std::string port;
+    std::string model;
+    int id;
 };
 
 
@@ -79,48 +79,47 @@ std::shared_ptr<system::ModuleCommunicator> load_scan_transmitter(const laser_pa
 std::string data_description(const utils::CommandLine& commandLine);
 
 // Helpers for doing the actual data transmission
-void produce_laser_scans(std::shared_ptr<sensors::LaserRangefinder>  rangefinder,
+void produce_laser_scans(std::shared_ptr<sensors::LaserRangefinder> rangefinder,
                          std::shared_ptr<system::ModuleCommunicator> transmitter,
-                         const laser_params_t&                         params);
+                         const laser_params_t& params);
 
 void invalidate_scan_points(polar_laser_scan_t& scan, size_t firstIndex, size_t lastIndex);
 
 /**
-* laser_scan_producer is a program that reads data from a laser rangefinder and then
-* transmits it to all modules that need the data. The laser_scan_producer supports
-* any laser rangefinder drivers that implement the LaserRangefinder interface.
-* Transmission of laser scans uses the LaserScanTransmitter interface, so any implementation
-* is supported.
-*
-* Command-line arguments are used to  pick the driver and communication protocol to use.
-*
-* The command-line arguments for laser_scan_producer are as follows:
-*
-*   -h, --help                  Print this message
-*   --port 'laser port'         Port the device is connected to (supplied to driver) : Default = /dev/ttyACM0
-*   --laser-model 'laser type'  Rangefinder driver to use : Default = UTM-30LX
-*           Currently supported lasers:
-*               UTM-30LX
-*               URG-04LX
-*   --config-file 'filename'    Name of the config file with settings about the laser
-*   --id          'id'          Unique id for the laser
-*   --with-intensity            If present, then capture intensity data along with the range data (optional)
-*   --channel 'name'            Name of the channel for the data : Default = SENSOR_FRONT_LASER
-*/
+ * laser_scan_producer is a program that reads data from a laser rangefinder and then
+ * transmits it to all modules that need the data. The laser_scan_producer supports
+ * any laser rangefinder drivers that implement the LaserRangefinder interface.
+ * Transmission of laser scans uses the LaserScanTransmitter interface, so any implementation
+ * is supported.
+ *
+ * Command-line arguments are used to  pick the driver and communication protocol to use.
+ *
+ * The command-line arguments for laser_scan_producer are as follows:
+ *
+ *   -h, --help                  Print this message
+ *   --port 'laser port'         Port the device is connected to (supplied to driver) : Default = /dev/ttyACM0
+ *   --laser-model 'laser type'  Rangefinder driver to use : Default = UTM-30LX
+ *           Currently supported lasers:
+ *               UTM-30LX
+ *               URG-04LX
+ *   --config-file 'filename'    Name of the config file with settings about the laser
+ *   --id          'id'          Unique id for the laser
+ *   --with-intensity            If present, then capture intensity data along with the range data (optional)
+ *   --channel 'name'            Name of the channel for the data : Default = SENSOR_FRONT_LASER
+ */
 int main(int argc, char** argv)
 {
     utils::CommandLine commandLine(argc, argv);
 
     // If help requested, show it and then exit immediately
-    if(display_help_message_if_needed(commandLine))
-    {
+    if (display_help_message_if_needed(commandLine)) {
         return -1;
     }
 
     laser_params_t params = load_laser_params(commandLine);
 
-    std::shared_ptr<sensors::LaserRangefinder>       rangefinder = load_rangefinder_driver(params);
-    std::shared_ptr<system::ModuleCommunicator>  transmitter = load_scan_transmitter(params);
+    std::shared_ptr<sensors::LaserRangefinder> rangefinder = load_rangefinder_driver(params);
+    std::shared_ptr<system::ModuleCommunicator> transmitter = load_scan_transmitter(params);
 
     produce_laser_scans(rangefinder, transmitter, params);
 
@@ -133,29 +132,33 @@ bool display_help_message_if_needed(const utils::CommandLine& commandLine)
 {
     // Help is needed if explicitly requested or if the laser driver and communication protocol
     // are not specified
-    bool needHelp = commandLine.argumentExists(HELP_SHORT)   ||
-                    commandLine.argumentExists(HELP_LONG)    ||
-                    !commandLine.argumentExists(CONFIG_FILE);
+    bool needHelp = commandLine.argumentExists(HELP_SHORT) || commandLine.argumentExists(HELP_LONG)
+      || !commandLine.argumentExists(CONFIG_FILE);
 
-    if(needHelp)
-    {
-        std::cout<<"laser_scan_producer: \n"
-                 <<"Command-line arguments are used to  pick the driver and communication protocol to use.\n"
-                 <<'\n'
-                 <<"The command-line arguments for laser_scan_producer are as follows:\n"
-                 <<'\n'
-                 <<"    -h, --help                  Print this message\n"
-                 <<"    --port 'laser port'         Port the device is connected to (supplied to driver) : Default = "<<DEFAULT_PORT<<'\n'
-                 <<"    --laser-model 'laser type'  Rangefinder driver to use : Default = "<<DEFAULT_LASER_MODEL<<'\n'
-                 <<"            Currently supported lasers:\n"
-                 <<"                UTM-30LX\n"
-                 <<"                URG-04LX\n"
-                 <<"    --config-file 'filename'    Name of the config file with settings about the laser\n"
-                 <<"    --with-intensity            If present, then capture intensity data along with the range data (optional)\n"
-                 <<"    --channel 'name'            Name of the channel for the data : Default = "<<DEFAULT_CHANNEL<<'\n'
-                 <<"    --id      'id'              Unique id for the laser producing the data : Default = "<<DEFAULT_ID<<'\n'
-                 <<"    --log-file 'filename'       Name of file in which to save the scan data being produced. If the option isn't set, data isn't logged (optional)\n"
-                 <<std::endl;
+    if (needHelp) {
+        std::cout << "laser_scan_producer: \n"
+                  << "Command-line arguments are used to  pick the driver and communication protocol to use.\n"
+                  << '\n'
+                  << "The command-line arguments for laser_scan_producer are as follows:\n"
+                  << '\n'
+                  << "    -h, --help                  Print this message\n"
+                  << "    --port 'laser port'         Port the device is connected to (supplied to driver) : Default = "
+                  << DEFAULT_PORT << '\n'
+                  << "    --laser-model 'laser type'  Rangefinder driver to use : Default = " << DEFAULT_LASER_MODEL
+                  << '\n'
+                  << "            Currently supported lasers:\n"
+                  << "                UTM-30LX\n"
+                  << "                URG-04LX\n"
+                  << "    --config-file 'filename'    Name of the config file with settings about the laser\n"
+                  << "    --with-intensity            If present, then capture intensity data along with the range "
+                     "data (optional)\n"
+                  << "    --channel 'name'            Name of the channel for the data : Default = " << DEFAULT_CHANNEL
+                  << '\n'
+                  << "    --id      'id'              Unique id for the laser producing the data : Default = "
+                  << DEFAULT_ID << '\n'
+                  << "    --log-file 'filename'       Name of file in which to save the scan data being produced. If "
+                     "the option isn't set, data isn't logged (optional)\n"
+                  << std::endl;
     }
 
     return needHelp;
@@ -173,62 +176,46 @@ laser_params_t load_laser_params(const utils::CommandLine& commandLine)
     requiredConfigValues.push_back(std::make_pair(PRODUCER_HEADING, FIRST_VALID_KEY));
     requiredConfigValues.push_back(std::make_pair(PRODUCER_HEADING, LAST_VALID_KEY));
 
-    if(config.validate(requiredConfigValues) > 0)
-    {
-        std::cerr<<"ERROR: Missing required config file values."<<std::endl;
+    if (config.validate(requiredConfigValues) > 0) {
+        std::cerr << "ERROR: Missing required config file values." << std::endl;
         exit(-1);
     }
 
     laser_params_t params;
 
-    params.offset        = utils::create_pose_6dof_from_string(config.getValueAsString(PRODUCER_HEADING, OFFSET_KEY));
+    params.offset = utils::create_pose_6dof_from_string(config.getValueAsString(PRODUCER_HEADING, OFFSET_KEY));
     params.firstValidIndex = config.getValueAsUInt32(PRODUCER_HEADING, FIRST_VALID_KEY);
-    params.lastValidIndex  = config.getValueAsUInt32(PRODUCER_HEADING, LAST_VALID_KEY);
+    params.lastValidIndex = config.getValueAsUInt32(PRODUCER_HEADING, LAST_VALID_KEY);
 
     assert(params.firstValidIndex <= params.lastValidIndex);
 
-    if(!commandLine.argumentExists(CHANNEL) && config.hasValue(PRODUCER_HEADING, CHANNEL_KEY))
-    {
+    if (!commandLine.argumentExists(CHANNEL) && config.hasValue(PRODUCER_HEADING, CHANNEL_KEY)) {
         params.channel = config.getValueAsString(PRODUCER_HEADING, CHANNEL_KEY);
-    }
-    else
-    {
+    } else {
         params.channel = commandLine.argumentValue(CHANNEL, DEFAULT_CHANNEL);
     }
 
-    if(!commandLine.argumentExists(LASER_PORT) && config.hasValue(PRODUCER_HEADING, PORT_KEY))
-    {
+    if (!commandLine.argumentExists(LASER_PORT) && config.hasValue(PRODUCER_HEADING, PORT_KEY)) {
         params.port = config.getValueAsString(PRODUCER_HEADING, PORT_KEY);
-    }
-    else
-    {
+    } else {
         params.port = commandLine.argumentValue(LASER_PORT, DEFAULT_PORT);
     }
 
-    if(!commandLine.argumentExists(ID) && config.hasValue(PRODUCER_HEADING, ID_KEY))
-    {
+    if (!commandLine.argumentExists(ID) && config.hasValue(PRODUCER_HEADING, ID_KEY)) {
         params.id = config.getValueAsInt32(PRODUCER_HEADING, ID_KEY);
-    }
-    else
-    {
+    } else {
         params.id = atoi(commandLine.argumentValue(ID, DEFAULT_ID).c_str());
     }
 
-    if(!commandLine.argumentExists(LASER_MODEL) && config.hasValue(PRODUCER_HEADING, MODEL_KEY))
-    {
+    if (!commandLine.argumentExists(LASER_MODEL) && config.hasValue(PRODUCER_HEADING, MODEL_KEY)) {
         params.model = config.getValueAsString(PRODUCER_HEADING, MODEL_KEY);
-    }
-    else
-    {
+    } else {
         params.model = commandLine.argumentValue(LASER_MODEL, DEFAULT_LASER_MODEL);
     }
 
-    if(!commandLine.argumentExists(WITH_INTENSITY) && config.hasValue(PRODUCER_HEADING, INTENSITY_KEY))
-    {
+    if (!commandLine.argumentExists(WITH_INTENSITY) && config.hasValue(PRODUCER_HEADING, INTENSITY_KEY)) {
         params.withIntensity = config.getValueAsBool(PRODUCER_HEADING, INTENSITY_KEY);
-    }
-    else
-    {
+    } else {
         params.withIntensity = commandLine.argumentExists(WITH_INTENSITY);
     }
 
@@ -243,8 +230,7 @@ std::shared_ptr<sensors::LaserRangefinder> load_rangefinder_driver(const laser_p
 
     std::shared_ptr<sensors::LaserRangefinder> rangefinder;
 
-    if((params.model == URG_04LX) || (params.model == UTM_30LX))
-    {
+    if ((params.model == URG_04LX) || (params.model == UTM_30LX)) {
         rangefinder = load_hokuyo_urg_laser_driver(params);
     }
 
@@ -259,7 +245,8 @@ std::shared_ptr<sensors::LaserRangefinder> load_hokuyo_urg_laser_driver(const la
 {
     assert(!params.port.empty());
 
-    return std::shared_ptr<sensors::LaserRangefinder>(new sensors::HokuyoURGLaser(params.port, params.id, params.withIntensity));
+    return std::shared_ptr<sensors::LaserRangefinder>(
+      new sensors::HokuyoURGLaser(params.port, params.id, params.withIntensity));
 }
 
 
@@ -277,42 +264,40 @@ std::string log_filename(const utils::CommandLine& commandLine)
 
 
 // Helpers for doing the actual data transmission
-void produce_laser_scans(std::shared_ptr<sensors::LaserRangefinder>      rangefinder,
+void produce_laser_scans(std::shared_ptr<sensors::LaserRangefinder> rangefinder,
                          std::shared_ptr<system::ModuleCommunicator> transmitter,
-                         const laser_params_t&                             params)
+                         const laser_params_t& params)
 {
-    int64_t startTime   = 0;
-    int64_t endTime     = 0;
-    int64_t deltaTime   = 0;
-    int     numReadings = 0;
+    int64_t startTime = 0;
+    int64_t endTime = 0;
+    int64_t deltaTime = 0;
+    int numReadings = 0;
 
     rangefinder->calculateLatency();
 
-    polar_laser_scan_t     polarScan;
+    polar_laser_scan_t polarScan;
     cartesian_laser_scan_t cartesianScan;
 
-    polarScan.offset.x     = params.offset.x;
-    polarScan.offset.y     = params.offset.y;
+    polarScan.offset.x = params.offset.x;
+    polarScan.offset.y = params.offset.y;
     polarScan.offset.theta = params.offset.theta;
     polarScan.scanId = 0;
 
-    while(true)
-    {
+    while (true) {
         startTime = utils::system_time_us();
 
-        if(rangefinder->getLaserScan(polarScan))
-        {
-            endTime    = utils::system_time_us();
-            deltaTime += (endTime > startTime) ? endTime-startTime : startTime-endTime;
+        if (rangefinder->getLaserScan(polarScan)) {
+            endTime = utils::system_time_us();
+            deltaTime += (endTime > startTime) ? endTime - startTime : startTime - endTime;
             ++numReadings;
 
-            if(deltaTime > vulcan::utils::sec_to_usec(1))
-            {
-                std::cout << "Laser update rate: " << (static_cast<float>(numReadings)*vulcan::utils::usec_to_sec(deltaTime))
-                    << " Hz" << std::endl;
+            if (deltaTime > vulcan::utils::sec_to_usec(1)) {
+                std::cout << "Laser update rate: "
+                          << (static_cast<float>(numReadings) * vulcan::utils::usec_to_sec(deltaTime)) << " Hz"
+                          << std::endl;
 
                 numReadings = 0;
-                deltaTime   = 0;
+                deltaTime = 0;
             }
 
             polar_scan_to_cartesian_scan_in_robot_frame(polarScan, cartesianScan, false);
@@ -328,11 +313,9 @@ void produce_laser_scans(std::shared_ptr<sensors::LaserRangefinder>      rangefi
 
 void invalidate_scan_points(polar_laser_scan_t& scan, size_t firstIndex, size_t lastIndex)
 {
-    for(uint16_t n = 0; n < scan.numRanges; ++n)
-    {
+    for (uint16_t n = 0; n < scan.numRanges; ++n) {
         // Only invalidate the point if it is valid to begin with otherwise bad points will be marked okay
-        if((n < firstIndex || n > lastIndex) && (scan.ranges[n] > 0))
-        {
+        if ((n < firstIndex || n > lastIndex) && (scan.ranges[n] > 0)) {
             scan.ranges[n] *= -1;
         }
     }

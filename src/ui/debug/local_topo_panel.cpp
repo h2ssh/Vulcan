@@ -8,32 +8,32 @@
 
 
 /**
-* \file     local_topo_panel.cpp
-* \author   Collin Johnson
-*
-* Definition of LocalTopoPanel.
-*/
+ * \file     local_topo_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalTopoPanel.
+ */
 
 #include "ui/debug/local_topo_panel.h"
-#include "ui/debug/local_topo_display_widget.h"
-#include "ui/debug/debug_ui.h"
-#include "ui/components/labeling_csp_player.h"
-#include "ui/common/file_dialog_settings.h"
 #include "hssh/local_metric/pose.h"
-#include "hssh/local_topological/command.h"
-#include "hssh/local_topological/local_topo_map.h"
-#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
 #include "hssh/local_topological/area_detection/gateways/feature_extraction.h"
 #include "hssh/local_topological/area_detection/gateways/gateway_classifier.h"
 #include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
 #include "hssh/local_topological/area_detection/gateways/isovist_maxima.h"
 #include "hssh/local_topological/area_detection/labeling/hypothesis.h"
 #include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/command.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include "system/module_communicator.h"
+#include "ui/common/file_dialog_settings.h"
+#include "ui/components/labeling_csp_player.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/local_topo_display_widget.h"
 #include "utils/auto_mutex.h"
 #include "utils/serialized_file_io.h"
-#include "utils/visibility_graph_feature.h"
 #include "utils/stub.h"
+#include "utils/visibility_graph_feature.h"
 #include <cassert>
 
 // For KDevelop code completion to work with the wxWidgets event table. It doesn't like the togglebutton.
@@ -43,58 +43,58 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(LocalTopoPanel, wxEvtHandler)
-    EVT_RADIOBOX(ID_LOCAL_TOPO_MODE_RADIO, LocalTopoPanel::modeRadioChanged)
-    EVT_CHECKBOX(ID_SHOW_VORONOI_GRID_BOX, LocalTopoPanel::showVoronoiGrid)
-    EVT_CHECKBOX(ID_SHOW_DISTANCE_GRADIENT_BOX, LocalTopoPanel::showDistanceGradient)
-    EVT_CHECKBOX(ID_SHOW_FULL_SKELETON_BOX,     LocalTopoPanel::showFullSkeleton)
-    EVT_CHECKBOX(ID_SHOW_REDUCED_SKELETON_BOX,  LocalTopoPanel::showReducedSkeleton)
-    EVT_CHECKBOX(ID_FOLLOW_ROBOT_TOPO_BOX,      LocalTopoPanel::centerOnRobot)
-    EVT_CHECKBOX(ID_SHOW_GATEWAYS_BOX,          LocalTopoPanel::showGateways)
-    EVT_CHOICE(ID_GATEWAY_TYPE_CHOICE,          LocalTopoPanel::gatewayChoiceChanged)
-    EVT_CHECKBOX(ID_SHOW_NORMALS_BOX,           LocalTopoPanel::showNormals)
-    EVT_BUTTON(ID_SAVE_LOCAL_TOPO_MAP_BUTTON,   LocalTopoPanel::saveLocalTopoMapPressed)
-    EVT_BUTTON(ID_LOAD_LOCAL_TOPO_MAP_BUTTON,   LocalTopoPanel::loadLocalTopoMapPressed)
-    EVT_BUTTON(ID_SEND_LOCAL_TOPO_MAP_BUTTON,   LocalTopoPanel::sendLocalTopoMapPressed)
-    EVT_CHECKBOX(ID_SHOW_FRONTIERS_BOX,           LocalTopoPanel::showFrontiers)
-    EVT_RADIOBOX(ID_SHOW_AREAS_BOX,               LocalTopoPanel::showAreasChanged)
-    EVT_CHECKBOX(ID_SHOW_SMALL_STAR_BOX,          LocalTopoPanel::showSmallScaleStar)
-    EVT_CHECKBOX(ID_SHOW_AREA_GATEWAYS_BOX,       LocalTopoPanel::showAreaGateways)
-    EVT_CHECKBOX(ID_SHOW_AREA_GRAPH_BOX,        LocalTopoPanel::showAreaGraph)
-    EVT_CHECKBOX(ID_SHOW_VISIBILITY_GRAPH_BOX,    LocalTopoPanel::showVisibilityGraph)
-    EVT_RADIOBOX(ID_AREA_HYPOTHESIS_VALUE_RADIO,   LocalTopoPanel::areaHypothesisValueChanged)
-    EVT_CHOICE(ID_HYP_FEATURE_CHOICE, LocalTopoPanel::hypFeatureChoiceChanged)
-    EVT_RADIOBOX(ID_HYPOTHESES_TO_SHOW_RADIO,     LocalTopoPanel::hypothesesToShowChanged)
-    EVT_BUTTON(ID_CSP_LOAD_BUTTON,              LocalTopoPanel::cspLoadPressed)
-    EVT_BUTTON(ID_CSP_PLAY_BUTTON,              LocalTopoPanel::cspPlayPressed)
-    EVT_BUTTON(ID_CSP_PAUSE_BUTTON,             LocalTopoPanel::cspPausePressed)
-    EVT_BUTTON(ID_CSP_STOP_BUTTON,              LocalTopoPanel::cspStopPressed)
-    EVT_BUTTON(ID_CSP_JUMP_TO_START_BUTTON,     LocalTopoPanel::cspJumpToStartPressed)
-    EVT_BUTTON(ID_CSP_PREV_ITERATION_BUTTON,    LocalTopoPanel::cspPrevIterationPressed)
-    EVT_BUTTON(ID_CSP_NEXT_ITERATION_BUTTON,    LocalTopoPanel::cspNextIterationPressed)
-    EVT_BUTTON(ID_CSP_JUMP_TO_END_BUTTON,       LocalTopoPanel::cspJumpToEndPressed)
-    EVT_SLIDER(ID_CSP_ITERATION_SLIDER,         LocalTopoPanel::iterationSliderChanged)
-    EVT_SLIDER(ID_CSP_SPEED_SLIDER,             LocalTopoPanel::speedSliderChanged)
-    EVT_CHECKBOX(ID_SHOW_LOCAL_HEAT_MAP_BOX,    LocalTopoPanel::showHeatMapChanged)
-    EVT_BUTTON(ID_GENERATE_LOCAL_HEAT_MAP_BUTTON, LocalTopoPanel::generateHeatMapPressed)
-    EVT_CHECKBOX(ID_SHOW_LOCAL_TOPO_EVENT_BOX,    LocalTopoPanel::showEventVisualizations)
-    EVT_CHECKBOX(ID_SHOW_ISOVIST_BOX,             LocalTopoPanel::showIsovistChanged)
-    EVT_CHECKBOX(ID_SHOW_ISOVIST_FIELD_BOX,       LocalTopoPanel::showIsovistFieldChanged)
-    EVT_CHECKBOX(ID_SHOW_ISOVIST_DERIV_FIELD_BOX, LocalTopoPanel::showIsovistDerivFieldChanged)
-    EVT_BUTTON(ID_CALCULATE_ISOVISTS_BUTTON,      LocalTopoPanel::calculateIsovistPressed)
-    EVT_CHOICE(ID_FIELD_SCALAR_CHOICE,            LocalTopoPanel::scalarChoiceChanged)
-    EVT_BUTTON(ID_CALCULATE_GRADIENTS_BUTTON,     LocalTopoPanel::calculateGradientsPressed)
-    EVT_TOGGLEBUTTON(ID_SELECT_ISOVISTS_BUTTON,   LocalTopoPanel::selectIsovistsChanged)
-    EVT_CHECKBOX(ID_SHOW_CELL_GRADIENTS_BOX,      LocalTopoPanel::showGradientsChanged)
-    EVT_CHECKBOX(ID_SHOW_ISOVIST_MAXIMA_BOX,      LocalTopoPanel::showLocalMaximaChanged)
-    EVT_BUTTON(ID_LOAD_GATEWAY_CLASSIFIER_BUTTON, LocalTopoPanel::loadGatewayClassifierPressed)
-    EVT_BUTTON(ID_CALCULATE_GATEWAY_PROBABILITIES_BUTTON, LocalTopoPanel::calculateGatewayProbabilitiesPressed)
-    EVT_CHECKBOX(ID_SHOW_GATEWAY_PROBABILITIES_BOX, LocalTopoPanel::showGatewayProbabilitiesChanged)
-    EVT_SLIDER(ID_GATEWAY_CUTOFF_SLIDER,            LocalTopoPanel::gatewayProbabilitySliderChanged)
-    EVT_CHOICE(ID_VISIBILITY_FEATURE_CHOICE,      LocalTopoPanel::visibilityFeatureChoiceChanged)
+EVT_RADIOBOX(ID_LOCAL_TOPO_MODE_RADIO, LocalTopoPanel::modeRadioChanged)
+EVT_CHECKBOX(ID_SHOW_VORONOI_GRID_BOX, LocalTopoPanel::showVoronoiGrid)
+EVT_CHECKBOX(ID_SHOW_DISTANCE_GRADIENT_BOX, LocalTopoPanel::showDistanceGradient)
+EVT_CHECKBOX(ID_SHOW_FULL_SKELETON_BOX, LocalTopoPanel::showFullSkeleton)
+EVT_CHECKBOX(ID_SHOW_REDUCED_SKELETON_BOX, LocalTopoPanel::showReducedSkeleton)
+EVT_CHECKBOX(ID_FOLLOW_ROBOT_TOPO_BOX, LocalTopoPanel::centerOnRobot)
+EVT_CHECKBOX(ID_SHOW_GATEWAYS_BOX, LocalTopoPanel::showGateways)
+EVT_CHOICE(ID_GATEWAY_TYPE_CHOICE, LocalTopoPanel::gatewayChoiceChanged)
+EVT_CHECKBOX(ID_SHOW_NORMALS_BOX, LocalTopoPanel::showNormals)
+EVT_BUTTON(ID_SAVE_LOCAL_TOPO_MAP_BUTTON, LocalTopoPanel::saveLocalTopoMapPressed)
+EVT_BUTTON(ID_LOAD_LOCAL_TOPO_MAP_BUTTON, LocalTopoPanel::loadLocalTopoMapPressed)
+EVT_BUTTON(ID_SEND_LOCAL_TOPO_MAP_BUTTON, LocalTopoPanel::sendLocalTopoMapPressed)
+EVT_CHECKBOX(ID_SHOW_FRONTIERS_BOX, LocalTopoPanel::showFrontiers)
+EVT_RADIOBOX(ID_SHOW_AREAS_BOX, LocalTopoPanel::showAreasChanged)
+EVT_CHECKBOX(ID_SHOW_SMALL_STAR_BOX, LocalTopoPanel::showSmallScaleStar)
+EVT_CHECKBOX(ID_SHOW_AREA_GATEWAYS_BOX, LocalTopoPanel::showAreaGateways)
+EVT_CHECKBOX(ID_SHOW_AREA_GRAPH_BOX, LocalTopoPanel::showAreaGraph)
+EVT_CHECKBOX(ID_SHOW_VISIBILITY_GRAPH_BOX, LocalTopoPanel::showVisibilityGraph)
+EVT_RADIOBOX(ID_AREA_HYPOTHESIS_VALUE_RADIO, LocalTopoPanel::areaHypothesisValueChanged)
+EVT_CHOICE(ID_HYP_FEATURE_CHOICE, LocalTopoPanel::hypFeatureChoiceChanged)
+EVT_RADIOBOX(ID_HYPOTHESES_TO_SHOW_RADIO, LocalTopoPanel::hypothesesToShowChanged)
+EVT_BUTTON(ID_CSP_LOAD_BUTTON, LocalTopoPanel::cspLoadPressed)
+EVT_BUTTON(ID_CSP_PLAY_BUTTON, LocalTopoPanel::cspPlayPressed)
+EVT_BUTTON(ID_CSP_PAUSE_BUTTON, LocalTopoPanel::cspPausePressed)
+EVT_BUTTON(ID_CSP_STOP_BUTTON, LocalTopoPanel::cspStopPressed)
+EVT_BUTTON(ID_CSP_JUMP_TO_START_BUTTON, LocalTopoPanel::cspJumpToStartPressed)
+EVT_BUTTON(ID_CSP_PREV_ITERATION_BUTTON, LocalTopoPanel::cspPrevIterationPressed)
+EVT_BUTTON(ID_CSP_NEXT_ITERATION_BUTTON, LocalTopoPanel::cspNextIterationPressed)
+EVT_BUTTON(ID_CSP_JUMP_TO_END_BUTTON, LocalTopoPanel::cspJumpToEndPressed)
+EVT_SLIDER(ID_CSP_ITERATION_SLIDER, LocalTopoPanel::iterationSliderChanged)
+EVT_SLIDER(ID_CSP_SPEED_SLIDER, LocalTopoPanel::speedSliderChanged)
+EVT_CHECKBOX(ID_SHOW_LOCAL_HEAT_MAP_BOX, LocalTopoPanel::showHeatMapChanged)
+EVT_BUTTON(ID_GENERATE_LOCAL_HEAT_MAP_BUTTON, LocalTopoPanel::generateHeatMapPressed)
+EVT_CHECKBOX(ID_SHOW_LOCAL_TOPO_EVENT_BOX, LocalTopoPanel::showEventVisualizations)
+EVT_CHECKBOX(ID_SHOW_ISOVIST_BOX, LocalTopoPanel::showIsovistChanged)
+EVT_CHECKBOX(ID_SHOW_ISOVIST_FIELD_BOX, LocalTopoPanel::showIsovistFieldChanged)
+EVT_CHECKBOX(ID_SHOW_ISOVIST_DERIV_FIELD_BOX, LocalTopoPanel::showIsovistDerivFieldChanged)
+EVT_BUTTON(ID_CALCULATE_ISOVISTS_BUTTON, LocalTopoPanel::calculateIsovistPressed)
+EVT_CHOICE(ID_FIELD_SCALAR_CHOICE, LocalTopoPanel::scalarChoiceChanged)
+EVT_BUTTON(ID_CALCULATE_GRADIENTS_BUTTON, LocalTopoPanel::calculateGradientsPressed)
+EVT_TOGGLEBUTTON(ID_SELECT_ISOVISTS_BUTTON, LocalTopoPanel::selectIsovistsChanged)
+EVT_CHECKBOX(ID_SHOW_CELL_GRADIENTS_BOX, LocalTopoPanel::showGradientsChanged)
+EVT_CHECKBOX(ID_SHOW_ISOVIST_MAXIMA_BOX, LocalTopoPanel::showLocalMaximaChanged)
+EVT_BUTTON(ID_LOAD_GATEWAY_CLASSIFIER_BUTTON, LocalTopoPanel::loadGatewayClassifierPressed)
+EVT_BUTTON(ID_CALCULATE_GATEWAY_PROBABILITIES_BUTTON, LocalTopoPanel::calculateGatewayProbabilitiesPressed)
+EVT_CHECKBOX(ID_SHOW_GATEWAY_PROBABILITIES_BOX, LocalTopoPanel::showGatewayProbabilitiesChanged)
+EVT_SLIDER(ID_GATEWAY_CUTOFF_SLIDER, LocalTopoPanel::gatewayProbabilitySliderChanged)
+EVT_CHOICE(ID_VISIBILITY_FEATURE_CHOICE, LocalTopoPanel::visibilityFeatureChoiceChanged)
 END_EVENT_TABLE()
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
 namespace vulcan
 {
@@ -196,25 +196,23 @@ LocalTopoPanel::LocalTopoPanel(const ui_params_t& params, const local_topo_panel
 
     // Create the names for the hypothesis features
     hssh::HypothesisFeatures hypFeatures;
-    for(std::size_t n = 0; n < hypFeatures.numFeatures(); ++n)
-    {
+    for (std::size_t n = 0; n < hypFeatures.numFeatures(); ++n) {
         widgets.hypFeatureChoice->Append(hssh::HypothesisFeatures::featureName(n));
     }
 
     widgets.hypFeatureChoice->SetSelection(0);
 
     // Create the names for the isovists
-    for(int n = 0; n < utils::Isovist::kNumScalars; ++n)
-    {
+    for (int n = 0; n < utils::Isovist::kNumScalars; ++n) {
         widgets.isovistScalarChoice->Append(utils::Isovist::scalarName(static_cast<utils::Isovist::Scalar>(n)));
     }
 
     widgets.isovistScalarChoice->SetSelection(0);
 
     // Create the names for the visibility graph features
-    for(int n = 0; n < static_cast<int>(utils::VisibilityGraphFeatureType::num_features); ++n)
-    {
-        widgets.visibilityFeatureChoice->Append(utils::feature_type_to_string(static_cast<utils::VisibilityGraphFeatureType>(n)));
+    for (int n = 0; n < static_cast<int>(utils::VisibilityGraphFeatureType::num_features); ++n) {
+        widgets.visibilityFeatureChoice->Append(
+          utils::feature_type_to_string(static_cast<utils::VisibilityGraphFeatureType>(n)));
     }
 
     widgets.visibilityFeatureChoice->SetSelection(0);
@@ -271,13 +269,11 @@ void LocalTopoPanel::update(void)
 
 void LocalTopoPanel::saveSettings(utils::ConfigFileWriter& config)
 {
-
 }
 
 
 void LocalTopoPanel::loadSettings(const utils::ConfigFile& config)
 {
-
 }
 
 
@@ -295,32 +291,26 @@ void LocalTopoPanel::handleData(const hssh::gateway_debug_info_t& debug, const s
     utils::AutoMutex autoLock(dataLock_);
 
     // If there aren't the same number of intermediate hypotheses, then clearly
-    if(debug.intermediateHypotheses.size() != gatewayInfo.intermediateHypotheses.size())
-    {
-        gatewayInfo       = debug;
+    if (debug.intermediateHypotheses.size() != gatewayInfo.intermediateHypotheses.size()) {
+        gatewayInfo = debug;
         gatewaysAreDirty_ = true;
-        gatewaysIndex     = 0;
+        gatewaysIndex = 0;
         return;
     }
 
     // Otherwise, see if the descriptions are all the same, if so, just copy over the hypotheses -- these should almost
     // always be the same
-    for(std::size_t n = 0; n < debug.intermediateHypotheses.size(); ++n)
-    {
-        if(gatewayInfo.intermediateHypotheses[n].first == debug.intermediateHypotheses[n].first)
-        {
+    for (std::size_t n = 0; n < debug.intermediateHypotheses.size(); ++n) {
+        if (gatewayInfo.intermediateHypotheses[n].first == debug.intermediateHypotheses[n].first) {
             gatewayInfo.intermediateHypotheses[n].second = debug.intermediateHypotheses[n].second;
-        }
-        else
-        {
+        } else {
             // A description has changed, so the choice box needs to be rebuilt
             gatewayInfo.intermediateHypotheses[n] = debug.intermediateHypotheses[n];
-            gatewaysAreDirty_                     = true;
+            gatewaysAreDirty_ = true;
         }
     }
 
-    if(gatewaysIndex < gatewayInfo.intermediateHypotheses.size())
-    {
+    if (gatewaysIndex < gatewayInfo.intermediateHypotheses.size()) {
         widgets.displayWidget->setGateways(gatewayInfo.intermediateHypotheses[gatewaysIndex].second);
     }
 }
@@ -366,30 +356,23 @@ void LocalTopoPanel::handleData(const hssh::LocalAreaEventVec& events, const std
 {
     utils::AutoMutex autoLock(dataLock_);
 
-    if(events.empty())
-    {
+    if (events.empty()) {
         return;
     }
 
     // If the arriving events have lower sequence numbers than the stored events, clear
     // out the current events because the local_topo_hssh module must have been reset
-    if(!events_.empty() && events.front()->sequenceId() < events_.back()->sequenceId())
-    {
+    if (!events_.empty() && events.front()->sequenceId() < events_.back()->sequenceId()) {
         events_.clear();
     }
 
-    std::transform(events.begin(),
-                   events.end(),
-                   std::back_inserter(events_),
-                   [](const hssh::LocalAreaEventPtr& event)
-                   {
-                       return event->clone();
-                   });
+    std::transform(events.begin(), events.end(), std::back_inserter(events_), [](const hssh::LocalAreaEventPtr& event) {
+        return event->clone();
+    });
 
     eventsAreDirty_ = true;
 
-    if(!events_.empty())
-    {
+    if (!events_.empty()) {
         widgets.displayWidget->setEvent(events_.back());
     }
 }
@@ -407,8 +390,7 @@ void LocalTopoPanel::objectExited(const hssh::DebugHypothesis*& object)
 {
     // If the hover hypothesis is the same as the exited object, then the hover should be reset
     // If it is different, then some other event has changed it, so it should remain as-is
-    if(hoverHypothesis_ == object)
-    {
+    if (hoverHypothesis_ == object) {
         hoverHypothesis_ = nullptr;
     }
 
@@ -424,16 +406,14 @@ void LocalTopoPanel::objectSelected(const hssh::DebugHypothesis*& object)
 
 void LocalTopoPanel::updateGateways(void)
 {
-    if(gatewaysAreDirty_)
-    {
+    if (gatewaysAreDirty_) {
         widgets.gatewayTypeChoice->Clear();
 
-        for(auto& hypotheses : gatewayInfo.intermediateHypotheses)
-        {
+        for (auto& hypotheses : gatewayInfo.intermediateHypotheses) {
             widgets.gatewayTypeChoice->Append(wxString(hypotheses.first.c_str(), wxConvUTF8));
         }
 
-        gatewaysIndex     = (gatewaysIndex < gatewayInfo.intermediateHypotheses.size()) ? gatewaysIndex : 0;
+        gatewaysIndex = (gatewaysIndex < gatewayInfo.intermediateHypotheses.size()) ? gatewaysIndex : 0;
         gatewaysAreDirty_ = false;
     }
 }
@@ -442,11 +422,9 @@ void LocalTopoPanel::updateGateways(void)
 void LocalTopoPanel::updateHypotheses(void)
 {
     // Only go through the process of changing the visible hypotheses if the hypotheses have changed in some way
-    if(hypothesesAreDirty_)
-    {
+    if (hypothesesAreDirty_) {
         // Determine which hypotheses are currently being shown.
-        switch(hypothesesToShow_)
-        {
+        switch (hypothesesToShow_) {
         case kShowMaxLikelihood:
             changeVisibleHypotheses(areaInfo_.maximumLikelihoodHypotheses);
             break;
@@ -466,8 +444,7 @@ void LocalTopoPanel::updateHypotheses(void)
         hypothesesAreDirty_ = false;
     }
 
-    if(hoverHypothesis_)
-    {
+    if (hoverHypothesis_) {
         auto distribution = hoverHypothesis_->getDistribution();
         widgets.labelDistributionText->SetLabel(wxString::Format(wxT("P:%.3f  Dec:%.3f  Dest:%.3f"),
                                                                  distribution.path,
@@ -488,15 +465,12 @@ void LocalTopoPanel::changeVisibleHypotheses(const std::vector<hssh::DebugHypoth
     // Assign the hypotheses to be displayed
     widgets.displayWidget->setVisibleHypotheses(visibleHypotheses);
 
-    if(grid)
-    {
+    if (grid) {
         // Assign the hypotheses to be selected amongst via the mouse
         std::map<Point<int>, const hssh::DebugHypothesis*> cellToVisible;
-        for(auto& hyp : visibleHypotheses)
-        {
+        for (auto& hyp : visibleHypotheses) {
             const auto& extent = hyp.getExtent();
-            for(auto& cell : extent)
-            {
+            for (auto& cell : extent) {
                 cellToVisible.insert(std::make_pair(utils::global_point_to_grid_cell_round(cell, *grid), &hyp));
             }
         }
@@ -508,12 +482,11 @@ void LocalTopoPanel::changeVisibleHypotheses(const std::vector<hssh::DebugHypoth
 
 void LocalTopoPanel::updateCSPInfo(void)
 {
-    if(cspInfoIsDirty_ && grid)
-    {
+    if (cspInfoIsDirty_ && grid) {
         cspPlayer_->setCSPInfo(cspInfo_, grid->metersPerCell());
         cspPlayer_->setFramesPerIteration(widgets.cspSpeedSlider->GetValue());
         widgets.cspIterationSlider->SetMin(0);
-        widgets.cspIterationSlider->SetMax(cspPlayer_->numIterations()-1);
+        widgets.cspIterationSlider->SetMax(cspPlayer_->numIterations() - 1);
         cspInfoIsDirty_ = false;
     }
 
@@ -523,12 +496,10 @@ void LocalTopoPanel::updateCSPInfo(void)
 
 void LocalTopoPanel::updateEvents(void)
 {
-    if(eventsAreDirty_)
-    {
+    if (eventsAreDirty_) {
         widgets.eventsList->Clear();
 
-        for(auto& e : events_)
-        {
+        for (auto& e : events_) {
             widgets.eventsList->Append(wxString(e->description().c_str(), wxConvUTF8));
         }
 
@@ -539,50 +510,47 @@ void LocalTopoPanel::updateEvents(void)
 
 void LocalTopoPanel::calculateIsovistField(void)
 {
-    if(!grid)
-    {
+    if (!grid) {
         return;
     }
 
     utils::isovist_options_t options;
-    options.numRays       = 1440;
-    options.maxDistance   = 20.0f;
+    options.numRays = 1440;
+    options.maxDistance = 20.0f;
     options.saveEndpoints = widgets.showIsovistBox->IsChecked();
 
-    field_.reset(new hssh::VoronoiIsovistField(*grid, radio_selection_to_location(widgets.isovistLocationRadio->GetSelection()), options));
-    widgets.displayWidget->setIsovistField(field_, static_cast<utils::Isovist::Scalar>(widgets.isovistScalarChoice->GetSelection()));
+    field_.reset(
+      new hssh::VoronoiIsovistField(*grid,
+                                    radio_selection_to_location(widgets.isovistLocationRadio->GetSelection()),
+                                    options));
+    widgets.displayWidget->setIsovistField(
+      field_,
+      static_cast<utils::Isovist::Scalar>(widgets.isovistScalarChoice->GetSelection()));
 }
 
 
 void LocalTopoPanel::calculateProbableGateways(void)
 {
-    if(!classifier_)
-    {
+    if (!classifier_) {
         std::cerr << "ERROR: LocalTopoPanel: No gateway classifier loaded. Can't compute probabilities.\n";
         return;
-    }
-    else if(!grid)
-    {
+    } else if (!grid) {
         std::cerr << "ERROR: LocalTopoPanel: No Voronoi skeleton available. Can't compute probabilities.\n";
         return;
-    }
-    else if(!field_)
-    {
+    } else if (!field_) {
         std::cerr << "ERROR: LocalTopoPanel: No isovist field available. Can't compute probabilities.\n";
         return;
     }
 
-    auto classifierType = static_cast<hssh::GatewayClassifier::ClassifierType>(
-        widgets.classifierToUseRadio->GetSelection());
+    auto classifierType =
+      static_cast<hssh::GatewayClassifier::ClassifierType>(widgets.classifierToUseRadio->GetSelection());
 
     hssh::VoronoiEdges edges{*grid, hssh::SKELETON_CELL_REDUCED_SKELETON};
     auto features = extract_gateway_features_default(edges, *field_);
     hssh::CellToTypeMap<double> probabilities;
-    for(auto& f : features)
-    {
+    for (auto& f : features) {
         double probability = classifier_->classifyGateway(f.second, classifierType).probability;
-        if((probability >= gatewayProbCutoff_) || (gatewayProbCutoff_ < 0.01))
-        {
+        if ((probability >= gatewayProbCutoff_) || (gatewayProbCutoff_ < 0.01)) {
             probabilities[f.first] = probability;
         }
     }
@@ -637,8 +605,7 @@ void LocalTopoPanel::showGateways(wxCommandEvent& event)
 void LocalTopoPanel::gatewayChoiceChanged(wxCommandEvent& event)
 {
     std::size_t selectedIndex = event.GetSelection();
-    if(selectedIndex < gatewayInfo.intermediateHypotheses.size())
-    {
+    if (selectedIndex < gatewayInfo.intermediateHypotheses.size()) {
         gatewaysIndex = event.GetSelection();
         widgets.displayWidget->setGateways(gatewayInfo.intermediateHypotheses[gatewaysIndex].second);
     }
@@ -653,8 +620,7 @@ void LocalTopoPanel::showNormals(wxCommandEvent& event)
 
 void LocalTopoPanel::saveLocalTopoMapPressed(wxCommandEvent& event)
 {
-    if(!topoMap_)
-    {
+    if (!topoMap_) {
         std::cerr << "WARNING:LocalTopoPanel: No local topo map to save!\n";
         return;
     }
@@ -666,11 +632,9 @@ void LocalTopoPanel::saveLocalTopoMapPressed(wxCommandEvent& event)
                             wxT("*.ltm"),
                             kFileSaveFlags);
 
-    if(saveDialog.ShowModal() == wxID_OK)
-    {
+    if (saveDialog.ShowModal() == wxID_OK) {
         auto path = std::string{saveDialog.GetPath().mb_str()};
-        if(!utils::save_serializable_to_file(path, *topoMap_))
-        {
+        if (!utils::save_serializable_to_file(path, *topoMap_)) {
             std::cerr << "ERROR:LocalTopoPanel: Failed to save topo map to file " << path << '\n';
         }
     }
@@ -686,17 +650,13 @@ void LocalTopoPanel::loadLocalTopoMapPressed(wxCommandEvent& event)
                             wxT("*.ltm"),
                             kFileOpenFlags);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         auto path = std::string{loadDialog.GetPath().mb_str()};
         hssh::LocalTopoMap topoMap;
 
-        if(!utils::load_serializable_from_file(path, topoMap))
-        {
+        if (!utils::load_serializable_from_file(path, topoMap)) {
             std::cerr << "ERROR:LocalTopoPanel: Failed to load topo map to file " << path << '\n';
-        }
-        else
-        {
+        } else {
             topoMap_.reset(new hssh::LocalTopoMap(topoMap));
             widgets.displayWidget->setLocalTopoMap(topoMap_);
             grid = std::make_shared<hssh::VoronoiSkeletonGrid>(topoMap_->voronoiSkeleton());
@@ -708,8 +668,7 @@ void LocalTopoPanel::loadLocalTopoMapPressed(wxCommandEvent& event)
 
 void LocalTopoPanel::sendLocalTopoMapPressed(wxCommandEvent& event)
 {
-    if(topoMap_ && consumer_)
-    {
+    if (topoMap_ && consumer_) {
         consumer_->sendMessage(*topoMap_);
     }
 }
@@ -776,8 +735,7 @@ void LocalTopoPanel::cspLoadPressed(wxCommandEvent& event)
     hssh::CSPDebugInfo debug;
     std::string path = getenv("VULCAN_BIN");
     path += "/csp_debug_info.log";
-    if(utils::load_serializable_from_file(path, debug))
-    {
+    if (utils::load_serializable_from_file(path, debug)) {
         handleData(debug, "HSSH_CSP_DEBUG_INFO");
     }
 }
@@ -845,16 +803,14 @@ void LocalTopoPanel::showHeatMapChanged(wxCommandEvent& event)
 void LocalTopoPanel::generateHeatMapPressed(wxCommandEvent& event)
 {
     long numPaths = 0;
-    if(widgets.numPathsText->GetValue().ToLong(&numPaths) && topoMap_)
-    {
+    if (widgets.numPathsText->GetValue().ToLong(&numPaths) && topoMap_) {
         numPaths = std::max(10l, numPaths);
 
         hssh::LocalTopoHeatMap heatMap(*topoMap_);
         heatMap.generatePaths(numPaths);
         widgets.displayWidget->setHeatMap(heatMap.labeledStats());
 
-        if(widgets.showHeatMapBox->IsChecked())
-        {
+        if (widgets.showHeatMapBox->IsChecked()) {
             widgets.displayWidget->useHeatMap(true);
         }
     }
@@ -900,8 +856,7 @@ void LocalTopoPanel::selectIsovistsChanged(wxCommandEvent& event)
 
 void LocalTopoPanel::scalarChoiceChanged(wxCommandEvent& event)
 {
-    if(field_)
-    {
+    if (field_) {
         widgets.displayWidget->setIsovistField(field_, static_cast<utils::Isovist::Scalar>(event.GetSelection()));
     }
 }
@@ -909,8 +864,7 @@ void LocalTopoPanel::scalarChoiceChanged(wxCommandEvent& event)
 
 void LocalTopoPanel::calculateGradientsPressed(wxCommandEvent& event)
 {
-    if(field_)
-    {
+    if (field_) {
         hssh::VoronoiEdges edges(*grid, hssh::SKELETON_CELL_REDUCED_SKELETON);
         gradients_.reset(new hssh::VoronoiIsovistGradients(edges));
         gradients_->calculateGradients(static_cast<utils::Isovist::Scalar>(widgets.isovistScalarChoice->GetSelection()),
@@ -941,15 +895,13 @@ void LocalTopoPanel::loadGatewayClassifierPressed(wxCommandEvent& event)
                             wxT(""),
                             wxT(""),
                             kFileOpenFlags);
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         auto noExtension = loadDialog.GetPath().BeforeFirst(wxUniChar('.'));
         auto path = std::string{noExtension.mb_str()};
 
         classifier_ = std::make_unique<hssh::GatewayClassifier>(path);
 
-        if(!classifier_)
-        {
+        if (!classifier_) {
             std::cerr << "ERROR:LocalTopoPanel: Failed to load classifier " << path << '\n';
         }
     }
@@ -977,14 +929,15 @@ void LocalTopoPanel::gatewayProbabilitySliderChanged(wxCommandEvent& event)
 
 void LocalTopoPanel::visibilityFeatureChoiceChanged(wxCommandEvent& event)
 {
-    widgets.displayWidget->setVisibilityGraphFeature(static_cast<utils::VisibilityGraphFeatureType>(event.GetSelection()));;
+    widgets.displayWidget->setVisibilityGraphFeature(
+      static_cast<utils::VisibilityGraphFeatureType>(event.GetSelection()));
+    ;
 }
 
 
 hssh::LocalTopoMode radio_selection_to_mode(int radio)
 {
-    switch(radio)
-    {
+    switch (radio) {
     case 0:
         return hssh::LocalTopoMode::event_detection;
     case 1:
@@ -999,8 +952,7 @@ hssh::LocalTopoMode radio_selection_to_mode(int radio)
 
 hssh::IsovistLocation radio_selection_to_location(int radio)
 {
-    switch(radio)
-    {
+    switch (radio) {
     case 0:
         return hssh::IsovistLocation::FREE_SPACE;
     case 1:
@@ -1025,8 +977,8 @@ int int_from_text(wxTextCtrl* text)
 double double_from_text(wxTextCtrl* text)
 {
     double value = 0.0;
-    return text->GetValue().ToDouble(&value) ? value: 0.0;
+    return text->GetValue().ToDouble(&value) ? value : 0.0;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

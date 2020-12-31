@@ -8,24 +8,24 @@
 
 
 /**
-* \file     messages.h
-* \author   Collin Johnson
-*
-* Declaration of the messages for interacting with the local_metric_hssh and some
-* associated types supporting those messages.
-*
-*   - local_metric_mode_message_t
-*       + local_metric_mode_t
-*   - relocalization_request_message_t
-*       + relocalization_initialization_mode_t
-*       + relocalization_map_action_t
-*   - completed_relocalization_message_t
-*       + relocalization_result_t
-*
-* All of these messages are encapsulated in the local_metric_hssh_message_t to make it
-* easy for adding new messages and having them delivered to other modules, rather than
-* blitzing them with a huge number of individual message inputs to process.
-*/
+ * \file     messages.h
+ * \author   Collin Johnson
+ *
+ * Declaration of the messages for interacting with the local_metric_hssh and some
+ * associated types supporting those messages.
+ *
+ *   - local_metric_mode_message_t
+ *       + local_metric_mode_t
+ *   - relocalization_request_message_t
+ *       + relocalization_initialization_mode_t
+ *       + relocalization_map_action_t
+ *   - completed_relocalization_message_t
+ *       + relocalization_result_t
+ *
+ * All of these messages are encapsulated in the local_metric_hssh_message_t to make it
+ * easy for adding new messages and having them delivered to other modules, rather than
+ * blitzing them with a huge number of individual message inputs to process.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_MESSAGES_H
 #define HSSH_LOCAL_METRIC_MESSAGES_H
@@ -54,34 +54,34 @@ enum class LocalMetricMode
 
 struct local_metric_mode_message_t
 {
-    int64_t         timestamp;
+    int64_t timestamp;
     LocalMetricMode mode;
 };
 
 /////////// local_metric_glass_eval_message_t //////////////////
-enum class GlassEvalCmd:uint8_t
+enum class GlassEvalCmd : uint8_t
 {
-    kNOP=0,
+    kNOP = 0,
     kSaveMap,
     kLoadMap,
     kSavePoses,
     kSaveScans
-    
+
 };
 
 struct local_metric_glass_eval_message_t
 {
-    int64_t         timestamp;
-    GlassEvalCmd    cmd;
-    std::string     filename; 
+    int64_t timestamp;
+    GlassEvalCmd cmd;
+    std::string filename;
 };
 
 /////////// Relocalization messages  //////////////////
 struct local_metric_relocalization_request_message_t
 {
-    int64_t            timestamp;
+    int64_t timestamp;
     LocalPerceptualMap map;
-    
+
     std::shared_ptr<FilterInitializer> initializer;
 };
 
@@ -89,34 +89,35 @@ struct local_metric_relocalization_request_message_t
 template <class Archive>
 void serialize(Archive& ar, local_metric_glass_eval_message_t& msg)
 {
-    ar & msg.timestamp;
-    ar & msg.cmd;
-    ar & msg.filename;
+    ar& msg.timestamp;
+    ar& msg.cmd;
+    ar& msg.filename;
 }
 
 ///////////////////// Serialization support ////////////////////////////
 template <class Archive>
 void serialize(Archive& ar, local_metric_mode_message_t& msg)
 {
-    ar & msg.timestamp;
-    ar & msg.mode;
+    ar& msg.timestamp;
+    ar& msg.mode;
 }
 
 ///////////////////// Serialization support ////////////////////////////
 template <class Archive>
 void serialize(Archive& ar, local_metric_relocalization_request_message_t& msg)
 {
-    ar & msg.timestamp;
-    ar & msg.map;
-    ar & msg.initializer;
+    ar& msg.timestamp;
+    ar& msg.map;
+    ar& msg.initializer;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
 // DEFINE_SYSTEM_MESSAGE(polar_laser_scan_t, ("LAZER"))
 DEFINE_SYSTEM_MESSAGE(hssh::local_metric_glass_eval_message_t, ("HSSH_LOCAL_METRIC_GLASS_EVAL_MSG"))
 DEFINE_SYSTEM_MESSAGE(hssh::local_metric_mode_message_t, ("HSSH_LOCAL_METRIC_MODE_MSG"))
-DEFINE_SYSTEM_MESSAGE(hssh::local_metric_relocalization_request_message_t, ("HSSH_LOCAL_METRIC_RELOCALIZATION_REQUEST_MSG"))
+DEFINE_SYSTEM_MESSAGE(hssh::local_metric_relocalization_request_message_t,
+                      ("HSSH_LOCAL_METRIC_RELOCALIZATION_REQUEST_MSG"))
 
-#endif // HSSH_LOCAL_METRIC_MESSAGES_H
+#endif   // HSSH_LOCAL_METRIC_MESSAGES_H

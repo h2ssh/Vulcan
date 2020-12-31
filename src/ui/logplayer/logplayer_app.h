@@ -8,11 +8,11 @@
 
 
 /**
-* \file     logplayer_app.h
-* \author   Collin Johnson
-*
-* Declaration of LogplayerApp, which handles the creation of the Logplayer UI.
-*/
+ * \file     logplayer_app.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LogplayerApp, which handles the creation of the Logplayer UI.
+ */
 
 #ifndef UI_LOGPLAYER_LOGPLAYER_APP_H
 #define UI_LOGPLAYER_LOGPLAYER_APP_H
@@ -29,18 +29,16 @@ class LogplayerFrame;
 class LogplayerApp : public wxApp
 {
 public:
-
     virtual bool OnInit(void);
-    virtual int  OnExit(void);
+    virtual int OnExit(void);
 
 private:
-
     LogplayerFrame* mainFrame;
 };
 
 DECLARE_APP(LogplayerApp)
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_LOGPLAYER_LOGPLAYER_APP_H
+#endif   // UI_LOGPLAYER_LOGPLAYER_APP_H

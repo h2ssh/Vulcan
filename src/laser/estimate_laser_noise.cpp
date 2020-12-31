@@ -10,10 +10,10 @@
 #include "math/regression.h"
 #include "math/statistics.h"
 #include "sensors/sensor_log.h"
-#include <gnuplot-iostream.h>
 #include <boost/range/iterator_range.hpp>
-#include <iostream>
 #include <cassert>
+#include <gnuplot-iostream.h>
+#include <iostream>
 
 using namespace vulcan;
 
@@ -26,13 +26,11 @@ int main(int argc, char** argv)
 {
     sensors::SensorLog log(argv[1]);
 
-    if(log.sizeFrontLaser() == 0)
-    {
+    if (log.sizeFrontLaser() == 0) {
         return -1;
     }
 
-    if(log.sizeBackLaser() == 0)
-    {
+    if (log.sizeBackLaser() == 0) {
         return -1;
     }
 
@@ -48,13 +46,10 @@ void estimate_sensor_noise(const std::string& laserName, LaserIt begin, LaserIt 
     using ValueVec = std::vector<double>;
     std::vector<ValueVec> values(begin->ranges.size());
 
-    for(auto& scan : boost::make_iterator_range(begin, end))
-    {
+    for (auto& scan : boost::make_iterator_range(begin, end)) {
         assert(values.size() == scan.ranges.size());
-        for(std::size_t n = 0; n < scan.ranges.size(); ++n)
-        {
-            if((scan.ranges[n] > 0.0f) && (scan.ranges[n] < 40.0f))
-            {
+        for (std::size_t n = 0; n < scan.ranges.size(); ++n) {
+            if ((scan.ranges[n] > 0.0f) && (scan.ranges[n] < 40.0f)) {
                 values[n].push_back(scan.ranges[n]);
             }
         }
@@ -63,20 +58,18 @@ void estimate_sensor_noise(const std::string& laserName, LaserIt begin, LaserIt 
     std::vector<double> means;
     std::vector<double> variances;
 
-    for(auto& v : values)
-    {
+    for (auto& v : values) {
         means.push_back(math::mean(v.begin(), v.end()));
         variances.push_back(std::sqrt(math::variance(v.begin(), v.end())));
     }
 
     std::vector<Point<float>> meanVsVar;
-    for(std::size_t n = 0; n < means.size(); ++n)
-    {
+    for (std::size_t n = 0; n < means.size(); ++n) {
         // Toss out high std dev as they must have hit something dynamic
-//         if(variances[n] < 0.2)
-//         {
-            meanVsVar.emplace_back(means[n], variances[n]);
-//         }
+        //         if(variances[n] < 0.2)
+        //         {
+        meanVsVar.emplace_back(means[n], variances[n]);
+        //         }
     }
 
     auto line = math::total_least_squares(meanVsVar.begin(), meanVsVar.end());

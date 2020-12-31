@@ -7,15 +7,15 @@
 */
 
 
-#include "mpepc/training/agent_state.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/areas/serialization.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "math/boundary.h"
 #include "mpepc/cost/social_cost.h"
+#include "mpepc/evaluation/mpepc_log.h"
 #include "mpepc/social/social_norm_utils.h"
 #include "mpepc/social/topo_situation.h"
-#include "mpepc/evaluation/mpepc_log.h"
-#include "hssh/local_topological/area.h"
-#include "hssh/local_topological/local_topo_map.h"
-#include "hssh/local_topological/areas/serialization.h"
-#include "math/boundary.h"
+#include "mpepc/training/agent_state.h"
 #include "tracker/objects/serialization.h"
 #include "utils/algorithm_ext.h"
 #include "utils/pose_trace.h"
@@ -79,8 +79,7 @@ void add_situation_distance(const Situation& situation, double normDistance, tra
 
 int main(int argc, char** argv)
 {
-    if(argc < 5)
-    {
+    if (argc < 5) {
         std::cout << "Expected: train_social_norms 'num dist bins' 'num lateral bins'"
                      "'logs file' 'learned norm output file'\n";
         exit(EXIT_FAILURE);
@@ -99,14 +98,12 @@ int main(int argc, char** argv)
 
     // Load all the logs and their associated LTMs
     std::ifstream logsIn(argv[3]);
-    while(!logsIn.eof())
-    {
+    while (!logsIn.eof()) {
         training_log_t log;
         logsIn >> log;
 
         // Check that there was enough information about the log
-        if(!log.logName.empty() && !log.ltmName.empty())
-        {
+        if (!log.logName.empty() && !log.ltmName.empty()) {
             trainingLogs.push_back(log);
 
             // Remove previous data stored with this log
@@ -127,8 +124,7 @@ int main(int argc, char** argv)
 
     int64_t totalTime = 0;
 
-    for(auto& log : trainingLogs)
-    {
+    for (auto& log : trainingLogs) {
         std::cout << "Beginning training for " << log.logName << "...\n";
         int64_t startTime = utils::system_time_us();
 
@@ -154,8 +150,7 @@ int main(int argc, char** argv)
               << "Found: " << state.numPathExamples << " path examples.\n"
               << "       " << state.numPlaceExamples << " place examples.\n";
 
-    for(auto& resp : state.learnedResponses)
-    {
+    for (auto& resp : state.learnedResponses) {
         resp.normalizeDistribution();
     }
 
@@ -163,13 +158,12 @@ int main(int argc, char** argv)
     state.genericResponsePath.normalizeDistribution();
 
     std::cout << "Learned responses:\n";
-    for(auto& resp : state.learnedResponses)
-    {
+    for (auto& resp : state.learnedResponses) {
         std::cout << resp << '\n';
     }
 
     std::cout << "Generic path:  " << state.genericResponsePath << '\n'
-        << "Generic place: " << state.genericResponsePlace << '\n';
+              << "Generic place: " << state.genericResponsePlace << '\n';
 
     learned_norm_cost_params_t learnedParams;
     learnedParams.defaultResponsePlace = state.genericResponsePlace;
@@ -177,8 +171,7 @@ int main(int argc, char** argv)
     learnedParams.responses = state.learnedResponses;
     learnedParams.numLateralBins = state.numLateralBins;
 
-    if(!utils::save_serializable_to_file(argv[4], learnedParams))
-    {
+    if (!utils::save_serializable_to_file(argv[4], learnedParams)) {
         std::cerr << "ERROR: Failed to saved the learned model to file: " << argv[4] << '\n';
         exit(EXIT_FAILURE);
     }
@@ -196,26 +189,21 @@ void process_log(const training_log_t& log, training_state_t& state)
     MPEPCLog mpepcLog(log.logName);
     hssh::LocalTopoMap topoMap;
 
-    if(!utils::load_serializable_from_file(log.ltmName, topoMap))
-    {
+    if (!utils::load_serializable_from_file(log.ltmName, topoMap)) {
         std::cerr << "WARNING: Failed to load " << log.ltmName << " not processing log " << log.logName << '\n';
         return;
     }
 
     mpepcLog.loadAll();
 
-    for(auto& objects : boost::make_iterator_range(mpepcLog.beginObjects(), mpepcLog.endObjects()))
-    {
+    for (auto& objects : boost::make_iterator_range(mpepcLog.beginObjects(), mpepcLog.endObjects())) {
         auto stateIt = mpepcLog.beginMotionState(objects.timestamp());
 
         // Must have a motion state to account for robot in order for this state of objects to be valid
-        if(stateIt != mpepcLog.endMotionState())
-        {
+        if (stateIt != mpepcLog.endMotionState()) {
             // Make sure the robot is included in the state because people are reacting to it!
             learn_responses_for_time_step(objects, *stateIt, topoMap, state);
-        }
-        else
-        {
+        } else {
             std::cout << "Forced to ignore dynamic objects at " << objects.timestamp() << '\n';
         }
     }
@@ -232,28 +220,24 @@ void learn_responses_for_time_step(const tracker::DynamicObjectCollection& objec
 
     std::vector<topo_agent_t> otherAgents;
 
-    for(std::size_t n = 0; n < agents.size(); ++n)
-    {
+    for (std::size_t n = 0; n < agents.size(); ++n) {
         // Check if the agent is moving or not. Don't try learning from things that aren't moving or things that are
         // moving really fast
         double vel = std::sqrt(std::pow(agents[n].state.xVel, 2.0) + std::pow(agents[n].state.yVel, 2.0));
-        if((vel < 0.25) || (vel > 2.0))
-        {
+        if ((vel < 0.25) || (vel > 2.0)) {
             continue;
         }
 
         otherAgents = agents;
-        otherAgents.push_back(robotAgent);  // add robot here to avoid it being included in agents that we are
-                                            // learning from
+        otherAgents.push_back(robotAgent);   // add robot here to avoid it being included in agents that we are
+                                             // learning from
         filter_unimportant_agents(agents[n], otherAgents);
 
         // If on a path segment, then learn that distribution
-        if(topoMap.areaWithId(agents[n].areaId)->type() == hssh::AreaType::path_segment)
-        {
+        if (topoMap.areaWithId(agents[n].areaId)->type() == hssh::AreaType::path_segment) {
             double dist = add_path_example(agents[n], otherAgents, topoMap, state);
 
-            if(dist > 0.0)
-            {
+            if (dist > 0.0) {
                 ++state.numPathExamples;
 
                 // Store the state of the agent for k-means processing
@@ -262,20 +246,16 @@ void learn_responses_for_time_step(const tracker::DynamicObjectCollection& objec
         }
 
         // If about to transition to a new area, then learn the transition distribution
-        if(is_about_to_transition(agents[n], topoMap))
-        {
+        if (is_about_to_transition(agents[n], topoMap)) {
             double dist = add_place_example(agents[n], otherAgents, topoMap, state);
 
-            if(dist > 0.0)
-            {
+            if (dist > 0.0) {
                 ++state.numPlaceExamples;
 
                 // Store the state of the agent for k-means processing
                 state.transObservations[agents[n].areaId].push_back(agent_state_t(agents[n].state, dist));
             }
         }
-
-
     }
 }
 
@@ -291,8 +271,8 @@ void filter_unimportant_agents(const topo_agent_t& agent, std::vector<topo_agent
 
     utils::erase_remove_if(otherAgents, [&agent, kMaxImportantDist](auto& other) {
         return distance_between_points(Point<float>(agent.state.x, agent.state.y),
-                                             Point<float>(other.state.x, other.state.y))
-            > kMaxImportantDist;
+                                       Point<float>(other.state.x, other.state.y))
+          > kMaxImportantDist;
     });
 }
 
@@ -304,16 +284,13 @@ double add_path_example(const topo_agent_t& agent,
 {
     double normDistance = normalized_position_path(agent, topoMap);
 
-    if((normDistance >= 0.0) && (normDistance <= 1.0))
-    {
+    if ((normDistance >= 0.0) && (normDistance <= 1.0)) {
         state.genericResponsePath.addExample(normDistance);
 
         PathSituation situation(agent, otherAgents, state.numLateralBins, topoMap);
         add_situation_distance(situation, normDistance, state);
-    }
-    else
-    {
-        normDistance = -1.0;    // set negative to show we didn't use it
+    } else {
+        normDistance = -1.0;   // set negative to show we didn't use it
     }
 
     return normDistance;
@@ -327,17 +304,14 @@ double add_place_example(const topo_agent_t& agent,
 {
     auto normDistance = normalized_position_gateway(agent, topoMap);
 
-    if((normDistance >= 0.0) && (normDistance <= 1.0))
-    {
+    if ((normDistance >= 0.0) && (normDistance <= 1.0)) {
         // Always update the generic place response
         state.genericResponsePlace.addExample(normDistance);
 
         PlaceSituation situation(agent, otherAgents, topoMap);
         add_situation_distance(situation, normDistance, state);
-    }
-    else
-    {
-        normDistance = -1.0;    // set negative to show we didn't use it
+    } else {
+        normDistance = -1.0;   // set negative to show we didn't use it
     }
 
     return normDistance;
@@ -348,18 +322,14 @@ template <class Situation>
 void add_situation_distance(const Situation& situation, double normDistance, training_state_t& state)
 {
     // See if this situation matches a known response. Otherwise need to create a new response
-    auto respIt = std::find_if(state.learnedResponses.begin(),
-                               state.learnedResponses.end(),
-                               [&situation](const auto& response) {
-        return response.isResponseForSituation(situation);
-    });
+    auto respIt =
+      std::find_if(state.learnedResponses.begin(), state.learnedResponses.end(), [&situation](const auto& response) {
+          return response.isResponseForSituation(situation);
+      });
 
-    if(respIt != state.learnedResponses.end())
-    {
+    if (respIt != state.learnedResponses.end()) {
         respIt->addExample(normDistance);
-    }
-    else
-    {
+    } else {
         // Initialize all counts at one to avoid zero probabilities
         std::vector<double> initialCount(state.numDistBins, 1.0);
         TopoSituationResponse newResponse(situation, initialCount);
@@ -374,8 +344,7 @@ void save_situations(const std::string& filename, const training_state_t& state)
 {
     std::ofstream out(filename);
 
-    for(auto& response : state.learnedResponses)
-    {
+    for (auto& response : state.learnedResponses) {
         response.saveExamples(out);
     }
 

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     remote_encoders.h
-* \author   Collin Johnson
-*
-* Declaration of RemoteEncoders.
-*/
+ * \file     remote_encoders.h
+ * \author   Collin Johnson
+ *
+ * Declaration of RemoteEncoders.
+ */
 
 #ifndef SENSORS_REMOTE_ENCODERS_H
 #define SENSORS_REMOTE_ENCODERS_H
@@ -29,18 +29,17 @@ namespace sensors
 const std::string REMOTE_ENCODERS_TYPE("remote");
 
 /**
-* RemoteEncoders is a class for receiving encoder values from some remote source via the communication system
-* rather than directly via a driver. The getTicks method simply blocks until new ticks are received.
-*/
+ * RemoteEncoders is a class for receiving encoder values from some remote source via the communication system
+ * rather than directly via a driver. The getTicks method simply blocks until new ticks are received.
+ */
 class RemoteEncoders : public WheelEncoders
 {
 public:
-
     /**
-    * Constructor for RemoteEncoders.
-    *
-    * \param    params          Parameters for the encoder odometry
-    */
+     * Constructor for RemoteEncoders.
+     *
+     * \param    params          Parameters for the encoder odometry
+     */
     RemoteEncoders(const wheel_encoders_params_t& params);
 
     // OdometryEstimator interface -- use the inherited versions of other methods
@@ -50,17 +49,16 @@ public:
 
     // WheelEncoders interface
     virtual encoder_data_t getEncoders(void);
-    virtual void           resetEncoders(void);
+    virtual void resetEncoders(void);
 
 private:
-
     encoder_data_t encoders;
 
     utils::ConditionVariable dataTrigger;
-    utils::Mutex             dataLock;
+    utils::Mutex dataLock;
 };
 
-}
-}
+}   // namespace sensors
+}   // namespace vulcan
 
-#endif // SENSORS_REMOTE_ENCODERS_H
+#endif   // SENSORS_REMOTE_ENCODERS_H

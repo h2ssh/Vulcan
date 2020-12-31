@@ -7,14 +7,13 @@
 */
 
 
-#include<core/pose.h"
-#include<core/laser_scan.h"
+#include <core/laser_scan.h"
+#include <core/pose.h"
 
-namespace vulcan{
-	namespace glass{
-		void update_glass(const pose_t& currentPose, const polar_laser_scan_t& sensorData);
-	}
+namespace vulcan
+{
+namespace glass
+{
+void update_glass(const pose_t& currentPose, const polar_laser_scan_t& sensorData);
 }
-
-
-
+}   // namespace vulcan

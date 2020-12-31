@@ -8,30 +8,30 @@
 
 
 /**
-* \file     local_topo_display_widget.cpp
-* \author   Collin Johnson
-*
-* Definition of LocalTopoDisplayWidget.
-*/
+ * \file     local_topo_display_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalTopoDisplayWidget.
+ */
 
 #include "ui/debug/local_topo_display_widget.h"
-#include "ui/components/labeling_csp_player.h"
-#include "ui/components/place_grid_renderer.h"
+#include "hssh/local_metric/pose.h"
+#include "ui/common/color_generator.h"
+#include "ui/common/grid_cell_selector.h"
+#include "ui/components/area_graph_renderer.h"
+#include "ui/components/area_subgraph_renderer.h"
 #include "ui/components/gateways_renderer.h"
 #include "ui/components/isovist_renderer.h"
-#include "ui/components/voronoi_isovist_gradients_renderer.h"
-#include "ui/components/area_graph_renderer.h"
-#include "ui/components/visibility_graph_renderer.h"
-#include "ui/components/area_subgraph_renderer.h"
-#include "ui/components/local_area_renderer.h"
+#include "ui/components/labeling_csp_player.h"
 #include "ui/components/local_area_event_renderer.h"
-#include "ui/common/grid_cell_selector.h"
-#include "ui/common/color_generator.h"
-#include "hssh/local_metric/pose.h"
+#include "ui/components/local_area_renderer.h"
+#include "ui/components/place_grid_renderer.h"
+#include "ui/components/visibility_graph_renderer.h"
+#include "ui/components/voronoi_isovist_gradients_renderer.h"
 #include "utils/auto_mutex.h"
+#include <cassert>
 #include <iterator>
 #include <sstream>
-#include <cassert>
 
 namespace vulcan
 {
@@ -110,14 +110,15 @@ void LocalTopoDisplayWidget::setWidgetParams(const local_topo_display_params_t& 
 {
     this->params = params;
 
-    gridRenderer->setRenderColors(params.frontierColor,
-                                  params.skeletonCellColor,
-                                  params.reducedCellColor);
+    gridRenderer->setRenderColors(params.frontierColor, params.skeletonCellColor, params.reducedCellColor);
 
     gatewaysRenderer->setRenderColors(params.exploredColor, params.frontierColor, params.gatewayEndpointColor);
     isovistRenderer->setRenderColors(params.isovistRayColor, params.isovistFieldColors);
     gradientsRenderer_->setRenderColors(params.isovistRayColor, params.isovistFieldColors);
-    graphRenderer->setRenderColors(params.gatewayColor, params.junctionColor, params.frontierColor, params.deadEndColor);
+    graphRenderer->setRenderColors(params.gatewayColor,
+                                   params.junctionColor,
+                                   params.frontierColor,
+                                   params.deadEndColor);
     hypothesisRenderer->setRenderColors(params.unknownColor,
                                         params.decisionColor,
                                         params.destinationColor,
@@ -182,12 +183,9 @@ void LocalTopoDisplayWidget::showAreaGateways(bool show)
 
 void LocalTopoDisplayWidget::showIsovist(bool show)
 {
-    if(show && !shouldShowIsovist)
-    {
+    if (show && !shouldShowIsovist) {
         pushMouseHandler(isovistSelector_.get());
-    }
-    else if(!show && shouldShowIsovist)
-    {
+    } else if (!show && shouldShowIsovist) {
         removeMouseHandler(isovistSelector_.get());
         shouldSelectIsovists = false;
     }
@@ -207,8 +205,7 @@ void LocalTopoDisplayWidget::selectIsovists(bool select)
 
 void LocalTopoDisplayWidget::setHypothesisValueToDisplay(int toDisplay)
 {
-    if(toDisplay >= 0 && toDisplay < kNumDisplays)
-    {
+    if (toDisplay >= 0 && toDisplay < kNumDisplays) {
         areaHypothesisValue_ = toDisplay;
     }
 }
@@ -216,31 +213,28 @@ void LocalTopoDisplayWidget::setHypothesisValueToDisplay(int toDisplay)
 
 void LocalTopoDisplayWidget::setSkeleton(std::shared_ptr<hssh::VoronoiSkeletonGrid> skeleton)
 {
-    if(!skeleton)
-    {
+    if (!skeleton) {
         return;
     }
 
     utils::AutoMutex autoLock(dataLock);
 
-    grid        = skeleton;
+    grid = skeleton;
     gridIsDirty = true;
 
-    if(gridWidth != grid->getWidthInCells() || gridHeight != grid->getHeightInCells())
-    {
-        gridWidth  = grid->getWidthInCells();
+    if (gridWidth != grid->getWidthInCells() || gridHeight != grid->getHeightInCells()) {
+        gridWidth = grid->getWidthInCells();
         gridHeight = grid->getHeightInCells();
     }
 
-    selectedSources.clear();  // each grid erases the previously selected sources
+    selectedSources.clear();   // each grid erases the previously selected sources
 
     // When the map changes, auto-zoom
     setViewRegion(grid->getWidthInMeters(), grid->getHeightInMeters());
-    if(!doFollowRobot)
-    {
+    if (!doFollowRobot) {
         setCameraFocalPoint(grid->getGlobalCenter());
     }
-//     setGridDimensions(grid->getWidthInMeters(), grid->getHeightInMeters());
+    //     setGridDimensions(grid->getWidthInMeters(), grid->getHeightInMeters());
 }
 
 
@@ -294,21 +288,23 @@ void LocalTopoDisplayWidget::setEvent(std::shared_ptr<hssh::LocalAreaEvent> even
 }
 
 
-void LocalTopoDisplayWidget::setIsovistField(std::shared_ptr<hssh::VoronoiIsovistField> field, utils::Isovist::Scalar scalar)
+void LocalTopoDisplayWidget::setIsovistField(std::shared_ptr<hssh::VoronoiIsovistField> field,
+                                             utils::Isovist::Scalar scalar)
 {
     utils::AutoMutex autoLock(dataLock);
-    field_  = field;
+    field_ = field;
     scalar_ = scalar;
     selectedIsovists_.clear();
 }
 
 
-void LocalTopoDisplayWidget::setIsovistGradients(std::shared_ptr<hssh::VoronoiIsovistGradients> gradients, std::shared_ptr<hssh::VoronoiIsovistMaxima> maxima)
+void LocalTopoDisplayWidget::setIsovistGradients(std::shared_ptr<hssh::VoronoiIsovistGradients> gradients,
+                                                 std::shared_ptr<hssh::VoronoiIsovistMaxima> maxima)
 {
     utils::AutoMutex autoLock(dataLock);
 
-    gradients_         = gradients;
-    maxima_            = maxima;
+    gradients_ = gradients;
+    maxima_ = maxima;
     gradientsAreDirty_ = true;
 }
 
@@ -341,13 +337,11 @@ void LocalTopoDisplayWidget::setVisibilityGraphFeature(utils::VisibilityGraphFea
 
     assert(featureType != utils::VisibilityGraphFeatureType::num_features);
 
-    if(visGraphFeatureType_ != featureType)
-    {
+    if (visGraphFeatureType_ != featureType) {
         visGraphFeatureType_ = featureType;
 
         // If the feature has changed, then recompute the visiblity graph
-        if(visGraphFeatureType_ != utils::VisibilityGraphFeatureType::none)
-        {
+        if (visGraphFeatureType_ != utils::VisibilityGraphFeatureType::none) {
             visibilityGraphIsDirty_ = true;
         }
     }
@@ -373,8 +367,7 @@ void LocalTopoDisplayWidget::handleData(const hssh::local_area_debug_info_t& inf
 GLEventStatus LocalTopoDisplayWidget::handleRightMouseUp(const GLMouseEvent& event)
 {
     // Nothing to do if there isn't a grid yet.
-    if(!grid)
-    {
+    if (!grid) {
         return GridBasedDisplayWidget::handleRightMouseUp(event);
     }
 
@@ -383,29 +376,21 @@ GLEventStatus LocalTopoDisplayWidget::handleRightMouseUp(const GLMouseEvent& eve
     const auto& skeletonSources = grid->getSkeletonSources();
     auto skeletonCellIt = skeletonSources.find(cell);
 
-    if(skeletonCellIt != skeletonSources.end())
-    {
+    if (skeletonCellIt != skeletonSources.end()) {
         bool shouldReset = selectedSources.find(cell) != selectedSources.end();
 
-        if(shouldReset)
-        {
+        if (shouldReset) {
             gridRenderer->resetCellColor(cell, grid->getClassification(cell.x, cell.y));
             selectedSources.erase(cell);
-        }
-        else
-        {
+        } else {
             gridRenderer->setCellColor(cell, params.sourceColor);
             selectedSources.insert(cell);
         }
 
-        for(auto& source : skeletonCellIt->second)
-        {
-            if(shouldReset)
-            {
+        for (auto& source : skeletonCellIt->second) {
+            if (shouldReset) {
                 gridRenderer->resetCellColor(source, grid->getClassification(source));
-            }
-            else
-            {
+            } else {
                 gridRenderer->setCellColor(source, params.sourceColor);
             }
         }
@@ -420,13 +405,11 @@ void LocalTopoDisplayWidget::renderWidget(void)
     utils::AutoMutex lock(dataLock);
 
     // Nothing to do if there isn't a grid yet -- that forms the backbone of everything.
-    if(!grid)
-    {
+    if (!grid) {
         return;
     }
 
-    if(doFollowRobot)
-    {
+    if (doFollowRobot) {
         setCameraFocalPoint(robotPose.toPoint());
     }
 
@@ -440,8 +423,7 @@ void LocalTopoDisplayWidget::renderWidget(void)
 
 Point<int> LocalTopoDisplayWidget::convertWorldToGrid(const Point<float>& world) const
 {
-    if(grid)
-    {
+    if (grid) {
         return utils::global_point_to_grid_cell(world, *grid);
     }
     return Point<int>(0, 0);
@@ -452,13 +434,11 @@ std::string LocalTopoDisplayWidget::printCellInformation(Point<int> cell)
 {
     std::string information = printVoronoiDistance(cell);
 
-    if(selectedHypothesis_)
-    {
+    if (selectedHypothesis_) {
         information += printHypothesisFeatures();
     }
 
-    if(field_)
-    {
+    if (field_) {
         information += printIsovistInformation(cell);
     }
 
@@ -468,14 +448,12 @@ std::string LocalTopoDisplayWidget::printCellInformation(Point<int> cell)
 
 void LocalTopoDisplayWidget::renderGrid(void)
 {
-    if(gridIsDirty)
-    {
+    if (gridIsDirty) {
         gridRenderer->setGrid(*grid);
         gridIsDirty = false;
     }
 
-    if(showVoronoiGrid_)
-    {
+    if (showVoronoiGrid_) {
         gridRenderer->renderGrid();
     }
 }
@@ -483,75 +461,59 @@ void LocalTopoDisplayWidget::renderGrid(void)
 
 void LocalTopoDisplayWidget::renderIsovists(void)
 {
-    if(gradientsAreDirty_ && gradients_ && maxima_ && grid)
-    {
+    if (gradientsAreDirty_ && gradients_ && maxima_ && grid) {
         gradientsRenderer_->setGradients(*gradients_, *maxima_, *grid);
         gradientsAreDirty_ = false;
     }
 
-    if(probabilitiesAreDirty_ && grid)
-    {
+    if (probabilitiesAreDirty_ && grid) {
         gradientsRenderer_->setProbabilities(probabilities_, *grid);
         probabilitiesAreDirty_ = false;
     }
 
-    if(shouldShowIsovist && field_ && field_->contains(isovistSelector_->hoverCell()))
-    {
+    if (shouldShowIsovist && field_ && field_->contains(isovistSelector_->hoverCell())) {
         isovistRenderer->renderIsovist(field_->at(isovistSelector_->hoverCell()));
 
-        for(std::size_t n = 0; n < selectedIsovists_.size(); ++n)
-        {
+        for (std::size_t n = 0; n < selectedIsovists_.size(); ++n) {
             isovistRenderer->renderIsovist(field_->at(selectedIsovists_[n]), isovistColors_[n]);
         }
     }
 
-    if(shouldSelectIsovists && field_)
-    {
-        if(!isovistSelector_->isActivelySelecting())
-        {
-            for(auto selected : isovistSelector_->selectedCells())
-            {
+    if (shouldSelectIsovists && field_) {
+        if (!isovistSelector_->isActivelySelecting()) {
+            for (auto selected : isovistSelector_->selectedCells()) {
                 auto indexIt = std::find(selectedIsovists_.begin(), selectedIsovists_.end(), selected);
-                if(indexIt != selectedIsovists_.end())
-                {
+                if (indexIt != selectedIsovists_.end()) {
                     selectedIsovists_.erase(indexIt);
-                }
-                else if(field_->contains(selected))
-                {
+                } else if (field_->contains(selected)) {
                     selectedIsovists_.push_back(selected);
                 }
             }
             isovistSelector_->clearSelectedCells();
 
-            if(isovistColors_.size() != selectedIsovists_.size())
-            {
+            if (isovistColors_.size() != selectedIsovists_.size()) {
                 isovistColors_ = generate_colors(selectedIsovists_.size(), 0.75);
             }
         }
     }
 
-    if(shouldShowIsovistField && field_)
-    {
+    if (shouldShowIsovistField && field_) {
         isovistRenderer->renderIsovistField(field_->begin(), field_->end(), scalar_, grid->metersPerCell());
     }
 
-    if(shouldShowIsovistDerivField_ && field_)
-    {
+    if (shouldShowIsovistDerivField_ && field_) {
         isovistRenderer->renderIsovistDerivField(field_->begin(), field_->end(), scalar_, grid->metersPerCell());
     }
 
-    if(shouldShowGradients_)
-    {
+    if (shouldShowGradients_) {
         gradientsRenderer_->renderCellGradients();
     }
 
-    if(shouldShowGradientMaxima_)
-    {
+    if (shouldShowGradientMaxima_) {
         gradientsRenderer_->renderLocalMaxima();
     }
 
-    if(shouldShowProbabilities_)
-    {
+    if (shouldShowProbabilities_) {
         gradientsRenderer_->renderProbabilities();
     }
 }
@@ -559,8 +521,7 @@ void LocalTopoDisplayWidget::renderIsovists(void)
 
 void LocalTopoDisplayWidget::renderGateways(void)
 {
-    if(shouldShowGateways)
-    {
+    if (shouldShowGateways) {
         gatewaysRenderer->renderGateways(gateways, shouldShowNormals);
     }
 }
@@ -568,19 +529,15 @@ void LocalTopoDisplayWidget::renderGateways(void)
 
 void LocalTopoDisplayWidget::renderAreas(void)
 {
-    if(shouldShowAreaGraph)
-    {
+    if (shouldShowAreaGraph) {
         graphRenderer->renderGraph(areaInfo.graph);
     }
 
-    if(shouldShowVisibilityGraph_ && grid)
-    {
-        if(visibilityGraphIsDirty_)
-        {
+    if (shouldShowVisibilityGraph_ && grid) {
+        if (visibilityGraphIsDirty_) {
             visGraph_ = areaInfo.graph.toVisibilityGraph(1.0, *grid);
 
-            if(visGraphFeatureType_ != utils::VisibilityGraphFeatureType::none)
-            {
+            if (visGraphFeatureType_ != utils::VisibilityGraphFeatureType::none) {
                 visGraphFeature_ = visGraph_.calculateFeature(visGraphFeatureType_);
             }
 
@@ -588,13 +545,11 @@ void LocalTopoDisplayWidget::renderAreas(void)
         }
 
         // If not showing a visibility graph feature, then just show the graph regularly
-        if(visGraphFeatureType_ == utils::VisibilityGraphFeatureType::none)
-        {
+        if (visGraphFeatureType_ == utils::VisibilityGraphFeatureType::none) {
             visibilityGraphRenderer_->renderVisibilityGraph(visGraph_, grid->getBottomLeft(), grid->metersPerCell());
         }
         // Otherwise provide the feature being used as well
-        else
-        {
+        else {
             visibilityGraphRenderer_->renderVisibilityGraph(visGraph_,
                                                             visGraphFeature_,
                                                             grid->getBottomLeft(),
@@ -603,52 +558,42 @@ void LocalTopoDisplayWidget::renderAreas(void)
     }
 
     // If the feature index is valid, then calculate a new normalizer
-    double maxValue = 1.0;  // if nothing has a value greater than 1, then there's no need to normalize!
-    for(auto& hyp : visibleHypotheses_)
-    {
+    double maxValue = 1.0;   // if nothing has a value greater than 1, then there's no need to normalize!
+    for (auto& hyp : visibleHypotheses_) {
         maxValue = std::max(maxValue, hyp.featureValue(hypFeatureIndex_));
     }
     hypFeatureNormalizer_ = 1.0 / maxValue;
 
 
-    for(auto& hyp : visibleHypotheses_)
-    {
+    for (auto& hyp : visibleHypotheses_) {
         renderHypothesis(hyp);
     }
 
-    if(selectedHypothesis_)
-    {
+    if (selectedHypothesis_) {
         renderHypothesis(*selectedHypothesis_);
     }
 
     areaRenderer_->setMetersPerCell(grid->metersPerCell());
 
-    switch(areasToShow)
-    {
+    switch (areasToShow) {
     case kShowLocalTopoMap:
-        if(topoMap_)
-        {
-            if(showTopoMapAsHeatMap_)
-            {
+        if (topoMap_) {
+            if (showTopoMapAsHeatMap_) {
                 areaRenderer_->renderLocalTopoMapAsHeatMap(*topoMap_, heatMap_);
-            }
-            else
-            {
+            } else {
                 areaRenderer_->renderLocalTopoMap(*topoMap_);
             }
         }
         break;
 
     case kShowLocalTopoGraph:
-        if(topoMap_)
-        {
+        if (topoMap_) {
             areaRenderer_->renderLocalTopoMapAsGraph(*topoMap_);
         }
         break;
 
     case kShowHSSHGraph:
-        if(topoMap_)
-        {
+        if (topoMap_) {
             areaRenderer_->renderLocalTopoMapAsHSSHGraph(*topoMap_);
         }
         break;
@@ -658,13 +603,11 @@ void LocalTopoDisplayWidget::renderAreas(void)
         break;
     }
 
-    if(cspPlayer_)
-    {
+    if (cspPlayer_) {
         cspPlayer_->update();
     }
 
-    if(shouldShowEvents_ && event_)
-    {
+    if (shouldShowEvents_ && event_) {
         eventRenderer_->renderEvent(*event_);
     }
 }
@@ -672,8 +615,7 @@ void LocalTopoDisplayWidget::renderAreas(void)
 
 void LocalTopoDisplayWidget::renderPose(void)
 {
-    if(showVoronoiGrid_)
-    {
+    if (showVoronoiGrid_) {
         glPointSize(10.0f);
         glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
         glBegin(GL_POINTS);
@@ -685,8 +627,7 @@ void LocalTopoDisplayWidget::renderPose(void)
 
 void LocalTopoDisplayWidget::renderProposals(const std::vector<hssh::AreaProposal>& proposals)
 {
-    for(auto& proposal : proposals)
-    {
+    for (auto& proposal : proposals) {
         areaRenderer_->renderAreaProposal(proposal, *grid);
     }
 }
@@ -694,8 +635,7 @@ void LocalTopoDisplayWidget::renderProposals(const std::vector<hssh::AreaProposa
 
 void LocalTopoDisplayWidget::renderHypothesis(const hssh::DebugHypothesis& hypothesis)
 {
-    switch(areaHypothesisValue_)
-    {
+    switch (areaHypothesisValue_) {
     case kDisplayDistribution:
         hypothesisRenderer->renderHypothesisDistribution(hypothesis, grid->metersPerCell());
         break;
@@ -718,8 +658,7 @@ std::string LocalTopoDisplayWidget::printVoronoiDistance(hssh::cell_t cell) cons
 {
     std::ostringstream dist;
 
-    if(grid)
-    {
+    if (grid) {
         dist << "Dist: " << grid->getMetricDistance(cell.x, cell.y) << ' ';
     }
 
@@ -731,8 +670,7 @@ std::string LocalTopoDisplayWidget::printHypothesisFeatures(void) const
 {
     std::ostringstream hypFeatures;
 
-    if(selectedHypothesis_)
-    {
+    if (selectedHypothesis_) {
         hypFeatures << "Hypothesis: Features: ";
         std::copy(selectedHypothesis_->featureBegin(),
                   selectedHypothesis_->featureEnd(),
@@ -747,13 +685,11 @@ std::string LocalTopoDisplayWidget::printIsovistInformation(hssh::cell_t cell) c
 {
     std::ostringstream isovistInfo;
 
-    if(field_ && field_->contains(cell))
-    {
+    if (field_ && field_->contains(cell)) {
         const auto& isovist = field_->at(cell);
-        isovistInfo << "Isovist: Value: " << isovist.scalar(scalar_) << " Deriv: "  << isovist.scalarDeriv(scalar_);
+        isovistInfo << "Isovist: Value: " << isovist.scalar(scalar_) << " Deriv: " << isovist.scalarDeriv(scalar_);
 
-        if(gradients_)
-        {
+        if (gradients_) {
             isovistInfo << " Gradient: " << gradients_->gradientAt(cell).value;
         }
     }
@@ -761,5 +697,5 @@ std::string LocalTopoDisplayWidget::printIsovistInformation(hssh::cell_t cell) c
     return isovistInfo.str();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

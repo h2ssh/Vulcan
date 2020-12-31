@@ -8,11 +8,11 @@
 
 
 /**
-* \file     pd_robot_plant.cpp
-* \author   Collin Johnson and Jong Jin Park
-*
-* Definition of PDRobotPlant.
-*/
+ * \file     pd_robot_plant.cpp
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Definition of PDRobotPlant.
+ */
 
 #include "robot/model/pd_robot_plant.h"
 #include "utils/timestamp.h"
@@ -29,8 +29,7 @@ inline float saturate_value(float value, float saturation)
 }
 
 
-PDRobotPlant::PDRobotPlant(const pd_robot_plant_params_t& params)
-: params_(params)
+PDRobotPlant::PDRobotPlant(const pd_robot_plant_params_t& params) : params_(params)
 {
 }
 
@@ -40,35 +39,34 @@ motion_state_t PDRobotPlant::nextState(const motion_state_t& state, const motion
     motion_state_t updatedState;
 
     // error between commanded and current speed
-    float linearError  = command.velocityCommand.linear  - state.velocity.linear;
+    float linearError = command.velocityCommand.linear - state.velocity.linear;
     float angularError = command.velocityCommand.angular - state.velocity.angular;
-    
+
     // compute and update acceleration
-    float linearAcceleration  = linearError *params_.pGain + state.acceleration.linear *params_.dGain;
-    float angularAcceleration = angularError*params_.pGain + state.acceleration.angular*params_.dGain;
-    
-    if(params_.useAccelerationSaturation)
-    {
-        linearAcceleration  = saturate_value(linearAcceleration,  params_.linearAccelSaturation);
+    float linearAcceleration = linearError * params_.pGain + state.acceleration.linear * params_.dGain;
+    float angularAcceleration = angularError * params_.pGain + state.acceleration.angular * params_.dGain;
+
+    if (params_.useAccelerationSaturation) {
+        linearAcceleration = saturate_value(linearAcceleration, params_.linearAccelSaturation);
         angularAcceleration = saturate_value(angularAcceleration, params_.angularAccelSaturation);
     }
-    
-    updatedState.acceleration.linear  = linearAcceleration;
+
+    updatedState.acceleration.linear = linearAcceleration;
     updatedState.acceleration.angular = angularAcceleration;
 
     // update pose based on average velocities
-    float deltaLinearHalf  = 0.5 * timestep * linearAcceleration;
+    float deltaLinearHalf = 0.5 * timestep * linearAcceleration;
     float deltaAngularHalf = 0.5 * timestep * angularAcceleration;
 
-    float meanLinear  = state.velocity.linear  + deltaLinearHalf;
+    float meanLinear = state.velocity.linear + deltaLinearHalf;
     float meanAngular = state.velocity.angular + deltaAngularHalf;
-    
-    updatedState.pose = turnDriveTurnIntegration(state.pose, velocity_t(meanLinear, meanAngular), timestep); 
-    
+
+    updatedState.pose = turnDriveTurnIntegration(state.pose, velocity_t(meanLinear, meanAngular), timestep);
+
     // update velocities
-    updatedState.velocity.linear  = meanLinear  + deltaLinearHalf;
+    updatedState.velocity.linear = meanLinear + deltaLinearHalf;
     updatedState.velocity.angular = meanAngular + deltaAngularHalf;
-    
+
     // update timestamp
     updatedState.timestamp = state.timestamp + utils::sec_to_usec(timestep);
 
@@ -76,5 +74,5 @@ motion_state_t PDRobotPlant::nextState(const motion_state_t& state, const motion
 }
 
 
-} // namespace robot
-} // namespace vulcan
+}   // namespace robot
+}   // namespace vulcan

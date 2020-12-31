@@ -8,37 +8,39 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of the params for the Calibration UI.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of the params for the Calibration UI.
+ */
 
 #ifndef UI_CALIBRATION_PARAMS_H
 #define UI_CALIBRATION_PARAMS_H
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace ui
 {
 
 struct calibration_ui_params_t
 {
-
 };
 
 /**
-* load_calibration_ui_params loads the parameters for the Calibration UI from
-* the provided ConfigFile.
-*
-* \param    config          ConfigFile with the parameters
-* \return   Parameters pulled from the file.
-*/
+ * load_calibration_ui_params loads the parameters for the Calibration UI from
+ * the provided ConfigFile.
+ *
+ * \param    config          ConfigFile with the parameters
+ * \return   Parameters pulled from the file.
+ */
 calibration_ui_params_t load_calibration_ui_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_CALIBRATION_PARAMS_H
+#endif   // UI_CALIBRATION_PARAMS_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     goal_name_dialog.h
-* \author   Collin Johnson
-*
-* Declaration of GoalNameDialog.
-*/
+ * \file     goal_name_dialog.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GoalNameDialog.
+ */
 
 #ifndef UI_NAVIGATION_GOAL_NAME_DIALOG_H
 #define UI_NAVIGATION_GOAL_NAME_DIALOG_H
@@ -26,27 +26,21 @@ namespace ui
 {
 
 /**
-* GoalNameDialog pops up a simple dialog with a text box so the user can enter the name of a goal.
-*
-* The dialog must be shown as a modal dialog box.
-*/
+ * GoalNameDialog pops up a simple dialog with a text box so the user can enter the name of a goal.
+ *
+ * The dialog must be shown as a modal dialog box.
+ */
 class GoalNameDialog : public GoalNameDialogBase
 {
 public:
-
-    GoalNameDialog(wxWindow* parent)
-    : GoalNameDialogBase(parent)
-    {
-        nameOkButton->Disable();
-    }
+    GoalNameDialog(wxWindow* parent) : GoalNameDialogBase(parent) { nameOkButton->Disable(); }
 
     /**
-    * goalName retrieves the name provided by the user.
-    */
+     * goalName retrieves the name provided by the user.
+     */
     std::string goalName(void) const { return goalName_; }
 
 private:
-
     std::string goalName_;
 
     // GoalNameDialogBase interface
@@ -64,8 +58,7 @@ private:
         std::cout << "Enter pressed. Name:" << goalName_ << '\n';
 
         // Once text has been entered, it is okay to close after enter is pressed
-        if(!goalName_.empty())
-        {
+        if (!goalName_.empty()) {
             EndModal(wxID_OK);
         }
     }
@@ -87,7 +80,7 @@ private:
     }
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_NAVIGATION_GOAL_NAME_DIALOG_H
+#endif   // UI_NAVIGATION_GOAL_NAME_DIALOG_H

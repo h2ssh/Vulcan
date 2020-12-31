@@ -8,11 +8,11 @@
 
 
 /**
-* \file     ballistic_estimator.h
-* \author   Collin Johnson
-* 
-* Declaration of BallisticGoalEstimator.
-*/
+ * \file     ballistic_estimator.h
+ * \author   Collin Johnson
+ *
+ * Declaration of BallisticGoalEstimator.
+ */
 
 #ifndef TRACKER_GOALS_BALLISTIC_ESTIMATOR_H
 #define TRACKER_GOALS_BALLISTIC_ESTIMATOR_H
@@ -23,16 +23,14 @@ namespace vulcan
 {
 namespace tracker
 {
-    
+
 /**
-* BallisticGoalEstimator
-*/
+ * BallisticGoalEstimator
+ */
 class BallisticGoalEstimator : public GoalEstimator
 {
 public:
-    
 private:
-    
     /////   GoalEstimator interface   /////
     ObjectGoalDistribution estimateFixedEndpointGoal(const FixedEndpointMotion& motion) override;
     ObjectGoalDistribution estimateStationaryGoal(const StationaryMotion& motion) override;
@@ -40,7 +38,7 @@ private:
     ObjectGoalDistribution estimateStridingGoal(const StridingMotion& motion) override;
 };
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_GOALS_BALLISTIC_ESTIMATOR_H
+#endif   // TRACKER_GOALS_BALLISTIC_ESTIMATOR_H

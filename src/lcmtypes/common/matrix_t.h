@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_MATRIX_T_H
 #define LCMTYPES_MATRIX_T_H
 
-#include "lcmtypes/vulcan_lcm_matrix_t.h"
 #include "core/matrix.h"
+#include "lcmtypes/vulcan_lcm_matrix_t.h"
 
 namespace vulcan
 {
@@ -24,7 +24,7 @@ void free_lcm_matrix(vulcan_lcm_matrix_t& matrix);
 void vulcan_matrix_to_lcm_matrix(const Matrix& vulcanMatrix, vulcan_lcm_matrix_t& lcmMatrix);
 void lcm_matrix_to_vulcan_matrix(const vulcan_lcm_matrix_t& lcmMatrix, Matrix& vulcanMatrix);
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_MATRIX_T_H
+#endif   // LCMTYPES_MATRIX_T_H

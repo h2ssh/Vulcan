@@ -8,11 +8,11 @@
 
 
 /**
-* \file     small_scale_space_boundary.cpp
-* \author   Collin Johnson
-*
-* Definition of create_small_scale_space_boundary factory.
-*/
+ * \file     small_scale_space_boundary.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_small_scale_space_boundary factory.
+ */
 
 #include "hssh/local_topological/small_scale_space_boundary.h"
 #include "hssh/local_topological/boundary/fixed.h"
@@ -25,12 +25,9 @@ namespace hssh
 
 std::unique_ptr<SmallScaleSpaceBoundary> create_small_scale_space_boundary(const std::string& type)
 {
-    if(type == kFixedBoundaryType)
-    {
+    if (type == kFixedBoundaryType) {
         return std::unique_ptr<SmallScaleSpaceBoundary>(new FixedBoundary);
-    }
-    else if(type == kShrinkAndStretchBoundaryType)
-    {
+    } else if (type == kShrinkAndStretchBoundaryType) {
         return std::unique_ptr<SmallScaleSpaceBoundary>(new ShrinkAndStretchBoundary);
     }
 
@@ -39,5 +36,5 @@ std::unique_ptr<SmallScaleSpaceBoundary> create_small_scale_space_boundary(const
     return std::unique_ptr<SmallScaleSpaceBoundary>();
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

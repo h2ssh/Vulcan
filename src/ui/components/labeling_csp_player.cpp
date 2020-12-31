@@ -8,18 +8,18 @@
 
 
 /**
-* \file     labeling_csp_playback.cpp
-* \author   Collin Johnson
-*
-* Definition of LabelingCSPPlayer.
-*/
+ * \file     labeling_csp_playback.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LabelingCSPPlayer.
+ */
 
 #include "ui/components/labeling_csp_player.h"
-#include "ui/components/area_extent_renderer.h"
-#include "ui/common/hssh_colors.h"
-#include "ui/common/gl_shapes.h"
-#include "ui/common/ui_color.h"
 #include "hssh/local_topological/area_detection/labeling/csp_debug.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/hssh_colors.h"
+#include "ui/common/ui_color.h"
+#include "ui/components/area_extent_renderer.h"
 #include <GL/gl.h>
 #include <cassert>
 
@@ -51,8 +51,7 @@ LabelingCSPPlayer::~LabelingCSPPlayer(void)
 void LabelingCSPPlayer::update(void)
 {
     // Nothing is displayed while stopped and the state doesn't change.
-    if(state_ == stopped)
-    {
+    if (state_ == stopped) {
         return;
     }
 
@@ -61,17 +60,14 @@ void LabelingCSPPlayer::update(void)
     ++numFramesShown_;
 
     // If playing, need to determine if a frame transition needs to occur. Otherwise,
-    if(state_ == playing)
-    {
-        if(numFramesShown_ > framesPerIteration_)
-        {
+    if (state_ == playing) {
+        if (numFramesShown_ > framesPerIteration_) {
             stepIteration(1);
             numFramesShown_ = 0;
         }
     }
 
-    if(iteration_ >= 0 && iteration_ < static_cast<int>(debugInfo_->iterations.size()))
-    {
+    if (iteration_ >= 0 && iteration_ < static_cast<int>(debugInfo_->iterations.size())) {
         renderIteration(debugInfo_->iterations[iteration_]);
     }
 }
@@ -83,8 +79,7 @@ void LabelingCSPPlayer::setCSPInfo(const hssh::CSPDebugInfo& info, double meters
     iteration_ = 0;
     numFramesShown_ = 0;
 
-    if(state_ != stopped)
-    {
+    if (state_ != stopped) {
         state_ = paused;
     }
 
@@ -155,8 +150,7 @@ void LabelingCSPPlayer::jumpToEnd(void)
 
 void LabelingCSPPlayer::jumpToIteration(int iteration)
 {
-    if((iteration < 0) || (iteration >= numIterations()))
-    {
+    if ((iteration < 0) || (iteration >= numIterations())) {
         return;
     }
 
@@ -169,15 +163,13 @@ void LabelingCSPPlayer::stepIteration(int direction)
     numFramesShown_ = 0;
     iteration_ += direction;
 
-    if(iteration_ >= numIterations())
-    {
+    if (iteration_ >= numIterations()) {
         iteration_ = numIterations() - 1;
     }
 
     // Don't use else-if because adjusting the max involves a subtraction and an empty set of info will cause
     // iteration to go below 0.
-    if(iteration_ < 0)
-    {
+    if (iteration_ < 0) {
         iteration_ = 0;
     }
 }
@@ -191,8 +183,7 @@ void LabelingCSPPlayer::renderIteration(const hssh::CSPIteration& iteration)
     GLColor defaultColor(0.0, 0.0, 0.0, 1.0);
 
     // Draw all the extents with the appropriate label
-    for(std::size_t n = 0; n < iteration.labels.size(); ++n)
-    {
+    for (std::size_t n = 0; n < iteration.labels.size(); ++n) {
         GLColor color = color_from_hypothesis_type(iteration.labels[n]);
         color.alpha((iteration.isFailing[n] || colorAllAreas) ? 0.9 : 0.2);
         extentRenderer_->renderExtentCells(debugInfo_->extents[n], metersPerCell_, color);
@@ -202,10 +193,10 @@ void LabelingCSPPlayer::renderIteration(const hssh::CSPIteration& iteration)
     // Draw the updated area first, so the thick boundary is drawn on top of it.
     renderArea(iteration.updatedArea, assigned);
 
-//     for(auto& area : iteration.failedAreas)
-//     {
-//         renderArea(area, failed);
-//     }
+    //     for(auto& area : iteration.failedAreas)
+    //     {
+    //         renderArea(area, failed);
+    //     }
 
     // Draw the endpoints for the areas with assigned path segments
     renderEndpoints(iteration);
@@ -222,17 +213,16 @@ void LabelingCSPPlayer::renderArea(const hssh::CSPArea& area, AreaStatus status)
     color_from_hypothesis_type(area.oldType).set();
     gl_draw_line_rectangle(area.boundary, kBoundaryThickness);
 
-    if(status == assigned)
-    {
+    if (status == assigned) {
         // Halfway point between the left and right sides
         float splitX = area.boundary.bottomLeft.x + area.boundary.width() / 2;
 
         color_from_hypothesis_type(area.oldType).set(0.6);
-        gl_draw_filled_rectangle(math::Rectangle<float>(area.boundary.bottomLeft,
-                                                        Point<float>(splitX, area.boundary.topRight.y)));
+        gl_draw_filled_rectangle(
+          math::Rectangle<float>(area.boundary.bottomLeft, Point<float>(splitX, area.boundary.topRight.y)));
         color_from_hypothesis_type(area.newType).set(0.6);
-        gl_draw_filled_rectangle(math::Rectangle<float>(Point<float>(splitX, area.boundary.bottomLeft.y),
-                                                        area.boundary.topRight));
+        gl_draw_filled_rectangle(
+          math::Rectangle<float>(Point<float>(splitX, area.boundary.bottomLeft.y), area.boundary.topRight));
     }
 }
 
@@ -243,8 +233,7 @@ void LabelingCSPPlayer::renderEndpoints(const hssh::CSPIteration& iteration)
     glColor4f(0, 0, 0, 0.75f);
     glBegin(GL_POINTS);
 
-    for(auto& endpoints : iteration.pathEndpoints)
-    {
+    for (auto& endpoints : iteration.pathEndpoints) {
         glVertex2f(endpoints.first.x, endpoints.first.y);
         glVertex2f(endpoints.second.x, endpoints.second.y);
     }
@@ -259,8 +248,7 @@ void LabelingCSPPlayer::renderGateways(const hssh::CSPIteration& iteration)
     glColor4f(0, 0, 0, 0.75f);
     glBegin(GL_LINES);
 
-    for(auto& gwy : iteration.gateways)
-    {
+    for (auto& gwy : iteration.gateways) {
         glVertex2f(gwy.a.x, gwy.a.y);
         glVertex2f(gwy.b.x, gwy.b.y);
     }
@@ -268,5 +256,5 @@ void LabelingCSPPlayer::renderGateways(const hssh::CSPIteration& iteration)
     glEnd();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

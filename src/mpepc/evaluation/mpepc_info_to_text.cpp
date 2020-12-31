@@ -10,8 +10,8 @@
 #include "mpepc/evaluation/mpepc_log.h"
 #include <boost/range/iterator_range.hpp>
 #include <fstream>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <string>
 #include <time.h>
 
@@ -34,18 +34,17 @@ int main(int argc, char** argv)
     const std::string kMPEPCPlannedPosesName("mpepc_planned_poses_");
     const std::string kMotionStateName("motion_state_");
     const std::string kJoystickName("joystick_");
-    
-    if(argc < 2)
-    {
+
+    if (argc < 2) {
         std::cout << "Expected input: mpepc_info_to_text 'log_filename'\n";
         return -1;
     }
-    
-    if((argc > 2) && (std::string(argv[2]) == gDateOpt))
-    {
+
+    if ((argc > 2) && (std::string(argv[2]) == gDateOpt)) {
         gUseDateTime = true;
-        
-        std::cout << "Saving data using wall-clock dates in the format HHMMSS.SSS, where SS.SSS is two characters for seconds and three characters for milliseconds.\n";
+
+        std::cout << "Saving data using wall-clock dates in the format HHMMSS.SSS, where SS.SSS is two characters for "
+                     "seconds and three characters for milliseconds.\n";
     }
 
     std::string logFilename(argv[1]);
@@ -65,26 +64,23 @@ void save_mpepc_debug_info(const mpepc::MPEPCLog& log, const std::string& filena
 {
     std::ofstream out(filename);
 
-    for(auto& mpepcInfo : boost::make_iterator_range(log.beginMPEPCInfo(), log.endMPEPCInfo()))
-    {
-        if(mpepcInfo.iteration != 0)
-        {
+    for (auto& mpepcInfo : boost::make_iterator_range(log.beginMPEPCInfo(), log.endMPEPCInfo())) {
+        if (mpepcInfo.iteration != 0) {
             print_time(mpepcInfo.updateStartTimeUs, out);
-            out << mpepcInfo.clearanceToStaticObs << ' '
-                << mpepcInfo.clearanceToDynObs << ' '
-                << mpepcInfo.iteration << ' ';
+            out << mpepcInfo.clearanceToStaticObs << ' ' << mpepcInfo.clearanceToDynObs << ' ' << mpepcInfo.iteration
+                << ' ';
             print_time(mpepcInfo.planReleaseTimeUs, out);
             out << mpepcInfo.plannedTrajectory.motionTarget.velocityGain;
-            
-    //         out << ' ' << mpepcInfo.haveGoalPose
-    //             << ' ' << mpepcInfo.goalPose.x
-    //             << ' ' << mpepcInfo.goalPose.y
-    //             << ' ' << mpepcInfo.goalPose.theta;
-            
+
+            //         out << ' ' << mpepcInfo.haveGoalPose
+            //             << ' ' << mpepcInfo.goalPose.x
+            //             << ' ' << mpepcInfo.goalPose.y
+            //             << ' ' << mpepcInfo.goalPose.theta;
+
             out << '\n';
         }
     }
-    
+
     out.close();
 }
 
@@ -92,22 +88,17 @@ void save_mpepc_debug_info(const mpepc::MPEPCLog& log, const std::string& filena
 void save_mpepc_planned_poses(const mpepc::MPEPCLog& log, const std::string& filename)
 {
     std::ofstream out(filename);
-    
-    for(auto& mpepcInfo : boost::make_iterator_range(log.beginMPEPCInfo(), log.endMPEPCInfo()))
-    {
-        if(mpepcInfo.iteration != 0)
-        {
+
+    for (auto& mpepcInfo : boost::make_iterator_range(log.beginMPEPCInfo(), log.endMPEPCInfo())) {
+        if (mpepcInfo.iteration != 0) {
             print_time(mpepcInfo.planReleaseTimeUs, out);
-            for(auto& pose : mpepcInfo.plannedTrajectory.poses)
-            {
-                out << ' ' << pose.x
-                    << ' ' << pose.y
-                    << ' ' << pose.theta;
+            for (auto& pose : mpepcInfo.plannedTrajectory.poses) {
+                out << ' ' << pose.x << ' ' << pose.y << ' ' << pose.theta;
             }
             out << '\n';
         }
     }
-    
+
     out.close();
 }
 
@@ -116,34 +107,26 @@ void save_motion_state(const mpepc::MPEPCLog& log, const std::string& filename)
 {
     std::ofstream out(filename);
 
-    for(auto& state : boost::make_iterator_range(log.beginMotionState(), log.endMotionState()))
-    {
+    for (auto& state : boost::make_iterator_range(log.beginMotionState(), log.endMotionState())) {
         print_time(state.pose.timestamp, out);
-        out << state.pose.x << ' '
-            << state.pose.y << ' '
-            << state.pose.theta << ' ';
-            
+        out << state.pose.x << ' ' << state.pose.y << ' ' << state.pose.theta << ' ';
+
         print_time(state.velocity.timestamp, out);
-        out << state.velocity.timestamp << ' '
-            << state.velocity.linear << ' '
-            << state.velocity.angular << ' ';
-        
+        out << state.velocity.timestamp << ' ' << state.velocity.linear << ' ' << state.velocity.angular << ' ';
+
         print_time(state.acceleration.timestamp, out);
-        out << state.acceleration.timestamp << ' '
-            << state.acceleration.linear << ' '
-            << state.acceleration.angular << ' ';
-        
+        out << state.acceleration.timestamp << ' ' << state.acceleration.linear << ' ' << state.acceleration.angular
+            << ' ';
+
         print_time(state.differentialWheels.rightWheel.timestamp, out);
-        out << state.differentialWheels.rightWheel.timestamp << ' '
-            << state.differentialWheels.rightWheel.speed << ' '
+        out << state.differentialWheels.rightWheel.timestamp << ' ' << state.differentialWheels.rightWheel.speed << ' '
             << state.differentialWheels.rightWheel.motorAccel << ' ';
-        
+
         print_time(state.differentialWheels.leftWheel.timestamp, out);
-        out << state.differentialWheels.leftWheel.timestamp << ' '
-            << state.differentialWheels.leftWheel.speed << ' '
+        out << state.differentialWheels.leftWheel.timestamp << ' ' << state.differentialWheels.leftWheel.speed << ' '
             << state.differentialWheels.leftWheel.motorAccel << '\n';
     }
-    
+
     out.close();
 }
 
@@ -152,13 +135,11 @@ void save_joystick(const mpepc::MPEPCLog& log, const std::string& filename)
 {
     std::ofstream out(filename);
 
-    for(auto& joystick : boost::make_iterator_range(log.beginCommandedJoystick(), log.endCommandedJoystick()))
-    {
+    for (auto& joystick : boost::make_iterator_range(log.beginCommandedJoystick(), log.endCommandedJoystick())) {
         print_time(joystick.timestamp, out);
-        out << joystick.forward << ' '
-            << joystick.left << '\n';
+        out << joystick.forward << ' ' << joystick.left << '\n';
     }
-    
+
     out.close();
 }
 
@@ -167,19 +148,12 @@ void save_joystick(const mpepc::MPEPCLog& log, const std::string& filename)
 
 void print_time(int64_t time, std::ostream& out)
 {
-    if(gUseDateTime)
-    {
-        time_t wallTime = time / 1000000; 
+    if (gUseDateTime) {
+        time_t wallTime = time / 1000000;
         auto date = gmtime(&wallTime);
-        out << std::setfill('0') 
-            << std::setw(2) << date->tm_hour 
-            << std::setw(2) << date->tm_min
-            << std::setw(2) << date->tm_sec 
-            << '.'
-            << std::setw(3) << ((time % 1000000) / 1000) << ' ';
-    }
-    else
-    {
+        out << std::setfill('0') << std::setw(2) << date->tm_hour << std::setw(2) << date->tm_min << std::setw(2)
+            << date->tm_sec << '.' << std::setw(3) << ((time % 1000000) / 1000) << ' ';
+    } else {
         out << time << ' ';
     }
 }

@@ -8,16 +8,16 @@
 
 
 /**
-* \file     visit.cpp
-* \author   Collin Johnson
-*
-* Definition of TopologicalVisit.
-*/
+ * \file     visit.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TopologicalVisit.
+ */
 
 #include "hssh/global_topological/utils/visit.h"
 #include "hssh/local_topological/local_topo_map.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 #define DEBUG_VISIT
 
@@ -37,9 +37,8 @@ TopologicalVisit::TopologicalVisit(int depth, const AreaTransitionEvent& entryEv
 
 #ifdef DEBUG_VISIT
     std::cout << "DEBUG: New TopologicalVisit: Entered: " << entryEvent.description() << " at " << entryPose_.pose()
-        << " with depth " << depth << '\n';
-    if(localArea_->type() == AreaType::decision_point)
-    {
+              << " with depth " << depth << '\n';
+    if (localArea_->type() == AreaType::decision_point) {
         auto place = std::static_pointer_cast<LocalPlace>(localArea_);
         std::cout << " Cycle:" << place->star();
     }
@@ -56,12 +55,9 @@ const LocalArea* TopologicalVisit::localArea(void) const
 
 boost::optional<AreaTransitionEvent> TopologicalVisit::exitEvent(void) const
 {
-    if(exitEvent_.exitedArea())
-    {
+    if (exitEvent_.exitedArea()) {
         return exitEvent_;
-    }
-    else
-    {
+    } else {
         return boost::none;
     }
 }
@@ -71,15 +67,13 @@ bool TopologicalVisit::setExitEvent(const AreaTransitionEvent& exitEvent)
 {
     assert(exitEvent.exitedArea());
 
-    if(exitEvent.exitedArea()->type() != localArea_->type())
-    {
-        std::cerr << "ERROR: Invalid event: Expected exit: " << localArea_->type() << " Occurred: "
-            << exitEvent.exitedArea()->type() << '\n';
+    if (exitEvent.exitedArea()->type() != localArea_->type()) {
+        std::cerr << "ERROR: Invalid event: Expected exit: " << localArea_->type()
+                  << " Occurred: " << exitEvent.exitedArea()->type() << '\n';
 
         // Check if the entered area is the same, due to a double-event firing. We can at least update the entered
         // model in this case.
-        if(exitEvent.enteredArea()->type() == localArea_->type())
-        {
+        if (exitEvent.enteredArea()->type() == localArea_->type()) {
             std::cout << "ERROR: Detected an event double-firing. Using the updated entry information.\n";
             areaId_ = exitEvent.enteredArea()->id();
             entryPose_ = exitEvent.pose();
@@ -88,7 +82,7 @@ bool TopologicalVisit::setExitEvent(const AreaTransitionEvent& exitEvent)
         }
 
         return false;
-//         assert(exitEvent.exitedArea()->type() == localArea_->type());
+        //         assert(exitEvent.exitedArea()->type() == localArea_->type());
     }
 
     areaId_ = exitEvent.exitedArea()->id();
@@ -98,8 +92,7 @@ bool TopologicalVisit::setExitEvent(const AreaTransitionEvent& exitEvent)
 
 #ifdef DEBUG_VISIT
     std::cout << "DEBUG: TopologicalVisit: Depth: " << depth_ << " Exited area: " << exitEvent.description();
-    if(localArea_->type() == AreaType::decision_point)
-    {
+    if (localArea_->type() == AreaType::decision_point) {
         auto place = std::static_pointer_cast<LocalPlace>(localArea_);
         std::cout << " Cycle:" << place->star();
     }
@@ -113,9 +106,9 @@ bool TopologicalVisit::setExitEvent(const AreaTransitionEvent& exitEvent)
 void TopologicalVisit::addPathEvent(const TurnAroundEvent& pathEvent)
 {
     assert(pathEvent.path());
-//     assert(pathEvent.path()->id() == areaId_);
+    //     assert(pathEvent.path()->id() == areaId_);
 
-//     pathEvents_.push_back(pathEvent);
+    //     pathEvents_.push_back(pathEvent);
 
     // Ensure the events are in increasing order
     std::sort(pathEvents_.begin(), pathEvents_.end(), [](const TurnAroundEvent& lhs, const TurnAroundEvent& rhs) {
@@ -123,8 +116,8 @@ void TopologicalVisit::addPathEvent(const TurnAroundEvent& pathEvent)
     });
 
 #ifdef DEBUG_VISIT
-    std::cout << "DEBUG: TopologicalVisit: Depth: " << depth_
-        << " Added new path event: " << pathEvent.description() << '\n';
+    std::cout << "DEBUG: TopologicalVisit: Depth: " << depth_ << " Added new path event: " << pathEvent.description()
+              << '\n';
 #endif
 }
 
@@ -134,11 +127,10 @@ void TopologicalVisit::updatePose(const LocalPose& pose)
     // Only change the last pose if the exit event hasn't occurred because the lastPose_ reflects the last
     // pose that was recorded in the area being visited, which is by definition either the most recent in time or
     // else the pose at exit.
-    if(!exitEvent_.exitedArea())
-    {
+    if (!exitEvent_.exitedArea()) {
         lastPose_ = pose;
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     linear.cpp
-* \author   Collin Johnson
-*
-* Definition of learn_linear_classifier.
-*/
+ * \file     linear.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of learn_linear_classifier.
+ */
 
 #include "utils/liblinear.h"
 #include "core/float_comparison.h"
@@ -35,8 +35,7 @@ model* learn_linear_classifier(const Matrix& features, const IntMatrix& labels)
     std::vector<double> linearLabels;
     std::vector<LinearFeatures> linearNodes;
 
-    for(std::size_t n = 0; n < features.n_cols; ++n)
-    {
+    for (std::size_t n = 0; n < features.n_cols; ++n) {
         LinearFeatures nodes;
         features_to_nodes(features.col(n), nodes);
 
@@ -45,18 +44,17 @@ model* learn_linear_classifier(const Matrix& features, const IntMatrix& labels)
     }
 
     std::vector<feature_node*> nodeStarts;
-    for(auto& n : linearNodes)
-    {
+    for (auto& n : linearNodes) {
         nodeStarts.push_back(n.data());
     }
 
-//     auto weights = calculate_label_weights(labels);
+    //     auto weights = calculate_label_weights(labels);
 
     assert(nodeStarts.size() == linearLabels.size());
 
     problem problem;
-    problem.l = linearLabels.size();    // number of examples
-    problem.n = features.n_rows;        // number of features
+    problem.l = linearLabels.size();   // number of examples
+    problem.n = features.n_rows;       // number of features
     problem.y = linearLabels.data();
     problem.x = nodeStarts.data();
     problem.bias = 0.0;
@@ -64,29 +62,29 @@ model* learn_linear_classifier(const Matrix& features, const IntMatrix& labels)
     // Assign the parameters to use for the learning -- using defaults taken from train.c in liblinear
     parameter param;
     param.solver_type = L2R_LR;
-//     param.solver_type = L1R_LR;
+    //     param.solver_type = L1R_LR;
     param.C = 1;
     param.eps = 0.01;
     param.p = 0.1;
-    param.nr_weight = 0;//weights.size();
+    param.nr_weight = 0;   // weights.size();
     param.init_sol = 0;
 
-//     param.weight_label = new int[param.nr_weight];
-//     param.weight = new double[param.nr_weight];
-//
-//     for(int n = 0; n < param.nr_weight; ++n)
-//     {
-//         param.weight_label[n] = weights[n].first;
-//         param.weight[n] = weights[n].second;
-//     }
+    //     param.weight_label = new int[param.nr_weight];
+    //     param.weight = new double[param.nr_weight];
+    //
+    //     for(int n = 0; n < param.nr_weight; ++n)
+    //     {
+    //         param.weight_label[n] = weights[n].first;
+    //         param.weight[n] = weights[n].second;
+    //     }
 
-    double minC = 0.125;  // setting less than 0 has it automatically find the best starting value
-    double maxC = 2048.0;   // using value from train.c
-    int numCrossValidationFolds = 5;    // use value from train.c
+    double minC = 0.125;               // setting less than 0 has it automatically find the best starting value
+    double maxC = 2048.0;              // using value from train.c
+    int numCrossValidationFolds = 5;   // use value from train.c
 
     // Output parameters of the training process
-    double bestC = 0.0;     // best C value to use
-    double bestRate = 0.0;  // best success rate (1.0-error rate)
+    double bestC = 0.0;      // best C value to use
+    double bestRate = 0.0;   // best success rate (1.0-error rate)
 
     std::cout << "INFO:learn_linear_classifier: Searching for best parameter C in range:\n";
 
@@ -102,18 +100,14 @@ model* learn_linear_classifier(const Matrix& features, const IntMatrix& labels)
     // ownership onward to someone else
     const char* kDummyModelFile = "dummy_model.linear";
 
-    if(save_model(kDummyModelFile, trainedModel) != 0)
-    {
+    if (save_model(kDummyModelFile, trainedModel) != 0) {
         perror("ERROR: learn_linear_classifier: Failed to save temporary model");
         free_and_destroy_model(&trainedModel);
         return nullptr;
-    }
-    else
-    {
+    } else {
         auto loadedModel = load_model(kDummyModelFile);
 
-        if(loadedModel == nullptr)
-        {
+        if (loadedModel == nullptr) {
             std::cerr << "ERROR: learn_linear_classifier: Failed to load temporary model.\n";
         }
 
@@ -125,8 +119,7 @@ model* learn_linear_classifier(const Matrix& features, const IntMatrix& labels)
 
 void features_to_nodes(const Vector& features, LinearFeatures& nodes)
 {
-    for(int featIdx = 0; featIdx < static_cast<int>(features.n_rows); ++featIdx)
-    {
+    for (int featIdx = 0; featIdx < static_cast<int>(features.n_rows); ++featIdx) {
         nodes.push_back(feature_node{featIdx + 1, features(featIdx)});
     }
 
@@ -167,5 +160,5 @@ void features_to_nodes(const Vector& features, LinearFeatures& nodes)
 //
 // }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

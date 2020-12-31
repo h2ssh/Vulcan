@@ -8,11 +8,11 @@
 
 
 /**
-* \file     object_state.h
-* \author   Collin Johnson
-*
-* Definition of object_state_t.
-*/
+ * \file     object_state.h
+ * \author   Collin Johnson
+ *
+ * Definition of object_state_t.
+ */
 
 #ifndef TRACKER_OBJECT_STATE_H
 #define TRACKER_OBJECT_STATE_H
@@ -25,8 +25,8 @@ namespace tracker
 {
 
 /**
-* object_motion_state_t defines estimated motion properties of the object: (x, y, xVel, yVel, xAccel, yAccel)
-*/
+ * object_motion_state_t defines estimated motion properties of the object: (x, y, xVel, yVel, xAccel, yAccel)
+ */
 struct object_motion_state_t
 {
     float x = 0.0f;
@@ -49,8 +49,8 @@ struct object_motion_state_t
 };
 
 /**
-* object_state_t contains the state of an object -- (time, motion, boundary).
-*/
+ * object_state_t contains the state of an object -- (time, motion, boundary).
+ */
 struct object_state_t
 {
     int64_t timestamp;
@@ -62,23 +62,16 @@ struct object_state_t
 template <class Archive>
 void serialize(Archive& ar, object_motion_state_t& motion)
 {
-    ar( motion.x,
-        motion.y,
-        motion.xVel,
-        motion.yVel,
-        motion.xAccel,
-        motion.yAccel);
+    ar(motion.x, motion.y, motion.xVel, motion.yVel, motion.xAccel, motion.yAccel);
 }
 
 template <class Archive>
 void serialize(Archive& ar, object_state_t& state)
 {
-    ar( state.timestamp,
-        state.motion,
-        state.boundary);
+    ar(state.timestamp, state.motion, state.boundary);
 }
 
-} // namespace vulcan
-} // namespace tracker
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_OBJECT_STATE_H
+#endif   // TRACKER_OBJECT_STATE_H

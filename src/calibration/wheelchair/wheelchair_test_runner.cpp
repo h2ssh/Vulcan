@@ -8,11 +8,11 @@
 
 
 /**
-* \file     wheelchair_test_runner.cpp
-* \author   Collin Johnson
-*
-* Definition of WheelchairTestRunner.
-*/
+ * \file     wheelchair_test_runner.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of WheelchairTestRunner.
+ */
 
 #include "calibration/wheelchair/wheelchair_test_runner.h"
 
@@ -22,4 +22,4 @@ namespace calibration
 {
 
 }
-}
+}   // namespace vulcan

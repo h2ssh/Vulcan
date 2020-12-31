@@ -16,10 +16,10 @@
 namespace vulcan
 {
 
-using Vector    = arma::Col<double>;
+using Vector = arma::Col<double>;
 using IntVector = arma::Col<int>;
 
-}
+}   // namespace vulcan
 
 namespace cereal
 {
@@ -28,8 +28,7 @@ template <class Archive, typename T>
 void save(Archive& ar, const arma::Col<T>& c)
 {
     uint64_t num = c.n_elem;
-    ar( num,
-        binary_data(const_cast<T*>(c.mem), num*sizeof(T)));
+    ar(num, binary_data(const_cast<T*>(c.mem), num * sizeof(T)));
 }
 
 template <class Archive, typename T>
@@ -38,15 +37,15 @@ void load(Archive& ar, arma::Col<T>& c)
     uint64_t num;
     T* memory;
 
-    ar( num);
+    ar(num);
     memory = new T[num];
-    ar( binary_data(memory, num*sizeof(T)));
+    ar(binary_data(memory, num * sizeof(T)));
 
     c = arma::Col<T>(memory, num);
 
-    delete [] memory;
+    delete[] memory;
 }
 
-}
+}   // namespace cereal
 
-#endif // MATH_VECTOR_H
+#endif   // MATH_VECTOR_H

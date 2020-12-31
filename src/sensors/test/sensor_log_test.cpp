@@ -8,11 +8,11 @@
 
 
 /**
-* \file     sensor_log_test.cpp
-* \author   Collin Johnson
-* 
-* sensor_log_test is a test program that loads the requested log file and outputs how much data was found inside.
-*/
+ * \file     sensor_log_test.cpp
+ * \author   Collin Johnson
+ *
+ * sensor_log_test is a test program that loads the requested log file and outputs how much data was found inside.
+ */
 
 #include "sensors/sensor_log.h"
 #include <gtest/gtest.h>
@@ -26,7 +26,7 @@ std::string logFilename;
 TEST(LogLoadsTest, LogHasData)
 {
     sensors::SensorLog log(logFilename);
-    
+
     EXPECT_GT(log.sizeFrontLaser(), std::size_t(0));
     EXPECT_GT(log.sizeBackLaser(), std::size_t(0));
     EXPECT_GT(log.sizeImu(), std::size_t(0));
@@ -37,39 +37,32 @@ TEST(LogLoadsTest, LogHasData)
 TEST(LogLoadsTest, DataIsSorted)
 {
     sensors::SensorLog log(logFilename);
-    
-    for(std::size_t n = 1; n < log.sizeFrontLaser(); ++n)
-    {
+
+    for (std::size_t n = 1; n < log.sizeFrontLaser(); ++n) {
         EXPECT_GT((log.beginFrontLaser() + n)->timestamp, (log.beginFrontLaser() + n - 1)->timestamp);
     }
-    
-    for(std::size_t n = 1; n < log.sizeBackLaser(); ++n)
-    {
+
+    for (std::size_t n = 1; n < log.sizeBackLaser(); ++n) {
         EXPECT_GT((log.beginBackLaser() + n)->timestamp, (log.beginBackLaser() + n - 1)->timestamp);
     }
-    
-    for(std::size_t n = 1; n < log.sizeOdometry(); ++n)
-    {
+
+    for (std::size_t n = 1; n < log.sizeOdometry(); ++n) {
         EXPECT_GT((log.beginOdometry() + n)->timestamp, (log.beginOdometry() + n - 1)->timestamp);
     }
-    
-    for(std::size_t n = 1; n < log.sizeEncoders(); ++n)
-    {
+
+    for (std::size_t n = 1; n < log.sizeEncoders(); ++n) {
         EXPECT_GT((log.beginEncoders() + n)->timestamp, (log.beginEncoders() + n - 1)->timestamp);
     }
-    
-    for(std::size_t n = 1; n < log.sizeImu(); ++n)
-    {
+
+    for (std::size_t n = 1; n < log.sizeImu(); ++n) {
         EXPECT_GT((log.beginImu() + n)->timestamp, (log.beginImu() + n - 1)->timestamp);
     }
-    
-    for(std::size_t n = 1; n < log.sizeCommandedJoystick(); ++n)
-    {
+
+    for (std::size_t n = 1; n < log.sizeCommandedJoystick(); ++n) {
         EXPECT_GT((log.beginCommandedJoystick() + n)->timestamp, (log.beginCommandedJoystick() + n - 1)->timestamp);
     }
-    
-    for(std::size_t n = 1; n < log.sizeCommandedVelocity(); ++n)
-    {
+
+    for (std::size_t n = 1; n < log.sizeCommandedVelocity(); ++n) {
         EXPECT_GT((log.beginCommandedVelocity() + n)->timestamp, (log.beginCommandedVelocity() + n - 1)->timestamp);
     }
 }
@@ -124,14 +117,14 @@ TEST(LogAddTest, CanAddCommandedVelocity)
 }
 
 
-int main(int argc, char **argv) 
+int main(int argc, char** argv)
 {
     testing::InitGoogleTest(&argc, argv);
-    
+
     // Remaining parameters are for my program. This is where the log file can be specified
     assert(argc > 1);
     logFilename = argv[1];
     std::cout << "Reading log:" << logFilename << '\n';
-    
+
     return RUN_ALL_TESTS();
 }

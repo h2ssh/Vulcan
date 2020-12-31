@@ -8,11 +8,11 @@
 
 
 /**
-* \file     simulator_frame.h
-* \author   Collin Johnson and Zongtai Luo
-*
-* Declaration of SimulatorFrame.
-*/
+ * \file     simulator_frame.h
+ * \author   Collin Johnson and Zongtai Luo
+ *
+ * Declaration of SimulatorFrame.
+ */
 
 #ifndef UI_SIMULATOR_SIMULATOR_FRAME_H
 #define UI_SIMULATOR_SIMULATOR_FRAME_H
@@ -30,18 +30,16 @@ class SimulatorRobotControl;
 class SimulatorFrame : public SimulatorUI
 {
 public:
-
     SimulatorFrame(void);
     virtual ~SimulatorFrame(void);
 
 private:
-
     SimulatorRobotControl* robot_control_;
 
     void setupSimulatorUI(void);
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_SIMULATOR_SIMULATOR_FRAME_H
+#endif   // UI_SIMULATOR_SIMULATOR_FRAME_H

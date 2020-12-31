@@ -8,11 +8,11 @@
 
 
 /**
-* \file     pedestrian_generator.cpp
-* \author   Collin Johnson
-*
-* Definition of PedestrianGenerator.
-*/
+ * \file     pedestrian_generator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of PedestrianGenerator.
+ */
 
 #include "mpepc/simulator/pedestrian_generator.h"
 
@@ -22,6 +22,5 @@ namespace mpepc
 {
 
 
-
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

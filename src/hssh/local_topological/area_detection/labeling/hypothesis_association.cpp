@@ -8,11 +8,11 @@
 
 
 /**
-* \file     hypothesis_association.cpp
-* \author   Collin Johnson
-*
-* Definition of AreaHypothesisAssociation.
-*/
+ * \file     hypothesis_association.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AreaHypothesisAssociation.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/hypothesis_association.h"
 #include "hssh/local_topological/area_detection/labeling/area_graph.h"
@@ -32,9 +32,9 @@ namespace hssh
 {
 
 /*
-* score_t keeps track of the association of a current area with a prior one. Thus, it is the amount of
-* the current area's skeleton contained in the prior area. Similarly for the contained boundaries.
-*/
+ * score_t keeps track of the association of a current area with a prior one. Thus, it is the amount of
+ * the current area's skeleton contained in the prior area. Similarly for the contained boundaries.
+ */
 struct score_t
 {
     AreaHypothesis* prior;
@@ -51,7 +51,7 @@ bool operator>(const score_t& lhs, const score_t& rhs)
     double rhsScore = (2 * rhs.numSharedBoundaries) + rhs.numContainedBoundaries + rhs.amountCellsContained;
 
     return (lhs.numSharedBoundaries > rhs.numSharedBoundaries)
-        || ((lhs.numSharedBoundaries == rhs.numSharedBoundaries) && (lhsScore > rhsScore));
+      || ((lhs.numSharedBoundaries == rhs.numSharedBoundaries) && (lhsScore > rhsScore));
 }
 
 std::ostream& operator<<(std::ostream& out, const score_t& score);
@@ -72,8 +72,7 @@ AreaHypothesisAssociation::AreaHypothesisAssociation(HypothesisGraph& prior,
                                                      const VoronoiSkeletonGrid& skeleton)
 {
     // Ensure there are valid hypotheses before attempting to create an association between them
-    if((prior.numHypotheses() > 0) && (current.numHypotheses() > 0))
-    {
+    if ((prior.numHypotheses() > 0) && (current.numHypotheses() > 0)) {
         findAssociationsWith(prior, current, skeleton);
     }
 }
@@ -112,57 +111,52 @@ void AreaHypothesisAssociation::findAssociationsWith(HypothesisGraph& prior,
 {
     // Each current is matched with at most one prior hypothesis. The associated hypothesis with the one that returns
     // is associated and has the maximum area amongst all possible matches
-    for(AreaHypothesis* currHyp : boost::make_iterator_range(current.beginHypothesis(), current.endHypothesis()))
-    {
+    for (AreaHypothesis* currHyp : boost::make_iterator_range(current.beginHypothesis(), current.endHypothesis())) {
         // Find prior -> current scores
         std::vector<score_t> scores;
         std::transform(prior.beginHypothesis(),
                        prior.endHypothesis(),
                        std::back_inserter(scores),
                        [&currHyp, &skeleton](AreaHypothesis* priorHyp) {
-            return score_t(*priorHyp, *currHyp, skeleton);
-        });
+                           return score_t(*priorHyp, *currHyp, skeleton);
+                       });
 
         // Preference is always given to areas with more shared boundaries
         std::sort(scores.begin(), scores.end(), std::greater<score_t>());
 
         AreaHypothesis* priorMatch = nullptr;
 
-        if(!scores.empty()
+        if (!scores.empty()
             && ((scores.front().numSharedBoundaries + scores.front().numContainedBoundaries > 1)
-                || scores.front().amountCellsContained > 0.25))
-        {
+                || scores.front().amountCellsContained > 0.25)) {
             priorMatch = scores.front().prior;
         }
 
 #ifdef DEBUG_SCORES
-        if(!scores.empty())
-        {
+        if (!scores.empty()) {
             const auto& prior = *scores.front().prior;
             std::cout << "Best match stats: Gwys: ";
-            for(auto& currBoundary : boost::make_iterator_range(currHyp->beginBoundary(), currHyp->endBoundary()))
-            {
-                bool isContained = prior.extent().contains(currBoundary->getGateway().center(), math::ReferenceFrame::GLOBAL)
-                    && prior.extent().cellContains(currBoundary->getGateway().center());
+            for (auto& currBoundary : boost::make_iterator_range(currHyp->beginBoundary(), currHyp->endBoundary())) {
+                bool isContained =
+                  prior.extent().contains(currBoundary->getGateway().center(), math::ReferenceFrame::GLOBAL)
+                  && prior.extent().cellContains(currBoundary->getGateway().center());
                 std::cout << currBoundary->getGateway().center() << ':' << isContained << ' ';
             }
             std::cout << '\n';
 
             std::cout << "Containment cells: ";
-            for(auto& cell : boost::make_iterator_range(currHyp->beginSkeleton(), currHyp->endSkeleton()))
-            {
+            for (auto& cell : boost::make_iterator_range(currHyp->beginSkeleton(), currHyp->endSkeleton())) {
                 auto globalPoint = utils::grid_point_to_global_point(cell, skeleton);
                 bool contained = (prior.extent().contains(globalPoint, math::ReferenceFrame::GLOBAL)
-                    && prior.extent().cellContains(globalPoint));
+                                  && prior.extent().cellContains(globalPoint));
                 std::cout << globalPoint << ':' << contained << ' ';
             }
             std::cout << '\n';
         }
-#endif // DEBUG_SCORES
+#endif   // DEBUG_SCORES
 
         // If there's at least one contained node, then we'll call it a potential match
-        if(priorMatch && !isAssociatedWith(priorMatch, currHyp))
-        {
+        if (priorMatch && !isAssociatedWith(priorMatch, currHyp)) {
             // Then create a bidirectional association between the two hypotheses
             associations_[priorMatch].push_back(currHyp);
             associations_[currHyp].push_back(priorMatch);
@@ -186,26 +180,23 @@ score_t::score_t(AreaHypothesis& prior, AreaHypothesis& current, const VoronoiSk
 
 std::ostream& operator<<(std::ostream& out, const score_t& score)
 {
-    out << score.prior->rectangleBoundary() << " : " << score.amountCellsContained << ','
-        << score.numSharedBoundaries << ',' << score.numContainedBoundaries;
+    out << score.prior->rectangleBoundary() << " : " << score.amountCellsContained << ',' << score.numSharedBoundaries
+        << ',' << score.numContainedBoundaries;
     return out;
 }
 
 
 double amount_cells_contained(AreaHypothesis& prior, AreaHypothesis& current, const VoronoiSkeletonGrid& skeleton)
 {
-    if(current.numSkeleton() == 0)
-    {
+    if (current.numSkeleton() == 0) {
         return 0.0;
     }
 
     double numContained = 0.0;
 
-    for(auto& cell : boost::make_iterator_range(current.beginSkeleton(), current.endSkeleton()))
-    {
+    for (auto& cell : boost::make_iterator_range(current.beginSkeleton(), current.endSkeleton())) {
         auto globalPoint = utils::grid_point_to_global_point(cell, skeleton);
-        if(prior.extent().cellContains(globalPoint))
-        {
+        if (prior.extent().cellContains(globalPoint)) {
             numContained += 1.0;
         }
     }
@@ -221,22 +212,18 @@ std::tuple<int, int> num_shared_and_contained_boundaries(AreaHypothesis& prior, 
 
     std::vector<const AreaHypothesisBoundary*> matched;
 
-    for(auto& currBoundary : boost::make_iterator_range(current.beginBoundary(), current.endBoundary()))
-    {
+    for (auto& currBoundary : boost::make_iterator_range(current.beginBoundary(), current.endBoundary())) {
         bool isShared = false;
 
-        for(auto& priorBoundary : boost::make_iterator_range(prior.beginBoundary(), prior.endBoundary()))
-        {
-            if(!utils::contains(matched, priorBoundary)
-                && currBoundary->getGateway().isSimilarTo(priorBoundary->getGateway()))
-            {
+        for (auto& priorBoundary : boost::make_iterator_range(prior.beginBoundary(), prior.endBoundary())) {
+            if (!utils::contains(matched, priorBoundary)
+                && currBoundary->getGateway().isSimilarTo(priorBoundary->getGateway())) {
                 matched.push_back(priorBoundary);
                 isShared = true;
             }
         }
 
-        if(!isShared && prior.extent().cellContains(currBoundary->getGateway().center()))
-        {
+        if (!isShared && prior.extent().cellContains(currBoundary->getGateway().center())) {
             ++numContained;
         }
     }
@@ -246,5 +233,5 @@ std::tuple<int, int> num_shared_and_contained_boundaries(AreaHypothesis& prior, 
     return std::make_pair(numShared, numContained);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

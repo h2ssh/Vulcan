@@ -8,16 +8,16 @@
 
 
 /**
-* \file     navigation_interface.cpp
-* \author   Collin Johnson
-* 
-* Definition of NavigationInterface.
-*/
+ * \file     navigation_interface.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of NavigationInterface.
+ */
 
 #include "planner/interface/navigation_interface.h"
+#include "mpepc/metric_planner/messages.h"
 #include "planner/interface/decision_action.h"
 #include "planner/interface/goal_action.h"
-#include "mpepc/metric_planner/messages.h"
 #include "system/system_communicator.h"
 #include <fstream>
 
@@ -43,35 +43,26 @@ bool NavigationInterface::hasFinishedAction(const mpepc::metric_planner_status_m
 {
     // Order to evaluate is to check if there's a decision action, if yes, see if it is done
     // When an action completes, clear it out of the
-    if(decisionAction_)
-    {
-        if(decisionAction_->isComplete(status))
-        {
+    if (decisionAction_) {
+        if (decisionAction_->isComplete(status)) {
             decisionAction_.reset();
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     // Otherwise, if there's a goal action, check if it has finished
-    if(goalAction_)
-    {
-        if(goalAction_->isComplete(status))
-        {
+    if (goalAction_) {
+        if (goalAction_->isComplete(status)) {
             goalAction_.reset();
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    if(status.status == mpepc::SUCCESS_REACHED_POSE)
-    {
+    if (status.status == mpepc::SUCCESS_REACHED_POSE) {
         std::cout << "WARNING: NavigationInterface: Reached a pose that wasn't commanded by NavigationInterface.\n";
     }
 
@@ -88,8 +79,7 @@ void NavigationInterface::goToDecision(const Decision& decision,
     decisionAction_->perform(communicator);
 
     // If a goal was being performed, it is now deferred
-    if(goalAction_)
-    {
+    if (goalAction_) {
         goalIsDeferred_ = true;
 
         std::cout << "INFO: NavigationInterface: Deferring goal: " << goalAction_->goal().name() << '\n';
@@ -112,12 +102,9 @@ void NavigationInterface::goToGoal(const Goal& goal,
     // Issuing a new goal clears any existing decision or goal commands
     decisionAction_.reset();
 
-    if(topoMap && goal.localArea())
-    {
+    if (topoMap && goal.localArea()) {
         goalAction_.reset(new GoalAction(goal, *topoMap));
-    }
-    else
-    {
+    } else {
         goalAction_.reset(new GoalAction(goal));
     }
     goalAction_->perform(communicator);
@@ -133,8 +120,7 @@ bool NavigationInterface::goToGoal(const std::string& goalName,
         return g.name() == goalName;
     });
 
-    if(goalIt != goalInterface_.end())
-    {
+    if (goalIt != goalInterface_.end()) {
         goToGoal(*goalIt, topoMap, communicator);
     }
 
@@ -144,12 +130,9 @@ bool NavigationInterface::goToGoal(const std::string& goalName,
 
 boost::optional<Goal> NavigationInterface::currentGoal(void) const
 {
-    if(goalAction_)
-    {
+    if (goalAction_) {
         return goalAction_->goal();
-    }
-    else
-    {
+    } else {
         return boost::none;
     }
 }
@@ -190,13 +173,11 @@ bool NavigationInterface::saveGoals(const std::string& filename)
 
     bool success = false;
 
-    if(out.is_open())
-    {
+    if (out.is_open()) {
         success = goalInterface_.save(out);
     }
 
-    if(!success)
-    {
+    if (!success) {
         std::cerr << "ERROR: NavigationInterface: Failed to load goals from " << filename << '\n';
     }
 
@@ -210,18 +191,16 @@ bool NavigationInterface::loadGoals(const std::string& filename)
 
     std::size_t numLoaded = 0;
 
-    if(in.is_open())
-    {
+    if (in.is_open()) {
         numLoaded = goalInterface_.load(in);
     }
 
-    if(numLoaded == 0)
-    {
+    if (numLoaded == 0) {
         std::cerr << "ERROR: NavigationInterface: Failed to load goals from " << filename << '\n';
     }
 
     return numLoaded > 0;
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

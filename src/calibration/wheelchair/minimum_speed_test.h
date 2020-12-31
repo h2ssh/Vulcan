@@ -8,14 +8,14 @@
 
 
 /**
-* \file     minimum_speed_test.h
-* \author   Collin Johnson
-*
-* Declaration of:
-*   - MinimumSpeedTest abstract base class
-*   - MinimumStartSpeedTest subclass
-*   - MinimumRollingSpeedTest subclass
-*/
+ * \file     minimum_speed_test.h
+ * \author   Collin Johnson
+ *
+ * Declaration of:
+ *   - MinimumSpeedTest abstract base class
+ *   - MinimumStartSpeedTest subclass
+ *   - MinimumRollingSpeedTest subclass
+ */
 
 #ifndef CALIBRATION_WHEELCHAIR_MINIMUM_SPEED_TEST_H
 #define CALIBRATION_WHEELCHAIR_MINIMUM_SPEED_TEST_H
@@ -28,16 +28,15 @@ namespace calibration
 {
 
 /**
-* MinimumSpeedTest
-*/
+ * MinimumSpeedTest
+ */
 class MinimumSpeedTest : public WheelchairTest
 {
 public:
-
 private:
 };
 
-}
-}
+}   // namespace calibration
+}   // namespace vulcan
 
-#endif // CALIBRATION_WHEELCHAIR_MINIMUM_SPEED_TEST_H
+#endif   // CALIBRATION_WHEELCHAIR_MINIMUM_SPEED_TEST_H

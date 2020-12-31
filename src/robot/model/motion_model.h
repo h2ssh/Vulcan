@@ -8,11 +8,11 @@
 
 
 /**
-* \file     motion_model.h
-* \author   Collin Johnson
-*
-* Definition of InverseMotionModel interface and motion_model_data_t POD.
-*/
+ * \file     motion_model.h
+ * \author   Collin Johnson
+ *
+ * Definition of InverseMotionModel interface and motion_model_data_t POD.
+ */
 
 #ifndef ROBOT_MODEL_MOTION_MODEL_H
 #define ROBOT_MODEL_MOTION_MODEL_H
@@ -31,51 +31,45 @@ namespace robot
 struct commanded_velocity_t;
 
 /**
-* motion_model_data_t holds possible data needed a motion model. Each type is optional and
-* a motion model may not consume everything.
-*/
+ * motion_model_data_t holds possible data needed a motion model. Each type is optional and
+ * a motion model may not consume everything.
+ */
 struct motion_model_data_t
 {
-    const std::vector<imu_data_t>*  imu;
-    const odometry_t*               odometry;
+    const std::vector<imu_data_t>* imu;
+    const odometry_t* odometry;
     const std::vector<commanded_velocity_t>* commands;
 
-    motion_model_data_t(void)
-    : imu(0)
-    , odometry(0)
-    , commands(0)
-    {
-    }
+    motion_model_data_t(void) : imu(0), odometry(0), commands(0) { }
 };
 
 /**
-* InverseMotionModel
-*/
+ * InverseMotionModel
+ */
 class InverseMotionModel
 {
 public:
-
     virtual ~InverseMotionModel(void) { }
 
     /**
-    * predictPose implements the prediction step of a KF/EKF, finding the predicted pose based on
-    * the control input. The previousPose is the result from a previous filtering calculation.
-    *
-    * Both the data from the previous timestemp and the current timestep are provided. Some motion models,
-    * like odometry, fake a control input by looking at the difference between odometry measurements at
-    * consecutive timesteps.
-    *
-    * \param    previousPose            Pose from a previous filtering operation
-    * \param    previousData            Data used for the last pose update
-    * \param    currentData             Data for the current update
-    * \return   Pose distribution determined by applying the new control signal the previous pose.
-    */
+     * predictPose implements the prediction step of a KF/EKF, finding the predicted pose based on
+     * the control input. The previousPose is the result from a previous filtering calculation.
+     *
+     * Both the data from the previous timestemp and the current timestep are provided. Some motion models,
+     * like odometry, fake a control input by looking at the difference between odometry measurements at
+     * consecutive timesteps.
+     *
+     * \param    previousPose            Pose from a previous filtering operation
+     * \param    previousData            Data used for the last pose update
+     * \param    currentData             Data for the current update
+     * \return   Pose distribution determined by applying the new control signal the previous pose.
+     */
     virtual pose_distribution_t predictPose(const pose_distribution_t& previousPose,
                                             const motion_model_data_t& previousData,
                                             const motion_model_data_t& currentData) = 0;
 };
 
-}
-}
+}   // namespace robot
+}   // namespace vulcan
 
-#endif // ROBOT_MODEL_MOTION_MODEL_H
+#endif   // ROBOT_MODEL_MOTION_MODEL_H

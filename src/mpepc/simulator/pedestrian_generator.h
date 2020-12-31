@@ -8,11 +8,11 @@
 
 
 /**
-* \file     pedestrian_generator.h
-* \author   Collin Johnson
-*
-* Declaration of PedestrianGenerator.
-*/
+ * \file     pedestrian_generator.h
+ * \author   Collin Johnson
+ *
+ * Declaration of PedestrianGenerator.
+ */
 
 #ifndef MPEPC_DYNAMIC_OBJECT_SIMULATOR_PEDESTRIAN_GENERATOR_H
 #define MPEPC_DYNAMIC_OBJECT_SIMULATOR_PEDESTRIAN_GENERATOR_H
@@ -23,18 +23,16 @@ namespace mpepc
 {
 
 /**
-* PedestrianGenerator analyzes the scene around a gateway and creates dynamic objects associated with the gateway.
-*
-*/
+ * PedestrianGenerator analyzes the scene around a gateway and creates dynamic objects associated with the gateway.
+ *
+ */
 class PedestrianGenerator
 {
 public:
-
 private:
-
 };
 
-}
-}
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_DYNAMIC_OBJECT_SIMULATOR_PEDESTRIAN_GENERATOR_H
+#endif   // MPEPC_DYNAMIC_OBJECT_SIMULATOR_PEDESTRIAN_GENERATOR_H

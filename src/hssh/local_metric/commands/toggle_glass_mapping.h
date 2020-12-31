@@ -8,12 +8,12 @@
 
 
 /**
-* \file     toggle_glass_mapping.h
-* \author   Collin Johnson
-*
-* Declaration of ToggleGlassMapping, which allows turning on/off the glass mapping on-the-fly rather than only through
-* a config file.
-*/
+ * \file     toggle_glass_mapping.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ToggleGlassMapping, which allows turning on/off the glass mapping on-the-fly rather than only through
+ * a config file.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_TOGGLE_GLASS_MAPPING_H
 #define HSSH_LOCAL_METRIC_COMMANDS_TOGGLE_GLASS_MAPPING_H
@@ -27,18 +27,17 @@ namespace hssh
 {
 
 /**
-* ToggleGlassMapping turns on/off the glass mapping.
-*/
+ * ToggleGlassMapping turns on/off the glass mapping.
+ */
 class ToggleGlassMapping : public LocalMetricCommand
 {
 public:
-
     /**
-    * Constructor for ToggleGlassMapping.
-    *
-    * \param    shouldMap           Flag indicating if glass mapping will be used or not
-    * \param    source              Source of the message (optional)
-    */
+     * Constructor for ToggleGlassMapping.
+     *
+     * \param    shouldMap           Flag indicating if glass mapping will be used or not
+     * \param    source              Source of the message (optional)
+     */
     ToggleGlassMapping(bool shouldMap, const std::string& source = "");
 
     // LocalMetricCommand interface
@@ -49,7 +48,6 @@ public:
     void print(std::ostream& out) const override;
 
 private:
-
     bool shouldMap_;
 
     // Serialization support
@@ -60,13 +58,12 @@ private:
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( cereal::base_class<LocalMetricCommand>(this),
-            shouldMap_);
+        ar(cereal::base_class<LocalMetricCommand>(this), shouldMap_);
     }
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
 // Serialization support for smart pointers
 #include <cereal/archives/binary.hpp>
@@ -74,4 +71,4 @@ private:
 
 CEREAL_REGISTER_TYPE(vulcan::hssh::ToggleGlassMapping)
 
-#endif // HSSH_LOCAL_METRIC_COMMANDS_TOGGLE_GLASS_MAPPING_H
+#endif   // HSSH_LOCAL_METRIC_COMMANDS_TOGGLE_GLASS_MAPPING_H

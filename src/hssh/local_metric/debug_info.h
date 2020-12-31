@@ -8,11 +8,11 @@
 
 
 /**
-* \file     debug_info.h
-* \author   Collin Johnson
-*
-* Definition of local_metric_localization_debug_info_t.
-*/
+ * \file     debug_info.h
+ * \author   Collin Johnson
+ *
+ * Definition of local_metric_localization_debug_info_t.
+ */
 
 #ifndef HSSH_LOCAL_METRIC_DEBUG_INFO_H
 #define HSSH_LOCAL_METRIC_DEBUG_INFO_H
@@ -40,19 +40,19 @@ struct local_metric_relocalization_debug_info_t
 template <class Archive>
 void serialize(Archive& ar, local_metric_localization_debug_info_t& info)
 {
-    ar( info.particleFilterInfo);
+    ar(info.particleFilterInfo);
 }
 
 template <class Archive>
 void serialize(Archive& ar, local_metric_relocalization_debug_info_t& info)
 {
-    ar( info.info);
+    ar(info.info);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-DEFINE_DEBUG_MESSAGE(hssh::local_metric_localization_debug_info_t,   ("DEBUG_HSSH_LOCAL_METRIC_LOCALIZATION_INFO"))
+DEFINE_DEBUG_MESSAGE(hssh::local_metric_localization_debug_info_t, ("DEBUG_HSSH_LOCAL_METRIC_LOCALIZATION_INFO"))
 DEFINE_DEBUG_MESSAGE(hssh::local_metric_relocalization_debug_info_t, ("DEBUG_HSSH_LOCAL_METRIC_RELOCALIZATION_INFO"))
 
-#endif // HSSH_LOCAL_METRIC_DEBUG_INFO_H
+#endif   // HSSH_LOCAL_METRIC_DEBUG_INFO_H

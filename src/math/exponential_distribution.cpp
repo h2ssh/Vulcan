@@ -8,11 +8,11 @@
 
 
 /**
-* \file     exponential_distribution.cpp
-* \author   Collin Johnson
-* 
-* Definition of ExponentialDistribution.
-*/
+ * \file     exponential_distribution.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ExponentialDistribution.
+ */
 
 #include "math/exponential_distribution.h"
 #include <cmath>
@@ -23,13 +23,18 @@ namespace vulcan
 {
 namespace math
 {
-    
-double max_value(double value)                   { return value <= 0.0 ? std::numeric_limits<double>::infinity() : value; }
-double etta     (double lambda, double maxValue) { return 1.0 / (1.0 - std::exp(-lambda * maxValue)); }
+
+double max_value(double value)
+{
+    return value <= 0.0 ? std::numeric_limits<double>::infinity() : value;
+}
+double etta(double lambda, double maxValue)
+{
+    return 1.0 / (1.0 - std::exp(-lambda * maxValue));
+}
 
 
-ExponentialDistribution::ExponentialDistribution(double lambda, double maxValue)
-: lambda_(lambda)
+ExponentialDistribution::ExponentialDistribution(double lambda, double maxValue) : lambda_(lambda)
 {
     setMaxValue(maxValue);
 }
@@ -38,7 +43,7 @@ ExponentialDistribution::ExponentialDistribution(double lambda, double maxValue)
 void ExponentialDistribution::setMaxValue(double max)
 {
     maxValue_ = max_value(max);
-    etta_     = etta(lambda_, maxValue_);
+    etta_ = etta(lambda_, maxValue_);
 }
 
 
@@ -51,11 +56,10 @@ double ExponentialDistribution::sample(void) const
 
 double ExponentialDistribution::likelihood(double value) const
 {
-    if(value < 0.0 || value > maxValue_)
-    {
+    if (value < 0.0 || value > maxValue_) {
         return 0.0;
     }
-    
+
     return etta_ * lambda_ * std::exp(-lambda_ * value);
 }
 
@@ -74,5 +78,5 @@ bool ExponentialDistribution::load(std::istream& in)
     return in.good();
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan

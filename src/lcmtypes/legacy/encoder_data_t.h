@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_SENSORS_ENCODER_DATA_T_H
 #define LCMTYPES_SENSORS_ENCODER_DATA_T_H
 
-#include <string>
 #include "lcmtypes/vulcan_lcm_encoder_data_t.h"
+#include <string>
 
 namespace vulcan
 {
@@ -26,9 +26,12 @@ void convert_lcm_to_vulcan(const vulcan_lcm_encoder_data_t& encodersMessage, enc
 void convert_vulcan_to_lcm(const encoder_data_t& encoders, vulcan_lcm_encoder_data_t& encodersMessage);
 
 void publish_data(lcm_t* lcm, const encoder_data_t& encoders, std::string channel = ENCODERS_CHANNEL);
-void subscribe_to_message(lcm_t* lcm, void (*callback)(const encoder_data_t&, const std::string&, void*), void* userdata, std::string channel = ENCODERS_CHANNEL);
+void subscribe_to_message(lcm_t* lcm,
+                          void (*callback)(const encoder_data_t&, const std::string&, void*),
+                          void* userdata,
+                          std::string channel = ENCODERS_CHANNEL);
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_SENSORS_ENCODER_DATA_T_H
+#endif   // LCMTYPES_SENSORS_ENCODER_DATA_T_H

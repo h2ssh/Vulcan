@@ -8,32 +8,59 @@
 
 
 /**
-* \file     local_area_renderer.h
-* \author   Collin Johnson
-*
-* Declaration of LocalAreaRenderer.
-*/
+ * \file     local_area_renderer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LocalAreaRenderer.
+ */
 
 #ifndef UI_COMPONENTS_LOCAL_AREA_RENDERER_H
 #define UI_COMPONENTS_LOCAL_AREA_RENDERER_H
 
+#include "core/point.h"
+#include "hssh/local_topological/area_visitor.h"
 #include "ui/common/color_interpolator.h"
 #include "ui/common/ui_color.h"
-#include "hssh/local_topological/area_visitor.h"
-#include "core/point.h"
 #include <memory>
 
 namespace vulcan
 {
-namespace hssh { class Gateway; }
-namespace hssh { class HeatMapStatistics; }
-namespace hssh { class LocalArea; }
-namespace hssh { class LocalTopoMap; }
-namespace hssh { class AreaExtent; }
-namespace hssh { class AreaProposal; }
-namespace hssh { enum class AreaType; }
-namespace hssh { class SmallScaleStar; }
-namespace hssh { class VoronoiSkeletonGrid; }
+namespace hssh
+{
+class Gateway;
+}
+namespace hssh
+{
+class HeatMapStatistics;
+}
+namespace hssh
+{
+class LocalArea;
+}
+namespace hssh
+{
+class LocalTopoMap;
+}
+namespace hssh
+{
+class AreaExtent;
+}
+namespace hssh
+{
+class AreaProposal;
+}
+namespace hssh
+{
+enum class AreaType;
+}
+namespace hssh
+{
+class SmallScaleStar;
+}
+namespace hssh
+{
+class VoronoiSkeletonGrid;
+}
 namespace ui
 {
 
@@ -41,83 +68,81 @@ class AreaExtentRenderer;
 class SmallScaleStarRenderer;
 
 /**
-* LocalAreaRenderer
-*/
+ * LocalAreaRenderer
+ */
 class LocalAreaRenderer : public hssh::LocalAreaVisitor
 {
 public:
-
     /**
-    * Constructor for LocalAreaRenderer.
-    */
+     * Constructor for LocalAreaRenderer.
+     */
     LocalAreaRenderer(void);
 
     ~LocalAreaRenderer(void);
 
     /**
-    * showGateways sets the flag for whether or not gateways should be drawn.
-    */
+     * showGateways sets the flag for whether or not gateways should be drawn.
+     */
     void showGateways(bool show) { showGateways_ = show; }
 
     /**
-    * showStar sets the flag for whether or not the small-scale star should be drawn.
-    */
+     * showStar sets the flag for whether or not the small-scale star should be drawn.
+     */
     void showStar(bool show) { showStar_ = show; }
 
     /**
-    * setMetersPerCell sets the meters per cell to render the extent of the areas.
-    */
+     * setMetersPerCell sets the meters per cell to render the extent of the areas.
+     */
     void setMetersPerCell(double metersPerCell) { metersPerCell_ = metersPerCell; }
 
     /**
-    * renderLocalTopoMap
-    */
+     * renderLocalTopoMap
+     */
     void renderLocalTopoMap(const hssh::LocalTopoMap& map);
 
     /**
-    * renderLocalTopoMapAsHeatMap renders the LocalTopoMap using the provided heat map.
-    */
+     * renderLocalTopoMapAsHeatMap renders the LocalTopoMap using the provided heat map.
+     */
     void renderLocalTopoMapAsHeatMap(const hssh::LocalTopoMap& map, const hssh::HeatMapStatistics& heatMap);
 
     /**
-    * renderLocalTopoMapAsGraph renders the local topo map with the following representation:
-    *
-    *   - decision points are large squares
-    *   - destinations are smaller squares
-    *   - path segments are line segments
-    *   - destinations along a path are drawn as a line from the path segment line to the center of the destination
-    */
+     * renderLocalTopoMapAsGraph renders the local topo map with the following representation:
+     *
+     *   - decision points are large squares
+     *   - destinations are smaller squares
+     *   - path segments are line segments
+     *   - destinations along a path are drawn as a line from the path segment line to the center of the destination
+     */
     void renderLocalTopoMapAsGraph(const hssh::LocalTopoMap& map);
 
     /**
-    * renderLocalTopoMapAsHSSHGraph renders the local topo map with the following representation:
-    *
-    *   - decision points are large squares
-    *   - destinations are smaller squares
-    *   - path segments are line segments
-    *   - destinations along a path are drawn as:
-    *       - a line from the path segment line to the center of the destination
-    *       - a square representing the decision point that would result from the decision point along the path segment
-    */
+     * renderLocalTopoMapAsHSSHGraph renders the local topo map with the following representation:
+     *
+     *   - decision points are large squares
+     *   - destinations are smaller squares
+     *   - path segments are line segments
+     *   - destinations along a path are drawn as:
+     *       - a line from the path segment line to the center of the destination
+     *       - a square representing the decision point that would result from the decision point along the path segment
+     */
     void renderLocalTopoMapAsHSSHGraph(const hssh::LocalTopoMap& map);
 
     /**
-    * renderLocalArea
-    */
+     * renderLocalArea
+     */
     void renderLocalArea(const hssh::LocalArea& area);
 
     /**
-    * renderAreaProposal
-    */
+     * renderAreaProposal
+     */
     void renderAreaProposal(const hssh::AreaProposal& area, const hssh::VoronoiSkeletonGrid& grid);
 
     // LocalAreaVisitor interface
     virtual void visitDecisionPoint(const hssh::LocalDecisionPoint& decision);
-    virtual void visitDestination  (const hssh::LocalDestination&   destination);
-    virtual void visitPathSegment  (const hssh::LocalPathSegment&   path);
+    virtual void visitDestination(const hssh::LocalDestination& destination);
+    virtual void visitPathSegment(const hssh::LocalPathSegment& path);
 
 private:
-
     bool showGateways_;
     bool showStar_;
 
@@ -128,13 +153,13 @@ private:
     double metersPerCell_;
 
 
-    void drawExtent   (const hssh::AreaExtent& proposal, const GLColor& color);
-    void drawGateways (const std::vector<hssh::Gateway>& gateways, const GLColor& color) const;
+    void drawExtent(const hssh::AreaExtent& proposal, const GLColor& color);
+    void drawGateways(const std::vector<hssh::Gateway>& gateways, const GLColor& color) const;
     void drawFrontiers(const std::vector<Point<double>>& frontiers) const;
-    void drawStar     (const hssh::SmallScaleStar& star, const Point<double>& origin);
+    void drawStar(const hssh::SmallScaleStar& star, const Point<double>& origin);
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_LOCAL_AREA_RENDERER_H
+#endif   // UI_COMPONENTS_LOCAL_AREA_RENDERER_H

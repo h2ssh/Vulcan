@@ -8,11 +8,11 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* Definition of binomial_proportion_z_test.
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * Definition of binomial_proportion_z_test.
+ */
 
 #include "math/z_test.h"
 #include <boost/math/distributions/normal.hpp>
@@ -22,9 +22,8 @@ namespace vulcan
 namespace math
 {
 
-z_test_results_t binomial_proportion_z_test(const z_test_sample_t& sampleA,
-                                            const z_test_sample_t& sampleB,
-                                            double confidence)
+z_test_results_t
+  binomial_proportion_z_test(const z_test_sample_t& sampleA, const z_test_sample_t& sampleB, double confidence)
 {
     // Code closely related to Boost.Math example at:
     // http://www.boost.org/doc/libs/1_65_1/libs/math/doc/html/math_toolkit/stat_tut/weg/st_eg/two_sample_students_t.html
@@ -39,29 +38,29 @@ z_test_results_t binomial_proportion_z_test(const z_test_sample_t& sampleA,
     double successA = static_cast<double>(sampleA.numTrue) / sampleA.numSamples;
     double successB = static_cast<double>(sampleB.numTrue) / sampleB.numSamples;
 
-    double totalSuccess = static_cast<double>(sampleA.numTrue + sampleB.numTrue)
-        / (sampleA.numSamples + sampleB.numSamples);
+    double totalSuccess =
+      static_cast<double>(sampleA.numTrue + sampleB.numTrue) / (sampleA.numSamples + sampleB.numSamples);
 
-    double zDenom = std::sqrt(totalSuccess * (1.0 - totalSuccess)
-        * ((1.0 / sampleA.numSamples) + (1.0 / sampleB.numSamples)));
+    double zDenom =
+      std::sqrt(totalSuccess * (1.0 - totalSuccess) * ((1.0 / sampleA.numSamples) + (1.0 / sampleB.numSamples)));
 
     z_test_results_t results;
-    results.zValue     = (successA - successB) / zDenom;
+    results.zValue = (successA - successB) / zDenom;
     results.confidence = confidence;
 
     normal dist;
 
     results.pValueDifferent = cdf(complement(dist, std::abs(results.zValue)));
-    results.areDifferent    = results.pValueDifferent < (confidence / 2.0);
+    results.areDifferent = results.pValueDifferent < (confidence / 2.0);
 
     results.pValueGreater = cdf(complement(dist, results.zValue));
-    results.isGreater     = results.pValueGreater < confidence;
+    results.isGreater = results.pValueGreater < confidence;
 
     results.pValueLess = cdf(dist, results.zValue);
-    results.isLess     = results.pValueLess < confidence;
+    results.isLess = results.pValueLess < confidence;
 
     return results;
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

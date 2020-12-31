@@ -16,8 +16,7 @@ namespace math
 {
 
 
-
 }
-}
+}   // namespace vulcan
 
-#endif // MATH_GRAPH_PLANARITY_H
+#endif   // MATH_GRAPH_PLANARITY_H

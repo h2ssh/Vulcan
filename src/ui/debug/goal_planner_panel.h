@@ -8,21 +8,21 @@
 
 
 /**
-* \file     goal_planner_panel.h
-* \author   Collin Johnson
-*
-* Declaration of GoalPlannerPanel.
-*/
+ * \file     goal_planner_panel.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GoalPlannerPanel.
+ */
 
 #ifndef UI_DEBUG_GOAL_PLANNER_PANEL_H
 #define UI_DEBUG_GOAL_PLANNER_PANEL_H
 
-#include "ui/common/ui_forward_declarations.h"
-#include "ui/common/ui_params.h"
-#include "ui/common/ui_panel.h"
-#include "planner/goal/messages.h"
 #include "hssh/global_topological/topological_map.h"
 #include "hssh/global_topological/utils/metric_map_cache.h"
+#include "planner/goal/messages.h"
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_panel.h"
+#include "ui/common/ui_params.h"
 #include "utils/mutex.h"
 #include <wx/wx.h>
 
@@ -34,80 +34,74 @@ namespace ui
 class GoalPlannerDisplayWidget;
 
 /**
-* goal_planner_panel_widgets_t specifies all the widgets belonging to the GoalPlannerPanel.
-* These widgets are provided in the constructor and are then used for event handling, etc.
-*/
+ * goal_planner_panel_widgets_t specifies all the widgets belonging to the GoalPlannerPanel.
+ * These widgets are provided in the constructor and are then used for event handling, etc.
+ */
 struct goal_planner_panel_widgets_t
 {
     GoalPlannerDisplayWidget* displayWidget;
-    wxRadioBox*               representationBox;
-    wxRadioBox*               routeDisplayBox;
-    wxTextCtrl*               animateFPSText;
-    
-    goal_planner_panel_widgets_t(void)
-        : displayWidget(0)
-        , representationBox(0)
-        , routeDisplayBox(0)
-        , animateFPSText(0)
+    wxRadioBox* representationBox;
+    wxRadioBox* routeDisplayBox;
+    wxTextCtrl* animateFPSText;
+
+    goal_planner_panel_widgets_t(void) : displayWidget(0), representationBox(0), routeDisplayBox(0), animateFPSText(0)
     {
     }
 };
 
 /**
-* GoalPlannerPanel manages interaction with the global topo planner. The panel passes
-* output from the planner to a GoalPlannerDisplayWidget for rendering. The panel supports
-* setting the global location in a map and a target, thereby generating a plan. The panel also
-* allows a user to Confirm or Cancel a planned route.
-*/
+ * GoalPlannerPanel manages interaction with the global topo planner. The panel passes
+ * output from the planner to a GoalPlannerDisplayWidget for rendering. The panel supports
+ * setting the global location in a map and a target, thereby generating a plan. The panel also
+ * allows a user to Confirm or Cancel a planned route.
+ */
 class GoalPlannerPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for GoalPlannerPanel.
-    *
-    * \param    params          Parameters for the panel
-    * \param    widgets         Widgets for the panel to use
-    */
+     * Constructor for GoalPlannerPanel.
+     *
+     * \param    params          Parameters for the panel
+     * \param    widgets         Widgets for the panel to use
+     */
     GoalPlannerPanel(const ui_params_t& params, goal_planner_panel_widgets_t& widgets);
 
     // UIPanel interface
-    virtual void setup       (wxGLContext* context, wxStatusBar* statusBar);
-    virtual void subscribe   (system::ModuleCommunicator& producer);
-    virtual void setConsumer (system::ModuleCommunicator* consumer);
-    virtual void update      (void);
+    virtual void setup(wxGLContext* context, wxStatusBar* statusBar);
+    virtual void subscribe(system::ModuleCommunicator& producer);
+    virtual void setConsumer(system::ModuleCommunicator* consumer);
+    virtual void update(void);
     virtual void saveSettings(utils::ConfigFileWriter& config);
     virtual void loadSettings(const utils::ConfigFile& config);
 
     // Data handlers
-    void handleData(const hssh::TopologicalMap&        map,     const std::string& channel);
-    void handleData(const planner::GoalTarget&        target,   const std::string& channel);
-    void handleData(const planner::GoalRoute&         route,    const std::string& channel);
-    void handleData(const planner::GoalProgress&      progress, const std::string& channel);
-    void handleData(const planner::goal_debug_info_t& info,     const std::string& channel);
+    void handleData(const hssh::TopologicalMap& map, const std::string& channel);
+    void handleData(const planner::GoalTarget& target, const std::string& channel);
+    void handleData(const planner::GoalRoute& route, const std::string& channel);
+    void handleData(const planner::GoalProgress& progress, const std::string& channel);
+    void handleData(const planner::goal_debug_info_t& info, const std::string& channel);
 
 private:
-
     // Event handlers
     void representationChanged(wxCommandEvent& event);
-    void routeDisplayChanged  (wxCommandEvent& event);
-    void setLocationPressed   (wxCommandEvent& event);
-    void sendLocationPressed  (wxCommandEvent& event);
-    void setGoalPressed       (wxCommandEvent& event);
-    void sendGoalPressed      (wxCommandEvent& event);
-    void animateSearchPressed (wxCommandEvent& event);
-    void confirmRoutePressed  (wxCommandEvent& event);
-    void cancelRoutePressed   (wxCommandEvent& event);
+    void routeDisplayChanged(wxCommandEvent& event);
+    void setLocationPressed(wxCommandEvent& event);
+    void sendLocationPressed(wxCommandEvent& event);
+    void setGoalPressed(wxCommandEvent& event);
+    void sendGoalPressed(wxCommandEvent& event);
+    void animateSearchPressed(wxCommandEvent& event);
+    void confirmRoutePressed(wxCommandEvent& event);
+    void cancelRoutePressed(wxCommandEvent& event);
 
     void sendRouteCommand(planner::route_command_t command);
 
     GoalPlannerDisplayWidget* displayWidget;
-    system::ModuleCommunicator*         consumer;
+    system::ModuleCommunicator* consumer;
 
     int32_t currentRouteId;
-    bool    routeIsConfirmed;
+    bool routeIsConfirmed;
 
-    hssh::TopologicalMap     map;
+    hssh::TopologicalMap map;
     hssh::MetricMapCache places;
 
     goal_planner_display_params_t params;
@@ -117,11 +111,11 @@ private:
     wxRadioBox* representationBox;
     wxRadioBox* routeDisplayBox;
     wxTextCtrl* animateFPSText;
-    
+
     DECLARE_EVENT_TABLE()
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_GOAL_PLANNER_PANEL_H
+#endif   // UI_DEBUG_GOAL_PLANNER_PANEL_H

@@ -8,17 +8,17 @@
 
 
 /**
-* \file     unicycle_pose_sampler.h
-* \author   Jong Jin Park
-*
-* Declaration of UnicyclePoseSampler for UnicycleRRTStar path planner.
-*/
+ * \file     unicycle_pose_sampler.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of UnicyclePoseSampler for UnicycleRRTStar path planner.
+ */
 
 #ifndef UNICYCLE_POSE_SAMPLER_H
 #define UNICYCLE_POSE_SAMPLER_H
 
-#include "mpepc/grid/obstacle_distance_grid.h"
 #include "core/pose.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
 
 namespace vulcan
 {
@@ -27,43 +27,42 @@ namespace mpepc
 
 struct unicycle_pose_sampler_params_t
 {
-    float goalBiasPercent = 10; // percentile of samples at goal pose
-    float defaultDistanceThreshold = 0; // margin from obstacles when determining freespace
+    float goalBiasPercent = 10;           // percentile of samples at goal pose
+    float defaultDistanceThreshold = 0;   // margin from obstacles when determining freespace
 };
 
 
 class UnicyclePoseSampler
 {
 public:
-
     /**
-    * Constructor for UnicyclePoseSampler.
-    */
+     * Constructor for UnicyclePoseSampler.
+     */
     explicit UnicyclePoseSampler(const unicycle_pose_sampler_params_t& params);
 
-    UnicyclePoseSampler(void) {};
+    UnicyclePoseSampler(void){};
 
     /**
-    * getGoalBiasedSample samples collision-free pose in a given map, with a goal bias
-    *
-    * \param    goalPose        goal pose in the map
-    * \param    grid            ObstacleDistanceGrid
-    * \param    isGoal          (output) indicator if the sampled pose is the goal
-    *
-    * \return   robotPose in free space
-    */
+     * getGoalBiasedSample samples collision-free pose in a given map, with a goal bias
+     *
+     * \param    goalPose        goal pose in the map
+     * \param    grid            ObstacleDistanceGrid
+     * \param    isGoal          (output) indicator if the sampled pose is the goal
+     *
+     * \return   robotPose in free space
+     */
     pose_t getGoalBiasedSample(const pose_t& goalPose, const ObstacleDistanceGrid& grid, bool* isGoal) const;
-//    TODO: Add this!
-//    pose_t sample(const pose_t& goalPose, const ObstacleDistanceGrid& grid, const RobotCollisionModel& robotShape);
+    //    TODO: Add this!
+    //    pose_t sample(const pose_t& goalPose, const ObstacleDistanceGrid& grid, const RobotCollisionModel&
+    //    robotShape);
 
 private:
-
     pose_t randomPoseInMap(const ObstacleDistanceGrid& grid) const;
 
     unicycle_pose_sampler_params_t params_;
 };
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // UNICYCLE_POSE_SAMPLER_H
+#endif   // UNICYCLE_POSE_SAMPLER_H

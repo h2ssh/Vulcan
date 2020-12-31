@@ -8,16 +8,16 @@
 
 
 /**
-* \file     enum_operators.h
-* \author   Collin Johnson
-* 
-* Definition of templates for implementing operator overloads for enum classes.
-* These templates allow for doing bit operations on the enum class values, performing
-* the necessary casting internally.
-* 
-*   - enum_bitwise_and
-*   - enum_bitwise_or
-*/
+ * \file     enum_operators.h
+ * \author   Collin Johnson
+ *
+ * Definition of templates for implementing operator overloads for enum classes.
+ * These templates allow for doing bit operations on the enum class values, performing
+ * the necessary casting internally.
+ *
+ *   - enum_bitwise_and
+ *   - enum_bitwise_or
+ */
 
 #ifndef UTILS_ENUM_OPERATORS_H
 #define UTILS_ENUM_OPERATORS_H
@@ -28,10 +28,10 @@ namespace vulcan
 {
 namespace utils
 {
-    
+
 /**
-* enum_bitwise_or
-*/
+ * enum_bitwise_or
+ */
 template <class T>
 inline constexpr T enum_bitwise_or(T lhs, T rhs)
 {
@@ -40,8 +40,8 @@ inline constexpr T enum_bitwise_or(T lhs, T rhs)
 }
 
 /**
-* enum_bitwise_and
-*/
+ * enum_bitwise_and
+ */
 template <class T>
 inline constexpr T enum_bitwise_and(T lhs, T rhs)
 {
@@ -50,16 +50,16 @@ inline constexpr T enum_bitwise_and(T lhs, T rhs)
 }
 
 /**
-* enum_to_bool
-*/
+ * enum_to_bool
+ */
 template <class T>
 inline constexpr bool enum_to_bool(T e)
 {
     using Size = typename std::underlying_type<T>::type;
     return static_cast<Size>(e) == 0 ? false : true;
 }
-    
-}
-}
 
-#endif // UTILS_ENUM_OPERATORS_H
+}   // namespace utils
+}   // namespace vulcan
+
+#endif   // UTILS_ENUM_OPERATORS_H

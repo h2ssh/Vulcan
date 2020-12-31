@@ -8,11 +8,11 @@
 
 
 /**
-* \file     area_transition_detector.h
-* \author   Collin Johnson
-* 
-* Definition of AreaTransitionDetector.
-*/
+ * \file     area_transition_detector.h
+ * \author   Collin Johnson
+ *
+ * Definition of AreaTransitionDetector.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENTS_AREA_TRANSITION_DETECTOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENTS_AREA_TRANSITION_DETECTOR_H
@@ -29,44 +29,42 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 class LocalArea;
 
-    
+
 const std::string kAreaTransitionDetectorType("area_transition");
 
 /**
-* AreaTransitionDetector detects transitions between one area and another area. An area transition occurs
-* when the robot crosses a gateway boundary between adjacent areas.
-*/
+ * AreaTransitionDetector detects transitions between one area and another area. An area transition occurs
+ * when the robot crosses a gateway boundary between adjacent areas.
+ */
 class AreaTransitionDetector : public AreaEventDetector
 {
 public:
-    
     /**
-    * Constructor for AreaTransitionDetector.
-    * 
-    * \param    params          Parameters for controlling when the transition events fire
-    */
+     * Constructor for AreaTransitionDetector.
+     *
+     * \param    params          Parameters for controlling when the transition events fire
+     */
     AreaTransitionDetector(const area_transition_detector_params_t& params);
-    
+
     // AreaEventDetector interface
     LocalAreaEventVec detectEvents(const LocalTopoMap& map) override;
     void addPose(const LocalPose& pose) override;
 
 private:
-
     bool isInitialArea_;
     utils::PoseTrace poses_;
     utils::TimedSequence<LocalPose> localPoses_;
-    math::Rectangle<float> previousBoundary_;       // boundary of area robot was last reported to be in
-    Gateway latestGateway_;                         // gateway cross during most recent event
+    math::Rectangle<float> previousBoundary_;   // boundary of area robot was last reported to be in
+    Gateway latestGateway_;                     // gateway cross during most recent event
     area_transition_detector_params_t params_;
-    
+
     std::ofstream transitionLog_;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_EVENTS_AREA_TRANSITION_DETECTOR_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_EVENTS_AREA_TRANSITION_DETECTOR_H

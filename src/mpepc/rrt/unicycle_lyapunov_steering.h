@@ -8,12 +8,12 @@
 
 
 /**
-* \file     unicycle_lyapunov_steering.h
-* \author   Jong Jin Park
-*
-* Declaration of UnicycleLyapunovSteering, which implements numerically stable
-* steering-along-vector-field via control-Lyapunov function.
-*/
+ * \file     unicycle_lyapunov_steering.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of UnicycleLyapunovSteering, which implements numerically stable
+ * steering-along-vector-field via control-Lyapunov function.
+ */
 
 #ifndef UNICYCLE_LYAPUNOV_STEERING_H
 #define UNICYCLE_LYAPUNOV_STEERING_H
@@ -31,7 +31,7 @@ class UnicycleLyapunovDistance;
 // struct containing a path segment
 struct unicycle_path_segment_t
 {
-    std::vector<pose_t>      steps;
+    std::vector<pose_t> steps;
     std::vector<Point<float>> path;
 };
 
@@ -45,29 +45,36 @@ struct unicycle_lyapunov_steering_params_t
 class UnicycleLyapunovSteering
 {
 public:
-
     /**
-    * Constructor for UnicycleLyapunovSteering
-    */
+     * Constructor for UnicycleLyapunovSteering
+     */
     explicit UnicycleLyapunovSteering(const unicycle_lyapunov_steering_params_t& params);
 
-    UnicycleLyapunovSteering(void) {};
+    UnicycleLyapunovSteering(void){};
 
-    unicycle_path_segment_t extend(const pose_t& robotPose, const UnicycleLyapunovDistance& lyap, double maxExtension) const;
+    unicycle_path_segment_t
+      extend(const pose_t& robotPose, const UnicycleLyapunovDistance& lyap, double maxExtension) const;
 
-    unicycle_path_segment_t steer (const pose_t& robotPose, const UnicycleLyapunovDistance& lyap) const;
+    unicycle_path_segment_t steer(const pose_t& robotPose, const UnicycleLyapunovDistance& lyap) const;
 
-    std::vector<Point<float>> steerAway(const Point<float>& point, const UnicycleLyapunovDistance& lyap, double maxExtension) const;
+    std::vector<Point<float>>
+      steerAway(const Point<float>& point, const UnicycleLyapunovDistance& lyap, double maxExtension) const;
 
 private:
-
-    pose_t incrementalRotation   (const pose_t& robotPose, const UnicycleLyapunovDistance& lyap, double maxRotation, bool* isAligned) const;
-    pose_t incrementalTranslation(const pose_t& robotPose, const UnicycleLyapunovDistance& lyap, double maxTranslation, std::vector<Point<float>>* points, bool* isConverged) const;
+    pose_t incrementalRotation(const pose_t& robotPose,
+                               const UnicycleLyapunovDistance& lyap,
+                               double maxRotation,
+                               bool* isAligned) const;
+    pose_t incrementalTranslation(const pose_t& robotPose,
+                                  const UnicycleLyapunovDistance& lyap,
+                                  double maxTranslation,
+                                  std::vector<Point<float>>* points,
+                                  bool* isConverged) const;
 
     unicycle_lyapunov_steering_params_t params_;
 };
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // UNICYCLE_LYAPUNOV_STEERING_H
+#endif   // UNICYCLE_LYAPUNOV_STEERING_H

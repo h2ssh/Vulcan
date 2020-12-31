@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of the params structs for the path follower module.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of the params structs for the path follower module.
+ */
 
 #ifndef MPEPC_MOTION_CONTROLLER_WAYPOINT_FOLLOWER_PARAMS_H
 #define MPEPC_MOTION_CONTROLLER_WAYPOINT_FOLLOWER_PARAMS_H
@@ -22,7 +22,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace mpepc
 {
@@ -35,22 +38,22 @@ struct graceful_motion_controller_params_t
 struct waypoint_follower_params_t
 {
     // Parameters for calculating maximum linear velocity
-    float   lookaheadDistance;
-    float   angularAttenuationDistance;
+    float lookaheadDistance;
+    float angularAttenuationDistance;
     int64_t speedupInterval;
-    
+
     float attenuationLinearVelocity;
     float maxAngularVelocityChange;
     float finalTargetVelocity;
     float finalTargetStopRadius;
-    
+
     graceful_motion_params_t gracefulMotionParams;
 };
 
-waypoint_follower_params_t          load_waypoint_follower_params(const utils::ConfigFile& config);
+waypoint_follower_params_t load_waypoint_follower_params(const utils::ConfigFile& config);
 graceful_motion_controller_params_t load_graceful_controller_params(const utils::ConfigFile& config);
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_MOTION_CONTROLLER_WAYPOINT_FOLLOWER_PARAMS_H
+#endif   // MPEPC_MOTION_CONTROLLER_WAYPOINT_FOLLOWER_PARAMS_H

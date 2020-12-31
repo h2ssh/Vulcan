@@ -8,35 +8,34 @@
 
 
 /**
-* \file     known_pose_localizer.cpp
-* \author   Collin Johnson
-* 
-* Definition of KnownPoseLocalizer.
-*/
+ * \file     known_pose_localizer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of KnownPoseLocalizer.
+ */
 
 #include "hssh/metrical/localization/known_pose_localizer.h"
-#include "hssh/metrical/data.h"
 #include "core/pose_distribution.h"
+#include "hssh/metrical/data.h"
 
 namespace vulcan
 {
 namespace hssh
 {
-    
+
 pose_t odometry_to_pose(const odometry_t& odom);
 pose_distribution_t pose_to_distribution(const pose_t& pose, int64_t timestamp);
-    
-    
-pose_distribution_t KnownPoseLocalizer::initializeLocalization(const metric_slam_data_t& data) 
+
+
+pose_distribution_t KnownPoseLocalizer::initializeLocalization(const metric_slam_data_t& data)
 {
-    if(!data.odometry.empty())
-    {
+    if (!data.odometry.empty()) {
         initialPose_ = odometry_to_pose(data.odometry.back());
     }
-    
+
     return pose_to_distribution(pose_t(0, 0, 0), data.endTime);
 }
-    
+
 
 void KnownPoseLocalizer::resetPoseEstimate(const pose_t& pose)
 {
@@ -44,23 +43,20 @@ void KnownPoseLocalizer::resetPoseEstimate(const pose_t& pose)
 }
 
 
-pose_distribution_t KnownPoseLocalizer::updatePoseEstimate(const metric_slam_data_t& data, 
-                                                                  const OccupancyGrid& map,
-                                                                  particle_filter_debug_info_t* debug)
+pose_distribution_t KnownPoseLocalizer::updatePoseEstimate(const metric_slam_data_t& data,
+                                                           const OccupancyGrid& map,
+                                                           particle_filter_debug_info_t* debug)
 {
     pose_t pose(data.endTime, 0, 0, 0);
-    
+
     // If no data, then the pose isn't required to be anything meaningful
-    if(data.odometry.empty())
-    {
+    if (data.odometry.empty()) {
         std::cerr << "ERROR: KnownPoseLocalizer: No odometry data available.\n";
-    }
-    else
-    {
+    } else {
         // Just set the mean to the latest piece of odometry data available
         pose = odometry_to_pose(data.odometry.back()).transformToNewFrame(initialPose_);
     }
-    
+
     return pose_to_distribution(pose, data.endTime);
 }
 
@@ -83,13 +79,13 @@ pose_distribution_t pose_to_distribution(const pose_t& pose, int64_t timestamp)
     poseDist(2, 0) = 0;
     poseDist(2, 1) = 0;
     poseDist(2, 2) = 1e-5;
-    
+
     poseDist[0] = pose.x;
     poseDist[1] = pose.y;
     poseDist[2] = pose.theta;
-    
+
     return pose_distribution_t(timestamp, poseDist);
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

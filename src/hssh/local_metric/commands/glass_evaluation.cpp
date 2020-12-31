@@ -8,11 +8,11 @@
 
 
 /**
-* \file     glass_evaluation.cpp
-* \author   Collin Johnson
-* 
-* Definition of GlassEvaluationCommand.
-*/
+ * \file     glass_evaluation.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlassEvaluationCommand.
+ */
 
 #include "hssh/local_metric/commands/glass_evaluation.h"
 #include "hssh/metrical/mapping/mapper.h"
@@ -23,42 +23,38 @@ namespace vulcan
 {
 namespace hssh
 {
-    
-std::unique_ptr<GlassEvaluationCommand> GlassEvaluationCommand::CreateSaveScansMessage(std::string source, 
+
+std::unique_ptr<GlassEvaluationCommand> GlassEvaluationCommand::CreateSaveScansMessage(std::string source,
                                                                                        std::string filename)
 {
     return std::unique_ptr<GlassEvaluationCommand>(new GlassEvaluationCommand(kSaveScans, filename, source));
 }
 
 
-std::unique_ptr<GlassEvaluationCommand> GlassEvaluationCommand::CreateSavePosesMessage(std::string source, 
+std::unique_ptr<GlassEvaluationCommand> GlassEvaluationCommand::CreateSavePosesMessage(std::string source,
                                                                                        std::string filename)
 {
     return std::unique_ptr<GlassEvaluationCommand>(new GlassEvaluationCommand(kSavePoses, filename, source));
 }
 
 
-std::unique_ptr<GlassEvaluationCommand> GlassEvaluationCommand::CreateSaveMapMessage(std::string source, 
+std::unique_ptr<GlassEvaluationCommand> GlassEvaluationCommand::CreateSaveMapMessage(std::string source,
                                                                                      std::string filename)
 {
     return std::unique_ptr<GlassEvaluationCommand>(new GlassEvaluationCommand(kSaveMap, filename, source));
 }
 
 
-void GlassEvaluationCommand::issue(const metric_slam_data_t& data, 
-                                   Localizer& localizer, 
-                                   Mapper& mapper, 
+void GlassEvaluationCommand::issue(const metric_slam_data_t& data,
+                                   Localizer& localizer,
+                                   Mapper& mapper,
                                    MetricRelocalizer& relocalizer) const
 {
-    switch(command_)
-    {
+    switch (command_) {
     case kSaveMap:
-        if(utils::save_serializable_to_file(filename_, mapper.getGlassMap()))
-        {
+        if (utils::save_serializable_to_file(filename_, mapper.getGlassMap())) {
             std::cout << "INFO: GlassEvaluationCommand: Saved glass map to " << filename_ << '\n';
-        }
-        else
-        {
+        } else {
             std::cout << "ERROR: GlassEvaluationCommand: Failed to save glass map to " << filename_ << '\n';
         }
         break;
@@ -87,5 +83,5 @@ GlassEvaluationCommand::GlassEvaluationCommand(Command command, std::string file
 {
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

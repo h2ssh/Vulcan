@@ -8,23 +8,23 @@
 
 
 /**
-* \file     waypoint_decider.cpp
-* \author   Collin Johnson
-*
-* Definition of WaypointTargetDecider. LOG_DATA flag optionally saves the commanded paths
-* to path.log.
-*/
+ * \file     waypoint_decider.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of WaypointTargetDecider. LOG_DATA flag optionally saves the commanded paths
+ * to path.log.
+ */
 
 #include "mpepc/motion_controller/waypoint_follower/waypoint_decider.h"
-#include "core/point.h"
 #include "core/angle_functions.h"
+#include "core/point.h"
 
 namespace vulcan
 {
 
 namespace mpepc
 {
-    
+
 WaypointDecider::WaypointDecider(void)
 {
 }
@@ -32,7 +32,7 @@ WaypointDecider::WaypointDecider(void)
 
 void WaypointDecider::setPath(const controller_waypoint_path_t& path)
 {
-    this->path          = path;
+    this->path = path;
     targetWaypointIndex = 0;
 }
 
@@ -52,24 +52,20 @@ bool WaypointDecider::shouldContinueDriving(const pose_t& currentPose) const
 
 bool WaypointDecider::haveReachedTargetWaypoint(const pose_t& currentPose) const
 {
-    if(haveReachedGoal())
-    {
+    if (haveReachedGoal()) {
         return true;
     }
 
     controller_waypoint_t waypoint = getTargetWaypoint();
 
     float distanceToWaypoint = distance_between_points(Point<float>(currentPose.x, currentPose.y),
-                                                             Point<float>(waypoint.pose.x, waypoint.pose.y));
+                                                       Point<float>(waypoint.pose.x, waypoint.pose.y));
 
     float waypointAlignment = fabs(angle_diff(currentPose.theta, waypoint.pose.theta));
 
-    if(targetWaypointIndex == path.waypoints.size()-1)
-    {
-        return (distanceToWaypoint < waypoint.radius/2) && (waypointAlignment < waypoint.alignment);
-    }
-    else
-    {
+    if (targetWaypointIndex == path.waypoints.size() - 1) {
+        return (distanceToWaypoint < waypoint.radius / 2) && (waypointAlignment < waypoint.alignment);
+    } else {
         return (distanceToWaypoint < waypoint.radius) && (waypointAlignment < waypoint.alignment);
     }
 }
@@ -89,14 +85,11 @@ controller_waypoint_t WaypointDecider::getTargetWaypoint(void) const
 {
     controller_waypoint_t nextWaypoint;
 
-    if(!haveReachedGoal())
-    {
+    if (!haveReachedGoal()) {
         nextWaypoint = path.waypoints[targetWaypointIndex];
-    }
-    else
-    {
-        nextWaypoint.pose            = pose_t(0, 0, 0);
-        nextWaypoint.radius          = 0;
+    } else {
+        nextWaypoint.pose = pose_t(0, 0, 0);
+        nextWaypoint.radius = 0;
         nextWaypoint.attenuationTime = 0;
     }
 
@@ -109,5 +102,5 @@ bool WaypointDecider::haveReachedGoal(void) const
     return targetWaypointIndex >= path.waypoints.size();
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

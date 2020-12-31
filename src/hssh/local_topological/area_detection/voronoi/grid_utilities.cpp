@@ -8,16 +8,16 @@
 
 
 /**
-* \file     grid_utilities.cpp
-* \author   Collin Johnson
-*
-* Definition of trace_ray_to_cell.
-*/
+ * \file     grid_utilities.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of trace_ray_to_cell.
+ */
 
-#include "hssh/local_topological/area_detection/voronoi/island_detector.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "hssh/local_topological/area_detection/voronoi/grid_utilities.h"
 #include "core/angle_functions.h"
+#include "hssh/local_topological/area_detection/voronoi/island_detector.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 
 namespace vulcan
 {
@@ -25,14 +25,11 @@ namespace hssh
 {
 
 float total_angle_subtended(float start, float stop, bool counterclockwise);
-bool  cell_is_ray_endpoint (const Point<int>& point, uint8_t mask, const VoronoiSkeletonGrid& grid);
-int   clamp_ray_endpoint   (int endpoint, int dimensionSize);
+bool cell_is_ray_endpoint(const Point<int>& point, uint8_t mask, const VoronoiSkeletonGrid& grid);
+int clamp_ray_endpoint(int endpoint, int dimensionSize);
 
 
-Point<int> trace_ray_to_cell(float                      angle,
-                                   const Point<int>&    start,
-                                   uint8_t                    mask,
-                                   const VoronoiSkeletonGrid& grid)
+Point<int> trace_ray_to_cell(float angle, const Point<int>& start, uint8_t mask, const VoronoiSkeletonGrid& grid)
 {
     float deltaX = cos(angle);
     float deltaY = sin(angle);
@@ -42,8 +39,7 @@ Point<int> trace_ray_to_cell(float                      angle,
 
     Point<int> rayCell(start.x, start.y);
 
-    while(!cell_is_ray_endpoint(rayCell, mask, grid))
-    {
+    while (!cell_is_ray_endpoint(rayCell, mask, grid)) {
         xPosition += deltaX;
         yPosition += deltaY;
 
@@ -58,19 +54,18 @@ Point<int> trace_ray_to_cell(float                      angle,
 }
 
 
-std::vector<Point<int>> trace_rays_in_range(const ray_trace_range_t&   range,
-                                                  const Point<int>&    start,
-                                                  uint8_t                    mask,
-                                                  const VoronoiSkeletonGrid& grid)
+std::vector<Point<int>> trace_rays_in_range(const ray_trace_range_t& range,
+                                            const Point<int>& start,
+                                            uint8_t mask,
+                                            const VoronoiSkeletonGrid& grid)
 {
     std::vector<Point<int>> endpoints;
 
     float totalAngleSubtended = total_angle_subtended(range.startAngle, range.stopAngle, range.counterclockwise);
-    float angleSubtended      = 0.0f;
-    float angleIncrement      = std::abs(range.resolution);
+    float angleSubtended = 0.0f;
+    float angleIncrement = std::abs(range.resolution);
 
-    for(float angle = range.startAngle; angleSubtended < totalAngleSubtended; angleSubtended += angleIncrement)
-    {
+    for (float angle = range.startAngle; angleSubtended < totalAngleSubtended; angleSubtended += angleIncrement) {
         endpoints.push_back(trace_ray_to_cell(angle, start, mask, grid));
 
         angle += range.counterclockwise ? angleIncrement : -angleIncrement;
@@ -83,35 +78,28 @@ std::vector<Point<int>> trace_rays_in_range(const ray_trace_range_t&   range,
 float total_angle_subtended(float start, float stop, bool counterclockwise)
 {
     // this is the special case for a complete circle
-    if(std::abs(stop - start) > 2*M_PI)
-    {
-        return 2*M_PI;
-    }
-    else if(counterclockwise)
-    {
-        return wrap_to_2pi(2*M_PI + stop - start);
-    }
-    else
-    {
-        return wrap_to_2pi(2*M_PI + start - stop);
+    if (std::abs(stop - start) > 2 * M_PI) {
+        return 2 * M_PI;
+    } else if (counterclockwise) {
+        return wrap_to_2pi(2 * M_PI + stop - start);
+    } else {
+        return wrap_to_2pi(2 * M_PI + start - stop);
     }
 }
 
 
 bool cell_is_ray_endpoint(const Point<int>& point, uint8_t mask, const VoronoiSkeletonGrid& grid)
 {
-    return (point.x >= grid.getWidthInCells() || point.y >= grid.getHeightInCells()) ||
-           (grid.getClassification(point.x, point.y) & mask);
+    return (point.x >= grid.getWidthInCells() || point.y >= grid.getHeightInCells())
+      || (grid.getClassification(point.x, point.y) & mask);
 }
 
 
 int clamp_ray_endpoint(int endpoint, int dimensionSize)
 {
-    if(endpoint == dimensionSize)
-    {
+    if (endpoint == dimensionSize) {
         return endpoint - 1;
-    }
-    else if(endpoint > dimensionSize)  // overflowed on the negative side, so go back to 0
+    } else if (endpoint > dimensionSize)   // overflowed on the negative side, so go back to 0
     {
         return 0;
     }
@@ -119,5 +107,5 @@ int clamp_ray_endpoint(int endpoint, int dimensionSize)
     return endpoint;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

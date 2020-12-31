@@ -8,18 +8,18 @@
 
 
 /**
-* \file     navigation_interface_control.cpp
-* \author   Collin Johnson
-*
-* Definition of NavigationInterfaceControl.
-*/
+ * \file     navigation_interface_control.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of NavigationInterfaceControl.
+ */
 
 #include "ui/navigation/navigation_interface_control.h"
+#include "system/module_communicator.h"
+#include "system/system_communicator.h"
 #include "ui/navigation/decision_interface_control.h"
 #include "ui/navigation/goal_interface_control.h"
 #include "ui/navigation/navigation_interface_display.h"
-#include "system/module_communicator.h"
-#include "system/system_communicator.h"
 #include "utils/timestamp.h"
 #include <cassert>
 
@@ -159,19 +159,15 @@ GLEventStatus NavigationInterfaceControl::keyPressed(wxKeyEvent& key)
 {
     GLEventStatus status = GLEventStatus::capture;
 
-    if(key.GetKeyCode() == WXK_SPACE)
-    {
-        if(isPaused_)
-        {
+    if (key.GetKeyCode() == WXK_SPACE) {
+        if (isPaused_) {
             mpepc::metric_planner_command_message_t resumeMessage;
             resumeMessage.timestamp = utils::system_time_us();
             resumeMessage.command = mpepc::RESUME;
             consumer_->sendMessage(resumeMessage);
 
             isPaused_ = false;
-        }
-        else
-        {
+        } else {
             mpepc::metric_planner_command_message_t pauseMessage;
             pauseMessage.timestamp = utils::system_time_us();
             pauseMessage.command = mpepc::PAUSE;
@@ -179,17 +175,11 @@ GLEventStatus NavigationInterfaceControl::keyPressed(wxKeyEvent& key)
 
             isPaused_ = true;
         }
-    }
-    else if(key.GetKeyCode() == 'O')
-    {
+    } else if (key.GetKeyCode() == 'O') {
         display_->toggleObjects();
-    }
-    else if(key.GetKeyCode() == 'T')
-    {
+    } else if (key.GetKeyCode() == 'T') {
         display_->toggleTrajectories();
-    }
-    else
-    {
+    } else {
         status = GLEventStatus::passthrough;
     }
 
@@ -201,40 +191,34 @@ NavigationData NavigationInterfaceControl::loadNewData(void)
 {
     NavigationData newData;
 
-    if(topoMap_.hasData())
-    {
+    if (topoMap_.hasData()) {
         topoMap_.swapBuffers();
         display_->setAreas(topoMap_);
         haveTopoMap_ = true;
     }
 
-    if(location_.hasData())
-    {
+    if (location_.hasData()) {
         location_.swapBuffers();
         haveLocation_ = true;
     }
 
-    if(map_.hasData())
-    {
+    if (map_.hasData()) {
         map_.swapBuffers();
         display_->setLPM(map_);
         haveMetricMap_ = true;
     }
 
-    if(objects_.hasData())
-    {
+    if (objects_.hasData()) {
         objects_.swapBuffers();
         display_->setObjects(objects_);
     }
 
-    if(trajectories_.hasData())
-    {
+    if (trajectories_.hasData()) {
         trajectories_.swapBuffers();
         display_->setTrajectories(trajectories_);
     }
 
-    if(pose_.hasData())
-    {
+    if (pose_.hasData()) {
         pose_.swapBuffers();
         display_->setPose(pose_);
     }
@@ -247,5 +231,5 @@ NavigationData NavigationInterfaceControl::loadNewData(void)
     return newData;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

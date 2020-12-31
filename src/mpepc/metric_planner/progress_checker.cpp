@@ -31,59 +31,47 @@ void ProgressChecker::run(const motion_state_t& state)
     const float kLinVelThreshold = 0.1;
     const float kAngVelThreshold = 0.2;
 
-    if(progressCounter_ == 0)
-    {
+    if (progressCounter_ == 0) {
         slowAverage_ = state.velocity;
         fastAverage_ = state.velocity;
-    }
-    else
-    {
-        slowAverage_.linear  = kSlowDecayRate*slowAverage_.linear  + (1 - kSlowDecayRate)*state.velocity.linear;
-        slowAverage_.angular = kSlowDecayRate*slowAverage_.angular + (1 - kSlowDecayRate)*state.velocity.angular;
+    } else {
+        slowAverage_.linear = kSlowDecayRate * slowAverage_.linear + (1 - kSlowDecayRate) * state.velocity.linear;
+        slowAverage_.angular = kSlowDecayRate * slowAverage_.angular + (1 - kSlowDecayRate) * state.velocity.angular;
 
-        fastAverage_.linear  = kFastDecayRate*fastAverage_.linear  + (1 - kFastDecayRate)*state.velocity.linear;
-        fastAverage_.angular = kFastDecayRate*fastAverage_.angular + (1 - kFastDecayRate)*state.velocity.angular;
+        fastAverage_.linear = kFastDecayRate * fastAverage_.linear + (1 - kFastDecayRate) * state.velocity.linear;
+        fastAverage_.angular = kFastDecayRate * fastAverage_.angular + (1 - kFastDecayRate) * state.velocity.angular;
     }
 
-    //is robot not moving (forward/backward)?
-    bool robotIsNotMoving = fabs(slowAverage_.linear)   < kLinVelThreshold &&
-                            fabs(fastAverage_.linear)   < kLinVelThreshold &&
-                            fabs(state.velocity.linear) < kLinVelThreshold;
+    // is robot not moving (forward/backward)?
+    bool robotIsNotMoving = fabs(slowAverage_.linear) < kLinVelThreshold && fabs(fastAverage_.linear) < kLinVelThreshold
+      && fabs(state.velocity.linear) < kLinVelThreshold;
 
-    if(robotIsNotMoving)
-    {
+    if (robotIsNotMoving) {
         // is robot not rotating?
-        bool robotIsNotRotating = fabs(slowAverage_.angular)   < kAngVelThreshold &&
-                                  fabs(fastAverage_.angular)   < kAngVelThreshold &&
-                                  fabs(state.velocity.angular) < kAngVelThreshold;
+        bool robotIsNotRotating = fabs(slowAverage_.angular) < kAngVelThreshold
+          && fabs(fastAverage_.angular) < kAngVelThreshold && fabs(state.velocity.angular) < kAngVelThreshold;
 
         // robot may be chattering (not being able to decide to turn right or left, if the long-term
         // average angular velocity is small, short-term angular delta is not small,
         // but the robot is not moving forward or backward.
-        bool robotIsChattering = robotIsNotMoving &&
-                                 fabs(slowAverage_.angular) < kAngVelThreshold &&
-                                 fabs(fastAverage_.angular - state.velocity.angular) > kAngVelThreshold;
+        bool robotIsChattering = robotIsNotMoving && fabs(slowAverage_.angular) < kAngVelThreshold
+          && fabs(fastAverage_.angular - state.velocity.angular) > kAngVelThreshold;
 
-        if(robotIsNotRotating || robotIsChattering)
-        {
+        if (robotIsNotRotating || robotIsChattering) {
             // if the robot is not moving, and is not rotating or is chattering around an angle,
             // then declare the robot is stuck somewhere.
             robotIsStuckCounter_++;
         }
-    }
-    else
-    {
+    } else {
         // if robot is moving update counters
         progressCounter_++;
 
-        if(progressCounter_ > kProgressCounterThreshold)
-        {
-            progressCounter_     = kProgressCounterThreshold;
+        if (progressCounter_ > kProgressCounterThreshold) {
+            progressCounter_ = kProgressCounterThreshold;
             robotIsStuckCounter_ = 0;
         }
     }
-
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

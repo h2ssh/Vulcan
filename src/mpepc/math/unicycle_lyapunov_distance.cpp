@@ -8,11 +8,11 @@
 
 
 /**
-* \file     unicycle_lyapunov_distance.cpp
-* \author   Jong Jin Park
-* 
-* Definition of UnicycleLyapunovDistance.
-*/
+ * \file     unicycle_lyapunov_distance.cpp
+ * \author   Jong Jin Park
+ *
+ * Definition of UnicycleLyapunovDistance.
+ */
 
 #include "mpepc/math/unicycle_lyapunov_distance.h"
 #include "core/pose.h"
@@ -22,7 +22,8 @@ namespace vulcan
 namespace mpepc
 {
 
-UnicycleLyapunovDistance::UnicycleLyapunovDistance(const pose_t& targetPose, const unicycle_lyapunov_distance_params_t& params)
+UnicycleLyapunovDistance::UnicycleLyapunovDistance(const pose_t& targetPose,
+                                                   const unicycle_lyapunov_distance_params_t& params)
 : chart_(targetPose, params.smallRadius)
 , params_(params)
 {
@@ -32,7 +33,7 @@ UnicycleLyapunovDistance::UnicycleLyapunovDistance(const pose_t& targetPose, con
 double UnicycleLyapunovDistance::stabilizingDeltaStar(const Point<float> point) const
 {
     reduced_egocentric_polar_coords_t coords = chart_.point2rp(point);
-    
+
     return stabilizing_delta_star(coords.r, coords.phi, params_.kPhi, params_.vectorFieldType, params_.smallRadius);
 }
 
@@ -40,8 +41,9 @@ double UnicycleLyapunovDistance::stabilizingDeltaStar(const Point<float> point) 
 double UnicycleLyapunovDistance::stabilizingHeading(const Point<float> point) const
 {
     reduced_egocentric_polar_coords_t coords = chart_.point2rp(point);
-    double deltaStar = stabilizing_delta_star(coords.r, coords.phi, params_.kPhi, params_.vectorFieldType, params_.smallRadius);
-    
+    double deltaStar =
+      stabilizing_delta_star(coords.r, coords.phi, params_.kPhi, params_.vectorFieldType, params_.smallRadius);
+
     return deltaStar + coords.lineOfSightAngle;
 }
 
@@ -49,7 +51,7 @@ double UnicycleLyapunovDistance::stabilizingHeading(const Point<float> point) co
 double UnicycleLyapunovDistance::distanceFromPoint(const Point<float>& point) const
 {
     reduced_egocentric_polar_coords_t coords = chart_.point2rp(point);
-    
+
     return distance_on_manifold(coords.r, coords.phi, params_.kPhi);
 }
 
@@ -57,11 +59,16 @@ double UnicycleLyapunovDistance::distanceFromPoint(const Point<float>& point) co
 double UnicycleLyapunovDistance::distanceFromPose(const pose_t& pose) const
 {
     egocentric_polar_coords_t coords = chart_.pose2rpd(pose);
-    
-    return unicycle_nonholonomic_distance(coords.r, coords.phi, coords.delta,
-                                          params_.kPhi, params_.kDelta, params_.vectorFieldType, params_.smallRadius);
+
+    return unicycle_nonholonomic_distance(coords.r,
+                                          coords.phi,
+                                          coords.delta,
+                                          params_.kPhi,
+                                          params_.kDelta,
+                                          params_.vectorFieldType,
+                                          params_.smallRadius);
 }
 
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan

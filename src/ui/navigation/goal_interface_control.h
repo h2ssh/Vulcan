@@ -8,26 +8,32 @@
 
 
 /**
-* \file     goal_interface_control.h
-* \author   Collin Johnson
-*
-* Declaration of GoalInterfaceControl.
-*/
+ * \file     goal_interface_control.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GoalInterfaceControl.
+ */
 
 #ifndef UI_NAVIGATION_GOAL_INTERFACE_CONTROL_H
 #define UI_NAVIGATION_GOAL_INTERFACE_CONTROL_H
 
+#include "core/pose.h"
 #include "ui/common/gl_event.h"
 #include "ui/common/grid_object_selector.h"
-#include "core/pose.h"
-#include <wx/wx.h>
-#include <wx/tglbtn.h>
 #include <unordered_map>
+#include <wx/tglbtn.h>
+#include <wx/wx.h>
 
 namespace vulcan
 {
-namespace planner { class NavigationInterface; }
-namespace system { class SystemCommunicator; }
+namespace planner
+{
+class NavigationInterface;
+}
+namespace system
+{
+class SystemCommunicator;
+}
 namespace ui
 {
 
@@ -35,8 +41,8 @@ class NavigationData;
 class NavigationInterfaceDisplay;
 
 /**
-* GoalInterfaceWidgets
-*/
+ * GoalInterfaceWidgets
+ */
 struct GoalInterfaceWidgets
 {
     wxListBox* goalsList = nullptr;
@@ -49,55 +55,54 @@ struct GoalInterfaceWidgets
 
 
 /**
-* GoalInterfaceControl handles the interface between the user and the GoalInterface. The control maintains the state
-* machine for the right panel of the NavigationInterface.
-*
-* The various buttons are enabled if the following conditions hold:
-*
-*   - Select Goal In Map : The robot has a map and a location/pose in the map
-*   - Add Selected Goal : A goal has been selected in the map
-*   - Add Current Location : The robot has a map and a location/pose in the map
-*   - Preview : A Goal is selected in the Goal list
-*   - Go : A Goal is selected in the Goal list that is not the currently deferred goal
-*   - Resume : A Goal is selected in the Goal list that is the current deferred goal
-*
-*/
-class GoalInterfaceControl : public GLMouseHandler,
-                             public wxEvtHandler
+ * GoalInterfaceControl handles the interface between the user and the GoalInterface. The control maintains the state
+ * machine for the right panel of the NavigationInterface.
+ *
+ * The various buttons are enabled if the following conditions hold:
+ *
+ *   - Select Goal In Map : The robot has a map and a location/pose in the map
+ *   - Add Selected Goal : A goal has been selected in the map
+ *   - Add Current Location : The robot has a map and a location/pose in the map
+ *   - Preview : A Goal is selected in the Goal list
+ *   - Go : A Goal is selected in the Goal list that is not the currently deferred goal
+ *   - Resume : A Goal is selected in the Goal list that is the current deferred goal
+ *
+ */
+class GoalInterfaceControl
+: public GLMouseHandler
+, public wxEvtHandler
 {
 public:
-
     /**
-    * Constructor for DecisionInterfaceControl.
-    *
-    * \param    interface           Interface to use for Decision-level navigation
-    * \param    display             Display to be updated with Decision-level state
-    */
+     * Constructor for DecisionInterfaceControl.
+     *
+     * \param    interface           Interface to use for Decision-level navigation
+     * \param    display             Display to be updated with Decision-level state
+     */
     GoalInterfaceControl(planner::NavigationInterface& interface,
                          NavigationInterfaceDisplay& display,
                          const GoalInterfaceWidgets& widgets);
 
     /**
-    * update
-    */
+     * update
+     */
     void update(const NavigationData& data, system::SystemCommunicator& communicator);
 
 private:
-
     planner::NavigationInterface& interface_;
     NavigationInterfaceDisplay& display_;
     GoalInterfaceWidgets widgets_;
 
     GridObjectSelector<int32_t> areaSelector_;
-    int32_t currentMapId_;          // Id of topo map currently being used
-    int32_t currentAreaId_;         // Id of the current area
-    pose_t currentPose_;     // Current pose in the map
+    int32_t currentMapId_;    // Id of topo map currently being used
+    int32_t currentAreaId_;   // Id of the current area
+    pose_t currentPose_;      // Current pose in the map
 
     // Store a mapping of area->center to allow for the creation of global pose goals associated with an area
     std::unordered_map<int32_t, pose_t> areaCenters_;
 
-    bool haveNewGoal_;      // Flag indicating if a new goal was created, so the goalsList should be repopulated
-    bool shouldSendGoalCommand_;    // Flag indicating if a new goal should be sent because the Go button was pressed
+    bool haveNewGoal_;             // Flag indicating if a new goal was created, so the goalsList should be repopulated
+    bool shouldSendGoalCommand_;   // Flag indicating if a new goal should be sent because the Go button was pressed
 
 
     void setSelectGoalState(const NavigationData& data);
@@ -119,7 +124,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_NAVIGATION_GOAL_INTERFACE_CONTROL_H
+#endif   // UI_NAVIGATION_GOAL_INTERFACE_CONTROL_H

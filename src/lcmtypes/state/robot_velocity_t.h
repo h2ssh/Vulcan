@@ -26,9 +26,12 @@ void convert_lcm_to_vulcan(const vulcan_lcm_robot_velocity_t& velocityMessage, v
 void convert_vulcan_to_lcm(const velocity_t& velocity, vulcan_lcm_robot_velocity_t& velocityMessage);
 
 void publish_data(lcm_t* lcm, const velocity_t& velocity, std::string channel = VELOCITY_CHANNEL);
-void subscribe_to_message(lcm_t* lcm, void (*callback)(const velocity_t&, const std::string&, void*), void* userdata, std::string channel = VELOCITY_CHANNEL);
+void subscribe_to_message(lcm_t* lcm,
+                          void (*callback)(const velocity_t&, const std::string&, void*),
+                          void* userdata,
+                          std::string channel = VELOCITY_CHANNEL);
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_ROBOT_VELOCITY_T_H
+#endif   // LCMTYPES_ROBOT_VELOCITY_T_H

@@ -8,12 +8,12 @@
 
 
 /**
-* \file     process_gateway_feature_results.cpp
-* \author   Collin Johnson
-*
-* process_gateway_feature_results is a program that parses the results of a gateway_feature_search program. It then
-* supplies various metrics to help search for the best combination of gateway features.
-*/
+ * \file     process_gateway_feature_results.cpp
+ * \author   Collin Johnson
+ *
+ * process_gateway_feature_results is a program that parses the results of a gateway_feature_search program. It then
+ * supplies various metrics to help search for the best combination of gateway features.
+ */
 
 #include <algorithm>
 #include <fstream>
@@ -39,11 +39,8 @@ struct FeatureSet
     int id;
     std::vector<ClassifierResult> results;
     double bestResult;
-    
-    bool operator<(const FeatureSet& rhs) const
-    {
-        return bestResult < rhs.bestResult;
-    }
+
+    bool operator<(const FeatureSet& rhs) const { return bestResult < rhs.bestResult; }
 };
 
 std::ifstream& operator>>(std::ifstream& in, FeatureSet& features);
@@ -57,32 +54,27 @@ void assign_fn_neg(std::vector<FeatureSet>& sets);
 
 int main(int argc, char** argv)
 {
-    if(argc < 2)
-    {
+    if (argc < 2) {
         std::cerr << "Expected command-line: process_gateway_feature_results <gateway results file>\n";
         return -1;
     }
-    
+
     std::ifstream in(argv[1]);
-    if(!in.is_open())
-    {
+    if (!in.is_open()) {
         std::cerr << "ERROR: Failed to open results file: " << argv[1] << '\n';
         return -1;
     }
-    
+
     std::vector<FeatureSet> sets;
     std::string line;
-    while(std::getline(in, line))
-    {
-        if(line.length() < 10)
-        {
+    while (std::getline(in, line)) {
+        if (line.length() < 10) {
             continue;
         }
-        
-        if(line.find("Feature") != std::string::npos)
-        {
+
+        if (line.find("Feature") != std::string::npos) {
             FeatureSet newSet;
-            
+
             // Line is: Feature set <id>
             std::istringstream featureIn(line);
             std::string tmp;
@@ -92,23 +84,23 @@ int main(int argc, char** argv)
             sets.emplace_back(std::move(newSet));
         }
     }
-    
+
     std::cout << "Read " << sets.size() << " feature sets.\n";
-    
+
     assign_max_sum_precision_recall(sets);
     std::sort(sets.begin(), sets.end());
-    
+
     std::ofstream prOut("pr_gateway_results.txt");
     prOut << "PR sum is: " << '\n';
     std::copy(sets.begin(), sets.end(), std::ostream_iterator<FeatureSet>(prOut, "\n"));
-    
+
     assign_fn_neg(sets);
     std::sort(sets.begin(), sets.end());
-    
+
     std::ofstream fnOut("fn_gateway_results.txt");
     fnOut << "Num Fn is: " << '\n';
     std::copy(sets.begin(), sets.end(), std::ostream_iterator<FeatureSet>(fnOut, "\n"));
-    
+
     return 0;
 }
 
@@ -116,23 +108,20 @@ int main(int argc, char** argv)
 std::ifstream& operator>>(std::ifstream& in, FeatureSet& features)
 {
     std::string line;
-    while(std::getline(in, line))
-    {
-        if(line.length() < 10)
-        {
+    while (std::getline(in, line)) {
+        if (line.length() < 10) {
             break;
         }
-        
-        // If we aren't reading the header, then 
-        if(line.find("Thresh") == std::string::npos)
-        {
+
+        // If we aren't reading the header, then
+        if (line.find("Thresh") == std::string::npos) {
             std::istringstream resIn(line);
             ClassifierResult result;
             resIn >> result;
             features.results.push_back(result);
         }
     }
-    
+
     return in;
 }
 
@@ -140,7 +129,7 @@ std::ifstream& operator>>(std::ifstream& in, FeatureSet& features)
 std::istream& operator>>(std::istream& in, ClassifierResult& result)
 {
     in >> result.threshold >> result.error >> result.numFn >> result.numTp >> result.numFp >> result.precision
-        >> result.recall;
+      >> result.recall;
     return in;
 }
 
@@ -154,12 +143,11 @@ std::ostream& operator<<(std::ostream& out, const FeatureSet& features)
 
 void assign_max_sum_precision_recall(std::vector<FeatureSet>& sets)
 {
-    for(auto& s : sets)
-    {
+    for (auto& s : sets) {
         std::sort(s.results.begin(), s.results.end(), [](const auto& lhs, const auto& rhs) {
             return lhs.precision + lhs.recall < rhs.precision + rhs.recall;
         });
-        
+
         s.bestResult = s.results.back().precision + s.results.back().recall;
     }
 }
@@ -167,12 +155,11 @@ void assign_max_sum_precision_recall(std::vector<FeatureSet>& sets)
 
 void assign_fn_neg(std::vector<FeatureSet>& sets)
 {
-    for(auto& s : sets)
-    {
+    for (auto& s : sets) {
         std::sort(s.results.begin(), s.results.end(), [](const auto& lhs, const auto& rhs) {
             return (lhs.numFn > rhs.numFn) || (lhs.numFn == rhs.numFn && lhs.threshold < rhs.threshold);
         });
-        
+
         s.bestResult = s.results.back().numFn;
     }
 }

@@ -20,23 +20,21 @@ namespace ui
 class NavigationInterfaceFrame;
 
 /**
-* NavigationInterfaceApp is where the main  
-*/
+ * NavigationInterfaceApp is where the main
+ */
 class NavigationInterfaceApp : public wxApp
 {
 public:
-    
     virtual bool OnInit(void);
-    virtual int  OnExit(void);
-    
+    virtual int OnExit(void);
+
 private:
-    
     NavigationInterfaceFrame* mainFrame;
 };
 
 DECLARE_APP(NavigationInterfaceApp)
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_NAVIGATION_NAVIGATION_INTERFACE_APP_H
+#endif   // UI_NAVIGATION_NAVIGATION_INTERFACE_APP_H

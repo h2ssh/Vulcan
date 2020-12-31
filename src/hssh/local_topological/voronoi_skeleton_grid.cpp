@@ -8,11 +8,11 @@
 
 
 /**
-* \file     place_grid.cpp
-* \author   Collin Johnson
-*
-* Definition of VoronoiSkeletonGrid.
-*/
+ * \file     place_grid.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of VoronoiSkeletonGrid.
+ */
 
 #include "hssh/local_topological/voronoi_skeleton_grid.h"
 
@@ -20,8 +20,9 @@ namespace vulcan
 {
 namespace hssh
 {
-    
-std::vector<cell_t> filter_cells(const std::vector<cell_t>& cells, uint8_t mask, const ClassificationGrid& classificationGrid);
+
+std::vector<cell_t>
+  filter_cells(const std::vector<cell_t>& cells, uint8_t mask, const ClassificationGrid& classificationGrid);
 
 
 VoronoiSkeletonGrid::VoronoiSkeletonGrid(void)
@@ -30,8 +31,8 @@ VoronoiSkeletonGrid::VoronoiSkeletonGrid(void)
 
 
 VoronoiSkeletonGrid::VoronoiSkeletonGrid(std::size_t width, std::size_t height, float scale)
-    : distanceGrid      (width, height, scale, Point<float>(0, 0))
-    , classificationGrid(width, height, scale, Point<float>(0, 0))
+: distanceGrid(width, height, scale, Point<float>(0, 0))
+, classificationGrid(width, height, scale, Point<float>(0, 0))
 {
 }
 
@@ -46,12 +47,11 @@ VoronoiSkeletonGrid::VoronoiSkeletonGrid(const DistanceGrid& distanceGrid, const
 SourceCells VoronoiSkeletonGrid::getSourceCells(int x, int y) const
 {
     auto sourcesIt = skeletonSources.find(cell_t(x, y));
-    
-    if(sourcesIt != skeletonSources.end())
-    {
+
+    if (sourcesIt != skeletonSources.end()) {
         return sourcesIt->second;
     }
-    
+
     return SourceCells();
 }
 
@@ -59,10 +59,10 @@ SourceCells VoronoiSkeletonGrid::getSourceCells(int x, int y) const
 void VoronoiSkeletonGrid::filterVoronoiInformation(uint8_t classificationMask)
 {
     std::vector<cell_t> filteredJunctions = filter_cells(junctions, classificationMask, classificationGrid);
-    std::vector<cell_t> filteredDeadEnds  = filter_cells(deadEnds,  classificationMask, classificationGrid);
-    
+    std::vector<cell_t> filteredDeadEnds = filter_cells(deadEnds, classificationMask, classificationGrid);
+
     junctions = std::move(filteredJunctions);
-    deadEnds  = std::move(filteredDeadEnds);
+    deadEnds = std::move(filteredDeadEnds);
 }
 
 
@@ -118,20 +118,19 @@ void VoronoiSkeletonGrid::reset(VoronoiDist distance, uint8_t classification)
 }
 
 
-std::vector<cell_t> filter_cells(const std::vector<cell_t>& cells, uint8_t mask, const ClassificationGrid& classificationGrid)
+std::vector<cell_t>
+  filter_cells(const std::vector<cell_t>& cells, uint8_t mask, const ClassificationGrid& classificationGrid)
 {
     std::vector<cell_t> filtered;
-    
-    for(auto cell : cells)
-    {
-        if(classificationGrid.getValue(cell.x, cell.y) & mask)
-        {
+
+    for (auto cell : cells) {
+        if (classificationGrid.getValue(cell.x, cell.y) & mask) {
             filtered.push_back(cell);
         }
     }
-    
+
     return filtered;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     navigation_grid_builder.h
-* \author   Collin Johnson and Jong Jin Park
-*
-* Declaration of NavigationGridBuilder.
-*/
+ * \file     navigation_grid_builder.h
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Declaration of NavigationGridBuilder.
+ */
 
 #ifndef MPEPC_GRID_NAVIGATION_GRID_BUILDER_H
 #define MPEPC_GRID_NAVIGATION_GRID_BUILDER_H
@@ -30,60 +30,57 @@ class NavigationGrid;
 struct navigation_grid_builder_params_t;
 
 /**
-* NavigationGridBuilder handles the construction of NavigationGrids. The NavigationGrid is constructed using the wavefront algorithm.
-* The cell containing the goal pose has zero cost and is placed in the queue. From here, each neighboring cell, based on 8-way
-* connectivity, is considered. If the cumulative cost of traveling to the cell and being at the cell is less than the currently
-* assigned cost, replace the cost for the cell and enqueue the cell. Repeat this process until the queue is empty.
-*/
+ * NavigationGridBuilder handles the construction of NavigationGrids. The NavigationGrid is constructed using the
+ * wavefront algorithm. The cell containing the goal pose has zero cost and is placed in the queue. From here, each
+ * neighboring cell, based on 8-way connectivity, is considered. If the cumulative cost of traveling to the cell and
+ * being at the cell is less than the currently assigned cost, replace the cost for the cell and enqueue the cell.
+ * Repeat this process until the queue is empty.
+ */
 class NavigationGridBuilder
 {
 public:
-
     /**
-    * Constructor for NavigationGridBuilder.
-    *
-    * \param    params          Parameters for building a navigation grid
-    */
+     * Constructor for NavigationGridBuilder.
+     *
+     * \param    params          Parameters for building a navigation grid
+     */
     NavigationGridBuilder(const navigation_grid_builder_params_t& params);
 
     /**
-    * Destructor for NavigationGridBuilder.
-    */
+     * Destructor for NavigationGridBuilder.
+     */
     ~NavigationGridBuilder(void);
 
     /**
-    * buildGrid builds a NavigationGrid defining a navigation function that carries the robot from the start
-    * location to the specified goal location. The navigation function combines the a distance-based metric and
-    * a cost-based metric to determine the optimal policy for every cell, subject to heurstic cost defined by the
-    * provided cost map.
-    *
-    * \param    start               Starting pose of the path through the navigation grid
-    * \param    goal                Goal pose for the path
-    * \param    costMap             Cost map defining the costs associated with occupying cells
-    * \param    navGrid             NavigationGrid built using the targets and cost map
-    * \return   True if the grid was built. False if no changes were deemed necessary.
-    */
-    bool buildGrid(const pose_t& start,
-                   const pose_t& goal,
-                   const CostMap& costMap,
-                   NavigationGrid& navGrid);
+     * buildGrid builds a NavigationGrid defining a navigation function that carries the robot from the start
+     * location to the specified goal location. The navigation function combines the a distance-based metric and
+     * a cost-based metric to determine the optimal policy for every cell, subject to heurstic cost defined by the
+     * provided cost map.
+     *
+     * \param    start               Starting pose of the path through the navigation grid
+     * \param    goal                Goal pose for the path
+     * \param    costMap             Cost map defining the costs associated with occupying cells
+     * \param    navGrid             NavigationGrid built using the targets and cost map
+     * \return   True if the grid was built. False if no changes were deemed necessary.
+     */
+    bool buildGrid(const pose_t& start, const pose_t& goal, const CostMap& costMap, NavigationGrid& navGrid);
 
     /**
-    * buildGrid builds a NavigationGrid defining a navigation function that carries the robot from the start
-    * location to the specified goal location. The navigation function combines the a distance-based metric and
-    * a cost-based metric to determine the optimal policy for every cell, subject to heurstic cost defined by the
-    * provided cost map.
-    *
-    * This version of the navigation function carries the robot through a sequence of intermediate goal locations
-    * before reaching the final goal.
-    *
-    * \param    start               Starting pose for the path through the navigation grid
-    * \param    goal                Goal pose for the path
-    * \param    intermediate        Intermediate waypoints that define a high-level topological route
-    * \param    costMap             Cost map defining the costs associated with occupying cells
-    * \param    navGrid             NavigationGrid built using the targets and cost map
-    * \return   True if the grid was built. False if no changes were deemed necessary.
-    */
+     * buildGrid builds a NavigationGrid defining a navigation function that carries the robot from the start
+     * location to the specified goal location. The navigation function combines the a distance-based metric and
+     * a cost-based metric to determine the optimal policy for every cell, subject to heurstic cost defined by the
+     * provided cost map.
+     *
+     * This version of the navigation function carries the robot through a sequence of intermediate goal locations
+     * before reaching the final goal.
+     *
+     * \param    start               Starting pose for the path through the navigation grid
+     * \param    goal                Goal pose for the path
+     * \param    intermediate        Intermediate waypoints that define a high-level topological route
+     * \param    costMap             Cost map defining the costs associated with occupying cells
+     * \param    navGrid             NavigationGrid built using the targets and cost map
+     * \return   True if the grid was built. False if no changes were deemed necessary.
+     */
     bool buildGrid(const pose_t& start,
                    const pose_t& goal,
                    const std::vector<NavWaypoint>& intermediate,
@@ -91,12 +88,11 @@ public:
                    NavigationGrid& navGrid);
 
 private:
-
     struct Impl;
     std::unique_ptr<Impl> impl_;
 };
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_GRID_NAVIGATION_GRID_BUILDER_H
+#endif   // MPEPC_GRID_NAVIGATION_GRID_BUILDER_H

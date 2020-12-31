@@ -8,11 +8,11 @@
 
 
 /**
-* \file     invalid_area.h
-* \author   Collin Johnson
-*
-* Definition of InvalidAreaException.
-*/
+ * \file     invalid_area.h
+ * \author   Collin Johnson
+ *
+ * Definition of InvalidAreaException.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_INVALID_AREA_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_INVALID_AREA_H
@@ -26,30 +26,22 @@ namespace hssh
 {
 
 /**
-* InvalidAreaException is thrown whenever an attempt to create a LocalArea or AreaProposal fails because a constraint
-* from the topological representation has been violated.
-*/
+ * InvalidAreaException is thrown whenever an attempt to create a LocalArea or AreaProposal fails because a constraint
+ * from the topological representation has been violated.
+ */
 class InvalidAreaException : public std::exception
 {
 public:
-
-    InvalidAreaException(std::string description)
-    : error_(description)
-    {
-    }
+    InvalidAreaException(std::string description) : error_(description) { }
 
     // std::exception interface
-    const char* what() const noexcept override
-    {
-        return error_.c_str();
-    }
+    const char* what() const noexcept override { return error_.c_str(); }
 
 private:
-
     std::string error_;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_INVALID_AREA_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_INVALID_AREA_H

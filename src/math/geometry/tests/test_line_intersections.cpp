@@ -208,8 +208,8 @@
 //     else if(!absolute_fuzzy_equal(intersections[0].intersection.x, 0.0f) ||
 //             !absolute_fuzzy_equal(intersections[0].intersection.y, 0.0f))
 //     {
-//         std::cout<<"FAILED: x: Wrong intersection point. Found: "<<intersections[0].intersection<<" Expected: (0, 0)\n";
-//         return false;
+//         std::cout<<"FAILED: x: Wrong intersection point. Found: "<<intersections[0].intersection<<" Expected: (0,
+//         0)\n"; return false;
 //     }
 //
 //     std::cout<<"PASSED: x\n";
@@ -245,8 +245,8 @@
 //     else if(!absolute_fuzzy_equal(intersections[0].intersection.x, 0.0f) ||
 //             !absolute_fuzzy_equal(intersections[0].intersection.y, 0.0f))
 //     {
-//         std::cout<<"FAILED: plus: Wrong intersection point. Found: "<<intersections[0].intersection<<" Expected: (0, 0)\n";
-//         return false;
+//         std::cout<<"FAILED: plus: Wrong intersection point. Found: "<<intersections[0].intersection<<" Expected: (0,
+//         0)\n"; return false;
 //     }
 //
 //     std::cout<<"PASSED: plus\n";
@@ -275,9 +275,8 @@
 //     }
 //     else if(intersections.size() > 1)
 //     {
-//         std::cout<<"FAILED: same_start_point: Too many intersections. Found: "<<intersections.size()<<" Expected: 1\n";
-//         print_intersections(intersections);
-//         return false;
+//         std::cout<<"FAILED: same_start_point: Too many intersections. Found: "<<intersections.size()<<" Expected:
+//         1\n"; print_intersections(intersections); return false;
 //     }
 //
 //     // TODO: Determine method for easily checking the correct points, rather than just the number of points
@@ -309,15 +308,14 @@
 //     }
 //     else if(intersections.size() > 1)
 //     {
-//         std::cout<<"FAILED: same_start_point: Too many intersections. Found: "<<intersections.size()<<" Expected: 1\n";
-//         print_intersections(intersections);
-//         return false;
+//         std::cout<<"FAILED: same_start_point: Too many intersections. Found: "<<intersections.size()<<" Expected:
+//         1\n"; print_intersections(intersections); return false;
 //     }
 //     else if(!absolute_fuzzy_equal(intersections[0].intersection.x, 1.5f) ||
 //             !absolute_fuzzy_equal(intersections[0].intersection.y, 1.5f))
 //     {
-//         std::cout<<"FAILED: same_start_point: Wrong intersection point. Found: "<<intersections[0].intersection<<" Expected: (1.5, 1.5)\n";
-//         return false;
+//         std::cout<<"FAILED: same_start_point: Wrong intersection point. Found: "<<intersections[0].intersection<<"
+//         Expected: (1.5, 1.5)\n"; return false;
 //     }
 //
 //     std::cout<<"PASSED: same_start_point\n";
@@ -353,8 +351,8 @@
 //     else if(!absolute_fuzzy_equal(intersections[0].intersection.x, -1.5f) ||
 //             !absolute_fuzzy_equal(intersections[0].intersection.y, -1.5f))
 //     {
-//         std::cout<<"FAILED: same_end_point: Wrong intersection point. Found: "<<intersections[0].intersection<<" Expected: (-1.5, -1.5)\n";
-//         return false;
+//         std::cout<<"FAILED: same_end_point: Wrong intersection point. Found: "<<intersections[0].intersection<<"
+//         Expected: (-1.5, -1.5)\n"; return false;
 //     }
 //
 //     std::cout<<"PASSED: same_end_point\n";
@@ -374,7 +372,8 @@
 // void print_intersections(const std::vector<intersection_point_t>& intersections)
 // {
 //     std::cout<<"INFO: Intersections:\n";
-//     for(auto intersectionIt = intersections.begin(), intersectionEnd = intersections.end(); intersectionIt != intersectionEnd; ++intersectionIt)
+//     for(auto intersectionIt = intersections.begin(), intersectionEnd = intersections.end(); intersectionIt !=
+//     intersectionEnd; ++intersectionIt)
 //     {
 //         std::cout<<intersectionIt->intersection<<'\n';
 //     }

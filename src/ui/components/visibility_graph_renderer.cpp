@@ -8,11 +8,11 @@
 
 
 /**
-* \file     visibility_graph_renderer.cpp
-* \author   Collin Johnson
-*
-* Declaration of VisibilityGraphRenderer.
-*/
+ * \file     visibility_graph_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Declaration of VisibilityGraphRenderer.
+ */
 
 #include "ui/components/visibility_graph_renderer.h"
 #include "ui/common/gl_shapes.h"
@@ -25,12 +25,9 @@ namespace vulcan
 namespace ui
 {
 
-Point<float> global_vertex(utils::VisGraphVertex vertex,
-                                 Point<float> globalOrigin,
-                                 double metersPerCell)
+Point<float> global_vertex(utils::VisGraphVertex vertex, Point<float> globalOrigin, double metersPerCell)
 {
-    return Point<float>(globalOrigin.x + (vertex.x * metersPerCell),
-                              globalOrigin.y + (vertex.y * metersPerCell));
+    return Point<float>(globalOrigin.x + (vertex.x * metersPerCell), globalOrigin.y + (vertex.y * metersPerCell));
 }
 
 
@@ -40,7 +37,6 @@ VisibilityGraphRenderer::VisibilityGraphRenderer(void)
 {
     std::vector<GLColor> colors{GLColor(0, 0, 255, 200), GLColor(0, 255, 0, 200), GLColor(255, 0, 0, 200)};
     featureColor_.setColors(colors);
-
 }
 
 
@@ -65,15 +61,13 @@ void VisibilityGraphRenderer::renderVisibilityGraph(const utils::VisibilityGraph
 }
 
 
-
 void VisibilityGraphRenderer::drawVertices(const utils::VisibilityGraph& graph,
                                            Point<float> globalOrigin,
                                            double metersPerCell)
 {
     vertexColor_.set();
 
-    for(auto vertex : graph.vertices())
-    {
+    for (auto vertex : graph.vertices()) {
         gl_draw_filled_circle(global_vertex(vertex, globalOrigin, metersPerCell), 0.25);
     }
 }
@@ -83,8 +77,7 @@ void VisibilityGraphRenderer::drawVertices(const utils::VisibilityGraphFeature& 
                                            Point<float> globalOrigin,
                                            double metersPerCell)
 {
-    for(auto vertex : graph)
-    {
+    for (auto vertex : graph) {
         GLColor color = featureColor_.calculateColor(vertex.second);
         color.set();
 
@@ -102,8 +95,7 @@ void VisibilityGraphRenderer::drawEdges(const utils::VisibilityGraph& graph,
     glLineWidth(0.1f);
     glBegin(GL_LINES);
 
-    for(auto edge : graph.edges())
-    {
+    for (auto edge : graph.edges()) {
         auto start = global_vertex(edge.first, globalOrigin, metersPerCell);
         auto end = global_vertex(edge.second, globalOrigin, metersPerCell);
 
@@ -114,5 +106,5 @@ void VisibilityGraphRenderer::drawEdges(const utils::VisibilityGraph& graph,
     glEnd();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -8,14 +8,14 @@
 
 
 /**
-* \file     hypothesis_generator_factory_impl.h
-* \author   Collin Johnson
-* 
-* Declaration of subclasses of HypothesisGeneratorFactory:
-*   
-*   - ExhaustiveGeneratorFactory : creates a factory that generates all children every time
-*   - LazyGeneratorFactory : creates a factory that lazily generates children
-*/
+ * \file     hypothesis_generator_factory_impl.h
+ * \author   Collin Johnson
+ *
+ * Declaration of subclasses of HypothesisGeneratorFactory:
+ *
+ *   - ExhaustiveGeneratorFactory : creates a factory that generates all children every time
+ *   - LazyGeneratorFactory : creates a factory that lazily generates children
+ */
 
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_FACTORY_IMPL_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_FACTORY_IMPL_H
@@ -27,7 +27,7 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 const std::string kExhaustiveGeneratorType("exhaustive");
 const std::string kLazyGeneratorType("lazy");
 
@@ -38,32 +38,29 @@ const std::string kLazyGeneratorType("lazy");
 class ExhaustiveGeneratorFactory : public HypothesisGeneratorFactory
 {
 public:
-
     /////   HypothesisGeneratorFactory interface   /////
-    std::unique_ptr<HypothesisGenerator> createGenerator(const TopologicalState* state, 
+    std::unique_ptr<HypothesisGenerator> createGenerator(const TopologicalState* state,
                                                          const GlobalLocationDistribution& locations,
                                                          const TopologicalVisit::Ptr& exitVisit,
                                                          const TopologicalVisit::Ptr& entryVisit) override;
 };
 
 /**
-* LazyGeneratorFactory creates a HypothesisGenerator that lazily creates child hypotheses based on the likelihood the
-* robot is there, given the distance it traveled. As new children are completed, the probability of the generator will
-* change to reflect the estimate.
-*/
+ * LazyGeneratorFactory creates a HypothesisGenerator that lazily creates child hypotheses based on the likelihood the
+ * robot is there, given the distance it traveled. As new children are completed, the probability of the generator will
+ * change to reflect the estimate.
+ */
 class LazyGeneratorFactory : public HypothesisGeneratorFactory
 {
 public:
-    
     /////   HypothesisGeneratorFactory interface   /////
-    std::unique_ptr<HypothesisGenerator> createGenerator(const TopologicalState* state, 
+    std::unique_ptr<HypothesisGenerator> createGenerator(const TopologicalState* state,
                                                          const GlobalLocationDistribution& locations,
                                                          const TopologicalVisit::Ptr& exitVisit,
                                                          const TopologicalVisit::Ptr& entryVisit) override;
-
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_FACTORY_IMPL_H
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_FACTORY_IMPL_H

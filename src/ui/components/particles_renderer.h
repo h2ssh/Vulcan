@@ -8,46 +8,50 @@
 
 
 /**
-* \file     particles_renderer.h
-* \author   Collin Johnson
-*
-* Declaration of ParticlesRenderer.
-*/
+ * \file     particles_renderer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ParticlesRenderer.
+ */
 
 #ifndef UI_COMPONENTS_PARTICLES_RENDERER_H
 #define UI_COMPONENTS_PARTICLES_RENDERER_H
 
 #include "ui/common/ui_color.h"
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 namespace vulcan
 {
-namespace hssh { struct particle_t; }
-namespace hssh { struct particle_grid_score_t; }
+namespace hssh
+{
+struct particle_t;
+}
+namespace hssh
+{
+struct particle_grid_score_t;
+}
 struct pose_t;
 
 namespace ui
 {
 
 /**
-* ParticlesRenderer is used for rendering the particles contained in a
-* std::vector<particle_t>. The particles are represented by (x, y, weight).
-*/
+ * ParticlesRenderer is used for rendering the particles contained in a
+ * std::vector<particle_t>. The particles are represented by (x, y, weight).
+ */
 class ParticlesRenderer
 {
 public:
-
     void setRenderColor(const GLColor& color);
     void renderParticles(const std::vector<hssh::particle_t>& samples);
     void renderParticleScores(const pose_t& pose, hssh::particle_grid_score_t& scores, double maxScore = 1.0);
 
 private:
-
     GLColor color;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_PARTICLES_RENDERER_H
+#endif   // UI_COMPONENTS_PARTICLES_RENDERER_H

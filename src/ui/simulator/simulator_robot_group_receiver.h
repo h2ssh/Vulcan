@@ -8,11 +8,11 @@
 
 
 /**
-* \file     simulator_robot_group_receiver.h
-* \author   Zongtai Luo
-*
-* Decleration of RobotGroupReceiver.
-*/
+ * \file     simulator_robot_group_receiver.h
+ * \author   Zongtai Luo
+ *
+ * Decleration of RobotGroupReceiver.
+ */
 
 #ifndef UI_SIMULATOR_SIMULATOR_ROBOT_GROUP_RECEIVER_H
 #define UI_SIMULATOR_SIMULATOR_ROBOT_GROUP_RECEIVER_H
@@ -28,31 +28,27 @@ namespace ui
 class RobotGroupReceiver
 {
 public:
+    RobotGroupReceiver(void) : robot_num_(0) { }
 
-	RobotGroupReceiver(void):
-	robot_num_(0)
-	{}
+    void initRobotGroupReceiver(void);
 
-	void initRobotGroupReceiver(void);
+    void pushBack(std::string system_url);
 
-	void pushBack(std::string system_url);
+    void subscribe(void);
 
-	void subscribe(void);
+    void update(void);
 
-	void update(void);
+    void RenderRobots(const std::unique_ptr<RobotRenderer>& robotRenderer);
 
-	void RenderRobots(const std::unique_ptr<RobotRenderer>& robotRenderer);
+    ~RobotGroupReceiver();
 
-	~RobotGroupReceiver();
-	
 private:
-	int8_t robot_num_;
+    int8_t robot_num_;
 
-	std::vector<RobotReceiver*> robot_receivers;
-
+    std::vector<RobotReceiver*> robot_receivers;
 };
 
-} // ui
-} // vulcan
+}   // namespace ui
+}   // namespace vulcan
 
 #endif

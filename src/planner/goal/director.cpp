@@ -8,11 +8,11 @@
 
 
 /**
-* \file     director.cpp
-* \author   Collin Johnson
-*
-* Definition of GoalDirector.
-*/
+ * \file     director.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GoalDirector.
+ */
 
 #include "planner/goal/director.h"
 #include "planner/goal/goal_progress.h"
@@ -74,7 +74,7 @@ void GoalDirector::handleData(const hssh::TopologicalMap& topoMap, const std::st
 {
     utils::AutoMutex autoLock(dataLock);
 
-    map     = topoMap;
+    map = topoMap;
     haveMap = true;
 
     dataTrigger.setPredicate(true);
@@ -92,7 +92,7 @@ void GoalDirector::handleData(const GoalTarget& target, const std::string& chann
 {
     utils::AutoMutex autoLock(dataLock);
 
-    this->target  = target;
+    this->target = target;
     haveNewTarget = true;
 
     dataTrigger.setPredicate(true);
@@ -127,7 +127,8 @@ void GoalDirector::processAvailableData(void)
     utils::AutoMutex autoLock(dataLock);
 
     // Run the state machine until the state doesn't change, meaning all new data has been processed
-    while(runStateMachine());
+    while (runStateMachine())
+        ;
 
     dataTrigger.setPredicate(false);
 }
@@ -135,29 +136,21 @@ void GoalDirector::processAvailableData(void)
 
 void GoalDirector::transmitCalculatedOutput(system::ModuleCommunicator& communicator)
 {
-    if(haveNewRoute)
-    {
-        
+    if (haveNewRoute) {
     }
 
-    if(haveNewProgress)
-    {
-        
+    if (haveNewProgress) {
     }
 
-    if(haveNewDebugInfo)
-    {
-        
+    if (haveNewDebugInfo) {
     }
 
-    if(haveNewSequence)
-    {
-        
+    if (haveNewSequence) {
     }
 
-    haveNewRoute     = false;
-    haveNewSequence  = false;
-    haveNewProgress  = false;
+    haveNewRoute = false;
+    haveNewSequence = false;
+    haveNewProgress = false;
     haveNewDebugInfo = false;
 }
 
@@ -166,8 +159,7 @@ bool GoalDirector::runStateMachine(void)
 {
     director_state_t startingState = state;
 
-    switch(state)
-    {
+    switch (state) {
     case WAITING_FOR_DATA:
         waitingForData();
         break;
@@ -185,13 +177,13 @@ bool GoalDirector::runStateMachine(void)
         break;
 
     default:
-        std::cerr<<"ERROR: GoalDirector: Unknown director state!\n";
+        std::cerr << "ERROR: GoalDirector: Unknown director state!\n";
         assert(false);
     }
 
-    #ifdef DEBUG_STATE_MACHINE
-    std::cout<<"DEBUG:Goal: Start state:"<<startingState<<" End state:"<<state<<'\n';
-    #endif
+#ifdef DEBUG_STATE_MACHINE
+    std::cout << "DEBUG:Goal: Start state:" << startingState << " End state:" << state << '\n';
+#endif
 
     return startingState != state;
 }
@@ -199,8 +191,7 @@ bool GoalDirector::runStateMachine(void)
 
 void GoalDirector::waitingForData(void)
 {
-    if(haveDataForNewPlan())
-    {
+    if (haveDataForNewPlan()) {
         state = CALCULATING_PLAN;
     }
 }
@@ -216,34 +207,28 @@ void GoalDirector::calculatePlan(void)
 {
     haveNewRoute = planner.plan(target, map, debug);
 
-    if(target.shouldConfirm())
-    {
+    if (target.shouldConfirm()) {
         state = WAITING_FOR_CONFIRMATION;
-    }
-    else
-    {
+    } else {
         monitor.setRouteToMonitor(planner.getRoute());
 
-        state           = EXECUTING_PLAN;
+        state = EXECUTING_PLAN;
         haveNewSequence = true;
     }
 
     haveNewDebugInfo = true;
-    haveNewTarget    = false;
+    haveNewTarget = false;
 }
 
 
 void GoalDirector::waitingForConfirmation(void)
 {
-    if(havePlanConfirmation && isPlanConfirmed())
-    {
+    if (havePlanConfirmation && isPlanConfirmed()) {
         monitor.setRouteToMonitor(planner.getRoute());
 
-        state           = EXECUTING_PLAN;
+        state = EXECUTING_PLAN;
         haveNewSequence = true;
-    }
-    else if(isPlanCancelled())
-    {
+    } else if (isPlanCancelled()) {
         state = WAITING_FOR_DATA;
     }
 }
@@ -265,8 +250,7 @@ void GoalDirector::monitorPlan(void)
 {
     monitor.updateProgress(map.getGlobalLocation());
 
-    if(needNewPlan())
-    {
+    if (needNewPlan()) {
         state = WAITING_FOR_DATA;
     }
 
@@ -282,17 +266,15 @@ bool GoalDirector::needNewPlan(void)
 
 bool GoalDirector::haveMessageWithProperties(uint32_t planId, route_command_t command)
 {
-    for(auto messageIt = routeMessages.begin(), messageEnd = routeMessages.end(); messageIt != messageEnd; ++messageIt)
-    {
-        if((messageIt->planId == planId) && (messageIt->command == command))
-        {
-            if(command == CONFIRM_ROUTE)
-            {
-                std::cout<<"INFO:GoalPlanner: Plan "<<messageIt->planId<<" confirmed via "<<messageIt->source<<'\n';
-            }
-            else if(command == CANCEL_ROUTE)
-            {
-                std::cout<<"INFO:GoalPlanner: Plan "<<messageIt->planId<<" cancelled via "<<messageIt->source<<'\n';
+    for (auto messageIt = routeMessages.begin(), messageEnd = routeMessages.end(); messageIt != messageEnd;
+         ++messageIt) {
+        if ((messageIt->planId == planId) && (messageIt->command == command)) {
+            if (command == CONFIRM_ROUTE) {
+                std::cout << "INFO:GoalPlanner: Plan " << messageIt->planId << " confirmed via " << messageIt->source
+                          << '\n';
+            } else if (command == CANCEL_ROUTE) {
+                std::cout << "INFO:GoalPlanner: Plan " << messageIt->planId << " cancelled via " << messageIt->source
+                          << '\n';
             }
 
             return true;
@@ -302,5 +284,5 @@ bool GoalDirector::haveMessageWithProperties(uint32_t planId, route_command_t co
     return false;
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

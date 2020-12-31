@@ -8,30 +8,30 @@
 
 
 /**
-* \file     velocity.h
-* \author   Collin Johnson and Jong Jin Park
-*
-* Declaration of velocity_t and acceleration_t, with linear and angular components.
-*/
+ * \file     velocity.h
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Declaration of velocity_t and acceleration_t, with linear and angular components.
+ */
 
 #ifndef CORE_VELOCITY_H
 #define CORE_VELOCITY_H
 
-#include <iosfwd>
 #include <cstdint>
+#include <iosfwd>
 
 namespace vulcan
 {
 
 /**
-* velocity_t represents the current velocity of the robot with linear and angular components.
-* Only magnitude of the velocity vectors are specified, since direction is always aligned with the current robot pose.
-*/
+ * velocity_t represents the current velocity of the robot with linear and angular components.
+ * Only magnitude of the velocity vectors are specified, since direction is always aligned with the current robot pose.
+ */
 struct velocity_t
 {
-    int64_t timestamp;      ///< Time at which this velocity was measured
-    float   linear;
-    float   angular;
+    int64_t timestamp;   ///< Time at which this velocity was measured
+    float linear;
+    float angular;
 
     explicit velocity_t(float linear = 0, float angular = 0, int64_t timestamp = 0)
     : timestamp(timestamp)
@@ -43,14 +43,14 @@ struct velocity_t
 
 
 /**
-* acceleration_t represents the current acceleration of the robot with linear and angular components.
-* Only magnitude of the velocity vectors are specified, since direction is always aligned with the current robot pose.
-*/
+ * acceleration_t represents the current acceleration of the robot with linear and angular components.
+ * Only magnitude of the velocity vectors are specified, since direction is always aligned with the current robot pose.
+ */
 struct acceleration_t
 {
-    int64_t timestamp;      ///< Time at which this velocity was measured
-    float   linear;
-    float   angular;
+    int64_t timestamp;   ///< Time at which this velocity was measured
+    float linear;
+    float angular;
 
     explicit acceleration_t(float linear = 0, float angular = 0, int64_t timestamp = 0)
     : timestamp(timestamp)
@@ -68,19 +68,15 @@ std::ostream& operator<<(std::ostream& out, const acceleration_t& a);
 template <class Archive>
 void serialize(Archive& ar, velocity_t& vel)
 {
-    ar (vel.timestamp,
-        vel.linear,
-        vel.angular);
+    ar(vel.timestamp, vel.linear, vel.angular);
 }
 
 template <class Archive>
 void serialize(Archive& ar, acceleration_t& accel)
 {
-    ar (accel.timestamp,
-        accel.linear,
-        accel.angular);
+    ar(accel.timestamp, accel.linear, accel.angular);
 }
 
-} // namespace vulcan
+}   // namespace vulcan
 
-#endif // CORE_VELOCITY_H
+#endif   // CORE_VELOCITY_H

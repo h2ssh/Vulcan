@@ -8,17 +8,17 @@
 
 
 /**
-* \file     vision_panel.h
-* \author   Collin Johnson
-*
-* Declaration of VisionPanel.
-*/
+ * \file     vision_panel.h
+ * \author   Collin Johnson
+ *
+ * Declaration of VisionPanel.
+ */
 
 #ifndef UI_DEBUG_VISION_PANEL_H
 #define UI_DEBUG_VISION_PANEL_H
 
-#include "ui/common/ui_panel.h"
 #include "core/image.h"
+#include "ui/common/ui_panel.h"
 #include "utils/mutex.h"
 #include <atomic>
 
@@ -26,7 +26,10 @@ class wxSlider;
 
 namespace vulcan
 {
-namespace vision { class ImageSegmenter; }
+namespace vision
+{
+class ImageSegmenter;
+}
 namespace ui
 {
 
@@ -36,31 +39,30 @@ class VisionDisplayWidget;
 struct vision_panel_widgets_t
 {
     VisionDisplayWidget* displayWidget;
-    wxSlider*            minEdgeWeightSlider;
-    wxSlider*            maxEdgeWeightSlider;
-    wxSlider*            pixelSigmaSlider;
-    wxSlider*            creditMultiplierSlider;
-    wxSlider*            filterWidthSlider;
+    wxSlider* minEdgeWeightSlider;
+    wxSlider* maxEdgeWeightSlider;
+    wxSlider* pixelSigmaSlider;
+    wxSlider* creditMultiplierSlider;
+    wxSlider* filterWidthSlider;
 };
 
 /**
-* VisionPanel is responsible for handling events and data flow within the Vision tab
-* in the DebugUI.
-*/
+ * VisionPanel is responsible for handling events and data flow within the Vision tab
+ * in the DebugUI.
+ */
 class VisionPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for VisionPanel.
-    */
+     * Constructor for VisionPanel.
+     */
     VisionPanel(const ui_params_t& params, const vision_panel_widgets_t& widgets);
 
     // UIPanel interface
-    virtual void setup       (wxGLContext* context, wxStatusBar* statusBar);
-    virtual void subscribe   (system::ModuleCommunicator& producer);
-    virtual void setConsumer (system::ModuleCommunicator* consumer);
-    virtual void update      (void);
+    virtual void setup(wxGLContext* context, wxStatusBar* statusBar);
+    virtual void subscribe(system::ModuleCommunicator& producer);
+    virtual void setConsumer(system::ModuleCommunicator* consumer);
+    virtual void update(void);
     virtual void saveSettings(utils::ConfigFileWriter& config);
     virtual void loadSettings(const utils::ConfigFile& config);
 
@@ -68,13 +70,12 @@ public:
     void handleData(const Image& image, const std::string& channel);
 
 private:
-
     vision_panel_widgets_t widgets_;
 
     std::unique_ptr<vision::ImageSegmenter> imageSegmenter_;
-    Image     image_;
+    Image image_;
     std::atomic<bool> haveNewImage_;
-    bool              shouldFindSegments_;
+    bool shouldFindSegments_;
 
     utils::Mutex imageLock_;
 
@@ -91,7 +92,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_VISION_PANEL_H
+#endif   // UI_DEBUG_VISION_PANEL_H

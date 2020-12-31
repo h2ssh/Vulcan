@@ -8,57 +8,53 @@
 
 
 /**
-* \file     object_factory.h
-* \author   Collin Johnson
-* 
-* Declaration of DynamicObjectFactory.
-*/
+ * \file     object_factory.h
+ * \author   Collin Johnson
+ *
+ * Declaration of DynamicObjectFactory.
+ */
 
 #ifndef TRACKER_OBJECTS_OBJECT_FACTORY_H
 #define TRACKER_OBJECTS_OBJECT_FACTORY_H
 
-#include "tracker/types.h"
 #include "tracker/motions/visitor.h"
+#include "tracker/types.h"
 #include <memory>
 
 namespace vulcan
 {
-namespace tracker 
+namespace tracker
 {
-    
+
 class DynamicObject;
 class ObjectBoundary;
 class ObjectMotion;
 
 /**
-* DynamicObjectFactory creates DynamicObjects based on the type of motion it has.
-*/
+ * DynamicObjectFactory creates DynamicObjects based on the type of motion it has.
+ */
 class DynamicObjectFactory : public ObjectMotionVisitor
 {
 public:
-
     virtual ~DynamicObjectFactory(void);
-    
+
     /**
-    * createDynamicObject creates a DynamicObject of the appropriate type based on its motion and boundary.
-    * 
-    * \param    id          Unique id to assign to the object
-    * \param    timestamp   Time at which the object was created
-    * \param    motion      Detected motion for the object 
-    * \param    boundary    Boundary of the object
-    */
-    std::unique_ptr<DynamicObject> createDynamicObject(ObjectId              id,
-                                                       int64_t               timestamp,
-                                                       const ObjectMotion&   motion, 
-                                                       const ObjectBoundary& boundary);
-    
+     * createDynamicObject creates a DynamicObject of the appropriate type based on its motion and boundary.
+     *
+     * \param    id          Unique id to assign to the object
+     * \param    timestamp   Time at which the object was created
+     * \param    motion      Detected motion for the object
+     * \param    boundary    Boundary of the object
+     */
+    std::unique_ptr<DynamicObject>
+      createDynamicObject(ObjectId id, int64_t timestamp, const ObjectMotion& motion, const ObjectBoundary& boundary);
+
 private:
-    
     ObjectId id_;
     int64_t timestamp_;
     const ObjectBoundary* boundary_;
     std::unique_ptr<DynamicObject> createdObject_;
-    
+
     // ObjectMotionVisitor interface
     void visitFixedEndpoint(const FixedEndpointMotion& motion) override;
     void visitSteady(const SteadyMotion& motion) override;
@@ -66,7 +62,7 @@ private:
     void visitStationary(const StationaryMotion& motion) override;
 };
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_OBJECTS_OBJECT_FACTORY_H
+#endif   // TRACKER_OBJECTS_OBJECT_FACTORY_H

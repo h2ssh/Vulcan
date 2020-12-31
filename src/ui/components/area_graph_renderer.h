@@ -8,11 +8,11 @@
 
 
 /**
-* \file     area_graph_renderer.h
-* \author   Collin Johnson
-*
-* Declaration of AreaGraphRenderer.
-*/
+ * \file     area_graph_renderer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of AreaGraphRenderer.
+ */
 
 #ifndef UI_COMPONENTS_AREA_GRAPH_RENDERER_H
 #define UI_COMPONENTS_AREA_GRAPH_RENDERER_H
@@ -20,22 +20,30 @@
 
 namespace vulcan
 {
-namespace hssh { class AreaGraph; }
-namespace hssh { class AreaNode; }
-namespace hssh { class AreaEdge; }
+namespace hssh
+{
+class AreaGraph;
+}
+namespace hssh
+{
+class AreaNode;
+}
+namespace hssh
+{
+class AreaEdge;
+}
 
 namespace ui
 {
 
 /**
-* AreaGraphRenderer renders an AreaGraph on the screen. The AreaGraph is drawn as circle for
-* the nodes with lines connecting them that represent the edges. The nodes are drawn as circles
-* with their color representing the type of the node as returned from the node->getType() method.
-*/
+ * AreaGraphRenderer renders an AreaGraph on the screen. The AreaGraph is drawn as circle for
+ * the nodes with lines connecting them that represent the edges. The nodes are drawn as circles
+ * with their color representing the type of the node as returned from the node->getType() method.
+ */
 class AreaGraphRenderer
 {
 public:
-
     void setRenderColors(const GLColor& gatewayColor,
                          const GLColor& junctionColor,
                          const GLColor& frontierColor,
@@ -44,7 +52,6 @@ public:
     void renderGraph(const hssh::AreaGraph& graph);
 
 private:
-
     void drawNode(const hssh::AreaNode& node);
     void drawEdge(const hssh::AreaEdge& edge);
 
@@ -56,7 +63,7 @@ private:
     GLColor deadEndColor;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_AREA_GRAPH_RENDERER_H
+#endif   // UI_COMPONENTS_AREA_GRAPH_RENDERER_H

@@ -8,13 +8,13 @@
 
 
 /**
-* \file     derivatives.h
-* \author   Collin Johnson
-*
-* Declaration of utility function for calculating various derivatives:
-*
-*   - uncertain_time_derivative : take a time derivative between two uncertain measurements
-*/
+ * \file     derivatives.h
+ * \author   Collin Johnson
+ *
+ * Declaration of utility function for calculating various derivatives:
+ *
+ *   - uncertain_time_derivative : take a time derivative between two uncertain measurements
+ */
 
 #ifndef MATH_DERIVATIVES_H
 #define MATH_DERIVATIVES_H
@@ -27,20 +27,19 @@ namespace math
 {
 
 /**
-* uncertain_time_derivative takes a time derivative of the provided uncertain values. The time derivative is taken in
-* seconds.
-*
-* \param    start           Start value of the uncertain value
-* \param    end             End value of the uncertain value
-* \param    durationUs      Time elapsed between measurement of start and end
-* \pre durationUs > 0
-* \return   Uncertain derivative with respect to time measured in seconds.
-*/
-MultivariateGaussian uncertain_time_derivative(const MultivariateGaussian& start,
-                                               const MultivariateGaussian& end,
-                                               int64_t durationUs);
+ * uncertain_time_derivative takes a time derivative of the provided uncertain values. The time derivative is taken in
+ * seconds.
+ *
+ * \param    start           Start value of the uncertain value
+ * \param    end             End value of the uncertain value
+ * \param    durationUs      Time elapsed between measurement of start and end
+ * \pre durationUs > 0
+ * \return   Uncertain derivative with respect to time measured in seconds.
+ */
+MultivariateGaussian
+  uncertain_time_derivative(const MultivariateGaussian& start, const MultivariateGaussian& end, int64_t durationUs);
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_DERIVATIVES_H
+#endif   // MATH_DERIVATIVES_H

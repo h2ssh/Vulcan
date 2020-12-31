@@ -8,17 +8,17 @@
 
 
 /**
-* \file     spherical_point.h
-* \author   Collin Johnson
-*
-* Declaration of SphericalPoint.
-*/
+ * \file     spherical_point.h
+ * \author   Collin Johnson
+ *
+ * Declaration of SphericalPoint.
+ */
 
 #ifndef MATH_SPHERICAL_POINT_H
 #define MATH_SPHERICAL_POINT_H
 
-#include <cmath>
 #include "math/point3d.h"
+#include <cmath>
 
 namespace vulcan
 {
@@ -26,8 +26,8 @@ namespace math
 {
 
 /**
-* SphericalPoint is a simple spherical point, (rho, phi, theta).
-*/
+ * SphericalPoint is a simple spherical point, (rho, phi, theta).
+ */
 struct SphericalPoint
 {
     float rho;
@@ -35,35 +35,30 @@ struct SphericalPoint
     float theta;
 
     /**
-    * Default constructor for SphericalPoint.
-    */
-    SphericalPoint(float rho = 0, float phi = 0, float theta = 0)
-    : rho(rho)
-    , phi(phi)
-    , theta(theta)
-    {
-    }
+     * Default constructor for SphericalPoint.
+     */
+    SphericalPoint(float rho = 0, float phi = 0, float theta = 0) : rho(rho), phi(phi), theta(theta) { }
 
     /**
-    * Constructor for SphericalPoint.
-    *
-    * Converts cartesian point to a spherical point.
-    */
+     * Constructor for SphericalPoint.
+     *
+     * Converts cartesian point to a spherical point.
+     */
     SphericalPoint(const Point3D<float>& cartesian)
-    : rho(std::sqrt(cartesian.x*cartesian.x + cartesian.y*cartesian.y + cartesian.z*cartesian.z))
-    , phi(std::acos(std::sqrt(cartesian.x*cartesian.x + cartesian.y*cartesian.y) / rho))
+    : rho(std::sqrt(cartesian.x * cartesian.x + cartesian.y * cartesian.y + cartesian.z * cartesian.z))
+    , phi(std::acos(std::sqrt(cartesian.x * cartesian.x + cartesian.y * cartesian.y) / rho))
     , theta(std::atan2(cartesian.y, cartesian.x))
     {
     }
 
     /**
-    * toCartesian converts the point into Cartesian coordinates.
-    */
+     * toCartesian converts the point into Cartesian coordinates.
+     */
     Point3D<float> toCartesian(void) const
     {
-        return Point3D<float>(rho*std::cos(theta)*std::cos(phi),
-                              rho*std::sin(theta)*std::cos(phi),
-                              rho*std::sin(phi));
+        return Point3D<float>(rho * std::cos(theta) * std::cos(phi),
+                              rho * std::sin(theta) * std::cos(phi),
+                              rho * std::sin(phi));
     }
 };
 
@@ -83,11 +78,11 @@ inline bool operator!=(const SphericalPoint& lhs, const SphericalPoint& rhs)
 template <class ostream>
 ostream& operator<<(ostream& out, const SphericalPoint& point)
 {
-    out<<'('<<point.rho<<','<<point.theta<<','<<point.phi<<')';
+    out << '(' << point.rho << ',' << point.theta << ',' << point.phi << ')';
     return out;
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_SPHERICAL_POINT_H
+#endif   // MATH_SPHERICAL_POINT_H

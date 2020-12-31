@@ -8,11 +8,11 @@
 
 
 /**
-* \file     gl_buffer_consumer.h
-* \author   Collin Johnson
-*
-* Declaration of GLBufferConsumer interface.
-*/
+ * \file     gl_buffer_consumer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GLBufferConsumer interface.
+ */
 
 #ifndef UI_COMMON_GL_BUFFER_CONSUMER_H
 #define UI_COMMON_GL_BUFFER_CONSUMER_H
@@ -25,27 +25,26 @@ namespace ui
 {
 
 /**
-* GLBufferConsumer is an interface for classes that wish to handle the pixels
-* drawn to the screen in an OpenGLWidget.
-*
-* The pixels are passed to the consumer as a Image.
-*/
+ * GLBufferConsumer is an interface for classes that wish to handle the pixels
+ * drawn to the screen in an OpenGLWidget.
+ *
+ * The pixels are passed to the consumer as a Image.
+ */
 class GLBufferConsumer
 {
 public:
-
     virtual ~GLBufferConsumer(void) { }
 
     /**
-    * handleBuffer is called each time the OpenGLWidget is refreshed. The updated
-    * pixels are stored in the Image.
-    *
-    * \param    buffer          Buffer containing the pixels
-    */
+     * handleBuffer is called each time the OpenGLWidget is refreshed. The updated
+     * pixels are stored in the Image.
+     *
+     * \param    buffer          Buffer containing the pixels
+     */
     virtual void handleBuffer(const Image& buffer) = 0;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMMON_GL_BUFFER_CONSUMER_H
+#endif   // UI_COMMON_GL_BUFFER_CONSUMER_H

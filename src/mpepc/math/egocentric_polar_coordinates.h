@@ -8,13 +8,13 @@
 
 
 /**
-* \file     egocentric_polar_coordinates.h
-* \author   Jong Jin Park
-*
-* Declaration of egocentric polar coordinates, which describes a relation
-* between between two poses on a plane.
-* See [Park-11] (original) and [Park-15] (updated) for further description.
-*/
+ * \file     egocentric_polar_coordinates.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of egocentric polar coordinates, which describes a relation
+ * between between two poses on a plane.
+ * See [Park-11] (original) and [Park-15] (updated) for further description.
+ */
 
 #ifndef EGOCENTRIC_POLAR_COORDINATES_H
 #define EGOCENTRIC_POLAR_COORDINATES_H
@@ -25,48 +25,45 @@ namespace mpepc
 {
 
 /**
-* line_of_sight_t encodes range and orientation of the line of sight from the position of an observer to a target.
-*/
+ * line_of_sight_t encodes range and orientation of the line of sight from the position of an observer to a target.
+ */
 struct line_of_sight_t
 {
-    double range; // length of the line of sight (radial distance to target)
-    double angle; // orientation of the line of sight in global coordinates
+    double range;   // length of the line of sight (radial distance to target)
+    double angle;   // orientation of the line of sight in global coordinates
 };
 
 /**
-* reduced_egocentric_polar_coords_t encodes a 2D point in egocentric polar coords, relative to a target pose.
-*/
+ * reduced_egocentric_polar_coords_t encodes a 2D point in egocentric polar coords, relative to a target pose.
+ */
 struct reduced_egocentric_polar_coords_t
 {
-    double r;                // length of the line of sight (radial distance to target)
-    double phi;              // angle of target orientation measured from the line of sight
-    double lineOfSightAngle; // in global coords. Useful to keep around.
+    double r;                  // length of the line of sight (radial distance to target)
+    double phi;                // angle of target orientation measured from the line of sight
+    double lineOfSightAngle;   // in global coords. Useful to keep around.
 };
 
 /**
-* egocentric_polar_coords_t encodes a 3D pose in egocentric polar coords relative to a target pose.
-* This coordinate system is useful for rigid body objects on 2D plane fixating on a target.
-* It is originally introduced in [Park-11]. See [Park-15] for updated definition.
-*/
+ * egocentric_polar_coords_t encodes a 3D pose in egocentric polar coords relative to a target pose.
+ * This coordinate system is useful for rigid body objects on 2D plane fixating on a target.
+ * It is originally introduced in [Park-11]. See [Park-15] for updated definition.
+ */
 struct egocentric_polar_coords_t
 {
-    double r;                // length of the line of sight (radial distance to target)
-    double delta;            // angle of robot orientation measured from the line of sight
-    double phi;              // angle of target orientation measured from the line of sight
-    double lineOfSightAngle; // in global coords. Useful to keep around.
+    double r;                  // length of the line of sight (radial distance to target)
+    double delta;              // angle of robot orientation measured from the line of sight
+    double phi;                // angle of target orientation measured from the line of sight
+    double lineOfSightAngle;   // in global coords. Useful to keep around.
 };
 
 // Serialization support -- only need this for egocentric_polar_coords_t
 template <class Archive>
 void serialize(Archive& ar, egocentric_polar_coords_t& coords)
 {
-    ar (coords.r,
-        coords.phi,
-        coords.delta,
-        coords.lineOfSightAngle);
+    ar(coords.r, coords.phi, coords.delta, coords.lineOfSightAngle);
 }
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // EGOCENTRIC_POLAR_COORDINATES_H
+#endif   // EGOCENTRIC_POLAR_COORDINATES_H

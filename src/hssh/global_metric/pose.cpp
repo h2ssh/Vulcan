@@ -8,11 +8,11 @@
 
 
 /**
-* \file     pose.cpp
-* \author   Collin Johnson
-* 
-* Definition of GlobalPose.
-*/
+ * \file     pose.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalPose.
+ */
 
 #include "hssh/global_metric/pose.h"
 
@@ -20,25 +20,20 @@ namespace vulcan
 {
 namespace hssh
 {
-    
-GlobalPose::GlobalPose(void)
-: mapId_(-1)
+
+GlobalPose::GlobalPose(void) : mapId_(-1)
 {
 }
 
 
-GlobalPose::GlobalPose(const pose_t& pose, int32_t mapId)
-: mapId_(mapId)
-, pose_(pose, MultivariateGaussian(3))
+GlobalPose::GlobalPose(const pose_t& pose, int32_t mapId) : mapId_(mapId), pose_(pose, MultivariateGaussian(3))
 {
 }
 
 
-GlobalPose::GlobalPose(const pose_distribution_t& pose, int32_t mapId)
-: mapId_(mapId)
-, pose_(pose)
+GlobalPose::GlobalPose(const pose_distribution_t& pose, int32_t mapId) : mapId_(mapId), pose_(pose)
 {
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     hypothesis_generator_factory_impl.cpp
-* \author   Collin Johnson
-* 
-* Definition of ExhaustiveGeneratorFactory and LazyGeneratorFactory.
-*/
+ * \file     hypothesis_generator_factory_impl.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ExhaustiveGeneratorFactory and LazyGeneratorFactory.
+ */
 
 #include "hssh/global_topological/mapping/hypothesis_generator_factory_impl.h"
 #include "hssh/global_topological/mapping/hypothesis_generator.h"
@@ -22,20 +22,19 @@ namespace vulcan
 {
 namespace hssh
 {
-    
-std::unique_ptr<HypothesisGenerator> ExhaustiveGeneratorFactory::createGenerator(
-    const TopologicalState* state, 
-    const GlobalLocationDistribution& locations,
-    const TopologicalVisit::Ptr& exitVisit,
-    const TopologicalVisit::Ptr& entryVisit
-)
+
+std::unique_ptr<HypothesisGenerator>
+  ExhaustiveGeneratorFactory::createGenerator(const TopologicalState* state,
+                                              const GlobalLocationDistribution& locations,
+                                              const TopologicalVisit::Ptr& exitVisit,
+                                              const TopologicalVisit::Ptr& entryVisit)
 {
     // Create instances of HypothesisGenerator itself
     return std::make_unique<HypothesisGenerator>(state, locations, exitVisit, entryVisit);
 }
 
 
-std::unique_ptr<HypothesisGenerator> LazyGeneratorFactory::createGenerator(const TopologicalState* state, 
+std::unique_ptr<HypothesisGenerator> LazyGeneratorFactory::createGenerator(const TopologicalState* state,
                                                                            const GlobalLocationDistribution& locations,
                                                                            const TopologicalVisit::Ptr& exitVisit,
                                                                            const TopologicalVisit::Ptr& entryVisit)
@@ -44,5 +43,5 @@ std::unique_ptr<HypothesisGenerator> LazyGeneratorFactory::createGenerator(const
     return std::make_unique<LazyGenerator>(state, locations, exitVisit, entryVisit);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

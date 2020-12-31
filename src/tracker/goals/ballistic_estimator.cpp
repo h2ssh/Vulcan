@@ -8,11 +8,11 @@
 
 
 /**
-* \file     ballistic_estimator.cpp
-* \author   Collin Johnson
-* 
-* Definition of BallisticGoalEstimator.
-*/
+ * \file     ballistic_estimator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of BallisticGoalEstimator.
+ */
 
 #include "tracker/goals/ballistic_estimator.h"
 #include "tracker/motions/stationary.h"
@@ -23,9 +23,9 @@
 
 namespace vulcan
 {
-namespace tracker 
+namespace tracker
 {
-    
+
 
 ObjectGoalDistribution BallisticGoalEstimator::estimateFixedEndpointGoal(const FixedEndpointMotion& motion)
 {
@@ -34,7 +34,7 @@ ObjectGoalDistribution BallisticGoalEstimator::estimateFixedEndpointGoal(const F
 }
 
 
-ObjectGoalDistribution BallisticGoalEstimator::estimateStationaryGoal(const StationaryMotion& motion) 
+ObjectGoalDistribution BallisticGoalEstimator::estimateStationaryGoal(const StationaryMotion& motion)
 {
     // A stationary object is always stationary
     auto position = motion.position();
@@ -43,24 +43,23 @@ ObjectGoalDistribution BallisticGoalEstimator::estimateStationaryGoal(const Stat
 }
 
 
-ObjectGoalDistribution BallisticGoalEstimator::estimateSteadyGoal(const SteadyMotion& motion) 
+ObjectGoalDistribution BallisticGoalEstimator::estimateSteadyGoal(const SteadyMotion& motion)
 {
     // For now, use the dumbest possible prediction and just shoot the goal the desired timestep forward in time
     // TODO: Make this smarter so it doesn't put the goal somewhere unreachable
-    auto goalPosition = motion.position() + Point<double>(motion.velocity().x * relativeGoalTime_,
-                                                                motion.velocity().y * relativeGoalTime_);
-    
-    return ObjectGoalDistribution{ObjectGoal{goalPosition, 
-                                             std::atan2(motion.velocity().y, motion.velocity().x),
-                                             std::log(1.0)}};
+    auto goalPosition = motion.position()
+      + Point<double>(motion.velocity().x * relativeGoalTime_, motion.velocity().y * relativeGoalTime_);
+
+    return ObjectGoalDistribution{
+      ObjectGoal{goalPosition, std::atan2(motion.velocity().y, motion.velocity().x), std::log(1.0)}};
 }
 
 
-ObjectGoalDistribution BallisticGoalEstimator::estimateStridingGoal(const StridingMotion& motion) 
+ObjectGoalDistribution BallisticGoalEstimator::estimateStridingGoal(const StridingMotion& motion)
 {
     PRINT_STUB("FixedGoalEstimator::estimateStridingGoal");
     return ObjectGoalDistribution{};
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

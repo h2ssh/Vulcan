@@ -8,11 +8,11 @@
 
 
 /**
-* \file     voronoi_graph_builder.cpp
-* \author   Collin Johnson
-*
-* Definition of VoronoiGraphBuilder.
-*/
+ * \file     voronoi_graph_builder.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of VoronoiGraphBuilder.
+ */
 
 #include "hssh/local_topological/area_detection/voronoi_graph_builder.h"
 #include "hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h"
@@ -24,7 +24,7 @@ namespace hssh
 {
 
 VoronoiSkeletonBuilder::VoronoiSkeletonBuilder(const skeleton_builder_params_t& skeletonParams,
-                                               const skeleton_pruner_params_t&  prunerParams)
+                                               const skeleton_pruner_params_t& prunerParams)
 : skeletonBuilder_(skeletonParams)
 , skeletonPruner_(prunerParams)
 {
@@ -48,5 +48,5 @@ void VoronoiSkeletonBuilder::buildVoronoiSkeleton(const LocalPerceptualMap& lpm,
     skeleton_.exitPoints = skeletonPruner_.getExitPoints();
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

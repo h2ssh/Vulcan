@@ -8,17 +8,17 @@
 
 
 /**
-* \file     decision_stump.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionStump.
-*/
+ * \file     decision_stump.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionStump.
+ */
 
 #include "utils/decision_stump.h"
 #include "utils/algorithm_ext.h"
 #include "utils/float_io.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 // #define DEBUG_BEST_SPLIT
 
@@ -42,11 +42,9 @@ std::unique_ptr<DecisionStump> DecisionStump::LearnStump(const IntVector& labels
     int bestFeature = -1;
     int bestPolarity = 1;
 
-    for(arma::uword feat = 0; feat < features.n_rows; ++feat)
-    {
+    for (arma::uword feat = 0; feat < features.n_rows; ++feat) {
         // If this is a feature to ignore, keep going
-        if(contains(ignoreFeatures, feat))
-        {
+        if (contains(ignoreFeatures, feat)) {
             continue;
         }
 
@@ -58,34 +56,29 @@ std::unique_ptr<DecisionStump> DecisionStump::LearnStump(const IntVector& labels
         double sumBelowNeg = totalWeightNeg;
 
         // All std::max(var, 0.0) are to deal with small floating point numbers going slightly negative.
-        for(arma::uword n = 0; n < sortIdx.n_elem; ++n)
-        {
+        for (arma::uword n = 0; n < sortIdx.n_elem; ++n) {
             auto idx = sortIdx[n];
 
-            if(labels(idx) > 0)
-            {
+            if (labels(idx) > 0) {
                 sumAbovePos += weights(idx);
                 sumBelowPos -= weights(idx);
-            }
-            else
-            {
+            } else {
                 sumAboveNeg += weights(idx);
                 sumBelowNeg -= weights(idx);
             }
 
-            double abovePosRatio = sumAbovePos;// / totalWeightPos;
-            double aboveNegRatio = sumAboveNeg;// / totalWeightNeg;
+            double abovePosRatio = sumAbovePos;   // / totalWeightPos;
+            double aboveNegRatio = sumAboveNeg;   // / totalWeightNeg;
 
-            double belowPosRatio = sumBelowPos;// / totalWeightPos;
-            double belowNegRatio = sumBelowNeg;// / totalWeightNeg;
+            double belowPosRatio = sumBelowPos;   // / totalWeightPos;
+            double belowNegRatio = sumBelowNeg;   // / totalWeightNeg;
 
-            double posError = aboveNegRatio + belowPosRatio;  // error if pos examples are > thresh
-            double negError = abovePosRatio + belowNegRatio;  // error if pos examples are < thresh
+            double posError = aboveNegRatio + belowPosRatio;   // error if pos examples are > thresh
+            double negError = abovePosRatio + belowNegRatio;   // error if pos examples are < thresh
 
             double error = std::min(posError, negError);
 
-            if(error < bestEntropy)
-            {
+            if (error < bestEntropy) {
                 auto nextIdx = n + 1 < sortIdx.n_elem ? sortIdx[n + 1] : sortIdx[n];
 
                 bestEntropy = error;
@@ -94,82 +87,78 @@ std::unique_ptr<DecisionStump> DecisionStump::LearnStump(const IntVector& labels
                 bestPolarity = (posError > negError) ? -1 : 1;
 
 #ifdef DEBUG_BEST_SPLIT
-                std::cout << "DEBUG: DecisionStump: New best split: Total: " << error
-                    << " Feat:" << bestFeature << " Thresh:" << bestThreshold
-                    << " Above: " << posError << " Below: " << negError
-                    << " Pol:" << bestPolarity;
-                if(bestPolarity > 0)
-                {
+                std::cout << "DEBUG: DecisionStump: New best split: Total: " << error << " Feat:" << bestFeature
+                          << " Thresh:" << bestThreshold << " Above: " << posError << " Below: " << negError
+                          << " Pol:" << bestPolarity;
+                if (bestPolarity > 0) {
                     std::cout << " pos TP:" << abovePosRatio << " neg TP: " << belowNegRatio << '\n';
-                }
-                else // if(bestPolarity < 0)
+                } else   // if(bestPolarity < 0)
                 {
                     std::cout << " pos TP:" << belowPosRatio << " neg TP: " << aboveNegRatio << '\n';
                 }
 #endif
 
-//             double weightAbove = sumAbovePos + sumAboveNeg;
-//             weightAbove = std::max(weightAbove, 0.0);
-//             double aboveEntropy = (weightAbove > 1e-6) ? 0.0 : HUGE_VAL;
-//
-//             if(sumAbovePos > 1e-6)
-//             {
-//                 aboveEntropy -= (sumAbovePos / weightAbove) * std::log(sumAbovePos / weightAbove);
-//             }
-//             if(sumAboveNeg > 1e-6)
-//             {
-//                 aboveEntropy -= (sumAboveNeg / weightAbove) * std::log(sumAboveNeg / weightAbove);
-//             }
-//             aboveEntropy = std::max(aboveEntropy, 0.0);
-//
-//             double weightBelow = sumBelowPos + sumBelowNeg;
-//             weightBelow = std::max(weightBelow, 0.0);
-//             double belowEntropy = (weightBelow > 1e-6) ? 0.0 : HUGE_VAL;
-//
-//             if(sumBelowPos > 1e-6)
-//             {
-//                 belowEntropy -= (sumBelowPos / weightBelow) * std::log(sumBelowPos / weightBelow);
-//             }
-//             if(sumBelowNeg > 1e-6)
-//             {
-//                 belowEntropy -= (sumBelowNeg / weightBelow) * std::log(sumBelowNeg / weightBelow);
-//             }
-//             belowEntropy = std::max(0.0, belowEntropy);
-//
-//             double totalEntropy = (weightAbove * aboveEntropy) + (weightBelow * belowEntropy);
-//
-//             if(totalEntropy < bestEntropy)
-//             {
-//                 bestEntropy = totalEntropy;
-//                 bestThreshold = features.row(feat)(idx);
-//                 bestFeature = feat;
-//                 bestPolarity = (sumAbovePos + sumBelowNeg) > (sumAboveNeg + sumBelowPos) ? 1 : -1;
-//
-// #ifdef DEBUG_BEST_SPLIT
-//                 std::cout << "DEBUG: DecisionStump: New best split: Total: " << totalEntropy
-//                     << " Feat:" << bestFeature << " Thresh:" << bestThreshold
-//                     << " Above: " << aboveEntropy << " w:" << weightAbove
-//                     << " Below: " << belowEntropy << " w:" << weightBelow
-//                     << " Pol:" << bestPolarity;
-//                 if(bestPolarity > 0)
-//                 {
-//                     std::cout << " pos TP:" << (sumAbovePos / totalWeightPos) << " neg TP: "
-//                         << (sumBelowNeg / totalWeightNeg) << '\n';
-//                 }
-//                 else // if(bestPolarity < 0)
-//                 {
-//                     std::cout << " pos TP:" << (sumBelowPos / totalWeightPos) << " neg TP: "
-//                         << (sumAboveNeg / totalWeightNeg) << '\n';
-//                 }
-// #endif
+                //             double weightAbove = sumAbovePos + sumAboveNeg;
+                //             weightAbove = std::max(weightAbove, 0.0);
+                //             double aboveEntropy = (weightAbove > 1e-6) ? 0.0 : HUGE_VAL;
+                //
+                //             if(sumAbovePos > 1e-6)
+                //             {
+                //                 aboveEntropy -= (sumAbovePos / weightAbove) * std::log(sumAbovePos / weightAbove);
+                //             }
+                //             if(sumAboveNeg > 1e-6)
+                //             {
+                //                 aboveEntropy -= (sumAboveNeg / weightAbove) * std::log(sumAboveNeg / weightAbove);
+                //             }
+                //             aboveEntropy = std::max(aboveEntropy, 0.0);
+                //
+                //             double weightBelow = sumBelowPos + sumBelowNeg;
+                //             weightBelow = std::max(weightBelow, 0.0);
+                //             double belowEntropy = (weightBelow > 1e-6) ? 0.0 : HUGE_VAL;
+                //
+                //             if(sumBelowPos > 1e-6)
+                //             {
+                //                 belowEntropy -= (sumBelowPos / weightBelow) * std::log(sumBelowPos / weightBelow);
+                //             }
+                //             if(sumBelowNeg > 1e-6)
+                //             {
+                //                 belowEntropy -= (sumBelowNeg / weightBelow) * std::log(sumBelowNeg / weightBelow);
+                //             }
+                //             belowEntropy = std::max(0.0, belowEntropy);
+                //
+                //             double totalEntropy = (weightAbove * aboveEntropy) + (weightBelow * belowEntropy);
+                //
+                //             if(totalEntropy < bestEntropy)
+                //             {
+                //                 bestEntropy = totalEntropy;
+                //                 bestThreshold = features.row(feat)(idx);
+                //                 bestFeature = feat;
+                //                 bestPolarity = (sumAbovePos + sumBelowNeg) > (sumAboveNeg + sumBelowPos) ? 1 : -1;
+                //
+                // #ifdef DEBUG_BEST_SPLIT
+                //                 std::cout << "DEBUG: DecisionStump: New best split: Total: " << totalEntropy
+                //                     << " Feat:" << bestFeature << " Thresh:" << bestThreshold
+                //                     << " Above: " << aboveEntropy << " w:" << weightAbove
+                //                     << " Below: " << belowEntropy << " w:" << weightBelow
+                //                     << " Pol:" << bestPolarity;
+                //                 if(bestPolarity > 0)
+                //                 {
+                //                     std::cout << " pos TP:" << (sumAbovePos / totalWeightPos) << " neg TP: "
+                //                         << (sumBelowNeg / totalWeightNeg) << '\n';
+                //                 }
+                //                 else // if(bestPolarity < 0)
+                //                 {
+                //                     std::cout << " pos TP:" << (sumBelowPos / totalWeightPos) << " neg TP: "
+                //                         << (sumAboveNeg / totalWeightNeg) << '\n';
+                //                 }
+                // #endif
             }
         }
     }
 
-    if(bestFeature != -1)
-    {
-        std::cout << "Created stump! Feature:" << bestFeature << " Threshold:" << bestThreshold << " Polarity: "
-            << bestPolarity << " Error:" << bestEntropy << '\n';
+    if (bestFeature != -1) {
+        std::cout << "Created stump! Feature:" << bestFeature << " Threshold:" << bestThreshold
+                  << " Polarity: " << bestPolarity << " Error:" << bestEntropy << '\n';
 
         auto stump = std::make_unique<DecisionStump>();
         stump->index_ = bestFeature;
@@ -178,9 +167,7 @@ std::unique_ptr<DecisionStump> DecisionStump::LearnStump(const IntVector& labels
         stump->falseWeight_ = (bestPolarity < 0) ? 1.0 : -1.0;
         stump->polarity_ = bestPolarity;
         return stump;
-    }
-    else
-    {
+    } else {
         return nullptr;
     }
 }
@@ -196,13 +183,10 @@ void DecisionStump::setWeight(double weight)
 {
     assert(weight > 0.0);
 
-    if(polarity_ > 0)
-    {
+    if (polarity_ > 0) {
         trueWeight_ = weight;
         falseWeight_ = -weight;
-    }
-    else
-    {
+    } else {
         trueWeight_ = -weight;
         falseWeight_ = weight;
     }
@@ -238,5 +222,5 @@ bool DecisionStump::save(std::ostream& out) const
     return out.good();
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

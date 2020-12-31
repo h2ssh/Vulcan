@@ -8,15 +8,15 @@
 
 
 /**
-* \file     algebraic_circle_fitting.h
-* \author   Collin Johnson
-* 
-* Declaration of circle_fit_by_taubin.
-* 
-* Adapted the following files available at: http://people.cas.uab.edu/~mosya/cl/CPPcircle.html
-* 
-*   - CircleFitByTaubin.cpp
-*/
+ * \file     algebraic_circle_fitting.h
+ * \author   Collin Johnson
+ *
+ * Declaration of circle_fit_by_taubin.
+ *
+ * Adapted the following files available at: http://people.cas.uab.edu/~mosya/cl/CPPcircle.html
+ *
+ *   - CircleFitByTaubin.cpp
+ */
 
 #ifndef MATH_GEOMETRY_ALGEBRAIC_CIRCLE_FITTING_H
 #define MATH_GEOMETRY_ALGEBRAIC_CIRCLE_FITTING_H
@@ -34,7 +34,7 @@ namespace detail
 Circle<float> circle_fit_by_taubin(DataIterator begin, DataIterator end);
 
 }
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_GEOMETRY_ALGEBRAIC_CIRCLE_FITTING_H
+#endif   // MATH_GEOMETRY_ALGEBRAIC_CIRCLE_FITTING_H

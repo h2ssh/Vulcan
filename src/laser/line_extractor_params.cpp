@@ -7,8 +7,8 @@
 */
 
 
-#include "utils/config_file.h"
 #include "laser/line_extractor_params.h"
+#include "utils/config_file.h"
 
 
 namespace vulcan
@@ -39,9 +39,9 @@ const std::string WINDOW_SIZE_KEY("window_size");
 const std::string MAX_POINT_DIST_KEY("max_point_distance");
 
 
-split_and_merge_params_t    load_split_and_merge_params(const vulcan::utils::ConfigFile& config);
-quick_split_params_t        load_quick_split_params(const vulcan::utils::ConfigFile& config);
-incremental_params_t        load_incremental_params(const vulcan::utils::ConfigFile& config);
+split_and_merge_params_t load_split_and_merge_params(const vulcan::utils::ConfigFile& config);
+quick_split_params_t load_quick_split_params(const vulcan::utils::ConfigFile& config);
+incremental_params_t load_incremental_params(const vulcan::utils::ConfigFile& config);
 angle_segmentation_params_t load_angle_segmentation_params(const vulcan::utils::ConfigFile& config);
 
 
@@ -61,10 +61,10 @@ laser_line_extractor_params_t load_laser_line_extractor_params(const vulcan::uti
 
     params.extractionAlgorithm = config.getValueAsString(LINE_EXTRACTOR_HEADING, ALGORITHM_KEY);
 
-    params.mergeParams       = load_split_and_merge_params(config);
-    params.quickParams       = load_quick_split_params(config);
+    params.mergeParams = load_split_and_merge_params(config);
+    params.quickParams = load_quick_split_params(config);
     params.incrementalParams = load_incremental_params(config);
-    params.angleParams       = load_angle_segmentation_params(config);
+    params.angleParams = load_angle_segmentation_params(config);
 
     return params;
 }
@@ -74,11 +74,11 @@ split_and_merge_params_t load_split_and_merge_params(const vulcan::utils::Config
 {
     split_and_merge_params_t params;
 
-    params.clusterDistance     = config.getValueAsFloat(SPLIT_AND_MERGE_HEADING, CLUSTER_DIST_KEY);
+    params.clusterDistance = config.getValueAsFloat(SPLIT_AND_MERGE_HEADING, CLUSTER_DIST_KEY);
     params.maxDistanceFromLine = config.getValueAsFloat(SPLIT_AND_MERGE_HEADING, MAX_LINE_DIST_KEY);
-    params.slopeTolerance      = config.getValueAsFloat(SPLIT_AND_MERGE_HEADING, SLOPE_TOL_KEY);
-    params.distanceTolerance   = config.getValueAsFloat(SPLIT_AND_MERGE_HEADING, DIST_TOL_KEY);
-    params.minPoints           = config.getValueAsUInt16(SPLIT_AND_MERGE_HEADING, MIN_POINTS_KEY);
+    params.slopeTolerance = config.getValueAsFloat(SPLIT_AND_MERGE_HEADING, SLOPE_TOL_KEY);
+    params.distanceTolerance = config.getValueAsFloat(SPLIT_AND_MERGE_HEADING, DIST_TOL_KEY);
+    params.minPoints = config.getValueAsUInt16(SPLIT_AND_MERGE_HEADING, MIN_POINTS_KEY);
 
     return params;
 }
@@ -88,9 +88,9 @@ quick_split_params_t load_quick_split_params(const vulcan::utils::ConfigFile& co
 {
     quick_split_params_t params;
 
-    params.clusterDistance     = config.getValueAsFloat(QUICK_SPLIT_HEADING, CLUSTER_DIST_KEY);
+    params.clusterDistance = config.getValueAsFloat(QUICK_SPLIT_HEADING, CLUSTER_DIST_KEY);
     params.maxDistanceFromLine = config.getValueAsFloat(QUICK_SPLIT_HEADING, MAX_LINE_DIST_KEY);
-    params.minPoints           = config.getValueAsUInt16(QUICK_SPLIT_HEADING, MIN_POINTS_KEY);
+    params.minPoints = config.getValueAsUInt16(QUICK_SPLIT_HEADING, MIN_POINTS_KEY);
 
     return params;
 }
@@ -100,10 +100,10 @@ incremental_params_t load_incremental_params(const vulcan::utils::ConfigFile& co
 {
     incremental_params_t params;
 
-    params.initialLength        = config.getValueAsUInt16(INCREMENTAL_HEADING, INITIAL_LENGTH_KEY);
-    params.increment            = config.getValueAsUInt16(INCREMENTAL_HEADING, INCREMENT_KEY);
+    params.initialLength = config.getValueAsUInt16(INCREMENTAL_HEADING, INITIAL_LENGTH_KEY);
+    params.increment = config.getValueAsUInt16(INCREMENTAL_HEADING, INCREMENT_KEY);
     params.correlationThreshold = config.getValueAsFloat(INCREMENTAL_HEADING, CORR_THRESH_KEY);
-    params.minPoints            = config.getValueAsUInt16(INCREMENTAL_HEADING, MIN_POINTS_KEY);
+    params.minPoints = config.getValueAsUInt16(INCREMENTAL_HEADING, MIN_POINTS_KEY);
 
     return params;
 }
@@ -114,12 +114,12 @@ angle_segmentation_params_t load_angle_segmentation_params(const vulcan::utils::
     angle_segmentation_params_t params;
 
     params.thresholdAngleDegrees = config.getValueAsFloat(ANGLE_SEGMENTATION_HEADING, ANGLE_THRESH_KEY);
-    params.windowSize            = config.getValueAsUInt16(ANGLE_SEGMENTATION_HEADING, WINDOW_SIZE_KEY);
-    params.maxPointDistance      = config.getValueAsFloat(ANGLE_SEGMENTATION_HEADING, MAX_POINT_DIST_KEY);
-    params.minPoints             = config.getValueAsUInt16(ANGLE_SEGMENTATION_HEADING, MIN_POINTS_KEY);
+    params.windowSize = config.getValueAsUInt16(ANGLE_SEGMENTATION_HEADING, WINDOW_SIZE_KEY);
+    params.maxPointDistance = config.getValueAsFloat(ANGLE_SEGMENTATION_HEADING, MAX_POINT_DIST_KEY);
+    params.minPoints = config.getValueAsUInt16(ANGLE_SEGMENTATION_HEADING, MIN_POINTS_KEY);
 
     return params;
 }
 
-} // namespace laser
-} // namespace vulcan
+}   // namespace laser
+}   // namespace vulcan

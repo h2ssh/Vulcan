@@ -8,52 +8,59 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* Declaration of TopoSituationRenderer.
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * Declaration of TopoSituationRenderer.
+ */
 
 #ifndef UI_COMPONENTS_TOPO_SITUATION_RENDERER_H
 #define UI_COMPONENTS_TOPO_SITUATION_RENDERER_H
 
 namespace vulcan
 {
-namespace hssh { class LocalTopoMap; }
-namespace mpepc { class PathSituation; }
-namespace mpepc { class PlaceSituation; }
+namespace hssh
+{
+class LocalTopoMap;
+}
+namespace mpepc
+{
+class PathSituation;
+}
+namespace mpepc
+{
+class PlaceSituation;
+}
 namespace ui
 {
 
 /**
-*
-*/
+ *
+ */
 class TopoSituationRenderer
 {
 public:
-
     /**
-    * Constructor for TopoSituationRenderer.
-    */
+     * Constructor for TopoSituationRenderer.
+     */
     TopoSituationRenderer(void);
 
     /**
-    * Render the path situation based on the topological map.
-    */
+     * Render the path situation based on the topological map.
+     */
     void renderSituationPath(const mpepc::PathSituation& situation, const hssh::LocalTopoMap& topoMap) const;
 
     /**
-    * Render the place situation based on the topological map.
-    *
-    */
+     * Render the place situation based on the topological map.
+     *
+     */
     void renderSituationPlace(const mpepc::PlaceSituation& situation, const hssh::LocalTopoMap& topoMap) const;
 
 private:
-
     double robotRadius_;
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_TOPO_SITUATION_RENDERER_H
+#endif   // UI_COMPONENTS_TOPO_SITUATION_RENDERER_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     discrete_gaussian.cpp
-* \author   Collin Johnson
-* 
-* Definition of DiscreteGaussianDistribution.
-*/
+ * \file     discrete_gaussian.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DiscreteGaussianDistribution.
+ */
 
 #include "math/discrete_gaussian.h"
 #include <cmath>
@@ -22,17 +22,17 @@ namespace vulcan
 {
 namespace math
 {
-    
+
 double cdf(double x, double mean, double variance);
-    
+
 
 DiscreteGaussianDistribution::DiscreteGaussianDistribution(double mean, double variance)
 : mean_(mean)
 , variance_(variance)
 {
 }
-    
-    
+
+
 double DiscreteGaussianDistribution::sample(void) const
 {
     std::cerr << "STUB: DiscreteGaussianDistribution::sample(void)\n";
@@ -44,7 +44,7 @@ double DiscreteGaussianDistribution::likelihood(double value) const
 {
     double upper = cdf(value + 0.5, mean_, variance_);
     double lower = cdf(value - 0.5, mean_, variance_);
-    
+
     return upper - lower;
 }
 
@@ -64,10 +64,9 @@ bool DiscreteGaussianDistribution::load(std::istream& in)
 
 
 double cdf(double x, double mean, double variance)
-{ 
-    return 0.5 * (1.0 + std::erf((x - mean) / std::sqrt(2.0*variance))); 
-    
+{
+    return 0.5 * (1.0 + std::erf((x - mean) / std::sqrt(2.0 * variance)));
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan

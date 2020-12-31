@@ -8,11 +8,11 @@
 
 
 /**
-* \file     director.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionPlannerDirector.
-*/
+ * \file     director.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionPlannerDirector.
+ */
 
 #include "planner/decision/director.h"
 #include "system/module_communicator.h"
@@ -31,7 +31,6 @@ DecisionPlannerDirector::DecisionPlannerDirector(const utils::CommandLine& comma
 
 void DecisionPlannerDirector::subscribeToData(system::ModuleCommunicator& communicator)
 {
-    
 }
 
 
@@ -54,8 +53,7 @@ system::UpdateStatus DecisionPlannerDirector::runUpdate(system::ModuleCommunicat
 
 void DecisionPlannerDirector::shutdown(system::ModuleCommunicator& communicator)
 {
-    
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

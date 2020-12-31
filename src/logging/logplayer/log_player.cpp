@@ -8,17 +8,17 @@
 
 
 /**
-* \file     log_player.cpp
-* \author   Collin Johnson
-*
-* Definition of LogPlayer.
-*/
+ * \file     log_player.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LogPlayer.
+ */
 
 #include "logging/logplayer/log_player.h"
-#include "utils/auto_mutex.h"
 #include "logging/logplayer/log_reader.h"
-#include <unistd.h>
+#include "utils/auto_mutex.h"
 #include <iostream>
+#include <unistd.h>
 
 // #define DEBUG_PLAYBACK
 
@@ -32,7 +32,7 @@ LogPlayer::LogPlayer(const log_player_params_t& params)
 , isPlaying(false)
 , loader(params.channels)
 , playbackTrigger(false)
-, playbackThread(true) // make the thread joinable
+, playbackThread(true)   // make the thread joinable
 , shouldRunThread(true)
 , exitWhenFinished(false)
 {
@@ -47,9 +47,9 @@ bool LogPlayer::load(const std::string& filename, log_type_t type)
 
     playbackTrigger.setPredicate(false);
 
-    logFile    = filename;
-    reader     = loader.loadLog(filename, type);
-    frame      = 0;
+    logFile = filename;
+    reader = loader.loadLog(filename, type);
+    frame = 0;
     timestamps = reader->getTimestamps();
 
     return reader.get() != 0;
@@ -70,8 +70,7 @@ bool LogPlayer::play(bool exitWhenLogEnds)
 
 void LogPlayer::step(void)
 {
-    if(!isPlaying)
-    {
+    if (!isPlaying) {
         reader->sendFrame(frame, communicator);
         ++frame;
     }
@@ -91,7 +90,7 @@ void LogPlayer::stop(void)
 
     playbackTrigger.setPredicate(false);
     isPlaying = false;
-    frame     = 0;
+    frame = 0;
 }
 
 
@@ -99,8 +98,7 @@ void LogPlayer::seek(std::size_t frame)
 {
     utils::AutoMutex autoLock(playbackLock);
 
-    if(frame < timestamps.size())
-    {
+    if (frame < timestamps.size()) {
         this->frame = frame;
     }
 }
@@ -117,8 +115,7 @@ void LogPlayer::setPlaybackSpeed(float speed)
 {
     utils::AutoMutex autoLock(playbackLock);
 
-    if(speed > 0.0f)
-    {
+    if (speed > 0.0f) {
         this->speed = speed;
     }
 }
@@ -132,24 +129,19 @@ void LogPlayer::waitForEnd(void)
 
 int LogPlayer::run(void)
 {
-    while(shouldRunThread)
-    {
+    while (shouldRunThread) {
         playbackTrigger.wait();
 
-        if(frame < timestamps.size())
-        {
+        if (frame < timestamps.size()) {
             reader->sendFrame(frame, communicator);
 
             waitForNextFrame();
 
             ++frame;
-        }
-        else
-        {
-            std::cout<<"INFO: Finished playing log file:"<<logFile<<'\n';
+        } else {
+            std::cout << "INFO: Finished playing log file:" << logFile << '\n';
 
-            if(exitWhenFinished)
-            {
+            if (exitWhenFinished) {
                 break;
             }
 
@@ -165,18 +157,17 @@ int LogPlayer::run(void)
 
 void LogPlayer::waitForNextFrame(void)
 {
-    if(frame < timestamps.size()-1)
-    {
-        int64_t sleepTime = (timestamps[frame+1] - timestamps[frame]) / speed;
+    if (frame < timestamps.size() - 1) {
+        int64_t sleepTime = (timestamps[frame + 1] - timestamps[frame]) / speed;
 
 #ifdef DEBUG_PLAYBACK
         std::cout << "DEBUG: LogPlayer: Waiting " << sleepTime << " for next frame.\n";
 #endif
 
-        assert(timestamps[frame+1] >= timestamps[frame]);
+        assert(timestamps[frame + 1] >= timestamps[frame]);
         usleep(sleepTime);
     }
 }
 
-} // namespace logplayer
-} // namespace vulcan
+}   // namespace logplayer
+}   // namespace vulcan

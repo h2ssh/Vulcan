@@ -8,11 +8,11 @@
 
 
 /**
-* \file     wheelchair_test.h
-* \author   Collin Johnson
-*
-* Declaration of WheelchairTest interface.
-*/
+ * \file     wheelchair_test.h
+ * \author   Collin Johnson
+ *
+ * Declaration of WheelchairTest interface.
+ */
 
 #ifndef CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_H
 #define CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_H
@@ -23,18 +23,15 @@ namespace calibration
 {
 
 /**
-* WheelchairTest
-*/
+ * WheelchairTest
+ */
 class WheelchairTest
 {
 public:
-
     virtual ~WheelchairTest(void) { }
-
-
 };
 
-}
-}
+}   // namespace calibration
+}   // namespace vulcan
 
-#endif // CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_H
+#endif   // CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_H

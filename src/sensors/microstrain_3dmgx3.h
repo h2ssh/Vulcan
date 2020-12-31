@@ -8,23 +8,23 @@
 
 
 /**
-* \file     microstrain_3dmgx3.h
-* \author   Collin Johnson
-*
-* Declaration of Microstrain3DMGX3 driver for interfacing with the IMU
-* of the same name.
-*/
+ * \file     microstrain_3dmgx3.h
+ * \author   Collin Johnson
+ *
+ * Declaration of Microstrain3DMGX3 driver for interfacing with the IMU
+ * of the same name.
+ */
 
 #ifndef SENSORS_MICROSTRAIN_3DMGX3_H
 #define SENSORS_MICROSTRAIN_3DMGX3_H
 
-#include <vector>
 #include "sensors/imu.h"
-#include "utils/sensor_time.h"
-#include "utils/thread.h"
-#include "utils/mutex.h"
 #include "utils/condition_variable.h"
+#include "utils/mutex.h"
+#include "utils/sensor_time.h"
 #include "utils/serial.h"
+#include "utils/thread.h"
+#include <vector>
 
 namespace vulcan
 {
@@ -32,20 +32,20 @@ namespace sensors
 {
 
 /**
-* Microstrain3DMGX3 is a driver for the Microstrain 3DM-GX3-35. The 3DM-GX3-35 is a combination of a
-* 3DM-GX3-25 and a GPS. The packet protocl is MIP, which allows for creating custom data packets rather
-* than the fixed types of data provided by the earlier protocol.
-*/
-class Microstrain3DMGX3 : public IMU,
-                          public utils::Threadable
+ * Microstrain3DMGX3 is a driver for the Microstrain 3DM-GX3-35. The 3DM-GX3-35 is a combination of a
+ * 3DM-GX3-25 and a GPS. The packet protocl is MIP, which allows for creating custom data packets rather
+ * than the fixed types of data provided by the earlier protocol.
+ */
+class Microstrain3DMGX3
+: public IMU
+, public utils::Threadable
 {
 public:
-
     /**
-    * Constructor for Microstrain3DMGX3.
-    *
-    * \param    port            Port on which to connect to the IMU
-    */
+     * Constructor for Microstrain3DMGX3.
+     *
+     * \param    port            Port on which to connect to the IMU
+     */
     Microstrain3DMGX3(const std::string& port);
 
     virtual ~Microstrain3DMGX3(void);
@@ -56,7 +56,6 @@ public:
     virtual bool getIMUData(imu_data_t& data);
 
 private:
-
     enum imu_mode_t
     {
         DEVICE_INFO,
@@ -66,16 +65,16 @@ private:
 
     struct ack_info_t
     {
-        char              set;
+        char set;
         std::vector<char> descriptors;
         std::vector<bool> acked;
     };
 
     // Setting up the 3DM-GX3 for continuous mode
-    void initialize      (void);
-    void stopData        (void);
-    void readDeviceInfo  (void);
-    void calibrate       (void);
+    void initialize(void);
+    void stopData(void);
+    void readDeviceInfo(void);
+    void calibrate(void);
     void setMessageFormat(void);
 
     // Threadable interface
@@ -92,11 +91,11 @@ private:
     void processDeviceInfo(char set, const char* packet, int length);
 
     void processAck(char set, const char* payload, int length);
-    void verifyAck (char set, char descriptor, char status);
+    void verifyAck(char set, char descriptor, char status);
 
     void processContinuousData(char set, const char* payload, int length);
-    void processAHRSData      (const char* payload, int length);
-    void processGPSData       (const char* payload, int length);
+    void processAHRSData(const char* payload, int length);
+    void processGPSData(const char* payload, int length);
 
     imu_mode_t mode;
     ack_info_t ack;
@@ -113,12 +112,12 @@ private:
 
     utils::SerialConnection serial;
 
-    utils::Thread            readThread;
-    utils::Mutex             dataLock;
+    utils::Thread readThread;
+    utils::Mutex dataLock;
     utils::ConditionVariable dataTrigger;
 };
 
-}
-}
+}   // namespace sensors
+}   // namespace vulcan
 
-#endif // SENSORS_MICROSTRAIN_3DMGX3_H
+#endif   // SENSORS_MICROSTRAIN_3DMGX3_H

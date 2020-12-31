@@ -15,8 +15,8 @@ namespace vision
 {
 
 FelzenszwalbSegmenter::FelzenszwalbSegmenter(const felzenszwalb_params_t& params)
-                                        : GraphBasedSegmenter(params.graphParams)
-                                        , params(params)
+: GraphBasedSegmenter(params.graphParams)
+, params(params)
 {
 }
 
@@ -24,31 +24,28 @@ FelzenszwalbSegmenter::FelzenszwalbSegmenter(const felzenszwalb_params_t& params
 int FelzenszwalbSegmenter::segmentGraph(void)
 {
     /*
-    * Main segmentation phase:
-    * 
-    * 1) Go through the pixels and merge any components whose edge is less than the threshold.
-    * 
-    * Straight forward
-    */
-    
-    for(auto pixelIt = pixelEdges.begin(), endIt = pixelEdges.end(); pixelIt != endIt; ++pixelIt)
-    {
+     * Main segmentation phase:
+     *
+     * 1) Go through the pixels and merge any components whose edge is less than the threshold.
+     *
+     * Straight forward
+     */
+
+    for (auto pixelIt = pixelEdges.begin(), endIt = pixelEdges.end(); pixelIt != endIt; ++pixelIt) {
         unsigned int componentA = componentForest->findSet(pixelIt->pixelA);
         unsigned int componentB = componentForest->findSet(pixelIt->pixelB);
-        
-        if((componentA != componentB)                           && 
-           (pixelIt->value < components[componentA].threshold) &&
-           (pixelIt->value < components[componentB].threshold))
-        {
+
+        if ((componentA != componentB) && (pixelIt->value < components[componentA].threshold)
+            && (pixelIt->value < components[componentB].threshold)) {
             unsigned int mergedComponent = mergeComponents(componentA, componentB);
-            
+
             // The new edge must be the minimum edge in the component because searching in non-decreasing order
-            components[mergedComponent].threshold = pixelIt->value + params.k/components[mergedComponent].size;
+            components[mergedComponent].threshold = pixelIt->value + params.k / components[mergedComponent].size;
         }
     }
-    
+
     return 0;
 }
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan

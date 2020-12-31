@@ -8,57 +8,57 @@
 
 
 /**
-* \file     gateways_renderer.h
-* \author   Collin Johnson
-*
-* Declaration of GatewaysRenderer.
-*/
+ * \file     gateways_renderer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GatewaysRenderer.
+ */
 
 #ifndef UI_COMPONENTS_GATEWAYS_RENDERER_H
 #define UI_COMPONENTS_GATEWAYS_RENDERER_H
 
-#include <vector>
 #include "ui/common/ui_color.h"
+#include <vector>
 
 namespace vulcan
 {
-namespace hssh { class Gateway; }
+namespace hssh
+{
+class Gateway;
+}
 
 namespace ui
 {
 
 /**
-* GatewaysRenderer renders a set of gateways onto the screen. Gateways are drawn as dashed lines that connect two
-* circular endpoints. The endpoints will fall within an anchor point, so there will be obvious and clear
-* overlap between the two if they are being rendered simultaneously.
-*/
+ * GatewaysRenderer renders a set of gateways onto the screen. Gateways are drawn as dashed lines that connect two
+ * circular endpoints. The endpoints will fall within an anchor point, so there will be obvious and clear
+ * overlap between the two if they are being rendered simultaneously.
+ */
 class GatewaysRenderer
 {
 public:
-
     /**
-    * setRenderColors sets the colors to use for rendering the gateways.
-    */
+     * setRenderColors sets the colors to use for rendering the gateways.
+     */
     void setRenderColors(const GLColor& exploredColor, const GLColor& frontierColor, const GLColor& endpointColor);
 
     /**
-    * renderGateways renders the gateways onto the screen.
-    */
+     * renderGateways renders the gateways onto the screen.
+     */
     void renderGateways(const std::vector<hssh::Gateway>& gateways, bool shouldRenderNormals = false);
 
     /**
-    * renderGateway renders a single gateway onto the screen.
-    * 
-    * \param    gateway                 Gateway to be drawn
-    * \param    shouldRenderNormals     Flag indicating if the normals for the gateway should be rendered (optional, default = false)
-    * \param    color                   Color to draw the gateway if different than global default (optional, default = nullptr)
-    */
-    void renderGateway(const hssh::Gateway& gateway, 
-                       bool shouldRenderNormals = false,
-                       const GLColor* color = nullptr);
+     * renderGateway renders a single gateway onto the screen.
+     *
+     * \param    gateway                 Gateway to be drawn
+     * \param    shouldRenderNormals     Flag indicating if the normals for the gateway should be rendered (optional,
+     * default = false) \param    color                   Color to draw the gateway if different than global default
+     * (optional, default = nullptr)
+     */
+    void renderGateway(const hssh::Gateway& gateway, bool shouldRenderNormals = false, const GLColor* color = nullptr);
 
 private:
-
     void renderGatewayNormals(const hssh::Gateway& gateway);
 
     GLColor exploredColor;
@@ -66,7 +66,7 @@ private:
     GLColor endpointColor;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_GATEWAYS_RENDERER_H
+#endif   // UI_COMPONENTS_GATEWAYS_RENDERER_H

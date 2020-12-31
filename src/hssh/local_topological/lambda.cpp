@@ -8,22 +8,22 @@
 
 
 /**
-* \file     lambda.cpp
-* \author   Collin Johnson
-*
-* Definition of various functions for calculating the lambda value between two places.
-*/
+ * \file     lambda.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of various functions for calculating the lambda value between two places.
+ */
 
 #include "hssh/local_topological/lambda.h"
+#include "core/angle_functions.h"
 #include "core/pose.h"
 #include "core/pose_distribution.h"
-#include "core/angle_functions.h"
 #include <cmath>
 
 #define DEBUG_MERGE
 
 #ifdef DEBUG_MERGE
-#include <iostream>
+    #include <iostream>
 #endif
 
 const double kFixedNoiseRatio = 0.05;
@@ -48,12 +48,11 @@ Lambda::Lambda(float x, float y, float theta, float xVariance, float yVariance, 
 }
 
 
-Lambda::Lambda(const pose_t& end, const pose_t& reference)
-: transformDistribution(3)
+Lambda::Lambda(const pose_t& end, const pose_t& reference) : transformDistribution(3)
 {
     auto endInRef = end.transformToNewFrame(reference);
-    x     = endInRef.x;
-    y     = endInRef.y;
+    x = endInRef.x;
+    y = endInRef.y;
     theta = endInRef.theta;
 
     setupDistribution();
@@ -85,8 +84,8 @@ Lambda Lambda::invert(void) const
     const double sinAngle = sin(-theta);
 
     inverted.theta = -theta;
-    inverted.x     = -x*cosAngle + y*sinAngle;
-    inverted.y     = -x*sinAngle - y*cosAngle;
+    inverted.x = -x * cosAngle + y * sinAngle;
+    inverted.y = -x * sinAngle - y * cosAngle;
 
     Vector invertedMean = transformDistribution.getMean();
     invertedMean(0) = inverted.x;
@@ -96,10 +95,10 @@ Lambda Lambda::invert(void) const
     Matrix jacobian(3, 3);
     jacobian(0, 0) = -cosAngle;
     jacobian(0, 1) = -sinAngle;
-    jacobian(0, 2) = -x*sinAngle + y*cosAngle;
+    jacobian(0, 2) = -x * sinAngle + y * cosAngle;
     jacobian(1, 0) = -sinAngle;
     jacobian(1, 1) = -cosAngle;
-    jacobian(1, 2) = -x*cosAngle + y*sinAngle;
+    jacobian(1, 2) = -x * cosAngle + y * sinAngle;
     jacobian(2, 0) = 0;
     jacobian(2, 1) = 0;
     jacobian(2, 2) = 1;
@@ -120,8 +119,8 @@ Lambda Lambda::rotate(float angle) const
     const double cosAngle = cos(angle);
     const double sinAngle = sin(angle);
 
-    rotated.x     = x*cosAngle - y*sinAngle;
-    rotated.y     = x*sinAngle + y*cosAngle;
+    rotated.x = x * cosAngle - y * sinAngle;
+    rotated.y = x * sinAngle + y * cosAngle;
     rotated.theta = angle_sum(rotated.theta, angle);
 
     // Now need to rotate the covariance matrix. Take the Jacobian of the applied transform to get
@@ -134,10 +133,10 @@ Lambda Lambda::rotate(float angle) const
     Matrix jacobian(3, 3);
     jacobian(0, 0) = cosAngle;
     jacobian(0, 1) = -sinAngle;
-    jacobian(0, 2) = -x*sinAngle - y*cosAngle;
+    jacobian(0, 2) = -x * sinAngle - y * cosAngle;
     jacobian(1, 0) = sinAngle;
     jacobian(1, 1) = cosAngle;
-    jacobian(1, 2) = x*cosAngle - y*sinAngle;
+    jacobian(1, 2) = x * cosAngle - y * sinAngle;
     jacobian(2, 0) = 0;
     jacobian(2, 1) = 0;
     jacobian(2, 2) = 1;
@@ -147,8 +146,8 @@ Lambda Lambda::rotate(float angle) const
 
     rotated.transformDistribution.setDistributionStatistics(rotatedMean, rotatedCov);
 
-    rotated.xVariance     = rotatedCov(0, 0);
-    rotated.yVariance     = rotatedCov(1, 1);
+    rotated.xVariance = rotatedCov(0, 0);
+    rotated.yVariance = rotatedCov(1, 1);
     rotated.thetaVariance = rotatedCov(2, 2);
 
     return rotated;
@@ -157,7 +156,7 @@ Lambda Lambda::rotate(float angle) const
 
 double Lambda::magnitude(void) const
 {
-    return std::sqrt(x*x + y*y);
+    return std::sqrt(x * x + y * y);
 }
 
 
@@ -170,11 +169,11 @@ double Lambda::heading(void) const
 void Lambda::merge(const Lambda& newLambda)
 {
     Vector origMean = transformDistribution.getMean();
-    Vector newMean  = newLambda.transformDistribution.getMean();
-    Matrix origCov  = transformDistribution.getCovariance();
-    Matrix newCov   = newLambda.transformDistribution.getCovariance();
+    Vector newMean = newLambda.transformDistribution.getMean();
+    Matrix origCov = transformDistribution.getCovariance();
+    Matrix newCov = newLambda.transformDistribution.getCovariance();
 
-    newCov  = origCov + newCov;
+    newCov = origCov + newCov;
 
     newMean(2) = wrap_to_pi(newMean(2));
     transformDistribution.setDistributionStatistics(newMean, newCov);
@@ -183,17 +182,17 @@ void Lambda::merge(const Lambda& newLambda)
     std::cout << "DEBUG:Lambda::merge: Orig:" << *this << '\n';
 #endif
 
-    x     = newMean(0);
-    y     = newMean(1);
+    x = newMean(0);
+    y = newMean(1);
     theta = newMean(2);
 
-    xVariance     = newCov(0, 0);
-    yVariance     = newCov(1, 1);
+    xVariance = newCov(0, 0);
+    yVariance = newCov(1, 1);
     thetaVariance = newCov(2, 2);
 
-    #ifdef DEBUG_MERGE
-    std::cout<<" Merged:"<<*this;
-    #endif
+#ifdef DEBUG_MERGE
+    std::cout << " Merged:" << *this;
+#endif
 }
 
 
@@ -217,5 +216,5 @@ void Lambda::setupDistribution(void)
     transformDistribution.setDistributionStatistics(transform, covariance);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     global_topo_editor_panel.h
-* \author   Collin Johnson
-* 
-* Definition of GlobalTopoEditorPanel.
-*/
+ * \file     global_topo_editor_panel.h
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalTopoEditorPanel.
+ */
 
 #ifndef UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_PANEL_H
 #define UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_PANEL_H
@@ -23,16 +23,14 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 class GlobalTopoEditorPanel : public UIPanel
 {
 public:
-    
 private:
-    
 };
-    
-}
-}
 
-#endif // UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_PANEL_H
+}   // namespace ui
+}   // namespace vulcan
+
+#endif   // UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_PANEL_H

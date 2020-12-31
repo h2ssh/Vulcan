@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.cpp
-* \author   Jong Jin Park
-*
-* Definition of load functions for the robot_model_params_t params structs.
-*/
+ * \file     params.cpp
+ * \author   Jong Jin Park
+ *
+ * Definition of load functions for the robot_model_params_t params structs.
+ */
 
 #include "robot/model/params.h"
 #include "utils/config_file.h"
@@ -23,41 +23,41 @@ namespace vulcan
 {
 namespace robot
 {
-    
+
 const std::string kRobotCollisionModelHeading("RobotCollisionModelParameters");
-const std::string kCollisionModelTypeKey     ("collision_model_type");
-const std::string kCircleModelRadiusKey      ("circle_model_radius_m");
-const std::string kRectangleModelKey         ("rectangle_model");
-const std::string kConvexPolygonModelKey     ("convex_polygon_model");
-const std::string kBodyCellSizeKey           ("body_cell_size_m");
+const std::string kCollisionModelTypeKey("collision_model_type");
+const std::string kCircleModelRadiusKey("circle_model_radius_m");
+const std::string kRectangleModelKey("rectangle_model");
+const std::string kConvexPolygonModelKey("convex_polygon_model");
+const std::string kBodyCellSizeKey("body_cell_size_m");
 
 const std::string kRobotPlantModelHeading("RobotPlantModelParameters");
-const std::string kDynamicsModelTypeKey  ("plant_model_type");
-    
-const std::string kPDRobotHeading  ("PDRobotParameters");
-const std::string kPGainKey        ("p_gain");
-const std::string kDGainKey        ("d_gain");
-const std::string kUseAccelSatKey  ("use_acceleration_saturation");
-const std::string kUseJerkSatKey   ("use_jerk_saturation");
-const std::string kLinAccSatValKey ("linear_acceleration_saturation");
-const std::string kAngAccSatValKey ("angular_acceleration_saturation");
+const std::string kDynamicsModelTypeKey("plant_model_type");
+
+const std::string kPDRobotHeading("PDRobotParameters");
+const std::string kPGainKey("p_gain");
+const std::string kDGainKey("d_gain");
+const std::string kUseAccelSatKey("use_acceleration_saturation");
+const std::string kUseJerkSatKey("use_jerk_saturation");
+const std::string kLinAccSatValKey("linear_acceleration_saturation");
+const std::string kAngAccSatValKey("angular_acceleration_saturation");
 const std::string kLinJerkSatValKey("linear_jerk_saturation");
 const std::string kAngJerkSatValKey("angular_jerk_saturation");
 
 const std::string kDiffTorquesHeading("DifferentialTorquesParameters");
-const std::string kWheelbase1Key     ("wheel_base");
-const std::string kWheelAccelKey     ("wheel_accel_max");
-const std::string kWheelVelKey     ("wheel_vel_max");
+const std::string kWheelbase1Key("wheel_base");
+const std::string kWheelAccelKey("wheel_accel_max");
+const std::string kWheelVelKey("wheel_vel_max");
 
 const std::string kDiffMotorsHeading("DifferentialMotorsParameters");
-const std::string kWheelbase2Key    ("wheel_base");
-const std::string kMotorMuKey       ("motor_mu");
-const std::string kMotorBetaKey     ("motor_beta");
-const std::string kMotorGammaKey    ("motor_gamma_coeff");
-const std::string kMotorAlphaKey    ("motor_alpha_coeff");
-const std::string kTurnInPlaceKey   ("turn_rate_in_place");
-const std::string kTurnRateBaseKey  ("turn_rate_base");
-const std::string kTurnReductionKey ("turn_rate_reduction");
+const std::string kWheelbase2Key("wheel_base");
+const std::string kMotorMuKey("motor_mu");
+const std::string kMotorBetaKey("motor_beta");
+const std::string kMotorGammaKey("motor_gamma_coeff");
+const std::string kMotorAlphaKey("motor_alpha_coeff");
+const std::string kTurnInPlaceKey("turn_rate_in_place");
+const std::string kTurnRateBaseKey("turn_rate_base");
+const std::string kTurnReductionKey("turn_rate_reduction");
 
 
 robot_model_params_t::robot_model_params_t(const utils::ConfigFile& config)
@@ -70,11 +70,15 @@ robot_model_params_t::robot_model_params_t(const utils::ConfigFile& config)
 collision_model_params_t::collision_model_params_t(const utils::ConfigFile& config)
 : type(config.getValueAsString(kRobotCollisionModelHeading, kCollisionModelTypeKey))
 , circleModelRadius(config.getValueAsFloat(kRobotCollisionModelHeading, kCircleModelRadiusKey))
-, rectangleModel(utils::create_rectangle_from_string(config.getValueAsString(kRobotCollisionModelHeading, kRectangleModelKey)))
-, convexPolygonModel(utils::create_point_vector_from_string(config.getValueAsString(kRobotCollisionModelHeading, kConvexPolygonModelKey)))
+, rectangleModel(
+    utils::create_rectangle_from_string(config.getValueAsString(kRobotCollisionModelHeading, kRectangleModelKey)))
+, convexPolygonModel(utils::create_point_vector_from_string(
+    config.getValueAsString(kRobotCollisionModelHeading, kConvexPolygonModelKey)))
 , bodyCellSize(config.getValueAsFloat(kRobotCollisionModelHeading, kBodyCellSizeKey))
 {
-    assert(convexPolygonModel.size() > 3); // need at least 4 vertices to make a proper polygon (the first and the last vertex is always identical)
+    assert(
+      convexPolygonModel.size()
+      > 3);   // need at least 4 vertices to make a proper polygon (the first and the last vertex is always identical)
     assert(bodyCellSize > 0.01f);
 }
 
@@ -119,19 +123,19 @@ differential_motors_plant_params_t::differential_motors_plant_params_t(const uti
 , turnRateBase(config.getValueAsFloat(kDiffMotorsHeading, kTurnRateBaseKey))
 , turnReductionRate(config.getValueAsFloat(kDiffMotorsHeading, kTurnReductionKey))
 {
-    assert(wheelbase         > 0.0f);
-    assert(motorMu           > 0.0f);
-    assert(motorBeta         > 0.0f);
-    assert(motorGamma        > 0.0f);
-    assert(motorAlpha        > 0.0f);
-    assert(turnRateInPlace   > 0.0f);
-    assert(turnRateBase      > 0.0f);
+    assert(wheelbase > 0.0f);
+    assert(motorMu > 0.0f);
+    assert(motorBeta > 0.0f);
+    assert(motorGamma > 0.0f);
+    assert(motorAlpha > 0.0f);
+    assert(turnRateInPlace > 0.0f);
+    assert(turnRateBase > 0.0f);
     assert(turnReductionRate < 0.01f);
-    
-    motorGamma *= motorBeta/motorMu;
+
+    motorGamma *= motorBeta / motorMu;
     motorAlpha *= motorBeta;
 }
 
 
-} // robot
-} // vulcan
+}   // namespace robot
+}   // namespace vulcan

@@ -8,19 +8,19 @@
 
 
 /**
-* \file     serial.h
-* \author   Collin Johnson
-*
-* Declaration of SerialConnection for talking over a serial port.
-*/
+ * \file     serial.h
+ * \author   Collin Johnson
+ *
+ * Declaration of SerialConnection for talking over a serial port.
+ */
 
 #ifndef UTILS_SERIAL_H
 #define UTILS_SERIAL_H
 
+#include <string>
 #include <sys/ioctl.h>
 #include <termios.h>   //for serial port stuff
 #include <unistd.h>
-#include <string>
 
 namespace vulcan
 {
@@ -52,55 +52,58 @@ enum Baud
 };
 
 /**
-* baud_from_int finds the baud rate associated with a given integer.
-*
-* \param    baud            Integer value representing the baud
-* \return   Baud enum value associated with the given integer. If no such value exists, the Baud returned is BAUD_0.
-*/
+ * baud_from_int finds the baud rate associated with a given integer.
+ *
+ * \param    baud            Integer value representing the baud
+ * \return   Baud enum value associated with the given integer. If no such value exists, the Baud returned is BAUD_0.
+ */
 Baud baud_from_int(int baud);
 
 /** SerialMode specifies the mode for the connection. */
 enum SerialMode
 {
-    EIGHT_N_1,          ///< 8N1 operation -- 8 data bits, no parity,   1 stop bit
-    EIGHT_N_2,          ///< 8N2 operation -- 8 data bits, no parity,   2 stop bits
-    SEVEN_E_1           ///< 7E1 operation -- 7 data bits, even parity, 1 stop bit
+    EIGHT_N_1,   ///< 8N1 operation -- 8 data bits, no parity,   1 stop bit
+    EIGHT_N_2,   ///< 8N2 operation -- 8 data bits, no parity,   2 stop bits
+    SEVEN_E_1    ///< 7E1 operation -- 7 data bits, even parity, 1 stop bit
 };
 
 /**
-* SerialConnection is a class that establishes and maintains a connection to a
-* serial port. Serial connection is a very bare interface for the serial line,
-* abstracting away the lowest levels details of communicating with the serial port.
-*
-* SerialConnection is intended for synchronous communication. As a result, calls
-* to readData() will block until data arrives. If asynchronous behavior is desired,
-* the Sockets class should be used.
-*
-* All connections established by the SerialConnection class use 8N1 settings with
-* no flow control because all the sensors we use have those settings. No need to
-* try and get fancy as as result.
-*/
+ * SerialConnection is a class that establishes and maintains a connection to a
+ * serial port. Serial connection is a very bare interface for the serial line,
+ * abstracting away the lowest levels details of communicating with the serial port.
+ *
+ * SerialConnection is intended for synchronous communication. As a result, calls
+ * to readData() will block until data arrives. If asynchronous behavior is desired,
+ * the Sockets class should be used.
+ *
+ * All connections established by the SerialConnection class use 8N1 settings with
+ * no flow control because all the sensors we use have those settings. No need to
+ * try and get fancy as as result.
+ */
 class SerialConnection
 {
 public:
+    /**
+     * Constructor for SerialConnection.
+     *
+     * After successful construction, the SerialConnection will be ready for read/write.
+     * connect() does not need to be called.
+     *
+     * \param    device              Serial device to connect to 'dev/tty**'
+     * \param    baudRate            Baud rate of the connection
+     * \param    mode                Mode of operation for the connection
+     * \param    useCanonical        Use canonical mode
+     * \param    eol                 End-of-line for canonical mode
+     */
+    SerialConnection(const std::string& device,
+                     Baud baudRate,
+                     SerialMode mode = EIGHT_N_1,
+                     bool useCanonical = false,
+                     char eol = 0);
 
     /**
-    * Constructor for SerialConnection.
-    *
-    * After successful construction, the SerialConnection will be ready for read/write.
-    * connect() does not need to be called.
-    *
-    * \param    device              Serial device to connect to 'dev/tty**'
-    * \param    baudRate            Baud rate of the connection
-    * \param    mode                Mode of operation for the connection
-    * \param    useCanonical        Use canonical mode
-    * \param    eol                 End-of-line for canonical mode
-    */
-    SerialConnection(const std::string& device, Baud baudRate, SerialMode mode = EIGHT_N_1, bool useCanonical = false, char eol = 0);
-
-    /**
-    * Destructor for SerialConnection. Closes the connection
-    */
+     * Destructor for SerialConnection. Closes the connection
+     */
     ~SerialConnection(void)
     {
         tcsetattr(fd, TCSANOW, &oldSettings);
@@ -108,116 +111,115 @@ public:
     }
 
     /**
-    * connect establishes the link to the serial device. After a successful call
-    * to connect(), data transmission can begin on the connection.
-    *
-    * \return   True if the connection is successfully established
-    */
+     * connect establishes the link to the serial device. After a successful call
+     * to connect(), data transmission can begin on the connection.
+     *
+     * \return   True if the connection is successfully established
+     */
     bool connect(void);
 
     /** close closes the connection. */
     void close(void) { ::close(fd); }
 
     /**
-    * write writes data to the connection. The call will block until all the data
-    * has been written.
-    *
-    * \param    data                Data to write
-    * \param    dataLen             Length of the data
-    * \return   True if the write is successful
-    */
+     * write writes data to the connection. The call will block until all the data
+     * has been written.
+     *
+     * \param    data                Data to write
+     * \param    dataLen             Length of the data
+     * \return   True if the write is successful
+     */
     bool write(const char* data, int dataLen);
-    
+
     /**
-    * write writes data to the connection. The call will block until all the data
-    * has been written.
-    *
-    * \param    data                Data to write
-    * \param    dataLen             Length of the data
-    * \return   True if the write is successful
-    */
+     * write writes data to the connection. The call will block until all the data
+     * has been written.
+     *
+     * \param    data                Data to write
+     * \param    dataLen             Length of the data
+     * \return   True if the write is successful
+     */
     bool write(const unsigned char* data, int dataLen);
 
     /**
-    * write writes data to the connection. The call will block until all the data
-    * has been written.
-    *
-    * \param    data                Data to write
-    * \return   True if the write is successful
-    */
+     * write writes data to the connection. The call will block until all the data
+     * has been written.
+     *
+     * \param    data                Data to write
+     * \return   True if the write is successful
+     */
     bool write(const std::string& data);
 
     /**
-    * read reads data from the connection. The supplied buffer will be resized according
-    * to the amount of data that needs to be written. The dataLen parameter specifies
-    * the current length of the buffer that is supplied. If the read() function needs
-    * to reallocate the buffer to make it large enough to store all the data, the
-    * bufLen parameter will be updated.
-    *
-    * \param    buffer              Buffer to read data into
-    * \param    bufLen              Length of the buffer
-    * \return   Pointer to the buffer the data was read into.
-    */
-    char*          read(char*          buffer, int& len);
+     * read reads data from the connection. The supplied buffer will be resized according
+     * to the amount of data that needs to be written. The dataLen parameter specifies
+     * the current length of the buffer that is supplied. If the read() function needs
+     * to reallocate the buffer to make it large enough to store all the data, the
+     * bufLen parameter will be updated.
+     *
+     * \param    buffer              Buffer to read data into
+     * \param    bufLen              Length of the buffer
+     * \return   Pointer to the buffer the data was read into.
+     */
+    char* read(char* buffer, int& len);
     unsigned char* read(unsigned char* buffer, int& len);
 
     /**
-    * flush clears all data from the serial line buffer. Any data the was on the line is immediately
-    * discarded and cannot be retrieved.
-    */
+     * flush clears all data from the serial line buffer. Any data the was on the line is immediately
+     * discarded and cannot be retrieved.
+     */
     void flush(void);
 
     /**
-    * getBaudRate retrieves the current baud rate of the SerialConnection.
-    *
-    * \return   Baud of the connection.
-    */
+     * getBaudRate retrieves the current baud rate of the SerialConnection.
+     *
+     * \return   Baud of the connection.
+     */
     Baud getBaudRate(void) const { return baud; }
 
     /**
-    * setBaudRate changes the baud rate of connection. If the change fails, the
-    * connection will no longer valid. Just a warning.
-    *
-    * \param    newBaud             New Baud to set for the connection
-    * \return   True if the baud rate is successfully changed.
-    */
+     * setBaudRate changes the baud rate of connection. If the change fails, the
+     * connection will no longer valid. Just a warning.
+     *
+     * \param    newBaud             New Baud to set for the connection
+     * \return   True if the baud rate is successfully changed.
+     */
     bool setBaudRate(Baud newBaud);
 
     /**
-    * getDevice retrieves the device this SerialConnection is communicating with.
-    *
-    * \return   Device represented by the SerialConnection.
-    */
+     * getDevice retrieves the device this SerialConnection is communicating with.
+     *
+     * \return   Device represented by the SerialConnection.
+     */
     std::string getDevice(void) const { return dev; }
 
     /**
-    * addToFDSet adds this connection to an fd_set for use in a select statement.
-    *
-    * \param    set         Set to add connection to
-    * \return   Minimum value to use for nfds with this connection.
-    */
+     * addToFDSet adds this connection to an fd_set for use in a select statement.
+     *
+     * \param    set         Set to add connection to
+     * \return   Minimum value to use for nfds with this connection.
+     */
     int addToFDSet(fd_set& set) const;
 
     /**
-    * isReady checks if this connection is ready for read/write as determined by the values in the fd_set.
-    *
-    * \param    set         Set used in the select statement
-    * \return   True if the fd is set. False otherwise.
-    */
+     * isReady checks if this connection is ready for read/write as determined by the values in the fd_set.
+     *
+     * \param    set         Set used in the select statement
+     * \return   True if the fd is set. False otherwise.
+     */
     bool isReady(fd_set& set) const;
 
 private:
-
-    mutable struct termios oldSettings;     ///< Save the old settings, so they can be returned when the line closes
-    std::string            dev;             ///< Serial device to open and talk with
-    Baud                   baud;            ///< Baud rate of the connection
-    SerialMode             parityMode;      ///< Parity for the connection
-    bool                   useCanonical;    ///< Flag indicating if canonical mode should be used
-    char                   eol;             ///< End-of-line character to use if operating in canonical mode
-    mutable int            fd;              ///< Low-level file descriptor for serial accesses
+    mutable struct termios oldSettings;   ///< Save the old settings, so they can be returned when the line closes
+    std::string dev;                      ///< Serial device to open and talk with
+    Baud baud;                            ///< Baud rate of the connection
+    SerialMode parityMode;                ///< Parity for the connection
+    bool useCanonical;                    ///< Flag indicating if canonical mode should be used
+    char eol;                             ///< End-of-line character to use if operating in canonical mode
+    mutable int fd;                       ///< Low-level file descriptor for serial accesses
 };
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan
 
-#endif // UTILS_SERIAL_H
+#endif   // UTILS_SERIAL_H

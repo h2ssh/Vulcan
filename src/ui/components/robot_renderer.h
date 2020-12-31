@@ -8,38 +8,40 @@
 
 
 /**
-* \file     robot_renderer.h
-* \author   Collin Johnson and Jong Jin Park
-*
-* Declaration of RobotRenderer.
-*/
+ * \file     robot_renderer.h
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Declaration of RobotRenderer.
+ */
 
 #ifndef UI_COMPONENTS_ROBOT_RENDERER_H
 #define UI_COMPONENTS_ROBOT_RENDERER_H
 
-#include "ui/common/ui_color.h"
 #include "core/point.h"
 #include "math/geometry/circle.h"
-#include "math/geometry/rectangle.h"
 #include "math/geometry/polygon.h"
+#include "math/geometry/rectangle.h"
+#include "ui/common/ui_color.h"
 #include <vector>
 
 namespace vulcan
 {
 struct pose_t;
-namespace robot{ struct collision_model_params_t; }
+namespace robot
+{
+struct collision_model_params_t;
+}
 
 namespace ui
 {
 
 /**
-* RobotRenderer draws a robot on the screen at the given position as a rectangle with fixed size.
-* Can also draw bounding boxes of various size around the robot when specified.
-*/
+ * RobotRenderer draws a robot on the screen at the given position as a rectangle with fixed size.
+ * Can also draw bounding boxes of various size around the robot when specified.
+ */
 class RobotRenderer
 {
 public:
-
     RobotRenderer(void);
 
     void setRobotColor(const GLColor& defaultColor);
@@ -55,7 +57,6 @@ public:
     void renderBoundingBox(const pose_t& robotPose, float boxOffset, const GLColor& boxColor) const;
 
 private:
-
     enum model_t
     {
         rectangle,
@@ -70,10 +71,10 @@ private:
     model_t modelToDraw_;
     math::Circle<float> circleModel_;
     math::Rectangle<float> rectangleModel;
-    math::Polygon<float>   convexPolygonModel;
+    math::Polygon<float> convexPolygonModel;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_ROBOT_RENDERER_H
+#endif   // UI_COMPONENTS_ROBOT_RENDERER_H

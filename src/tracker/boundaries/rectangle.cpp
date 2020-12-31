@@ -8,11 +8,11 @@
 
 
 /**
-* \file     rectangle.cpp
-* \author   Collin Johnson
-*
-* Definition of RectangleBoudary.
-*/
+ * \file     rectangle.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of RectangleBoudary.
+ */
 
 #include "tracker/boundaries/rectangle.h"
 
@@ -22,6 +22,5 @@ namespace tracker
 {
 
 
-
 }
-}
+}   // namespace vulcan

@@ -8,22 +8,22 @@
 
 
 /**
-* \file     scripting_panel.cpp
-* \author   Collin Johnson
-*
-* Implementation of ScriptingPanel.
-*/
+ * \file     scripting_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of ScriptingPanel.
+ */
 
 #include "ui/debug/scripting_panel.h"
-#include "ui/debug/planner_scripting_widget.h"
-#include "ui/debug/debug_ui.h"
-#include "ui/common/metric_path_creator.h"
-#include "ui/common/ui_params.h"
 #include "hssh/local_metric/lpm.h"
 #include "hssh/local_metric/lpm_io.h"
 #include "hssh/local_metric/pose.h"
 #include "mpepc/metric_planner/script/script.h"
 #include "mpepc/metric_planner/script/target_set.h"
+#include "ui/common/metric_path_creator.h"
+#include "ui/common/ui_params.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/planner_scripting_widget.h"
 #include "utils/auto_mutex.h"
 #include <cassert>
 #include <fstream>
@@ -37,22 +37,22 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(ScriptingPanel, wxEvtHandler)
-    EVT_BUTTON(ID_SCRIPTING_LOAD_MAP_BUTTON,        ScriptingPanel::loadMapPressed)
-    EVT_BUTTON(ID_SCRIPTING_CAPTURE_MAP_BUTTON,     ScriptingPanel::captureMapPressed)
-    EVT_BUTTON(ID_SCRIPT_TARGET_SELECT_POSE_BUTTON, ScriptingPanel::selectTargetPosePressed)
-    EVT_BUTTON(ID_SCRIPT_TARGET_CURRENT_BUTTON,     ScriptingPanel::useCurrentPosePressed)
-    EVT_BUTTON(ID_SCRIPT_CREATE_TARGET_BUTTON,      ScriptingPanel::createTargetPressed)
-    EVT_BUTTON(ID_SCRIPT_ERASE_TARGET_BUTTON,       ScriptingPanel::eraseTargetPressed)
-    EVT_BUTTON(ID_SCRIPT_SAVE_TARGETS_BUTTON,       ScriptingPanel::saveTargetsPressed)
-    EVT_BUTTON(ID_SCRIPT_LOAD_TARGETS_BUTTON,       ScriptingPanel::loadTargetsPressed)
-    EVT_BUTTON(ID_SCRIPT_ADD_TARGET_BUTTON,         ScriptingPanel::addTargetToScriptPressed)
-    EVT_BUTTON(ID_SCRIPT_REMOVE_TARGET_BUTTON,      ScriptingPanel::removeTargetFromScriptPressed)
-    EVT_BUTTON(ID_SCRIPT_SAVE_BUTTON,               ScriptingPanel::saveScriptPressed)
-    EVT_BUTTON(ID_SCRIPT_LOAD_BUTTON,               ScriptingPanel::loadScriptPressed)
+EVT_BUTTON(ID_SCRIPTING_LOAD_MAP_BUTTON, ScriptingPanel::loadMapPressed)
+EVT_BUTTON(ID_SCRIPTING_CAPTURE_MAP_BUTTON, ScriptingPanel::captureMapPressed)
+EVT_BUTTON(ID_SCRIPT_TARGET_SELECT_POSE_BUTTON, ScriptingPanel::selectTargetPosePressed)
+EVT_BUTTON(ID_SCRIPT_TARGET_CURRENT_BUTTON, ScriptingPanel::useCurrentPosePressed)
+EVT_BUTTON(ID_SCRIPT_CREATE_TARGET_BUTTON, ScriptingPanel::createTargetPressed)
+EVT_BUTTON(ID_SCRIPT_ERASE_TARGET_BUTTON, ScriptingPanel::eraseTargetPressed)
+EVT_BUTTON(ID_SCRIPT_SAVE_TARGETS_BUTTON, ScriptingPanel::saveTargetsPressed)
+EVT_BUTTON(ID_SCRIPT_LOAD_TARGETS_BUTTON, ScriptingPanel::loadTargetsPressed)
+EVT_BUTTON(ID_SCRIPT_ADD_TARGET_BUTTON, ScriptingPanel::addTargetToScriptPressed)
+EVT_BUTTON(ID_SCRIPT_REMOVE_TARGET_BUTTON, ScriptingPanel::removeTargetFromScriptPressed)
+EVT_BUTTON(ID_SCRIPT_SAVE_BUTTON, ScriptingPanel::saveScriptPressed)
+EVT_BUTTON(ID_SCRIPT_LOAD_BUTTON, ScriptingPanel::loadScriptPressed)
 END_EVENT_TABLE()
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
 namespace vulcan
 {
@@ -60,8 +60,8 @@ namespace ui
 {
 
 ScriptingPanel::ScriptingPanel(const ui_params_t& params, const scripting_panel_widgets_t& widgets)
-    : widgets(widgets)
-    , poseSelector(new PoseSelector)
+: widgets(widgets)
+, poseSelector(new PoseSelector)
 {
     assert(widgets.scriptingWidget);
     assert(widgets.elevatorTaskButton);
@@ -95,8 +95,7 @@ void ScriptingPanel::subscribe(system::ModuleCommunicator& producer)
 
 void ScriptingPanel::setConsumer(system::ModuleCommunicator* consumer)
 {
-    if(consumer)
-    {
+    if (consumer) {
         this->consumer = consumer;
     }
 }
@@ -104,8 +103,7 @@ void ScriptingPanel::setConsumer(system::ModuleCommunicator* consumer)
 
 void ScriptingPanel::update(void)
 {
-    if(isSelectingTarget)
-    {
+    if (isSelectingTarget) {
         updateTargetSelection();
     }
 
@@ -130,8 +128,7 @@ void ScriptingPanel::loadSettings(const utils::ConfigFile& config)
 
 void ScriptingPanel::handleData(const hssh::LocalPerceptualMap& map, const std::string& channel)
 {
-    if(shouldCaptureNextLPM)
-    {
+    if (shouldCaptureNextLPM) {
         utils::AutoMutex autoLock(lpmLock);
 
         lpm.reset(new hssh::LocalPerceptualMap(map));
@@ -151,8 +148,7 @@ void ScriptingPanel::handleData(const hssh::LocalPose& pose, const std::string& 
 
 void ScriptingPanel::initializeTargetSelection(void)
 {
-    if(!isSelectingTarget)
-    {
+    if (!isSelectingTarget) {
         poseSelector->reset();
         widgets.scriptingWidget->pushMouseHandler(poseSelector.get());
         isSelectingTarget = true;
@@ -167,8 +163,7 @@ void ScriptingPanel::updateTargetSelection(void)
     poseString << selectedTargetPose;
     widgets.targetPoseText->ChangeValue(wxString(poseString.str().c_str(), wxConvUTF8));
 
-    if(poseSelector->hasSelectedTarget())
-    {
+    if (poseSelector->hasSelectedTarget()) {
         widgets.scriptingWidget->showSelectedTarget(true);
         widgets.scriptingWidget->setSelectedTarget(poseSelector->getSelectedTarget());
     }
@@ -180,8 +175,7 @@ void ScriptingPanel::updateTargetSelection(void)
 
 void ScriptingPanel::stopTargetSelection(void)
 {
-    if(isSelectingTarget)
-    {
+    if (isSelectingTarget) {
         widgets.scriptingWidget->removeMouseHandler(poseSelector.get());
         isSelectingTarget = false;
     }
@@ -200,8 +194,9 @@ void ScriptingPanel::addNewTargetToSet(const pose_t& targetPose)
     target.name = widgets.targetNameText->GetValue().mb_str();
     target.pose = targetPose;
 
-// TODO: this needs to get done somewhere
-//     target.taskType = widgets.poseTaskButton->GetValue() ? planner::PoseTargetTask::POSE_TARGET_TASK_ID : planner::ElevatorTask::ELEVATOR_TASK_ID;
+    // TODO: this needs to get done somewhere
+    //     target.taskType = widgets.poseTaskButton->GetValue() ? planner::PoseTargetTask::POSE_TARGET_TASK_ID :
+    //     planner::ElevatorTask::ELEVATOR_TASK_ID;
 
     targets.push_back(target);
     widgets.scriptingWidget->setCompletedTargets(targets);
@@ -211,25 +206,25 @@ void ScriptingPanel::addNewTargetToSet(const pose_t& targetPose)
 
 void ScriptingPanel::addTargetToList(const mpepc::named_pose_t& target)
 {
-    long nextItemIndex = widgets.targetSetList->GetItemCount(); // append to the end
+    long nextItemIndex = widgets.targetSetList->GetItemCount();   // append to the end
 
     std::ostringstream poseString;
     poseString << target.pose;
 
     wxString taskString;
-//     switch(target.taskType)
-//     {
-//     case planner::PoseTargetTask::POSE_TARGET_TASK_ID:
-//         taskString = wxT("TARGET");
-//         break;
-//
-//     case planner::ElevatorTask::ELEVATOR_TASK_ID:
-//         taskString = wxT("ELEVATOR");
-//         break;
-//
-//     default:
-//         taskString = wxT("UNKNOWN");
-//     }
+    //     switch(target.taskType)
+    //     {
+    //     case planner::PoseTargetTask::POSE_TARGET_TASK_ID:
+    //         taskString = wxT("TARGET");
+    //         break;
+    //
+    //     case planner::ElevatorTask::ELEVATOR_TASK_ID:
+    //         taskString = wxT("ELEVATOR");
+    //         break;
+    //
+    //     default:
+    //         taskString = wxT("UNKNOWN");
+    //     }
     taskString = wxT("TARGET");
 
     long itemId = widgets.targetSetList->InsertItem(nextItemIndex, wxString(target.name.c_str(), wxConvUTF8));
@@ -245,20 +240,19 @@ void ScriptingPanel::eraseSelectedTargets(void)
 
     // Erase the selected targets from the internal structure, then rebuild the listctrl with the new targets
     // rather than deleting items from the list control
-    for(int n = selectedRows.size(); --n >= 0;)
-    {
+    for (int n = selectedRows.size(); --n >= 0;) {
         targets.erase(targets.begin() + selectedRows[n]);
         widgets.targetSetList->DeleteItem(selectedRows[n]);
     }
 
-    widgets.scriptingWidget->setCompletedTargets(targets);  // changed the number of targets, so need to update the display
+    widgets.scriptingWidget->setCompletedTargets(
+      targets);   // changed the number of targets, so need to update the display
 }
 
 
 void ScriptingPanel::removeTargetFromScript(std::size_t index)
 {
-    if(index < scriptTargets.size())
-    {
+    if (index < scriptTargets.size()) {
         scriptTargets.erase(scriptTargets.begin() + index);
     }
 
@@ -270,8 +264,7 @@ void ScriptingPanel::updateScriptList(void)
 {
     widgets.scriptList->Clear();
 
-    for(auto& target : scriptTargets)
-    {
+    for (auto& target : scriptTargets) {
         widgets.scriptList->Append(wxString(target.name.c_str(), wxConvUTF8));
     }
 }
@@ -283,10 +276,10 @@ std::vector<std::size_t> ScriptingPanel::getSelectedRows(void) const
 
     long nextSelectedIndex = widgets.targetSetList->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 
-    while(nextSelectedIndex != -1)
-    {
+    while (nextSelectedIndex != -1) {
         selectedRows.push_back(nextSelectedIndex);
-        nextSelectedIndex = widgets.targetSetList->GetNextItem(nextSelectedIndex, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+        nextSelectedIndex =
+          widgets.targetSetList->GetNextItem(nextSelectedIndex, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     }
 
     return selectedRows;
@@ -295,10 +288,14 @@ std::vector<std::size_t> ScriptingPanel::getSelectedRows(void) const
 
 void ScriptingPanel::loadMapPressed(wxCommandEvent& event)
 {
-    wxFileDialog loadDialog(widgets.scriptingWidget, wxT("Select map file..."), wxT(""), wxT(""), wxT("*.lpm"), wxFD_OPEN);
+    wxFileDialog loadDialog(widgets.scriptingWidget,
+                            wxT("Select map file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.lpm"),
+                            wxFD_OPEN);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         wxString path = loadDialog.GetPath();
 
         lpm.reset(new hssh::LocalPerceptualMap());
@@ -336,8 +333,7 @@ void ScriptingPanel::createTargetPressed(wxCommandEvent& event)
 void ScriptingPanel::eraseTargetPressed(wxCommandEvent& event)
 {
     // Nothing to do if there aren't any selected items
-    if(widgets.targetSetList->GetSelectedItemCount()== 0)
-    {
+    if (widgets.targetSetList->GetSelectedItemCount() == 0) {
         return;
     }
 
@@ -347,15 +343,18 @@ void ScriptingPanel::eraseTargetPressed(wxCommandEvent& event)
 
 void ScriptingPanel::saveTargetsPressed(wxCommandEvent& event)
 {
-    wxFileDialog saveDialog(widgets.scriptingWidget, wxT("Select targets file..."), wxT(""), wxT(""), wxT("*.tgt"), wxFD_SAVE);
+    wxFileDialog saveDialog(widgets.scriptingWidget,
+                            wxT("Select targets file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.tgt"),
+                            wxFD_SAVE);
 
-    if(saveDialog.ShowModal() == wxID_OK)
-    {
+    if (saveDialog.ShowModal() == wxID_OK) {
         wxString path = saveDialog.GetPath();
         std::ofstream out(std::string(path.mb_str()));
 
-        if(out.good())
-        {
+        if (out.good()) {
             mpepc::MetricTargetSet targetSet(targets);
             targetSet.saveToFile(out);
         }
@@ -365,20 +364,22 @@ void ScriptingPanel::saveTargetsPressed(wxCommandEvent& event)
 
 void ScriptingPanel::loadTargetsPressed(wxCommandEvent& event)
 {
-    wxFileDialog loadDialog(widgets.scriptingWidget, wxT("Select targets file..."), wxT(""), wxT(""), wxT("*.tgt"), wxFD_OPEN);
+    wxFileDialog loadDialog(widgets.scriptingWidget,
+                            wxT("Select targets file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.tgt"),
+                            wxFD_OPEN);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         wxString path = loadDialog.GetPath();
         std::ifstream in(std::string(path.mb_str()));
 
-        if(in.good())
-        {
+        if (in.good()) {
             mpepc::MetricTargetSet targetSet(in);
             targets.clear();
             widgets.targetSetList->DeleteAllItems();
-            for(auto& target : targetSet)
-            {
+            for (auto& target : targetSet) {
                 targets.push_back(target);
                 addTargetToList(target);
             }
@@ -391,8 +392,7 @@ void ScriptingPanel::addTargetToScriptPressed(wxCommandEvent& event)
 {
     auto selectedRows = getSelectedRows();
 
-    for(auto row : selectedRows)
-    {
+    for (auto row : selectedRows) {
         assert(row < targets.size());
 
         scriptTargets.push_back(targets[row]);
@@ -406,8 +406,7 @@ void ScriptingPanel::removeTargetFromScriptPressed(wxCommandEvent& event)
 {
     long selection = widgets.scriptList->GetSelection();
 
-    if(selection != wxNOT_FOUND)
-    {
+    if (selection != wxNOT_FOUND) {
         removeTargetFromScript(selection);
     }
 }
@@ -415,14 +414,17 @@ void ScriptingPanel::removeTargetFromScriptPressed(wxCommandEvent& event)
 
 void ScriptingPanel::saveScriptPressed(wxCommandEvent& event)
 {
-    wxFileDialog saveDialog(widgets.scriptingWidget, wxT("Select planner script file..."), wxT(""), wxT(""), wxT("*.spt"), wxFD_SAVE);
+    wxFileDialog saveDialog(widgets.scriptingWidget,
+                            wxT("Select planner script file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.spt"),
+                            wxFD_SAVE);
 
-    if(saveDialog.ShowModal() == wxID_OK)
-    {
+    if (saveDialog.ShowModal() == wxID_OK) {
         // Create the tasks to be tossed into the script
         std::vector<mpepc::ScriptTask> tasks;
-        for(auto& target : scriptTargets)
-        {
+        for (auto& target : scriptTargets) {
             // if a task is created from a single pose it is always a pose task.
             tasks.push_back(mpepc::ScriptTask(target.pose, target.name, "Pose"));
 
@@ -446,23 +448,25 @@ void ScriptingPanel::saveScriptPressed(wxCommandEvent& event)
 
 void ScriptingPanel::loadScriptPressed(wxCommandEvent& event)
 {
-    wxFileDialog loadDialog(widgets.scriptingWidget, wxT("Select planner script file..."), wxT(""), wxT(""), wxT("*.spt"), wxFD_OPEN);
+    wxFileDialog loadDialog(widgets.scriptingWidget,
+                            wxT("Select planner script file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.spt"),
+                            wxFD_OPEN);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         wxString path = loadDialog.GetPath();
         mpepc::MetricPlannerScript script(std::string(path.mb_str()));
 
         std::vector<mpepc::named_pose_t> loadedTargets;
 
         int targetCount = 0;
-        for(auto& task : script)
-        {
+        for (auto& task : script) {
             std::vector<pose_t> poses = task.getTargets();
             std::vector<std::string> names = task.getTargetNames();
 
-            for(std::size_t n = 0; n < poses.size(); ++n)
-            {
+            for (std::size_t n = 0; n < poses.size(); ++n) {
                 targetCount++;
                 mpepc::named_pose_t namedTarget;
                 namedTarget.name = names[n];
@@ -476,5 +480,5 @@ void ScriptingPanel::loadScriptPressed(wxCommandEvent& event)
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     elevator.cpp
-* \author   Collin Johnson
-*
-* Definition of Elevator.
-*/
+ * \file     elevator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of Elevator.
+ */
 
 #include "hssh/local_metric/multifloor/elevator.h"
 #include "hssh/local_metric/multifloor/floor.h"
@@ -27,21 +27,21 @@ namespace vulcan
 namespace hssh
 {
 
-Elevator::Elevator(int                                                   id,
-                   int                                                   currentFloor,
-                   const std::map<int, math::Rectangle<float>>&          boundaries,
+Elevator::Elevator(int id,
+                   int currentFloor,
+                   const std::map<int, math::Rectangle<float>>& boundaries,
                    const std::map<int, std::vector<floor_transition_t>>& transitions)
-    : id(id)
-    , boundaries(boundaries)
-    , transitions(transitions)
-    , currentFloor(currentFloor)
+: id(id)
+, boundaries(boundaries)
+, transitions(transitions)
+, currentFloor(currentFloor)
 {
 }
 
 
 Elevator::Elevator(int id, const pose_t& pose, int floorId, const LocalPerceptualMap& lpm)
-    : id(id)
-    , currentFloor(floorId)
+: id(id)
+, currentFloor(floorId)
 {
     calculateBoundary(pose, floorId, lpm);
 
@@ -53,8 +53,7 @@ math::Rectangle<float> Elevator::getBoundary(int floorId) const
 {
     auto boundaryIt = boundaries.find(floorId);
 
-    if(boundaryIt != boundaries.end())
-    {
+    if (boundaryIt != boundaries.end()) {
         return boundaryIt->second;
     }
 
@@ -66,8 +65,7 @@ bool Elevator::isRobotOnElevator(const pose_t& pose, int floorId) const
 {
     auto boundaryIt = boundaries.find(floorId);
 
-    if(boundaryIt != boundaries.end())
-    {
+    if (boundaryIt != boundaries.end()) {
         return boundaryIt->second.contains(pose.toPoint());
     }
 
@@ -75,7 +73,10 @@ bool Elevator::isRobotOnElevator(const pose_t& pose, int floorId) const
 }
 
 
-void Elevator::addFloor(const robot::elevator_t& elevator, const pose_t& pose, int floorId, const LocalPerceptualMap& lpm)
+void Elevator::addFloor(const robot::elevator_t& elevator,
+                        const pose_t& pose,
+                        int floorId,
+                        const LocalPerceptualMap& lpm)
 {
     calculateBoundary(pose, floorId, lpm);
     addFloorTransition(currentFloor, floorId, elevator.distance);
@@ -90,21 +91,19 @@ int Elevator::findNewFloor(const robot::elevator_t& elevator, double minDistance
 
     auto transIt = transitions.find(currentFloor);
 
-    if(transIt == transitions.end())
-    {
+    if (transIt == transitions.end()) {
         return -1;
     }
 
-    for(const auto& transition : transIt->second)
-    {
+    for (const auto& transition : transIt->second) {
         bool doFloorsMatch = std::abs(transition.height - elevator.distance) < minDistanceBetweenFloors;
 
 #ifdef DEBUG_NEW_FLOOR
-        std::cout<<"DEBUG:Elevator:Transition:"<<transition.height<<" Measured:"<<elevator.distance<<" Match? "<<doFloorsMatch<<'\n';
+        std::cout << "DEBUG:Elevator:Transition:" << transition.height << " Measured:" << elevator.distance
+                  << " Match? " << doFloorsMatch << '\n';
 #endif
 
-        if(doFloorsMatch)
-        {
+        if (doFloorsMatch) {
             return transition.endFloor;
         }
     }
@@ -119,8 +118,7 @@ void Elevator::calculateBoundary(const pose_t& pose, int floorId, const LocalPer
 
     Point<int> start = utils::global_point_to_grid_cell(pose.toPoint(), lpm);
 
-    for(double angle = 0; angle < 2.0*M_PI; angle += M_PI*5.0/180.0)
-    {
+    for (double angle = 0; angle < 2.0 * M_PI; angle += M_PI * 5.0 / 180.0) {
         float deltaX = cos(angle);
         float deltaY = sin(angle);
 
@@ -129,8 +127,7 @@ void Elevator::calculateBoundary(const pose_t& pose, int floorId, const LocalPer
 
         Point<int> rayCell(start.x, start.y);
 
-        while(lpm.isCellInGrid(rayCell) && (lpm.getCellTypeNoCheck(rayCell) & kFreeOccGridCell))
-        {
+        while (lpm.isCellInGrid(rayCell) && (lpm.getCellTypeNoCheck(rayCell) & kFreeOccGridCell)) {
             xPosition += deltaX;
             yPosition += deltaY;
 
@@ -141,11 +138,11 @@ void Elevator::calculateBoundary(const pose_t& pose, int floorId, const LocalPer
         endpoints.push_back(utils::grid_point_to_global_point(rayCell, lpm));
     }
 
-    boundaries.insert(std::make_pair(floorId, math::axis_aligned_bounding_rectangle<float>(endpoints.begin(),
-                                                                                           endpoints.end())));
+    boundaries.insert(
+      std::make_pair(floorId, math::axis_aligned_bounding_rectangle<float>(endpoints.begin(), endpoints.end())));
 
 #ifdef DEBUG_NEW_FLOOR
-    std::cout<<"Boundary for Floor "<<floorId<<':'<<boundaries[floorId]<<" in Elevator"<<id<<'\n';
+    std::cout << "Boundary for Floor " << floorId << ':' << boundaries[floorId] << " in Elevator" << id << '\n';
 #endif
 }
 
@@ -153,14 +150,11 @@ void Elevator::calculateBoundary(const pose_t& pose, int floorId, const LocalPer
 void Elevator::addFloorTransition(int floorA, int floorB, double height)
 {
     transitions[floorA].push_back({floorA, floorB, height});
-    
+
     auto transIt = transitions.find(floorB);
-    if(transIt != transitions.end())
-    {
+    if (transIt != transitions.end()) {
         transIt->second.push_back({floorB, floorA, -height});
-    }
-    else
-    {
+    } else {
         decltype(transIt->second) newFloorTransitions;
         newFloorTransitions.push_back({floorB, floorA, -height});
         transitions.insert(std::make_pair(floorB, newFloorTransitions));
@@ -172,14 +166,12 @@ void Elevator::inferAdditionalTransitions(int floorId, double height)
 {
     // All floors on the elevator MUST be connected, so whenever visiting a new floor, establish
     // any necessary connections
-    
+
     auto transIt = transitions.find(currentFloor);
-    
-    for(const auto& transition : transIt->second)
-    {
-        if(!doesTransitionExist(transition.endFloor, floorId))
-        {
-            addFloorTransition(transition.endFloor, floorId, height-transition.height);
+
+    for (const auto& transition : transIt->second) {
+        if (!doesTransitionExist(transition.endFloor, floorId)) {
+            addFloorTransition(transition.endFloor, floorId, height - transition.height);
         }
     }
 }
@@ -188,23 +180,20 @@ void Elevator::inferAdditionalTransitions(int floorId, double height)
 bool Elevator::doesTransitionExist(int floorA, int floorB) const
 {
     // A floor transition to itself exists by definition and doesn't need to be added to the map
-    if(floorA == floorB)
-    {
+    if (floorA == floorB) {
         return true;
     }
-    
+
     auto transIt = transitions.find(floorA);
-    
-    for(const auto& transition : transIt->second)
-    {
-        if(transition.endFloor == floorB)
-        {
+
+    for (const auto& transition : transIt->second) {
+        if (transition.endFloor == floorB) {
             return true;
         }
     }
-    
+
     return false;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

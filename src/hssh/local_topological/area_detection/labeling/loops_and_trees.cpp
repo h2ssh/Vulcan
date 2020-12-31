@@ -8,22 +8,22 @@
 
 
 /**
-* \file     loops_and_trees.cpp
-* \author   Collin Johnson
-*
-* Definition of label_loops_and_trees function.
-*/
+ * \file     loops_and_trees.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of label_loops_and_trees function.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/loops_and_trees.h"
 #include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/exterior_property.hpp>
 #include <boost/graph/johnson_all_pairs_shortest.hpp>
-#include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/visitors.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <cassert>
 #include <iostream>
 #include <stack>
-#include <cassert>
 
 #define DEBUG_LOOPS
 // #define DEBUG_CONNECTED
@@ -36,7 +36,7 @@ namespace hssh
 using namespace boost;
 
 using Vertex = graph_traits<LoopGraph>::vertex_descriptor;
-using Edge   = graph_traits<LoopGraph>::edge_descriptor;
+using Edge = graph_traits<LoopGraph>::edge_descriptor;
 
 // Define property map for storing the distances between nodes
 using DistProperty = exterior_vertex_property<LoopGraph, double>;
@@ -45,8 +45,8 @@ using DistMatrix = DistProperty::matrix_type;
 using DistMap = DistProperty::matrix_map_type;
 
 /*
-* LoopLabellingVisitor is a DFSVisitor for BGL.
-*/
+ * LoopLabellingVisitor is a DFSVisitor for BGL.
+ */
 struct LoopLabellingVisitor : public default_bfs_visitor
 {
     LoopLabellingVisitor(std::vector<Vertex>& pred, std::vector<Vertex>& source, std::vector<Vertex>& target)
@@ -58,8 +58,8 @@ struct LoopLabellingVisitor : public default_bfs_visitor
 
     // DFSVisitor concept interface
     void initialize_vertex(Vertex v, const LoopGraph& graph);
-    void tree_edge        (Edge   e, const LoopGraph& graph);
-    void non_tree_edge    (Edge   e, const LoopGraph& graph);
+    void tree_edge(Edge e, const LoopGraph& graph);
+    void non_tree_edge(Edge e, const LoopGraph& graph);
 
     std::vector<Vertex>& predecessors;
     std::vector<Vertex>& sourcePath;
@@ -82,18 +82,14 @@ void construct_loop_graph(AreaGraph& areaGraph, LoopGraph& loopGraph)
     std::for_each(areaGraph.beginEdges(), areaGraph.endEdges(), [&](const auto& edge) {
         auto endpoints = edge->getEndpoints();
 
-        for(auto& added : addedEdges)
-        {
+        for (auto& added : addedEdges) {
             // Ignore previously added edges
-            if((added.first == endpoints[0].get()) && (added.second == endpoints[1].get()))
-            {
+            if ((added.first == endpoints[0].get()) && (added.second == endpoints[1].get())) {
                 return;
             }
         }
 
-        auto e = add_edge(nodeToVertex[endpoints[0].get()],
-                          nodeToVertex[endpoints[1].get()],
-                          loopGraph);
+        auto e = add_edge(nodeToVertex[endpoints[0].get()], nodeToVertex[endpoints[1].get()], loopGraph);
         loopGraph[e.first].length = edge->getLength();
         addedEdges.emplace_back(endpoints[0].get(), endpoints[1].get());
         addedEdges.emplace_back(endpoints[1].get(), endpoints[0].get());
@@ -116,10 +112,10 @@ void label_loops_and_trees(LoopGraph& graph)
     std::vector<Vertex> sourcePath;
     std::vector<Vertex> targetPath;
     LoopLabellingVisitor vis(predecessors, sourcePath, targetPath);
-    predecessors[0] = 0;    // point root to itself
+    predecessors[0] = 0;   // point root to itself
 
     breadth_first_search(graph, vertex(0, graph), visitor(vis));
-//     undirected_dfs(graph, visitor(vis).edge_color_map(get(&LoopGraphEdge::color, graph)));
+    //     undirected_dfs(graph, visitor(vis).edge_color_map(get(&LoopGraphEdge::color, graph)));
 }
 
 
@@ -129,12 +125,10 @@ void compute_node_distances(AreaGraph& graph, const LoopGraph& loopGraph)
     DistMap distMap(distances, loopGraph);
     johnson_all_pairs_shortest_paths(loopGraph, distMap, weight_map(get(&LoopGraphEdge::length, loopGraph)));
 
-    for(std::size_t n = 0, end = graph.sizeNodes(); n < end; ++n)
-    {
+    for (std::size_t n = 0, end = graph.sizeNodes(); n < end; ++n) {
         AreaNode* startNode = loopGraph[n].node;
 
-        for(std::size_t m = n + 1; m < end; ++m)
-        {
+        for (std::size_t m = n + 1; m < end; ++m) {
             AreaNode* endNode = loopGraph[m].node;
             graph.setNodeDistance(startNode, endNode, distances[n][m]);
         }
@@ -165,8 +159,7 @@ void LoopLabellingVisitor::non_tree_edge(Edge e, const LoopGraph& graph)
 
     // Ignore this case. It arises from the BFS just looking at all outedges in the undirected graph, so it
     // sees back to the parent in the search tree when expanded.
-    if(predecessors[source(e, graph)] == targetVertex)
-    {
+    if (predecessors[source(e, graph)] == targetVertex) {
         return;
     }
 
@@ -175,8 +168,7 @@ void LoopLabellingVisitor::non_tree_edge(Edge e, const LoopGraph& graph)
 
     // Extract the source and target paths
     targetPath.clear();
-    while(prevVertex != vertex)
-    {
+    while (prevVertex != vertex) {
         targetPath.push_back(vertex);
         prevVertex = vertex;
         vertex = predecessors[vertex];
@@ -185,8 +177,7 @@ void LoopLabellingVisitor::non_tree_edge(Edge e, const LoopGraph& graph)
     vertex = source(e, graph);
     prevVertex = predecessors[vertex];
     sourcePath.clear();
-    while(prevVertex != vertex)
-    {
+    while (prevVertex != vertex) {
         sourcePath.push_back(vertex);
         prevVertex = vertex;
         vertex = predecessors[vertex];
@@ -203,13 +194,11 @@ void LoopLabellingVisitor::non_tree_edge(Edge e, const LoopGraph& graph)
     std::size_t sourceEnd = std::distance(sourcePath.begin(), sourceIt) + 1;
 
     double loopDist = 0.0;
-    for(std::size_t n = 1; n < targetEnd; ++n)
-    {
+    for (std::size_t n = 1; n < targetEnd; ++n) {
         loopDist += graph[edge(targetPath[n - 1], targetPath[n], graph).first].length;
     }
 
-    for(std::size_t n = 1; n < sourceEnd; ++n)
-    {
+    for (std::size_t n = 1; n < sourceEnd; ++n) {
         loopDist += graph[edge(sourcePath[n - 1], sourcePath[n], graph).first].length;
     }
 
@@ -217,26 +206,24 @@ void LoopLabellingVisitor::non_tree_edge(Edge e, const LoopGraph& graph)
     std::cout << "DEBUG:label_loops_and_trees: Found a loop with distance " << loopDist << " : \n";
 #endif
 
-    for(std::size_t n = 0; n < targetEnd; ++n)
-    {
+    for (std::size_t n = 0; n < targetEnd; ++n) {
         graph[targetPath[n]].node->setLoop(true);
         graph[targetPath[n]].node->setLoopDistance(loopDist);
 
 #ifdef DEBUG_LOOPS
         std::cout << graph[targetPath[n]].node->getPosition() << '\n';
-#endif // DEBUG_LOOPS
+#endif   // DEBUG_LOOPS
     }
 
-    for(std::size_t n = 0; n < sourceEnd; ++n)
-    {
+    for (std::size_t n = 0; n < sourceEnd; ++n) {
         graph[sourcePath[n]].node->setLoop(true);
         graph[sourcePath[n]].node->setLoopDistance(loopDist);
 
 #ifdef DEBUG_LOOPS
         std::cout << graph[sourcePath[n]].node->getPosition() << '\n';
-#endif // DEBUG_LOOPS
+#endif   // DEBUG_LOOPS
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

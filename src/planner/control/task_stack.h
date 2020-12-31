@@ -8,11 +8,11 @@
 
 
 /**
-* \file     task_stack.h
-* \author   Collin Johnson
-* 
-* Declaration of ControlTaskStack.
-*/
+ * \file     task_stack.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ControlTaskStack.
+ */
 
 #ifndef PLANNER_CONTROL_TASK_STACK_H
 #define PLANNER_CONTROL_TASK_STACK_H
@@ -24,13 +24,13 @@ namespace vulcan
 {
 namespace planner
 {
-    
+
 class ControlTask;
 
 // A deque currently supplies all functionality needed for the task stack
 using ControlTaskStack = std::deque<std::shared_ptr<ControlTask>>;
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_CONTROL_TASK_STACK_H
+#endif   // PLANNER_CONTROL_TASK_STACK_H

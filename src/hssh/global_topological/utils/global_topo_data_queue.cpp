@@ -8,11 +8,11 @@
 
 
 /**
-* \file     global_topo_data_queue.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalTopoDataQueue.
-*/
+ * \file     global_topo_data_queue.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalTopoDataQueue.
+ */
 
 #include "hssh/global_topological/utils/global_topo_data_queue.h"
 #include "utils/auto_mutex.h"
@@ -22,9 +22,7 @@ namespace vulcan
 namespace hssh
 {
 
-GlobalTopoDataQueue::GlobalTopoDataQueue(void)
-: haveLocalMap_(false)
-, dataTrigger_(false)
+GlobalTopoDataQueue::GlobalTopoDataQueue(void) : haveLocalMap_(false), dataTrigger_(false)
 {
 }
 
@@ -33,13 +31,12 @@ bool GlobalTopoDataQueue::waitForData(void)
 {
     // timedWait == 0 if success
     bool haveData = !dataTrigger_.timedWait(100);
-    
+
     // If data arrived, turn off the trigger for the next update
-    if(haveData)
-    {
+    if (haveData) {
         dataTrigger_.setPredicate(false);
     }
-    
+
     return haveData;
 }
 
@@ -62,12 +59,9 @@ GlobalTopoCommandPtr GlobalTopoDataQueue::popCommand(void)
 {
     utils::AutoMutex autoLock(dataLock_);
 
-    if(commands_.empty())
-    {
+    if (commands_.empty()) {
         return nullptr;
-    }
-    else
-    {
+    } else {
         auto message = std::move(commands_.front());
         commands_.pop_front();
         return message;
@@ -78,7 +72,7 @@ GlobalTopoCommandPtr GlobalTopoDataQueue::popCommand(void)
 bool GlobalTopoDataQueue::hasNewEvent(void) const
 {
     utils::AutoMutex autoLock(dataLock_);
-    return !events_.empty();// && haveLocalMap_;
+    return !events_.empty();   // && haveLocalMap_;
 }
 
 
@@ -93,12 +87,9 @@ LocalAreaEventPtr GlobalTopoDataQueue::popEvent(void)
 {
     utils::AutoMutex autoLock(dataLock_);
 
-    if(events_.empty())
-    {
+    if (events_.empty()) {
         return nullptr;
-    }
-    else
-    {
+    } else {
         auto event = std::move(events_.front());
         events_.pop_front();
         return event;
@@ -109,11 +100,10 @@ LocalAreaEventPtr GlobalTopoDataQueue::popEvent(void)
 LocalPose GlobalTopoDataQueue::popPose(void)
 {
     // If there's a new pose, then use it.
-    if(latestPose_.hasData())
-    {
+    if (latestPose_.hasData()) {
         latestPose_.swapBuffers();
     }
-    
+
     return latestPose_;
 }
 
@@ -127,11 +117,10 @@ bool GlobalTopoDataQueue::hasNewPose(void) const
 LocalTopoMap GlobalTopoDataQueue::popLocalMap(void)
 {
     // If there's a new map, then use it.
-    if(latestLocalMap_.hasData())
-    {
+    if (latestLocalMap_.hasData()) {
         latestLocalMap_.swapBuffers();
     }
-    
+
     return latestLocalMap_;
 }
 
@@ -159,7 +148,7 @@ void GlobalTopoDataQueue::handleData(const LocalAreaEventVec& events, const std:
 void GlobalTopoDataQueue::handleData(const LocalPose& pose, const std::string& channel)
 {
     latestPose_ = pose;
-    
+
     dataTrigger_.setPredicate(true);
     dataTrigger_.broadcast();
 }
@@ -181,5 +170,5 @@ void GlobalTopoDataQueue::handleData(const LocalTopoMap& localMap, const std::st
     haveLocalMap_ = true;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

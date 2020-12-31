@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of the various params structs for the logplayer and the load_logplayer_params function.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of the various params structs for the logplayer and the load_logplayer_params function.
+ */
 
 #ifndef LOGPLAYER_PARAMS_H
 #define LOGPLAYER_PARAMS_H
@@ -21,7 +21,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace logplayer
 {
@@ -39,14 +42,14 @@ struct log_player_params_t
 };
 
 /**
-* load_log_player_params loads the parameters for a given run of the LogPlayer.
-*
-* \param    config          ConfigFile from which to pull the parameters
-* \return   Parameters read from the config file.
-*/
+ * load_log_player_params loads the parameters for a given run of the LogPlayer.
+ *
+ * \param    config          ConfigFile from which to pull the parameters
+ * \return   Parameters read from the config file.
+ */
 log_player_params_t load_log_player_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace logplayer
+}   // namespace vulcan
 
-#endif // LOGPLAYER_PARAMS_H
+#endif   // LOGPLAYER_PARAMS_H

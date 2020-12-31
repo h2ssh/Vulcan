@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_SENSORS_IMU_T_H
 #define LCMTYPES_SENSORS_IMU_T_H
 
-#include <string>
 #include "lcmtypes/vulcan_lcm_imu_t.h"
+#include <string>
 
 namespace vulcan
 {
@@ -26,9 +26,12 @@ void convert_lcm_to_vulcan(const vulcan_lcm_imu_t& imuMessage, imu_data_t& imuDa
 void convert_vulcan_to_lcm(const imu_data_t& imuData, vulcan_lcm_imu_t& imuMessage);
 
 void publish_data(lcm_t* lcm, const imu_data_t& imuData, std::string channel = IMU_DATA_CHANNEL);
-void subscribe_to_message(lcm_t* lcm, void (*callback)(const imu_data_t&, const std::string&, void*), void* userdata, std::string channel = IMU_DATA_CHANNEL);
+void subscribe_to_message(lcm_t* lcm,
+                          void (*callback)(const imu_data_t&, const std::string&, void*),
+                          void* userdata,
+                          std::string channel = IMU_DATA_CHANNEL);
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_SENSORS_IMU_T_H
+#endif   // LCMTYPES_SENSORS_IMU_T_H

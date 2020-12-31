@@ -8,25 +8,25 @@
 
 
 /**
-* \file     tracker_display_widget.cpp
-* \author   Collin Johnson
-*
-* Definition of TrackerDisplayWidget.
-*/
+ * \file     tracker_display_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TrackerDisplayWidget.
+ */
 
 #include "ui/debug/tracker_display_widget.h"
-#include "ui/components/laser_object_renderer.h"
-#include "ui/components/robot_renderer.h"
-#include "ui/components/occupancy_grid_renderer.h"
-#include "ui/components/dynamic_object_renderer.h"
-#include "ui/components/object_intention_renderer.h"
-#include "ui/common/default_colors.h"
-#include "ui/common/ui_params.h"
-#include "tracker/objects/unclassified.h"
 #include "tracker/objects/person.h"
+#include "tracker/objects/pivoting_object.h"
 #include "tracker/objects/rigid.h"
 #include "tracker/objects/sliding_object.h"
-#include "tracker/objects/pivoting_object.h"
+#include "tracker/objects/unclassified.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/ui_params.h"
+#include "ui/components/dynamic_object_renderer.h"
+#include "ui/components/laser_object_renderer.h"
+#include "ui/components/object_intention_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/robot_renderer.h"
 #include "utils/auto_mutex.h"
 
 namespace vulcan
@@ -34,7 +34,7 @@ namespace vulcan
 namespace ui
 {
 
-    uint32_t rigid_object_state_to_flags(RigidObjectState state);
+uint32_t rigid_object_state_to_flags(RigidObjectState state);
 uint32_t tracking_uncertainty_to_flags(TrackingUncertainty uncertainty);
 
 
@@ -90,13 +90,10 @@ void TrackerDisplayWidget::shouldEvaluateIntentions(bool evaluate)
     utils::AutoMutex autoLock(dataLock_);
 
     // If starting evaluation, then reset any existing evaluation to store the new state
-    if(evaluate && !shouldEvaluateIntentions_)
-    {
+    if (evaluate && !shouldEvaluateIntentions_) {
         intentions_.reset();
         std::cout << "Reset intentions.\n";
-    }
-    else if(!evaluate && intentions_)
-    {
+    } else if (!evaluate && intentions_) {
         intentions_->saveToFile("debug_ui_intentions.txt");
         std::cout << "Saved intentions to debug_ui_intentions.txt\n";
     }
@@ -110,8 +107,7 @@ void TrackerDisplayWidget::handleData(const motion_state_t& state, const std::st
     utils::AutoMutex autoLock(dataLock_);
     robotState_ = state;
 
-    if(shouldFollowRobot_)
-    {
+    if (shouldFollowRobot_) {
         setCameraFocalPoint(state.pose.toPoint());
     }
 }
@@ -120,7 +116,7 @@ void TrackerDisplayWidget::handleData(const motion_state_t& state, const std::st
 void TrackerDisplayWidget::handleData(const hssh::LocalPerceptualMap& lpm, const std::string& channel)
 {
     utils::AutoMutex autoLock(dataLock_);
-    lpm_        = lpm;
+    lpm_ = lpm;
     haveNewLPM_ = true;
 }
 
@@ -130,7 +126,7 @@ void TrackerDisplayWidget::handleData(const tracker::LaserObjectCollection& obje
     utils::AutoMutex autoLock(dataLock_);
     laserObjects_.resize(1);
     laserObjects_[0] = objects;
-//     laserObjects_[objects.laserId()] = objects;
+    //     laserObjects_[objects.laserId()] = objects;
 }
 
 
@@ -139,16 +135,12 @@ void TrackerDisplayWidget::handleData(const tracker::DynamicObjectCollection& ob
     utils::AutoMutex autoLock(dataLock_);
     dynObjCollection_ = objects;
 
-    if(shouldEvaluateIntentions_ && !objects.empty())
-    {
+    if (shouldEvaluateIntentions_ && !objects.empty()) {
         // Just assume the first object is the one being tracked
         tracker::DynamicObject::ConstPtr object = *objects.begin();
-        if(!intentions_)
-        {
+        if (!intentions_) {
             intentions_ = std::make_unique<tracker::AreaIntentionEstimates>(0, object->goals());
-        }
-        else
-        {
+        } else {
             intentions_->addSample(*object);
         }
     }
@@ -165,48 +157,40 @@ void TrackerDisplayWidget::renderWidget(void)
 {
     utils::AutoMutex autoLock(dataLock_);
 
-    if(haveNewLPM_)
-    {
+    if (haveNewLPM_) {
         lpmRenderer_->setGrid(lpm_);
         haveNewLPM_ = false;
     }
 
     lpmRenderer_->renderGrid();
 
-    if(shouldShowLaserObjects_)
-    {
+    if (shouldShowLaserObjects_) {
         int options = createLaserOptions();
-        for(auto& objs : laserObjects_)
-        {
+        for (auto& objs : laserObjects_) {
             laserObjectRenderer_->renderObjects(objs, boundaryToShow_, options);
         }
-//         laserObjectRenderer_->renderObjects(laserObjects_[0], options);
-//         laserObjectRenderer_->renderObjects(laserObjects_[1], options);
+        //         laserObjectRenderer_->renderObjects(laserObjects_[0], options);
+        //         laserObjectRenderer_->renderObjects(laserObjects_[1], options);
     }
 
-    if(shouldShowDynamicObjects_)
-    {
+    if (shouldShowDynamicObjects_) {
         uint32_t rigidFlags = shouldShowAccleration_ ? DynamicObjectRenderer::kShowAcceleration : 0;
         rigidFlags |= tracking_uncertainty_to_flags(trackingUncertaintyToShow_);
         rigidFlags |= rigid_object_state_to_flags(rigidObjectStateToShow_);
         dynamicObjectRenderer_->renderCollectionStateEstimates(dynObjCollection_, rigidFlags);
     }
 
-    if(shouldShowDynamicObjects_ && (goalsToShow_ != PredictionType::none))
-    {
-        for(auto& obj : dynObjCollection_)
-        {
+    if (shouldShowDynamicObjects_ && (goalsToShow_ != PredictionType::none)) {
+        for (auto& obj : dynObjCollection_) {
             dynamicObjectRenderer_->renderObjectGoals(*obj, (goalsToShow_ == PredictionType::all));
         }
     }
 
-    if(shouldEvaluateIntentions_ && intentions_)
-    {
+    if (shouldEvaluateIntentions_ && intentions_) {
         intentionRenderer_->renderIntentions(*intentions_);
     }
 
-    if(shouldFollowRobot_)
-    {
+    if (shouldFollowRobot_) {
         robotRenderer_->renderRobot(robotState_.pose);
     }
 }
@@ -216,13 +200,11 @@ int TrackerDisplayWidget::createLaserOptions(void) const
 {
     int options = 0;
 
-    if(shouldShowLaserPoints_)
-    {
+    if (shouldShowLaserPoints_) {
         options |= LaserObjectRenderer::kShowPoints;
     }
 
-    if(shouldShowLaserUncertainty_)
-    {
+    if (shouldShowLaserUncertainty_) {
         options |= LaserObjectRenderer::kShowUncertainty;
     }
 
@@ -232,8 +214,7 @@ int TrackerDisplayWidget::createLaserOptions(void) const
 
 uint32_t rigid_object_state_to_flags(RigidObjectState state)
 {
-    switch(state)
-    {
+    switch (state) {
     case RigidObjectState::fast:
         return DynamicObjectRenderer::kShowFastState;
 
@@ -248,8 +229,7 @@ uint32_t rigid_object_state_to_flags(RigidObjectState state)
 
 uint32_t tracking_uncertainty_to_flags(TrackingUncertainty uncertainty)
 {
-    switch(uncertainty)
-    {
+    switch (uncertainty) {
     case TrackingUncertainty::position:
         return DynamicObjectRenderer::kShowPositionUncertainty;
 
@@ -266,5 +246,5 @@ uint32_t tracking_uncertainty_to_flags(TrackingUncertainty uncertainty)
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

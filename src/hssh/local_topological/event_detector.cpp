@@ -8,11 +8,11 @@
 
 
 /**
-* \file     event_detector.cpp
-* \author   Collin Johnson
-* 
-* Implementation of EventDetector.
-*/
+ * \file     event_detector.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of EventDetector.
+ */
 
 #include "hssh/local_topological/event_detector.h"
 #include "hssh/local_topological/event_detection/area_event_detector.h"
@@ -41,26 +41,24 @@ LocalAreaEventVec EventDetector::detectEvents(const LocalTopoMap& map)
 {
     LocalAreaEventVec allEvents;
 
-    for(auto& detector : detectors_)
-    {
+    for (auto& detector : detectors_) {
         auto&& events = detector->detectEvents(map);
-        
-        allEvents.insert(allEvents.end(), 
-                         std::make_move_iterator(events.begin()), 
+
+        allEvents.insert(allEvents.end(),
+                         std::make_move_iterator(events.begin()),
                          std::make_move_iterator(events.end()));
     }
-    
+
     return allEvents;
 }
 
 
 void EventDetector::addPose(const LocalPose& pose)
 {
-    for(auto& detector : detectors_)
-    {
+    for (auto& detector : detectors_) {
         detector->addPose(pose);
     }
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

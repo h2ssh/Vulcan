@@ -8,11 +8,11 @@
 
 
 /**
-* \file     path_renderer.h
-* \author   Collin Johnson
-*
-* Declaration of PathRenderer.
-*/
+ * \file     path_renderer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of PathRenderer.
+ */
 
 #ifndef UI_COMPONENTS_PATH_RENDERER_H
 #define UI_COMPONENTS_PATH_RENDERER_H
@@ -21,33 +21,34 @@
 
 namespace vulcan
 {
-namespace mpepc { class GridPath; }
+namespace mpepc
+{
+class GridPath;
+}
 namespace ui
 {
 
 /**
-* PathRenderer draws various types of paths. Currently supported are:
-*
-*   - GridPath : a path containing a sequence of grid cells
-*/
+ * PathRenderer draws various types of paths. Currently supported are:
+ *
+ *   - GridPath : a path containing a sequence of grid cells
+ */
 class PathRenderer
 {
 public:
-
     /**
-    * render draws the provided path.
-    *
-    * \param    path            Path to render
-    * \param    metersPerCell   Scale of cells in the grid
-    */
+     * render draws the provided path.
+     *
+     * \param    path            Path to render
+     * \param    metersPerCell   Scale of cells in the grid
+     */
     void render(const mpepc::GridPath& path, double metersPerCell);
 
 private:
-
     std::vector<float> vertices_;
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_PATH_RENDERER_H
+#endif   // UI_COMPONENTS_PATH_RENDERER_H

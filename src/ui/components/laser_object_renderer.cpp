@@ -8,17 +8,17 @@
 
 
 /**
-* \file     laser_object_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of LaserObjectRenderer.
-*/
+ * \file     laser_object_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LaserObjectRenderer.
+ */
 
 #include "ui/components/laser_object_renderer.h"
-#include "ui/components/object_boundary_renderer.h"
+#include "tracker/laser_object_collection.h"
 #include "ui/common/color_generator.h"
 #include "ui/common/gl_shapes.h"
-#include "tracker/laser_object_collection.h"
+#include "ui/components/object_boundary_renderer.h"
 #include <GL/gl.h>
 
 namespace vulcan
@@ -29,35 +29,32 @@ namespace ui
 const float kLineWidth = 2.0f;
 
 
-void LaserObjectRenderer::renderObjects(const tracker::LaserObjectCollection& objects, 
+void LaserObjectRenderer::renderObjects(const tracker::LaserObjectCollection& objects,
                                         tracker::BoundaryType boundary,
                                         int options)
 {
-    auto objectColors = generate_colors(objects.laserId()+1, 0.8, false);
-    
-    for(auto& o : objects)
-    {
+    auto objectColors = generate_colors(objects.laserId() + 1, 0.8, false);
+
+    for (auto& o : objects) {
         renderObject(o, boundary, objectColors[objects.laserId()], options);
     }
 }
 
 
-void LaserObjectRenderer::renderObject(const tracker::LaserObject& object, 
+void LaserObjectRenderer::renderObject(const tracker::LaserObject& object,
                                        tracker::BoundaryType boundary,
-                                       const GLColor& color, 
+                                       const GLColor& color,
                                        int options)
 {
     activeColor = color;
 
-    if(options & kShowUncertainty)
-    {
+    if (options & kShowUncertainty) {
         drawUncertainty(object);
     }
 
     drawBoundary(object.boundaryWithType(boundary), options);
 
-    if(options & kShowPoints)
-    {
+    if (options & kShowPoints) {
         drawPoints(object);
     }
 }
@@ -67,12 +64,9 @@ void LaserObjectRenderer::drawBoundary(const tracker::ObjectBoundary& boundary, 
 {
     // Only fill in the circle if not already drawing the uncertainty ellipse -- doing both
     // would be confusing
-    if(~options & kShowUncertainty)
-    {
+    if (~options & kShowUncertainty) {
         boundary.visitShape(ObjectBoundaryRenderer(activeColor));
-    }
-    else
-    {
+    } else {
         boundary.visitShape(OutlineObjectBoundaryRenderer(activeColor));
     }
 }
@@ -90,12 +84,11 @@ void LaserObjectRenderer::drawPoints(const tracker::LaserObject& object)
     glPointSize(2.0);
 
     glBegin(GL_POINTS);
-    for(auto point : object)
-    {
+    for (auto point : object) {
         glVertex2f(point.x, point.y);
     }
     glEnd();
 }
-    
-} // namespace ui
-} // namespace vulcan
+
+}   // namespace ui
+}   // namespace vulcan

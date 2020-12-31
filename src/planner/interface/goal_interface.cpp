@@ -8,11 +8,11 @@
 
 
 /**
-* \file     goal_interface.cpp
-* \author   Collin Johnson
-* 
-* Definition of GoalInterface.
-*/
+ * \file     goal_interface.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GoalInterface.
+ */
 
 #include "planner/interface/goal_interface.h"
 #include <iostream>
@@ -25,14 +25,13 @@ namespace planner
 
 void GoalInterface::addGlobalPose(const std::string& name, const pose_t& pose)
 {
-    auto goalIt = std::find_if(goals_.begin(), goals_.end(), [&name](const Goal& g) { return g.name() == name; });
+    auto goalIt = std::find_if(goals_.begin(), goals_.end(), [&name](const Goal& g) {
+        return g.name() == name;
+    });
 
-    if(goalIt != goals_.end())
-    {
+    if (goalIt != goals_.end()) {
         goalIt->setGlobalPose(pose);
-    }
-    else
-    {
+    } else {
         goals_.emplace_back(name, pose);
     }
 }
@@ -40,14 +39,13 @@ void GoalInterface::addGlobalPose(const std::string& name, const pose_t& pose)
 
 void GoalInterface::addLocalArea(const std::string& name, hssh::LocalArea::Id area)
 {
-    auto goalIt = std::find_if(goals_.begin(), goals_.end(), [&name](const Goal& g) { return g.name() == name; });
+    auto goalIt = std::find_if(goals_.begin(), goals_.end(), [&name](const Goal& g) {
+        return g.name() == name;
+    });
 
-    if(goalIt != goals_.end())
-    {
+    if (goalIt != goals_.end()) {
         goalIt->setLocalArea(area);
-    }
-    else
-    {
+    } else {
         goals_.emplace_back(name, area);
     }
 }
@@ -67,5 +65,5 @@ bool GoalInterface::save(std::ostream& out)
     return out.good();
 }
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan

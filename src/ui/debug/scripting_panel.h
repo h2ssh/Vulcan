@@ -8,80 +8,88 @@
 
 
 /**
-* \file     scripting_panel.h
-* \author   Collin Johnson
-*
-* Definition of ScriptingPanel.
-*/
+ * \file     scripting_panel.h
+ * \author   Collin Johnson
+ *
+ * Definition of ScriptingPanel.
+ */
 
 #ifndef UI_DEBUG_SCRIPTING_PANEL_H
 #define UI_DEBUG_SCRIPTING_PANEL_H
 
-#include "ui/common/ui_panel.h"
 #include "core/pose.h"
+#include "ui/common/ui_panel.h"
 #include "utils/mutex.h"
-#include <wx/wx.h>
-#include <wx/listctrl.h>
 #include <atomic>
 #include <memory>
 #include <vector>
+#include <wx/listctrl.h>
+#include <wx/wx.h>
 
 namespace vulcan
 {
-namespace hssh { class LocalPerceptualMap; }
-namespace hssh { class LocalPose; }
-namespace mpepc { struct named_pose_t; }
+namespace hssh
+{
+class LocalPerceptualMap;
+}
+namespace hssh
+{
+class LocalPose;
+}
+namespace mpepc
+{
+struct named_pose_t;
+}
 namespace ui
 {
 
-class  PlannerScriptingWidget;
-class  PoseSelector;
+class PlannerScriptingWidget;
+class PoseSelector;
 struct ui_params_t;
 
 /**
-* scripting_panel_widgets_t contains all the stateful widgets that the ScriptingPanel needs access to
-* outside of receiving events. Those widgets, namely the buttons, that raise an event when pressed don't
-* need to be stashed away.
-*/
+ * scripting_panel_widgets_t contains all the stateful widgets that the ScriptingPanel needs access to
+ * outside of receiving events. Those widgets, namely the buttons, that raise an event when pressed don't
+ * need to be stashed away.
+ */
 struct scripting_panel_widgets_t
 {
     PlannerScriptingWidget* scriptingWidget;
-    wxListCtrl*             targetSetList;
-    wxTextCtrl*             targetNameText;
-    wxRadioButton*          poseTaskButton;
-    wxRadioButton*          elevatorTaskButton;
-    wxTextCtrl*             targetPoseText;
-    wxListBox*              scriptList;
+    wxListCtrl* targetSetList;
+    wxTextCtrl* targetNameText;
+    wxRadioButton* poseTaskButton;
+    wxRadioButton* elevatorTaskButton;
+    wxTextCtrl* targetPoseText;
+    wxListBox* scriptList;
 
     scripting_panel_widgets_t(void)
-        : scriptingWidget(0)
-        , targetSetList(0)
-        , targetNameText(0)
-        , poseTaskButton(0)
-        , elevatorTaskButton(0)
-        , targetPoseText(0)
-        , scriptList(0)
+    : scriptingWidget(0)
+    , targetSetList(0)
+    , targetNameText(0)
+    , poseTaskButton(0)
+    , elevatorTaskButton(0)
+    , targetPoseText(0)
+    , scriptList(0)
     {
     }
 };
 
 /**
-* ScriptingPanel
-*/
+ * ScriptingPanel
+ */
 class ScriptingPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for ScriptingPanel.
-    */
+     * Constructor for ScriptingPanel.
+     */
     ScriptingPanel(const ui_params_t& params, const scripting_panel_widgets_t& widgets);
 
     // UIPanel interface
-    virtual void setup       (wxGLContext* context, wxStatusBar* statusBar);
-    virtual void subscribe   (system::ModuleCommunicator& producer);
-    virtual void setConsumer (system::ModuleCommunicator* consumer);
-    virtual void update      (void);
+    virtual void setup(wxGLContext* context, wxStatusBar* statusBar);
+    virtual void subscribe(system::ModuleCommunicator& producer);
+    virtual void setConsumer(system::ModuleCommunicator* consumer);
+    virtual void update(void);
     virtual void saveSettings(utils::ConfigFileWriter& config);
     virtual void loadSettings(const utils::ConfigFile& config);
 
@@ -90,13 +98,12 @@ public:
     void handleData(const hssh::LocalPose& pose, const std::string& channel);
 
 private:
-
-    scripting_panel_widgets_t     widgets;
+    scripting_panel_widgets_t widgets;
     std::shared_ptr<PoseSelector> poseSelector;
 
     std::shared_ptr<hssh::LocalPerceptualMap> lpm;
-    std::vector<mpepc::named_pose_t>          targets;
-    std::vector<mpepc::named_pose_t>          scriptTargets;
+    std::vector<mpepc::named_pose_t> targets;
+    std::vector<mpepc::named_pose_t> scriptTargets;
 
     system::ModuleCommunicator* consumer;
 
@@ -105,7 +112,7 @@ private:
     pose_t currentPose_;
 
     std::atomic<bool> shouldCaptureNextLPM;
-    utils::Mutex      lpmLock;
+    utils::Mutex lpmLock;
 
     void initializeTargetSelection(void);
     void updateTargetSelection(void);
@@ -122,23 +129,23 @@ private:
     std::vector<std::size_t> getSelectedRows(void) const;
 
     // Event handlers
-    void loadMapPressed               (wxCommandEvent& event);
-    void captureMapPressed            (wxCommandEvent& event);
-    void selectTargetPosePressed      (wxCommandEvent& event);
-    void useCurrentPosePressed        (wxCommandEvent& event);
-    void createTargetPressed          (wxCommandEvent& event);
-    void eraseTargetPressed           (wxCommandEvent& event);
-    void saveTargetsPressed           (wxCommandEvent& event);
-    void loadTargetsPressed           (wxCommandEvent& event);
-    void addTargetToScriptPressed     (wxCommandEvent& event);
+    void loadMapPressed(wxCommandEvent& event);
+    void captureMapPressed(wxCommandEvent& event);
+    void selectTargetPosePressed(wxCommandEvent& event);
+    void useCurrentPosePressed(wxCommandEvent& event);
+    void createTargetPressed(wxCommandEvent& event);
+    void eraseTargetPressed(wxCommandEvent& event);
+    void saveTargetsPressed(wxCommandEvent& event);
+    void loadTargetsPressed(wxCommandEvent& event);
+    void addTargetToScriptPressed(wxCommandEvent& event);
     void removeTargetFromScriptPressed(wxCommandEvent& event);
-    void saveScriptPressed            (wxCommandEvent& event);
-    void loadScriptPressed            (wxCommandEvent& event);
+    void saveScriptPressed(wxCommandEvent& event);
+    void loadScriptPressed(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_SCRIPTING_PANEL_H
+#endif   // UI_DEBUG_SCRIPTING_PANEL_H

@@ -5,5 +5,3 @@
  under the direction of Benjamin Kuipers, kuipers@umich.edu. Use of this code is governed by an
  MIT-style License that can be found at "https://github.com/h2ssh/Vulcan".
 */
-
-

@@ -8,12 +8,12 @@
 
 
 /**
-* \file     search.h
-* \author   Collin Johnson
-*
-* Declaration of a variety of search algorithms for a Graph. The implementation of the
-* algorithms will be in the various *_impl.h files to avoid cluttering this file.
-*/
+ * \file     search.h
+ * \author   Collin Johnson
+ *
+ * Declaration of a variety of search algorithms for a Graph. The implementation of the
+ * algorithms will be in the various *_impl.h files to avoid cluttering this file.
+ */
 
 #ifndef GRAPH_SEARCH_H
 #define GRAPH_SEARCH_H
@@ -28,8 +28,8 @@ namespace graph
 //       to get the implementation working before generalizing to a template approach -- if needed later.
 
 }
-}
+}   // namespace vulcan
 
 #include "graph/astar_impl.h"
 
-#endif // GRAPH_SEARCH_H
+#endif   // GRAPH_SEARCH_H

@@ -8,15 +8,15 @@
 
 
 /**
-* \file     event_log_runner.cpp
-* \author   Collin Johnson
-*
-* Definition of EventLogRunner.
-*/
+ * \file     event_log_runner.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of EventLogRunner.
+ */
 
 #include "hssh/global_topological/utils/event_log_runner.h"
-#include "hssh/global_topological/director.h"
 #include "hssh/global_topological/commands/save_topo_slam_data.h"
+#include "hssh/global_topological/director.h"
 #include "hssh/local_topological/evaluation/stability_log.h"
 #include "system/module_communicator.h"
 #include "utils/serialized_file_io.h"
@@ -37,13 +37,11 @@ EventLogRunner::EventLogRunner(const std::string& filename)
 
 EventLogRunner::EventLogRunner(const std::string& eventName, const std::string& poseName)
 {
-    if(!utils::load_serializable_from_file(eventName, events_))
-    {
+    if (!utils::load_serializable_from_file(eventName, events_)) {
         std::cerr << "ERROR: EventLogRunner: Failed to load events from " << eventName << '\n';
     }
 
-    if(!utils::load_serializable_from_file(poseName, poses_))
-    {
+    if (!utils::load_serializable_from_file(poseName, poses_)) {
         std::cerr << "ERROR: EventLogRunner: Failed to load poses from " << poseName << '\n';
     }
 }
@@ -58,32 +56,31 @@ void EventLogRunner::run(GlobalTopoDirector& director, bool interactive)
     PoseIter poseIt = poses_.begin();
 
     system::ModuleCommunicator communicator;
-    LocalAreaEventVec event(1);     // events are passed in as vectors of events, but we're just doing one at a time
+    LocalAreaEventVec event(1);   // events are passed in as vectors of events, but we're just doing one at a time
 
     // On each iteration, save the map data so it can be easily loaded for debugging
-    auto saveTree = std::make_shared<SaveTopoSlamDataCommand>(TopoSlamDataType::tree_of_maps, "current_tree_of_maps.tom", "event log runner");
-    auto saveCache = std::make_shared<SaveTopoSlamDataCommand>(TopoSlamDataType::map_cache, "current_map_cache.mmc", "event log runner");
+    auto saveTree = std::make_shared<SaveTopoSlamDataCommand>(TopoSlamDataType::tree_of_maps,
+                                                              "current_tree_of_maps.tom",
+                                                              "event log runner");
+    auto saveCache = std::make_shared<SaveTopoSlamDataCommand>(TopoSlamDataType::map_cache,
+                                                               "current_map_cache.mmc",
+                                                               "event log runner");
 
-    while((evIt != events_.end()) || (poseIt != poses_.end()))
-    {
+    while ((evIt != events_.end()) || (poseIt != poses_.end())) {
         bool sendEvent = (poseIt == poses_.end())   // if there are no poses, then only events still exist
-            || ((evIt != events_.end()) // otherwise, if an event and it is before next timestamp, it should be next
-                && ((*evIt)->timestamp() < poseIt->timestamp()));
+          || ((evIt != events_.end())   // otherwise, if an event and it is before next timestamp, it should be next
+              && ((*evIt)->timestamp() < poseIt->timestamp()));
 
-        if(sendEvent)
-        {
+        if (sendEvent) {
             // If interactive mode, wait until the user hits enter, then keep going
-            if(interactive)
-            {
+            if (interactive) {
                 std::cin.ignore();
             }
 
             event[0] = *evIt;
             director.handleData(event, "LOCAL_EVENT");
             ++evIt;
-        }
-        else
-        {
+        } else {
             director.handleData(*poseIt, "LOCAL_POSE");
             ++poseIt;
         }
@@ -91,8 +88,7 @@ void EventLogRunner::run(GlobalTopoDirector& director, bool interactive)
         director.runUpdate(communicator);
 
         // For each event, save the corresponding state for debugging
-        if(sendEvent)
-        {
+        if (sendEvent) {
             director.handleData(saveTree, "HSSH_GLOBAL_TOPO_COMMAND");
             director.handleData(saveCache, "HSSH_GLOBAL_TOPO_COMMAND");
         }
@@ -102,5 +98,5 @@ void EventLogRunner::run(GlobalTopoDirector& director, bool interactive)
     director.shutdown(communicator);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

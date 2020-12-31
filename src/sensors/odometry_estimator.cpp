@@ -8,17 +8,17 @@
 
 
 /**
-* \file     odometry_estimator.cpp
-* \author   Collin Johnson
-*
-* Definition of create_odometry_estimator.
-*/
+ * \file     odometry_estimator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_odometry_estimator.
+ */
 
 #include "sensors/odometry_estimator.h"
 #include "sensors/wheel_encoders.h"
 #include "sensors/wheel_encoders_params.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 namespace vulcan
 {
@@ -27,17 +27,16 @@ namespace sensors
 
 std::unique_ptr<OdometryEstimator> create_odometry_estimator(const std::string& type, const utils::ConfigFile& config)
 {
-    if(type == WHEEL_ENCODERS_TYPE)
-    {
+    if (type == WHEEL_ENCODERS_TYPE) {
         wheel_encoders_params_t params = load_wheel_encoders_params(config);
         return create_wheel_encoders(params.encoderType, params);
     }
 
-    std::cerr<<"ERROR: create_odometry_estimator: Unknown estimator type: "<<type<<std::endl;
+    std::cerr << "ERROR: create_odometry_estimator: Unknown estimator type: " << type << std::endl;
     assert(false);
 
     return std::unique_ptr<OdometryEstimator>();
 }
 
-}
-}
+}   // namespace sensors
+}   // namespace vulcan

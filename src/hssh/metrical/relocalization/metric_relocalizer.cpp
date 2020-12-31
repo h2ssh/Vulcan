@@ -8,22 +8,22 @@
 
 
 /**
-* \file     metric_relocalizer.cpp
-* \a uthor   Collin Johnson
-*
-* Definition of MetricRelocalizer.
-*/
+ * \file     metric_relocalizer.cpp
+ * \a uthor   Collin Johnson
+ *
+ * Definition of MetricRelocalizer.
+ */
 
 #include "hssh/metrical/relocalization/metric_relocalizer.h"
-#include "hssh/metrical/relocalization/debug_info.h"
-#include "hssh/metrical/relocalization/filter_initializer.h"
+#include "hssh/metrical/data.h"
 #include "hssh/metrical/localization/monte_carlo.h"
-#include "hssh/metrical/localization/particle_filter.h"
 #include "hssh/metrical/localization/motion_model.h"
 #include "hssh/metrical/localization/observation_model.h"
+#include "hssh/metrical/localization/particle_filter.h"
 #include "hssh/metrical/localization/vanilla_particle_filter.h"
 #include "hssh/metrical/occupancy_grid.h"
-#include "hssh/metrical/data.h"
+#include "hssh/metrical/relocalization/debug_info.h"
+#include "hssh/metrical/relocalization/filter_initializer.h"
 #include <iostream>
 
 #define DEBUG_PROGRESS
@@ -35,7 +35,10 @@ namespace vulcan
 namespace hssh
 {
 
-void generate_samples_at_position(const Point<float>& position, int numOrientations, double weight, std::vector<particle_t>& samples);
+void generate_samples_at_position(const Point<float>& position,
+                                  int numOrientations,
+                                  double weight,
+                                  std::vector<particle_t>& samples);
 
 
 MetricRelocalizer::MetricRelocalizer(const metric_relocalizer_params_t& params)
@@ -45,7 +48,7 @@ MetricRelocalizer::MetricRelocalizer(const metric_relocalizer_params_t& params)
 , maxPositionStdDev_(params.maxPositionStdDev)
 , maxOrientationStdDev_(params.maxOrientationStdDev)
 {
-    auto filterParams                 = params.filterParams;
+    auto filterParams = params.filterParams;
     filterParams.kldParams.minSamples = params.minParticleFilterSamples;
 
     filter_.reset(new ParticleFilter(filterParams,
@@ -62,8 +65,8 @@ MetricRelocalizer::~MetricRelocalizer(void)
 
 
 void MetricRelocalizer::startRelocalization(const metric_slam_data_t& data,
-                                            const OccupancyGrid&      map,
-                                            const FilterInitializer&  initializer)
+                                            const OccupancyGrid& map,
+                                            const FilterInitializer& initializer)
 {
     numRelocalizationAttempts_ = 0;
     status_ = RelocalizationStatus::InPrograss;
@@ -73,54 +76,49 @@ void MetricRelocalizer::startRelocalization(const metric_slam_data_t& data,
 }
 
 
-relocalization_progress_t MetricRelocalizer::updateRelocalization(const metric_slam_data_t&           data,
+relocalization_progress_t MetricRelocalizer::updateRelocalization(const metric_slam_data_t& data,
                                                                   metric_relocalization_debug_info_t* debug)
 {
     relocalization_progress_t progress;
 
     // Only start relocalization if there is actually something to do
-    if(status_ != RelocalizationStatus::InPrograss)
-    {
+    if (status_ != RelocalizationStatus::InPrograss) {
         progress.status = RelocalizationStatus::NoTask;
         return progress;
     }
 
-    pose_distribution_t estimatedPose = filter_->updateFilter(data,
-                                                                     map_,
-                                                                     (debug ? &debug->particleFilterInfo : nullptr));
+    pose_distribution_t estimatedPose =
+      filter_->updateFilter(data, map_, (debug ? &debug->particleFilterInfo : nullptr));
     progress.relocalizedPose = estimatedPose.toPose();
 
-    if(isRelocalized(estimatedPose))
-    {
+    if (isRelocalized(estimatedPose)) {
         progress.status = RelocalizationStatus::Success;
 
 #ifdef DEBUG_PROGRESS
-        std::cout<<"DEBUG:MetricRelocalizer: Successfully relocalized in map after "<<numRelocalizationAttempts_<<" updates\n";
+        std::cout << "DEBUG:MetricRelocalizer: Successfully relocalized in map after " << numRelocalizationAttempts_
+                  << " updates\n";
 #endif
-    }
-    else if(++numRelocalizationAttempts_ > maxRelocalizationAttempts_)
-    {
+    } else if (++numRelocalizationAttempts_ > maxRelocalizationAttempts_) {
         progress.status = RelocalizationStatus::Failure;
 
 #ifdef DEBUG_PROGRESS
-        std::cout<<"DEBUG:MetricRelocalizer: Failed to relocalize in map.\n";
+        std::cout << "DEBUG:MetricRelocalizer: Failed to relocalize in map.\n";
 #endif
-    }
-    else
-    {
+    } else {
         progress.status = RelocalizationStatus::InPrograss;
     }
     // Else still in status_
 
 #ifdef DEBUG_POSE
-    std::cout<<"DEBUG:MetricRelocalizer:Estimated pose in map:\n"<<estimatedPose.uncertainty.getMean()<<'\n'<<estimatedPose.uncertainty.getCovariance()<<'\n';
+    std::cout << "DEBUG:MetricRelocalizer:Estimated pose in map:\n"
+              << estimatedPose.uncertainty.getMean() << '\n'
+              << estimatedPose.uncertainty.getCovariance() << '\n';
 #endif
 
     status_ = progress.status;
 
-    if(debug)
-    {
-        debug->pose             = estimatedPose;
+    if (debug) {
+        debug->pose = estimatedPose;
         debug->initialParticles = initialSamples_;
     }
 
@@ -129,8 +127,8 @@ relocalization_progress_t MetricRelocalizer::updateRelocalization(const metric_s
 
 
 void MetricRelocalizer::initializeParticleFilter(const metric_slam_data_t& data,
-                                                 const OccupancyGrid&      map,
-                                                 const FilterInitializer&  initializer)
+                                                 const OccupancyGrid& map,
+                                                 const FilterInitializer& initializer)
 {
     initialSamples_ = initializer.generateInitialSamples(map, data);
     filter_->initializeWithSampleSet(initialSamples_);
@@ -141,10 +139,9 @@ bool MetricRelocalizer::isRelocalized(const pose_distribution_t& pose)
 {
     Vector stdDevs = arma::sqrt(pose.uncertainty.getCovariance().diag());
 
-    return (stdDevs(0) < maxPositionStdDev_) &&
-           (stdDevs(1) < maxPositionStdDev_) &&
-           (stdDevs(2) < maxOrientationStdDev_);
+    return (stdDevs(0) < maxPositionStdDev_) && (stdDevs(1) < maxPositionStdDev_)
+      && (stdDevs(2) < maxOrientationStdDev_);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -16,9 +16,9 @@
 #include <lcm/lcm_coretypes.h>
 
 #ifndef __serialized_t_hpp__
-#define __serialized_t_hpp__
+    #define __serialized_t_hpp__
 
-#include <vector>
+    #include <vector>
 
 namespace vulcan
 {
@@ -27,49 +27,62 @@ namespace system
 
 class serialized_t
 {
-    public:
-        int32_t    size;
-        std::vector<char> data;
+public:
+    int32_t size;
+    std::vector<char> data;
 
-    public:
-        inline int encode(void *buf, int offset, int maxlen) const;
-        inline int getEncodedSize() const;
-        inline int decode(const void *buf, int offset, int maxlen);
-        inline static int64_t getHash();
-        inline static const char* getTypeName();
+public:
+    inline int encode(void* buf, int offset, int maxlen) const;
+    inline int getEncodedSize() const;
+    inline int decode(const void* buf, int offset, int maxlen);
+    inline static int64_t getHash();
+    inline static const char* getTypeName();
 
-        // LCM support functions. Users should not call these
-        inline int _encodeNoHash(void *buf, int offset, int maxlen) const;
-        inline int _getEncodedSizeNoHash() const;
-        inline int _decodeNoHash(const void *buf, int offset, int maxlen);
-        inline static int64_t _computeHash(const __lcm_hash_ptr *p);
+    // LCM support functions. Users should not call these
+    inline int _encodeNoHash(void* buf, int offset, int maxlen) const;
+    inline int _getEncodedSizeNoHash() const;
+    inline int _decodeNoHash(const void* buf, int offset, int maxlen);
+    inline static int64_t _computeHash(const __lcm_hash_ptr* p);
 };
 
-int serialized_t::encode(void *buf, int offset, int maxlen) const
+int serialized_t::encode(void* buf, int offset, int maxlen) const
 {
     int pos = 0, tlen;
     int64_t hash = getHash();
 
     tlen = __int64_t_encode_array(buf, offset + pos, maxlen - pos, &hash, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
+    if (tlen < 0)
+        return tlen;
+    else
+        pos += tlen;
 
     tlen = this->_encodeNoHash(buf, offset + pos, maxlen - pos);
-    if (tlen < 0) return tlen; else pos += tlen;
+    if (tlen < 0)
+        return tlen;
+    else
+        pos += tlen;
 
     return pos;
 }
 
-int serialized_t::decode(const void *buf, int offset, int maxlen)
+int serialized_t::decode(const void* buf, int offset, int maxlen)
 {
     int pos = 0, thislen;
 
     int64_t msg_hash;
     thislen = __int64_t_decode_array(buf, offset + pos, maxlen - pos, &msg_hash, 1);
-    if (thislen < 0) return thislen; else pos += thislen;
-    if (msg_hash != getHash()) return -1;
+    if (thislen < 0)
+        return thislen;
+    else
+        pos += thislen;
+    if (msg_hash != getHash())
+        return -1;
 
     thislen = this->_decodeNoHash(buf, offset + pos, maxlen - pos);
-    if (thislen < 0) return thislen; else pos += thislen;
+    if (thislen < 0)
+        return thislen;
+    else
+        pos += thislen;
 
     return pos;
 }
@@ -90,33 +103,45 @@ const char* serialized_t::getTypeName()
     return "serialized_t";
 }
 
-int serialized_t::_encodeNoHash(void *buf, int offset, int maxlen) const
+int serialized_t::_encodeNoHash(void* buf, int offset, int maxlen) const
 {
     int pos = 0, tlen;
 
     tlen = __int32_t_encode_array(buf, offset + pos, maxlen - pos, &this->size, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
+    if (tlen < 0)
+        return tlen;
+    else
+        pos += tlen;
 
     const int8_t* dataBuf = reinterpret_cast<const int8_t*>(&this->data[0]);
-    
+
     tlen = __int8_t_encode_array(buf, offset + pos, maxlen - pos, dataBuf, this->size);
-    if(tlen < 0) return tlen; else pos += tlen;
+    if (tlen < 0)
+        return tlen;
+    else
+        pos += tlen;
 
     return pos;
 }
 
-int serialized_t::_decodeNoHash(const void *buf, int offset, int maxlen)
+int serialized_t::_decodeNoHash(const void* buf, int offset, int maxlen)
 {
     int pos = 0, tlen;
 
     tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->size, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
+    if (tlen < 0)
+        return tlen;
+    else
+        pos += tlen;
 
     this->data.resize(this->size);
-    if(this->size) {
+    if (this->size) {
         int8_t* dataBuf = reinterpret_cast<int8_t*>(&this->data[0]);
         tlen = __int8_t_decode_array(buf, offset + pos, maxlen - pos, dataBuf, this->size);
-        if(tlen < 0) return tlen; else pos += tlen;
+        if (tlen < 0)
+            return tlen;
+        else
+            pos += tlen;
     }
 
     return pos;
@@ -130,13 +155,13 @@ int serialized_t::_getEncodedSizeNoHash() const
     return enc_size;
 }
 
-int64_t serialized_t::_computeHash(const __lcm_hash_ptr *)
+int64_t serialized_t::_computeHash(const __lcm_hash_ptr*)
 {
     int64_t hash = 0x3b29a04c33438391LL;
-    return (hash<<1) + ((hash>>63)&1);
+    return (hash << 1) + ((hash >> 63) & 1);
 }
 
-} // namespace system
-} // namespace vulcan
+}   // namespace system
+}   // namespace vulcan
 
 #endif

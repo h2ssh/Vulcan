@@ -8,8 +8,8 @@
 
 
 /*
-* gl_utilities.h contains a number of common OpenGL functions that appear throughout the code.
-*/
+ * gl_utilities.h contains a number of common OpenGL functions that appear throughout the code.
+ */
 
 #ifndef UI_COMMON_GL_UTILITIES_H
 #define UI_COMMON_GL_UTILITIES_H
@@ -24,12 +24,17 @@ namespace ui
 
 void setup_opengl_context(void);
 void set_gl_viewport(std::size_t widthInPixels, std::size_t heightInPixels);
-void set_projection(std::size_t widthInPixels, std::size_t heightInPixels, float objectSize, float distance, float zoom);
+void set_projection(std::size_t widthInPixels,
+                    std::size_t heightInPixels,
+                    float objectSize,
+                    float distance,
+                    float zoom);
 void set_camera_position(const math::Point3D<float>& cameraFocus);
 
-Point<float> convert_screen_to_world_coordinates(const Point<int>& screenPosition, const math::Point3D<float>& cameraPosition);
+Point<float> convert_screen_to_world_coordinates(const Point<int>& screenPosition,
+                                                 const math::Point3D<float>& cameraPosition);
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMMON_GL_UTILITIES_H
+#endif   // UI_COMMON_GL_UTILITIES_H

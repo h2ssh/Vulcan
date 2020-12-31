@@ -8,11 +8,11 @@
 
 
 /**
-* \file     visibility_graph_types.h
-* \author   Collin Johnson
-*
-* Definition of utility types for the VisibilityGraph implementation.
-*/
+ * \file     visibility_graph_types.h
+ * \author   Collin Johnson
+ *
+ * Definition of utility types for the VisibilityGraph implementation.
+ */
 
 #ifndef UTILS_VISIBILITY_GRAPH_TYPES_H
 #define UTILS_VISIBILITY_GRAPH_TYPES_H
@@ -28,7 +28,7 @@ namespace utils
 using VisGraphVertex = Point<int>;
 using VisVertexIter = std::vector<utils::VisGraphVertex>::const_iterator;
 
-}
-}
+}   // namespace utils
+}   // namespace vulcan
 
-#endif // UTILS_VISIBILITY_GRAPH_TYPES_H
+#endif   // UTILS_VISIBILITY_GRAPH_TYPES_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     default_colors.cpp
-* \author   Collin Johnson
-*
-* Definition of the default color accessor functions.
-*/
+ * \file     default_colors.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of the default color accessor functions.
+ */
 
 #include "ui/common/default_colors.h"
 #include "ui/common/ui_color.h"
@@ -126,5 +126,5 @@ const GLColor& regular_mpepc_color(void)
     return regular;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

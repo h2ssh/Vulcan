@@ -20,23 +20,21 @@ namespace ui
 class SimulatorFrame;
 
 /**
-* SimulatorApp is where the main
-*/
+ * SimulatorApp is where the main
+ */
 class SimulatorApp : public wxApp
 {
 public:
-
     virtual bool OnInit(void);
-    virtual int  OnExit(void);
+    virtual int OnExit(void);
 
 private:
-
     SimulatorFrame* mainFrame;
 };
 
 DECLARE_APP(SimulatorApp)
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_SIMULATOR_SIMULATOR_APP_H
+#endif   // UI_SIMULATOR_SIMULATOR_APP_H

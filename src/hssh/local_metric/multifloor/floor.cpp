@@ -8,11 +8,11 @@
 
 
 /**
-* \file     floor.cpp
-* \author   Collin Johnson
-*
-* Definition of Floor.
-*/
+ * \file     floor.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of Floor.
+ */
 
 #include "hssh/local_metric/multifloor/floor.h"
 #include "hssh/local_metric/multifloor/elevator.h"
@@ -23,12 +23,9 @@ namespace vulcan
 namespace hssh
 {
 
-Floor::Floor(int32_t id, const std::string& lpmFile)
-    : id(id)
-    , lpmFile(lpmFile)
+Floor::Floor(int32_t id, const std::string& lpmFile) : id(id), lpmFile(lpmFile)
 {
-    if(lpmFile.find(".lpm") == std::string::npos)
-    {
+    if (lpmFile.find(".lpm") == std::string::npos) {
         std::ostringstream str;
         str << lpmFile << id << ".lpm";
         this->lpmFile = str.str();
@@ -36,13 +33,9 @@ Floor::Floor(int32_t id, const std::string& lpmFile)
 }
 
 
-Floor::Floor(int32_t id, const LocalPerceptualMap& lpm, const std::string& lpmFile)
-    : id(id)
-    , lpm(lpm)
-    , lpmFile(lpmFile)
+Floor::Floor(int32_t id, const LocalPerceptualMap& lpm, const std::string& lpmFile) : id(id), lpm(lpm), lpmFile(lpmFile)
 {
-    if(lpmFile.find(".lpm") == std::string::npos)
-    {
+    if (lpmFile.find(".lpm") == std::string::npos) {
         std::ostringstream str;
         str << lpmFile << id << ".lpm";
         this->lpmFile = str.str();
@@ -58,10 +51,8 @@ Floor::~Floor(void)
 
 std::shared_ptr<Elevator> Floor::isOnKnownElevator(const pose_t& pose) const
 {
-    for(const auto& elevator : elevators)
-    {
-        if(elevator->isRobotOnElevator(pose, id))
-        {
+    for (const auto& elevator : elevators) {
+        if (elevator->isRobotOnElevator(pose, id)) {
             return elevator;
         }
     }
@@ -81,5 +72,5 @@ void Floor::updateLPM(const LocalPerceptualMap& lpm)
     this->lpm = lpm;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

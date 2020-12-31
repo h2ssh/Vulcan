@@ -8,11 +8,11 @@
 
 
 /**
-* \file     hypothesis_type.cpp
-* \author   Collin Johnson
-*
-* Definition of HypothesisType.
-*/
+ * \file     hypothesis_type.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of HypothesisType.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
 #include <iostream>
@@ -33,11 +33,9 @@ const std::string kPathName("path");
 const std::string kAreaName("area");
 
 
-
 std::ostream& operator<<(std::ostream& out, HypothesisType type)
 {
-    switch(type)
-    {
+    switch (type) {
     case HypothesisType::kNone:
         out << kNoneName;
         break;
@@ -72,35 +70,21 @@ std::istream& operator>>(std::istream& in, HypothesisType& type)
 {
     std::string name;
     in >> name;
-    if(name == kPlaceName)
-    {
+    if (name == kPlaceName) {
         type = HypothesisType::kPlace;
-    }
-    else if(name == kDecisionName)
-    {
+    } else if (name == kDecisionName) {
         type = HypothesisType::kDecision;
-    }
-    else if(name == kDestName)
-    {
+    } else if (name == kDestName) {
         type = HypothesisType::kDest;
-    }
-    else if(name == kPathEndName)
-    {
+    } else if (name == kPathEndName) {
         type = HypothesisType::kPathEndpoint;
-    }
-    else if(name == kPathDestName)
-    {
+    } else if (name == kPathDestName) {
         type = HypothesisType::kPathDest;
-    }
-    else if(name == kPathName)
-    {
+    } else if (name == kPathName) {
         type = HypothesisType::kPath;
-    }
-    else if(name == kAreaName)
-    {
+    } else if (name == kAreaName) {
         type = HypothesisType::kArea;
-    }
-    else //if(name == kNoneName)
+    } else   // if(name == kNoneName)
     {
         type = HypothesisType::kNone;
     }
@@ -108,5 +92,5 @@ std::istream& operator>>(std::istream& in, HypothesisType& type)
     return in;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

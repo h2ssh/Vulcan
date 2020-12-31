@@ -8,18 +8,18 @@
 
 
 /**
-* \file     probability_evaluator.cpp
-* \author   Collin Johnson
-*
-* Definition of HypothesisProbabilityEvaluator.
-*/
+ * \file     probability_evaluator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of HypothesisProbabilityEvaluator.
+ */
 
 #include "hssh/global_topological/mapping/probability_evaluator.h"
 #include "hssh/global_topological/mapping/likelihood_evaluator.h"
 #include "hssh/global_topological/mapping/prior_evaluator.h"
 #include "hssh/global_topological/state.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 #define DEBUG_PROBABILITY
 
@@ -29,9 +29,8 @@ namespace hssh
 {
 
 HypothesisProbabilityEvaluator::HypothesisProbabilityEvaluator(
-    std::vector<std::unique_ptr<HypothesisLikelihoodEvaluator>> likelihoodEvaluators,
-    std::unique_ptr<HypothesisPriorEvaluator> priorEvaluator
-)
+  std::vector<std::unique_ptr<HypothesisLikelihoodEvaluator>> likelihoodEvaluators,
+  std::unique_ptr<HypothesisPriorEvaluator> priorEvaluator)
 : likelihoodEvaluators_(std::move(likelihoodEvaluators))
 , priorEvaluator_(std::move(priorEvaluator))
 {
@@ -44,31 +43,30 @@ HypothesisProbabilityEvaluator::~HypothesisProbabilityEvaluator(void)
 }
 
 
-TopoMapProbability HypothesisProbabilityEvaluator::calculateProbability(const TopologicalState& hypothesis, 
+TopoMapProbability HypothesisProbabilityEvaluator::calculateProbability(const TopologicalState& hypothesis,
                                                                         const MetricMapCache& places)
 {
     TopoMapProbability probability;
-    
+
     double measurementLogLikelihood = 0.0;
 
-    for(auto& eval : likelihoodEvaluators_)
-    {
+    for (auto& eval : likelihoodEvaluators_) {
         measurementLogLikelihood = eval->calculateLogLikelihood(hypothesis, places);
 
         probability.measurementLogLikelihoods.push_back(measurementLogLikelihood);
         probability.logLikelihood += measurementLogLikelihood;
     }
 
-    probability.logPrior     = priorEvaluator_->calculateLogPrior(hypothesis);
+    probability.logPrior = priorEvaluator_->calculateLogPrior(hypothesis);
     probability.logPosterior = probability.logLikelihood + probability.logPrior;
 
 #ifdef DEBUG_PROBABILITY
     std::cout << "Likelihood:" << probability.logLikelihood << " Prior:" << probability.logPrior
-        << " Posterior:" << probability.logPosterior << '\n';
+              << " Posterior:" << probability.logPosterior << '\n';
 #endif
 
     return probability;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

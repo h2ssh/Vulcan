@@ -8,20 +8,20 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* A simple program to load the results of the human-human and human-robot labeling comparisons and generate a
-* scatterplot of the results for route edit distance vs. cell-by-cell accuracy.
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * A simple program to load the results of the human-human and human-robot labeling comparisons and generate a
+ * scatterplot of the results for route edit distance vs. cell-by-cell accuracy.
+ */
 
 #include <boost/filesystem.hpp>
 #include <boost/tuple/tuple.hpp>
-#include <gnuplot-iostream.h>
 #include <fstream>
+#include <gnuplot-iostream.h>
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <string>
 
 
 const int kRobotId = -1;
@@ -62,12 +62,11 @@ void create_scatterplot(const std::vector<map_results_t>& results, const std::st
 void create_human_only_scatterplot(const std::vector<map_results_t>& results, const std::string& mapName);
 
 /**
-* summarize_label_results takes the name of the results file as its only argument.
-*/
+ * summarize_label_results takes the name of the results file as its only argument.
+ */
 int main(int argc, char** argv)
 {
-    if(argc < 3)
-    {
+    if (argc < 3) {
         std::cout << "INFO: Expected command-line: create_comparison_plots 'results directory' 'map name'\n";
         return -1;
     }
@@ -77,24 +76,21 @@ int main(int argc, char** argv)
 
     using namespace boost::filesystem;
 
-    for(directory_iterator dirIt(argv[1]), endIt; dirIt != endIt; ++dirIt)
-    {
+    for (directory_iterator dirIt(argv[1]), endIt; dirIt != endIt; ++dirIt) {
         auto path = dirIt->path();
-        if((path.string().find("ltm_compare_results.txt") != std::string::npos)
-            || (path.string().find("robot_results.txt") != std::string::npos))
-        {
-            ResultType type = (path.string().find("robot") != std::string::npos) ? ResultType::robot : ResultType::human;
+        if ((path.string().find("ltm_compare_results.txt") != std::string::npos)
+            || (path.string().find("robot_results.txt") != std::string::npos)) {
+            ResultType type =
+              (path.string().find("robot") != std::string::npos) ? ResultType::robot : ResultType::human;
 
             std::ifstream in(path.string());
             std::string resultsLine;
 
             std::cout << "Loading results for " << path.string() << '\n';
 
-            while(std::getline(in, resultsLine))
-            {
+            while (std::getline(in, resultsLine)) {
                 // Break as soon as finished reading file
-                if(resultsLine.length() < 10)
-                {
+                if (resultsLine.length() < 10) {
                     break;
                 }
 
@@ -105,23 +101,18 @@ int main(int argc, char** argv)
 
                 std::cout << results.name << '\n';
 
-                try
-                {
+                try {
                     results.mapIds = extract_map_ids(path.string(), results.name);
 
                     auto resIt = std::find(pairwiseResults.begin(), pairwiseResults.end(), results);
-                    if(resIt != pairwiseResults.end())
-                    {
+                    if (resIt != pairwiseResults.end()) {
                         std::cout << "Found duplicate: " << resIt->mapIds.first << ',' << resIt->mapIds.second << '\n';
                         *resIt = *resIt + results;
-                    }
-                    else
-                    {
+                    } else {
                         std::cout << "Adding new: " << results.mapIds.first << ',' << results.mapIds.second << '\n';
                         pairwiseResults.push_back(results);
                     }
-                } catch(std::invalid_argument& e)
-                {
+                } catch (std::invalid_argument& e) {
                     std::cerr << "Ignored map " << results.name << ":: " << e.what() << '\n';
                 }
             }
@@ -145,37 +136,29 @@ std::pair<int, int> extract_map_ids(const std::string& resultPath, const std::st
     std::pair<int, int> ids;
 
     auto resultStart = resultPath.find_first_of(kDigits);
-    if(resultStart != std::string::npos)
-    {
-        ids.first = std::strtol(resultPath.substr(resultStart, resultPath.find_first_not_of(kDigits, resultStart)).c_str(),
-                                0,
-                                10);
-    }
-    else
-    {
+    if (resultStart != std::string::npos) {
+        ids.first =
+          std::strtol(resultPath.substr(resultStart, resultPath.find_first_not_of(kDigits, resultStart)).c_str(),
+                      0,
+                      10);
+    } else {
         ids.first = kRobotId;
     }
 
     auto compStart = compareMap.find_first_of(kDigits);
-    if(compStart != std::string::npos)
-    {
-        ids.second = std::strtol(compareMap.substr(compStart, compareMap.find_first_not_of(kDigits, compStart)).c_str(),
-                                 0,
-                                 10);
-    }
-    else
-    {
+    if (compStart != std::string::npos) {
+        ids.second =
+          std::strtol(compareMap.substr(compStart, compareMap.find_first_not_of(kDigits, compStart)).c_str(), 0, 10);
+    } else {
         ids.second = kRobotId;
     }
 
     // Sort so the small id is always first
-    if(ids.second < ids.first)
-    {
+    if (ids.second < ids.first) {
         std::swap(ids.first, ids.second);
     }
 
-    if((ids.second == kRobotId) || (ids.first == ids.second))
-    {
+    if ((ids.second == kRobotId) || (ids.first == ids.second)) {
         throw std::invalid_argument("Ids should be different and robot ids are always lowest");
     }
 
@@ -189,12 +172,14 @@ map_results_t operator+(const map_results_t& lhs, const map_results_t& rhs)
 
     // Accumulate the edit distance values
     sumResults.numPaths += rhs.numPaths;
-    sumResults.meanTopoEdit = ((lhs.numPaths * lhs.meanTopoEdit) + (rhs.numPaths * rhs.meanTopoEdit)) / sumResults.numPaths;
+    sumResults.meanTopoEdit =
+      ((lhs.numPaths * lhs.meanTopoEdit) + (rhs.numPaths * rhs.meanTopoEdit)) / sumResults.numPaths;
     sumResults.varTopoEdit += rhs.varTopoEdit;
-    sumResults.meanRouteEdit = ((lhs.numPaths * lhs.meanRouteEdit) + (rhs.numPaths * rhs.meanRouteEdit)) / sumResults.numPaths;
+    sumResults.meanRouteEdit =
+      ((lhs.numPaths * lhs.meanRouteEdit) + (rhs.numPaths * rhs.meanRouteEdit)) / sumResults.numPaths;
     sumResults.varRouteEdit += rhs.varRouteEdit;
-    sumResults.zeroErrorRoutePercent = ((lhs.zeroErrorRoutePercent * lhs.numPaths)
-        + (rhs.zeroErrorRoutePercent * rhs.numPaths)) / sumResults.numPaths;
+    sumResults.zeroErrorRoutePercent =
+      ((lhs.zeroErrorRoutePercent * lhs.numPaths) + (rhs.zeroErrorRoutePercent * rhs.numPaths)) / sumResults.numPaths;
 
     // Accumulate the cell-by-cell values
     sumResults.totalCells += rhs.totalCells;
@@ -220,9 +205,9 @@ bool operator==(const map_results_t& lhs, const map_results_t& rhs)
 std::istream& operator>>(std::istream& in, map_results_t& results)
 {
     in >> results.name >> results.numPaths >> results.meanTopoEdit >> results.varTopoEdit >> results.meanRouteEdit
-        >> results.varRouteEdit >> results.zeroErrorRoutePercent >> results.cellSuccessRate >> results.totalCells
-        >> results.correctCells >> results.numDecisionAsPath >> results.numDecisionAsDest >> results.numDestAsPath
-        >> results.numDestAsDecision >> results.numPathAsDecision >> results.numPathAsDest;
+      >> results.varRouteEdit >> results.zeroErrorRoutePercent >> results.cellSuccessRate >> results.totalCells
+      >> results.correctCells >> results.numDecisionAsPath >> results.numDecisionAsDest >> results.numDestAsPath
+      >> results.numDestAsDecision >> results.numPathAsDecision >> results.numPathAsDest;
     return in;
 }
 
@@ -239,7 +224,7 @@ void create_scatterplot(const std::vector<map_results_t>& results, const std::st
     plot << "set xrange [0:8]\n";
 
     plot << "plot '-' using 1:2 ps 2 lw 2 lc rgb \"#87ceeb\" title 'Human-vs-Human',"
-        << "'-' using 1:2 ps 2 lw 2 lc rgb \"#ff6347\" title 'MCMC-vs-Human'";
+         << "'-' using 1:2 ps 2 lw 2 lc rgb \"#ff6347\" title 'MCMC-vs-Human'";
     plot << std::endl;
 
     // Data is col 1 = value, col 2 = tic value
@@ -248,8 +233,7 @@ void create_scatterplot(const std::vector<map_results_t>& results, const std::st
     std::vector<double> robotCell;
     std::vector<double> robotRoute;
 
-    for(auto& r : results)
-    {
+    for (auto& r : results) {
         auto& cell = (r.type == ResultType::human) ? humanCell : robotCell;
         auto& route = (r.type == ResultType::human) ? humanRoute : robotRoute;
 
@@ -281,10 +265,8 @@ void create_human_only_scatterplot(const std::vector<map_results_t>& results, co
     std::vector<double> humanCell;
     std::vector<double> humanRoute;
 
-    for(auto& r : results)
-    {
-        if (r.type == ResultType::human)
-        {
+    for (auto& r : results) {
+        if (r.type == ResultType::human) {
             humanCell.push_back(r.cellSuccessRate * 100);
             humanRoute.push_back(r.meanRouteEdit);
         }

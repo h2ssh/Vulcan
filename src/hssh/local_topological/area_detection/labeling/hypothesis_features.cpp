@@ -8,33 +8,33 @@
 
 
 /**
-* \file     hypothesis_features.cpp
-* \author   Collin Johnson
-*
-* Definition of HypothesisFeatures.
-*/
+ * \file     hypothesis_features.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of HypothesisFeatures.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "core/float_comparison.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
 #include "hssh/local_topological/area_detection/labeling/boundary.h"
 #include "hssh/local_topological/area_detection/labeling/hypothesis.h"
-#include "hssh/local_topological/area_extent.h"
-#include "hssh/local_topological/area_detection/labeling/area_graph.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
-#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
-#include "math/moments_features.h"
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "math/covariance.h"
+#include "math/moments_features.h"
 #include "math/statistics.h"
 #include "math/zernike_moments.h"
-#include "core/float_comparison.h"
 #include "utils/float_io.h"
 #include "utils/visibility_graph.h"
 #include "utils/visibility_graph_feature.h"
 #include <boost/accumulators/framework/accumulator_set.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/max.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/median.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/sum.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
 #include <boost/iterator/transform_iterator.hpp>
@@ -49,7 +49,7 @@ namespace vulcan
 namespace hssh
 {
 
-const int kFeaturesVersion = 249;        // version number to assign to newly calculated features
+const int kFeaturesVersion = 249;   // version number to assign to newly calculated features
 const int kIsovistFeaturesVersion = 237;
 
 // Keep a single instance so the pre-cached values can be used repeatedly, which will speed up the overall moments
@@ -59,34 +59,34 @@ static math::ZernikeMoments<5> zernike;
 enum FeatureIndex
 {
     kLoopDist,
-//     kUniqueNeighbors,
+    //     kUniqueNeighbors,
     kNumGateways,
     kEdgeLength,
     kAvgGatewayLength,
     kMaxGatewayLength,
     kGatewayRatio,
-//     kShapeArea,
-//     kShapePerimeter,
+    //     kShapeArea,
+    //     kShapePerimeter,
     kAxisRatioIndex,
-//     kWeightedAxisRatio,
-//     kMeanAreaComp,
-//     kStdAreaComp,
-//     kMeanPerimeterComp,
-//     kStdPerimeterComp,
+    //     kWeightedAxisRatio,
+    //     kMeanAreaComp,
+    //     kStdAreaComp,
+    //     kMeanPerimeterComp,
+    //     kStdPerimeterComp,
     kShapeEccentricity,
     kShapeCircularity,
-//     kShapeCompactness,
-//     kDiscretizedCompactness,
-//     kAminCompactness,
-//     kAmaxCompactness,
-//     kPminCompactness,
-//     kPmaxCompactness,
-//     kShapeWaviness,
-//     kIsovistMeanArea,
-//     kIsovistStdArea,
+    //     kShapeCompactness,
+    //     kDiscretizedCompactness,
+    //     kAminCompactness,
+    //     kAmaxCompactness,
+    //     kPminCompactness,
+    //     kPmaxCompactness,
+    //     kShapeWaviness,
+    //     kIsovistMeanArea,
+    //     kIsovistStdArea,
     kIsovistVariationArea,
-//     kIsovistMeanPerimeter,
-//     kIsovistStdPerimeter,
+    //     kIsovistMeanPerimeter,
+    //     kIsovistStdPerimeter,
     kIsovistVariationPerimeter,
     kIsovistMeanEccentricity,
     kIsovistStdEccentricity,
@@ -100,11 +100,11 @@ enum FeatureIndex
     kIsovistStdRayCompactness,
     kIsovistMeanShapeDistCompactness,
     kIsovistStdShapeDistCompactness,
-//     kIsovistMeanRelation,
-//     kIsovistStdRelation,
+    //     kIsovistMeanRelation,
+    //     kIsovistStdRelation,
     kIsovistVariationRelation,
-//     kIsovistMeanDelta,
-//     kIsovistStdDelta,
+    //     kIsovistMeanDelta,
+    //     kIsovistStdDelta,
     kIsovistVariationDelta,
     kVisGraphMeanClusterCoeff,
     kVisGraphStdClusterCoeff,
@@ -115,19 +115,19 @@ enum FeatureIndex
     kSkeletonMaxBetweenness,
     kSkeletonMeanBetweenness,
     kSkeletonStdBetweenness,
-//     kIsovistDistMinMean,
-//     kIsovistDistMinStd,
-//     kIsovistDistMinVariation,
-//     kIsovistDistMean,
-//     kIsovistDistStd,
+    //     kIsovistDistMinMean,
+    //     kIsovistDistMinStd,
+    //     kIsovistDistMinVariation,
+    //     kIsovistDistMean,
+    //     kIsovistDistStd,
     kIsovistDistVariation,
-//     kIsovistDistFromCenterMean,
-//     kIsovistDistFromCenterStd,
+    //     kIsovistDistFromCenterMean,
+    //     kIsovistDistFromCenterStd,
     kIsovistDistFromCenterVariation,
     kIsovistAngleBetweenMinDistsMean,
     kIsovistAngleBetweenMinDistsStd,
-//     kIsovistAreaBalanceMean,
-//     kIsovistAreaBalanceStd,
+    //     kIsovistAreaBalanceMean,
+    //     kIsovistAreaBalanceStd,
     kNumFixedFeatures
 };
 
@@ -139,22 +139,22 @@ enum IsovistFeatureIndex
     kSingleCompactness,
     kSingleRayCompactness,
     kSingleShapeDistCompactness,
-//     kSingleDVariation,
-//     kSingleDeltaVariation,
+    //     kSingleDVariation,
+    //     kSingleDeltaVariation,
     kSingleAvgDelta,
     kSingleStdDelta,
     kSingleAvgRelation,
     kSingleStdRelation,
-//     kSingleDistMin,
+    //     kSingleDistMin,
     kSingleDistMean,
     kSingleDistStd,
-//     kSingleDistSkewness,
+    //     kSingleDistSkewness,
     kSingleDistFromCenterMean,
     kSingleDistFromCenterStd,
-//     kSingleDistFromCenterVariation,
+    //     kSingleDistFromCenterVariation,
     kSingleAngleBetweenMinDists,
-//     kSingleMinHalfArea,
-//     kSingleAreaBalance,
+    //     kSingleMinHalfArea,
+    //     kSingleAreaBalance,
     kSingleArea,
     kSinglePerimeter,
     kNumSingle,
@@ -185,14 +185,12 @@ int current_hypothesis_features_version(void)
 std::ostream& operator<<(std::ostream& out, const HypothesisFeatures& features)
 {
     out << features.version() << ' ' << features.numFeatures() << ' ';
-    for(auto f : features)
-    {
+    for (auto f : features) {
         utils::save_floating_point(out, f);
     }
 
     out << features.numIsovists() << ' ' << features.numIsovistFeatures() << ' ';
-    for(auto f : features.isovistFeatures())
-    {
+    for (auto f : features.isovistFeatures()) {
         utils::save_floating_point(out, f);
     }
     utils::save_floating_point(out, features.explorationAmount());
@@ -208,8 +206,7 @@ std::istream& operator>>(std::istream& in, HypothesisFeatures& features)
     in >> numFeatures;
 
     features.features_.resize(numFeatures);
-    for(int n = 0; n < numFeatures; ++n)
-    {
+    for (int n = 0; n < numFeatures; ++n) {
         features.features_[n] = utils::load_floating_point(in);
     }
 
@@ -217,8 +214,7 @@ std::istream& operator>>(std::istream& in, HypothesisFeatures& features)
     int numIsovistFeatures = 0;
     in >> numIsovists >> numIsovistFeatures;
     features.isovistFeatures_.resize(numIsovistFeatures, numIsovists);
-    for(auto& f : features.isovistFeatures_)
-    {
+    for (auto& f : features.isovistFeatures_) {
         f = utils::load_floating_point(in);
     }
     features.exploration_ = utils::load_floating_point(in);
@@ -228,19 +224,16 @@ std::istream& operator>>(std::istream& in, HypothesisFeatures& features)
 
 bool operator==(const HypothesisFeatures& lhs, const HypothesisFeatures& rhs)
 {
-    if(lhs.numFeatures() != rhs.numFeatures())
-    {
+    if (lhs.numFeatures() != rhs.numFeatures()) {
         return false;
     }
 
     bool areSame = absolute_fuzzy_equal(lhs.explorationAmount(), rhs.explorationAmount());
 
-    for(std::size_t n = 0; n < lhs.numFeatures(); ++n)
-    {
+    for (std::size_t n = 0; n < lhs.numFeatures(); ++n) {
         areSame = absolute_fuzzy_equal(lhs.featureAt(n), rhs.featureAt(n));
 
-        if(!areSame)
-        {
+        if (!areSame) {
             break;
         }
     }
@@ -263,48 +256,47 @@ void HypothesisFeatures::ClearCache(void)
 }
 
 
-HypothesisFeatures::HypothesisFeatures(const AreaHypothesis&      hypothesis,
-                                       const AreaExtent&          extent,
+HypothesisFeatures::HypothesisFeatures(const AreaHypothesis& hypothesis,
+                                       const AreaExtent& extent,
                                        const VoronoiSkeletonGrid& grid,
                                        const VoronoiIsovistField& isovistField,
                                        const utils::VisibilityGraph& visGraph,
                                        const utils::VisibilityGraph& skeletonGraph)
 : HypothesisFeatures()
 {
-//     HypothesisFeatures* cached = find_cached_features(hypothesis);
-//     if(cached)
-//     {
-//         *this = *cached;
-//     }
-//     else
-//     {
-        assert(features_.size() == numFeatures());
+    //     HypothesisFeatures* cached = find_cached_features(hypothesis);
+    //     if(cached)
+    //     {
+    //         *this = *cached;
+    //     }
+    //     else
+    //     {
+    assert(features_.size() == numFeatures());
 
-        exploration_ = 1.0 - hypothesis.extent().frontierRatio();
+    exploration_ = 1.0 - hypothesis.extent().frontierRatio();
 
-        features_.fill(NAN);
-        calculateStructureFeatures(hypothesis, grid);
-        calculateAxisFeatures (hypothesis, grid);
-        calculateIsovistFeatures(hypothesis, isovistField);
-        calculateVisGraphFeatures(hypothesis, visGraph);
-        calculateSkeletonGraphFeatures(hypothesis, skeletonGraph);
-        calculateShapeFeatures(extent, grid);
-//         calculateZernikeFeature(extent);
+    features_.fill(NAN);
+    calculateStructureFeatures(hypothesis, grid);
+    calculateAxisFeatures(hypothesis, grid);
+    calculateIsovistFeatures(hypothesis, isovistField);
+    calculateVisGraphFeatures(hypothesis, visGraph);
+    calculateSkeletonGraphFeatures(hypothesis, skeletonGraph);
+    calculateShapeFeatures(extent, grid);
+    //         calculateZernikeFeature(extent);
 
-//         axisRatio_ = features_[kAxisRatioIndex];
+    //         axisRatio_ = features_[kAxisRatioIndex];
 
-//         add_features_to_cache(hypothesis, *this);
+    //         add_features_to_cache(hypothesis, *this);
 
-        for(arma::uword idx = 0; idx < features_.n_elem; ++idx)
-        {
-            if(std::isnan(features_[idx]))
-            {
-                std::cout << "Found NAN in feature: " << featureName(idx) << " Area:" << extent.rectangleBoundary(math::ReferenceFrame::GLOBAL) << '\n'
-                    << " Num cells:" << hypothesis.numSkeleton() << '\n';
-                assert(!std::isnan(features_[idx]));
-            }
+    for (arma::uword idx = 0; idx < features_.n_elem; ++idx) {
+        if (std::isnan(features_[idx])) {
+            std::cout << "Found NAN in feature: " << featureName(idx)
+                      << " Area:" << extent.rectangleBoundary(math::ReferenceFrame::GLOBAL) << '\n'
+                      << " Num cells:" << hypothesis.numSkeleton() << '\n';
+            assert(!std::isnan(features_[idx]));
         }
-//     }
+    }
+    //     }
 }
 
 
@@ -331,155 +323,153 @@ std::string HypothesisFeatures::featureName(int index)
 {
     FeatureIndex feature = static_cast<FeatureIndex>(index);
 
-    switch(feature)
-    {
-        case kLoopDist:
-            return "loop dist";
-//         case kUniqueNeighbors:
-//             return "unique neighbors";
-        case kNumGateways:
-            return "num gateways";
-        case kEdgeLength:
-            return "edge length";
-        case kAvgGatewayLength:
-            return "avg gateway length";
-        case kMaxGatewayLength:
-            return "max gateway length";
-        case kGatewayRatio:
-            return "gateway ratio";
-//         case kShapeArea:
-//             return "shape area";
-//         case kShapePerimeter:
-//             return "shape perimeter";
-        case kAxisRatioIndex:
-            return "axis ratio";
-//         case kWeightedAxisRatio:
-//             return "weighted axis ratio";
-//         case kMeanAreaComp:
-//             return "area comp mean";
-//         case kStdAreaComp:
-//             return "area comp std";
-//         case kMeanPerimeterComp:
-//             return "perimeter comp mean";
-//         case kStdPerimeterComp:
-//             return "perimeter comp std";
-        case kShapeEccentricity:
-            return "shape eccentricity";
-        case kShapeCircularity:
-            return "shape circularity";
-//         case kShapeCompactness:
-//             return "shape compactness";
-//         case kDiscretizedCompactness:
-//             return "discretized compactness";
-//         case kAminCompactness:
-//             return "a_min compactness";
-//         case kAmaxCompactness:
-//             return "a_max compactness";
-//         case kPminCompactness:
-//             return "p_min compactness";
-//         case kPmaxCompactness:
-//             return "p_max compactness";
-//         case kShapeWaviness:
-//             return "shape waviness";
-//         case kIsovistMeanArea:
-//             return "area mean";
-//         case kIsovistStdArea:
-//             return "area std";
-        case kIsovistVariationArea:
-            return "area variation";
-//         case kIsovistMeanPerimeter:
-//             return "perimeter mean";
-//         case kIsovistStdPerimeter:
-//             return "perimeter std";
-        case kIsovistVariationPerimeter:
-            return "perimeter variation";
-        case kIsovistMeanEccentricity:
-            return "eccentricity mean";
-        case kIsovistStdEccentricity:
-            return "eccentricity std";
-        case kIsovistMeanCircularity:
-            return "circularity mean";
-        case kIsovistStdCircularity:
-            return "circularity std";
-        case kIsovistMeanWaviness:
-            return "waviness mean";
-        case kIsovistStdWaviness:
-            return "waviness std";
-        case kIsovistMeanCompactness:
-            return "compactness mean";
-        case kIsovistStdCompactness:
-            return "compactness std";
-        case kIsovistMeanRayCompactness:
-            return "ray compactness mean";
-        case kIsovistStdRayCompactness:
-            return "ray compactness std";
-        case kIsovistMeanShapeDistCompactness:
-            return "shape dist compactness mean";
-        case kIsovistStdShapeDistCompactness:
-            return "shape dist compactness std";
-//         case kIsovistMeanRelation:
-//             return "relation mean";
-//         case kIsovistStdRelation:
-//             return "relation std";
-        case kIsovistVariationRelation:
-            return "relation variation";
-//         case kIsovistMeanDelta:
-//             return "delta mean";
-//         case kIsovistStdDelta:
-//             return "delta std";
-        case kIsovistVariationDelta:
-            return "delta variation";
-        case kVisGraphMeanClusterCoeff:
-            return "cluster coeff mean";
-        case kVisGraphStdClusterCoeff:
-            return "cluster coeff std";
-        case kVisGraphMeanBetweenness:
-            return "betweenness mean";
-        case kVisGraphStdBetweenness:
-            return "betweenness std";
-        case kVisGraphMeanPageRank:
-            return "pagerank mean";
-        case kVisGraphStdPageRank:
-            return "pagerank std";
-        case kSkeletonMaxBetweenness:
-            return "skel betweenness max";
-        case kSkeletonMeanBetweenness:
-            return "skel betweenness mean";
-        case kSkeletonStdBetweenness:
-            return "skel betweenness std";
-//         case kIsovistDistMinMean:
-//             return "min dist mean";
-//         case kIsovistDistMinStd:
-//             return "min dist std";
-//         case kIsovistDistMinVariation:
-//             return "min dist variation";
-//         case kIsovistDistMean:
-//             return "dist mean";
-//         case kIsovistDistStd:
-//             return "dist std";
-        case kIsovistDistVariation:
-            return "dist variation";
-//         case kIsovistDistFromCenterMean:
-//             return "dist from center mean";
-//         case kIsovistDistFromCenterStd:
-//             return "dist from center std";
-        case kIsovistDistFromCenterVariation:
-            return "dist from center variation";
-        case kIsovistAngleBetweenMinDistsMean:
-            return "angle between min mean";
-        case kIsovistAngleBetweenMinDistsStd:
-            return "angle between min std";
-//         case kIsovistAreaBalanceMean:
-//             return "area balance mean";
-//         case kIsovistAreaBalanceStd:
-//             return "area balance std";
-        case kNumFixedFeatures:
-        default:
-            break;
+    switch (feature) {
+    case kLoopDist:
+        return "loop dist";
+        //         case kUniqueNeighbors:
+        //             return "unique neighbors";
+    case kNumGateways:
+        return "num gateways";
+    case kEdgeLength:
+        return "edge length";
+    case kAvgGatewayLength:
+        return "avg gateway length";
+    case kMaxGatewayLength:
+        return "max gateway length";
+    case kGatewayRatio:
+        return "gateway ratio";
+        //         case kShapeArea:
+        //             return "shape area";
+        //         case kShapePerimeter:
+        //             return "shape perimeter";
+    case kAxisRatioIndex:
+        return "axis ratio";
+        //         case kWeightedAxisRatio:
+        //             return "weighted axis ratio";
+        //         case kMeanAreaComp:
+        //             return "area comp mean";
+        //         case kStdAreaComp:
+        //             return "area comp std";
+        //         case kMeanPerimeterComp:
+        //             return "perimeter comp mean";
+        //         case kStdPerimeterComp:
+        //             return "perimeter comp std";
+    case kShapeEccentricity:
+        return "shape eccentricity";
+    case kShapeCircularity:
+        return "shape circularity";
+        //         case kShapeCompactness:
+        //             return "shape compactness";
+        //         case kDiscretizedCompactness:
+        //             return "discretized compactness";
+        //         case kAminCompactness:
+        //             return "a_min compactness";
+        //         case kAmaxCompactness:
+        //             return "a_max compactness";
+        //         case kPminCompactness:
+        //             return "p_min compactness";
+        //         case kPmaxCompactness:
+        //             return "p_max compactness";
+        //         case kShapeWaviness:
+        //             return "shape waviness";
+        //         case kIsovistMeanArea:
+        //             return "area mean";
+        //         case kIsovistStdArea:
+        //             return "area std";
+    case kIsovistVariationArea:
+        return "area variation";
+        //         case kIsovistMeanPerimeter:
+        //             return "perimeter mean";
+        //         case kIsovistStdPerimeter:
+        //             return "perimeter std";
+    case kIsovistVariationPerimeter:
+        return "perimeter variation";
+    case kIsovistMeanEccentricity:
+        return "eccentricity mean";
+    case kIsovistStdEccentricity:
+        return "eccentricity std";
+    case kIsovistMeanCircularity:
+        return "circularity mean";
+    case kIsovistStdCircularity:
+        return "circularity std";
+    case kIsovistMeanWaviness:
+        return "waviness mean";
+    case kIsovistStdWaviness:
+        return "waviness std";
+    case kIsovistMeanCompactness:
+        return "compactness mean";
+    case kIsovistStdCompactness:
+        return "compactness std";
+    case kIsovistMeanRayCompactness:
+        return "ray compactness mean";
+    case kIsovistStdRayCompactness:
+        return "ray compactness std";
+    case kIsovistMeanShapeDistCompactness:
+        return "shape dist compactness mean";
+    case kIsovistStdShapeDistCompactness:
+        return "shape dist compactness std";
+        //         case kIsovistMeanRelation:
+        //             return "relation mean";
+        //         case kIsovistStdRelation:
+        //             return "relation std";
+    case kIsovistVariationRelation:
+        return "relation variation";
+        //         case kIsovistMeanDelta:
+        //             return "delta mean";
+        //         case kIsovistStdDelta:
+        //             return "delta std";
+    case kIsovistVariationDelta:
+        return "delta variation";
+    case kVisGraphMeanClusterCoeff:
+        return "cluster coeff mean";
+    case kVisGraphStdClusterCoeff:
+        return "cluster coeff std";
+    case kVisGraphMeanBetweenness:
+        return "betweenness mean";
+    case kVisGraphStdBetweenness:
+        return "betweenness std";
+    case kVisGraphMeanPageRank:
+        return "pagerank mean";
+    case kVisGraphStdPageRank:
+        return "pagerank std";
+    case kSkeletonMaxBetweenness:
+        return "skel betweenness max";
+    case kSkeletonMeanBetweenness:
+        return "skel betweenness mean";
+    case kSkeletonStdBetweenness:
+        return "skel betweenness std";
+        //         case kIsovistDistMinMean:
+        //             return "min dist mean";
+        //         case kIsovistDistMinStd:
+        //             return "min dist std";
+        //         case kIsovistDistMinVariation:
+        //             return "min dist variation";
+        //         case kIsovistDistMean:
+        //             return "dist mean";
+        //         case kIsovistDistStd:
+        //             return "dist std";
+    case kIsovistDistVariation:
+        return "dist variation";
+        //         case kIsovistDistFromCenterMean:
+        //             return "dist from center mean";
+        //         case kIsovistDistFromCenterStd:
+        //             return "dist from center std";
+    case kIsovistDistFromCenterVariation:
+        return "dist from center variation";
+    case kIsovistAngleBetweenMinDistsMean:
+        return "angle between min mean";
+    case kIsovistAngleBetweenMinDistsStd:
+        return "angle between min std";
+        //         case kIsovistAreaBalanceMean:
+        //             return "area balance mean";
+        //         case kIsovistAreaBalanceStd:
+        //             return "area balance std";
+    case kNumFixedFeatures:
+    default:
+        break;
     }
 
-    if((index >= kNumFixedFeatures) && (index < static_cast<int>(kNumFixedFeatures + zernike.numMoments())))
-    {
+    if ((index >= kNumFixedFeatures) && (index < static_cast<int>(kNumFixedFeatures + zernike.numMoments()))) {
         std::ostringstream str;
         str << "zernike: " << (index - kNumFixedFeatures);
         return str.str();
@@ -490,8 +480,7 @@ std::string HypothesisFeatures::featureName(int index)
 
 std::string HypothesisFeatures::isovistFeatureName(int index)
 {
-    switch(index)
-    {
+    switch (index) {
     case kSingleEccentricity:
         return utils::Isovist::scalarName(utils::Isovist::kShapeEccentricity);
     case kSingleCircularity:
@@ -504,10 +493,10 @@ std::string HypothesisFeatures::isovistFeatureName(int index)
         return utils::Isovist::scalarName(utils::Isovist::kRayCompactness);
     case kSingleShapeDistCompactness:
         return utils::Isovist::scalarName(utils::Isovist::kShapeDistCompactness);
-//     case kSingleDVariation:
-//         return utils::Isovist::scalarName(utils::Isovist::kDVariation);
-//     case kSingleDeltaVariation:
-//         return utils::Isovist::scalarName(utils::Isovist::kDeltaVariation);
+        //     case kSingleDVariation:
+        //         return utils::Isovist::scalarName(utils::Isovist::kDVariation);
+        //     case kSingleDeltaVariation:
+        //         return utils::Isovist::scalarName(utils::Isovist::kDeltaVariation);
     case kSingleAvgDelta:
         return utils::Isovist::scalarName(utils::Isovist::kDeltaAvg);
     case kSingleStdDelta:
@@ -516,26 +505,26 @@ std::string HypothesisFeatures::isovistFeatureName(int index)
         return utils::Isovist::scalarName(utils::Isovist::kDistRelationAvg);
     case kSingleStdRelation:
         return utils::Isovist::scalarName(utils::Isovist::kDistRelationStd);
-//     case kSingleDistMin:
-//         return utils::Isovist::scalarName(utils::Isovist::kDmin);
+        //     case kSingleDistMin:
+        //         return utils::Isovist::scalarName(utils::Isovist::kDmin);
     case kSingleDistMean:
         return utils::Isovist::scalarName(utils::Isovist::kDavg);
     case kSingleDistStd:
         return utils::Isovist::scalarName(utils::Isovist::kDstd);
-//     case kSingleDistSkewness:
-//         return utils::Isovist::scalarName(utils::Isovist::kDskewness);
+        //     case kSingleDistSkewness:
+        //         return utils::Isovist::scalarName(utils::Isovist::kDskewness);
     case kSingleDistFromCenterMean:
         return utils::Isovist::scalarName(utils::Isovist::kShapeDistAvg);
     case kSingleDistFromCenterStd:
         return utils::Isovist::scalarName(utils::Isovist::kShapeDistStd);
-//     case kSingleDistFromCenterVariation:
-//         return utils::Isovist::scalarName(utils::Isovist::kShapeDistVariation);
+        //     case kSingleDistFromCenterVariation:
+        //         return utils::Isovist::scalarName(utils::Isovist::kShapeDistVariation);
     case kSingleAngleBetweenMinDists:
         return utils::Isovist::scalarName(utils::Isovist::kAngleBetweenMinDists);
-//     case kSingleMinHalfArea:
-//         return utils::Isovist::scalarName(utils::Isovist::kMinHalfArea);
-//     case kSingleAreaBalance:
-//         return utils::Isovist::scalarName(utils::Isovist::kAreaBalance);
+        //     case kSingleMinHalfArea:
+        //         return utils::Isovist::scalarName(utils::Isovist::kMinHalfArea);
+        //     case kSingleAreaBalance:
+        //         return utils::Isovist::scalarName(utils::Isovist::kAreaBalance);
     case kSingleArea:
         return utils::Isovist::scalarName(utils::Isovist::kArea);
     case kSinglePerimeter:
@@ -552,44 +541,37 @@ void HypothesisFeatures::calculateStructureFeatures(const AreaHypothesis& hypoth
 {
     double totalGwyPerim = 0.0;
 
-    for(auto& bnd : boost::make_iterator_range(hypothesis.beginBoundary(), hypothesis.endBoundary()))
-    {
+    for (auto& bnd : boost::make_iterator_range(hypothesis.beginBoundary(), hypothesis.endBoundary())) {
         totalGwyPerim += gateway_cell_perimeter(bnd->getGateway(), grid.metersPerCell());
     }
 
-    if(hypothesis.extent().perimeter() > 0.0)
-    {
+    if (hypothesis.extent().perimeter() > 0.0) {
         features_[kGatewayRatio] = totalGwyPerim / hypothesis.extent().perimeter();
-    }
-    else
-    {
+    } else {
         features_[kGatewayRatio] = 0.0;
     }
 
     double minLoop = HUGE_VAL;
-    for(auto& node : boost::make_iterator_range(hypothesis.beginNode(), hypothesis.endNode()))
-    {
+    for (auto& node : boost::make_iterator_range(hypothesis.beginNode(), hypothesis.endNode())) {
         minLoop = std::min(minLoop, node->getLoopDistance());
     }
 
     features_[kLoopDist] = minLoop;
 
-//     auto neighbors = hypothesis.findAdjacentHypotheses();
-//     double totalNeighbors = neighbors.size();
-//     std::sort(neighbors.begin(), neighbors.end());
-//     utils::erase_unique(neighbors);
-//
-//     features_[kUniqueNeighbors] = neighbors.empty() ? 0.0 : neighbors.size() / totalNeighbors;
+    //     auto neighbors = hypothesis.findAdjacentHypotheses();
+    //     double totalNeighbors = neighbors.size();
+    //     std::sort(neighbors.begin(), neighbors.end());
+    //     utils::erase_unique(neighbors);
+    //
+    //     features_[kUniqueNeighbors] = neighbors.empty() ? 0.0 : neighbors.size() / totalNeighbors;
 
     features_[kNumGateways] = hypothesis.numBoundaries();
 
     AreaGraph* graph = hypothesis.areaGraph();
     double totalLength = 0.0;
     int totalDists = 0;
-    for(auto& node : boost::make_iterator_range(hypothesis.beginNode(), hypothesis.endNode()))
-    {
-        for(auto& otherNode : boost::make_iterator_range(hypothesis.beginNode(), hypothesis.endNode()))
-        {
+    for (auto& node : boost::make_iterator_range(hypothesis.beginNode(), hypothesis.endNode())) {
+        for (auto& otherNode : boost::make_iterator_range(hypothesis.beginNode(), hypothesis.endNode())) {
             totalLength += graph->distanceBetweenNodes(node, otherNode);
             ++totalDists;
         }
@@ -601,8 +583,7 @@ void HypothesisFeatures::calculateStructureFeatures(const AreaHypothesis& hypoth
     double maxGwyLength = 0.0;
     int numGwys = 0;
 
-    for(auto& bnd : boost::make_iterator_range(hypothesis.beginBoundary(), hypothesis.endBoundary()))
-    {
+    for (auto& bnd : boost::make_iterator_range(hypothesis.beginBoundary(), hypothesis.endBoundary())) {
         totalGwyLength += bnd->length();
         maxGwyLength = std::max(bnd->length(), maxGwyLength);
     }
@@ -615,19 +596,18 @@ void HypothesisFeatures::calculateStructureFeatures(const AreaHypothesis& hypoth
 void HypothesisFeatures::calculateAxisFeatures(const AreaHypothesis& hypothesis, const VoronoiSkeletonGrid& grid)
 {
     std::vector<double> weights(hypothesis.numSkeleton(), 1.0);
-    auto features = math::point2D_covariance_properties(hypothesis.beginSkeleton(),
-                                                        hypothesis.endSkeleton(),
-                                                        weights.begin());
+    auto features =
+      math::point2D_covariance_properties(hypothesis.beginSkeleton(), hypothesis.endSkeleton(), weights.begin());
     features_[kAxisRatioIndex] = features.eccentricity;
 
-//     std::transform(hypothesis.beginSkeleton(), hypothesis.endSkeleton(), weights.begin(), [&grid](cell_t c) {
-//         return grid.getMetricDistance(c.x, c.y);
-//     });
-//
-//     auto weightedFeatures = math::point2D_covariance_properties(hypothesis.beginSkeleton(),
-//                                                                 hypothesis.endSkeleton(),
-//                                                                 weights.begin());
-//     features_[kWeightedAxisRatio] = weightedFeatures.eccentricity;
+    //     std::transform(hypothesis.beginSkeleton(), hypothesis.endSkeleton(), weights.begin(), [&grid](cell_t c) {
+    //         return grid.getMetricDistance(c.x, c.y);
+    //     });
+    //
+    //     auto weightedFeatures = math::point2D_covariance_properties(hypothesis.beginSkeleton(),
+    //                                                                 hypothesis.endSkeleton(),
+    //                                                                 weights.begin());
+    //     features_[kWeightedAxisRatio] = weightedFeatures.eccentricity;
 }
 
 
@@ -635,29 +615,26 @@ void HypothesisFeatures::calculateShapeFeatures(const AreaExtent& extent, const 
 {
     auto shapeFeatures = math::shape_features(extent.begin(), extent.end(), extent.area(), extent.center().toPoint());
     features_[kShapeEccentricity] = shapeFeatures[math::kShapeEccentricity];
-    if(extent.perimeter() > 0.0)
-    {
-        features_[kShapeCircularity] = (4.0*M_PI*extent.area()) / std::pow(extent.perimeter(), 2);
-//         features_[kShapeWaviness] = extent.hullPerimeter(grid) / extent.perimeter();
-    }
-    else
-    {
+    if (extent.perimeter() > 0.0) {
+        features_[kShapeCircularity] = (4.0 * M_PI * extent.area()) / std::pow(extent.perimeter(), 2);
+        //         features_[kShapeWaviness] = extent.hullPerimeter(grid) / extent.perimeter();
+    } else {
         features_[kShapeCircularity] = 1.0;
-//         features_[kShapeWaviness] = 1.0;
+        //         features_[kShapeWaviness] = 1.0;
     }
 
-//     features_[kShapeCompactness] = shapeFeatures[math::kShapeCompactness];
-//
-//     extent_compactness_t compactness = extent.compactness();
-//     features_[kShapeCircularity] = compactness.circularity;
-//     features_[kDiscretizedCompactness] = compactness.ndc;
-//     features_[kAminCompactness] = compactness.aMin;
-//     features_[kAmaxCompactness] = compactness.aMax;
-//     features_[kPminCompactness] = compactness.pMin;
-//     features_[kPmaxCompactness] = compactness.pMax;
+    //     features_[kShapeCompactness] = shapeFeatures[math::kShapeCompactness];
+    //
+    //     extent_compactness_t compactness = extent.compactness();
+    //     features_[kShapeCircularity] = compactness.circularity;
+    //     features_[kDiscretizedCompactness] = compactness.ndc;
+    //     features_[kAminCompactness] = compactness.aMin;
+    //     features_[kAmaxCompactness] = compactness.aMax;
+    //     features_[kPminCompactness] = compactness.pMin;
+    //     features_[kPmaxCompactness] = compactness.pMax;
 
-//     features_[kShapeArea] = extent.area();
-//     features_[kShapePerimeter] = extent.perimeter();
+    //     features_[kShapeArea] = extent.area();
+    //     features_[kShapePerimeter] = extent.perimeter();
 }
 
 
@@ -665,11 +642,7 @@ void HypothesisFeatures::calculateIsovistFeatures(const AreaHypothesis& hypothes
                                                   const VoronoiIsovistField& isovistField)
 {
     using namespace boost::accumulators;
-    using IsovistAcc = accumulator_set<double, stats<tag::mean,
-                                                     tag::max,
-                                                     tag::sum,
-                                                     tag::variance,
-                                                     tag::median>>;
+    using IsovistAcc = accumulator_set<double, stats<tag::mean, tag::max, tag::sum, tag::variance, tag::median>>;
 
     IsovistAcc eccentricityAcc;
     IsovistAcc circularityAcc;
@@ -696,14 +669,13 @@ void HypothesisFeatures::calculateIsovistFeatures(const AreaHypothesis& hypothes
     double area = hypothesis.extent().area();
     double perimeter = hypothesis.extent().perimeter();
 
-//     int numIsovistMoments = (isovistField[0].numScalars() - utils::Isovist::kNumScalars);
-    int numIsovistFeatures = kNumSingle;// + numIsovistMoments;
+    //     int numIsovistMoments = (isovistField[0].numScalars() - utils::Isovist::kNumScalars);
+    int numIsovistFeatures = kNumSingle;   // + numIsovistMoments;
     arma::colvec singleFeatures(numIsovistFeatures);
     isovistFeatures_.resize(numIsovistFeatures, std::distance(hypothesis.beginSkeleton(), hypothesis.endSkeleton()));
     int isovistCol = 0;
 
-    for(auto& cell : boost::make_iterator_range(hypothesis.beginSkeleton(), hypothesis.endSkeleton()))
-    {
+    for (auto& cell : boost::make_iterator_range(hypothesis.beginSkeleton(), hypothesis.endSkeleton())) {
         // Sum the variances to get the std for the full isovist field in the area
         const auto& isovist = isovistField[cell];
         eccentricityAcc(isovist.scalar(utils::Isovist::kShapeEccentricity));
@@ -734,29 +706,30 @@ void HypothesisFeatures::calculateIsovistFeatures(const AreaHypothesis& hypothes
         singleFeatures[kSingleCompactness] = isovist.scalar(utils::Isovist::kShapeCompactness);
         singleFeatures[kSingleRayCompactness] = isovist.scalar(utils::Isovist::kRayCompactness);
         singleFeatures[kSingleShapeDistCompactness] = isovist.scalar(utils::Isovist::kShapeDistCompactness);
-//         singleFeatures[kSingleDistMin] = isovist.scalar(utils::Isovist::kDmin);
+        //         singleFeatures[kSingleDistMin] = isovist.scalar(utils::Isovist::kDmin);
         singleFeatures[kSingleDistStd] = isovist.scalar(utils::Isovist::kDstd);
         singleFeatures[kSingleDistMean] = isovist.scalar(utils::Isovist::kDavg);
-//         singleFeatures[kSingleDVariation] = isovist.scalar(utils::Isovist::kDVariation);
+        //         singleFeatures[kSingleDVariation] = isovist.scalar(utils::Isovist::kDVariation);
         singleFeatures[kSingleDistFromCenterMean] = isovist.scalar(utils::Isovist::kShapeDistAvg);
         singleFeatures[kSingleDistFromCenterStd] = isovist.scalar(utils::Isovist::kShapeDistStd);
-//         singleFeatures[kSingleDistFromCenterVariation] = isovist.scalar(utils::Isovist::kShapeDistVariation);
-//         singleFeatures[kSingleDeltaVariation] = isovist.scalar(utils::Isovist::kDeltaVariation);
+        //         singleFeatures[kSingleDistFromCenterVariation] = isovist.scalar(utils::Isovist::kShapeDistVariation);
+        //         singleFeatures[kSingleDeltaVariation] = isovist.scalar(utils::Isovist::kDeltaVariation);
         singleFeatures[kSingleAvgRelation] = isovist.scalar(utils::Isovist::kDistRelationAvg);
         singleFeatures[kSingleStdRelation] = isovist.scalar(utils::Isovist::kDistRelationStd);
         singleFeatures[kSingleAvgDelta] = isovist.scalar(utils::Isovist::kDeltaAvg);
         singleFeatures[kSingleStdDelta] = isovist.scalar(utils::Isovist::kDeltaStd);
-//         singleFeatures[kSingleDistSkewness] = isovist.scalar(utils::Isovist::kDskewness);
+        //         singleFeatures[kSingleDistSkewness] = isovist.scalar(utils::Isovist::kDskewness);
         singleFeatures[kSingleArea] = isovist.scalar(utils::Isovist::kArea);
         singleFeatures[kSinglePerimeter] = isovist.scalar(utils::Isovist::kPerimeter);
         singleFeatures[kSingleAngleBetweenMinDists] = isovist.scalar(utils::Isovist::kAngleBetweenMinDists);
-//         singleFeatures[kSingleMinHalfArea] = isovist.scalar(utils::Isovist::kMinHalfArea);
-//         singleFeatures[kSingleAreaBalance] = isovist.scalar(utils::Isovist::kAreaBalance);
+        //         singleFeatures[kSingleMinHalfArea] = isovist.scalar(utils::Isovist::kMinHalfArea);
+        //         singleFeatures[kSingleAreaBalance] = isovist.scalar(utils::Isovist::kAreaBalance);
 
-//         for(int n = 0; n < numIsovistMoments; ++n)
-//         {
-//             singleFeatures[kNumSingle + n] = isovist.scalar(static_cast<utils::Isovist::Scalar>(utils::Isovist::kNumScalars + n));
-//         }
+        //         for(int n = 0; n < numIsovistMoments; ++n)
+        //         {
+        //             singleFeatures[kNumSingle + n] =
+        //             isovist.scalar(static_cast<utils::Isovist::Scalar>(utils::Isovist::kNumScalars + n));
+        //         }
 
         singleFeatures[kSingleArea] = isovist.scalar(utils::Isovist::kArea);
         singleFeatures[kSinglePerimeter] = isovist.scalar(utils::Isovist::kPerimeter);
@@ -766,18 +739,18 @@ void HypothesisFeatures::calculateIsovistFeatures(const AreaHypothesis& hypothes
     auto numCells = std::distance(hypothesis.beginSkeleton(), hypothesis.endSkeleton());
     assert(numCells > 1);
 
-//     features_[kIsovistMeanArea] = mean(areaAcc);
-//     features_[kIsovistStdArea] = std::sqrt(variance(areaAcc));
+    //     features_[kIsovistMeanArea] = mean(areaAcc);
+    //     features_[kIsovistStdArea] = std::sqrt(variance(areaAcc));
     features_[kIsovistVariationArea] = (mean(areaAcc) > 0.0) ? std::sqrt(variance(areaAcc)) / mean(areaAcc) : 1e7;
-//     features_[kMeanAreaComp] = (max(areaAcc) > 0.0) ? mean(areaAcc) / max(areaAcc) : 1e7;
-//     features_[kStdAreaComp] = std::sqrt(variance(areaRatioAcc));
+    //     features_[kMeanAreaComp] = (max(areaAcc) > 0.0) ? mean(areaAcc) / max(areaAcc) : 1e7;
+    //     features_[kStdAreaComp] = std::sqrt(variance(areaRatioAcc));
 
-//     features_[kIsovistMeanPerimeter] = mean(perimAcc);
-//     features_[kIsovistStdPerimeter] = std::sqrt(variance(perimAcc));
-    features_[kIsovistVariationPerimeter] = (mean(perimAcc) > 0.0) ? std::sqrt(variance(perimAcc)) / mean(perimAcc)
-        : 1e7;
-//     features_[kMeanPerimeterComp] = (max(perimAcc) > 0.0) ? mean(perimAcc) / max(perimAcc) : 1e7;
-//     features_[kStdPerimeterComp] = std::sqrt(variance(perimRatioAcc));
+    //     features_[kIsovistMeanPerimeter] = mean(perimAcc);
+    //     features_[kIsovistStdPerimeter] = std::sqrt(variance(perimAcc));
+    features_[kIsovistVariationPerimeter] =
+      (mean(perimAcc) > 0.0) ? std::sqrt(variance(perimAcc)) / mean(perimAcc) : 1e7;
+    //     features_[kMeanPerimeterComp] = (max(perimAcc) > 0.0) ? mean(perimAcc) / max(perimAcc) : 1e7;
+    //     features_[kStdPerimeterComp] = std::sqrt(variance(perimRatioAcc));
 
     features_[kIsovistMeanEccentricity] = mean(eccentricityAcc);
     features_[kIsovistStdEccentricity] = std::sqrt(variance(eccentricityAcc));
@@ -797,52 +770,48 @@ void HypothesisFeatures::calculateIsovistFeatures(const AreaHypothesis& hypothes
     features_[kIsovistMeanShapeDistCompactness] = mean(shapeDistCompactnessAcc);
     features_[kIsovistStdShapeDistCompactness] = std::sqrt(variance(shapeDistCompactnessAcc));
 
-//     features_[kIsovistMeanRelation] = mean(avgRelationAcc);
-//     features_[kIsovistStdRelation] = std::sqrt(variance(avgRelationAcc));
-    features_[kIsovistVariationRelation] = (mean(avgRelationAcc) > 0.0) ?
-        std::sqrt(sum(stdRelationAcc)) / mean(avgRelationAcc) : 1e7;
+    //     features_[kIsovistMeanRelation] = mean(avgRelationAcc);
+    //     features_[kIsovistStdRelation] = std::sqrt(variance(avgRelationAcc));
+    features_[kIsovistVariationRelation] =
+      (mean(avgRelationAcc) > 0.0) ? std::sqrt(sum(stdRelationAcc)) / mean(avgRelationAcc) : 1e7;
 
-//     features_[kIsovistMeanDelta] = mean(avgDeltaAcc);
-//     features_[kIsovistStdDelta] = std::sqrt(variance(avgDeltaAcc));
-    features_[kIsovistVariationDelta] = (mean(avgDeltaAcc) > 0.0) ?
-        std::sqrt(sum(stdDeltaAcc)) / mean(avgDeltaAcc) : 1e7;
+    //     features_[kIsovistMeanDelta] = mean(avgDeltaAcc);
+    //     features_[kIsovistStdDelta] = std::sqrt(variance(avgDeltaAcc));
+    features_[kIsovistVariationDelta] =
+      (mean(avgDeltaAcc) > 0.0) ? std::sqrt(sum(stdDeltaAcc)) / mean(avgDeltaAcc) : 1e7;
 
-//     features_[kIsovistDistMinMean] = mean(minDistAcc);
-//     features_[kIsovistDistMinStd] = std::sqrt(variance(minDistAcc));
-//     features_[kIsovistDistMinVariation] = (mean(minDistAcc) > 0.0) ?
-//         std::sqrt(variance(minDistAcc)) / mean(minDistAcc) : 1e7;
+    //     features_[kIsovistDistMinMean] = mean(minDistAcc);
+    //     features_[kIsovistDistMinStd] = std::sqrt(variance(minDistAcc));
+    //     features_[kIsovistDistMinVariation] = (mean(minDistAcc) > 0.0) ?
+    //         std::sqrt(variance(minDistAcc)) / mean(minDistAcc) : 1e7;
 
-//     features_[kIsovistDistMean] = mean(avgDistAcc);
-//     features_[kIsovistDistStd] = std::sqrt(sum(stdDistAcc));
-    features_[kIsovistDistVariation] = (mean(avgDistAcc) > 0.0) ?
-        std::sqrt(sum(stdDistAcc)) / mean(avgDistAcc) : 1e7;
+    //     features_[kIsovistDistMean] = mean(avgDistAcc);
+    //     features_[kIsovistDistStd] = std::sqrt(sum(stdDistAcc));
+    features_[kIsovistDistVariation] = (mean(avgDistAcc) > 0.0) ? std::sqrt(sum(stdDistAcc)) / mean(avgDistAcc) : 1e7;
 
-//     features_[kIsovistDistFromCenterMean] = mean(avgDistFromCenterAcc);
-//     features_[kIsovistDistFromCenterStd] = std::sqrt(sum(stdDistFromCenterAcc));
-    features_[kIsovistDistFromCenterVariation] = (mean(avgDistFromCenterAcc) > 0.0) ?
-        std::sqrt(sum(stdDistFromCenterAcc)) / mean(avgDistFromCenterAcc) : 1e7;
+    //     features_[kIsovistDistFromCenterMean] = mean(avgDistFromCenterAcc);
+    //     features_[kIsovistDistFromCenterStd] = std::sqrt(sum(stdDistFromCenterAcc));
+    features_[kIsovistDistFromCenterVariation] =
+      (mean(avgDistFromCenterAcc) > 0.0) ? std::sqrt(sum(stdDistFromCenterAcc)) / mean(avgDistFromCenterAcc) : 1e7;
 
     features_[kIsovistAngleBetweenMinDistsMean] = mean(minDistAngleAcc);
     features_[kIsovistAngleBetweenMinDistsStd] = std::sqrt(variance(minDistAngleAcc));
 
-//     features_[kIsovistAreaBalanceMean] = mean(areaBalanceAcc);
-//     features_[kIsovistAreaBalanceStd] = std::sqrt(variance(areaBalanceAcc));
+    //     features_[kIsovistAreaBalanceMean] = mean(areaBalanceAcc);
+    //     features_[kIsovistAreaBalanceStd] = std::sqrt(variance(areaBalanceAcc));
 }
 
 
 void HypothesisFeatures::calculateZernikeFeature(const AreaExtent& extent)
 {
-    if(extent.area() > 0.0)
-    {
+    if (extent.area() > 0.0) {
         auto boundary = extent.rectangleBoundary(math::ReferenceFrame::GLOBAL);
         auto zernikeFeatures = zernike.moments<double>(extent.begin(),
                                                        extent.end(),
                                                        extent.center().toPoint(),
                                                        std::max(boundary.width(), boundary.height()));
         std::copy(zernikeFeatures.begin(), zernikeFeatures.end(), features_.begin() + kNumFixedFeatures);
-    }
-    else
-    {
+    } else {
         std::fill(features_.begin() + kNumFixedFeatures, features_.end(), 0.0);
     }
 }
@@ -883,27 +852,23 @@ HypothesisFeatures* find_cached_features(const AreaHypothesis& hyp)
 {
     auto cacheIt = kFeaturesCache.find(hyp.numBoundaries());
 
-    if(cacheIt == kFeaturesCache.end())
-    {
+    if (cacheIt == kFeaturesCache.end()) {
         return nullptr;
     }
 
-    for(auto& cached : cacheIt->second)
-    {
+    for (auto& cached : cacheIt->second) {
         bool matchesCache = true;
-        for(auto& boundary : boost::make_iterator_range(hyp.beginBoundary(), hyp.endBoundary()))
-        {
-            if(std::find(cached.boundaryCells.begin(),
-                         cached.boundaryCells.end(),
-                         boundary->getGateway().skeletonCell()) == cached.boundaryCells.end())
-            {
+        for (auto& boundary : boost::make_iterator_range(hyp.beginBoundary(), hyp.endBoundary())) {
+            if (std::find(cached.boundaryCells.begin(),
+                          cached.boundaryCells.end(),
+                          boundary->getGateway().skeletonCell())
+                == cached.boundaryCells.end()) {
                 matchesCache = false;
                 break;
             }
         }
 
-        if(matchesCache)
-        {
+        if (matchesCache) {
             return &(cached.features);
         }
     }
@@ -918,13 +883,12 @@ void add_features_to_cache(const AreaHypothesis& hyp, const HypothesisFeatures& 
     cached.features = features;
     cached.boundaryCells.reserve(hyp.numBoundaries());
 
-    for(auto& boundary : boost::make_iterator_range(hyp.beginBoundary(), hyp.endBoundary()))
-    {
+    for (auto& boundary : boost::make_iterator_range(hyp.beginBoundary(), hyp.endBoundary())) {
         cached.boundaryCells.push_back(boundary->getGateway().skeletonCell());
     }
 
     kFeaturesCache[cached.boundaryCells.size()].push_back(std::move(cached));
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

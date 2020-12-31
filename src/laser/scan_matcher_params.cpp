@@ -7,8 +7,8 @@
 */
 
 
-#include "utils/config_file.h"
 #include "laser/scan_matcher_params.h"
+#include "utils/config_file.h"
 
 namespace vulcan
 {
@@ -41,21 +41,21 @@ scan_matcher_params_t load_scan_matcher_params(const utils::ConfigFile& config)
 {
     scan_matcher_params_t params;
 
-    params.fineResolutionGridWidth     = config.getValueAsUInt16(SCAN_MATCHER_HEADING, FINE_GRID_WIDTH);
-    params.fineResolutionGridHeight    = config.getValueAsUInt16(SCAN_MATCHER_HEADING, FINE_GRID_HEIGHT);
+    params.fineResolutionGridWidth = config.getValueAsUInt16(SCAN_MATCHER_HEADING, FINE_GRID_WIDTH);
+    params.fineResolutionGridHeight = config.getValueAsUInt16(SCAN_MATCHER_HEADING, FINE_GRID_HEIGHT);
     params.fineResolutionMetersPerCell = config.getValueAsFloat(SCAN_MATCHER_HEADING, FINE_GRID_SCALE);
 
     params.coarseResolutionMetersPerCell = config.getValueAsFloat(SCAN_MATCHER_HEADING, COARSE_GRID_SCALE);
 
-    params.fineAngularSearchResolution   = config.getValueAsFloat(SCAN_MATCHER_HEADING, FINE_ANG_RES);
+    params.fineAngularSearchResolution = config.getValueAsFloat(SCAN_MATCHER_HEADING, FINE_ANG_RES);
     params.coarseAngularSearchResolution = config.getValueAsFloat(SCAN_MATCHER_HEADING, COARSE_ANG_RES);
 
-    params.minXSearchArea     = config.getValueAsFloat(SCAN_MATCHER_HEADING, MIN_X_SEARCH_KEY);
-    params.minYSearchArea     = config.getValueAsFloat(SCAN_MATCHER_HEADING, MIN_Y_SEARCH_KEY);
+    params.minXSearchArea = config.getValueAsFloat(SCAN_MATCHER_HEADING, MIN_X_SEARCH_KEY);
+    params.minYSearchArea = config.getValueAsFloat(SCAN_MATCHER_HEADING, MIN_Y_SEARCH_KEY);
     params.minThetaSearchArea = config.getValueAsFloat(SCAN_MATCHER_HEADING, MIN_THETA_SEARCH_KEY);
 
-    params.maxXSearchArea     = config.getValueAsFloat(SCAN_MATCHER_HEADING, MAX_X_SEARCH_KEY);
-    params.maxYSearchArea     = config.getValueAsFloat(SCAN_MATCHER_HEADING, MAX_Y_SEARCH_KEY);
+    params.maxXSearchArea = config.getValueAsFloat(SCAN_MATCHER_HEADING, MAX_X_SEARCH_KEY);
+    params.maxYSearchArea = config.getValueAsFloat(SCAN_MATCHER_HEADING, MAX_Y_SEARCH_KEY);
     params.maxThetaSearchArea = config.getValueAsFloat(SCAN_MATCHER_HEADING, MAX_THETA_SEARCH_KEY);
 
     params.minNumTransformsToConsider = config.getValueAsInt16(SCAN_MATCHER_HEADING, MIN_NUM_TRANSFORMS_KEY);
@@ -63,5 +63,5 @@ scan_matcher_params_t load_scan_matcher_params(const utils::ConfigFile& config)
     return params;
 }
 
-}
-}
+}   // namespace laser
+}   // namespace vulcan

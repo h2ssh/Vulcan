@@ -8,19 +8,19 @@
 
 
 /**
-* \file     transition_cycle.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalTransitionCycle.
-*/
+ * \file     transition_cycle.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalTransitionCycle.
+ */
 
 #include "hssh/global_topological/transition_cycle.h"
 #include "hssh/global_topological/utils/local_to_global.h"
 #include "hssh/global_topological/utils/visit.h"
 #include "utils/cyclic_iterator.h"
 #include <algorithm>
-#include <iterator>
 #include <cassert>
+#include <iterator>
 
 // #define DEBUG_CONSTRUCT
 
@@ -38,25 +38,22 @@ GlobalTransitionCycle::GlobalTransitionCycle(const GlobalArea& globalArea, const
 {
     // For each fragment in the small-scale star, create a corresponding GlobalTransition. The order in which the
     // fragments processed is the same order they are stored in the global cycle.
-    for(auto& frag : star)
-    {
-        if(frag.navigable)
-        {
+    for (auto& frag : star) {
+        if (frag.navigable) {
             transitions_.emplace_back(next_id(),
                                       globalArea,
                                       GlobalArea(frag.type),
                                       NavigationStatus::navigable,
                                       ExplorationStatus::frontier);
-        }
-        else
-        {
+        } else {
             transitions_.emplace_back(next_id(), globalArea);
         }
     }
 
 #ifdef DEBUG_CONSTRUCT
-    std::cout << "DEBUG: GlobalTransitionCycle: Created a new cycle from star:\n" << star << "\n to cycle \n"
-        << *this << '\n';
+    std::cout << "DEBUG: GlobalTransitionCycle: Created a new cycle from star:\n"
+              << star << "\n to cycle \n"
+              << *this << '\n';
 #endif
 }
 
@@ -66,18 +63,15 @@ GlobalTransition GlobalTransitionCycle::next(const GlobalTransition& trans) cons
     auto transIt = std::find(transitions_.begin(), transitions_.end(), trans);
 
     // If the transition exists, then go to the next transition
-    if(transIt != transitions_.end())
-    {
+    if (transIt != transitions_.end()) {
         auto nextIt = transIt + 1;
 
         // If the next is the end, then wrap around to the beginning of the cycle
-        if(nextIt == transitions_.end())
-        {
+        if (nextIt == transitions_.end()) {
             return transitions_.front();
         }
         // Otherwise just return the next.
-        else
-        {
+        else {
             return *nextIt;
         }
     }
@@ -92,16 +86,13 @@ GlobalTransition GlobalTransitionCycle::previous(const GlobalTransition& trans) 
     auto transIt = std::find(transitions_.begin(), transitions_.end(), trans);
 
     // If the transition exists, then go to the previous transition
-    if(transIt != transitions_.end())
-    {
+    if (transIt != transitions_.end()) {
         // If the current is the beginning, then wrap around to the end of the cycle
-        if(transIt == transitions_.begin())
-        {
+        if (transIt == transitions_.begin()) {
             return transitions_.back();
         }
         // Otherwise just use the previous transition
-        else
-        {
+        else {
             return *(transIt - 1);
         }
     }
@@ -116,8 +107,7 @@ GlobalTransition GlobalTransitionCycle::aligned(const GlobalTransition& trans) c
     auto transIt = std::find(transitions_.begin(), transitions_.end(), trans);
 
     // If the transition exists, then jump to the other side of the cycle
-    if(transIt != transitions_.end())
-    {
+    if (transIt != transitions_.end()) {
         int index = std::distance(transitions_.begin(), transIt);
         index = (index + (size() / 2)) % size();
         return transitions_[index];
@@ -143,8 +133,7 @@ bool GlobalTransitionCycle::replaceTransition(const GlobalTransition& trans, con
 {
     auto transIt = std::find(transitions_.begin(), transitions_.end(), trans);
 
-    if(transIt != transitions_.end())
-    {
+    if (transIt != transitions_.end()) {
         *transIt = newTrans;
     }
 
@@ -154,15 +143,12 @@ bool GlobalTransitionCycle::replaceTransition(const GlobalTransition& trans, con
 
 bool operator==(const GlobalTransitionCycle& lhs, const GlobalTransitionCycle& rhs)
 {
-    if(lhs.size() != rhs.size())
-    {
+    if (lhs.size() != rhs.size()) {
         return false;
     }
 
-    for(std::size_t n = 0; n < lhs.size(); ++n)
-    {
-        if(cycle_rotations_match(lhs, rhs, n))
-        {
+    for (std::size_t n = 0; n < lhs.size(); ++n) {
+        if (cycle_rotations_match(lhs, rhs, n)) {
             return true;
         }
     }
@@ -190,23 +176,20 @@ bool are_cycles_compatible(const GlobalTransitionCycle& lhs,
                            const GlobalTransition& rhsEntry)
 {
     // Cycles can't be compatible if they aren't individually equal
-    if(lhs != rhs)
-    {
+    if (lhs != rhs) {
         return false;
     }
 
     // Find the starting point of the lhsEntry in its transitions
     auto lhsIt = std::find(lhs.begin(), lhs.end(), lhsEntry);
     // If the entry isn't found, then the cycles must be incompatible
-    if(lhsIt == lhs.end())
-    {
+    if (lhsIt == lhs.end()) {
         return false;
     }
     // Find the starting point of the rhsEntry in its transitions
     auto rhsIt = std::find(rhs.begin(), rhs.end(), rhsEntry);
     // If the entry isn't found, then the cycles must be incompatible
-    if(rhsIt == rhs.end())
-    {
+    if (rhsIt == rhs.end()) {
         return false;
     }
 
@@ -228,5 +211,5 @@ bool cycle_rotations_match(const GlobalTransitionCycle& lhs,
     return std::equal(lhs.begin(), lhs.end(), rhsRange.first, rhsRange.second, are_similar_transitions);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

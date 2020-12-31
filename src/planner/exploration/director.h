@@ -8,11 +8,11 @@
 
 
 /**
-* \file     director.h
-* \author   Collin Johnson
-*
-* Declaration of ExplorationDirector.
-*/
+ * \file     director.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ExplorationDirector.
+ */
 
 #ifndef PLANNER_EXPLORATION_DIRECTOR_H
 #define PLANNER_EXPLORATION_DIRECTOR_H
@@ -30,32 +30,31 @@ class MapExplorer;
 
 
 /**
-* ExplorationDirector orchestrates the actions taken in the map_exploration module. The director makes use of the
-* provided MapExplorer in the following way:
-*
-*   - subscribeToData:
-*       - explorer->subscribeToData
-*   - waitForTrigger:
-*       - explorer->hasNewData
-*   - runUpdate:
-*       - explorer->startExploring (on initialization)
-*       - explorer->continueExploring (during normal updates)
-*       - explorer->isFinishedExploring (check if finished, if so, exploration ends and module exits)
-*   - shutdown:
-*       - explorer->stopExploring (clean up on exploration completion)
-*/
+ * ExplorationDirector orchestrates the actions taken in the map_exploration module. The director makes use of the
+ * provided MapExplorer in the following way:
+ *
+ *   - subscribeToData:
+ *       - explorer->subscribeToData
+ *   - waitForTrigger:
+ *       - explorer->hasNewData
+ *   - runUpdate:
+ *       - explorer->startExploring (on initialization)
+ *       - explorer->continueExploring (during normal updates)
+ *       - explorer->isFinishedExploring (check if finished, if so, exploration ends and module exits)
+ *   - shutdown:
+ *       - explorer->stopExploring (clean up on exploration completion)
+ */
 class ExplorationDirector : public system::Director
 {
 public:
-
     /**
-    * Constructor for ExplorationDirector.
-    */
+     * Constructor for ExplorationDirector.
+     */
     ExplorationDirector(std::unique_ptr<MapExplorer> explorer);
 
     /**
-    * Destructor for ExplorationDirector.
-    */
+     * Destructor for ExplorationDirector.
+     */
     ~ExplorationDirector(void);
 
     // Director interface
@@ -65,14 +64,13 @@ public:
     void shutdown(system::ModuleCommunicator& communicator) override;
 
 private:
-
     bool initialized_;
     std::unique_ptr<MapExplorer> explorer_;
 
     utils::ConditionVariable dataTrigger_;
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_EXPLORATION_DIRECTOR_H
+#endif   // PLANNER_EXPLORATION_DIRECTOR_H

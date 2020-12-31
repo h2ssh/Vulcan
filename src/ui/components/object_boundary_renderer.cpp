@@ -8,11 +8,11 @@
 
 
 /**
-* \file     object_boundary_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of ObjectBoundaryRenderer and OutlineObjectBoundaryRenderer.
-*/
+ * \file     object_boundary_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ObjectBoundaryRenderer and OutlineObjectBoundaryRenderer.
+ */
 
 #include "ui/components/object_boundary_renderer.h"
 #include "ui/common/gl_shapes.h"
@@ -28,8 +28,7 @@ constexpr float kLineWidth = 2.0f;
 
 //////////////////////////////////// ObjectBoundaryRenderer ///////////////////////////////////
 
-ObjectBoundaryRenderer::ObjectBoundaryRenderer(const GLColor& color)
-: color_(color)
+ObjectBoundaryRenderer::ObjectBoundaryRenderer(const GLColor& color) : color_(color)
 {
 }
 
@@ -60,7 +59,7 @@ void ObjectBoundaryRenderer::operator()(const tracker::TwoCircles& twoCircles)
     color_.set();
     gl_draw_line_circle(twoCircles[0], kLineWidth);
     gl_draw_line_circle(twoCircles[1], kLineWidth);
-    
+
     glLineWidth(kLineWidth);
     glBegin(GL_LINES);
     glVertex2f(twoCircles[0].center().x, twoCircles[0].center().y);
@@ -104,8 +103,7 @@ void ObjectBoundaryRenderer::operator()(const tracker::TwoRects& rects)
 
 
 //////////////////////////////////// OutlineObjectBoundaryRenderer ///////////////////////////////////
-OutlineObjectBoundaryRenderer::OutlineObjectBoundaryRenderer(const GLColor& color)
-: color_(color)
+OutlineObjectBoundaryRenderer::OutlineObjectBoundaryRenderer(const GLColor& color) : color_(color)
 {
 }
 
@@ -159,5 +157,5 @@ void OutlineObjectBoundaryRenderer::operator()(const tracker::TwoRects& rects)
     glEnd();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

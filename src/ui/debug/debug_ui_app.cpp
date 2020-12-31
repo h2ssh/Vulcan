@@ -8,9 +8,9 @@
 
 
 #include "ui/debug/debug_ui_app.h"
-#include "utils/config_file.h"
 #include "ui/common/ui_params.h"
 #include "ui/debug/debug_ui_frame.h"
+#include "utils/config_file.h"
 
 
 using vulcan::ui::DebugUIApp;
@@ -21,15 +21,13 @@ IMPLEMENT_APP(DebugUIApp)
 
 bool DebugUIApp::OnInit(void)
 {
-    if(argv < 2)
-    {
+    if (argv < 2) {
         std::cout << "Using default config file for debug_ui:  debug_ui.cfg\n";
     }
 
     wxString configFilename("debug_ui.cfg");
 
-    if(argv > 1)
-    {
+    if (argv > 1) {
         configFilename = argv[1];
     }
 

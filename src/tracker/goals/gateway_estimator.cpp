@@ -8,20 +8,20 @@
 
 
 /**
-* \file     gateway_estimator.cpp
-* \author   Collin Johnson
-*
-* Definition of GatewayGoalEstimator.
-*/
+ * \file     gateway_estimator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GatewayGoalEstimator.
+ */
 
 #include "tracker/goals/gateway_estimator.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include "math/boundary.h"
 #include "tracker/motions/stationary.h"
 #include "tracker/motions/steady.h"
 #include "tracker/motions/striding.h"
 #include "tracker/tracking_environment.h"
-#include "hssh/local_topological/area.h"
-#include "hssh/local_topological/local_topo_map.h"
 #include "utils/algorithm_ext.h"
 #include "utils/config_file.h"
 #include "utils/stub.h"
@@ -56,8 +56,7 @@ gateway_goal_estimator_params_t::gateway_goal_estimator_params_t(const utils::Co
 
 /////   GatewayGoalEstimator implementation   /////
 
-GatewayGoalEstimator::GatewayGoalEstimator(const gateway_goal_estimator_params_t& params)
-: params_(params)
+GatewayGoalEstimator::GatewayGoalEstimator(const gateway_goal_estimator_params_t& params) : params_(params)
 {
 }
 
@@ -81,24 +80,22 @@ ObjectGoalDistribution GatewayGoalEstimator::estimateStationaryGoal(const Statio
 ObjectGoalDistribution GatewayGoalEstimator::estimateSteadyGoal(const SteadyMotion& motion)
 {
     assert(environment_);
-    assert(environment_->ltm); // only valid to estimate gateways if there's actually an LTM
+    assert(environment_->ltm);   // only valid to estimate gateways if there's actually an LTM
 
     auto areas = environment_->ltm->allAreasContaining(motion.position());
 
     // If there aren't any areas with this object, then there can't be any goals.
-    if(areas.empty())
-    {
-//         std::cout << "WARNING: Object at " << motion.position() << " is not located in any areas!\n";
+    if (areas.empty()) {
+        //         std::cout << "WARNING: Object at " << motion.position() << " is not located in any areas!\n";
         return ObjectGoalDistribution{};
     }
 
     // Assign the new area if the previous area wasn't found.
     auto currentArea = environment_->ltm->areaWithId(currentAreaId_);
-    if(!utils::contains(areas, currentArea))
-    {
+    if (!utils::contains(areas, currentArea)) {
         currentArea = areas.front();
         currentAreaId_ = currentArea->id();
-        goals_.clear();    // when the area changes, so do all the goals
+        goals_.clear();   // when the area changes, so do all the goals
 
         distOverTime_.clear();
     }
@@ -106,13 +103,11 @@ ObjectGoalDistribution GatewayGoalEstimator::estimateSteadyGoal(const SteadyMoti
 
     // The current area is now known, so goal estimation can be performed
     auto& gateways = currentArea->gateways();
-    for(auto& g : gateways)
-    {
+    for (auto& g : gateways) {
         // If a particular goal isn't found in the current set of gateways, then add it
         goal_t newGoal{g, params_.timeWindowUs};
 
-        if(!utils::contains(goals_, newGoal))
-        {
+        if (!utils::contains(goals_, newGoal)) {
             goals_.emplace_back(newGoal);
             distOverTime_.push_back(std::vector<double>());
         }
@@ -140,20 +135,16 @@ ObjectGoalDistribution GatewayGoalEstimator::estimateSteadyGoal(const SteadyMoti
     double speed = std::sqrt((xVel * xVel) + (yVel * yVel));
     bool hasGoalBehavior = speed > params_.minGoalBehaviorSpeed;
 
-    for(auto& g : goals_)
-    {
+    for (auto& g : goals_) {
         likelihood_t meas{motion.timestamp(), 0.0};
 
-        if(hasGoalBehavior)
-        {
+        if (hasGoalBehavior) {
             auto range = math::boundary_heading_range(g.gateway.boundary(), motion.position(), heading);
             double prob = math::boundary_heading_probability(range, sigma);
-            prob = std::max(prob, 1e-8);    // clamp to at least a small probability to avoid negative infinities
+            prob = std::max(prob, 1e-8);   // clamp to at least a small probability to avoid negative infinities
             meas.logLikelihood = std::log(prob);
-        }
-        else
-        {
-            meas.logLikelihood = std::log(1.0 / goals_.size());     // not moving fast enough to have an opinion
+        } else {
+            meas.logLikelihood = std::log(1.0 / goals_.size());   // not moving fast enough to have an opinion
         }
 
         g.logLikelihoods.push(meas);
@@ -161,39 +152,38 @@ ObjectGoalDistribution GatewayGoalEstimator::estimateSteadyGoal(const SteadyMoti
     }
 
     std::vector<ObjectGoal> goalDist;
-    for(auto& g : goals_)
-    {
+    for (auto& g : goals_) {
         goalDist.emplace_back(g.gateway.boundary(), g.gateway.direction(), g.logProbability);
     }
 
     auto distribution = ObjectGoalDistribution{goalDist};
 
-//     for(std::size_t n = 0; n < goals_.size(); ++n)
-//     {
-//         distOverTime_[n].push_back(distribution[n].probability());
-//     }
-//
-//
-//     plot << "set style line 1 linecolor rgb '0x87ceeb' linewidth 2\n";
-//     plot << "set style line 2 linecolor rgb '0xff6347' linewidth 2\n";
-//     plot << "set style line 3 linecolor rgb '0x6a5acd' linewidth 2\n";
-//     plot << "set style line 4 linecolor rgb '0xda70d6' linewidth 2\n";
-//     plot << "set style line 5 linecolor rgb '0x32cd32' linewidth 2\n";
-//     plot << "set title 'Intention estimates for an agent moving through an intersection'\n";
-//
-//     plot << "set ylabel 'Probability'\n";
-//     plot << "set yrange [-0.1:1.1]\n";
-//     plot << "set xlabel 'Time Step'\n";
-//
-//     plot << "set for [i=1:" << distOverTime_.size() << "] linetype i\n";
-//
-//     plot << "title(n) = sprintf(\"%d\", n)\n";
-//     plot << "plot for [n=1:" << distOverTime_.size() << "] '-' u :1 w lines ls n title title(n)\n";
-//
-//     for(auto& dist : distOverTime_)
-//     {
-//         plot.send1d(dist);
-//     }
+    //     for(std::size_t n = 0; n < goals_.size(); ++n)
+    //     {
+    //         distOverTime_[n].push_back(distribution[n].probability());
+    //     }
+    //
+    //
+    //     plot << "set style line 1 linecolor rgb '0x87ceeb' linewidth 2\n";
+    //     plot << "set style line 2 linecolor rgb '0xff6347' linewidth 2\n";
+    //     plot << "set style line 3 linecolor rgb '0x6a5acd' linewidth 2\n";
+    //     plot << "set style line 4 linecolor rgb '0xda70d6' linewidth 2\n";
+    //     plot << "set style line 5 linecolor rgb '0x32cd32' linewidth 2\n";
+    //     plot << "set title 'Intention estimates for an agent moving through an intersection'\n";
+    //
+    //     plot << "set ylabel 'Probability'\n";
+    //     plot << "set yrange [-0.1:1.1]\n";
+    //     plot << "set xlabel 'Time Step'\n";
+    //
+    //     plot << "set for [i=1:" << distOverTime_.size() << "] linetype i\n";
+    //
+    //     plot << "title(n) = sprintf(\"%d\", n)\n";
+    //     plot << "plot for [n=1:" << distOverTime_.size() << "] '-' u :1 w lines ls n title title(n)\n";
+    //
+    //     for(auto& dist : distOverTime_)
+    //     {
+    //         plot.send1d(dist);
+    //     }
 
     return distribution;
 }
@@ -202,10 +192,9 @@ ObjectGoalDistribution GatewayGoalEstimator::estimateSteadyGoal(const SteadyMoti
 double GatewayGoalEstimator::goalLogProbability(const goal_t& goal) const
 {
     double logProbability = goal.logPrior;
-    for(auto& meas : goal.logLikelihoods)
-    {
-        double weight = std::exp(-utils::usec_to_sec(goal.logLikelihoods.timestamp() - meas.timestamp)
-            / params_.timeDecayConstant);
+    for (auto& meas : goal.logLikelihoods) {
+        double weight =
+          std::exp(-utils::usec_to_sec(goal.logLikelihoods.timestamp() - meas.timestamp) / params_.timeDecayConstant);
         logProbability += meas.logLikelihood * weight;
     }
 
@@ -219,5 +208,5 @@ ObjectGoalDistribution GatewayGoalEstimator::estimateStridingGoal(const Striding
     return ObjectGoalDistribution{};
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

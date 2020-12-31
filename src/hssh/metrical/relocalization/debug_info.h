@@ -8,11 +8,11 @@
 
 
 /**
-* \file     debug_info.h
-* \author   Collin Johnson
-* 
-* Definition of metric_relocalization_debug_info_t.
-*/
+ * \file     debug_info.h
+ * \author   Collin Johnson
+ *
+ * Definition of metric_relocalization_debug_info_t.
+ */
 
 #ifndef HSSH_UTILS_METRICAL_RELOCALIZATION_DEBUG_INFO_H
 #define HSSH_UTILS_METRICAL_RELOCALIZATION_DEBUG_INFO_H
@@ -24,23 +24,21 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 struct metric_relocalization_debug_info_t
 {
-    pose_distribution_t   pose;                      ///< Pose in the relocalization map
-    std::vector<particle_t>      initialParticles;          ///< Initial set of particles when relocalizing
-    particle_filter_debug_info_t particleFilterInfo;        ///< Current state of the relocalization process
+    pose_distribution_t pose;                          ///< Pose in the relocalization map
+    std::vector<particle_t> initialParticles;          ///< Initial set of particles when relocalizing
+    particle_filter_debug_info_t particleFilterInfo;   ///< Current state of the relocalization process
 };
 
 template <class Archive>
 void serialize(Archive& ar, metric_relocalization_debug_info_t& info)
 {
-    ar( info.pose,
-        info.initialParticles,
-        info.particleFilterInfo);
+    ar(info.pose, info.initialParticles, info.particleFilterInfo);
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_METRICAL_RELOCALIZATION_DEBUG_INFO_H
+#endif   // HSSH_UTILS_METRICAL_RELOCALIZATION_DEBUG_INFO_H

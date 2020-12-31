@@ -23,20 +23,20 @@ struct message_traits<vulcan_lcm::direct_control_command>
 {
     using type = pure_lcm_message_tag;
 
-    enum { num_channels = 1 };      ///< num_channels specifies the number of channels that exist for the type. The majority of messages
-                                    ///< will have a single channel.
+    enum
+    {
+        num_channels = 1
+    };   ///< num_channels specifies the number of channels that exist for the type. The majority of messages
+         ///< will have a single channel.
 
     /**
-    * channelName retrieves the name for the channel at the provided index. The index must be in the range [0, num_channels) or the program
-    * will fail with an assertion immediately.
-    */
-    static std::string channelName(int index)
-    {
-        return "DIRECT_CONTROL_COMMAND";
-    }
+     * channelName retrieves the name for the channel at the provided index. The index must be in the range [0,
+     * num_channels) or the program will fail with an assertion immediately.
+     */
+    static std::string channelName(int index) { return "DIRECT_CONTROL_COMMAND"; }
 };
 
-}
-}
+}   // namespace system
+}   // namespace vulcan
 
-#endif // LCMTYPES_COMMANDS_DIRECT_CONTROL_COMMAND_H
+#endif   // LCMTYPES_COMMANDS_DIRECT_CONTROL_COMMAND_H

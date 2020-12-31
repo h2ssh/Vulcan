@@ -8,18 +8,18 @@
 
 
 /**
-* \file     director.h
-* \author   Collin Johnson
-*
-* Declaration of GlobalTopoDirector.
-*/
+ * \file     director.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GlobalTopoDirector.
+ */
 
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_DIRECTOR_H
 #define HSSH_GLOBAL_TOPOLOGICAL_DIRECTOR_H
 
-#include "system/director.h"
-#include "hssh/global_topological/utils/global_topo_data_queue.h"
 #include "hssh/global_topological/params.h"
+#include "hssh/global_topological/utils/global_topo_data_queue.h"
+#include "system/director.h"
 #include <memory>
 #include <vector>
 
@@ -31,23 +31,22 @@ namespace hssh
 class TopologicalSLAM;
 
 /**
-* GlobalTopoDirector is responsible for orchestrating the flow of computation for
-* the global_topo module. Data arrives, computation occurs, data is sent to output consumers.
-*/
+ * GlobalTopoDirector is responsible for orchestrating the flow of computation for
+ * the global_topo module. Data arrives, computation occurs, data is sent to output consumers.
+ */
 class GlobalTopoDirector : public system::Director
 {
 public:
-
     /**
-    * Constructor for GlobalTopoDirector.
-    */
+     * Constructor for GlobalTopoDirector.
+     */
     GlobalTopoDirector(std::unique_ptr<TopologicalSLAM> slam,
                        const utils::CommandLine& commandLine,
                        const utils::ConfigFile& config);
 
     /**
-    * Destructor for GlobalTopoDirector.
-    */
+     * Destructor for GlobalTopoDirector.
+     */
     virtual ~GlobalTopoDirector(void);
 
     // system::Director interface
@@ -63,10 +62,9 @@ public:
     void handleData(const LocalTopoMap& localMap, const std::string& channel);
 
 private:
-
     global_topo_params_t params_;
     std::unique_ptr<TopologicalSLAM> slam_;
-//     MetricMapCache placeManager;
+    //     MetricMapCache placeManager;
     GlobalTopoDataQueue queue_;
     bool haveDataToTransmit_ = false;
 
@@ -75,7 +73,7 @@ private:
     void transmitCalculatedOutput(system::ModuleCommunicator& communicator);
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_DIRECTOR_H
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_DIRECTOR_H

@@ -8,15 +8,15 @@
 
 
 /**
-* \file     metric_editor_widget.cpp
-* \author   Collin Johnson
-* 
-* Implementation of MetricEditorWidget.
-*/
+ * \file     metric_editor_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of MetricEditorWidget.
+ */
 
 #include "ui/mapeditor/metric_editor_widget.h"
-#include "ui/components/occupancy_grid_renderer.h"
 #include "ui/common/ui_params.h"
+#include "ui/components/occupancy_grid_renderer.h"
 #include "utils/auto_mutex.h"
 #include <GL/gl.h>
 
@@ -24,9 +24,9 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 void draw_cell(Point<double> cell, double scale);
-    
+
 
 MetricEditorWidget::MetricEditorWidget(wxWindow* parent,
                                        wxWindowID id,
@@ -48,16 +48,16 @@ MetricEditorWidget::~MetricEditorWidget(void)
 
 
 void MetricEditorWidget::setParams(const ui_params_t& params)
-{ 
-    this->params = params.lpmParams; 
+{
+    this->params = params.lpmParams;
 }
 
 
 void MetricEditorWidget::setLPM(std::shared_ptr<hssh::LocalPerceptualMap> lpm)
 {
     utils::AutoMutex autoLock(lpmLock);
-    
-    this->lpm   = lpm;
+
+    this->lpm = lpm;
     lpmIsDirty_ = true;
     setViewRegion(lpm->getWidthInMeters(), lpm->getHeightInMeters());
     setCameraFocalPoint(lpm->getGlobalCenter());
@@ -68,7 +68,7 @@ void MetricEditorWidget::setHoverCell(Point<int> cell, hssh::cell_type_t type)
 {
     hoverCell = cell;
     hoverType = type;
-    
+
     usingHoverCell = true;
 }
 
@@ -77,7 +77,7 @@ void MetricEditorWidget::setHoverLine(Line<int> line, hssh::cell_type_t type)
 {
     hoverLine = line;
     hoverType = type;
-    
+
     usingHoverCell = false;
 }
 
@@ -90,11 +90,10 @@ void MetricEditorWidget::setSelectedCells(const std::vector<Point<int>>& selecte
 
 Point<int> MetricEditorWidget::convertWorldToGrid(const Point<float>& world) const
 {
-    if(lpm)
-    {
+    if (lpm) {
         return utils::global_point_to_grid_cell(world, *lpm);
     }
-    
+
     return Point<int>(0, 0);
 }
 
@@ -102,24 +101,20 @@ Point<int> MetricEditorWidget::convertWorldToGrid(const Point<float>& world) con
 void MetricEditorWidget::renderWidget(void)
 {
     utils::AutoMutex autoLock(lpmLock);
-    
+
     // Only render if there's actually an LPM. Otherwise, just chill out.
-    if(lpm)
-    {
-        if(lpmIsDirty_)
-        {
+    if (lpm) {
+        if (lpmIsDirty_) {
             lpmRenderer->setGrid(*lpm);
             lpmIsDirty_ = false;
         }
-        
+
         lpmRenderer->renderGrid();
-        
-        if(showHover && usingHoverCell)
-        {
+
+        if (showHover && usingHoverCell) {
             renderHoverCell();
             renderSelectedCells();
-        }
-        else if(showHover)  // in line mode, don't need to render the selected cells because a line is drawn instead
+        } else if (showHover)   // in line mode, don't need to render the selected cells because a line is drawn instead
         {
             renderHoverLine();
         }
@@ -130,7 +125,7 @@ void MetricEditorWidget::renderWidget(void)
 void MetricEditorWidget::renderHoverCell(void)
 {
     GLColor color = selectCellColor();
-    
+
     color.set(0.66f);
     glBegin(GL_QUADS);
     draw_cell(utils::grid_point_to_global_point(hoverCell, *lpm), lpm->metersPerCell());
@@ -141,16 +136,16 @@ void MetricEditorWidget::renderHoverCell(void)
 void MetricEditorWidget::renderHoverLine(void)
 {
     GLColor color = selectCellColor();
-    
+
     Line<double> global(utils::grid_point_to_global_point(hoverLine.a, *lpm),
-                              utils::grid_point_to_global_point(hoverLine.b, *lpm));
-    
+                        utils::grid_point_to_global_point(hoverLine.b, *lpm));
+
     color.set(0.66f);
     glBegin(GL_QUADS);
     draw_cell(global.a, lpm->metersPerCell());
     draw_cell(global.b, lpm->metersPerCell());
     glEnd();
-    
+
     glLineWidth(2.0);
     glBegin(GL_LINES);
     glVertex2f(global.a.x, global.a.y);
@@ -162,15 +157,14 @@ void MetricEditorWidget::renderHoverLine(void)
 void MetricEditorWidget::renderSelectedCells(void)
 {
     GLColor color = selectCellColor();
-    
+
     color.set(0.66f);
     glBegin(GL_QUADS);
-    
-    for(const auto& cell : selectedCells)
-    {
+
+    for (const auto& cell : selectedCells) {
         draw_cell(utils::grid_point_to_global_point(cell, *lpm), lpm->metersPerCell());
     }
-    
+
     glEnd();
 }
 
@@ -178,35 +172,28 @@ void MetricEditorWidget::renderSelectedCells(void)
 GLColor MetricEditorWidget::selectCellColor(void)
 {
     GLColor cellColor = params.occupiedColor;
-    
-    if(hoverType & hssh::kDynamicOccGridCell)
-    {
+
+    if (hoverType & hssh::kDynamicOccGridCell) {
         cellColor = params.dynamicColor;
-    }
-    else if(hoverType & hssh::kLimitedVisibilityOccGridCell)
-    {
+    } else if (hoverType & hssh::kLimitedVisibilityOccGridCell) {
         cellColor = params.limitedVisibilityColor;
-    }
-    else if(hoverType & hssh::kHazardOccGridCell)
-    {
+    } else if (hoverType & hssh::kHazardOccGridCell) {
         cellColor = params.hazardColor;
-    }
-    else if(hoverType & hssh::kQuasiStaticOccGridCell)
-    {
+    } else if (hoverType & hssh::kQuasiStaticOccGridCell) {
         cellColor = params.quasiStaticColor;
     }
-    
+
     return cellColor;
 }
 
 
 void draw_cell(Point<double> cell, double scale)
 {
-    glVertex2f(cell.x,       cell.y);
-    glVertex2f(cell.x,       cell.y+scale);
-    glVertex2f(cell.x+scale, cell.y+scale);
-    glVertex2f(cell.x+scale, cell.y);
+    glVertex2f(cell.x, cell.y);
+    glVertex2f(cell.x, cell.y + scale);
+    glVertex2f(cell.x + scale, cell.y + scale);
+    glVertex2f(cell.x + scale, cell.y);
 }
-    
-} // namespace ui
-} // namespace vulcan
+
+}   // namespace ui
+}   // namespace vulcan

@@ -8,17 +8,17 @@
 
 
 /**
-* \file     scan_weighting.cpp
-* \author   Collin Johnson
-*
-* Definition of functions that calculate various types of weights for scans:
-*
-*   - calculate_covariance_weights
-*/
+ * \file     scan_weighting.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of functions that calculate various types of weights for scans:
+ *
+ *   - calculate_covariance_weights
+ */
 
 #include "hssh/metrical/localization/scan_weighting.h"
-#include "laser/laser_scan_lines.h"
 #include "core/multivariate_gaussian.h"
+#include "laser/laser_scan_lines.h"
 #include "math/statistics.h"
 #include "utils/strided_sequence.h"
 
@@ -35,18 +35,18 @@ namespace vulcan
 namespace hssh
 {
 
-void calculate_line_weights(const laser::laser_scan_lines_t&  scan,
+void calculate_line_weights(const laser::laser_scan_lines_t& scan,
                             const MultivariateGaussian& proposalDistribution,
                             int stride,
                             std::vector<float>& weights);
 
-void calculate_distance_weights(const laser::laser_scan_lines_t&  scan,
+void calculate_distance_weights(const laser::laser_scan_lines_t& scan,
                                 const MultivariateGaussian& proposalDistribution,
                                 int stride,
                                 std::vector<float>& weights);
 
 
-void calculate_covariance_weights(const laser::laser_scan_lines_t&  scan,
+void calculate_covariance_weights(const laser::laser_scan_lines_t& scan,
                                   const MultivariateGaussian& proposalDistribution,
                                   int stride,
                                   std::vector<float>& weights)
@@ -93,27 +93,28 @@ void calculate_covariance_weights(const laser::laser_scan_lines_t&  scan,
 
 #ifdef DEBUG_PLOTS
     plot[scan.scan.laserId] << "set yrange [-0.05:1.05]\n";
-    plot[scan.scan.laserId] << "plot '-' with lines title 'Dist Weights', '-' with lines title 'Line Weights', '-' with lines title 'Final Weights'\n";
+    plot[scan.scan.laserId] << "plot '-' with lines title 'Dist Weights', '-' with lines title 'Line Weights', '-' "
+                               "with lines title 'Final Weights'\n";
     plot[scan.scan.laserId].send1d(distWeights);
     plot[scan.scan.laserId].send1d(lineWeights);
     plot[scan.scan.laserId].send1d(weights);
-#endif // DEBUG_PLOTS
+#endif   // DEBUG_PLOTS
 }
 
 
-void calculate_line_weights(const laser::laser_scan_lines_t&  scan,
+void calculate_line_weights(const laser::laser_scan_lines_t& scan,
                             const MultivariateGaussian& proposalDistribution,
                             int stride,
                             std::vector<float>& weights)
 {
     Matrix eigenvectors;
     Vector eigenvalues;
-    Matrix xyCov = proposalDistribution.getCovariance().submat(arma::span(0,1), arma::span(0,1));
+    Matrix xyCov = proposalDistribution.getCovariance().submat(arma::span(0, 1), arma::span(0, 1));
     arma::eig_sym(eigenvalues, eigenvectors, xyCov);
     eigenvalues /= arma::sum(eigenvalues);
 
     double currentWeight = 0.0;
-    int   loadedLineIndex = -1;
+    int loadedLineIndex = -1;
     float proposalOrientation = proposalDistribution.getMean()(2);
     arma::rowvec scanLine(2);
 
@@ -128,30 +129,27 @@ void calculate_line_weights(const laser::laser_scan_lines_t&  scan,
 
 #ifdef DEBUG_COVARIANCE
     std::cout << "DEBUG:calculate_covariance_weights:Num lines:" << scan.lines.size() << " Eigenvectors:\n"
-        << eigenvectors << " Eigenvalues:\n" << eigenvalues << '\n';
+              << eigenvectors << " Eigenvalues:\n"
+              << eigenvalues << '\n';
 #endif
 
     auto weightIt = weights.begin();
 
-    for(std::size_t n = 0; n < scan.scan.numRanges; n += stride, ++weightIt)
-    {
+    for (std::size_t n = 0; n < scan.scan.numRanges; n += stride, ++weightIt) {
         int currentLineIndex = scan.scanPointToLineIndices[n];
         // If there's no line, use the non-line weight
-        if(currentLineIndex == -1)
-        {
+        if (currentLineIndex == -1) {
             currentWeight = kNonLineWeight;
         }
         // If the line has changed, determine the weight of the new line
-        else if(currentLineIndex != loadedLineIndex)
-        {
+        else if (currentLineIndex != loadedLineIndex) {
             float lineLength = length(scan.lines[currentLineIndex]);
 
             // Lines of length 0 -- yes they happen -- will break the weighting, so throw them out
-            if(lineLength > 0.01)
-            {
+            if (lineLength > 0.01) {
                 scanLine(0) = (scan.lines[currentLineIndex].b.x - scan.lines[currentLineIndex].a.x) / lineLength;
                 scanLine(1) = (scan.lines[currentLineIndex].b.y - scan.lines[currentLineIndex].a.y) / lineLength;
-                scanLine    = scanLine * lineRotation;
+                scanLine = scanLine * lineRotation;
 
                 Vector result = (1.0f - arma::abs(scanLine * eigenvectors)) * eigenvalues;
                 currentWeight = std::max(result(0), kMinWeight);
@@ -159,13 +157,13 @@ void calculate_line_weights(const laser::laser_scan_lines_t&  scan,
                 loadedLineIndex = currentLineIndex;
 
 #ifdef DEBUG_COVARIANCE
-                std::cout<<"INFO:CovWeight:line:"<<scan.lines[currentLineIndex]<< " Dir:"<<scanLine<<" weight:"<<currentWeight << " Dot:\n" << result <<'\n';
+                std::cout << "INFO:CovWeight:line:" << scan.lines[currentLineIndex] << " Dir:" << scanLine
+                          << " weight:" << currentWeight << " Dot:\n"
+                          << result << '\n';
 #endif
 
                 assert(currentWeight != NAN);
-            }
-            else
-            {
+            } else {
                 currentWeight = kNonLineWeight;
             }
         }
@@ -176,7 +174,7 @@ void calculate_line_weights(const laser::laser_scan_lines_t&  scan,
 }
 
 
-void calculate_distance_weights(const laser::laser_scan_lines_t&  scan,
+void calculate_distance_weights(const laser::laser_scan_lines_t& scan,
                                 const MultivariateGaussian& proposalDistribution,
                                 int stride,
                                 std::vector<float>& weights)
@@ -184,24 +182,21 @@ void calculate_distance_weights(const laser::laser_scan_lines_t&  scan,
     // For each cell that the distance steps out, that increases the weight of the scan
     // this will create a discretized weight based on the orientation uncertainty
     const double thetaSigma = std::sqrt(proposalDistribution(2, 2));
-    const double metersPerCell = 0.05;  // TODO: Provide this as a parameter
+    const double metersPerCell = 0.05;   // TODO: Provide this as a parameter
 
     auto weightIt = weights.begin();
-    for(std::size_t n = 0; n < scan.scan.numRanges; n += stride, ++weightIt)
-    {
+    for (std::size_t n = 0; n < scan.scan.numRanges; n += stride, ++weightIt) {
         // Ignore invalid ranges
-        if((scan.scan.ranges[n] > 0.0) && (scan.scan.ranges[n] < 30.0))
-        {
+        if ((scan.scan.ranges[n] > 0.0) && (scan.scan.ranges[n] < 30.0)) {
             *weightIt += std::max(std::lrint(scan.scan.ranges[n] * thetaSigma / metersPerCell), 1L);
         }
     }
 
     float max = *std::max_element(weights.begin(), weights.end());
-    for(auto& w : weights)
-    {
+    for (auto& w : weights) {
         w /= max;
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

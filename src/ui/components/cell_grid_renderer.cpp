@@ -8,11 +8,11 @@
 
 
 /**
-* \file     cell_grid_renderer.h
-* \author   Collin Johnson
-*
-* Definition of CellGridAlphaRenderer.
-*/
+ * \file     cell_grid_renderer.h
+ * \author   Collin Johnson
+ *
+ * Definition of CellGridAlphaRenderer.
+ */
 
 #include "ui/components/cell_grid_renderer.h"
 #include "ui/common/gl_texture_helpers.h"
@@ -38,18 +38,16 @@ CellGridAlphaRenderer::CellGridAlphaRenderer(int32_t maxValue, bool invertAlpha)
 
 void CellGridAlphaRenderer::setCellGrid(const utils::CellGrid<int32_t>& grid)
 {
-    if((gridWidth != static_cast<int>(grid.getWidthInCells())) 
-        || (gridHeight != static_cast<int>(grid.getHeightInCells())))
-    {
-        if(!initialized)
-        {
+    if ((gridWidth != static_cast<int>(grid.getWidthInCells()))
+        || (gridHeight != static_cast<int>(grid.getHeightInCells()))) {
+        if (!initialized) {
             glGenTextures(1, &textureName);
             initialized = true;
         }
 
-        delete [] gridTexture;
+        delete[] gridTexture;
 
-        gridWidth  = grid.getWidthInCells();
+        gridWidth = grid.getWidthInCells();
         gridHeight = grid.getHeightInCells();
 
         // The place exists in its own abstract coordinate system that doesn't have any
@@ -60,7 +58,7 @@ void CellGridAlphaRenderer::setCellGrid(const utils::CellGrid<int32_t>& grid)
         initializeGridTexture();
     }
 
-    gridWidthInMeters  = grid.getWidthInMeters();
+    gridWidthInMeters = grid.getWidthInMeters();
     gridHeightInMeters = grid.getHeightInMeters();
     gridCenterInMeters = grid.getBottomLeft();
 
@@ -70,53 +68,52 @@ void CellGridAlphaRenderer::setCellGrid(const utils::CellGrid<int32_t>& grid)
 
 void CellGridAlphaRenderer::setCellGrid(const utils::CellGrid<uint16_t>& grid)
 {
-    if((gridWidth != static_cast<int>(grid.getWidthInCells())) 
-        || (gridHeight != static_cast<int>(grid.getHeightInCells())))
-    {
-        if(!initialized)
-        {
+    if ((gridWidth != static_cast<int>(grid.getWidthInCells()))
+        || (gridHeight != static_cast<int>(grid.getHeightInCells()))) {
+        if (!initialized) {
             glGenTextures(1, &textureName);
             initialized = true;
         }
-        
-        delete [] gridTexture;
-        
-        gridWidth  = grid.getWidthInCells();
+
+        delete[] gridTexture;
+
+        gridWidth = grid.getWidthInCells();
         gridHeight = grid.getHeightInCells();
-        
+
         // The place exists in its own abstract coordinate system that doesn't have any
         // tie to metric space, so the center point is always just the middle of the grid
         gridCenter.x = gridWidth / 2;
         gridCenter.y = gridHeight / 2;
-        
+
         initializeGridTexture();
     }
-    
-    gridWidthInMeters  = grid.getWidthInMeters();
+
+    gridWidthInMeters = grid.getWidthInMeters();
     gridHeightInMeters = grid.getHeightInMeters();
     gridCenterInMeters = grid.getBottomLeft();
-    
+
     updateGridTexture(grid);
 }
 
 
 void CellGridAlphaRenderer::renderGrid(bool useMeters)
 {
-    if(initialized)
-    {
+    if (initialized) {
         enableTexture();
 
-        float textureXMax = gridWidth  / static_cast<float>(textureWidth);
+        float textureXMax = gridWidth / static_cast<float>(textureWidth);
         float textureYMax = gridHeight / static_cast<float>(textureHeight);
 
         color.set();
 
-        if(useMeters)
-        {
-            draw_one_texture_on_rectangle(gridCenterInMeters.x, gridCenterInMeters.y, gridWidthInMeters, gridHeightInMeters, textureXMax, textureYMax);
-        }
-        else
-        {
+        if (useMeters) {
+            draw_one_texture_on_rectangle(gridCenterInMeters.x,
+                                          gridCenterInMeters.y,
+                                          gridWidthInMeters,
+                                          gridHeightInMeters,
+                                          textureXMax,
+                                          textureYMax);
+        } else {
             draw_one_texture_on_rectangle(gridCenter.x, gridCenter.y, gridWidth, gridHeight, textureXMax, textureYMax);
         }
 
@@ -127,10 +124,10 @@ void CellGridAlphaRenderer::renderGrid(bool useMeters)
 
 void CellGridAlphaRenderer::initializeGridTexture(void)
 {
-    textureWidth  = round_to_power_of_two(gridWidth);
+    textureWidth = round_to_power_of_two(gridWidth);
     textureHeight = round_to_power_of_two(gridHeight);
 
-    gridTexture = new uint16_t[textureWidth*textureHeight];
+    gridTexture = new uint16_t[textureWidth * textureHeight];
 
     initialize_texture_16(textureName, gridTexture, textureWidth, textureHeight, GL_ALPHA, GL_ALPHA);
 }
@@ -177,11 +174,9 @@ void CellGridAlphaRenderer::convertGridToTexture(const utils::CellGrid<int32_t>&
     int32_t cellMax = invert ? 65535 : 0;
     int32_t maxValueCell = invert ? 0 : 65535;
 
-    for(int y = 0; y < gridHeight; ++y)
-    {
-        for(int x = 0; x < gridWidth; ++x)
-        {
-            gridTexture[textureIndex++] = (grid(x, y) < maxValue) ? (cellMax - grid(x, y)*scale) : maxValueCell;
+    for (int y = 0; y < gridHeight; ++y) {
+        for (int x = 0; x < gridWidth; ++x) {
+            gridTexture[textureIndex++] = (grid(x, y) < maxValue) ? (cellMax - grid(x, y) * scale) : maxValueCell;
         }
     }
 }
@@ -191,21 +186,19 @@ void CellGridAlphaRenderer::convertGridToTexture(const utils::CellGrid<uint16_t>
 {
     assert(gridHeight == static_cast<int>(grid.getHeightInCells()));
     assert(gridWidth == static_cast<int>(grid.getWidthInCells()));
-    
+
     int textureIndex = 0;
-    
+
     float scale = 65535.0f / maxValue * (invert ? 1 : -1);
     uint16_t cellMax = invert ? 65535 : 0;
     uint16_t maxValueCell = invert ? 0 : 65535;
-    
-    for(int y = 0; y < gridHeight; ++y)
-    {
-        for(int x = 0; x < gridWidth; ++x)
-        {
-            gridTexture[textureIndex++] = (grid(x, y) < maxValue) ? (cellMax - grid(x, y)*scale) : maxValueCell;
+
+    for (int y = 0; y < gridHeight; ++y) {
+        for (int x = 0; x < gridWidth; ++x) {
+            gridTexture[textureIndex++] = (grid(x, y) < maxValue) ? (cellMax - grid(x, y) * scale) : maxValueCell;
         }
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

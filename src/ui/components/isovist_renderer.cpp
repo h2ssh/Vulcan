@@ -8,16 +8,16 @@
 
 
 /**
-* \file     isovist_renderer.cpp
-* \author   Collin Johnson
-*
-* Implementation of IsovistRenderer.
-*/
+ * \file     isovist_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of IsovistRenderer.
+ */
 
 #include "ui/components/isovist_renderer.h"
+#include "math/geometry/convex_hull.h"
 #include "ui/common/default_colors.h"
 #include "utils/histogram.h"
-#include "math/geometry/convex_hull.h"
 #include <GL/gl.h>
 #include <algorithm>
 
@@ -29,8 +29,7 @@ namespace ui
 bool is_scalar_orientation(utils::Isovist::Scalar scalar);
 
 
-void IsovistRenderer::setRenderColors(const GLColor& rayColor,
-                                      const std::vector<GLColor>& fieldColors)
+void IsovistRenderer::setRenderColors(const GLColor& rayColor, const std::vector<GLColor>& fieldColors)
 {
     rayColor_ = rayColor;
     scalarInterpolator_.setColors(fieldColors);
@@ -52,11 +51,9 @@ void IsovistRenderer::renderIsovist(const utils::Isovist& isovist, const GLColor
     int minIdx = 0;
 
     int otherSide = numPoints / 2;
-    for(int n = 0, end = otherSide; n < end; ++n)
-    {
+    for (int n = 0, end = otherSide; n < end; ++n) {
         double dist = distance_between_points(*(isovist.begin() + n), *(isovist.begin() + n + otherSide));
-        if(dist < minDist)
-        {
+        if (dist < minDist) {
             minDist = dist;
             minIdx = n;
         }
@@ -67,15 +64,11 @@ void IsovistRenderer::renderIsovist(const utils::Isovist& isovist, const GLColor
 
     glLineWidth(1.5f);
     glBegin(GL_LINES);
-    for(auto ptIt = isovist.begin(); ptIt != isovist.end(); ++ptIt)
-    {
+    for (auto ptIt = isovist.begin(); ptIt != isovist.end(); ++ptIt) {
         int idx = std::distance(isovist.begin(), ptIt);
-        if((idx >= minIdx) && (idx < minIdx + otherSide))
-        {
+        if ((idx >= minIdx) && (idx < minIdx + otherSide)) {
             halfColor.set();
-        }
-        else
-        {
+        } else {
             otherColor.set();
         }
         glVertex2f(position.x, position.y);
@@ -88,8 +81,7 @@ void IsovistRenderer::renderIsovist(const utils::Isovist& isovist, const GLColor
     glLineWidth(1.5f);
     occupied_color().set(0.75);
     glBegin(GL_LINE_LOOP);
-    for(auto endpoint : hull)
-    {
+    for (auto endpoint : hull) {
         glVertex2f(endpoint.x, endpoint.y);
     }
     glEnd();
@@ -97,8 +89,7 @@ void IsovistRenderer::renderIsovist(const utils::Isovist& isovist, const GLColor
     glLineWidth(3.0f);
     color.set();
     glBegin(GL_LINE_LOOP);
-    for(auto endpoint : isovist)
-    {
+    for (auto endpoint : isovist) {
         glVertex2f(endpoint.x, endpoint.y);
     }
     glEnd();
@@ -107,32 +98,27 @@ void IsovistRenderer::renderIsovist(const utils::Isovist& isovist, const GLColor
 
 void IsovistRenderer::renderIsovistField(utils::IsovistField::Iter begin,
                                          utils::IsovistField::Iter end,
-                                         utils::Isovist::Scalar    value,
-                                         double                    scale) const
+                                         utils::Isovist::Scalar value,
+                                         double scale) const
 {
-    if(begin == end)
-    {
+    if (begin == end) {
         return;
     }
 
-    if(is_scalar_orientation(value))
-    {
+    if (is_scalar_orientation(value)) {
         renderOrientationField(begin, end, value, scale);
-    }
-    else
-    {
+    } else {
         renderScalarField(begin, end, value, scale);
     }
 }
 
 
 void IsovistRenderer::renderIsovistDerivField(utils::IsovistField::Iter begin,
-                                         utils::IsovistField::Iter end,
-                                         utils::Isovist::Scalar    value,
-                                         double                    scale) const
+                                              utils::IsovistField::Iter end,
+                                              utils::Isovist::Scalar value,
+                                              double scale) const
 {
-    if(begin == end)
-    {
+    if (begin == end) {
         return;
     }
 
@@ -142,8 +128,8 @@ void IsovistRenderer::renderIsovistDerivField(utils::IsovistField::Iter begin,
 
 void IsovistRenderer::renderScalarField(utils::IsovistField::Iter begin,
                                         utils::IsovistField::Iter end,
-                                        utils::Isovist::Scalar    value,
-                                        double                    scale) const
+                                        utils::Isovist::Scalar value,
+                                        double scale) const
 {
     auto scalarComp = [value](const utils::Isovist& lhs, const utils::Isovist& rhs) {
         return lhs.scalar(value) < rhs.scalar(value);
@@ -151,11 +137,10 @@ void IsovistRenderer::renderScalarField(utils::IsovistField::Iter begin,
 
     double minValue = std::min_element(begin, end, scalarComp)->scalar(value);
     double maxValue = std::max_element(begin, end, scalarComp)->scalar(value);
-    double range    = maxValue - minValue;
+    double range = maxValue - minValue;
 
     glBegin(GL_QUADS);
-    while(begin != end)
-    {
+    while (begin != end) {
         drawScalar(begin->position(), (begin->scalar(value) - minValue) / range, scale);
         ++begin;
     }
@@ -166,11 +151,10 @@ void IsovistRenderer::renderScalarField(utils::IsovistField::Iter begin,
 void IsovistRenderer::renderOrientationField(utils::IsovistField::Iter begin,
                                              utils::IsovistField::Iter end,
                                              utils::Isovist::Scalar scalar,
-                                             double                 scale) const
+                                             double scale) const
 {
     glBegin(GL_QUADS);
-    while(begin != end)
-    {
+    while (begin != end) {
         drawOrientation(begin->position(), begin->scalar(scalar), scale);
         ++begin;
     }
@@ -180,20 +164,19 @@ void IsovistRenderer::renderOrientationField(utils::IsovistField::Iter begin,
 
 void IsovistRenderer::renderDerivField(utils::IsovistField::Iter begin,
                                        utils::IsovistField::Iter end,
-                                       utils::Isovist::Scalar    value,
-                                       double                    scale) const
+                                       utils::Isovist::Scalar value,
+                                       double scale) const
 {
-        auto scalarComp = [value](const utils::Isovist& lhs, const utils::Isovist& rhs) {
+    auto scalarComp = [value](const utils::Isovist& lhs, const utils::Isovist& rhs) {
         return lhs.scalarDeriv(value) < rhs.scalarDeriv(value);
     };
 
     double minValue = std::min_element(begin, end, scalarComp)->scalarDeriv(value);
     double maxValue = std::max_element(begin, end, scalarComp)->scalarDeriv(value);
-    double range    = maxValue - minValue;
+    double range = maxValue - minValue;
 
     glBegin(GL_QUADS);
-    while(begin != end)
-    {
+    while (begin != end) {
         drawScalar(begin->position(), (begin->scalarDeriv(value) - minValue) / range, scale);
         ++begin;
     }
@@ -221,10 +204,10 @@ void IsovistRenderer::drawValueRect(const Point<double>& position, double scale)
 {
     const double kWidth = scale * 2.0;
 
-    glVertex2f(position.x,        position.y);
-    glVertex2f(position.x+kWidth, position.y);
-    glVertex2f(position.x+kWidth, position.y+kWidth);
-    glVertex2f(position.x,        position.y+kWidth);
+    glVertex2f(position.x, position.y);
+    glVertex2f(position.x + kWidth, position.y);
+    glVertex2f(position.x + kWidth, position.y + kWidth);
+    glVertex2f(position.x, position.y + kWidth);
 }
 
 
@@ -233,5 +216,5 @@ bool is_scalar_orientation(utils::Isovist::Scalar scalar)
     return (scalar == utils::Isovist::kOrientation) || (scalar == utils::Isovist::kWeightedOrientation);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

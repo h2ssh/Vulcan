@@ -7,15 +7,15 @@
 */
 
 
-#include <cstring>
-#include <iostream>
+#include "ui/components/image_renderer.h"
+#include "core/image.h"
+#include "core/point.h"
+#include "ui/common/gl_texture_helpers.h"
+#include "vision/filters.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "core/point.h"
-#include "core/image.h"
-#include "vision/filters.h"
-#include "ui/common/gl_texture_helpers.h"
-#include "ui/components/image_renderer.h"
+#include <cstring>
+#include <iostream>
 
 
 using namespace vulcan;
@@ -26,26 +26,19 @@ void set_image_base_color(void);
 void draw_image(Point<float> bottomLeft, float imageWidth, float imageHeight, float textureWidth, float textureHeight);
 
 
-ImageRenderer::ImageRenderer(void) :
-                        imageWidth(0),
-                        imageHeight(0),
-                        textureWidth(0),
-                        textureHeight(0),
-                        texture(0)
+ImageRenderer::ImageRenderer(void) : imageWidth(0), imageHeight(0), textureWidth(0), textureHeight(0), texture(0)
 {
-
 }
 
 
 void ImageRenderer::renderImage(const Image& image)
 {
-    if((imageWidth != image.getWidth()) || (imageHeight != image.getHeight()))
-    {
+    if ((imageWidth != image.getWidth()) || (imageHeight != image.getHeight())) {
         free_textures(&texture, 1);
-        
-        imageWidth  = image.getWidth();
+
+        imageWidth = image.getWidth();
         imageHeight = image.getHeight();
-        
+
         initializeImageTexture(image);
     }
 
@@ -55,13 +48,9 @@ void ImageRenderer::renderImage(const Image& image)
     float textureYMax = imageHeight / static_cast<float>(textureHeight);
 
     set_image_base_color();
-    
-    draw_image(Point<float>(0, 0),
-               imageWidth,
-               imageHeight,
-               textureXMax,
-               textureYMax);
-          
+
+    draw_image(Point<float>(0, 0), imageWidth, imageHeight, textureXMax, textureYMax);
+
     disableImageTexture();
 }
 
@@ -69,14 +58,14 @@ void ImageRenderer::renderImage(const Image& image)
 void ImageRenderer::initializeImageTexture(const Image& image)
 {
     glGenTextures(1, &textureName);
-    
-    textureWidth  = round_to_power_of_two(imageWidth);
+
+    textureWidth = round_to_power_of_two(imageWidth);
     textureHeight = round_to_power_of_two(imageHeight);
-    
+
     texture = create_texture(textureWidth, textureHeight, 3);
-    
+
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    
+
     glBindTexture(GL_TEXTURE_2D, textureName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -106,27 +95,24 @@ void ImageRenderer::disableImageTexture(void)
 void ImageRenderer::convertImageToTexture(const Image& image)
 {
     Image filteredImage(image);
-    
+
     vision::Gaussian2DFilter<2> gaussian(0.8);
-    
-//     gaussian.apply(image, filteredImage);
-    
+
+    //     gaussian.apply(image, filteredImage);
+
     uint8_t* pixels = image.getPixelBuffer();
 
-    if(image.getColorspace() == MONO)
-    {
+    if (image.getColorspace() == MONO) {
         int total = imageWidth * imageHeight;
         int textureValue = 0;
-        for(int n = 0; n < total; ++n, textureValue += 3)
-        {
-            texture[textureValue]   = pixels[n];
-            texture[textureValue+1] = pixels[n];
-            texture[textureValue+2] = pixels[n];
+        for (int n = 0; n < total; ++n, textureValue += 3) {
+            texture[textureValue] = pixels[n];
+            texture[textureValue + 1] = pixels[n];
+            texture[textureValue + 2] = pixels[n];
         }
-    }
-    else // colorspace == RGB
+    } else   // colorspace == RGB
     {
-        memcpy(texture, pixels, imageWidth*imageHeight*3);
+        memcpy(texture, pixels, imageWidth * imageHeight * 3);
     }
 
     set_sub_texture(texture, imageWidth, imageHeight, GL_RGB);
@@ -144,19 +130,20 @@ void draw_image(Point<float> bottomLeft, float imageWidth, float imageHeight, fl
 {
     glBegin(GL_QUADS);
 
-    // NOTE: The texture is drawn here "upside down" on purpose because the image is defined in a left-handed coordinate system.
+    // NOTE: The texture is drawn here "upside down" on purpose because the image is defined in a left-handed coordinate
+    // system.
     //       It won't likely be changed to the more desirable right-handed coordinates
     glTexCoord2f(0.0, textureHeight);
     glVertex2f(bottomLeft.x, bottomLeft.y);
 
     glTexCoord2f(textureWidth, textureHeight);
-    glVertex2f(bottomLeft.x+imageWidth, bottomLeft.y);
-    
+    glVertex2f(bottomLeft.x + imageWidth, bottomLeft.y);
+
     glTexCoord2f(textureWidth, 0);
-    glVertex2f(bottomLeft.x+imageWidth, bottomLeft.y+imageHeight);
-    
+    glVertex2f(bottomLeft.x + imageWidth, bottomLeft.y + imageHeight);
+
     glTexCoord2f(0.0, 0);
-    glVertex2f(bottomLeft.x, bottomLeft.y+imageHeight);
+    glVertex2f(bottomLeft.x, bottomLeft.y + imageHeight);
 
     glEnd();
 }

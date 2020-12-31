@@ -8,17 +8,17 @@
 
 
 /**
-* \file     decision_interface_control.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionInterfaceControl.
-*/
+ * \file     decision_interface_control.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionInterfaceControl.
+ */
 
 #include "ui/navigation/decision_interface_control.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "planner/interface/navigation_interface.h"
 #include "ui/navigation/navigation_data.h"
 #include "ui/navigation/navigation_interface_display.h"
-#include "planner/interface/navigation_interface.h"
-#include "hssh/local_topological/local_topo_map.h"
 #include "utils/algorithm_ext.h"
 #include "utils/stub.h"
 
@@ -41,42 +41,36 @@ DecisionInterfaceControl::DecisionInterfaceControl(planner::NavigationInterface&
 , selectedIndex_(0)
 , didSelectArea_(false)
 {
-
 }
 
 
 void DecisionInterfaceControl::update(const NavigationData& data, system::SystemCommunicator& communicator)
 {
     // If a selection was made, then send it off before updating any state that may have changed
-    if(didSelectArea_)
-    {
+    if (didSelectArea_) {
         interface_.goToDecision(*(interface_.beginDecisions() + selectedIndex_), pose_, communicator);
         didSelectArea_ = false;
     }
 
     // Nothing to do if there's no location or no topo map or if the location doesn't belong to the current,
     // which means a transition to some new map is underway
-    if(!data.topoMap || !data.location || (data.topoMap->mapId() != data.location->mapId()))
-    {
+    if (!data.topoMap || !data.location || (data.topoMap->mapId() != data.location->mapId())) {
         return;
     }
 
     // If the robot has changed areas or the map has changed, then
-    if((data.location->areaId() != prevArea_) || (data.location->mapId() != prevMap_))
-    {
+    if ((data.location->areaId() != prevArea_) || (data.location->mapId() != prevMap_)) {
         int numNewActions = interface_.determineDecisions(*data.topoMap, *data.location, data.pose);
 
         // If there's a new action, then the current action state needs to be reset
-        if(numNewActions > 0)
-        {
-            display_.setDecisions(std::vector<planner::Decision>(interface_.beginDecisions(),
-                                                                 interface_.endDecisions()));
+        if (numNewActions > 0) {
+            display_.setDecisions(
+              std::vector<planner::Decision>(interface_.beginDecisions(), interface_.endDecisions()));
 
             hoverIndex_ = selectedIndex_ = interface_.sizeDecisions();
         }
-        
-        if(auto currentArea = data.topoMap->areaWithId(data.location->areaId()))
-        {
+
+        if (auto currentArea = data.topoMap->areaWithId(data.location->areaId())) {
             display_.setGateways(currentArea->gateways());
         }
     }
@@ -94,54 +88,36 @@ GLEventStatus DecisionInterfaceControl::keyPressed(wxKeyEvent& key)
 {
     GLEventStatus status = GLEventStatus::capture;
 
-    if(!key.ControlDown() && (key.GetKeyCode() == WXK_UP))
-    {
+    if (!key.ControlDown() && (key.GetKeyCode() == WXK_UP)) {
         hoverIndex_ = find_action_with_direction(planner::DecisionDirection::forward, interface_);
-    }
-    else if(!key.ControlDown() && (key.GetKeyCode() == WXK_DOWN))
-    {
+    } else if (!key.ControlDown() && (key.GetKeyCode() == WXK_DOWN)) {
         hoverIndex_ = find_action_with_direction(planner::DecisionDirection::backward, interface_);
-    }
-    else if(!key.ControlDown() && (key.GetKeyCode() == WXK_LEFT))
-    {
+    } else if (!key.ControlDown() && (key.GetKeyCode() == WXK_LEFT)) {
         hoverIndex_ = find_action_with_direction(planner::DecisionDirection::left, interface_);
-    }
-    else if(!key.ControlDown() && (key.GetKeyCode() == WXK_RIGHT))
-    {
+    } else if (!key.ControlDown() && (key.GetKeyCode() == WXK_RIGHT)) {
         hoverIndex_ = find_action_with_direction(planner::DecisionDirection::right, interface_);
-    }
-    else if(key.ControlDown() && (key.GetKeyCode() == WXK_LEFT))
-    {
+    } else if (key.ControlDown() && (key.GetKeyCode() == WXK_LEFT)) {
         hoverIndex_ = (hoverIndex_ > 0) ? hoverIndex_ - 1 : interface_.sizeDecisions() - 1;
-    }
-    else if(key.ControlDown() && (key.GetKeyCode() == WXK_RIGHT))
-    {
+    } else if (key.ControlDown() && (key.GetKeyCode() == WXK_RIGHT)) {
         ++hoverIndex_;
 
-        if(hoverIndex_ >= interface_.sizeDecisions())
-        {
+        if (hoverIndex_ >= interface_.sizeDecisions()) {
             hoverIndex_ = 0;
         }
-    }
-    else if(key.GetKeyCode() == WXK_RETURN)
-    {
+    } else if (key.GetKeyCode() == WXK_RETURN) {
         // If something is selected, then unselect
-        if((selectedIndex_ < interface_.sizeDecisions()) && (selectedIndex_ == hoverIndex_))
-        {
+        if ((selectedIndex_ < interface_.sizeDecisions()) && (selectedIndex_ == hoverIndex_)) {
             selectedIndex_ = interface_.sizeDecisions();
-            display_.setDecisions(std::vector<planner::Decision>(interface_.beginDecisions(),
-                                                                 interface_.endDecisions()));
+            display_.setDecisions(
+              std::vector<planner::Decision>(interface_.beginDecisions(), interface_.endDecisions()));
         }
         // Otherwise, select if there is a valid hover
-        else if(hoverIndex_ < interface_.sizeDecisions())
-        {
+        else if (hoverIndex_ < interface_.sizeDecisions()) {
             selectedIndex_ = hoverIndex_;
             didSelectArea_ = true;
             display_.setDecisions(std::vector<planner::Decision>());
         }
-    }
-    else
-    {
+    } else {
         status = GLEventStatus::passthrough;
     }
 
@@ -152,14 +128,13 @@ GLEventStatus DecisionInterfaceControl::keyPressed(wxKeyEvent& key)
 std::size_t find_action_with_direction(planner::DecisionDirection direction,
                                        const planner::NavigationInterface& interface)
 {
-    auto actionIt = std::find_if(interface.beginDecisions(),
-                                 interface.endDecisions(),
-                                 [direction](const planner::Decision& action) {
-        return action.direction() == direction;
-    });
+    auto actionIt =
+      std::find_if(interface.beginDecisions(), interface.endDecisions(), [direction](const planner::Decision& action) {
+          return action.direction() == direction;
+      });
 
     return std::distance(interface.beginDecisions(), actionIt);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

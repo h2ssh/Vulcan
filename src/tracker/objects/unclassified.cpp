@@ -8,24 +8,24 @@
 
 
 /**
-* \file     unclassified.cpp
-* \author   Collin Johnson
-* 
-* Definition of UnclassifiedObject.
-*/
+ * \file     unclassified.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of UnclassifiedObject.
+ */
 
 #include "tracker/objects/unclassified.h"
 #include "tracker/dynamic_object_visitor.h"
 
 namespace vulcan
 {
-namespace tracker 
+namespace tracker
 {
-    
+
 UnclassifiedObject::UnclassifiedObject(ObjectId id,
-                                       int64_t                 timestamp,
-                                       const StationaryMotion& motion, 
-                                       const ObjectBoundary&   boundary)
+                                       int64_t timestamp,
+                                       const StationaryMotion& motion,
+                                       const ObjectBoundary& boundary)
 : BaseType(timestamp, motion, boundary)
 , id_(id)
 {
@@ -43,5 +43,5 @@ void UnclassifiedObject::accept(DynamicObjectVisitor& visitor) const
     visitor.visitUnclassified(*this);
 }
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan

@@ -10,25 +10,25 @@
 #ifndef SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_DIRECTOR_H
 #define SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_DIRECTOR_H
 
-#include <fstream>
-#include "system/director.h"
-#include "utils/condition_variable.h"
-#include "utils/mutex.h"
 #include "core/image.h"
 #include "core/laser_scan.h"
 #include "laser/dynamic_laser_points.h"
-#include "vision/navtexture/image_object_identifier.h"
+#include "system/director.h"
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
 #include "vision/navtexture/image_object.h"
-#include "vision/navtexture/navtexture_params.h"
+#include "vision/navtexture/image_object_identifier.h"
 #include "vision/navtexture/navtexture_input_consumer.h"
 #include "vision/navtexture/navtexture_output_consumer.h"
+#include "vision/navtexture/navtexture_params.h"
+#include <fstream>
 
 namespace vulcan
 {
 
 namespace laser
 {
-    struct dynamic_laser_points_t;
+struct dynamic_laser_points_t;
 }
 
 namespace vision
@@ -37,43 +37,42 @@ namespace vision
 class NavTextureOutputConsumer;
 
 /**
-* NavTextureDirector is responsible for organizing the processing of incoming data. The incoming data:
-*
-* 0) Raw image
-* 1) Robot pose
-* 2) Dynamic objects identified in the map
-*
-* The raw image is segments and the textures in the segments are classified. The ground plane segments
-* adjacent to dynamic objects have an increased likelihood of being navigable.
-*
-* The output is:
-*
-* 0) Ground navigability classification
-*/
-class NavTextureDirector : public system::Director<NavTextureOutputConsumer>,
-                           public NavTextureInputConsumer
+ * NavTextureDirector is responsible for organizing the processing of incoming data. The incoming data:
+ *
+ * 0) Raw image
+ * 1) Robot pose
+ * 2) Dynamic objects identified in the map
+ *
+ * The raw image is segments and the textures in the segments are classified. The ground plane segments
+ * adjacent to dynamic objects have an increased likelihood of being navigable.
+ *
+ * The output is:
+ *
+ * 0) Ground navigability classification
+ */
+class NavTextureDirector
+: public system::Director<NavTextureOutputConsumer>
+, public NavTextureInputConsumer
 {
 public:
-
     /**
-    * Constructor for NavTextureDirector.
-    */
+     * Constructor for NavTextureDirector.
+     */
     NavTextureDirector(const navtexture_params_t& params);
 
     /**
-    * Destructor for NavTextureDirector.
-    */
+     * Destructor for NavTextureDirector.
+     */
     virtual ~NavTextureDirector(void);
 
     // Handlers for the input consumer interface
-    virtual void handleData(const Image&                                image,         const std::string& channel);
-    virtual void handleData(const polar_laser_scan_t&            scan,          const std::string& channel);
-    virtual void handleData(const pose_t&                        pose,          const std::string& channel);
-    virtual void handleData(const laser::dynamic_laser_points_t&        dynamicPoints, const std::string& channel);
-    virtual void handleData(const tracker::DynamicObjectCollection& objects,       const std::string& channel);
+    virtual void handleData(const Image& image, const std::string& channel);
+    virtual void handleData(const polar_laser_scan_t& scan, const std::string& channel);
+    virtual void handleData(const pose_t& pose, const std::string& channel);
+    virtual void handleData(const laser::dynamic_laser_points_t& dynamicPoints, const std::string& channel);
+    virtual void handleData(const tracker::DynamicObjectCollection& objects, const std::string& channel);
 
 private:
-
     // Director interface implementation
     virtual void waitForData(void);
     virtual void processAvailableData(void);
@@ -81,11 +80,11 @@ private:
 
     bool haveRequiredDataForCalculation(void);
 
-    ImageObjectIdentifier         objectIdentifier;
-    Image                         currentImage;
-    polar_laser_scan_t     currentScan;
+    ImageObjectIdentifier objectIdentifier;
+    Image currentImage;
+    polar_laser_scan_t currentScan;
     laser::dynamic_laser_points_t dynamicPoints;
-    std::vector<image_object_t>   imageObjects;
+    std::vector<image_object_t> imageObjects;
 
     navtexture_params_t params;
 
@@ -95,11 +94,11 @@ private:
     bool haveLaser;
     bool haveDynamic;
 
-    utils::Mutex             dataLock;
+    utils::Mutex dataLock;
     utils::ConditionVariable dataTrigger;
 };
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan
 
-#endif // SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_DIRECTOR_H
+#endif   // SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_DIRECTOR_H

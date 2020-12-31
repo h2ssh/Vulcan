@@ -8,20 +8,20 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* Definition of TopoSituationRenderer.
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * Definition of TopoSituationRenderer.
+ */
 
 #include "ui/components/topo_situation_renderer.h"
-#include "ui/common/default_colors.h"
-#include "ui/common/ui_color.h"
 #include "hssh/local_topological/area.h"
-#include "hssh/local_topological/local_topo_map.h"
 #include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include "mpepc/social/topo_situation.h"
 #include "robot/model/params.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/ui_color.h"
 #include "utils/config_file.h"
 #include <GL/gl.h>
 
@@ -33,33 +33,27 @@ namespace ui
 using namespace mpepc;
 
 GLColor bin_state_color(PathSituation::BinState state);
-std::vector<Point<float>> points_along_boundary(Line<double> boundary,
-                                                      double direction,
-                                                      int numBins,
-                                                      double robotRadius);
+std::vector<Point<float>>
+  points_along_boundary(Line<double> boundary, double direction, int numBins, double robotRadius);
 
 
-TopoSituationRenderer::TopoSituationRenderer(void)
-: robotRadius_(0.3)
+TopoSituationRenderer::TopoSituationRenderer(void) : robotRadius_(0.3)
 {
     utils::ConfigFile modelConfig(robot::kRobotModelConfigFilename);
     robot::collision_model_params_t params(modelConfig);
 
     // If there's a circle model radius to be loaded
-    if(params.circleModelRadius > 0.0)
-    {
+    if (params.circleModelRadius > 0.0) {
         robotRadius_ = params.circleModelRadius;
     }
 }
 
 
-void TopoSituationRenderer::renderSituationPath(const PathSituation& situation,
-                                                const hssh::LocalTopoMap& topoMap) const
+void TopoSituationRenderer::renderSituationPath(const PathSituation& situation, const hssh::LocalTopoMap& topoMap) const
 {
     auto area = topoMap.areaWithId(situation.areaId());
 
-    if(!area || (area->type() != hssh::AreaType::path_segment))
-    {
+    if (!area || (area->type() != hssh::AreaType::path_segment)) {
         return;
     }
 
@@ -69,18 +63,13 @@ void TopoSituationRenderer::renderSituationPath(const PathSituation& situation,
     hssh::Gateway start;
 
     // Find the ends
-    if(path->plusTransition().gateway().id() == situation.gatewayId())
-    {
+    if (path->plusTransition().gateway().id() == situation.gatewayId()) {
         goal = path->plusTransition().gateway();
         start = path->minusTransition().gateway();
-    }
-    else if(path->minusTransition().gateway().id() == situation.gatewayId())
-    {
+    } else if (path->minusTransition().gateway().id() == situation.gatewayId()) {
         goal = path->minusTransition().gateway();
         start = path->plusTransition().gateway();
-    }
-    else
-    {
+    } else {
         // Unknown gateway -- only dealing with the two endpoints right now in this visualization
         return;
     }
@@ -90,13 +79,12 @@ void TopoSituationRenderer::renderSituationPath(const PathSituation& situation,
     // Start line is inbound, so need to make sure direction (which is always outbound) gets flipped
     auto startVertices = points_along_boundary(start.boundary(), start.direction() + M_PI, bins.size(), robotRadius_);
 
-    assert(goalVertices.size() == bins.size() + 1); // check for fencepost error
+    assert(goalVertices.size() == bins.size() + 1);   // check for fencepost error
 
     const float kAlpha = 0.3f;
 
     glBegin(GL_QUADS);
-    for(std::size_t n = 0; n < bins.size(); ++n)
-    {
+    for (std::size_t n = 0; n < bins.size(); ++n) {
         auto color = bin_state_color(bins[n]);
         color.set(kAlpha);
 
@@ -111,8 +99,7 @@ void TopoSituationRenderer::renderSituationPath(const PathSituation& situation,
     color.set(0.9);
 
     glLineWidth(1.0f);
-    for(std::size_t n = 0; n < bins.size(); ++n)
-    {
+    for (std::size_t n = 0; n < bins.size(); ++n) {
         glBegin(GL_LINE_LOOP);
         glVertex2f(goalVertices[n].x, goalVertices[n].y);
         glVertex2f(goalVertices[n + 1].x, goalVertices[n + 1].y);
@@ -128,8 +115,7 @@ void TopoSituationRenderer::renderSituationPlace(const PlaceSituation& situation
 {
     auto place = topoMap.areaWithId(situation.areaId());
 
-    if(!place)
-    {
+    if (!place) {
         return;
     }
 
@@ -139,8 +125,7 @@ void TopoSituationRenderer::renderSituationPlace(const PlaceSituation& situation
 
 GLColor bin_state_color(PathSituation::BinState state)
 {
-    switch(state)
-    {
+    switch (state) {
     case PathSituation::empty:
         return dynamic_color();
     case PathSituation::toward:
@@ -155,10 +140,8 @@ GLColor bin_state_color(PathSituation::BinState state)
 }
 
 
-std::vector<Point<float>> points_along_boundary(Line<double> boundary,
-                                                      double direction,
-                                                      int numBins,
-                                                      double robotRadius)
+std::vector<Point<float>>
+  points_along_boundary(Line<double> boundary, double direction, int numBins, double robotRadius)
 {
     // If A isn't left of normal line in direction, then flip the boundary
     Line<double> normal;
@@ -167,8 +150,7 @@ std::vector<Point<float>> points_along_boundary(Line<double> boundary,
     normal.b.x += std::cos(direction);
     normal.b.y += std::sin(direction);
 
-    if(!left_of_line(normal, boundary.a))
-    {
+    if (!left_of_line(normal, boundary.a)) {
         std::swap(boundary.a, boundary.b);
     }
 
@@ -181,10 +163,10 @@ std::vector<Point<float>> points_along_boundary(Line<double> boundary,
     const double step = len / numBins;
     double nextPoint = robotRadius + step;
 
-    for(int n = 0; n < numBins - 1; ++n)    // outsides of the bins accounted for, so only need interior points
+    for (int n = 0; n < numBins - 1; ++n)   // outsides of the bins accounted for, so only need interior points
     {
         Point<float> point(boundary.a.x + (nextPoint * std::cos(orientation)),
-                                 boundary.a.y + (nextPoint * std::sin(orientation)));
+                           boundary.a.y + (nextPoint * std::sin(orientation)));
         points.push_back(point);
         nextPoint += step;
     }
@@ -193,5 +175,5 @@ std::vector<Point<float>> points_along_boundary(Line<double> boundary,
     return points;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

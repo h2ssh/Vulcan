@@ -8,25 +8,31 @@
 
 
 /**
-* \file     tracking_environment.h
-* \author   Collin Johnson
-*
-* Definition of tracking_environment_t.
-*/
+ * \file     tracking_environment.h
+ * \author   Collin Johnson
+ *
+ * Definition of tracking_environment_t.
+ */
 
 #ifndef TRACKER_TRACKING_ENVIRONMENT_H
 #define TRACKER_TRACKING_ENVIRONMENT_H
 
 namespace vulcan
 {
-namespace hssh { class LocalPerceptualMap; }
-namespace hssh { class LocalTopoMap; }
+namespace hssh
+{
+class LocalPerceptualMap;
+}
+namespace hssh
+{
+class LocalTopoMap;
+}
 namespace tracker
 {
 
 /**
-* tracking_environment_t contains representations of the environment for use with goal estimation.
-*/
+ * tracking_environment_t contains representations of the environment for use with goal estimation.
+ */
 struct tracking_environment_t
 {
     int64_t timestamp;
@@ -34,7 +40,7 @@ struct tracking_environment_t
     const hssh::LocalTopoMap* ltm;
 };
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_TRACKING_ENVIRONMENT_H
+#endif   // TRACKER_TRACKING_ENVIRONMENT_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     hypothesis_factor_graph.cpp
-* \author   Collin Johnson
-*
-* Definition of convert_hypothesis_graph_to_factor_graph.
-*/
+ * \file     hypothesis_factor_graph.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of convert_hypothesis_graph_to_factor_graph.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/hypothesis_factor_graph.h"
 #include "hssh/local_topological/area_detection/labeling/boundary.h"
@@ -43,9 +43,7 @@ struct ConstructionState
 };
 
 
-void add_area_variable(AreaHypothesis* hyp,
-                       const HypothesisClassifier& classifier,
-                       ConstructionState& state);
+void add_area_variable(AreaHypothesis* hyp, const HypothesisClassifier& classifier, ConstructionState& state);
 void add_gateway_variable(AreaHypothesisBoundary* boundary, ConstructionState& state);
 void add_boundary_factor(AreaHypothesisBoundary* boundary,
                          const BoundaryClassifier& classifier,
@@ -59,20 +57,17 @@ HypothesisFactorGraph convert_hypothesis_graph_to_factor_graph(HypothesisGraph& 
     ConstructionState state;
 
     // Create a factor for the type distribution for each area
-    for(AreaHypothesis* hyp : boost::make_iterator_range(hypGraph.beginHypothesis(), hypGraph.endHypothesis()))
-    {
+    for (AreaHypothesis* hyp : boost::make_iterator_range(hypGraph.beginHypothesis(), hypGraph.endHypothesis())) {
         add_area_variable(hyp, hypClassifier, state);
     }
 
     // Create a factor for the gateway probability for each boundary
-    for(AreaHypothesisBoundary* bnd : boost::make_iterator_range(hypGraph.beginBoundary(), hypGraph.endBoundary()))
-    {
+    for (AreaHypothesisBoundary* bnd : boost::make_iterator_range(hypGraph.beginBoundary(), hypGraph.endBoundary())) {
         add_gateway_variable(bnd, state);
     }
 
     // Create a factor for the type distribution for each boundary and its bounding areas
-    for(AreaHypothesisBoundary* bnd : boost::make_iterator_range(hypGraph.beginBoundary(), hypGraph.endBoundary()))
-    {
+    for (AreaHypothesisBoundary* bnd : boost::make_iterator_range(hypGraph.beginBoundary(), hypGraph.endBoundary())) {
         add_boundary_factor(bnd, bndClassifier, state);
     }
 
@@ -85,9 +80,7 @@ HypothesisFactorGraph convert_hypothesis_graph_to_factor_graph(HypothesisGraph& 
 }
 
 
-void add_area_variable(AreaHypothesis* hyp,
-                       const HypothesisClassifier& classifier,
-                       ConstructionState& state)
+void add_area_variable(AreaHypothesis* hyp, const HypothesisClassifier& classifier, ConstructionState& state)
 {
     int id = state.nextId++;
     state.varToHyp[id] = hyp;
@@ -181,18 +174,15 @@ void add_boundary_factor(AreaHypothesisBoundary* boundary,
     hyps[1] = boundary->getHypotheses()[1];
 
     std::array<int, 2> pathIdx;
-    for(int n = 0; n < 2; ++n)
-    {
+    for (int n = 0; n < 2; ++n) {
         pathIdx[n] = hyps[n]->isEndGateway(boundary->getGateway().id()) ? kPathEndIdx : kPathIdx;
     }
 
     // Create a state probability for each combination of path/dest/decision for the areas and on/off for boundary
-    for(int i = 0; i < 3; ++i)
-    {
+    for (int i = 0; i < 3; ++i) {
         int idxI = i == kPathIdx ? pathIdx[0] : i;
 
-        for(int j = 0; j < 3; ++j)
-        {
+        for (int j = 0; j < 3; ++j) {
             int idxJ = j == kPathIdx ? pathIdx[1] : j;
 
             FactorStateProb onProb;
@@ -229,5 +219,5 @@ void add_boundary_factor(AreaHypothesisBoundary* boundary,
     state.edges.push_back(edge3);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

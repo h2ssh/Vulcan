@@ -8,11 +8,11 @@
 
 
 /**
-* \file     location.h
-* \author   Collin Johnson
-*
-* Definition of types defining the robot's location within the different layers of the HSSH.
-*/
+ * \file     location.h
+ * \author   Collin Johnson
+ *
+ * Definition of types defining the robot's location within the different layers of the HSSH.
+ */
 
 #ifndef HSSH_LOCATION_H
 #define HSSH_LOCATION_H
@@ -23,8 +23,7 @@ namespace hssh
 {
 
 
-
 }
-}
+}   // namespace vulcan
 
-#endif // HSSH_LOCATION_H
+#endif   // HSSH_LOCATION_H

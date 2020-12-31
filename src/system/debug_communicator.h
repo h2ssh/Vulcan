@@ -8,11 +8,11 @@
 
 
 /**
-* \file     debug_communicator.h
-* \author   Collin Johnson
-* 
-* Definition of DebugCommunicator adapter class.
-*/
+ * \file     debug_communicator.h
+ * \author   Collin Johnson
+ *
+ * Definition of DebugCommunicator adapter class.
+ */
 
 #ifndef SYSTEM_DEBUG_COMMUNICATOR_H
 #define SYSTEM_DEBUG_COMMUNICATOR_H
@@ -27,58 +27,53 @@ namespace system
 {
 
 /**
-* DebugCommunicator is an Adapter class that provides limited access to the communicator facilities of a 
-* ModuleCommunicator. It enforces that only Debug and Plot data are sent. Any other data that attempts to be sent
-* will result in a static_assert compiler error.
-* 
-* The DebugCommunicator should be passed to processing classes by a Director. This ensures that system messages flow
-* only from the Director, which enforces the inputs and outputs, and not the implementation classes.
-*/
+ * DebugCommunicator is an Adapter class that provides limited access to the communicator facilities of a
+ * ModuleCommunicator. It enforces that only Debug and Plot data are sent. Any other data that attempts to be sent
+ * will result in a static_assert compiler error.
+ *
+ * The DebugCommunicator should be passed to processing classes by a Director. This ensures that system messages flow
+ * only from the Director, which enforces the inputs and outputs, and not the implementation classes.
+ */
 class DebugCommunicator
 {
 public:
-    
     /**
-    * Constructor for DebugCommunicator.
-    * 
-    * \param    communicator        ModuleCommunicator instance to wrap
-    */
-    DebugCommunicator(ModuleCommunicator& communicator)
-    : communicator_(communicator)
-    {
-    }
-    
+     * Constructor for DebugCommunicator.
+     *
+     * \param    communicator        ModuleCommunicator instance to wrap
+     */
+    DebugCommunicator(ModuleCommunicator& communicator) : communicator_(communicator) { }
+
     /**
-    * sendDebug sends a debug message.
-    * 
-    * \param    msg         Message to be sent
-    * 
-    * Concept:
-    * 
-    *   - T is a DebugMessage
-    */
+     * sendDebug sends a debug message.
+     *
+     * \param    msg         Message to be sent
+     *
+     * Concept:
+     *
+     *   - T is a DebugMessage
+     */
     template <typename T>
     void sendDebug(const T& msg)
     {
-        static_assert(std::is_same<typename message_traits<T>::type, debug_message_tag>::value, 
+        static_assert(std::is_same<typename message_traits<T>::type, debug_message_tag>::value,
                       "sendDebug: Can only send DebugMessages");
         communicator_.sendMessage(msg);
     }
-    
-//     /**
-//     * sendPlot
-//     */
-//     void sendPlot(const ui::PlotData& plot)
-//     {
-//         communicator_.sendMessage(plot);
-//     }
+
+    //     /**
+    //     * sendPlot
+    //     */
+    //     void sendPlot(const ui::PlotData& plot)
+    //     {
+    //         communicator_.sendMessage(plot);
+    //     }
 
 private:
-
     ModuleCommunicator& communicator_;
 };
 
-}
-}
+}   // namespace system
+}   // namespace vulcan
 
-#endif // SYSTEM_DEBUG_COMMUNICATOR_H
+#endif   // SYSTEM_DEBUG_COMMUNICATOR_H

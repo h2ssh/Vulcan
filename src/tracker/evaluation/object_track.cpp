@@ -8,11 +8,11 @@
 
 
 /**
-* \file     object_track.cpp
-* \author   Collin Johnson
-*
-* Definition of ObjectTrack.
-*/
+ * \file     object_track.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ObjectTrack.
+ */
 
 #include "tracker/evaluation/object_track.h"
 #include <cassert>
@@ -22,8 +22,7 @@ namespace vulcan
 namespace tracker
 {
 
-ObjectTrack::ObjectTrack(DynamicObject::ConstPtr object)
-: currentEstimate_(object)
+ObjectTrack::ObjectTrack(DynamicObject::ConstPtr object) : currentEstimate_(object)
 {
     assert(currentEstimate_);
 }
@@ -34,5 +33,5 @@ void ObjectTrack::addEstimate(DynamicObject::ConstPtr estimate)
     currentEstimate_ = estimate;
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

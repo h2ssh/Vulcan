@@ -8,15 +8,15 @@
 
 
 /**
-* \file     logplayer_frame.cpp
-* \author   Collin Johnson
-*
-* Definition of LogplayerFrame.
-*/
+ * \file     logplayer_frame.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LogplayerFrame.
+ */
 
 #include "ui/logplayer/logplayer_frame.h"
-#include "ui/common/file_dialog_settings.h"
 #include "logging/logplayer/log_player.h"
+#include "ui/common/file_dialog_settings.h"
 #include "utils/auto_mutex.h"
 #include <wx/event.h>
 #include <wx/filedlg.h>
@@ -30,17 +30,17 @@ namespace ui
 const int TIMER_ID = 901;
 
 BEGIN_EVENT_TABLE(LogplayerFrame, wxFrame)
-    EVT_BUTTON(ID_RESTART_BUTTON,          LogplayerFrame::pressedRestart)
-    EVT_BUTTON(ID_PLAY_BUTTON,             LogplayerFrame::pressedPlay)
-    EVT_BUTTON(ID_STEP_BUTTON,             LogplayerFrame::pressedStep)
-    EVT_BUTTON(ID_SLOWER_BUTTON,           LogplayerFrame::pressedSlower)
-    EVT_BUTTON(ID_FASTER_BUTTON,           LogplayerFrame::pressedFaster)
-    EVT_TEXT_ENTER(ID_PLAYBACK_SPEED_TEXT, LogplayerFrame::enteredSpeed)
-    EVT_MENU(ID_FILE_OPEN_MENU_ITEM,       LogplayerFrame::pressedFileOpen)
-    EVT_MENU(ID_FILE_QUIT_MENU_ITEM,       LogplayerFrame::pressedFileQuit)
-    EVT_COMMAND_SCROLL_CHANGED(ID_LOG_POSITION_SLIDER, LogplayerFrame::movedSlider)
-    EVT_PAINT(LogplayerFrame::paint)
-    EVT_TIMER(TIMER_ID, LogplayerFrame::redraw)
+EVT_BUTTON(ID_RESTART_BUTTON, LogplayerFrame::pressedRestart)
+EVT_BUTTON(ID_PLAY_BUTTON, LogplayerFrame::pressedPlay)
+EVT_BUTTON(ID_STEP_BUTTON, LogplayerFrame::pressedStep)
+EVT_BUTTON(ID_SLOWER_BUTTON, LogplayerFrame::pressedSlower)
+EVT_BUTTON(ID_FASTER_BUTTON, LogplayerFrame::pressedFaster)
+EVT_TEXT_ENTER(ID_PLAYBACK_SPEED_TEXT, LogplayerFrame::enteredSpeed)
+EVT_MENU(ID_FILE_OPEN_MENU_ITEM, LogplayerFrame::pressedFileOpen)
+EVT_MENU(ID_FILE_QUIT_MENU_ITEM, LogplayerFrame::pressedFileQuit)
+EVT_COMMAND_SCROLL_CHANGED(ID_LOG_POSITION_SLIDER, LogplayerFrame::movedSlider)
+EVT_PAINT(LogplayerFrame::paint)
+EVT_TIMER(TIMER_ID, LogplayerFrame::redraw)
 END_EVENT_TABLE()
 
 
@@ -54,8 +54,7 @@ LogplayerFrame::LogplayerFrame(std::unique_ptr<logplayer::LogPlayer> player)
     refreshTimer = new wxTimer(this, TIMER_ID);
     refreshTimer->Start(100, wxTIMER_CONTINUOUS);
 
-    for(int n = -4; n <= 4; ++n)
-    {
+    for (int n = -4; n <= 4; ++n) {
         availableSpeeds.push_back(std::pow(2.0, n));
     }
 
@@ -78,13 +77,10 @@ void LogplayerFrame::pressedRestart(wxCommandEvent& event)
 
 void LogplayerFrame::pressedPlay(wxCommandEvent& event)
 {
-    if(!isPlaying)
-    {
+    if (!isPlaying) {
         player->play(false);
         playButton->SetLabel(wxT("Pause"));
-    }
-    else
-    {
+    } else {
         player->pause();
         playButton->SetLabel(wxT("Play"));
     }
@@ -101,8 +97,7 @@ void LogplayerFrame::pressedStep(wxCommandEvent& event)
 
 void LogplayerFrame::pressedSlower(wxCommandEvent& event)
 {
-    if(speedIndex > 0)
-    {
+    if (speedIndex > 0) {
         --speedIndex;
     }
 
@@ -114,8 +109,7 @@ void LogplayerFrame::pressedSlower(wxCommandEvent& event)
 
 void LogplayerFrame::pressedFaster(wxCommandEvent& event)
 {
-    if(speedIndex < availableSpeeds.size()-1)
-    {
+    if (speedIndex < availableSpeeds.size() - 1) {
         ++speedIndex;
     }
 
@@ -131,8 +125,7 @@ void LogplayerFrame::enteredSpeed(wxCommandEvent& event)
 
     double newSpeed = speed;
 
-    if(text.ToDouble(&newSpeed) && (newSpeed > 0.0))
-    {
+    if (text.ToDouble(&newSpeed) && (newSpeed > 0.0)) {
         speed = newSpeed;
         player->setPlaybackSpeed(speed);
     }
@@ -148,14 +141,13 @@ void LogplayerFrame::pressedFileOpen(wxCommandEvent& event)
                       wxEmptyString,
                       kFileOpenFlags);
 
-    if(open.ShowModal() == wxID_OK)
-    {
+    if (open.ShowModal() == wxID_OK) {
         wxString path = open.GetPath();
         activeLogFile = std::string(path.mb_str());
         player->load(activeLogFile);
 
         std::size_t localPath = path.rfind('/');
-        path = path.substr(localPath+1);
+        path = path.substr(localPath + 1);
         logFileText->SetLabel(path);
         logPositionSlider->SetRange(0, player->numberOfFrames());
     }
@@ -178,7 +170,6 @@ void LogplayerFrame::movedSlider(wxScrollEvent& event)
 
 void LogplayerFrame::paint(wxPaintEvent& event)
 {
-
 }
 
 
@@ -190,5 +181,5 @@ void LogplayerFrame::redraw(wxTimerEvent& event)
     logPositionSlider->SetValue(frame);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

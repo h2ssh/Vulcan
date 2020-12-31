@@ -8,11 +8,11 @@
 
 
 /**
-* \file     id.cpp
-* \author   Collin Johnson
-*
-* Definition of load_next_id, save_next_id, next_id.
-*/
+ * \file     id.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of load_next_id, save_next_id, next_id.
+ */
 
 #include "hssh/utils/id.h"
 #include <fstream>
@@ -29,8 +29,7 @@ bool load_next_id(const std::string& name)
 {
     std::ifstream in(name);
 
-    if(in.is_open())
-    {
+    if (in.is_open()) {
         in >> nextId;
     }
 
@@ -42,8 +41,7 @@ bool save_next_id(const std::string& name)
 {
     std::ofstream out(name);
 
-    if(out.is_open())
-    {
+    if (out.is_open()) {
         out << nextId;
     }
 
@@ -56,5 +54,5 @@ Id next_id(void)
     return ++nextId;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

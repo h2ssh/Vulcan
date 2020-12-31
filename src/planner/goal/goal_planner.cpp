@@ -8,20 +8,20 @@
 
 
 /**
-* \file     global_topo_planner.cpp
-* \author   Collin Johnson
-*
-* Definition of GoalPlanner.
-*/
+ * \file     global_topo_planner.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GoalPlanner.
+ */
 
 #include "planner/goal/goal_planner.h"
-#include "planner/goal/goal_target.h"
-#include "planner/goal/search.h"
-#include "planner/goal/debug_info.h"
 #include "hssh/global_topological/topological_map.h"
 #include "planner/decision/decision_target.h"
-#include <iostream>
+#include "planner/goal/debug_info.h"
+#include "planner/goal/goal_target.h"
+#include "planner/goal/search.h"
 #include <cassert>
+#include <iostream>
 
 #define DEBUG_MAP
 #define DEBUG_PATH
@@ -33,16 +33,13 @@ namespace vulcan
 namespace planner
 {
 
-void print_map     (const hssh::TopologicalMap& map);
-void print_path    (const graph::Path<hssh::TopologicalVertex>& path);
-void print_route   (const GoalRoute& route);
+void print_map(const hssh::TopologicalMap& map);
+void print_path(const graph::Path<hssh::TopologicalVertex>& path);
+void print_route(const GoalRoute& route);
 void print_sequence(const DecisionTargetSequence& sequence);
 
 
-GoalPlanner::GoalPlanner(void)
-    : haveGraph(false)
-    , graphId(0)
-    , routeId(0)
+GoalPlanner::GoalPlanner(void) : haveGraph(false), graphId(0), routeId(0)
 {
 }
 
@@ -50,7 +47,7 @@ GoalPlanner::GoalPlanner(void)
 bool GoalPlanner::plan(const GoalTarget& target, const hssh::TopologicalMap& map, goal_debug_info_t& info)
 {
     hssh::TopologicalVertex start = hssh::convert_location_to_vertex(map.getGlobalLocation(), map);
-    hssh::TopologicalVertex goal  = hssh::convert_place_to_vertex(target.getTargetPlace());
+    hssh::TopologicalVertex goal = hssh::convert_place_to_vertex(target.getTargetPlace());
 
     initializeGraph(map);
 
@@ -60,13 +57,12 @@ bool GoalPlanner::plan(const GoalTarget& target, const hssh::TopologicalMap& map
 
     print_path(searcher.getPath());
 
-    if(foundPath)
-    {
+    if (foundPath) {
         convertPathToRoute(searcher.getPath(), map);
         convertRouteToSequence(map);
     }
 
-    info.searchInfo       = searcher.getDebugInfo();
+    info.searchInfo = searcher.getDebugInfo();
     info.searchInfo.graph = graph;
 
     return foundPath;
@@ -75,12 +71,11 @@ bool GoalPlanner::plan(const GoalTarget& target, const hssh::TopologicalMap& map
 
 void GoalPlanner::initializeGraph(const hssh::TopologicalMap& map)
 {
-    if(!haveGraph || (map.getId() != graphId))
-    {
-        graph   = hssh::convert_map_to_graph(map);
+    if (!haveGraph || (map.getId() != graphId)) {
+        graph = hssh::convert_map_to_graph(map);
 
         haveGraph = true;
-        graphId   = map.getId();
+        graphId = map.getId();
 
         print_map(map);
     }
@@ -93,15 +88,12 @@ void GoalPlanner::convertPathToRoute(const graph::Path<hssh::TopologicalVertex>&
 
     std::vector<goal_route_element_t> elements;
 
-    for(auto vertexIt = vertices.begin(), vertexEnd = vertices.end(); vertexIt != vertexEnd; ++vertexIt)
-    {
+    for (auto vertexIt = vertices.begin(), vertexEnd = vertices.end(); vertexIt != vertexEnd; ++vertexIt) {
         hssh::NodeData node = vertexIt->getVertexData();
 
-        if(node.isSegment)
-        {
+        if (node.isSegment) {
             elements.push_back(goal_route_element_t(*map.getPathSegment(node.id)));
-        }
-        else // place!
+        } else   // place!
         {
             elements.push_back(goal_route_element_t(*map.getPlace(node.id)));
         }
@@ -120,8 +112,7 @@ void GoalPlanner::convertRouteToSequence(const hssh::TopologicalMap& map)
     std::vector<std::shared_ptr<DecisionTarget>> targets;
 
     // If a single element, then already at the target, so no need to actually create a new sequence
-    if(elements.size() > 1)
-    {
+    if (elements.size() > 1) {
         targets.push_back(createInitialTarget(elements[0], elements[1], map.getGlobalLocation()));
 
         createTargetsForRemainingElements(elements, targets);
@@ -133,7 +124,8 @@ void GoalPlanner::convertRouteToSequence(const hssh::TopologicalMap& map)
 }
 
 
-GoalPlanner::fragment_info_t GoalPlanner::getFragmentInfoFromSegment(const hssh::GlobalPathSegment& segment, int placeId, bool entryFragment)
+GoalPlanner::fragment_info_t
+  GoalPlanner::getFragmentInfoFromSegment(const hssh::GlobalPathSegment& segment, int placeId, bool entryFragment)
 {
     assert((segment.getPlusTransition().placeId == placeId) || (segment.getMinusTransition().placeId == placeId));
 
@@ -141,17 +133,14 @@ GoalPlanner::fragment_info_t GoalPlanner::getFragmentInfoFromSegment(const hssh:
 
     info.pathId = segment.getPathId();
 
-    if(segment.getPlusTransition().placeId == placeId)
-    {
+    if (segment.getPlusTransition().placeId == placeId) {
         info.direction = entryFragment ? hssh::PATH_MINUS : hssh::PATH_PLUS;
-    }
-    else if(segment.getMinusTransition().placeId == placeId)
-    {
+    } else if (segment.getMinusTransition().placeId == placeId) {
         info.direction = entryFragment ? hssh::PATH_PLUS : hssh::PATH_MINUS;
-    }
-    else
-    {
-        std::cout<<"ERROR:GoalPlanner:Place "<<placeId<<" was not on the specified path segment:"<<segment.getPlusTransition().placeId<<"->"<<segment.getMinusTransition().placeId<<'\n';
+    } else {
+        std::cout << "ERROR:GoalPlanner:Place " << placeId
+                  << " was not on the specified path segment:" << segment.getPlusTransition().placeId << "->"
+                  << segment.getMinusTransition().placeId << '\n';
         assert(false);
     }
 
@@ -163,117 +152,116 @@ GoalPlanner::fragment_info_t GoalPlanner::getFragmentInfoFromLocation(const hssh
 {
     fragment_info_t info;
 
-    // Remember the direction of a fragment is the direction you would move if EXITING through it. The placeState direction
-    // will be the direction through which the place was entered, thus need to flip the directions to determine the entry fragment
-    info.pathId    = location.pathId;
+    // Remember the direction of a fragment is the direction you would move if EXITING through it. The placeState
+    // direction will be the direction through which the place was entered, thus need to flip the directions to
+    // determine the entry fragment
+    info.pathId = location.pathId;
     info.direction = (location.pathDirection == hssh::PATH_PLUS) ? hssh::PATH_MINUS : hssh::PATH_PLUS;
 
     return info;
 }
 
 
-std::shared_ptr<DecisionTarget> GoalPlanner::createInitialTarget(const goal_route_element_t&    firstElement,
-                                                                 const goal_route_element_t&    secondElement,
+std::shared_ptr<DecisionTarget> GoalPlanner::createInitialTarget(const goal_route_element_t& firstElement,
+                                                                 const goal_route_element_t& secondElement,
                                                                  const hssh::GlobalLocation& location)
 {
     assert(firstElement.isPathSegment || firstElement.isPlace);
 
-    if(firstElement.isPathSegment)
-    {
-        std::cout<<"initial was path\n";
+    if (firstElement.isPathSegment) {
+        std::cout << "initial was path\n";
         return createInitialPathTarget(firstElement.segment, secondElement.place.getId(), location);
-    }
-    else // if(firstElement.isPlace)
+    } else   // if(firstElement.isPlace)
     {
         fragment_info_t entry = getFragmentInfoFromLocation(location);
-        fragment_info_t exit  = getFragmentInfoFromSegment(secondElement.segment, firstElement.place.getId(), true);
+        fragment_info_t exit = getFragmentInfoFromSegment(secondElement.segment, firstElement.place.getId(), true);
 
-        std::cout<<"initial was place:"<<entry.pathId<<':'<<entry.direction<<' '<<exit.pathId<<':'<<exit.direction<<'\n';
+        std::cout << "initial was place:" << entry.pathId << ':' << entry.direction << ' ' << exit.pathId << ':'
+                  << exit.direction << '\n';
         return createPlaceTarget(firstElement.place.getStar(), entry, exit);
     }
 }
 
 
-void GoalPlanner::createTargetsForRemainingElements(const std::vector<goal_route_element_t>&      elements,
+void GoalPlanner::createTargetsForRemainingElements(const std::vector<goal_route_element_t>& elements,
                                                     std::vector<std::shared_ptr<DecisionTarget>>& targets)
 {
     // Don't need to process the final element because the robot will be at the goal place at that point in time
-    for(size_t n = 1; n < elements.size()-1; ++n)
-    {
-        if(elements[n].isPathSegment)
-        {
-            std::cout<<"adding path\n";
+    for (size_t n = 1; n < elements.size() - 1; ++n) {
+        if (elements[n].isPathSegment) {
+            std::cout << "adding path\n";
             targets.push_back(createPathTarget());
-        }
-        else if(elements[n].isPlace)
-        {
-            fragment_info_t entry = getFragmentInfoFromSegment(elements[n-1].segment, elements[n].place.getId(), false);
-            fragment_info_t exit  = getFragmentInfoFromSegment(elements[n+1].segment, elements[n].place.getId(), true);
+        } else if (elements[n].isPlace) {
+            fragment_info_t entry =
+              getFragmentInfoFromSegment(elements[n - 1].segment, elements[n].place.getId(), false);
+            fragment_info_t exit = getFragmentInfoFromSegment(elements[n + 1].segment, elements[n].place.getId(), true);
 
-            std::cout<<"adding place:"<<entry.pathId<<':'<<entry.direction<<' '<<exit.pathId<<':'<<exit.direction<<'\n';
+            std::cout << "adding place:" << entry.pathId << ':' << entry.direction << ' ' << exit.pathId << ':'
+                      << exit.direction << '\n';
             targets.push_back(createPlaceTarget(elements[n].place.getStar(), entry, exit));
-        }
-        else
-        {
+        } else {
             assert("ERROR:GoalPlanner: Element was invalid\n" && false);
         }
     }
 }
 
 
-std::shared_ptr<DecisionTarget> GoalPlanner::createInitialPathTarget(const hssh::GlobalPathSegment& segment, int nextPlaceId, const hssh::GlobalLocation& location)
+std::shared_ptr<DecisionTarget> GoalPlanner::createInitialPathTarget(const hssh::GlobalPathSegment& segment,
+                                                                     int nextPlaceId,
+                                                                     const hssh::GlobalLocation& location)
 {
     /*
-    * For the initial path target, the robot is going to be moving in some direction along the global and local path. If the target place of the current segment is not
-    * the next place along the route, then the robot needs to drive to the beginning of the local path, rather than the end. After the initial path target, the robot
-    * will always be driving to the end of the path.
-    */
+     * For the initial path target, the robot is going to be moving in some direction along the global and local path.
+     * If the target place of the current segment is not the next place along the route, then the robot needs to drive
+     * to the beginning of the local path, rather than the end. After the initial path target, the robot will always be
+     * driving to the end of the path.
+     */
 
-    return std::shared_ptr<DecisionTarget>(new LocalPathTarget((location.pathState.targetPlaceId != nextPlaceId) ? LOCAL_TOPO_PATH_START : LOCAL_TOPO_PATH_END));
+    return std::shared_ptr<DecisionTarget>(new LocalPathTarget(
+      (location.pathState.targetPlaceId != nextPlaceId) ? LOCAL_TOPO_PATH_START : LOCAL_TOPO_PATH_END));
 }
 
 
-std::shared_ptr<DecisionTarget> GoalPlanner::createPlaceTarget(const hssh::LargeScaleStar& star, fragment_info_t entry, fragment_info_t exit)
+std::shared_ptr<DecisionTarget>
+  GoalPlanner::createPlaceTarget(const hssh::LargeScaleStar& star, fragment_info_t entry, fragment_info_t exit)
 {
     /*
-    * The PlaceNeighborhoodTarget needs the SmallScaleStar and entry and exit local path fragments for the neighborhood to be navigated. Need to find
-    * the correct global path fragment for the entry and exit of the global place, then get the associate local path fragments to successfully do the
-    * downward conversion from the global topological to local topological layers of the HSSH.
-    */
-    hssh::SmallScaleStar        smallStar = star.toSmallScaleStar();
+     * The PlaceNeighborhoodTarget needs the SmallScaleStar and entry and exit local path fragments for the neighborhood
+     * to be navigated. Need to find the correct global path fragment for the entry and exit of the global place, then
+     * get the associate local path fragments to successfully do the downward conversion from the global topological to
+     * local topological layers of the HSSH.
+     */
+    hssh::SmallScaleStar smallStar = star.toSmallScaleStar();
     hssh::local_path_fragment_t entryFragment;
     hssh::local_path_fragment_t exitFragment;
 
     std::vector<hssh::global_path_fragment_t> globalFragments = star.getPathFragments();
 
     bool haveEntry = false;
-    bool haveExit  = false;
+    bool haveExit = false;
 
-    for(size_t n = 0; n < globalFragments.size(); ++n)
-    {
-        if((globalFragments[n].pathId == entry.pathId) && (globalFragments[n].direction == entry.direction))
-        {
+    for (size_t n = 0; n < globalFragments.size(); ++n) {
+        if ((globalFragments[n].pathId == entry.pathId) && (globalFragments[n].direction == entry.direction)) {
             entryFragment = smallStar.getFragmentWithId(globalFragments[n].fragmentId);
-            haveEntry     = true;
+            haveEntry = true;
         }
 
-        if((globalFragments[n].pathId == exit.pathId) && (globalFragments[n].direction == exit.direction))
-        {
+        if ((globalFragments[n].pathId == exit.pathId) && (globalFragments[n].direction == exit.direction)) {
             exitFragment = smallStar.getFragmentWithId(globalFragments[n].fragmentId);
-            haveExit     = true;
+            haveExit = true;
         }
     }
 
-    if(!haveEntry)
-    {
-        std::cout<<"ERROR:GoalPlanner: Failed to find entry path fragment: "<<entry.pathId<<':'<<entry.direction<<'\n';
-        std::cout<<star<<'\n';
+    if (!haveEntry) {
+        std::cout << "ERROR:GoalPlanner: Failed to find entry path fragment: " << entry.pathId << ':' << entry.direction
+                  << '\n';
+        std::cout << star << '\n';
     }
 
-    if(!haveExit)
-    {
-        std::cout<<"ERROR:GoalPlanner: Failed to find exit path fragment: "<<exit.pathId<<':'<<exit.direction<<'\n';
-        std::cout<<star<<'\n';
+    if (!haveExit) {
+        std::cout << "ERROR:GoalPlanner: Failed to find exit path fragment: " << exit.pathId << ':' << exit.direction
+                  << '\n';
+        std::cout << star << '\n';
     }
 
     assert(haveEntry && haveExit);
@@ -284,94 +272,81 @@ std::shared_ptr<DecisionTarget> GoalPlanner::createPlaceTarget(const hssh::Large
 
 std::shared_ptr<DecisionTarget> GoalPlanner::createPathTarget(void)
 {
-    // When navigating along anything but the initial path, the robot will always go to the end of the LocalPath because it is moving to the
-    // next place on the path, which is always the end in the local path frame of reference
+    // When navigating along anything but the initial path, the robot will always go to the end of the LocalPath because
+    // it is moving to the next place on the path, which is always the end in the local path frame of reference
     return std::shared_ptr<DecisionTarget>(new LocalPathTarget(LOCAL_TOPO_PATH_END));
 }
 
 
 void print_map(const hssh::TopologicalMap& map)
 {
-    #ifdef DEBUG_MAP
+#ifdef DEBUG_MAP
     auto places = map.getPlaces();
-    auto paths  = map.getPaths();
+    auto paths = map.getPaths();
 
-    for(auto placeIt = places.begin(), placeEnd = places.end(); placeIt != placeEnd; ++placeIt)
-    {
-        std::cout<<"Place "<<placeIt->second.getId()<<':'<<placeIt->second.getStar()<<'\n';
+    for (auto placeIt = places.begin(), placeEnd = places.end(); placeIt != placeEnd; ++placeIt) {
+        std::cout << "Place " << placeIt->second.getId() << ':' << placeIt->second.getStar() << '\n';
     }
 
-    for(auto pathIt = paths.begin(), pathEnd = paths.end(); pathIt != pathEnd; ++pathIt)
-    {
-        std::cout<<pathIt->second<<'\n';
+    for (auto pathIt = paths.begin(), pathEnd = paths.end(); pathIt != pathEnd; ++pathIt) {
+        std::cout << pathIt->second << '\n';
     }
-    #endif
+#endif
 }
 
 
 void print_path(const graph::Path<hssh::TopologicalVertex>& path)
 {
-    #ifdef DEBUG_PATH
-    if(path.getLength() > 0)
-    {
-        std::cout<<"DEBUG:GoalPlanner: Path through graph:\n";
+#ifdef DEBUG_PATH
+    if (path.getLength() > 0) {
+        std::cout << "DEBUG:GoalPlanner: Path through graph:\n";
 
         auto vertices = path.getPath();
 
-        for(auto vertexIt = vertices.begin(), vertexEnd = vertices.end(); vertexIt != vertexEnd; ++vertexIt)
-        {
-            std::cout<<vertexIt->getId()<<' ';
+        for (auto vertexIt = vertices.begin(), vertexEnd = vertices.end(); vertexIt != vertexEnd; ++vertexIt) {
+            std::cout << vertexIt->getId() << ' ';
         }
-        std::cout<<'\n';
+        std::cout << '\n';
+    } else {
+        std::cout << "DEBUG:GoalPlanner: Failed to find a path!\n";
     }
-    else
-    {
-        std::cout<<"DEBUG:GoalPlanner: Failed to find a path!\n";
-    }
-    #endif
+#endif
 }
 
 
 void print_route(const GoalRoute& route)
 {
-    #ifdef DEBUG_ROUTE
-    std::cout<<"DEBUG:GoalPlanner: Route through map:\n";
+#ifdef DEBUG_ROUTE
+    std::cout << "DEBUG:GoalPlanner: Route through map:\n";
 
     auto elements = route.getSequence();
 
-    for(auto elementIt = elements.begin(), elementEnd = elements.end(); elementIt != elementEnd; ++elementIt)
-    {
-        if(elementIt->isPlace)
-        {
-            std::cout<<'P'<<elementIt->place.getId()<<' ';
-        }
-        else if(elementIt->isPathSegment)
-        {
-            std::cout<<'S'<<elementIt->segment.getPathId()<<' ';
-        }
-        else
-        {
+    for (auto elementIt = elements.begin(), elementEnd = elements.end(); elementIt != elementEnd; ++elementIt) {
+        if (elementIt->isPlace) {
+            std::cout << 'P' << elementIt->place.getId() << ' ';
+        } else if (elementIt->isPathSegment) {
+            std::cout << 'S' << elementIt->segment.getPathId() << ' ';
+        } else {
             assert("ERROR:Element must be either a place or a path segment" && false);
         }
     }
-    std::cout<<'\n';
+    std::cout << '\n';
 
-    #endif
+#endif
 }
 
 
 void print_sequence(const DecisionTargetSequence& sequence)
 {
-    #ifdef DEBUG_SEQUENCE
+#ifdef DEBUG_SEQUENCE
     const std::vector<std::shared_ptr<DecisionTarget>>& targets = sequence.getSequence();
 
-    std::cout<<"DEBUG:GoalPlanner: Local target sequence:\n";
-    for(size_t n = 0; n < targets.size(); ++n)
-    {
-        std::cout<<targets[n]->getDescription()<<(n == targets.size()-1 ? "\n" : " -> ");
+    std::cout << "DEBUG:GoalPlanner: Local target sequence:\n";
+    for (size_t n = 0; n < targets.size(); ++n) {
+        std::cout << targets[n]->getDescription() << (n == targets.size() - 1 ? "\n" : " -> ");
     }
-    #endif
+#endif
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

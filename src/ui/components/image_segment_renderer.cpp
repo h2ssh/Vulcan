@@ -8,11 +8,11 @@
 
 
 /**
-* \file     image_segment_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of ImageSegmentRenderer.
-*/
+ * \file     image_segment_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ImageSegmentRenderer.
+ */
 
 #include "ui/components/image_segment_renderer.h"
 #include "ui/common/gl_texture_helpers.h"
@@ -38,18 +38,19 @@ ImageSegmentRenderer::ImageSegmentRenderer(void)
 }
 
 
-void ImageSegmentRenderer::setImageSegments(const std::vector<vision::image_segment_t>& segments, int imageWidth, int imageHeight)
+void ImageSegmentRenderer::setImageSegments(const std::vector<vision::image_segment_t>& segments,
+                                            int imageWidth,
+                                            int imageHeight)
 {
     assert(imageWidth * imageHeight > 0);
 
-    if(!initialized || (imageWidth*imageHeight > this->imageWidth*this->imageHeight))
-    {
+    if (!initialized || (imageWidth * imageHeight > this->imageWidth * this->imageHeight)) {
         initializeSegmentsTexture(imageWidth, imageHeight);
     }
 
     assert(textureWidth * textureHeight > 0);
 
-    this->imageWidth  = imageWidth;
+    this->imageWidth = imageWidth;
     this->imageHeight = imageHeight;
 
     activate_texture(textureName, GL_TEXTURE0, GL_DECAL);
@@ -63,8 +64,7 @@ void ImageSegmentRenderer::setImageSegments(const std::vector<vision::image_segm
 
 void ImageSegmentRenderer::renderImageSegments(void)
 {
-    if(initialized)
-    {
+    if (initialized) {
         enableSegmentTexture();
 
         float textureXMax = maxSegmentX / static_cast<float>(textureWidth);
@@ -86,12 +86,11 @@ void ImageSegmentRenderer::renderImageSegments(void)
 
 void ImageSegmentRenderer::initializeSegmentsTexture(int imageWidth, int imageHeight)
 {
-    if(!initialized)
-    {
+    if (!initialized) {
         glGenTextures(1, &textureName);
     }
 
-    textureWidth  = round_to_power_of_two(imageWidth);
+    textureWidth = round_to_power_of_two(imageWidth);
     textureHeight = round_to_power_of_two(imageHeight);
 
     texture.resize(textureWidth * textureHeight * 4);
@@ -131,42 +130,33 @@ void ImageSegmentRenderer::convertSegmentsToTexture(const std::vector<vision::im
 
     std::fill(texture.begin(), texture.end(), 255);
 
-    for(auto& segment : segments)
-    {
-        for(auto& pixel : segment.pixels)
-        {
-            pixelIndex = (pixel.x + pixel.y*imageWidth)*4;
+    for (auto& segment : segments) {
+        for (auto& pixel : segment.pixels) {
+            pixelIndex = (pixel.x + pixel.y * imageWidth) * 4;
 
-            texture[pixelIndex]   = static_cast<uint8_t>(segment.averageColor[0]);
-            texture[pixelIndex+1] = static_cast<uint8_t>(segment.averageColor[1]);
-            texture[pixelIndex+2] = static_cast<uint8_t>(segment.averageColor[2]);
-            texture[pixelIndex+3] = alpha;
+            texture[pixelIndex] = static_cast<uint8_t>(segment.averageColor[0]);
+            texture[pixelIndex + 1] = static_cast<uint8_t>(segment.averageColor[1]);
+            texture[pixelIndex + 2] = static_cast<uint8_t>(segment.averageColor[2]);
+            texture[pixelIndex + 3] = alpha;
         }
 
-        for(auto& pixel : segment.boundaryPixels)
-        {
-            pixelIndex = (pixel.x + pixel.y*imageWidth)*4;
+        for (auto& pixel : segment.boundaryPixels) {
+            pixelIndex = (pixel.x + pixel.y * imageWidth) * 4;
 
-            texture[pixelIndex]   = 0;
-            texture[pixelIndex+1] = 0;
-            texture[pixelIndex+2] = 0;
-            texture[pixelIndex+3] = 255;
+            texture[pixelIndex] = 0;
+            texture[pixelIndex + 1] = 0;
+            texture[pixelIndex + 2] = 0;
+            texture[pixelIndex + 3] = 255;
 
-            if(pixel.x > maxSegmentX)
-            {
+            if (pixel.x > maxSegmentX) {
                 maxSegmentX = pixel.x;
-            }
-            else if(pixel.x < minSegmentX)
-            {
+            } else if (pixel.x < minSegmentX) {
                 minSegmentX = pixel.x;
             }
 
-            if(pixel.y > maxSegmentY)
-            {
+            if (pixel.y > maxSegmentY) {
                 maxSegmentY = pixel.y;
-            }
-            else if(pixel.y < minSegmentY)
-            {
+            } else if (pixel.y < minSegmentY) {
                 minSegmentY = pixel.y;
             }
         }
@@ -177,5 +167,5 @@ void ImageSegmentRenderer::convertSegmentsToTexture(const std::vector<vision::im
     ++maxSegmentY;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

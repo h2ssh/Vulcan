@@ -8,24 +8,24 @@
 
 
 /**
-* \file     discretized_angle_grid.cpp
-* \author   Paul Foster and Collin Johnson
-*
-* Definition of DiscretizedAngleGrid.
-*/
+ * \file     discretized_angle_grid.cpp
+ * \author   Paul Foster and Collin Johnson
+ *
+ * Definition of DiscretizedAngleGrid.
+ */
 
 #include "utils/discretized_angle_grid.h"
 #include "utils/algorithm_ext.h"
 #include "utils/compression.h"
 #include "utils/stub.h"
 #include "utils/timestamp.h"
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/clamp.hpp>
 #include <algorithm>
-#include <sstream>
+#include <boost/algorithm/clamp.hpp>
+#include <boost/filesystem.hpp>
 #include <cassert>
 #include <cstdio>
 #include <cstring>
+#include <sstream>
 
 // #define DEBUG_BOUNDARY
 // #define DEBUG_TILES
@@ -82,16 +82,15 @@ DiscretizedAngleGrid::DiscretizedAngleGrid(std::size_t widthInCells,
     // The activeRadius is the width in tiles. The width of the region is 2*radius + 1 to give a little slop, plus
     // account for the robot's position. Each tile contains tilewidth * tilewidth cells, so tilewidth^2 * anglebins
     // are needed for each tile.
-    activeRegionRadius_ = (round_up_to_nearest_n(activeRadius * cellsPerMeter_, kTileWidth_) / kTileWidth_)
-        + kActiveRadiusBuffer;
+    activeRegionRadius_ =
+      (round_up_to_nearest_n(activeRadius * cellsPerMeter_, kTileWidth_) / kTileWidth_) + kActiveRadiusBuffer;
     int maxActiveWidth = (2 * activeRegionRadius_) + 1;
 
     int numActiveTiles = (maxActiveWidth + 1) * (maxActiveWidth + 1);
     angleBins_.resize(numActiveTiles * kAngleBinsPerTile_, 0);
 
     // Create available bins for each tile
-    for(int n = 0; n < numActiveTiles; ++n)
-    {
+    for (int n = 0; n < numActiveTiles; ++n) {
         availableBins_.push_back(n * kAngleBinsPerTile_);
     }
 
@@ -107,8 +106,7 @@ void DiscretizedAngleGrid::changeBoundary(const math::Rectangle<double>& newBoun
     // unavailable, so their shifting doesn't affect the map. If an active cells shifts of the map, then its bin needs
     // to be added back to the available bins
 
-    if(newBoundary == cells_.getBoundary())
-    {
+    if (newBoundary == cells_.getBoundary()) {
         return;
     }
 
@@ -119,8 +117,7 @@ void DiscretizedAngleGrid::changeBoundary(const math::Rectangle<double>& newBoun
 
     using ActiveTileBin = std::pair<Point<int>, int64_t>;
     std::vector<ActiveTileBin> activeBins;
-    for(auto activeIt = beginActiveTiles(), activeEnd = endActiveTiles(); activeIt != activeEnd; ++activeIt)
-    {
+    for (auto activeIt = beginActiveTiles(), activeEnd = endActiveTiles(); activeIt != activeEnd; ++activeIt) {
         activeBins.emplace_back(Tile(activeIt.x(), activeIt.y()), *activeIt);
     }
 
@@ -132,11 +129,9 @@ void DiscretizedAngleGrid::changeBoundary(const math::Rectangle<double>& newBoun
     int xShift = std::round(gridShift.x * cells_.tilesPerMeter());
     int yShift = std::round(gridShift.y * cells_.tilesPerMeter());
 
-    for(auto& a : activeBins)
-    {
-        if((a.first.x + xShift < 0) || (a.first.x + xShift >= static_cast<int>(cells_.getWidthInTiles()))
-            || (a.first.y + yShift < 0) || (a.first.y + yShift >= static_cast<int>(cells_.getHeightInTiles())))
-        {
+    for (auto& a : activeBins) {
+        if ((a.first.x + xShift < 0) || (a.first.x + xShift >= static_cast<int>(cells_.getWidthInTiles()))
+            || (a.first.y + yShift < 0) || (a.first.y + yShift >= static_cast<int>(cells_.getHeightInTiles()))) {
             assert(a.second != kUnassignedBin);
             availableBins_.push_back(a.second);
             clearBin(a.second);
@@ -146,10 +141,8 @@ void DiscretizedAngleGrid::changeBoundary(const math::Rectangle<double>& newBoun
             return b.second == a.second;
         });
 
-        if(numSame != 1)
-        {
-            std::cout << "ERROR: DiscretizedAngleGrid: Duplicate bin assigned:" << a.first << "->"
-                << a.second << '\n';
+        if (numSame != 1) {
+            std::cout << "ERROR: DiscretizedAngleGrid: Duplicate bin assigned:" << a.first << "->" << a.second << '\n';
             assert(numSame == 1);
         }
     }
@@ -164,17 +157,15 @@ void DiscretizedAngleGrid::changeBoundary(const math::Rectangle<double>& newBoun
 
     // If the active region has grown, then some tiles will need to be assigned a bin. Can't use recenter because
     // it will also try save the non-existent (now) cells to file.
-    for(auto activeIt = beginActiveTiles(), activeEnd = endActiveTiles(); activeIt != activeEnd; ++activeIt)
-    {
-        if(*activeIt == kUnassignedBin)
-        {
+    for (auto activeIt = beginActiveTiles(), activeEnd = endActiveTiles(); activeIt != activeEnd; ++activeIt) {
+        if (*activeIt == kUnassignedBin) {
             assignTileBins(Tile(activeIt.x(), activeIt.y()));
         }
     }
 
 #ifdef DEBUG_BOUNDARY
-    std::cout << "DEBUG: DiscretizedAngleGrid: Assigned boundary:" << newBoundary << " Final boundary:"
-        << cells_.getBoundary() << '\n';
+    std::cout << "DEBUG: DiscretizedAngleGrid: Assigned boundary:" << newBoundary
+              << " Final boundary:" << cells_.getBoundary() << '\n';
 #endif
 
     eraseOffMapTiles();
@@ -189,8 +180,7 @@ bool DiscretizedAngleGrid::recenterActiveRegion(Point<float> robotPosition)
     // robot tile the center tile.
     auto robotTileOffset = position_to_tile(robotPosition, cells_) - activeRegion_.center();
 
-    if((std::abs(robotTileOffset.x) <= 1) && (std::abs(robotTileOffset.y) <= 1))
-    {
+    if ((std::abs(robotTileOffset.x) <= 1) && (std::abs(robotTileOffset.y) <= 1)) {
 #ifdef DEBUG_BOUNDARY
         std::cout << "DEBUG: DiscretizedAngleGrid: Center offset not large enough. Not recentering.\n";
 #endif
@@ -201,8 +191,7 @@ bool DiscretizedAngleGrid::recenterActiveRegion(Point<float> robotPosition)
 
     // If pushed up against the boundary of the map, even if a shift is needed, there might not be anywhere for the
     // region to grow, so it will still be unchanged for the off-center robot position.
-    if(newActiveRegion == activeRegion_)
-    {
+    if (newActiveRegion == activeRegion_) {
 #ifdef DEBUG_BOUNDARY
         std::cout << "DEBUG: DiscretizedAngleGrid: Active region unchanged. Not recentering.\n";
 #endif
@@ -219,7 +208,7 @@ bool DiscretizedAngleGrid::recenterActiveRegion(Point<float> robotPosition)
 
 #ifdef DEBUG_BOUNDARY
     std::cout << "DEBUG: DiscretizedAngleGrid: Assigned new active region: Tiles:" << activeRegion_ << " Cells: "
-        << " Cells:" << getActiveRegionInCells() << '\n';
+              << " Cells:" << getActiveRegionInCells() << '\n';
 #endif
 
     return true;
@@ -231,7 +220,7 @@ math::Rectangle<float> DiscretizedAngleGrid::getActiveRegion(void) const
     auto activeOrigin = grid_point_to_global_point(tile_origin_cell(activeRegion_.bottomLeft, cells_), cells_);
     return math::Rectangle<float>(activeOrigin,
                                   Point<float>(activeOrigin.x + activeWidth() * cells_.metersPerTile(),
-                                                     activeOrigin.y + activeHeight() * cells_.metersPerTile()));
+                                               activeOrigin.y + activeHeight() * cells_.metersPerTile()));
 }
 
 
@@ -240,7 +229,7 @@ math::Rectangle<int> DiscretizedAngleGrid::getActiveRegionInCells(void) const
     auto activeOrigin = tile_origin_cell(activeRegion_.bottomLeft, cells_);
     return math::Rectangle<int>(activeOrigin,
                                 Point<int>(activeOrigin.x + (activeWidth() * cells_.getTileSize()),
-                                                 activeOrigin.y + (activeHeight() * cells_.getTileSize())));
+                                           activeOrigin.y + (activeHeight() * cells_.getTileSize())));
 }
 
 
@@ -264,10 +253,7 @@ DiscretizedAngleGrid::TileIter DiscretizedAngleGrid::beginActiveTiles(void)
 
 DiscretizedAngleGrid::TileIter DiscretizedAngleGrid::endActiveTiles(void)
 {
-    return TileIter(activeRegion_.bottomLeft.x,
-                    activeRegion_.bottomLeft.y + activeHeight(),
-                    activeWidth(),
-                    cells_);
+    return TileIter(activeRegion_.bottomLeft.x, activeRegion_.bottomLeft.y + activeHeight(), activeWidth(), cells_);
 }
 
 
@@ -280,10 +266,8 @@ void DiscretizedAngleGrid::reset(void)
 
 void DiscretizedAngleGrid::flush(void)
 {
-    for(int tileY = activeRegion_.bottomLeft.y; tileY <= activeRegion_.topRight.y; ++tileY)
-    {
-        for(int tileX = activeRegion_.bottomLeft.x; tileX <= activeRegion_.topRight.x; ++tileX)
-        {
+    for (int tileY = activeRegion_.bottomLeft.y; tileY <= activeRegion_.topRight.y; ++tileY) {
+        for (int tileX = activeRegion_.bottomLeft.x; tileX <= activeRegion_.topRight.x; ++tileX) {
             tileWrite(Tile(tileX, tileY));
         }
     }
@@ -295,17 +279,17 @@ DiscretizedAngleGrid::TileRegion DiscretizedAngleGrid::calculateActiveRegion(Poi
     using namespace boost::algorithm;
 
     auto centerTile = position_to_tile(center, cells_);
-    return TileRegion(Tile(clamp(centerTile.x - activeRegionRadius_, 0, static_cast<int>(cells_.getWidthInTiles() - 1)),
-                           clamp(centerTile.y - activeRegionRadius_, 0, static_cast<int>(cells_.getHeightInTiles() - 1))),
-                      Tile(clamp(centerTile.x + activeRegionRadius_, 0, static_cast<int>(cells_.getWidthInTiles() - 1)),
-                           clamp(centerTile.y + activeRegionRadius_, 0, static_cast<int>(cells_.getHeightInTiles() - 1))));
+    return TileRegion(
+      Tile(clamp(centerTile.x - activeRegionRadius_, 0, static_cast<int>(cells_.getWidthInTiles() - 1)),
+           clamp(centerTile.y - activeRegionRadius_, 0, static_cast<int>(cells_.getHeightInTiles() - 1))),
+      Tile(clamp(centerTile.x + activeRegionRadius_, 0, static_cast<int>(cells_.getWidthInTiles() - 1)),
+           clamp(centerTile.y + activeRegionRadius_, 0, static_cast<int>(cells_.getHeightInTiles() - 1))));
 }
 
 
 void DiscretizedAngleGrid::setActiveBins(void)
 {
-    for(auto activeIt = beginActiveTiles(), activeEnd = endActiveTiles(); activeIt != activeEnd; ++activeIt)
-    {
+    for (auto activeIt = beginActiveTiles(), activeEnd = endActiveTiles(); activeIt != activeEnd; ++activeIt) {
         assignTileBins(Tile(activeIt.x(), activeIt.y()));
     }
 }
@@ -315,15 +299,12 @@ void DiscretizedAngleGrid::saveNewInactiveBins(const TileRegion& newActiveRegion
 {
     // Write out the newly inactive tiles and return their bins to the available bins
     int writecount = 0;
-    for(int tileY = activeRegion_.bottomLeft.y; tileY <= activeRegion_.topRight.y; ++tileY)
-    {
-        for(int tileX = activeRegion_.bottomLeft.x; tileX <= activeRegion_.topRight.x; ++tileX)
-        {
+    for (int tileY = activeRegion_.bottomLeft.y; tileY <= activeRegion_.topRight.y; ++tileY) {
+        for (int tileX = activeRegion_.bottomLeft.x; tileX <= activeRegion_.topRight.x; ++tileX) {
             // If this tile that was loaded with the old origin is no longer in the grid with the changed origin
             // then it should be cached to disk
-            if((tileX < newActiveRegion.bottomLeft.x) || (tileX > newActiveRegion.topRight.x)
-                || (tileY < newActiveRegion.bottomLeft.y) || (tileY > newActiveRegion.topRight.y))
-            {
+            if ((tileX < newActiveRegion.bottomLeft.x) || (tileX > newActiveRegion.topRight.x)
+                || (tileY < newActiveRegion.bottomLeft.y) || (tileY > newActiveRegion.topRight.y)) {
                 tileWrite(Tile(tileX, tileY));
                 freeTileBins(Tile(tileX, tileY));
                 // If successfully wrote, then cache the position that was written
@@ -341,14 +322,11 @@ void DiscretizedAngleGrid::loadNewActiveBins(const TileRegion& newActiveRegion)
     std::sort(availableBins_.begin(), availableBins_.end());
 
     int readcount = 0;
-    for(int tileY = newActiveRegion.bottomLeft.y; tileY <= newActiveRegion.topRight.y; ++tileY)
-    {
-        for(int tileX = newActiveRegion.bottomLeft.x; tileX <= newActiveRegion.topRight.x; ++tileX)
-        {
+    for (int tileY = newActiveRegion.bottomLeft.y; tileY <= newActiveRegion.topRight.y; ++tileY) {
+        for (int tileX = newActiveRegion.bottomLeft.x; tileX <= newActiveRegion.topRight.x; ++tileX) {
             // If the tile in the new region wasn't in the old region, its prior state should be loaded from disk
-            if((tileX < activeRegion_.bottomLeft.x) || (tileX > activeRegion_.topRight.x)
-                || (tileY < activeRegion_.bottomLeft.y) || (tileY > activeRegion_.topRight.y))
-            {
+            if ((tileX < activeRegion_.bottomLeft.x) || (tileX > activeRegion_.topRight.x)
+                || (tileY < activeRegion_.bottomLeft.y) || (tileY > activeRegion_.topRight.y)) {
                 assignTileBins(Tile(tileX, tileY));
                 tileRead(Tile(tileX, tileY));
                 readcount++;
@@ -370,18 +348,15 @@ void DiscretizedAngleGrid::eraseOffMapTiles(void)
 #endif
 
     // Find all cached tiles that are no longer on the map and remove the file for each of them
-    for(auto tile : cachedTilePositions_)
-    {
-        if(currentBoundary.contains(tile))
-        {
+    for (auto tile : cachedTilePositions_) {
+        if (currentBoundary.contains(tile)) {
             continue;
         }
 
         std::string tileName = tile_name(name_, tile);
         bool success = boost::filesystem::remove(tileName);
 
-        if(!success)
-        {
+        if (!success) {
             std::cerr << "WARNING: DiscretizedAngleGrid: Failed to remove tile: " << tileName << " It didn't exist.\n";
         }
     }
@@ -407,8 +382,7 @@ void DiscretizedAngleGrid::freeTileBins(Tile tile)
 
 void DiscretizedAngleGrid::assignTileBins(Tile tile)
 {
-    if(availableBins_.empty())
-    {
+    if (availableBins_.empty()) {
         std::cerr << "ERROR: DiscretizedAngleGrid: Out of available bins!\n";
         assert(!availableBins_.empty());
     }
@@ -419,8 +393,7 @@ void DiscretizedAngleGrid::assignTileBins(Tile tile)
     // When iterating through a single tile, can just use the unsafe iterator for TiledCellGrid
     auto tileStart = cells_.begin(tile.x, tile.y);
     auto tileEnd = cells_.end(tile.x, tile.y);
-    while(tileStart != tileEnd)
-    {
+    while (tileStart != tileEnd) {
         *tileStart = nextBin;
         nextBin += kAngleBinsPerCell_;
         ++tileStart;
@@ -452,36 +425,30 @@ void DiscretizedAngleGrid::tileWrite(Tile tile)
     std::string tileName = tile_name(name_, tilePosition);
     FILE* fp = fopen(tileName.c_str(), "wb");
 
-    if(fp)
-    {
+    if (fp) {
         const std::size_t kTileBytes = kAngleBinsPerTile_ * sizeof(Value);
         auto tileOrigin = tile_origin_cell(tile, cells_);
         auto tileStartBin = cells_(tileOrigin.x, tileOrigin.y);
 
         std::size_t compression = 0;
-        if(compression)
-        {
+        if (compression) {
             PRINT_STUB("DiscretizedAngleGrid::tileWrite compressed data");
-    //         diskBuffer_.reserve(bsz);
-    //         diskBuffer_.clear();
-    //         compress(tileBuffer_.begin(), tileBuffer_.end(), std::back_inserter(diskBuffer_));
-    //         writesize = diskBuffer_.size();
-    //
-    //         fwrite(&compression,sizeof(std::size_t),1,fp);
-    //         fwrite(&writesize,sizeof(std::size_t),1,fp);
-    //         fwrite(diskBuffer_.data(),1,writesize,fp);
-        }
-        else
-        {
+            //         diskBuffer_.reserve(bsz);
+            //         diskBuffer_.clear();
+            //         compress(tileBuffer_.begin(), tileBuffer_.end(), std::back_inserter(diskBuffer_));
+            //         writesize = diskBuffer_.size();
+            //
+            //         fwrite(&compression,sizeof(std::size_t),1,fp);
+            //         fwrite(&writesize,sizeof(std::size_t),1,fp);
+            //         fwrite(diskBuffer_.data(),1,writesize,fp);
+        } else {
             fwrite(&compression, sizeof(std::size_t), 1, fp);
             fwrite(&kTileBytes, sizeof(std::size_t), 1, fp);
             fwrite(angleBins_.data() + tileStartBin, 1, kTileBytes, fp);
         }
 
         fclose(fp);
-    }
-    else
-    {
+    } else {
         std::cerr << "ERROR:DiscretizedAngleGrid: Failed to open tile cache file:" << tileName << '\n';
         perror("errno:");
     }
@@ -493,22 +460,18 @@ void DiscretizedAngleGrid::tileRead(Tile tile)
     std::string tileFilename = tile_name(name_, tile_origin_position(tile, cells_));
     FILE* fp = fopen(tileFilename.c_str(), "rb");
 
-    if(fp)
-    {
+    if (fp) {
         std::size_t compression;
-        if(fread(&compression,sizeof(std::size_t),1,fp))
-        {
+        if (fread(&compression, sizeof(std::size_t), 1, fp)) {
             // do nothing on error...
         }
         std::size_t readsize;
-        if(fread(&readsize,sizeof(std::size_t),1,fp))
-        {
+        if (fread(&readsize, sizeof(std::size_t), 1, fp)) {
             // do nothing on error
         }
 
-        //Data is uncompressed
-        if(!compression)
-        {
+        // Data is uncompressed
+        if (!compression) {
             const std::size_t kTileBytes = kAngleBinsPerTile_ * sizeof(Value);
             auto tileOrigin = tile_origin_cell(tile, cells_);
             auto tileStartBin = cells_(tileOrigin.x, tileOrigin.y);
@@ -516,30 +479,27 @@ void DiscretizedAngleGrid::tileRead(Tile tile)
             assert(readsize == kTileBytes);
             std::size_t count = fread(angleBins_.data() + tileStartBin, 1, readsize, fp);
             assert(count == readsize);
-        }
-        else
-        {  //Data is RL compressed
+        } else {   // Data is RL compressed
             PRINT_STUB("DiscretizedAngleGrid::tileRead compressed data");
-//             diskBuffer_.resize(readsize);
-//             if(fread(diskBuffer_.data(),1,readsize,fp));
-//
-//             tileBuffer_.reserve(bsz);
-//             tileBuffer_.clear();
-//             decompress(diskBuffer_.begin(), diskBuffer_.end(), std::back_inserter(tileBuffer_));
-//             assert(tileBuffer_.size() == bsz);
+            //             diskBuffer_.resize(readsize);
+            //             if(fread(diskBuffer_.data(),1,readsize,fp));
+            //
+            //             tileBuffer_.reserve(bsz);
+            //             tileBuffer_.clear();
+            //             decompress(diskBuffer_.begin(), diskBuffer_.end(), std::back_inserter(tileBuffer_));
+            //             assert(tileBuffer_.size() == bsz);
         }
-    }
-    else
-    {
-//         std::cerr << "WARNING: DiscretizedAngleGrid: Failed to read tile from " << tileFilename << " Tile:" << tile <<
-//             " Origin:" << cells_.getBottomLeft() << " Dim:" << cells_.getWidthInTiles() << 'x' << cells_.getHeightInTiles() << '\n';
-//         perror("errno:");
+    } else {
+        //         std::cerr << "WARNING: DiscretizedAngleGrid: Failed to read tile from " << tileFilename << " Tile:"
+        //         << tile <<
+        //             " Origin:" << cells_.getBottomLeft() << " Dim:" << cells_.getWidthInTiles() << 'x' <<
+        //             cells_.getHeightInTiles() << '\n';
+        //         perror("errno:");
 
         tileClear(tile);
     }
 
-    if(fp)
-    {
+    if (fp) {
         fclose(fp);
     }
 }
@@ -556,25 +516,21 @@ void DiscretizedAngleGrid::tileClear(Tile tile)
 
 void DiscretizedAngleGrid::verifyActiveRegion(void)
 {
-    for(auto activeIt = beginActiveTiles(), activeEnd = endActiveTiles(); activeIt != activeEnd; ++activeIt)
-    {
-        if(*activeIt == kUnassignedBin)
-        {
+    for (auto activeIt = beginActiveTiles(), activeEnd = endActiveTiles(); activeIt != activeEnd; ++activeIt) {
+        if (*activeIt == kUnassignedBin) {
             std::cout << "ERROR: DiscretizedAngleGrid: Active region:" << activeRegion_ << '\n'
-                << "Unassigned active:" << Tile(activeIt.x(), activeIt.y()) << '\n';
+                      << "Unassigned active:" << Tile(activeIt.x(), activeIt.y()) << '\n';
             assert(*activeIt != kUnassignedBin);
         }
 
-        auto unassignedIt = std::find(cells_.begin(activeIt.x(), activeIt.y()),
-                                      cells_.end(activeIt.x(), activeIt.y()),
-                                      kUnassignedBin);
-        if(unassignedIt != cells_.end(activeIt.x(), activeIt.y()))
-        {
+        auto unassignedIt =
+          std::find(cells_.begin(activeIt.x(), activeIt.y()), cells_.end(activeIt.x(), activeIt.y()), kUnassignedBin);
+        if (unassignedIt != cells_.end(activeIt.x(), activeIt.y())) {
             auto badCellIt = activeIt.begin();
             std::advance(badCellIt, std::distance(cells_.begin(activeIt.x(), activeIt.y()), unassignedIt));
             std::cout << "ERROR: DiscretizedAngleGrid: Active region:" << activeRegion_ << '\n'
-                << "Unassigned active:" << Tile(activeIt.x(), activeIt.y())
-                << " Cell:" << badCellIt.x() << ',' << badCellIt.y() << '\n';
+                      << "Unassigned active:" << Tile(activeIt.x(), activeIt.y()) << " Cell:" << badCellIt.x() << ','
+                      << badCellIt.y() << '\n';
             assert(unassignedIt == cells_.end(activeIt.x(), activeIt.y()));
         }
     }
@@ -591,9 +547,9 @@ std::string tile_name(const std::string& gridName, Point<double> tilePosition)
 
     std::ostringstream filename;
     filename << kTileBaseDirectory << gridName << "/Tile_X-" << xName << "_Y-" << yName << "_Sz-" << kTileSize
-        << ".tile";
+             << ".tile";
     return filename.str();
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

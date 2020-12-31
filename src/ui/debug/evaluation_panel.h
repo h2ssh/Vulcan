@@ -8,11 +8,11 @@
 
 
 /**
-* \file     evaluation_panel.h
-* \author   Collin Johnson
-*
-* Declaration of EvaluationPanel.
-*/
+ * \file     evaluation_panel.h
+ * \author   Collin Johnson
+ *
+ * Declaration of EvaluationPanel.
+ */
 
 #ifndef UI_DEBUG_EVALUATION_PANEL_H
 #define UI_DEBUG_EVALUATION_PANEL_H
@@ -22,8 +22,14 @@
 
 namespace vulcan
 {
-namespace hssh { class AreaStabilityAnalyzer; }
-namespace hssh { class LocalTopoMap; }
+namespace hssh
+{
+class AreaStabilityAnalyzer;
+}
+namespace hssh
+{
+class LocalTopoMap;
+}
 namespace ui
 {
 
@@ -40,18 +46,17 @@ struct evaluation_panel_widgets_t
 };
 
 /**
-* EvaluationPanel
-*/
+ * EvaluationPanel
+ */
 class EvaluationPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for EvaluationPanel.
-    *
-    * \param    params          Parameters for the rendering
-    * \param    widgets         Interactive widgets on the panel
-    */
+     * Constructor for EvaluationPanel.
+     *
+     * \param    params          Parameters for the rendering
+     * \param    widgets         Interactive widgets on the panel
+     */
     EvaluationPanel(const ui_params_t& params, const evaluation_panel_widgets_t& widgets);
 
     // UIPanel interface
@@ -63,7 +68,6 @@ public:
     void loadSettings(const utils::ConfigFile& config) override;
 
 private:
-
     std::shared_ptr<hssh::AreaStabilityAnalyzer> stabilityAnalyzer_;
     std::shared_ptr<hssh::LocalTopoMap> map_;
     evaluation_panel_widgets_t widgets_;
@@ -79,7 +83,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_EVALUATION_PANEL_H
+#endif   // UI_DEBUG_EVALUATION_PANEL_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     global_place.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalPlace.
-*/
+ * \file     global_place.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalPlace.
+ */
 
 #include "hssh/global_topological/global_place.h"
 #include <algorithm>
@@ -22,10 +22,7 @@ namespace vulcan
 namespace hssh
 {
 
-GlobalPlace::GlobalPlace(Id id,
-                         AreaType type,
-                         Id metricId,
-                         const GlobalTransitionCycle& cycle)
+GlobalPlace::GlobalPlace(Id id, AreaType type, Id metricId, const GlobalTransitionCycle& cycle)
 : id_(id)
 , type_(type)
 , cycle_(cycle)
@@ -44,13 +41,12 @@ bool GlobalPlace::changeMetricId(Id oldId, Id newId)
 {
     auto idIt = std::find(metricPlaceIds_.begin(), metricPlaceIds_.end(), oldId);
 
-    if(idIt != metricPlaceIds_.end())
-    {
+    if (idIt != metricPlaceIds_.end()) {
         *idIt = newId;
     }
 
     return idIt != metricPlaceIds_.end();
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

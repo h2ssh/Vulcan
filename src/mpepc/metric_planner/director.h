@@ -8,47 +8,47 @@
 
 
 /**
-* \file     director.h
-* \author   Jong Jin Park and Collin Johnson
-*
-* Declaration of MetricPlannerDirector.
-*/
+ * \file     director.h
+ * \author   Jong Jin Park and Collin Johnson
+ *
+ * Declaration of MetricPlannerDirector.
+ */
 
 #ifndef METRIC_PLANNER_DIRECTOR_H
 #define METRIC_PLANNER_DIRECTOR_H
 
 // system and utils
 #include "system/director.h"
+#include "utils/condition_variable.h"
+#include "utils/locked_bool.h"
 #include "utils/locked_double_buffer.h"
 #include "utils/locked_queue.h"
-#include "utils/locked_bool.h"
-#include "utils/condition_variable.h"
 #include "utils/mutex.h"
 #include <memory>
 
 // metric planner inputs and outputs
+#include "core/motion_state.h"
 #include "hssh/local_metric/lpm.h"
 #include "hssh/local_topological/local_topo_map.h"
-#include "core/motion_state.h"
-#include "tracker/dynamic_object_collection.h"
 #include "mpepc/metric_planner/messages.h"
-#include "mpepc/motion_controller/task/target.h" // the planner can only send the motion target task (for now at least)
 #include "mpepc/motion_controller/messages.h"
+#include "mpepc/motion_controller/task/target.h"   // the planner can only send the motion target task (for now at least)
+#include "tracker/dynamic_object_collection.h"
 
 // task and script processors
-#include "mpepc/metric_planner/task/task.h"
 #include "mpepc/metric_planner/script/script.h"
+#include "mpepc/metric_planner/task/task.h"
 
 // other data processors and paramsters
 #include "mpepc/grid/obstacle_distance_grid.h"
 #include "mpepc/grid/obstacle_distance_grid_builder.h"
 #include "mpepc/grid/visibility_analysis.h"
+#include "mpepc/metric_planner/params.h"
+#include "mpepc/metric_planner/progress_checker.h"
 #include "mpepc/simulator/dynamic_object_filter.h"
 #include "mpepc/simulator/dynamic_object_simulator.h"
 #include "mpepc/trajectory/trajectory_planner.h"
 #include "mpepc/trajectory/trajectory_planner_info.h"
-#include "mpepc/metric_planner/params.h"
-#include "mpepc/metric_planner/progress_checker.h"
 
 #include "lcmtypes/mpepc/metric_pose_target_t.h"
 
@@ -86,44 +86,42 @@ const std::string kLocalTopoMapArgument("topo-map");
 const std::string kMetricMapArgument("map");
 
 /**
-* MetricPlannerDirector processes incoming data and requests. Using these data,
-* the director orchestrates the calculation of a trajectory for the robot to follow.
-* The trajectory is represented by a motion target, which is issued to the motion
-* controller module that is responsible for generating motor commands for the robot.
-* The director is also responsible for enforcing a regular update period.
-*/
+ * MetricPlannerDirector processes incoming data and requests. Using these data,
+ * the director orchestrates the calculation of a trajectory for the robot to follow.
+ * The trajectory is represented by a motion target, which is issued to the motion
+ * controller module that is responsible for generating motor commands for the robot.
+ * The director is also responsible for enforcing a regular update period.
+ */
 class MetricPlannerDirector : public system::Director
 {
 public:
-
     /**
-    * Constructor for MetricPlannerDirector.
-    */
+     * Constructor for MetricPlannerDirector.
+     */
     MetricPlannerDirector(const utils::CommandLine& commandLine, const utils::ConfigFile& config);
 
     /**
-    * Destructor for MetricPlannerDirector.
-    */
+     * Destructor for MetricPlannerDirector.
+     */
     ~MetricPlannerDirector(void);
 
     // system::Director interface
     void subscribeToData(system::ModuleCommunicator& producer) override;
     system::TriggerStatus waitForTrigger(void) override;
     system::UpdateStatus runUpdate(system::ModuleCommunicator& transmitter) override;
-    void shutdown (system::ModuleCommunicator& transmitter) override;
+    void shutdown(system::ModuleCommunicator& transmitter) override;
 
     // data subscriptions
-    void handleData(const hssh::LocalPerceptualMap&            lpm,            const std::string& channel);
-    void handleData(const hssh::LocalTopoMap&                  ltm,            const std::string& channel);
-    void handleData(const tracker::DynamicObjectCollection& trackedObjects,    const std::string& channel);
-    void handleData(const motion_state_t&               robotState,     const std::string& channel);
-    void handleData(const std::shared_ptr<MetricPlannerTask>&  task,           const std::string& channel);
-    void handleData(const MetricPlannerScript&                 script,         const std::string& channel);
-    void handleData(const metric_planner_command_message_t&    commandMessage, const std::string& channel);
-    void handleData(const vulcan_lcm::metric_pose_target_t&    target,         const std::string& channel);
+    void handleData(const hssh::LocalPerceptualMap& lpm, const std::string& channel);
+    void handleData(const hssh::LocalTopoMap& ltm, const std::string& channel);
+    void handleData(const tracker::DynamicObjectCollection& trackedObjects, const std::string& channel);
+    void handleData(const motion_state_t& robotState, const std::string& channel);
+    void handleData(const std::shared_ptr<MetricPlannerTask>& task, const std::string& channel);
+    void handleData(const MetricPlannerScript& script, const std::string& channel);
+    void handleData(const metric_planner_command_message_t& commandMessage, const std::string& channel);
+    void handleData(const vulcan_lcm::metric_pose_target_t& target, const std::string& channel);
 
 private:
-
     // methods
     void setMetricPlannerTiming(void);
     void updateTaskEnvironment(void);
@@ -135,7 +133,10 @@ private:
     void enforceMetricPlannerTiming(void);
     void transmitCalculatedOutput(system::ModuleCommunicator& transmitter);
 
-    bool haveEssentialData(void) const { return haveGrid_ && haveRobotState_; }; // metric planner will start only when it has the essential pieces of data
+    bool haveEssentialData(void) const
+    {
+        return haveGrid_ && haveRobotState_;
+    };   // metric planner will start only when it has the essential pieces of data
     void handleCommandMessage(const metric_planner_command_message_t& message);
 
     void openDataLog(void);
@@ -148,31 +149,31 @@ private:
     std::vector<laser_configuration_t> laserConfigs_;
 
     // input data buffers
-    utils::LockedDoubleBuffer<hssh::LocalPerceptualMap>         lpmBuffer_;
-    utils::LockedDoubleBuffer<hssh::LocalTopoMap>               topoBuffer_;
+    utils::LockedDoubleBuffer<hssh::LocalPerceptualMap> lpmBuffer_;
+    utils::LockedDoubleBuffer<hssh::LocalTopoMap> topoBuffer_;
     utils::LockedDoubleBuffer<tracker::DynamicObjectCollection> trackedObjectsBuffer_;
-    utils::LockedDoubleBuffer<motion_state_t>            robotStateBuffer_;
-    utils::LockedQueue<metric_planner_command_message_t>        messageQueue_;
+    utils::LockedDoubleBuffer<motion_state_t> robotStateBuffer_;
+    utils::LockedQueue<metric_planner_command_message_t> messageQueue_;
 
     // data indicators
-    utils::LockedBool haveGrid_;       // LPM has been received at least once
-    utils::LockedBool haveLTM_;         // local topo map has been received at least once
-    utils::LockedBool haveRobotState_; // robot state has been received at least once
-    utils::LockedBool inDynamicEnvironment_;    // flag indicating if a DynamicObjectCollection has ever been received
-                                                // if so, then require tracked objects to not go stale
-                                                // if not, then the safety check for tracked objects is bypassed
+    utils::LockedBool haveGrid_;               // LPM has been received at least once
+    utils::LockedBool haveLTM_;                // local topo map has been received at least once
+    utils::LockedBool haveRobotState_;         // robot state has been received at least once
+    utils::LockedBool inDynamicEnvironment_;   // flag indicating if a DynamicObjectCollection has ever been received
+                                               // if so, then require tracked objects to not go stale
+                                               // if not, then the safety check for tracked objects is bypassed
 
     // data handlers
     utils::ConditionVariable dataTrigger_;
 
     // script and task handling
-    utils::Mutex scriptLock_; // lock for the received script
-    utils::Mutex taskLock_;   // lock for the received task
+    utils::Mutex scriptLock_;   // lock for the received script
+    utils::Mutex taskLock_;     // lock for the received task
 
     utils::LockedBool haveNewScript_;
     utils::LockedBool haveNewTask_;
-    utils::LockedBool usingLCMTask_;        // flag indicating using task from LCM, thus send LCM version of planner status
-    utils::LockedBool usingScript_;         // is a script currently controlling the robot?
+    utils::LockedBool usingLCMTask_;   // flag indicating using task from LCM, thus send LCM version of planner status
+    utils::LockedBool usingScript_;    // is a script currently controlling the robot?
 
     std::shared_ptr<MetricPlannerScript> receivedScript_;
     std::shared_ptr<MetricPlannerScript> activeScript_;
@@ -181,54 +182,57 @@ private:
     // when it becomes active, it converts to a much richer task manifold.
     std::shared_ptr<MetricPlannerTask> receivedTask_;
     std::shared_ptr<MetricPlannerTask> activeTask_;
-    std::unique_ptr<TaskManifold>      activeManifold_;
+    std::unique_ptr<TaskManifold> activeManifold_;
 
     // obstacles in the map. both static and dynamic
     bool haveNewObstacleDistanceGrid_;
     ObstacleDistanceGridBuilder obstacleDistanceGridBuilder_;
-    ObstacleDistanceGrid        obstacleDistanceGrid_;
-    VisibilityAnalysis          visibility_;
-    DynamicObjectFilter         objectFilter_;
-    DynamicObjectSimulator      objectSimulator_;
+    ObstacleDistanceGrid obstacleDistanceGrid_;
+    VisibilityAnalysis visibility_;
+    DynamicObjectFilter objectFilter_;
+    DynamicObjectSimulator objectSimulator_;
 
-    TrajectoryPlanner           trajectoryPlanner_;
+    TrajectoryPlanner trajectoryPlanner_;
 
     // logging and progress checking
-    std::ofstream   dataLog;
+    std::ofstream dataLog;
     ProgressChecker progressChecker;
 
     // metric planner timing
     int64_t previousPlanReleaseTimeUs_;
     int64_t updateStartTimeUs_;
     int64_t planReleaseTimeUs_;
-    int64_t averagePlanningTimeUs_; // average time the planner is taking
+    int64_t averagePlanningTimeUs_;   // average time the planner is taking
     int64_t lastGridUpdateTimeUs_;
     int64_t lastTransmissionTimeForObstacleDistanceGridUs_;
 
     // planner status indicators
-    bool isPaused_; // Is the planner paused (by external command)? If so the planner is idle, but it retains all the data.
-    bool isWaitingForPrecondition_; // if the script is waiting for some precondition before switching to the next task.
+    bool isPaused_;   // Is the planner paused (by external command)? If so the planner is idle, but it retains all the
+                      // data.
+    bool
+      isWaitingForPrecondition_;   // if the script is waiting for some precondition before switching to the next task.
     metric_planner_status_message_t plannerStatus_;
 
     // dynamic object simulator output
     std::vector<dynamic_object_trajectory_t> dynObjects_;
 
     // trajectory planner output
-    bool shouldOutputLessDebugInfo_; // debug information is always produced, but this option allows you to discard all evaluated trajectories but the final output.
-    trajectory_planner_output_t     trajectoryPlannerOutput_;
+    bool shouldOutputLessDebugInfo_;   // debug information is always produced, but this option allows you to discard
+                                       // all evaluated trajectories but the final output.
+    trajectory_planner_output_t trajectoryPlannerOutput_;
     trajectory_planner_debug_info_t trajectoryPlannerDebugInfo_;
 
     // commands to the motion controller
     bool haveMotionControllerTask_;
     bool haveMotionControllerCommandMessage_;
 
-    motion_target_t                       previousMotionTarget_;
-    motion_target_t                       nextMotionTarget_;
+    motion_target_t previousMotionTarget_;
+    motion_target_t nextMotionTarget_;
     std::shared_ptr<MotionControllerTask> motionControllerTask_;
-    motion_controller_command_message_t   motionControllerCommandMessage_;
+    motion_controller_command_message_t motionControllerCommandMessage_;
 };
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // METRIC_PLANNER_DIRECTOR_H
+#endif   // METRIC_PLANNER_DIRECTOR_H

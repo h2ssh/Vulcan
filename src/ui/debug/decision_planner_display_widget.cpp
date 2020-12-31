@@ -8,17 +8,17 @@
 
 
 /**
-* \file     decision_planner_display_widget.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionPlannerDisplayWidget.
-*/
+ * \file     decision_planner_display_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionPlannerDisplayWidget.
+ */
 
 #include "ui/debug/decision_planner_display_widget.h"
+#include "ui/common/ui_params.h"
+#include "ui/components/decision_plan_renderer.h"
 #include "ui/components/occupancy_grid_renderer.h"
 #include "ui/components/robot_renderer.h"
-#include "ui/components/decision_plan_renderer.h"
-#include "ui/common/ui_params.h"
 #include "utils/auto_mutex.h"
 
 namespace vulcan
@@ -33,12 +33,12 @@ DecisionPlannerDisplayWidget::DecisionPlannerDisplayWidget(wxWindow* parent,
                                                            long style,
                                                            const wxString& name,
                                                            const wxPalette& palette)
-    : GridBasedDisplayWidget(parent, id, pos, size, style, name, palette)
-    , lpmRenderer(new OccupancyGridRenderer)
-    , planRenderer(new DecisionPlanRenderer)
-    , robotRenderer(new RobotRenderer)
-    , haveNewLPM(false)
-    , havePlan(false)
+: GridBasedDisplayWidget(parent, id, pos, size, style, name, palette)
+, lpmRenderer(new OccupancyGridRenderer)
+, planRenderer(new DecisionPlanRenderer)
+, robotRenderer(new RobotRenderer)
+, haveNewLPM(false)
+, havePlan(false)
 {
 }
 
@@ -51,12 +51,14 @@ DecisionPlannerDisplayWidget::~DecisionPlannerDisplayWidget(void)
 }
 
 
-void DecisionPlannerDisplayWidget::setWidgetParams(const lpm_display_params_t&              lpmParams,
-                                                   const local_topo_display_params_t&       localTopoParams,
+void DecisionPlannerDisplayWidget::setWidgetParams(const lpm_display_params_t& lpmParams,
+                                                   const local_topo_display_params_t& localTopoParams,
                                                    const decision_planner_display_params_t& plannerParams)
 {
     robotRenderer->setRobotColor(lpmParams.robotColor);
-    planRenderer->setRenderColors(plannerParams.placeEntryFragmentColor, plannerParams.placeExitFragmentColor, lpmParams.targetCircleColor);
+    planRenderer->setRenderColors(plannerParams.placeEntryFragmentColor,
+                                  plannerParams.placeExitFragmentColor,
+                                  lpmParams.targetCircleColor);
 }
 
 
@@ -82,8 +84,7 @@ void DecisionPlannerDisplayWidget::renderWidget(void)
 {
     utils::AutoMutex autoLock(dataLock);
 
-    if(haveNewLPM)
-    {
+    if (haveNewLPM) {
         lpmRenderer->setGrid(lpm);
         haveNewLPM = false;
     }
@@ -99,5 +100,5 @@ Point<int> DecisionPlannerDisplayWidget::convertWorldToGrid(const Point<float>& 
     return utils::global_point_to_grid_cell(world, lpm);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

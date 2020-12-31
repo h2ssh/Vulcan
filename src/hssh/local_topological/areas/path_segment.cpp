@@ -8,29 +8,29 @@
 
 
 /**
-* \file     path_segment.cpp
-* \author   Collin Johnson
-*
-* Definition of LocalPathSegment.
-*/
+ * \file     path_segment.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalPathSegment.
+ */
 
 #include "hssh/local_topological/areas/path_segment.h"
 #include "hssh/local_topological/area_visitor.h"
 #include <sstream>
 
-namespace vulcan 
+namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
 
-LocalPathSegment::LocalPathSegment(const TransitionAffordance&              plus,
-                                   const TransitionAffordance&              minus,
+LocalPathSegment::LocalPathSegment(const TransitionAffordance& plus,
+                                   const TransitionAffordance& minus,
                                    const std::vector<TransitionAffordance>& leftDestinations,
                                    const std::vector<TransitionAffordance>& rightDestinations,
-                                   const Lambda&                            lambda,
-                                   int                                      id,
-                                   const AreaExtent&                        extent,
-                                   const std::vector<Gateway>&              gateways)
+                                   const Lambda& lambda,
+                                   int id,
+                                   const AreaExtent& extent,
+                                   const std::vector<Gateway>& gateways)
 : LocalArea(id, extent, gateways)
 , plusTransition_(plus)
 , minusTransition_(minus)
@@ -53,13 +53,11 @@ std::string LocalPathSegment::description(void) const
 
 void LocalPathSegment::visitAffordances(NavigationAffordanceVisitor& visitor) const
 {
-    for(auto& dest : leftDestinations_)
-    {
+    for (auto& dest : leftDestinations_) {
         dest.accept(visitor);
     }
 
-    for(auto& dest : rightDestinations_)
-    {
+    for (auto& dest : rightDestinations_) {
         dest.accept(visitor);
     }
 
@@ -79,5 +77,5 @@ bool LocalPathSegment::isEndpoint(const LocalArea& adj) const
     return adj.hasGateway(plusTransition_.gateway()) || adj.hasGateway(minusTransition_.gateway());
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

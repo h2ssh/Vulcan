@@ -8,16 +8,16 @@
 
 
 /**
-* \file     path.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalPath.
-*/
+ * \file     path.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalPath.
+ */
 
 #include "hssh/global_topological/global_path.h"
 #include "utils/stub.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 #define DEBUG_ADD_PLACE
 
@@ -27,15 +27,12 @@ namespace hssh
 {
 
 // Helper functions
-GlobalPath::GlobalPath(Id id)
-: id_(id)
+GlobalPath::GlobalPath(Id id) : id_(id)
 {
 }
 
 
-GlobalPath::GlobalPath(Id id, const std::vector<GlobalPathSegment>& segments)
-: id_(id)
-, segments_(segments)
+GlobalPath::GlobalPath(Id id, const std::vector<GlobalPathSegment>& segments) : id_(id), segments_(segments)
 {
     PRINT_PRETTY_STUB();
     std::cout << "INFO: Need to implement construction of GlobalPath from path segments_.\n";
@@ -45,8 +42,7 @@ GlobalPath::GlobalPath(Id id, const std::vector<GlobalPathSegment>& segments)
 std::ostream& operator<<(std::ostream& out, const GlobalPath& path)
 {
     out << "Path " << path.id_ << ':';
-    for(Id id : path.places())
-    {
+    for (Id id : path.places()) {
         out << id << ' ';
     }
 
@@ -58,28 +54,23 @@ std::vector<Id> GlobalPath::places(void) const
 {
     std::vector<Id> places;
 
-    for(size_t n = 0; n < segments_.size(); ++n)
-    {
+    for (size_t n = 0; n < segments_.size(); ++n) {
         places.push_back(segments_[n].plusTransition().otherArea(segments_[n].toArea()).id());
 
         // For the final place, need to also add the minus side -- might be frontier or the end place on the path
-        if(n == segments_.size()-1)
-        {
+        if (n == segments_.size() - 1) {
             places.push_back(segments_[n].minusTransition().otherArea(segments_[n].toArea()).id());
         }
     }
 
-    // This code is here to ensure an infinite loop does not get introduced into a path when loops are created in the path segments
-    int lastPlace  = -1;
+    // This code is here to ensure an infinite loop does not get introduced into a path when loops are created in the
+    // path segments
+    int lastPlace = -1;
     int placeCount = 0;
-    for(size_t n = 0; n < places.size(); ++n)
-    {
-        if(places[n] == lastPlace)
-        {
+    for (size_t n = 0; n < places.size(); ++n) {
+        if (places[n] == lastPlace) {
             ++placeCount;
-        }
-        else
-        {
+        } else {
             placeCount = 0;
         }
 
@@ -94,10 +85,8 @@ std::vector<Id> GlobalPath::places(void) const
 
 int GlobalPath::getSegmentIndex(const GlobalPathSegment& segment) const
 {
-    for(size_t n = 0; n < segments_.size(); ++n)
-    {
-        if(segments_[n].id() == segment.id())
-        {
+    for (size_t n = 0; n < segments_.size(); ++n) {
+        if (segments_[n].id() == segment.id()) {
             return n;
         }
     }
@@ -114,10 +103,8 @@ bool GlobalPath::hasSegmentWithId(Id id) const
 
 GlobalPathSegment GlobalPath::getSegmentWithId(Id id) const
 {
-    for(auto& s : segments_)
-    {
-        if(s.id() == id)
-        {
+    for (auto& s : segments_) {
+        if (s.id() == id) {
             return s;
         }
     }
@@ -125,5 +112,5 @@ GlobalPathSegment GlobalPath::getSegmentWithId(Id id) const
     return GlobalPathSegment();
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

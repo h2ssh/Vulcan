@@ -8,11 +8,11 @@
 
 
 /**
-* \file     global_topo_editor_widget.h
-* \author   Collin Johnson
-* 
-* Definition of GlobalTopoEditorWidget.
-*/
+ * \file     global_topo_editor_widget.h
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalTopoEditorWidget.
+ */
 
 #ifndef UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_WIDGET_H
 #define UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_WIDGET_H
@@ -23,11 +23,10 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 class GlobalTopoEditorWidget : public OpenGLWidget
 {
 public:
-    
     GlobalTopoEditorWidget(wxWindow* parent,
                            wxWindowID id = wxID_ANY,
                            const wxPoint& pos = wxDefaultPosition,
@@ -35,16 +34,15 @@ public:
                            long style = 0,
                            const wxString& name = wxString((const wxChar*)("GLCanvas")),
                            const wxPalette& palette = wxNullPalette);
-    
+
     virtual ~GlobalTopoEditorWidget(void);
-    
+
 private:
-    
     // OpenGLWidget interface
     virtual void renderWidget(void) { }
 };
-    
-}
-}
 
-#endif // UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_WIDGET_H
+}   // namespace ui
+}   // namespace vulcan
+
+#endif   // UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_WIDGET_H

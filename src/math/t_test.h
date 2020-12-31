@@ -8,11 +8,11 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* Declaration of t_test_results_t and independent_t_test.
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * Declaration of t_test_results_t and independent_t_test.
+ */
 
 #ifndef MATH_T_TEST_H
 #define MATH_T_TEST_H
@@ -23,18 +23,18 @@ namespace math
 {
 
 /**
-* Results for running an t-test on two sets of samples.
-*
-* Based on a provided confidence threshold, the summary provided details:
-*
-*   - Are means significantly different? (Two-tailed test)
-*   - Is sample A mean significantly less than sample B mean? (One-tailed test)
-*   - Is sample A mean significantly greater than sample B mean? (One-tailed test)
-*/
+ * Results for running an t-test on two sets of samples.
+ *
+ * Based on a provided confidence threshold, the summary provided details:
+ *
+ *   - Are means significantly different? (Two-tailed test)
+ *   - Is sample A mean significantly less than sample B mean? (One-tailed test)
+ *   - Is sample A mean significantly greater than sample B mean? (One-tailed test)
+ */
 struct t_test_results_t
 {
-    double tValue;          ///< T-statistic computed for the samples
-    double confidence;      ///< Confidence value provided by caller
+    double tValue;       ///< T-statistic computed for the samples
+    double confidence;   ///< Confidence value provided by caller
 
     // P-Values giving probability of difference between the distributions
     double pValueDifferent;
@@ -42,14 +42,14 @@ struct t_test_results_t
     double pValueGreater;
 
     // Conditions based on the p-values
-    bool areDifferent;      ///< Don't reject hypothesis they are different
-    bool isLess;            ///< Don't reject hypothesis that sample A mean is less than sample B mean
-    bool isGreater;         ///< Don't reject hypothesis that Sample A mean is greater than sample B mean
+    bool areDifferent;   ///< Don't reject hypothesis they are different
+    bool isLess;         ///< Don't reject hypothesis that sample A mean is less than sample B mean
+    bool isGreater;      ///< Don't reject hypothesis that Sample A mean is greater than sample B mean
 };
 
 /**
-* Description of samples for a t-test.
-*/
+ * Description of samples for a t-test.
+ */
 struct t_test_sample_t
 {
     double mean;
@@ -59,19 +59,19 @@ struct t_test_sample_t
 
 
 /**
-* Run a t-test on independent samples.
-*
-* \pre  sampleA.numSamples > 1 && sampleB.numSamples > 1
-* \pre  sampleA.variance > 0
-* \pre  sampleB.variance > 0
-* \param    sampleA         One of the samples
-* \param    sampleB         The other sample
-* \param    confidence      Confidence value for asserting a condition to be true or false
-* \return   Results of the t-test as a t_test_results_t that summarizes the analysis.
-*/
+ * Run a t-test on independent samples.
+ *
+ * \pre  sampleA.numSamples > 1 && sampleB.numSamples > 1
+ * \pre  sampleA.variance > 0
+ * \pre  sampleB.variance > 0
+ * \param    sampleA         One of the samples
+ * \param    sampleB         The other sample
+ * \param    confidence      Confidence value for asserting a condition to be true or false
+ * \return   Results of the t-test as a t_test_results_t that summarizes the analysis.
+ */
 t_test_results_t independent_t_test(const t_test_sample_t& sampleA, const t_test_sample_t& sampleB, double confidence);
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_T_TEST_H
+#endif   // MATH_T_TEST_H

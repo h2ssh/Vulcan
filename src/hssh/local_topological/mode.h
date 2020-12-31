@@ -8,11 +8,11 @@
 
 
 /**
-* \file
-* \author   Collin Johnson
-*
-* Declaration of possible modes for local_topo_hssh.
-*/
+ * \file
+ * \author   Collin Johnson
+ *
+ * Declaration of possible modes for local_topo_hssh.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_MODE_H
 #define HSSH_LOCAL_TOPOLOGICAL_MODE_H
@@ -23,15 +23,15 @@ namespace hssh
 {
 
 /**
-* Possible states for the local_topo_hssh module:
-*/
+ * Possible states for the local_topo_hssh module:
+ */
 enum class LocalTopoMode
 {
-    label_only,             ///< Only run the labeling process because the robot is in an area of perceptual uncertainty
-    event_detection,        ///< Run the labeling and event detection
+    label_only,        ///< Only run the labeling process because the robot is in an area of perceptual uncertainty
+    event_detection,   ///< Run the labeling and event detection
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_MODE_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_MODE_H

@@ -8,14 +8,14 @@
 
 
 /**
-* \file     unicycle_nonholonomic_distance.h
-* \author   Jong Jin Park
-* 
-* Declaration of distance functions relavent for unicycle-type vehicles with
-* non-holonomic constraints (that can rotate in place but cannot move sideways).
-* Supports two (analytically describable) stabilizing vector field types.
-* Uses egocentric polar coordinates.
-*/
+ * \file     unicycle_nonholonomic_distance.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of distance functions relavent for unicycle-type vehicles with
+ * non-holonomic constraints (that can rotate in place but cannot move sideways).
+ * Supports two (analytically describable) stabilizing vector field types.
+ * Uses egocentric polar coordinates.
+ */
 
 #ifndef UNICYCLE_NONHOLONOMIC_DISTANCE_H
 #define UNICYCLE_NONHOLONOMIC_DISTANCE_H
@@ -39,15 +39,31 @@ double gradient_descent_on_manifold(double r, double phi, double kPhi, double ra
 
 double smooth_descent_on_manifold(double r, double phi, double kPhi, double rangeEpsilon = 0.05);
 
-double stabilizing_delta_star(double r, double phi, double kPhi, stabilizing_vector_field_type_t vectorFieldType, double rangeEpsilon = 0.05);
+double stabilizing_delta_star(double r,
+                              double phi,
+                              double kPhi,
+                              stabilizing_vector_field_type_t vectorFieldType,
+                              double rangeEpsilon = 0.05);
 
 // distance to a target pose over the manifold equipped with stabilizing vector field
-double distance_to_manifold(double r, double phi, double delta, double kPhi, double kDelta, stabilizing_vector_field_type_t vectorFieldType, double rangeEpsilon = 0.05);
+double distance_to_manifold(double r,
+                            double phi,
+                            double delta,
+                            double kPhi,
+                            double kDelta,
+                            stabilizing_vector_field_type_t vectorFieldType,
+                            double rangeEpsilon = 0.05);
 
 // distance to target pose in egocentric polar coordinates
-double unicycle_nonholonomic_distance(double r, double phi, double delta, double kPhi, double kDelta, stabilizing_vector_field_type_t vectorFieldType, double rangeEpsilon = 0.05);
+double unicycle_nonholonomic_distance(double r,
+                                      double phi,
+                                      double delta,
+                                      double kPhi,
+                                      double kDelta,
+                                      stabilizing_vector_field_type_t vectorFieldType,
+                                      double rangeEpsilon = 0.05);
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // UNICYCLE_NONHOLONOMIC_DISTANCE_H
+#endif   // UNICYCLE_NONHOLONOMIC_DISTANCE_H

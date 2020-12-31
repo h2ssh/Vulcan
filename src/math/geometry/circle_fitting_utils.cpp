@@ -8,17 +8,17 @@
 
 
 /**
-* \file     circle_fitting_utils.cpp
-* \author   Collin Johnson
-*
-* Definition of utility functions for the circle fitting algorithms.
-*
-* Adapted the following files available at: http://people.cas.uab.edu/~mosya/cl/CPPcircle.html
-*
-*   - Utilities.cpp
-*   - mystuff.h
-*   - data.h
-*/
+ * \file     circle_fitting_utils.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of utility functions for the circle fitting algorithms.
+ *
+ * Adapted the following files available at: http://people.cas.uab.edu/~mosya/cl/CPPcircle.html
+ *
+ *   - Utilities.cpp
+ *   - mystuff.h
+ *   - data.h
+ */
 
 #include "math/geometry/circle_fitting_utils.h"
 #include "math/geometry/circle.h"
@@ -52,15 +52,13 @@ double Sigma(DataIterator begin, DataIterator end, const Circle<float>& circle)
 {
     double sum = 0.0;
 
-    std::for_each(begin, end,
-                  [&](const Point<float>& p)
-                  {
-                      sum += std::pow(distance_between_points(p, circle.center()) - circle.radius(), 2);
-                  });
+    std::for_each(begin, end, [&](const Point<float>& p) {
+        sum += std::pow(distance_between_points(p, circle.center()) - circle.radius(), 2);
+    });
 
     return sqrt(sum / std::distance(begin, end));
 }
 
-}
-}
-}
+}   // namespace detail
+}   // namespace math
+}   // namespace vulcan

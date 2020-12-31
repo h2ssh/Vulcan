@@ -8,18 +8,18 @@
 
 
 /**
-* \file     shrink_and_stretch.cpp
-* \author   Collin Johnson
-*
-* Definition of ShrinkAndStretchBoundary.
-*/
+ * \file     shrink_and_stretch.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ShrinkAndStretchBoundary.
+ */
 
 #include "hssh/local_topological/boundary/shrink_and_stretch.h"
-#include "hssh/local_topological/events/area_transition.h"
-#include "hssh/local_topological/local_topo_map.h"
-#include "hssh/local_topological/area.h"
 #include "hssh/local_metric/lpm.h"
 #include "hssh/local_metric/pose.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include "math/geometry/shape_fitting.h"
 #include "utils/isovist.h"
 
@@ -31,19 +31,19 @@ namespace hssh
 math::Rectangle<float> area_visible_from_position(Point<float> position, const LocalPerceptualMap& lpm);
 
 
-boost::optional<SmallScaleSpaceBoundary::MapBoundary> ShrinkAndStretchBoundary::computeBoundary(
-    const LocalAreaEventVec& events,
-    const LocalTopoMap& topoMap,
-    const LocalPose& pose,
-    const LocalPerceptualMap& lpm)
+boost::optional<SmallScaleSpaceBoundary::MapBoundary>
+  ShrinkAndStretchBoundary::computeBoundary(const LocalAreaEventVec& events,
+                                            const LocalTopoMap& topoMap,
+                                            const LocalPose& pose,
+                                            const LocalPerceptualMap& lpm)
 {
     currentMap_ = &topoMap;
     currentLpm_ = &lpm;
     currentPosition_ = pose.pose().toPoint();
-    updatedBoundary_ = boost::none;     // Initialize to no new boundary, as boundary-changing events may not have occurred
+    updatedBoundary_ =
+      boost::none;   // Initialize to no new boundary, as boundary-changing events may not have occurred
 
-    for(auto& e : events)
-    {
+    for (auto& e : events) {
         e->accept(*this);
     }
 
@@ -55,18 +55,16 @@ void ShrinkAndStretchBoundary::visitAreaTransition(const AreaTransitionEvent& ev
 {
     // Create a bounding box around the current area plus its immediate neighbors.
     auto currentArea = event.enteredArea();
-    
-    Point<float> boundaryRadius(3.0, 3.0); // buffer to give the new boundary
 
-    if(currentArea)
-    {
+    Point<float> boundaryRadius(3.0, 3.0);   // buffer to give the new boundary
+
+    if (currentArea) {
         auto areaPlusNeighbors = currentMap_->neighborsOf(*currentArea);
         areaPlusNeighbors.push_back(currentArea);
 
         // Accumulate the vertices for all the included areas
         std::vector<Point<float>> boundaryPoints;
-        for(auto& area : areaPlusNeighbors)
-        {
+        for (auto& area : areaPlusNeighbors) {
             auto boundary = area->boundary();
             boundaryPoints.push_back(boundary.bottomLeft - boundaryRadius);
             boundaryPoints.push_back(boundary.topRight + boundaryRadius);
@@ -77,8 +75,7 @@ void ShrinkAndStretchBoundary::visitAreaTransition(const AreaTransitionEvent& ev
         boundaryPoints.push_back(visibleArea.topRight);
 
         // And create an axis-aligned bounding rectangle around them
-        updatedBoundary_ = math::axis_aligned_bounding_rectangle<float>(boundaryPoints.begin(),
-                                                                        boundaryPoints.end());
+        updatedBoundary_ = math::axis_aligned_bounding_rectangle<float>(boundaryPoints.begin(), boundaryPoints.end());
     }
 }
 
@@ -105,5 +102,5 @@ math::Rectangle<float> area_visible_from_position(Point<float> position, const L
     return math::axis_aligned_bounding_rectangle<float>(visibleArea.begin(), visibleArea.end());
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     sensor_log.cpp
-* \author   Collin Johnson
-*
-* Definition of SensorLog.
-*/
+ * \file     sensor_log.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of SensorLog.
+ */
 
 #include "sensors/sensor_log.h"
 #include "system/module_communicator.h"
@@ -28,38 +28,22 @@ namespace sensors
 class LCMSensorCallbacks
 {
 public:
-
-    LCMSensorCallbacks(SensorLog& log)
-    : log_(log)
-    {
-    }
+    LCMSensorCallbacks(SensorLog& log) : log_(log) { }
 
     void handleData(const polar_laser_scan_t& scan, const std::string& channel)
     {
-        if(scan.laserId == kFrontLaserId)
-        {
+        if (scan.laserId == kFrontLaserId) {
             log_.addFrontLaser(scan);
-        }
-        else if(scan.laserId == kBackLaserId)
-        {
+        } else if (scan.laserId == kBackLaserId) {
             log_.addBackLaser(scan);
         }
     }
 
-    void handleData(const imu_data_t& imu, const std::string& channel)
-    {
-        log_.addImu(imu);
-    }
+    void handleData(const imu_data_t& imu, const std::string& channel) { log_.addImu(imu); }
 
-    void handleData(const odometry_t& odom, const std::string& channel)
-    {
-        log_.addOdometry(odom);
-    }
+    void handleData(const odometry_t& odom, const std::string& channel) { log_.addOdometry(odom); }
 
-    void handleData(const encoder_data_t& encoders, const std::string& channel)
-    {
-        log_.addEncoders(encoders);
-    }
+    void handleData(const encoder_data_t& encoders, const std::string& channel) { log_.addEncoders(encoders); }
 
     void handleData(const robot::commanded_joystick_t& joystick, const std::string& channel)
     {
@@ -72,14 +56,16 @@ public:
     }
 
 private:
-
-    SensorLog& log_;        // Log to add the data to
+    SensorLog& log_;   // Log to add the data to
 };
 
 
 // Utility function for sorting the sensor data by timestamp
 template <class Timestamped>
-bool sort_by_time(const Timestamped& lhs, const Timestamped& rhs) { return lhs.timestamp < rhs.timestamp; }
+bool sort_by_time(const Timestamped& lhs, const Timestamped& rhs)
+{
+    return lhs.timestamp < rhs.timestamp;
+}
 
 
 //////////////////////////////////////// SensorLog implementation ////////////////////////////////////////////
@@ -89,8 +75,7 @@ SensorLog::SensorLog(void)
 }
 
 
-SensorLog::SensorLog(const std::string& logFilename)
-: name_(logFilename)
+SensorLog::SensorLog(const std::string& logFilename) : name_(logFilename)
 {
     // Load all values from the provided LCM log. The LCM callbacks instance that will interact with LCM and callback
     // to add the values to the sensor log.
@@ -100,7 +85,9 @@ SensorLog::SensorLog(const std::string& logFilename)
     // lcm-logplayer. The interesting command is setting speed=0, which causes the log to playback as fast as it can
     // be read, as opposed to waiting between messages. Info on speed=0 can be found in lcm/lcm_file.c.
     std::ostringstream logProviderUrl;
-    logProviderUrl << "file://" << logFilename << "?speed=0"; // default mode is read mode, but have to read LCM code carefully to actually know that
+    logProviderUrl
+      << "file://" << logFilename
+      << "?speed=0";   // default mode is read mode, but have to read LCM code carefully to actually know that
     system::ModuleCommunicator comm(logProviderUrl.str(), "");
 
     // Subscribe to each message in the log
@@ -112,7 +99,8 @@ SensorLog::SensorLog(const std::string& logFilename)
     comm.subscribeTo<robot::commanded_velocity_t>(&callbacks);
 
     // Keep reading messages until the processIncoming doesn't return success, indicating that there's no data left
-    while(comm.processIncoming() == 0);
+    while (comm.processIncoming() == 0)
+        ;
 
     // Once all data has been read, then sort all data by timestamp to ensure correct ordering
     std::sort(frontLaser_.begin(), frontLaser_.end(), sort_by_time<polar_laser_scan_t>);
@@ -124,13 +112,13 @@ SensorLog::SensorLog(const std::string& logFilename)
     std::sort(velocityCommand_.begin(), velocityCommand_.end(), sort_by_time<robot::commanded_velocity_t>);
 
     std::cout << "INFO: SensorLog: Loaded the following data from " << name_ << ":\n"
-        << "Front laser:" << frontLaser_.size() << '\n'
-        << "Back laser: " << backLaser_.size() << '\n'
-        << "IMU:        " << imu_.size() << '\n'
-        << "Odometry:   " << odometry_.size() << '\n'
-        << "Encoders:   " << encoders_.size() << '\n'
-        << "Joystick:   " << joystickCommand_.size() << '\n'
-        << "Cmd Vel:    " << velocityCommand_.size() << '\n';
+              << "Front laser:" << frontLaser_.size() << '\n'
+              << "Back laser: " << backLaser_.size() << '\n'
+              << "IMU:        " << imu_.size() << '\n'
+              << "Odometry:   " << odometry_.size() << '\n'
+              << "Encoders:   " << encoders_.size() << '\n'
+              << "Joystick:   " << joystickCommand_.size() << '\n'
+              << "Cmd Vel:    " << velocityCommand_.size() << '\n';
 }
 
 
@@ -175,5 +163,5 @@ void SensorLog::addCommandedVelocity(const robot::commanded_velocity_t& command)
     velocityCommand_.push_back(command);
 }
 
-} // namespace sensors
-} // namespace vulcan
+}   // namespace sensors
+}   // namespace vulcan

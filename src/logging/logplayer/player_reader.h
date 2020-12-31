@@ -8,44 +8,41 @@
 
 
 /**
-* \file     player_reader.h
-* \author   Collin Johnson
-* 
-* Declaration of PlayerReader for reading Player/Stage log files -- .plf
-*/
+ * \file     player_reader.h
+ * \author   Collin Johnson
+ *
+ * Declaration of PlayerReader for reading Player/Stage log files -- .plf
+ */
 
 #ifndef LOGGING_LOGPLAYER_PLAYER_READER_H
 #define LOGGING_LOGPLAYER_PLAYER_READER_H
 
 #include "logging/logplayer/log_reader.h"
 
-namespace vulcan 
+namespace vulcan
 {
 namespace logplayer
 {
-    
+
 /**
-* PlayerReader 
-*/
-class PlayerReader : public LogReader 
+ * PlayerReader
+ */
+class PlayerReader : public LogReader
 {
 public:
-    
     /**
-    * Constructor for PlayerReader.
-    * 
-    * \param    channels        Channels on which to publish sensor data
-    */
+     * Constructor for PlayerReader.
+     *
+     * \param    channels        Channels on which to publish sensor data
+     */
     PlayerReader(const data_channels_t& channels);
-    
+
 private:
-    
     // LogReader interface
-    bool convertLogToFrames(const std::string & filename) override;
-    
+    bool convertLogToFrames(const std::string& filename) override;
 };
 
-} // namespace logplayer
-} // namespace vulcan 
+}   // namespace logplayer
+}   // namespace vulcan
 
-#endif // LOGGING_LOGPLAYER_PLAYER_READER_H
+#endif   // LOGGING_LOGPLAYER_PLAYER_READER_H

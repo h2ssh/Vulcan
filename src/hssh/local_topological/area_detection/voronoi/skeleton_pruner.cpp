@@ -8,23 +8,23 @@
 
 
 /**
-* \file     skeleton_pruner.cpp
-* \author   Collin Johnson
-*
-* Definition of SkeletonPruner.
-*/
+ * \file     skeleton_pruner.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of SkeletonPruner.
+ */
 
 #include "hssh/local_topological/area_detection/voronoi/skeleton_pruner.h"
-#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
 #include "hssh/local_topological/area_detection/voronoi/search.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
-#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h"
 #include "hssh/local_topological/area_detection/voronoi/skeleton_graph_rasterization.h"
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "utils/algorithm_ext.h"
+#include <cmath>
 #include <iostream>
 #include <iterator>
 #include <set>
-#include <cmath>
 
 // #define DEBUG_START_POINT
 // #define DEBUG_EXIT_POINTS
@@ -34,10 +34,7 @@ namespace vulcan
 namespace hssh
 {
 
-bool is_valid_start_cell(const cell_t& point,
-                         const VoronoiSkeletonGrid& grid,
-                         float minDistance,
-                         const pose_t& pose);
+bool is_valid_start_cell(const cell_t& point, const VoronoiSkeletonGrid& grid, float minDistance, const pose_t& pose);
 void prune_clumps(const SkeletonGraph& revg, VoronoiSkeletonGrid& grid);
 bool is_cell_nub(cell_t cell, const VoronoiSkeletonGrid& grid, int maxLength = 3);
 
@@ -62,40 +59,31 @@ void SkeletonPruner::pruneSkeleton(VoronoiSkeletonGrid& grid,
 {
     std::set<cell_t> startCells;
 
-    for(auto deadEnd : grid.getDeadEnds())
-    {
-        if(is_valid_start_cell(deadEnd, grid, minExitPointDistance, pose))
-        {
+    for (auto deadEnd : grid.getDeadEnds()) {
+        if (is_valid_start_cell(deadEnd, grid, minExitPointDistance, pose)) {
             startCells.insert(deadEnd);
         }
     }
 
-    if(startCells.empty())
-    {
-        for(auto junction : grid.getJunctionsPoints())
-        {
-            if(is_valid_start_cell(junction, grid, minExitPointDistance, pose))
-            {
+    if (startCells.empty()) {
+        for (auto junction : grid.getJunctionsPoints()) {
+            if (is_valid_start_cell(junction, grid, minExitPointDistance, pose)) {
                 startCells.insert(junction);
             }
         }
     }
 
-    for(auto& point : pointsOfInterest)
-    {
+    for (auto& point : pointsOfInterest) {
         auto cell = utils::global_point_to_grid_cell_round(point, grid);
         // If the cell is there, just take it
-        if(grid.getClassification(cell.x, cell.y) & SKELETON_CELL_SKELETON)
-        {
+        if (grid.getClassification(cell.x, cell.y) & SKELETON_CELL_SKELETON) {
             startCells.insert(cell);
         }
         // Otherwise check neighbors to see if any of them are a cell of interest
-        else
-        {
+        else {
             NeighborArray neighbors;
             int num = neighbor_cells_equal_classification(cell, SKELETON_CELL_SKELETON, grid, EIGHT_WAY, neighbors);
-            if(num > 0)
-            {
+            if (num > 0) {
                 startCells.insert(neighbors[0]);
             }
         }
@@ -103,12 +91,11 @@ void SkeletonPruner::pruneSkeleton(VoronoiSkeletonGrid& grid,
 
     // Only prune if the start cell is inside the grid and marked as a skeleton cell,
     // otherwise there is no skeleton to be pruned away
-    if(!startCells.empty())
-    {
+    if (!startCells.empty()) {
 #ifdef DEBUG_START_POINT
-        std::cout<<"DEBUG:Pruner:Start cells:\n";
+        std::cout << "DEBUG:Pruner:Start cells:\n";
         std::copy(startCells.begin(), startCells.end(), std::ostream_iterator<cell_t>(std::cout, " "));
-        std::cout<<'\n';
+        std::cout << '\n';
 #endif
 
         // Extract the graph
@@ -123,13 +110,12 @@ void SkeletonPruner::pruneSkeleton(VoronoiSkeletonGrid& grid,
 
         auto maxGraphIt = std::max_element(components.begin(),
                                            components.end(),
-                                           [](const SkeletonGraph& lhs, const SkeletonGraph& rhs)
-                                           {
+                                           [](const SkeletonGraph& lhs, const SkeletonGraph& rhs) {
                                                return lhs.size() < rhs.size();
                                            });
 
-        std::cout<<"INFO: SkeletonPruner: Found "<<components.size()<<" subgraphs in the reduced EVG.\n"
-                 << "INFO: SkeletonPruner: Reduced skeleton size:" << maxGraphIt->size() << '\n';
+        std::cout << "INFO: SkeletonPruner: Found " << components.size() << " subgraphs in the reduced EVG.\n"
+                  << "INFO: SkeletonPruner: Reduced skeleton size:" << maxGraphIt->size() << '\n';
 
         // Rasterize the graph back onto the grid
         rasterize_graph_onto_grid(*maxGraphIt, grid);
@@ -142,17 +128,14 @@ void SkeletonPruner::pruneSkeleton(VoronoiSkeletonGrid& grid,
 
 
 #ifdef DEBUG_EXIT_POINTS
-        std::cout<<"DEBUG:Pruner:Exit points:\n";
-        for(auto exitIt = exitVertices.begin(), exitEnd = exitVertices.end(); exitIt != exitEnd; ++exitIt)
-        {
-            std::cout<<(*exitIt)->point<<' ';
+        std::cout << "DEBUG:Pruner:Exit points:\n";
+        for (auto exitIt = exitVertices.begin(), exitEnd = exitVertices.end(); exitIt != exitEnd; ++exitIt) {
+            std::cout << (*exitIt)->point << ' ';
         }
-        std::cout<<'\n';
+        std::cout << '\n';
 #endif
-    }
-    else
-    {
-        std::cerr<<"ERROR:SkeletonPruner:No valid start cells for the pruning operation\n";
+    } else {
+        std::cerr << "ERROR:SkeletonPruner:No valid start cells for the pruning operation\n";
     }
 }
 
@@ -162,39 +145,33 @@ std::vector<skeleton_graph_vertex_t*> SkeletonPruner::findExitVertices(const Vor
 {
     std::vector<skeleton_graph_vertex_t*> exitPoints;
 
-    int width  = grid.getWidthInCells();
+    int width = grid.getWidthInCells();
     int height = grid.getHeightInCells();
 
-    for(auto vertex : evg.getVertices())
-    {
+    for (auto vertex : evg.getVertices()) {
         bool hasLongEdge = false;
-        for(std::size_t n = 0; n < vertex->numAdjacent; ++n)
-        {
+        for (std::size_t n = 0; n < vertex->numAdjacent; ++n) {
             hasLongEdge = vertex->distance[n] > 2.0;
         }
 
         // If the vertex hits the edge of the map, it must be an exit point
-        if((vertex->point.x == 0) || (vertex->point.y == 0) || (vertex->point.x + 1 == width) ||
-            (vertex->point.y + 1 == height))
-        {
+        if ((vertex->point.x == 0) || (vertex->point.y == 0) || (vertex->point.x + 1 == width)
+            || (vertex->point.y + 1 == height)) {
             exitPoints.push_back(vertex);
         }
         // If it is a long edge, then it should be added regardless of the exit distance
-        else if(hasLongEdge)
-        {
+        else if (hasLongEdge) {
             exitPoints.push_back(vertex);
         }
         // If less than the min exit point distance, can't be an exit point
-        else if((grid.getMetricDistance(vertex->point.x, vertex->point.y) < minExitPointDistance) &&
-            (num_source_cells_with_classification(vertex->point, SKELETON_CELL_FRONTIER, grid) == 0))
-        {
+        else if ((grid.getMetricDistance(vertex->point.x, vertex->point.y) < minExitPointDistance)
+                 && (num_source_cells_with_classification(vertex->point, SKELETON_CELL_FRONTIER, grid) == 0)) {
             continue;
         }
         // At this point, any cell that is a dead end is valid. The other filter have tossed out the bad ones.
         // Always trust the validity of dead ends, the filtering of which are good or bad has already happened
         // elsewhere
-        else if(utils::contains(grid.getDeadEnds(), vertex->point))
-        {
+        else if (utils::contains(grid.getDeadEnds(), vertex->point)) {
             exitPoints.push_back(vertex);
         }
     }
@@ -207,28 +184,22 @@ void SkeletonPruner::findReducedExitPoints(VoronoiSkeletonGrid& grid, const Skel
 {
     reducedExitPoints.clear();
 
-    for(auto vertex : revg.getVertices())
-    {
+    for (auto vertex : revg.getVertices()) {
         // If one adjacent and the vertex hasn't been pruned by other processes
         // then it is an exit point in the updated graph
-        if((vertex->numAdjacent == 1)
-            && (grid.getClassification(vertex->point.x, vertex->point.y) & SKELETON_CELL_REDUCED_SKELETON))
-        {
+        if ((vertex->numAdjacent == 1)
+            && (grid.getClassification(vertex->point.x, vertex->point.y) & SKELETON_CELL_REDUCED_SKELETON)) {
             reducedExitPoints.push_back(vertex->point);
         }
     }
 }
 
 
-bool is_valid_start_cell(const cell_t& point,
-                         const VoronoiSkeletonGrid& grid,
-                         float minDistance,
-                         const pose_t& pose)
+bool is_valid_start_cell(const cell_t& point, const VoronoiSkeletonGrid& grid, float minDistance, const pose_t& pose)
 {
     // If not a skeleton cell or too close to a wall, then definitely not a valid start
-    if((~grid.getClassification(point.x, point.y) & SKELETON_CELL_SKELETON)
-        || (grid.getMetricDistance(point.x, point.y) < minDistance))
-    {
+    if ((~grid.getClassification(point.x, point.y) & SKELETON_CELL_SKELETON)
+        || (grid.getMetricDistance(point.x, point.y) < minDistance)) {
         return false;
     }
 
@@ -237,9 +208,7 @@ bool is_valid_start_cell(const cell_t& point,
     auto poseCell = utils::global_point_to_grid_cell_round(pose.toPoint(), grid);
 
     // If the pose isn't in free space or in the map, then start is valid
-    if(!grid.isCellInGrid(poseCell)
-        || (~grid.getClassificationNoCheck(poseCell.x, poseCell.y) & SKELETON_CELL_FREE))
-    {
+    if (!grid.isCellInGrid(poseCell) || (~grid.getClassificationNoCheck(poseCell.x, poseCell.y) & SKELETON_CELL_FREE)) {
         return true;
     }
 
@@ -250,10 +219,8 @@ bool is_valid_start_cell(const cell_t& point,
 
 void prune_clumps(const SkeletonGraph& revg, VoronoiSkeletonGrid& grid)
 {
-    for(auto vertex : revg.getVertices())
-    {
-        if(is_cell_nub(vertex->point, grid))
-        {
+    for (auto vertex : revg.getVertices()) {
+        if (is_cell_nub(vertex->point, grid)) {
             grid.removeClassification(vertex->point.x, vertex->point.y, SKELETON_CELL_REDUCED_SKELETON);
         }
     }
@@ -266,16 +233,12 @@ bool is_cell_nub(cell_t cell, const VoronoiSkeletonGrid& grid, int maxLength)
     int length = 0;
     int numDeadEnds = 0;
     int numJunctions = 0;
-    for(auto& t : trace.traces)
-    {
-        length += t.points.empty() ? 0 : t.points.size() - 1;  // don't include the cell itself in the length
+    for (auto& t : trace.traces) {
+        length += t.points.empty() ? 0 : t.points.size() - 1;   // don't include the cell itself in the length
 
-        if((t.endCause == TRACE_DEAD_END) || (t.endCause == TRACE_FRONTIER))
-        {
+        if ((t.endCause == TRACE_DEAD_END) || (t.endCause == TRACE_FRONTIER)) {
             ++numDeadEnds;
-        }
-        else if(t.endCause == TRACE_JUNCTION)
-        {
+        } else if (t.endCause == TRACE_JUNCTION) {
             ++numJunctions;
         }
     }
@@ -283,5 +246,5 @@ bool is_cell_nub(cell_t cell, const VoronoiSkeletonGrid& grid, int maxLength)
     return (length <= maxLength) && (numJunctions <= 1) && (numDeadEnds >= 1);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

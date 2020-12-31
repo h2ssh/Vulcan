@@ -8,14 +8,14 @@
 
 
 /**
-* \file     save_scans.cpp
-* \author   Paul Foster
-*
-* Functions to allow saving the scans used in mapping to file
-*
-*   - accumulate_scan  :  stores a copy of the scan to a list of scans used
-*   - save_scans       :  dumps the stored scans to disk
-*/
+ * \file     save_scans.cpp
+ * \author   Paul Foster
+ *
+ * Functions to allow saving the scans used in mapping to file
+ *
+ *   - accumulate_scan  :  stores a copy of the scan to a list of scans used
+ *   - save_scans       :  dumps the stored scans to disk
+ */
 
 #include "hssh/metrical/mapping/map_builder.h"
 #include "laser/moving_laser_scan.h"
@@ -35,8 +35,8 @@ struct scan_save_data_t
 {
     int64_t timestamp;
     int laserId;
-    float x;// approximate x of laser for scan
-    float y;// approximate y of laser for scan
+    float x;   // approximate x of laser for scan
+    float y;   // approximate y of laser for scan
     float thetaStart;
     float thetaEnd;
     std::vector<laser::adjusted_ray_t> rays;
@@ -45,10 +45,10 @@ struct scan_save_data_t
 static std::vector<scan_save_data_t> log;
 
 /**
-* accumulate_scan
-*
-* \param    scan      Maximum number of features to consider
-*/
+ * accumulate_scan
+ *
+ * \param    scan      Maximum number of features to consider
+ */
 void accumulate_scan(const map_update_data_t& data)
 {
     scan_save_data_t scanData;
@@ -56,7 +56,7 @@ void accumulate_scan(const map_update_data_t& data)
     scanData.laserId = data.scan.laserId();
 
     std::vector<laser::adjusted_ray_t> rays(data.scan.begin(), data.scan.end());
-    auto& midray = rays[rays.size()/2];
+    auto& midray = rays[rays.size() / 2];
 
     scanData.x = midray.position.x;
     scanData.y = midray.position.y;
@@ -69,16 +69,21 @@ void accumulate_scan(const map_update_data_t& data)
     std::cout << "pushed:" << log.size() << '\n';
 }
 
-#define w(r) {const auto& d=r;fwrite(&d,sizeof d,1,f);}
+#define w(r)                        \
+    {                               \
+        const auto& d = r;          \
+        fwrite(&d, sizeof d, 1, f); \
+    }
 /**
-* save_scans
-*
-* \param    filename File to save to
-*/
-void save_scans(const std::string& filename) {
+ * save_scans
+ *
+ * \param    filename File to save to
+ */
+void save_scans(const std::string& filename)
+{
     FILE* f;
     f = fopen(filename.c_str(), "wb");
-    for(scan_save_data_t& s:log){
+    for (scan_save_data_t& s : log) {
         w(s.timestamp);
         w(s.laserId);
         w(s.x);
@@ -86,7 +91,7 @@ void save_scans(const std::string& filename) {
         w(s.thetaStart);
         w(s.thetaEnd);
         w(s.rays.size());
-        for(auto& r : s.rays){
+        for (auto& r : s.rays) {
             w(r.position.x);
             w(r.position.y);
             w(r.endpoint.x);
@@ -97,5 +102,5 @@ void save_scans(const std::string& filename) {
     fclose(f);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

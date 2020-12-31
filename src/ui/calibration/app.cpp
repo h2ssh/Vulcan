@@ -15,4 +15,4 @@ namespace ui
 {
 
 }
-}
+}   // namespace vulcan

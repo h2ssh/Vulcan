@@ -8,11 +8,11 @@
 
 
 /**
-* \file     wheelchair_test_data_producer.h
-* \author   Collin Johnson
-*
-* Declaration of WheelchairTestDataProducer interface.
-*/
+ * \file     wheelchair_test_data_producer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of WheelchairTestDataProducer interface.
+ */
 
 #ifndef CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_DATA_PRODUCER_H
 #define CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_DATA_PRODUCER_H
@@ -23,8 +23,7 @@ namespace calibration
 {
 
 
-
 }
-}
+}   // namespace vulcan
 
-#endif // CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_DATA_PRODUCER_H
+#endif   // CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_DATA_PRODUCER_H

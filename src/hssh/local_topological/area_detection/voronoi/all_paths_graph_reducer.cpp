@@ -8,11 +8,11 @@
 
 
 /**
-* \file     all_paths_graph_reducer.cpp
-* \author   Collin Johnson
-*
-* Definition of AllPathsGraphReducer.
-*/
+ * \file     all_paths_graph_reducer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AllPathsGraphReducer.
+ */
 
 #include "hssh/local_topological/area_detection/voronoi/all_paths_graph_reducer.h"
 
@@ -26,12 +26,13 @@ AllPathsGraphReducer::AllPathsGraphReducer(void) : graphReducer(true)
 }
 
 
-const SkeletonGraph& AllPathsGraphReducer::reduceSkeleton(const SkeletonGraph& graph, const std::vector<skeleton_graph_vertex_t*>& exitPoints)
+const SkeletonGraph& AllPathsGraphReducer::reduceSkeleton(const SkeletonGraph& graph,
+                                                          const std::vector<skeleton_graph_vertex_t*>& exitPoints)
 {
     reduced = graphReducer.extractAllPathsSubgraph(graph, exitPoints);
-    
+
     return reduced;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

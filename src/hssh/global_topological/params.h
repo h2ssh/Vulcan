@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Definition of the params structs for the global_topo_hssh module.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Definition of the params structs for the global_topo_hssh module.
+ */
 
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_PARAMS_H
 #define HSSH_GLOBAL_TOPOLOGICAL_PARAMS_H
@@ -21,7 +21,10 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace hssh
 {
@@ -29,7 +32,7 @@ namespace hssh
 struct global_topo_data_queue_params_t
 {
     float distanceBetweenPoseEvents;
-    
+
     global_topo_data_queue_params_t(const utils::ConfigFile& config);
     global_topo_data_queue_params_t(void) = default;
 };
@@ -37,7 +40,7 @@ struct global_topo_data_queue_params_t
 struct hypothesis_generator_params_t
 {
     std::string generatorType;
-    
+
     hypothesis_generator_params_t(const utils::ConfigFile& config);
     hypothesis_generator_params_t(void) = default;
 };
@@ -45,7 +48,7 @@ struct hypothesis_generator_params_t
 struct generator_queue_params_t
 {
     std::string queueType;
-    
+
     generator_queue_params_t(const utils::ConfigFile& config);
     generator_queue_params_t(void) = default;
 };
@@ -55,7 +58,7 @@ struct lev_mar_optimizer_params_t
     size_t maxIterations;
     double initialMu;
     double stopThreshold;
-    
+
     lev_mar_optimizer_params_t(const utils::ConfigFile& config);
     lev_mar_optimizer_params_t(void) = default;
 };
@@ -63,9 +66,9 @@ struct lev_mar_optimizer_params_t
 struct map_optimizer_params_t
 {
     std::string type;
-    
+
     lev_mar_optimizer_params_t levMarParams;
-    
+
     map_optimizer_params_t(const utils::ConfigFile& config);
     map_optimizer_params_t(void) = default;
 };
@@ -111,14 +114,14 @@ struct hypothesis_probability_evaluator_params_t
     std::string likelihoodEvaluators;
     std::string priorEvaluator;
 
-    edge_length_evaluator_params_t                edgeLengthParams;
-    lpm_match_evaluator_params_t                  lpmMatchParams;
+    edge_length_evaluator_params_t edgeLengthParams;
+    lpm_match_evaluator_params_t lpmMatchParams;
     place_layout_compatibility_evaluator_params_t compatibilityParams;
-    chi_likelihood_evaluator_params_t             chiLikelihoodParams;
+    chi_likelihood_evaluator_params_t chiLikelihoodParams;
 
-    dirichlet_prior_evaluator_params_t                dirichletParams;
+    dirichlet_prior_evaluator_params_t dirichletParams;
     bayesian_information_criterion_evaluator_params_t bayesianInformationParams;
-    
+
     hypothesis_probability_evaluator_params_t(const utils::ConfigFile& config);
     hypothesis_probability_evaluator_params_t(void) = default;
 };
@@ -126,7 +129,7 @@ struct hypothesis_probability_evaluator_params_t
 struct lazy_evaluation_mapper_params_t
 {
     uint32_t minHypothesesToExpand;
-    bool     useHeuristic;
+    bool useHeuristic;
 
     hypothesis_probability_evaluator_params_t probabilityParams;
 };
@@ -144,12 +147,12 @@ struct topological_mapper_params_t
 struct global_topo_params_t
 {
     global_topo_data_queue_params_t queueParams;
-    
+
     global_topo_params_t(const utils::ConfigFile& config);
     global_topo_params_t(void) = default;
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_PARAMS_H
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_PARAMS_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     decision_action.h
-* \author   Collin Johnson
-*
-* Declaration of DecisionAction.
-*/
+ * \file     decision_action.h
+ * \author   Collin Johnson
+ *
+ * Declaration of DecisionAction.
+ */
 
 #ifndef PLANNER_INTERFACE_DECISION_ACTION_H
 #define PLANNER_INTERFACE_DECISION_ACTION_H
@@ -22,54 +22,61 @@
 
 namespace vulcan
 {
-namespace mpepc { class MetricPlannerTask; }
-namespace mpepc { struct metric_planner_status_message_t; }
+namespace mpepc
+{
+class MetricPlannerTask;
+}
+namespace mpepc
+{
+struct metric_planner_status_message_t;
+}
 struct pose_t;
-namespace system { class SystemCommunicator; }
+namespace system
+{
+class SystemCommunicator;
+}
 namespace planner
 {
 
 /**
-* DecisionAction
-*/
+ * DecisionAction
+ */
 class DecisionAction
 {
 public:
-
     /**
-    * Constructor for DecisionAction.
-    *
-    * \param    decision        Decision to be performed
-    * \param    robotPose       Current pose of the robot
-    */
+     * Constructor for DecisionAction.
+     *
+     * \param    decision        Decision to be performed
+     * \param    robotPose       Current pose of the robot
+     */
     DecisionAction(const Decision& decision, const pose_t& robotPose);
 
     /**
-    * perform performs the action.
-    *
-    * \param    communicator
-    */
+     * perform performs the action.
+     *
+     * \param    communicator
+     */
     void perform(system::SystemCommunicator& communicator) const;
 
     /**
-    * isComplete checks if the action has finished.
-    *
-    * \param    status          Status from the underlying planner
-    */
+     * isComplete checks if the action has finished.
+     *
+     * \param    status          Status from the underlying planner
+     */
     bool isComplete(const mpepc::metric_planner_status_message_t& status) const;
 
     /**
-    * decision retrieves the decision being commanded by this action.
-    */
+     * decision retrieves the decision being commanded by this action.
+     */
     Decision decision(void) const { return decision_; }
 
 private:
-
     Decision decision_;
     std::shared_ptr<mpepc::MetricPlannerTask> task_;
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_INTERFACE_DECISION_ACTION_H
+#endif   // PLANNER_INTERFACE_DECISION_ACTION_H

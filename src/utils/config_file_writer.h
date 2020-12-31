@@ -8,11 +8,11 @@
 
 
 /**
-* \file     config_file_writer.h
-* \author   Collin Johnson
-*
-* Declaration of ConfigFileWriter.
-*/
+ * \file     config_file_writer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ConfigFileWriter.
+ */
 
 #ifndef UTILS_CONFIG_FILE_WRITER_H
 #define UTILS_CONFIG_FILE_WRITER_H
@@ -23,17 +23,15 @@ namespace utils
 {
 
 /**
-* ConfigFileWriter
-*/
+ * ConfigFileWriter
+ */
 class ConfigFileWriter
 {
 public:
-    
 private:
-    
 };
 
-}
-}
+}   // namespace utils
+}   // namespace vulcan
 
-#endif // UTILS_CONFIG_FILE_WRITER_H
+#endif   // UTILS_CONFIG_FILE_WRITER_H

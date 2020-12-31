@@ -8,11 +8,11 @@
 
 
 /**
-* \file     hypothesis_generator.cpp
-* \author   Collin Johnson
-*
-* Definition of HypothesisGenerator abstract base class.
-*/
+ * \file     hypothesis_generator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of HypothesisGenerator abstract base class.
+ */
 
 #include "hssh/global_topological/mapping/hypothesis_generator.h"
 #include "hssh/global_topological/mapping/loop_closures.h"
@@ -49,8 +49,7 @@ HypothesisGenerator::~HypothesisGenerator(void)
 
 TopologicalState HypothesisGenerator::nextState(void)
 {
-    if(!haveGeneratedChildren_)
-    {
+    if (!haveGeneratedChildren_) {
         generateChildren();
         haveGeneratedChildren_ = true;
     }
@@ -58,8 +57,7 @@ TopologicalState HypothesisGenerator::nextState(void)
     TopologicalState next;
 
     // If not finished yet, snag the last child and remove it
-    if(!completed())
-    {
+    if (!completed()) {
         assert(!children_.empty());
         next = children_.back().second;
         children_.pop_back();
@@ -79,12 +77,9 @@ bool HypothesisGenerator::completed(void) const
 double HypothesisGenerator::logProbability(void) const
 {
     // If no children remain, then there's no probability
-    if(haveGeneratedChildren_ && children_.empty())
-    {
+    if (haveGeneratedChildren_ && children_.empty()) {
         return -1.0e100;
-    }
-    else
-    {
+    } else {
         // Everything needs to be log-likelihood and probability
         // Only have a child probability if the maps have been generated, until then just the parent + heuristic is it
         double childProbability = children_.empty() ? 0.0 : children_.back().first;
@@ -115,8 +110,7 @@ double HypothesisGenerator::computeChildLogLikelihood(const TopologicalState& pa
 void HypothesisGenerator::generateChildren(void)
 {
     // Create all children for each possible robot location and find their probabilities
-    for(auto& loc : locations_)
-    {
+    for (auto& loc : locations_) {
         generateChildrenForLocation(loc);
     }
 
@@ -130,23 +124,17 @@ void HypothesisGenerator::generateChildren(void)
 void HypothesisGenerator::generateChildrenForLocation(const WeightedGlobalLocation& location)
 {
     // If at a new place, then need to add a new place and close all loops
-    if(location.location.areaId == kFrontierId)
-    {
+    if (location.location.areaId == kFrontierId) {
         auto newStates = establishPossibleLoopClosures(location.location);
         newStates.push_back(createNewAreaChild(location.location));
 
-        for(auto& state : newStates)
-        {
-            double childLogLikelihood = computeChildLogLikelihood(*parent_,
-                                                                  state,
-                                                                  *exitVisit_);
-            children_.emplace_back(location.probability + childLogLikelihood,
-                                   std::move(state));
+        for (auto& state : newStates) {
+            double childLogLikelihood = computeChildLogLikelihood(*parent_, state, *exitVisit_);
+            children_.emplace_back(location.probability + childLogLikelihood, std::move(state));
         }
     }
     // If at a known place, need to mark the revisited area
-    else
-    {
+    else {
         // When revisiting places, we traversed a path segment, so we need to deal with the updated optimization.
         // Otherwise, the previous optimization is still valid.
         TopologicalState newState;
@@ -155,8 +143,7 @@ void HypothesisGenerator::generateChildrenForLocation(const WeightedGlobalLocati
         newState.location = location.location;
         newState.needsOptimization = is_place_type(location.location.areaType);
         newState.visitDepth = entryVisit_->depth();
-        newState.numPlaceVisits = parent_->numPlaceVisits
-            + (is_place_type(location.location.areaType) ? 1 : 0);
+        newState.numPlaceVisits = parent_->numPlaceVisits + (is_place_type(location.location.areaType) ? 1 : 0);
         newState.visitEventCount = 0;
 
         // There is no additional log-likelihood here because we are at a known place
@@ -176,23 +163,18 @@ std::vector<TopologicalState> HypothesisGenerator::establishPossibleLoopClosures
     GlobalPlace newPlace;
 
     // Create the appropriate type of place to use for the loop closure checks
-    if(is_place_type(location.areaType))
-    {
-        std::tie(newPlace, entryTransition)
-            = create_global_place_from_local_place(newArea,
-                                                   entryVisit_->entryEvent().transitionGateway(),
-                                                   *entryVisit_->localArea());
-    }
-    else if(location.areaType == AreaType::path_segment)
-    {
-        std::tie(newSegment, entryTransition)
-            = create_global_path_segment_from_local_path_segment(newArea,
-                                                                 entryVisit_->entryEvent().transitionGateway(),
-                                                                 *entryVisit_->localArea(),
-                                                                 false);    // explored state doesn't matter here
-    }
-    else
-    {
+    if (is_place_type(location.areaType)) {
+        std::tie(newPlace, entryTransition) =
+          create_global_place_from_local_place(newArea,
+                                               entryVisit_->entryEvent().transitionGateway(),
+                                               *entryVisit_->localArea());
+    } else if (location.areaType == AreaType::path_segment) {
+        std::tie(newSegment, entryTransition) =
+          create_global_path_segment_from_local_path_segment(newArea,
+                                                             entryVisit_->entryEvent().transitionGateway(),
+                                                             *entryVisit_->localArea(),
+                                                             false);   // explored state doesn't matter here
+    } else {
         std::cerr << "ERROR: HypothesisGenerator: At an unknown type of place: " << location.areaType << '\n';
         assert(location.areaType != AreaType::frontier);
         return loops;
@@ -200,47 +182,33 @@ std::vector<TopologicalState> HypothesisGenerator::establishPossibleLoopClosures
 
     // Check every frontier to see if it can form a valid loop closure with the newly visited area
     std::cout << "Generating hypotheses. Map has " << parent_->map->sizeFrontiers() << " frontiers.\n";
-    for(auto& f : boost::make_iterator_range(parent_->map->beginFrontiers(), parent_->map->endFrontiers()))
-    {
+    for (auto& f : boost::make_iterator_range(parent_->map->beginFrontiers(), parent_->map->endFrontiers())) {
         // Perform an initial sanity check
         bool validLoopClosure = is_possible_loop_closure(location, f, f.visitedArea());
 
         // If might be a loop closure
-        if(validLoopClosure)
-        {
+        if (validLoopClosure) {
             // Check for specific compatibility with path segment or place, depending on the type
-            if(is_place_type(location.areaType) && parent_->map->getPlace(f.visitedArea().id()))
-            {
-                validLoopClosure = are_compatible_places(newPlace,
-                                                         entryTransition,
-                                                         *parent_->map->getPlace(f.visitedArea().id()),
-                                                         f);
-            }
-            else if(auto path = parent_->map->getPathSegment(f.visitedArea().id()))
-            {
+            if (is_place_type(location.areaType) && parent_->map->getPlace(f.visitedArea().id())) {
+                validLoopClosure =
+                  are_compatible_places(newPlace, entryTransition, *parent_->map->getPlace(f.visitedArea().id()), f);
+            } else if (auto path = parent_->map->getPathSegment(f.visitedArea().id())) {
                 assert(location.areaType == AreaType::path_segment);
-                validLoopClosure = are_compatible_path_segments(newSegment,
-                                                                entryTransition,
-                                                                *path,
-                                                                f);
+                validLoopClosure = are_compatible_path_segments(newSegment, entryTransition, *path, f);
             }
         }
 
         // If a valid loop closure was found
-        if(validLoopClosure)
-        {
+        if (validLoopClosure) {
             // Create the corresponding state
             TopologicalState newState;
             newState.id = next_id();
-            std::tie(newState.map, newState.location) = parent_->map->closeLoop(location,
-                                                                                f.visitedArea(),
-                                                                                f,
-                                                                                *entryVisit_);
+            std::tie(newState.map, newState.location) =
+              parent_->map->closeLoop(location, f.visitedArea(), f, *entryVisit_);
             assert(newState.map);
-            newState.needsOptimization = is_place_type(location.areaType);  // only optimize upon exiting paths
+            newState.needsOptimization = is_place_type(location.areaType);   // only optimize upon exiting paths
             newState.visitDepth = entryVisit_->depth();
-            newState.numPlaceVisits = parent_->numPlaceVisits
-                + (is_place_type(location.areaType) ? 1 : 0);
+            newState.numPlaceVisits = parent_->numPlaceVisits + (is_place_type(location.areaType) ? 1 : 0);
             newState.visitEventCount = 0;
 
             // And add it to the list of possible loop closures
@@ -250,7 +218,7 @@ std::vector<TopologicalState> HypothesisGenerator::establishPossibleLoopClosures
 
 #ifdef DEBUG_LOOP_CLOSURES
     std::cout << "DEBUG: HypothesisGenerator: Found " << loops.size() << " loop closures for new location amongst "
-        << parent_->map->sizeFrontiers() << " frontier areas.\n";
+              << parent_->map->sizeFrontiers() << " frontier areas.\n";
 #endif
 
     return loops;
@@ -264,12 +232,11 @@ TopologicalState HypothesisGenerator::createNewAreaChild(const GlobalLocation& l
     std::tie(newState.map, newState.location) = parent_->map->addArea(location, *entryVisit_);
     newState.needsOptimization = false;
     newState.visitDepth = entryVisit_->depth();
-    newState.numPlaceVisits = parent_->numPlaceVisits
-        + (is_place_type(location.areaType) ? 1 : 0);
+    newState.numPlaceVisits = parent_->numPlaceVisits + (is_place_type(location.areaType) ? 1 : 0);
     newState.visitEventCount = 0;
 
     return newState;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

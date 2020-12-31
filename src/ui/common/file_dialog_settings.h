@@ -8,11 +8,11 @@
 
 
 /**
-* \file     file_dialog_settings.h
-* \author   Collin Johnson
-* 
-* Definition of the default flags to be used when creating open or save file dialogs.
-*/
+ * \file     file_dialog_settings.h
+ * \author   Collin Johnson
+ *
+ * Definition of the default flags to be used when creating open or save file dialogs.
+ */
 
 #ifndef UI_COMMON_FILE_DIALOG_SETTINGS_H
 #define UI_COMMON_FILE_DIALOG_SETTINGS_H
@@ -27,7 +27,7 @@ namespace ui
 const int kFileOpenFlags = wxFD_OPEN | wxFD_CHANGE_DIR | wxFD_FILE_MUST_EXIST;
 const int kFileSaveFlags = wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT;
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMMON_FILE_DIALOG_SETTINGS_H
+#endif   // UI_COMMON_FILE_DIALOG_SETTINGS_H

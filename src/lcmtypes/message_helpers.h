@@ -17,11 +17,11 @@ namespace vulcan
 {
 namespace lcm
 {
-    
-void verify_channel(const std::string& channel, const std::string&              defaultChannel,  bool isSubscribing);
-void verify_channel(const std::string& channel, const std::vector<std::string>& defaultChannels, bool isSubscribing);
-    
-}
-}
 
-#endif // LCMTYPES_MESSAGE_HELPERS_H
+void verify_channel(const std::string& channel, const std::string& defaultChannel, bool isSubscribing);
+void verify_channel(const std::string& channel, const std::vector<std::string>& defaultChannels, bool isSubscribing);
+
+}   // namespace lcm
+}   // namespace vulcan
+
+#endif   // LCMTYPES_MESSAGE_HELPERS_H

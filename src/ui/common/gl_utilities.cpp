@@ -21,7 +21,7 @@ namespace ui
 void setup_opengl_context(void)
 {
     // set the viewport for doing the proper display
-    glShadeModel(GL_SMOOTH);  // use flat shading for now
+    glShadeModel(GL_SMOOTH);   // use flat shading for now
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
@@ -29,8 +29,8 @@ void setup_opengl_context(void)
 
 void set_gl_viewport(std::size_t widthInPixels, std::size_t heightInPixels)
 {
-    glClearColor(1.0, 1.0, 1.0, 1.0);  // clear to white screen
-    glShadeModel(GL_SMOOTH);  // use flat shading for now
+    glClearColor(1.0, 1.0, 1.0, 1.0);   // clear to white screen
+    glShadeModel(GL_SMOOTH);            // use flat shading for now
 
     glViewport(0, 0, (GLsizei)widthInPixels, (GLsizei)heightInPixels);
 }
@@ -38,7 +38,7 @@ void set_gl_viewport(std::size_t widthInPixels, std::size_t heightInPixels)
 
 void set_projection(std::size_t widthInPixels, std::size_t heightInPixels, float objectSize, float distance, float zoom)
 {
-    float fov = 2.0 * std::atan2(zoom*objectSize/2.0, distance) * (180.0 / M_PI);
+    float fov = 2.0 * std::atan2(zoom * objectSize / 2.0, distance) * (180.0 / M_PI);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -52,11 +52,12 @@ void set_camera_position(const math::Point3D<float>& cameraFocus)
 }
 
 
-Point<float> convert_screen_to_world_coordinates(const Point<int>& screenPosition, const math::Point3D<float>& cameraPosition)
+Point<float> convert_screen_to_world_coordinates(const Point<int>& screenPosition,
+                                                 const math::Point3D<float>& cameraPosition)
 {
     GLdouble modelview[16];
     GLdouble projection[16];
-    GLint    viewport[16];
+    GLint viewport[16];
 
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
     glGetDoublev(GL_PROJECTION_MATRIX, projection);
@@ -65,7 +66,7 @@ Point<float> convert_screen_to_world_coordinates(const Point<int>& screenPositio
     math::Point3D<double> near;
     math::Point3D<double> far;
     math::Point3D<double> ray;
-    Point<float>  goal;
+    Point<float> goal;
 
     gluUnProject(screenPosition.x, screenPosition.y, 0, modelview, projection, viewport, &near.x, &near.y, &near.z);
     gluUnProject(screenPosition.x, screenPosition.y, 1, modelview, projection, viewport, &far.x, &far.y, &far.z);
@@ -74,8 +75,9 @@ Point<float> convert_screen_to_world_coordinates(const Point<int>& screenPositio
     ray.y = far.y - near.y;
     ray.z = far.z - near.z;
 
-    // Now find out where this ray intersects with the plane z = 0. The start of the ray is cameraPos. Intersection parametric: cameraPos.z / ray.z.
-    // Then just do cameraPos.x - ray.x * t cameraPos.y - ray.y * t to get the actual intersection
+    // Now find out where this ray intersects with the plane z = 0. The start of the ray is cameraPos. Intersection
+    // parametric: cameraPos.z / ray.z. Then just do cameraPos.x - ray.x * t cameraPos.y - ray.y * t to get the actual
+    // intersection
     double t = cameraPosition.z / ray.z;
 
     goal.x = cameraPosition.x - ray.x * t;
@@ -84,5 +86,5 @@ Point<float> convert_screen_to_world_coordinates(const Point<int>& screenPositio
     return goal;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

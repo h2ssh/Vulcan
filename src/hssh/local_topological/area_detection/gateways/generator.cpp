@@ -8,16 +8,16 @@
 
 
 /**
-* \file     generator.cpp
-* \author   Collin Johnson
-*
-* Definition of create_gateway_generator factory.
-*/
+ * \file     generator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_gateway_generator factory.
+ */
 
 #include "hssh/local_topological/area_detection/gateways/generator.h"
+#include "hssh/local_topological/area_detection/gateways/classifier_based_generator.h"
 #include "hssh/local_topological/area_detection/gateways/isovist_orientation_gateway_generator.h"
 #include "hssh/local_topological/area_detection/gateways/isovist_voronoi_gateway_generator.h"
-#include "hssh/local_topological/area_detection/gateways/classifier_based_generator.h"
 #include "hssh/local_topological/params.h"
 
 namespace vulcan
@@ -29,26 +29,22 @@ std::unique_ptr<GatewayGenerator> create_gateway_generator(const std::string& ty
                                                            const std::string& mapName,
                                                            const gateway_generator_params_t& params)
 {
-    if(type == kIsovistVoronoiGatewayGeneratorType)
-    {
+    if (type == kIsovistVoronoiGatewayGeneratorType) {
         return std::make_unique<IsovistVoronoiGatewayGenerator>(params.voronoiParams);
     }
     // map name needed for classifier, so if it isn't available fall back on the next-best generator
-    else if((type == kIsovistOrientationGatewayGeneratorType) || mapName.empty())
-    {
+    else if ((type == kIsovistOrientationGatewayGeneratorType) || mapName.empty()) {
         return std::make_unique<IsovistOrientationGatewayGenerator>(params.orientationParams);
-    }
-    else if(type == kClassifierBasedGeneratorType)
-    {
+    } else if (type == kClassifierBasedGeneratorType) {
         return std::make_unique<ClassifierBasedGenerator>(params.classifierParams, mapName);
     }
 
     std::cerr << "ERROR: create_isovist_maximum_gateway_generator: Attempted to create unknown generator type:" << type
-        << std::endl;
+              << std::endl;
     assert(false);
 
     return std::unique_ptr<GatewayGenerator>();
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

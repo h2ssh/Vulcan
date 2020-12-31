@@ -8,20 +8,20 @@
 
 
 /**
-* \file     vision_display_widget.h
-* \author   Collin Johnson
-* 
-* Declaration of VisionDisplayWidget.
-*/
+ * \file     vision_display_widget.h
+ * \author   Collin Johnson
+ *
+ * Declaration of VisionDisplayWidget.
+ */
 
 #ifndef UI_DEBUG_VISION_DISPLAY_WIDGET_H
 #define UI_DEBUG_VISION_DISPLAY_WIDGET_H
 
-#include "ui/components/grid_based_display_widget.h"
-#include "ui/common/ui_params.h"
 #include "core/image.h"
-#include "vision/image_segment.h"
+#include "ui/common/ui_params.h"
+#include "ui/components/grid_based_display_widget.h"
 #include "utils/mutex.h"
+#include "vision/image_segment.h"
 #include <wx/wx.h>
 
 namespace vulcan
@@ -34,16 +34,15 @@ class GroundPlaneBoundaryRenderer;
 class ImageSegmentRenderer;
 
 /**
-* VisionDisplayWidget is a widget that displays the various output produced by
-* the vision modules used by Vulcan. The
-*/
+ * VisionDisplayWidget is a widget that displays the various output produced by
+ * the vision modules used by Vulcan. The
+ */
 class VisionDisplayWidget : public GridBasedDisplayWidget
 {
 public:
-
     /**
-    * Constructor for VisionDisplayWidget.
-    */
+     * Constructor for VisionDisplayWidget.
+     */
     VisionDisplayWidget(wxWindow* parent,
                         wxWindowID id = wxID_ANY,
                         const wxPoint& pos = wxDefaultPosition,
@@ -58,23 +57,22 @@ public:
     void showImageSegments(bool show) { shouldShowImageSegments_ = show; }
 
     // Handle the various types of incoming vision data
-    void setImage        (Image image);
+    void setImage(Image image);
     void setImageSegments(std::vector<vision::image_segment_t> segments);
 
 private:
-
-    Image                        image_;
+    Image image_;
     std::vector<vision::image_segment_t> segments_;
-    
-    std::unique_ptr<ImageRenderer>        imageRenderer_;
+
+    std::unique_ptr<ImageRenderer> imageRenderer_;
     std::unique_ptr<ImageSegmentRenderer> segmentRenderer_;
-    
+
     bool shouldShowImageSegments_;
     bool haveNewSegments_;
     bool initialized_;
 
     utils::Mutex dataLock_;
-    
+
     // GridBasedDisplayWidget interface
     virtual void renderWidget(void);
     virtual Point<int> convertWorldToGrid(const Point<float>& world) const;
@@ -82,7 +80,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_VISION_DISPLAY_WIDGET_H
+#endif   // UI_DEBUG_VISION_DISPLAY_WIDGET_H

@@ -8,30 +8,30 @@
 
 
 /**
-* \file     calibration_panel.h
-* \author   Jong Jin Park
-*
-* Definition of the CalibrationPanel, which provides event handling for the Calibration display tab.
-*/
+ * \file     calibration_panel.h
+ * \author   Jong Jin Park
+ *
+ * Definition of the CalibrationPanel, which provides event handling for the Calibration display tab.
+ */
 
 #ifndef UI_DEBUG_CALIBRATION_PANEL_H
 #define UI_DEBUG_CALIBRATION_PANEL_H
 
-#include "ui/common/ui_forward_declarations.h"
-#include "ui/common/ui_params.h"
-#include "ui/common/ui_panel.h"
 #include "core/laser_scan.h"
-#include "utils/mutex.h"
 #include "sensors/sensor_log.h"
-#include <wx/wx.h>
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_panel.h"
+#include "ui/common/ui_params.h"
+#include "utils/mutex.h"
 #include <atomic>
+#include <wx/wx.h>
 
 namespace vulcan
 {
 namespace ui
 {
 
-class  CalibrationDisplayWidget;
+class CalibrationDisplayWidget;
 
 struct calibration_panel_widgets_t
 {
@@ -55,38 +55,37 @@ struct calibration_panel_widgets_t
     wxRadioBox* tiltLaserToShowRadio = nullptr;
     wxTextCtrl* tiltStartIndex = nullptr;
     wxTextCtrl* tiltEndIndex = nullptr;
-    wxButton*   calibratePitchButton = nullptr;
-    wxButton*   calibrateRollButton = nullptr;
+    wxButton* calibratePitchButton = nullptr;
+    wxButton* calibrateRollButton = nullptr;
 };
 
 /**
-* CalibrationPanel is responsible for event handling in the calibration panel.
-*
-* The CalibrationPanel currently supports the following modes:
-*
-*   - manual : manual mode is entered as soon as laser data arrives via LCM. In manual mode, the user types in the
-*       (x, y, theta) calibration between laser and robot frames. The data is initially seeded with the stored offset
-*       in the laser data.
-*
-*   - tilt : tilt mode is entered as soon as tilt data is loaded from a sensor log.
-*/
+ * CalibrationPanel is responsible for event handling in the calibration panel.
+ *
+ * The CalibrationPanel currently supports the following modes:
+ *
+ *   - manual : manual mode is entered as soon as laser data arrives via LCM. In manual mode, the user types in the
+ *       (x, y, theta) calibration between laser and robot frames. The data is initially seeded with the stored offset
+ *       in the laser data.
+ *
+ *   - tilt : tilt mode is entered as soon as tilt data is loaded from a sensor log.
+ */
 class CalibrationPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for CalibrationPanel.
-    *
-    * \param    params          Parameters to the panel and widget
-    * \param    widget          CalibrationDisplayWidget instance to be controlled by the panel
-    */
+     * Constructor for CalibrationPanel.
+     *
+     * \param    params          Parameters to the panel and widget
+     * \param    widget          CalibrationDisplayWidget instance to be controlled by the panel
+     */
     CalibrationPanel(const ui_params_t& params, const calibration_panel_widgets_t& widgets);
 
     // UIPanel interface
-    void setup       (wxGLContext* context, wxStatusBar* statusBar) override;
-    void subscribe   (system::ModuleCommunicator& producer) override;
-    void setConsumer (system::ModuleCommunicator* consumer) override;
-    void update      (void) override;
+    void setup(wxGLContext* context, wxStatusBar* statusBar) override;
+    void subscribe(system::ModuleCommunicator& producer) override;
+    void setConsumer(system::ModuleCommunicator* consumer) override;
+    void update(void) override;
     void saveSettings(utils::ConfigFileWriter& config) override;
     void loadSettings(const utils::ConfigFile& config) override;
 
@@ -94,7 +93,6 @@ public:
     void handleData(const polar_laser_scan_t& scan, const std::string& channel);
 
 private:
-
     using index_range = std::pair<int, int>;
 
     // Which calibration is being performed?
@@ -111,7 +109,7 @@ private:
     };
 
     Mode mode_;
-    std::atomic<Mode> newMode_;      // mode to apply on next iteration, based on new inputs
+    std::atomic<Mode> newMode_;   // mode to apply on next iteration, based on new inputs
     calibration_panel_widgets_t widgets;
 
     system::ModuleCommunicator* consumer;
@@ -152,17 +150,17 @@ private:
 
     // Event handlers
     void showFrontLaserChecked(wxCommandEvent& event);
-    void showBackLaserChecked (wxCommandEvent& event);
-    void setFrontLaserX       (wxCommandEvent& event);
-    void setFrontLaserY       (wxCommandEvent& event);
-    void setFrontLaserTheta   (wxCommandEvent& event);
-    void setFrontLaserPitch   (wxCommandEvent& event);
-    void setFrontLaserRoll    (wxCommandEvent& event);
-    void setBackLaserX        (wxCommandEvent& event);
-    void setBackLaserY        (wxCommandEvent& event);
-    void setBackLaserTheta    (wxCommandEvent& event);
-    void setBackLaserPitch    (wxCommandEvent& event);
-    void setBackLaserRoll     (wxCommandEvent& event);
+    void showBackLaserChecked(wxCommandEvent& event);
+    void setFrontLaserX(wxCommandEvent& event);
+    void setFrontLaserY(wxCommandEvent& event);
+    void setFrontLaserTheta(wxCommandEvent& event);
+    void setFrontLaserPitch(wxCommandEvent& event);
+    void setFrontLaserRoll(wxCommandEvent& event);
+    void setBackLaserX(wxCommandEvent& event);
+    void setBackLaserY(wxCommandEvent& event);
+    void setBackLaserTheta(wxCommandEvent& event);
+    void setBackLaserPitch(wxCommandEvent& event);
+    void setBackLaserRoll(wxCommandEvent& event);
 
     void loadTiltDataPressed(wxCommandEvent& event);
     void tiltLaserChanged(wxCommandEvent& event);
@@ -174,7 +172,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_METRIC_PLANNER_PANEL_H
+#endif   // UI_DEBUG_METRIC_PLANNER_PANEL_H

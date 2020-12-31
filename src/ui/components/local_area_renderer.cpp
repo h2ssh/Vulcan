@@ -8,32 +8,32 @@
 
 
 /**
-* \file     local_area_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of LocalAreaRenderer.
-*/
+ * \file     local_area_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LocalAreaRenderer.
+ */
 
 #include "ui/components/local_area_renderer.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/area_detection/labeling/area_proposal.h"
+#include "hssh/local_topological/areas/decision_point.h"
+#include "hssh/local_topological/areas/destination.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/evaluation/heat_map.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/hssh_colors.h"
 #include "ui/components/area_extent_renderer.h"
 #include "ui/components/gateways_renderer.h"
 #include "ui/components/occupancy_grid_renderer.h"
 #include "ui/components/small_scale_star_renderer.h"
-#include "ui/common/hssh_colors.h"
-#include "ui/common/gl_shapes.h"
-#include "hssh/local_topological/area.h"
-#include "hssh/local_topological/local_topo_map.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
-#include "hssh/local_topological/areas/decision_point.h"
-#include "hssh/local_topological/areas/destination.h"
-#include "hssh/local_topological/areas/path_segment.h"
-#include "hssh/local_topological/area_detection/labeling/area_proposal.h"
-#include "hssh/local_topological/evaluation/heat_map.h"
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/min.hpp>
-#include <boost/accumulators/statistics/max.hpp>
 #include <GL/gl.h>
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/max.hpp>
+#include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
 #include <cassert>
 
 namespace vulcan
@@ -71,8 +71,8 @@ LocalAreaRenderer::LocalAreaRenderer(void)
 , metersPerCell_(0.05)
 {
     std::vector<GLColor> heatMapColors{GLColor{0, 0, 255, 255},
-//         GLColor{0, 255, 0, 255},
-        GLColor{255, 0, 0, 255}};
+                                       //         GLColor{0, 255, 0, 255},
+                                       GLColor{255, 0, 0, 255}};
     heatMapInterpolator_.setColors(heatMapColors);
 }
 
@@ -95,19 +95,16 @@ void LocalAreaRenderer::renderLocalTopoMapAsHeatMap(const hssh::LocalTopoMap& ma
     // Calculate the min and max counts for the values, so the range for creating the [0,1] ranges can be found
     using namespace boost::accumulators;
     accumulator_set<int, stats<tag::min, tag::max>> visitAcc;
-    for(auto& count : heatMap.areaVisitCount)
-    {
+    for (auto& count : heatMap.areaVisitCount) {
         visitAcc(count.second);
     }
 
     int minVisits = min(visitAcc);
     double rangeVisits = max(visitAcc) - min(visitAcc);
 
-    for(auto& area : map)
-    {
+    for (auto& area : map) {
         auto countIt = heatMap.areaVisitCount.find(area->id());
-        if(countIt != heatMap.areaVisitCount.end())
-        {
+        if (countIt != heatMap.areaVisitCount.end()) {
             drawExtent(area->extent(),
                        heatMapInterpolator_.calculateColor((countIt->second - minVisits) / rangeVisits));
             drawGateways(area->gateways(), GLColor());
@@ -140,7 +137,7 @@ void LocalAreaRenderer::renderAreaProposal(const hssh::AreaProposal& area, const
 {
     drawExtent(area.getExtent(), color_from_local_area_type(area.getType()));
     drawGateways(area.getAllGateways(grid, math::ReferenceFrame::LOCAL), color_from_local_area_type(area.getType()));
-//     drawFrontiers(area.getFrontiers());
+    //     drawFrontiers(area.getFrontiers());
 }
 
 
@@ -150,16 +147,15 @@ void LocalAreaRenderer::visitDecisionPoint(const hssh::LocalDecisionPoint& decis
     drawGateways(decision.gateways(), color_from_local_area_type(hssh::AreaType::decision_point));
     drawStar(decision.star(), decision.center().toPoint());
 
-//     glPushMatrix();
-//     glTranslatef(decision.center().x, decision.center().y, 0.0f);
-//     glRotatef(decision.center().theta * 180.0f / M_PI, 0.0f, 0.0f, 1.0f);
-//     OccupancyGridRenderer gridRenderer;
-//     gridRenderer.setGrid(decision.map());
-//     gridRenderer.renderGrid();
-//     glPopMatrix();
-//
-//     extentRenderer_.renderExtentRectangle(decision.extent(), GLColor(1.0f, 1.0f, 0.0f, 0.6f));
-
+    //     glPushMatrix();
+    //     glTranslatef(decision.center().x, decision.center().y, 0.0f);
+    //     glRotatef(decision.center().theta * 180.0f / M_PI, 0.0f, 0.0f, 1.0f);
+    //     OccupancyGridRenderer gridRenderer;
+    //     gridRenderer.setGrid(decision.map());
+    //     gridRenderer.renderGrid();
+    //     glPopMatrix();
+    //
+    //     extentRenderer_.renderExtentRectangle(decision.extent(), GLColor(1.0f, 1.0f, 0.0f, 0.6f));
 }
 
 
@@ -186,18 +182,16 @@ void LocalAreaRenderer::drawExtent(const hssh::AreaExtent& extent, const GLColor
 
 void LocalAreaRenderer::drawGateways(const std::vector<hssh::Gateway>& gateways, const GLColor& color) const
 {
-    if(showGateways_)
-    {
+    if (showGateways_) {
         GatewaysRenderer renderer;
         renderer.renderGateways(gateways, false);
 
-        for(auto& gateway : gateways)
-        {
+        for (auto& gateway : gateways) {
             // Draw gateways separately so the gateway is drawn the correct color
             const float BOUNDARY_WIDTH = 3.0f;
 
             glLineWidth(BOUNDARY_WIDTH);
-            glEnable(GL_LINE_STIPPLE); // Draw boundary as a dashed line to make it pop out a bit
+            glEnable(GL_LINE_STIPPLE);   // Draw boundary as a dashed line to make it pop out a bit
             glLineStipple(3, 0xAAAA);
             glBegin(GL_LINES);
 
@@ -216,8 +210,7 @@ void LocalAreaRenderer::drawGateways(const std::vector<hssh::Gateway>& gateways,
 
 void LocalAreaRenderer::drawFrontiers(const std::vector<Point<double>>& frontiers) const
 {
-    for(auto frontier : frontiers)
-    {
+    for (auto frontier : frontiers) {
         frontier_color().set(0.33f);
         gl_draw_filled_circle(frontier, 0.2, 36);
         frontier_color().set();
@@ -228,8 +221,7 @@ void LocalAreaRenderer::drawFrontiers(const std::vector<Point<double>>& frontier
 
 void LocalAreaRenderer::drawStar(const hssh::SmallScaleStar& star, const Point<double>& origin)
 {
-    if(showStar_)
-    {
+    if (showStar_) {
         starRenderer_->render(star, origin);
     }
 }
@@ -243,15 +235,12 @@ LocalTopoGraphRenderer::LocalTopoGraphRenderer(const hssh::LocalTopoMap& map, bo
 : map(map)
 , drawHSSHStyle(drawAsHSSH)
 {
-    if(drawHSSHStyle)
-    {
+    if (drawHSSHStyle) {
         decisionColor = decision_point_color();
         destColor = decision_point_color();
         decisionSize = kGraphPointSize * 1.5;
         destSize = kGraphPointSize * 1.5;
-    }
-    else
-    {
+    } else {
         decisionColor = decision_point_color();
         destColor = destination_color();
         decisionSize = kGraphPointSize * 2;
@@ -265,19 +254,15 @@ void LocalTopoGraphRenderer::visitDecisionPoint(const hssh::LocalDecisionPoint& 
     glLineWidth(kGraphLineWidth);
     glBegin(GL_LINES);
 
-    for(auto adjAffordance : decision.adjacent())
-    {
+    for (auto adjAffordance : decision.adjacent()) {
         auto adj = map.otherSideOfGateway(adjAffordance.gateway(), decision);
-        if(adj)
-        {
+        if (adj) {
             decisionColor.set(0.8);
             glVertex2f(decision.center().x, decision.center().y);
 
-            if(adj->type() == hssh::AreaType::destination)
-            {
+            if (adj->type() == hssh::AreaType::destination) {
                 destColor.set(0.8);
-            }
-            else // leading to a path
+            } else   // leading to a path
             {
                 path_color().set(0.8);
             }
@@ -290,9 +275,8 @@ void LocalTopoGraphRenderer::visitDecisionPoint(const hssh::LocalDecisionPoint& 
 
     decisionColor.set();
     Point<float> rectOffset(1.0f, 1.0f);
-    gl_draw_filled_rectangle(math::Rectangle<float>(decision.center().toPoint() - rectOffset,
-                                                    decision.center().toPoint() + rectOffset));
-
+    gl_draw_filled_rectangle(
+      math::Rectangle<float>(decision.center().toPoint() - rectOffset, decision.center().toPoint() + rectOffset));
 }
 
 
@@ -302,8 +286,7 @@ void LocalTopoGraphRenderer::visitDestination(const hssh::LocalDestination& dest
     glLineWidth(kGraphLineWidth);
     glBegin(GL_LINES);
 
-    for(auto adjAffordance : destination.adjacent())
-    {
+    for (auto adjAffordance : destination.adjacent()) {
         destColor.set(0.8);
         glVertex2f(destination.center().x, destination.center().y);
         glVertex2f(adjAffordance.target().x, adjAffordance.target().y);
@@ -315,8 +298,7 @@ void LocalTopoGraphRenderer::visitDestination(const hssh::LocalDestination& dest
     destColor.set();
     glPushMatrix();
     glTranslatef(destination.center().x, destination.center().y, 0.0f);
-    if(!drawHSSHStyle)
-    {
+    if (!drawHSSHStyle) {
         glRotatef(45.0f, 0, 0, 1.0f);
     }
     Point<float> bl(-0.9f, -0.9f);
@@ -335,8 +317,7 @@ void LocalTopoGraphRenderer::visitPathSegment(const hssh::LocalPathSegment& path
 
     glLineWidth(kGraphLineWidth);
     glBegin(GL_LINES);
-    for(auto destAffordance : path.leftDestinations())
-    {
+    for (auto destAffordance : path.leftDestinations()) {
         auto destCenterProjection = closest_point_on_line_segment(destAffordance.target().toPoint(), pathLine);
         path_color().set(0.8);
         glVertex2f(destCenterProjection.x, destCenterProjection.y);
@@ -344,8 +325,7 @@ void LocalTopoGraphRenderer::visitPathSegment(const hssh::LocalPathSegment& path
         glVertex2f(destAffordance.target().x, destAffordance.target().y);
     }
 
-    for(auto destAffordance : path.rightDestinations())
-    {
+    for (auto destAffordance : path.rightDestinations()) {
         auto destCenterProjection = closest_point_on_line_segment(destAffordance.target().toPoint(), pathLine);
         path_color().set(0.8);
         glVertex2f(destCenterProjection.x, destCenterProjection.y);
@@ -360,35 +340,30 @@ void LocalTopoGraphRenderer::visitPathSegment(const hssh::LocalPathSegment& path
     glEnd();
 
     // Draw the decision points for the dest-path intersections
-    if(drawHSSHStyle)
-    {
+    if (drawHSSHStyle) {
         destColor.set(0.8);
 
-        for(auto destAffordance : path.leftDestinations())
-        {
+        for (auto destAffordance : path.leftDestinations()) {
             auto dest = map.otherSideOfGateway(destAffordance.gateway(), path);
-            if(dest)
-            {
+            if (dest) {
                 auto destCenterProjection = closest_point_on_line_segment(destAffordance.target().toPoint(), pathLine);
                 Point<float> rectOffset(1.0f, 1.0f);
-                gl_draw_filled_rectangle(math::Rectangle<float>(destCenterProjection - rectOffset,
-                                                                destCenterProjection + rectOffset));
+                gl_draw_filled_rectangle(
+                  math::Rectangle<float>(destCenterProjection - rectOffset, destCenterProjection + rectOffset));
             }
         }
 
-        for(auto destAffordance : path.rightDestinations())
-        {
+        for (auto destAffordance : path.rightDestinations()) {
             auto dest = map.otherSideOfGateway(destAffordance.gateway(), path);
-            if(dest)
-            {
+            if (dest) {
                 auto destCenterProjection = closest_point_on_line_segment(destAffordance.target().toPoint(), pathLine);
                 Point<float> rectOffset(1.0f, 1.0f);
-                gl_draw_filled_rectangle(math::Rectangle<float>(destCenterProjection - rectOffset,
-                                                                destCenterProjection + rectOffset));
+                gl_draw_filled_rectangle(
+                  math::Rectangle<float>(destCenterProjection - rectOffset, destCenterProjection + rectOffset));
             }
         }
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

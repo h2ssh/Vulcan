@@ -8,30 +8,28 @@
 
 
 /**
-* \file     isovist_gradients.cpp
-* \author   Collin Johnson
-*
-* Definition of VoronoiIsovistGradients.
-*/
+ * \file     isovist_gradients.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of VoronoiIsovistGradients.
+ */
 
 #include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
 #include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
 #include "math/savitzky_golay.h"
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>
-#include <numeric>
 #include <cmath>
+#include <numeric>
 
 namespace vulcan
 {
 namespace hssh
 {
 
-VoronoiIsovistGradients::VoronoiIsovistGradients(const VoronoiEdges& edges)
-: edges_(edges)
+VoronoiIsovistGradients::VoronoiIsovistGradients(const VoronoiEdges& edges) : edges_(edges)
 {
-    for(const auto& e : edges_)
-    {
+    for (const auto& e : edges_) {
         boost::push_back(isovistCells_, boost::as_array(e));
     }
 
@@ -42,8 +40,7 @@ VoronoiIsovistGradients::VoronoiIsovistGradients(const VoronoiEdges& edges)
 
 void VoronoiIsovistGradients::calculateGradients(utils::Isovist::Scalar scalar, const VoronoiIsovistField& field)
 {
-    for(const auto& edgeCells : edges_)
-    {
+    for (const auto& edgeCells : edges_) {
         calculateGradientsForEdge(edgeCells, scalar, field);
     }
 }
@@ -53,8 +50,7 @@ void VoronoiIsovistGradients::initializeCellToIndex(void)
 {
     cellToIndex_.reserve(isovistCells_.size());
     int index = 0;
-    for(auto& cell : isovistCells_)
-    {
+    for (auto& cell : isovistCells_) {
         cellToIndex_[cell] = index++;
     }
 }
@@ -72,28 +68,22 @@ void VoronoiIsovistGradients::calculateGradientsForEdge(const CellVector& cells,
 
     edgeDerivs_.resize(edgeScalars_.size());
 
-    if(edgeDerivs_.size() >= 7)
-    {
+    if (edgeDerivs_.size() >= 7) {
         math::savitzky_golay_first_deriv(edgeScalars_.begin(),
                                          edgeScalars_.end(),
                                          edgeDerivs_.begin(),
                                          math::SGWindowRadius::three);
-    }
-    else if(edgeDerivs_.size() >= 5)
-    {
+    } else if (edgeDerivs_.size() >= 5) {
         math::savitzky_golay_first_deriv(edgeScalars_.begin(),
                                          edgeScalars_.end(),
                                          edgeDerivs_.begin(),
                                          math::SGWindowRadius::two);
-    }
-    else
-    {
+    } else {
         std::adjacent_difference(edgeScalars_.begin(), edgeScalars_.end(), edgeDerivs_.begin());
         edgeDerivs_[0] = 0.0;
     }
 
-    for(std::size_t n = 0; n < cells.size(); ++n)
-    {
+    for (std::size_t n = 0; n < cells.size(); ++n) {
         int cellIndex = cellToIndex_[cells[n]];
 
         // Take the absolute value of the derivative to account for it being a function of the direction
@@ -101,12 +91,11 @@ void VoronoiIsovistGradients::calculateGradientsForEdge(const CellVector& cells,
         // sign -- thus causing some otherwise obvious gateways to "hide"
         gradients_[cellIndex] = position_value_t(cells[n], std::abs(edgeDerivs_[n]), edgeScalars_[n]);
 
-        if((scalar == utils::Isovist::kWeightedOrientation) || (scalar == utils::Isovist::kOrientation))
-        {
+        if ((scalar == utils::Isovist::kWeightedOrientation) || (scalar == utils::Isovist::kOrientation)) {
             gradients_[cellIndex].value = std::abs(wrap_to_pi_2(edgeDerivs_[n]));
         }
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

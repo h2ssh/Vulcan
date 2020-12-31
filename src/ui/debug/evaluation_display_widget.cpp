@@ -8,18 +8,18 @@
 
 
 /**
-* \file     evaluation_widget.cpp
-* \author   Collin Johnson
-*
-* Definition of EvaluationDisplayWidget.
-*/
+ * \file     evaluation_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of EvaluationDisplayWidget.
+ */
 
 #include "ui/debug/evaluation_display_widget.h"
+#include "mpepc/evaluation/path_summary.h"
 #include "ui/common/default_colors.h"
 #include "ui/components/place_grid_renderer.h"
 #include "ui/components/pose_trace_renderer.h"
 #include "ui/components/stable_area_renderer.h"
-#include "mpepc/evaluation/path_summary.h"
 #include "utils/cell_grid_utils.h"
 
 namespace vulcan
@@ -58,8 +58,7 @@ EvaluationDisplayWidget::~EvaluationDisplayWidget(void)
 
 void EvaluationDisplayWidget::setMap(const std::shared_ptr<hssh::LocalTopoMap>& map)
 {
-    if(map)
-    {
+    if (map) {
         map_ = map;
         haveNewMap_ = true;
 
@@ -88,12 +87,9 @@ void EvaluationDisplayWidget::setPaths(const mpepc::PathSummary& paths)
 
 void EvaluationDisplayWidget::shouldDrawBoundaries(bool draw)
 {
-    if(draw)
-    {
+    if (draw) {
         areaMask_ |= StableAreaRenderer::kDrawBoundary;
-    }
-    else
-    {
+    } else {
         areaMask_ &= ~StableAreaRenderer::kDrawBoundary;
     }
 }
@@ -101,12 +97,9 @@ void EvaluationDisplayWidget::shouldDrawBoundaries(bool draw)
 
 void EvaluationDisplayWidget::shouldDrawStars(bool draw)
 {
-    if(draw)
-    {
+    if (draw) {
         areaMask_ |= StableAreaRenderer::kDrawStar;
-    }
-    else
-    {
+    } else {
         areaMask_ &= ~StableAreaRenderer::kDrawStar;
     }
 }
@@ -114,8 +107,7 @@ void EvaluationDisplayWidget::shouldDrawStars(bool draw)
 
 Point<int> EvaluationDisplayWidget::convertWorldToGrid(const Point<float>& world) const
 {
-    if(map_)
-    {
+    if (map_) {
         return utils::global_point_to_grid_cell(world, map_->voronoiSkeleton());
     }
 
@@ -125,36 +117,29 @@ Point<int> EvaluationDisplayWidget::convertWorldToGrid(const Point<float>& world
 
 void EvaluationDisplayWidget::renderWidget(void)
 {
-    if(haveNewMap_)
-    {
+    if (haveNewMap_) {
         mapRenderer_->setGrid(map_->voronoiSkeleton());
         haveNewMap_ = false;
     }
 
-    if(map_)
-    {
+    if (map_) {
         mapRenderer_->renderGrid();
     }
 
-    if(areas_)
-    {
+    if (areas_) {
         areaRenderer_->renderAll(*areas_, areaMask_);
     }
 
-    if(!socialTraces_.empty())
-    {
-        for(auto& trace : socialTraces_)
-        {
+    if (!socialTraces_.empty()) {
+        for (auto& trace : socialTraces_) {
             auto color = social_mpepc_color();
             color.alpha(0.5);
             renderTrace(trace, color);
         }
     }
 
-    if(!regularTraces_.empty())
-    {
-        for(auto& trace : regularTraces_)
-        {
+    if (!regularTraces_.empty()) {
+        for (auto& trace : regularTraces_) {
             auto color = regular_mpepc_color();
             color.alpha(0.5);
             renderTrace(trace, color);
@@ -170,5 +155,5 @@ void EvaluationDisplayWidget::renderTrace(const utils::PoseTrace& trace, const G
     traceRenderer_->renderTrace();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

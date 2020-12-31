@@ -8,19 +8,19 @@
 
 
 /**
-* \file     tree_of_maps.cpp
-* \author   Collin Johnson
-*
-* Definition of TreeOfMapsOld.
-*/
+ * \file     tree_of_maps.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TreeOfMapsOld.
+ */
 
-#include "hssh/global_topological/tree_of_maps.h"
-#include "hssh/global_topological/topological_map_hypothesis.h"
-#include "hssh/global_topological/hypothesis_tree.h"
 #include "core/angle_functions.h"
+#include "hssh/global_topological/hypothesis_tree.h"
+#include "hssh/global_topological/topological_map_hypothesis.h"
+#include "hssh/global_topological/tree_of_maps.h"
+#include <cassert>
 #include <iostream>
 #include <queue>
-#include <cassert>
 
 // #define DEBUG_LEAVES
 // #define DEBUG_CONNECT_PLACES
@@ -31,8 +31,7 @@ namespace vulcan
 namespace hssh
 {
 
-TreeOfMapsOld::TreeOfMapsOld(void)
-    : nextHypothesisId(0)
+TreeOfMapsOld::TreeOfMapsOld(void) : nextHypothesisId(0)
 {
 }
 
@@ -45,20 +44,19 @@ bool TreeOfMapsOld::setRootHypothesis(uint32_t id)
 
     TopoMapPtr root;
 
-    for(auto depthIt = depths.rbegin(), depthEnd = depths.rend(); depthIt != depthEnd; ++depthIt)
-    {
-        auto hypIt = std::find_if(depthIt->begin(), depthIt->end(), [&id](const TopoMapPtr& hyp) { return hyp->getId() == id; });
+    for (auto depthIt = depths.rbegin(), depthEnd = depths.rend(); depthIt != depthEnd; ++depthIt) {
+        auto hypIt = std::find_if(depthIt->begin(), depthIt->end(), [&id](const TopoMapPtr& hyp) {
+            return hyp->getId() == id;
+        });
 
-        if(hypIt != depthIt->end())
-        {
+        if (hypIt != depthIt->end()) {
             root = *hypIt;
             break;
         }
     }
 
     // If the map was found, then set it to be the new root. Otherwise, just pretend this method call never happened.
-    if(root)
-    {
+    if (root) {
         setRootHypothesis(root);
     }
 
@@ -72,7 +70,7 @@ void TreeOfMapsOld::setRootHypothesis(TopoMapPtr root)
     depths.clear();
     idToMap.clear();
 
-    root->id    = nextHypothesisId++;
+    root->id = nextHypothesisId++;
     root->depth = 0;
     root->children.clear();
 
@@ -90,8 +88,7 @@ TopoMapPtr TreeOfMapsOld::getMapFromId(uint32_t id) const
 
     auto mapIt = idToMap.find(id);
 
-    if(mapIt != idToMap.end())
-    {
+    if (mapIt != idToMap.end()) {
         mapPtr = mapIt->second;
     }
 
@@ -101,16 +98,16 @@ TopoMapPtr TreeOfMapsOld::getMapFromId(uint32_t id) const
 
 const std::set<TopoMapPtr>& TreeOfMapsOld::getLeaves(void) const
 {
-    #ifdef DEBUG_LEAVES
-    std::cout<<"DEBUG:TreeOfMapsOld:Leaves:\n";
+#ifdef DEBUG_LEAVES
+    std::cout << "DEBUG:TreeOfMapsOld:Leaves:\n";
 
-    for(auto leafIt = leaves.begin(), leafEnd = leaves.end(); leafIt != leafEnd; ++leafIt)
-    {
+    for (auto leafIt = leaves.begin(), leafEnd = leaves.end(); leafIt != leafEnd; ++leafIt) {
         assert((*leafIt)->children.empty());
 
-        std::cout<<leafIt->get()<<' '<<(*leafIt)->getDepth()<<' '<<(*leafIt)->getLogPosterior()<<' '<<(*leafIt)->getEstimatedLogPosterior()<<'\n';
+        std::cout << leafIt->get() << ' ' << (*leafIt)->getDepth() << ' ' << (*leafIt)->getLogPosterior() << ' '
+                  << (*leafIt)->getEstimatedLogPosterior() << '\n';
     }
-    #endif
+#endif
 
     return leaves;
 }
@@ -120,13 +117,10 @@ HypothesisTree TreeOfMapsOld::getHypothesisTree(void) const
 {
     std::vector<hypothesis_tree_node_t> hypNodes;
 
-    if(!depths.empty())
-    {
+    if (!depths.empty()) {
         buildHypothesisTree(*(depths[0].begin()), hypNodes);
         return HypothesisTree(probabilityDescriptions, hypNodes, (*(depths[0].begin()))->getId(), leaves.size());
-    }
-    else
-    {
+    } else {
         return HypothesisTree(probabilityDescriptions, hypNodes, 0, leaves.size());
     }
 }
@@ -157,50 +151,43 @@ void TreeOfMapsOld::createInitialHypothesis(const GlobalPlace& initialPlace)
 }
 
 
-TopoMapPtr TreeOfMapsOld::addNewPlace(const TopoMapPtr& map,
-                                   GlobalPlace&      newPlace,
-                                   int               entrySegmentId,
-                                   const Lambda&     lambda)
+TopoMapPtr
+  TreeOfMapsOld::addNewPlace(const TopoMapPtr& map, GlobalPlace& newPlace, int entrySegmentId, const Lambda& lambda)
 {
-    if(isValidParent(map))
-    {
+    if (isValidParent(map)) {
         TopoMapPtr childMap(new TopologicalMapHypothesis(*map.get()));
 
         addChildToMap(map, childMap);
         childMap->addNewPlace(newPlace, entrySegmentId, lambda);
         validateHypothesis(childMap);
         return childMap;
-    }
-    else
-    {
+    } else {
         assert("bad parent add new place\n" && false);
         return TopoMapPtr();
     }
 }
 
 
-TopoMapPtr TreeOfMapsOld::connectPlaces(const TopoMapPtr&         map,
-                                     const place_connection_t& previousPlace,
-                                     const place_connection_t& currentPlace,
-                                     const Lambda&             lambda,
-                                     const pose_t&      transform)
+TopoMapPtr TreeOfMapsOld::connectPlaces(const TopoMapPtr& map,
+                                        const place_connection_t& previousPlace,
+                                        const place_connection_t& currentPlace,
+                                        const Lambda& lambda,
+                                        const pose_t& transform)
 {
-    if(isValidParent(map))
-    {
+    if (isValidParent(map)) {
         TopoMapPtr childMap(new TopologicalMapHypothesis(*map.get()));
 
-        #ifdef DEBUG_CONNECT_PLACES
-        std::cout<<"DEBUG:TreeOfMapsOld:Connecting places in hypothesis:"<<previousPlace.placeId<<':'<<previousPlace.eventFragment.fragmentId
-                 <<" to "<<currentPlace.placeId<<':'<<currentPlace.eventFragment.fragmentId<<'\n';
-        #endif
+#ifdef DEBUG_CONNECT_PLACES
+        std::cout << "DEBUG:TreeOfMapsOld:Connecting places in hypothesis:" << previousPlace.placeId << ':'
+                  << previousPlace.eventFragment.fragmentId << " to " << currentPlace.placeId << ':'
+                  << currentPlace.eventFragment.fragmentId << '\n';
+#endif
 
         childMap->connectPlaces(currentPlace, previousPlace, lambda, transform);
         validateHypothesis(childMap);
         addChildToMap(map, childMap);
         return childMap;
-    }
-    else
-    {
+    } else {
         assert(false && "bad parent connect places\n");
         return TopoMapPtr();
     }
@@ -209,16 +196,13 @@ TopoMapPtr TreeOfMapsOld::connectPlaces(const TopoMapPtr&         map,
 
 TopoMapPtr TreeOfMapsOld::copyMapToNextDepth(const TopoMapPtr& map, const Lambda& lambda)
 {
-    if(isValidParent(map))
-    {
+    if (isValidParent(map)) {
         TopoMapPtr childMap(new TopologicalMapHypothesis(*map.get()));
 
         childMap->updateLambdaOnLastPathSegment(lambda);
         addChildToMap(map, childMap);
         return childMap;
-    }
-    else
-    {
+    } else {
         assert(false && "bad parent copy to next\n");
         return TopoMapPtr();
     }
@@ -229,11 +213,9 @@ uint32_t TreeOfMapsOld::prune(TopoMapPtr toPrune)
 {
     assert(toPrune.get());
     // Prune recursively until hitting a parent with a child
-    if(!toPrune->children.empty() || (toPrune->depth == 0))
-    {
-        if(toPrune->depth == 0 && toPrune->children.empty())
-        {
-            std::cerr<<"WARNING:TreeOfMapsOld: Wanted to prune the root!\n";
+    if (!toPrune->children.empty() || (toPrune->depth == 0)) {
+        if (toPrune->depth == 0 && toPrune->children.empty()) {
+            std::cerr << "WARNING:TreeOfMapsOld: Wanted to prune the root!\n";
         }
 
         return toPrune->depth;
@@ -257,9 +239,11 @@ uint32_t TreeOfMapsOld::prune(TopoMapPtr toPrune)
 }
 
 
-void TreeOfMapsOld::buildHypothesisTree(const TopoMapPtr& hypothesis, std::vector<hypothesis_tree_node_t>& hypNodes) const
+void TreeOfMapsOld::buildHypothesisTree(const TopoMapPtr& hypothesis,
+                                        std::vector<hypothesis_tree_node_t>& hypNodes) const
 {
-    // Recursively go through the all the nodes in the tree. Leaves have no children, so the recursion will successfully stop.
+    // Recursively go through the all the nodes in the tree. Leaves have no children, so the recursion will successfully
+    // stop.
     hypothesis_tree_node_t hypNode;
 
     hypNode.id = hypothesis->id;
@@ -269,19 +253,21 @@ void TreeOfMapsOld::buildHypothesisTree(const TopoMapPtr& hypothesis, std::vecto
     hypNode.probabilities.push_back(hypothesis->probability.estimatedLogLikelihood);
     hypNode.probabilities.push_back(hypothesis->probability.estimatedLogPrior);
     hypNode.probabilities.push_back(hypothesis->probability.estimatedLogPosterior);
-    hypNode.probabilities.insert(hypNode.probabilities.begin(), hypothesis->probability.measurementLogLikelihoods.begin(), hypothesis->probability.measurementLogLikelihoods.end());
+    hypNode.probabilities.insert(hypNode.probabilities.begin(),
+                                 hypothesis->probability.measurementLogLikelihoods.begin(),
+                                 hypothesis->probability.measurementLogLikelihoods.end());
 
-    for(auto childIt = hypothesis->children.begin(), childEnd = hypothesis->children.end(); childIt != childEnd; ++childIt)
-    {
+    for (auto childIt = hypothesis->children.begin(), childEnd = hypothesis->children.end(); childIt != childEnd;
+         ++childIt) {
         hypNode.children.push_back((*childIt)->id);
         buildHypothesisTree(*childIt, hypNodes);
     }
 
     hypNodes.push_back(hypNode);
 
-    #ifdef DEBUG_HYPOTHESIS_TREE
-    std::cout<<"DEBUG:HypothesisTree:Node "<<hypNode.id<<" Children:"<<hypNode.children.size()<<'\n';
-    #endif
+#ifdef DEBUG_HYPOTHESIS_TREE
+    std::cout << "DEBUG:HypothesisTree:Node " << hypNode.id << " Children:" << hypNode.children.size() << '\n';
+#endif
 }
 
 
@@ -291,23 +277,18 @@ bool TreeOfMapsOld::isValidParent(const TopoMapPtr& parent)
 
     uint32_t depth = parent->getDepth();
 
-    if(depth < depths.size() && depths[depth].find(parent) != depths[depth].end() && !parent->pruned)
-    {
+    if (depth < depths.size() && depths[depth].find(parent) != depths[depth].end() && !parent->pruned) {
         return true;
-    }
-    else if(depth >= depths.size())
-    {
-        std::cerr<<"ERROR:TreeOfMapsOld:Attempting to add place to a map with depth "<<depth<<" but tree height is "<<getHeight()<<". Ignoring.\n";
+    } else if (depth >= depths.size()) {
+        std::cerr << "ERROR:TreeOfMapsOld:Attempting to add place to a map with depth " << depth
+                  << " but tree height is " << getHeight() << ". Ignoring.\n";
         assert(false);
-    }
-    else if(parent->pruned)
-    {
-        std::cerr<<"ERROR:TreeOfMapsOld:Attempting to add place to a map but parent was pruned. Ignoring.\n";
+    } else if (parent->pruned) {
+        std::cerr << "ERROR:TreeOfMapsOld:Attempting to add place to a map but parent was pruned. Ignoring.\n";
         assert(false);
-    }
-    else
-    {
-        std::cerr<<"ERROR:TreeOfMapsOld:Attempting to add place to a map with depth "<<depth<<" but map doesn't exist at that depth. Ignorning.\n";
+    } else {
+        std::cerr << "ERROR:TreeOfMapsOld:Attempting to add place to a map with depth " << depth
+                  << " but map doesn't exist at that depth. Ignorning.\n";
         assert(false);
     }
 
@@ -317,27 +298,23 @@ bool TreeOfMapsOld::isValidParent(const TopoMapPtr& parent)
 
 void TreeOfMapsOld::addChildToMap(const TopoMapPtr& parent, const TopoMapPtr& child)
 {
-    if(parent->children.empty())
-    {
+    if (parent->children.empty()) {
         leaves.erase(parent);
     }
 
     parent->children.push_back(child);
-    child->id     = nextHypothesisId++;
+    child->id = nextHypothesisId++;
     child->parent = parent;
-    child->depth  = parent->depth + 1;
+    child->depth = parent->depth + 1;
 
     leaves.insert(child);
     idToMap[child->id] = child;
 
-    if(child->depth == depths.size())
-    {
+    if (child->depth == depths.size()) {
         std::set<TopoMapPtr> nextDepth;
         nextDepth.insert(child);
         depths.push_back(nextDepth);
-    }
-    else
-    {
+    } else {
         depths[child->depth].insert(child);
     }
 }
@@ -345,37 +322,43 @@ void TreeOfMapsOld::addChildToMap(const TopoMapPtr& parent, const TopoMapPtr& ch
 
 void TreeOfMapsOld::validateHypothesis(TopoMapPtr& map)
 {
-    for(auto pathIt = map->paths.begin(), pathEnd = map->paths.end(); pathIt != pathEnd; ++pathIt)
-    {
+    for (auto pathIt = map->paths.begin(), pathEnd = map->paths.end(); pathIt != pathEnd; ++pathIt) {
         GlobalPath& currentPath = pathIt->second;
 
         const std::deque<GlobalPathSegment>& segments = currentPath.getGlobalPathSegments();
 
-        for(auto segmentIt = segments.begin(), segmentEnd = segments.end(); segmentIt != segmentEnd; ++segmentIt)
-        {
-            if(segmentIt->getPlusTransition().placeId >= PATH_MIN_PLACE_ID && segmentIt->getMinusTransition().placeId >= PATH_MIN_PLACE_ID)
-            {
-                GlobalPlace& plusPlace  = map->places[segmentIt->getPlusTransition().placeId];
+        for (auto segmentIt = segments.begin(), segmentEnd = segments.end(); segmentIt != segmentEnd; ++segmentIt) {
+            if (segmentIt->getPlusTransition().placeId >= PATH_MIN_PLACE_ID
+                && segmentIt->getMinusTransition().placeId >= PATH_MIN_PLACE_ID) {
+                GlobalPlace& plusPlace = map->places[segmentIt->getPlusTransition().placeId];
                 GlobalPlace& minusPlace = map->places[segmentIt->getMinusTransition().placeId];
 
-                assert(plusPlace.getStar().getFragmentWithId(segmentIt->getPlusTransition().transitionFragmentId).exploration == PATH_FRAGMENT_EXPLORED);
-                assert(minusPlace.getStar().getFragmentWithId(segmentIt->getMinusTransition().transitionFragmentId).exploration == PATH_FRAGMENT_EXPLORED);
-            }
-            else if(segmentIt->getPlusTransition().placeId >= PATH_MIN_PLACE_ID && segmentIt->getMinusTransition().placeId == PATH_FRONTIER_ID)
-            {
-                GlobalPlace& plusPlace  = map->places[segmentIt->getPlusTransition().placeId];
+                assert(
+                  plusPlace.getStar().getFragmentWithId(segmentIt->getPlusTransition().transitionFragmentId).exploration
+                  == PATH_FRAGMENT_EXPLORED);
+                assert(minusPlace.getStar()
+                         .getFragmentWithId(segmentIt->getMinusTransition().transitionFragmentId)
+                         .exploration
+                       == PATH_FRAGMENT_EXPLORED);
+            } else if (segmentIt->getPlusTransition().placeId >= PATH_MIN_PLACE_ID
+                       && segmentIt->getMinusTransition().placeId == PATH_FRONTIER_ID) {
+                GlobalPlace& plusPlace = map->places[segmentIt->getPlusTransition().placeId];
 
-                assert(plusPlace.getStar().getFragmentWithId(segmentIt->getPlusTransition().transitionFragmentId).exploration == PATH_FRAGMENT_FRONTIER);
-            }
-            else if(segmentIt->getPlusTransition().placeId == PATH_FRONTIER_ID && segmentIt->getMinusTransition().placeId >= PATH_MIN_PLACE_ID)
-            {
-                GlobalPlace& minusPlace  = map->places[segmentIt->getMinusTransition().placeId];
+                assert(
+                  plusPlace.getStar().getFragmentWithId(segmentIt->getPlusTransition().transitionFragmentId).exploration
+                  == PATH_FRAGMENT_FRONTIER);
+            } else if (segmentIt->getPlusTransition().placeId == PATH_FRONTIER_ID
+                       && segmentIt->getMinusTransition().placeId >= PATH_MIN_PLACE_ID) {
+                GlobalPlace& minusPlace = map->places[segmentIt->getMinusTransition().placeId];
 
-                assert(minusPlace.getStar().getFragmentWithId(segmentIt->getMinusTransition().transitionFragmentId).exploration == PATH_FRAGMENT_FRONTIER);
+                assert(minusPlace.getStar()
+                         .getFragmentWithId(segmentIt->getMinusTransition().transitionFragmentId)
+                         .exploration
+                       == PATH_FRAGMENT_FRONTIER);
             }
         }
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

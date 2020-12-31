@@ -8,11 +8,11 @@
 
 
 /**
-* \file     position.h
-* \author   Collin Johnson
-*
-* Declaration of position_t.
-*/
+ * \file     position.h
+ * \author   Collin Johnson
+ *
+ * Declaration of position_t.
+ */
 
 #ifndef CORE_POSITION_H
 #define CORE_POSITION_H
@@ -26,4 +26,4 @@ using position_t = Point<float>;
 
 }
 
-#endif // CORE_POSITION_H
+#endif   // CORE_POSITION_H

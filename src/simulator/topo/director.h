@@ -8,20 +8,20 @@
 
 
 /**
-* \file     director.h
-* \author   Collin Johnson
-*
-* Declaration of TopoMapDirector.
-*/
+ * \file     director.h
+ * \author   Collin Johnson
+ *
+ * Declaration of TopoMapDirector.
+ */
 
 #ifndef SIMULATOR_TOPO_DIRECTOR_H
 #define SIMULATOR_TOPO_DIRECTOR_H
 
-#include "system/director.h"
 #include "simulator/topo/consumers.h"
-#include "utils/mutex.h"
-#include "utils/condition_variable.h"
 #include "simulator/topo/topological_map_simulator.h"
+#include "system/director.h"
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
 
 namespace vulcan
 {
@@ -31,29 +31,28 @@ namespace simulator
 struct topo_map_simulator_params_t;
 
 /**
-* TopoMapDirector organizes processing of data for the topo_map_simulator. Incoming data is passed to
-* the TopologicalMapSimulator and the output of the simulator is sent of to the subscribed output consumers.
-*/
-class TopoMapDirector : public system::Director
-                      , public TopoMapInputConsumer
+ * TopoMapDirector organizes processing of data for the topo_map_simulator. Incoming data is passed to
+ * the TopologicalMapSimulator and the output of the simulator is sent of to the subscribed output consumers.
+ */
+class TopoMapDirector
+: public system::Director
+, public TopoMapInputConsumer
 {
 public:
-
     /**
-    * Constructor for TopoMapDirector.
-    *
-    * \param    params          Parameters for the module
-    */
+     * Constructor for TopoMapDirector.
+     *
+     * \param    params          Parameters for the module
+     */
     TopoMapDirector(const topo_map_simulator_params_t& params);
 
     // TopoMapInputConsumer interface
-    void handleData(const hssh::TopologicalMap&             map,      const std::string& channel);
-    void handleData(const hssh::GlobalLocation&          state,    const std::string& channel);
-    void handleData(const planner::GoalRoute&         plan,     const std::string& channel);
+    void handleData(const hssh::TopologicalMap& map, const std::string& channel);
+    void handleData(const hssh::GlobalLocation& state, const std::string& channel);
+    void handleData(const planner::GoalRoute& plan, const std::string& channel);
     void handleData(const planner::DecisionTargetSequence& sequence, const std::string& channel);
 
 private:
-
     // system::Director interface
     void waitForData(void);
     void processAvailableData(void);
@@ -61,11 +60,11 @@ private:
 
     TopologicalMapSimulator simulator;
 
-    utils::Mutex             dataLock;
+    utils::Mutex dataLock;
     utils::ConditionVariable dataTrigger;
 };
 
-}
-}
+}   // namespace simulator
+}   // namespace vulcan
 
-#endif // SIMULATOR_TOPO_DIRECTOR_H
+#endif   // SIMULATOR_TOPO_DIRECTOR_H

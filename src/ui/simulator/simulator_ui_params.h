@@ -8,11 +8,11 @@
 
 
 /**
-* \file     simulator_ui_params.h
-* \author   Zongtai Luo
-*
-* Reading system url and main script.
-*/
+ * \file     simulator_ui_params.h
+ * \author   Zongtai Luo
+ *
+ * Reading system url and main script.
+ */
 
 #ifndef UI_SIMULATOR_SIMULATOR_UI_PARAMS_H
 #define UI_SIMULATOR_SIMULATOR_UI_PARAMS_H
@@ -38,7 +38,7 @@ std::string load_system_url(const utils::ConfigFile& config, const std::string& 
 robot_receiver_params_t load_simulator_ui_params(const utils::ConfigFile& config);
 
 
-} // sim
-} // vulcan
+}   // namespace ui
+}   // namespace vulcan
 
 #endif

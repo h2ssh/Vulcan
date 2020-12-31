@@ -8,11 +8,11 @@
 
 
 /**
-* \file     command.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionCommand.
-*/
+ * \file     command.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionCommand.
+ */
 
 #include "planner/decision/command.h"
 #include "planner/decision/planner.h"
@@ -31,9 +31,7 @@ DecisionCommand::DecisionCommand(const std::string& source, IssueMode mode, cons
 }
 
 
-DecisionCommand::DecisionCommand(const std::string& source)
-: source_(source)
-, mode_(Clear)
+DecisionCommand::DecisionCommand(const std::string& source) : source_(source), mode_(Clear)
 {
 }
 
@@ -43,5 +41,5 @@ void DecisionCommand::issue(DecisionPlanner& planner) const
     PRINT_STUB("DecisionCommand::issue");
 }
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan

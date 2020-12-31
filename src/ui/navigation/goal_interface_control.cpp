@@ -8,18 +8,18 @@
 
 
 /**
-* \file     goal_interface_control.cpp
-* \author   Collin Johnson
-*
-* Definition of GoalInterfaceControl.
-*/
+ * \file     goal_interface_control.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GoalInterfaceControl.
+ */
 
 #include "ui/navigation/goal_interface_control.h"
+#include "planner/interface/navigation_interface.h"
 #include "ui/navigation/goal_name_dialog.h"
 #include "ui/navigation/navigation_data.h"
-#include "ui/navigation/navigation_interface_display.h"
 #include "ui/navigation/navigation_interface.h"
-#include "planner/interface/navigation_interface.h"
+#include "ui/navigation/navigation_interface_display.h"
 #include "utils/stub.h"
 
 namespace vulcan
@@ -30,18 +30,18 @@ namespace ui
 const std::string kGoalsFile("navigation_goals.txt");
 const int32_t kNoArea = -1;
 
-    
+
 void populate_object_selector(const hssh::LocalTopoMap& map,
                               const hssh::LocalPerceptualMap& lpm,
                               GridObjectSelector<int32_t>& selector);
-    
+
 
 BEGIN_EVENT_TABLE(GoalInterfaceControl, wxEvtHandler)
-    EVT_TOGGLEBUTTON(ID_SELECT_GOAL_BUTTON, GoalInterfaceControl::selectGoalToggled)
-    EVT_BUTTON(ID_ADD_SELECTED_BUTTON, GoalInterfaceControl::addSelectedPressed)
-    EVT_BUTTON(ID_ADD_CURRENT_LOCATION_BUTTON, GoalInterfaceControl::addCurrentLocationPressed)
-    EVT_BUTTON(ID_PREVIEW_ROUTE_BUTTON, GoalInterfaceControl::previewRoutePressed)
-    EVT_BUTTON(ID_GO_BUTTON, GoalInterfaceControl::goPressed)
+EVT_TOGGLEBUTTON(ID_SELECT_GOAL_BUTTON, GoalInterfaceControl::selectGoalToggled)
+EVT_BUTTON(ID_ADD_SELECTED_BUTTON, GoalInterfaceControl::addSelectedPressed)
+EVT_BUTTON(ID_ADD_CURRENT_LOCATION_BUTTON, GoalInterfaceControl::addCurrentLocationPressed)
+EVT_BUTTON(ID_PREVIEW_ROUTE_BUTTON, GoalInterfaceControl::previewRoutePressed)
+EVT_BUTTON(ID_GO_BUTTON, GoalInterfaceControl::goPressed)
 END_EVENT_TABLE()
 
 
@@ -64,7 +64,7 @@ GoalInterfaceControl::GoalInterfaceControl(planner::NavigationInterface& interfa
     assert(widgets_.goButton);
 
     widgets_.previewButton->Show(false);
-    
+
     interface_.loadGoals(kGoalsFile);
     populateGoalsList();
 }
@@ -77,49 +77,41 @@ void GoalInterfaceControl::update(const NavigationData& data, system::SystemComm
     setAddCurrentState(data);
     setPreviewState(data);
     setGoResumeState(data);
-    
-    if(haveNewGoal_)
-    {
+
+    if (haveNewGoal_) {
         populateGoalsList();
         haveNewGoal_ = false;
     }
-    
+
     // When the map changes, a new mapping between areas and grid cells needs to be created and the new association
     // of area id to center needs to be created
-    if(data.topoMap && data.metricMap && (data.topoMap->mapId() != currentMapId_))
-    {
+    if (data.topoMap && data.metricMap && (data.topoMap->mapId() != currentMapId_)) {
         populate_object_selector(*data.topoMap, *data.metricMap, areaSelector_);
         currentMapId_ = data.topoMap->mapId();
 
         areaCenters_.clear();
-        for(auto& area : *data.topoMap)
-        {
+        for (auto& area : *data.topoMap) {
             areaCenters_[area->id()] = area->center();
         }
     }
 
     currentAreaId_ = data.location ? data.location->areaId() : kNoArea;
     currentPose_ = data.pose;
-    
+
     display_.setHoverArea(areaSelector_.hoverObject().get_value_or(kNoArea));
     display_.setSelectedArea(areaSelector_.selectedObject().get_value_or(kNoArea));
-    
-    if(auto goal = interface_.currentGoal())
-    {
+
+    if (auto goal = interface_.currentGoal()) {
         display_.setGoalArea(goal->localArea().get_value_or(kNoArea));
-    }
-    else
-    {
+    } else {
         display_.setGoalArea(kNoArea);
     }
-    
 
-    if(shouldSendGoalCommand_)
-    {
+
+    if (shouldSendGoalCommand_) {
         bool success = interface_.goToGoal(selectedGoal(), data.topoMap, communicator);
 
-        if(!success)
-        {
+        if (!success) {
             std::cerr << "ERROR: GoalInterfaceControl: Unable to go to goal: " << selectedGoal() << '\n';
         }
 
@@ -144,7 +136,7 @@ void GoalInterfaceControl::setAddSelectedState(const NavigationData& data)
 
 void GoalInterfaceControl::setAddCurrentState(const NavigationData& data)
 {
-    bool haveMetricLocation = data.metricMap;  // always have a pose
+    bool haveMetricLocation = data.metricMap;   // always have a pose
     bool haveTopoLocation = data.topoMap && data.location && (data.topoMap->mapId() == data.location->mapId());
     widgets_.addCurrentButton->Enable(haveMetricLocation || haveTopoLocation);
 }
@@ -164,11 +156,9 @@ void GoalInterfaceControl::setGoResumeState(const NavigationData& data)
 
     widgets_.goButton->SetLabel(wxString("GO"));
 
-    if(interface_.hasDeferredGoal())
-    {
+    if (interface_.hasDeferredGoal()) {
         assert(executingGoal);
-        if(executingGoal->name() == listGoal)
-        {
+        if (executingGoal->name() == listGoal) {
             widgets_.goButton->SetLabel(wxString("RESUME"));
         }
     }
@@ -181,8 +171,7 @@ void GoalInterfaceControl::populateGoalsList(void)
 {
     widgets_.goalsList->Clear();
 
-    for(auto& goal : boost::make_iterator_range(interface_.beginGoals(), interface_.endGoals()))
-    {
+    for (auto& goal : boost::make_iterator_range(interface_.beginGoals(), interface_.endGoals())) {
         widgets_.goalsList->Append(wxString(goal.name()));
     }
 }
@@ -192,12 +181,9 @@ std::string GoalInterfaceControl::selectedGoal(void)
 {
     auto selection = widgets_.goalsList->GetSelection();
 
-    if(selection == wxNOT_FOUND)
-    {
+    if (selection == wxNOT_FOUND) {
         return std::string("");
-    }
-    else
-    {
+    } else {
         return widgets_.goalsList->GetString(selection).ToStdString();
     }
 }
@@ -205,14 +191,11 @@ std::string GoalInterfaceControl::selectedGoal(void)
 
 void GoalInterfaceControl::selectGoalToggled(wxCommandEvent& event)
 {
-    if(widgets_.selectGoalButton->GetValue())
-    {
+    if (widgets_.selectGoalButton->GetValue()) {
         display_.pushMouseHandler(&areaSelector_);
         display_.showAreas(true);
         display_.setMode(NavigationInterfaceMode::select);
-    }
-    else
-    {
+    } else {
         display_.removeMouseHandler(&areaSelector_);
         display_.showAreas(false);
         display_.setMode(NavigationInterfaceMode::drive);
@@ -224,22 +207,19 @@ void GoalInterfaceControl::addSelectedPressed(wxCommandEvent& event)
 {
     auto selectedArea = areaSelector_.selectedObject();
 
-    if(selectedArea)
-    {
+    if (selectedArea) {
         assert(*selectedArea != kNoArea);
 
         GoalNameDialog nameDialog(&display_);
-        if(nameDialog.ShowModal() == wxID_OK)
-        {
+        if (nameDialog.ShowModal() == wxID_OK) {
             interface_.addGoalLocalArea(nameDialog.goalName(), *selectedArea);
 
-            if(areaCenters_.find(*selectedArea) != areaCenters_.end())
-            {
+            if (areaCenters_.find(*selectedArea) != areaCenters_.end()) {
                 interface_.addGoalGlobalPose(nameDialog.goalName(), areaCenters_[*selectedArea]);
             }
 
             haveNewGoal_ = true;
-            
+
             interface_.saveGoals(kGoalsFile);
         }
     }
@@ -249,17 +229,15 @@ void GoalInterfaceControl::addSelectedPressed(wxCommandEvent& event)
 void GoalInterfaceControl::addCurrentLocationPressed(wxCommandEvent& event)
 {
     GoalNameDialog nameDialog(&display_);
-    if(nameDialog.ShowModal() == wxID_OK)
-    {
+    if (nameDialog.ShowModal() == wxID_OK) {
         interface_.addGoalGlobalPose(nameDialog.goalName(), currentPose_);
 
-        if(currentAreaId_ != kNoArea)
-        {
+        if (currentAreaId_ != kNoArea) {
             interface_.addGoalLocalArea(nameDialog.goalName(), currentAreaId_);
         }
 
         haveNewGoal_ = true;
-        
+
         interface_.saveGoals(kGoalsFile);
     }
 }
@@ -277,23 +255,20 @@ void GoalInterfaceControl::goPressed(wxCommandEvent& event)
 }
 
 
-void populate_object_selector(const hssh::LocalTopoMap& map, 
-                              const hssh::LocalPerceptualMap& lpm, 
+void populate_object_selector(const hssh::LocalTopoMap& map,
+                              const hssh::LocalPerceptualMap& lpm,
                               GridObjectSelector<int32_t>& selector)
 {
     std::map<Point<int>, int32_t> cellToArea;
-    for(const auto& area : map)
-    {
+    for (const auto& area : map) {
         const auto& extent = area->extent();
-        for(auto& cell : extent)
-        {
+        for (auto& cell : extent) {
             cellToArea.insert(std::make_pair(utils::global_point_to_grid_cell_round(cell, lpm), area->id()));
         }
     }
-    
+
     selector.setObjects(cellToArea);
-    
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

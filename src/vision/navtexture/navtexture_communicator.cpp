@@ -7,14 +7,14 @@
 */
 
 
-#include "vision/navtexture/navtexture_input_consumer.h"
 #include "vision/navtexture/navtexture_communicator.h"
+#include "vision/navtexture/navtexture_input_consumer.h"
 
 namespace vulcan
 {
 namespace vision
 {
-    
+
 NavTextureCommunicator::NavTextureCommunicator(void)
 {
 }
@@ -22,11 +22,11 @@ NavTextureCommunicator::NavTextureCommunicator(void)
 
 void NavTextureCommunicator::addInputConsumer(NavTextureInputConsumer* consumer)
 {
-    receiver.subscribeToMessage<Image>                               (consumer);
-    receiver.subscribeToMessage<polar_laser_scan_t>           (consumer);
-    receiver.subscribeToMessage<laser::dynamic_laser_points_t>       (consumer);
+    receiver.subscribeToMessage<Image>(consumer);
+    receiver.subscribeToMessage<polar_laser_scan_t>(consumer);
+    receiver.subscribeToMessage<laser::dynamic_laser_points_t>(consumer);
     receiver.subscribeToMessage<tracker::DynamicObjectCollection>(consumer);
-    receiver.subscribeToMessage<pose_t>                       (consumer);
+    receiver.subscribeToMessage<pose_t>(consumer);
 }
 
 
@@ -35,5 +35,5 @@ void NavTextureCommunicator::handleImageSegments(const std::vector<image_segment
     transmitter.sendMessage(segments);
 }
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan

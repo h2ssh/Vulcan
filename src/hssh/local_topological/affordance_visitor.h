@@ -8,11 +8,11 @@
 
 
 /**
-* \file     affordance_visitor.h
-* \author   Collin Johnson
-* 
-* Declaration of NavigationAffordanceVisitor interface.
-*/
+ * \file     affordance_visitor.h
+ * \author   Collin Johnson
+ *
+ * Declaration of NavigationAffordanceVisitor interface.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AFFORDANCE_VISITOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_AFFORDANCE_VISITOR_H
@@ -21,27 +21,26 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 class ExplorationAffordance;
 class MoveAlongAffordance;
 class TransitionAffordance;
 
 /**
-* NavigationAffordanceVisitor is the interface for visitors handling classes in the NavigationAffordance hierarchy.
-*/
+ * NavigationAffordanceVisitor is the interface for visitors handling classes in the NavigationAffordance hierarchy.
+ */
 class NavigationAffordanceVisitor
 {
 public:
-
     virtual ~NavigationAffordanceVisitor(void) { }
-    
+
     // Visitation methods called by classes of the corresponding types
     virtual void visitExploration(const ExplorationAffordance& affordance) = 0;
-    virtual void visitMoveAlong  (const MoveAlongAffordance&   affordance) = 0;
-    virtual void visitTransition (const TransitionAffordance&  affordance) = 0;
+    virtual void visitMoveAlong(const MoveAlongAffordance& affordance) = 0;
+    virtual void visitTransition(const TransitionAffordance& affordance) = 0;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AFFORDANCE_VISITOR_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AFFORDANCE_VISITOR_H

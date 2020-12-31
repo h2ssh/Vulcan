@@ -8,11 +8,11 @@
 
 
 /**
-* \file     interpolation.cpp
-* \author   Collin Johnson
-*
-* Definition of interpolation functions declared in interpolation.h.
-*/
+ * \file     interpolation.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of interpolation functions declared in interpolation.h.
+ */
 
 #include "math/interpolation.h"
 #include "core/point.h"
@@ -27,11 +27,9 @@ float unit_bilinear_interpolation(const Point<float>& point, float values[4])
 {
     assert(0 <= point.x && point.x <= 1 && 0 <= point.y && point.y <= 1);
 
-    return (values[0] * (1.0f-point.x) * (1.0f-point.y)) +
-           (values[1] * point.x        * (1.0f-point.y)) +
-           (values[2] * (1.0f-point.x) * point.y)        +
-           (values[3] * point.x        * point.y);
+    return (values[0] * (1.0f - point.x) * (1.0f - point.y)) + (values[1] * point.x * (1.0f - point.y))
+      + (values[2] * (1.0f - point.x) * point.y) + (values[3] * point.x * point.y);
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan

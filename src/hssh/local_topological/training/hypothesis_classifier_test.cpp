@@ -8,11 +8,11 @@
 
 
 /**
-* \file     hypothesis_classifier_test.cpp
-* \author   Collin Johnson
-*
-* Definition of HypothesisClassifierTest.
-*/
+ * \file     hypothesis_classifier_test.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of HypothesisClassifierTest.
+ */
 
 #include "hssh/local_topological/training/hypothesis_classifier_test.h"
 #include "hssh/local_topological/training/labeled_area_data.h"
@@ -25,9 +25,9 @@ namespace hssh
 {
 
 MapTestResults generate_results_for_map(const HypothesisClassifier& classifier,
-                                        const std::string&              mapName,
-                                        LabeledAreaData::FeatureIter    begin,
-                                        LabeledAreaData::FeatureIter    end);
+                                        const std::string& mapName,
+                                        LabeledAreaData::FeatureIter begin,
+                                        LabeledAreaData::FeatureIter end);
 
 
 HypothesisClassifierTest::HypothesisClassifierTest(const std::string& classifierType,
@@ -61,12 +61,9 @@ std::vector<MapTestResults> HypothesisClassifierTest::calculateResults(const Lab
 {
     std::vector<MapTestResults> dataResults;
 
-    for(auto& map : boost::make_iterator_range(data.beginMaps(), data.endMaps()))
-    {
-        dataResults.push_back(generate_results_for_map(*classifier_,
-                                                       map,
-                                                       data.beginMapExamples(map),
-                                                       data.endMapExamples(map)));
+    for (auto& map : boost::make_iterator_range(data.beginMaps(), data.endMaps())) {
+        dataResults.push_back(
+          generate_results_for_map(*classifier_, map, data.beginMapExamples(map), data.endMapExamples(map)));
     }
 
     return dataResults;
@@ -77,8 +74,7 @@ MapTestResults HypothesisClassifierTest::accumulateResults(const std::vector<Map
 {
     MapTestResults overall;
 
-    for(auto& result : results)
-    {
+    for (auto& result : results) {
         overall.numTests += result.numTests;
         overall.numCorrectTests += result.numCorrectTests;
         overall.numDecisionAsPath += result.numDecisionAsPath;
@@ -94,47 +90,32 @@ MapTestResults HypothesisClassifierTest::accumulateResults(const std::vector<Map
 
 
 MapTestResults generate_results_for_map(const HypothesisClassifier& classifier,
-                                        const std::string&              mapName,
-                                        LabeledAreaData::FeatureIter    begin,
-                                        LabeledAreaData::FeatureIter    end)
+                                        const std::string& mapName,
+                                        LabeledAreaData::FeatureIter begin,
+                                        LabeledAreaData::FeatureIter end)
 {
     MapTestResults results;
-    results.mapName  = mapName;
+    results.mapName = mapName;
     results.numTests = std::distance(begin, end);
 
-    for(auto& example : boost::make_iterator_range(begin, end))
-    {
+    for (auto& example : boost::make_iterator_range(begin, end)) {
         results.tests.push_back(std::make_pair(example.type, classifier.classify(example.features)));
     }
 
-    for(auto& test : results.tests)
-    {
-        if(test.first == test.second)
-        {
+    for (auto& test : results.tests) {
+        if (test.first == test.second) {
             ++results.numCorrectTests;
-        }
-        else if((test.first == HypothesisType::kDecision) && (test.second == HypothesisType::kPath))
-        {
+        } else if ((test.first == HypothesisType::kDecision) && (test.second == HypothesisType::kPath)) {
             ++results.numDecisionAsPath;
-        }
-        else if((test.first == HypothesisType::kDecision) && (test.second == HypothesisType::kDest))
-        {
+        } else if ((test.first == HypothesisType::kDecision) && (test.second == HypothesisType::kDest)) {
             ++results.numDecisionAsDest;
-        }
-        else if((test.first == HypothesisType::kDest) && (test.second == HypothesisType::kPath))
-        {
+        } else if ((test.first == HypothesisType::kDest) && (test.second == HypothesisType::kPath)) {
             ++results.numDestAsPath;
-        }
-        else if((test.first == HypothesisType::kDest) && (test.second == HypothesisType::kDecision))
-        {
+        } else if ((test.first == HypothesisType::kDest) && (test.second == HypothesisType::kDecision)) {
             ++results.numDestAsDecision;
-        }
-        else if((test.first == HypothesisType::kPath) && (test.second == HypothesisType::kDecision))
-        {
+        } else if ((test.first == HypothesisType::kPath) && (test.second == HypothesisType::kDecision)) {
             ++results.numPathAsDecision;
-        }
-        else if((test.first == HypothesisType::kPath) && (test.second == HypothesisType::kDest))
-        {
+        } else if ((test.first == HypothesisType::kPath) && (test.second == HypothesisType::kDest)) {
             ++results.numPathAsDest;
         }
     }
@@ -142,5 +123,5 @@ MapTestResults generate_results_for_map(const HypothesisClassifier& classifier,
     return results;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

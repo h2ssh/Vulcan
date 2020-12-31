@@ -8,11 +8,11 @@
 
 
 /**
-* \file     dbscan.cpp
-* \author   Collin Johnson
-*
-* Definition of dbscan_1d_linear.
-*/
+ * \file     dbscan.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of dbscan_1d_linear.
+ */
 
 #include "math/clustering.h"
 #include <algorithm>
@@ -40,7 +40,10 @@ IndexRange expand_cluster(IndexIt begin, IndexIt after, IndexIt end, double epsi
 void add_cluster_to_results(IndexRange cluster, DataIt begin, clustering_result_t& results);
 std::vector<double> calculate_cluster_means(DataIt begin, DataIt end, const clustering_result_t& results);
 
-inline int range_size(IndexRange range) { return std::distance(range.first, range.second); }
+inline int range_size(IndexRange range)
+{
+    return std::distance(range.first, range.second);
+}
 
 
 clustering_result_t dbscan_1d_linear(DataIt begin, DataIt end, double epsilon, int minPoints)
@@ -51,47 +54,44 @@ clustering_result_t dbscan_1d_linear(DataIt begin, DataIt end, double epsilon, i
     // Sort the data by value in ascending order.
     std::vector<DataIt> indexes(std::distance(begin, end));
     std::iota(indexes.begin(), indexes.end(), begin);
-    std::sort(indexes.begin(), indexes.end(), [](DataIt lhs, DataIt rhs) { return *lhs < *rhs; });
+    std::sort(indexes.begin(), indexes.end(), [](DataIt lhs, DataIt rhs) {
+        return *lhs < *rhs;
+    });
 
     /*
-    * Until all data have been assigned a cluster:
-    *   Find the neighborhood of the next data point to consider
-    *   Grow the neighborhood fully
-    *   If not large enough, assign as a noisy neighborhood
-    *   Otherwise, assign the next cluster id
-    *   Use the end of the previous neighborhood as the start of the next neighborhood
-    */
+     * Until all data have been assigned a cluster:
+     *   Find the neighborhood of the next data point to consider
+     *   Grow the neighborhood fully
+     *   If not large enough, assign as a noisy neighborhood
+     *   Otherwise, assign the next cluster id
+     *   Use the end of the previous neighborhood as the start of the next neighborhood
+     */
 
     // The initial cluster has no data before or after
     IndexRange clusterEnds(indexes.begin(), indexes.begin());
 
-    do
-    {
+    do {
         // The search for the new cluster begins from the end of the previous cluster
-        clusterEnds = find_data_neighborhood(clusterEnds.second,
-                                             clusterEnds.second,
-                                             clusterEnds.second,
-                                             indexes.end(),
-                                             epsilon);
+        clusterEnds =
+          find_data_neighborhood(clusterEnds.second, clusterEnds.second, clusterEnds.second, indexes.end(), epsilon);
         clusterEnds = expand_cluster(clusterEnds.first, clusterEnds.second, indexes.end(), epsilon, minPoints);
 
         // If the cluster is large enough, add it to the results
-        if(range_size(clusterEnds) >= minPoints)
-        {
+        if (range_size(clusterEnds) >= minPoints) {
             add_cluster_to_results(clusterEnds, begin, results);
-        }
-        else // a cluster isn't added, so just start the search at the next point, which is ends.first + 1
+        } else   // a cluster isn't added, so just start the search at the next point, which is ends.first + 1
         {
             clusterEnds.second = clusterEnds.first + 1;
         }
         // Otherwise, since all points are defaulted to noisy, ignore the results and keep searching
-    } while(clusterEnds.second != indexes.end()); // Once the cluster end is the end of the indexes, no more clusters exist
+    } while (clusterEnds.second
+             != indexes.end());   // Once the cluster end is the end of the indexes, no more clusters exist
 
 #ifdef DEBUG_RESULTS
     auto means = calculate_cluster_means(begin, end, results);
-    std::cout << "INFO: dbscan_1d_linear: Cluster results:\nNum clusters:" << results.numClusters << " Cluster sizes:\n";
-    for(std::size_t n = 0; n < means.size(); ++n)
-    {
+    std::cout << "INFO: dbscan_1d_linear: Cluster results:\nNum clusters:" << results.numClusters
+              << " Cluster sizes:\n";
+    for (std::size_t n = 0; n < means.size(); ++n) {
         std::cout << std::setprecision(5) << std::setw(5) << means[n] << "->" << results.clusterSizes[n] << '\n';
     }
 #endif
@@ -127,8 +127,7 @@ IndexRange find_data_neighborhood(IndexIt data, IndexIt before, IndexIt after, I
 
 #ifdef DEBUG_NEIGHBORHOOD
     std::cout << "INFO: dbscan_1d: Neighborhood for " << **data << " is:";
-    for(auto it = before; it != after; ++it)
-    {
+    for (auto it = before; it != after; ++it) {
         std::cout << **it << ' ';
     }
     std::cout << '\n';
@@ -140,32 +139,30 @@ IndexRange find_data_neighborhood(IndexIt data, IndexIt before, IndexIt after, I
 
 IndexRange expand_cluster(IndexIt begin, IndexIt after, IndexIt end, double epsilon, int minPoints)
 {
-    // When expanding a cluster, the goal is to find the range of the cluster [begin, after). After is the one-past-the-end
-    // iterator for the cluster.
-    // For each point in the current range [current,after) create the neighborhood and extend the range of the after
-    // iterator. If the neighborhood size is less than minPoints, then we have reached the end of the cluster. Alternately,
-    // if the end of the cluster contains all points, then we've reached the end of the cluster too.
+    // When expanding a cluster, the goal is to find the range of the cluster [begin, after). After is the
+    // one-past-the-end iterator for the cluster. For each point in the current range [current,after) create the
+    // neighborhood and extend the range of the after iterator. If the neighborhood size is less than minPoints, then we
+    // have reached the end of the cluster. Alternately, if the end of the cluster contains all points, then we've
+    // reached the end of the cluster too.
 
     IndexIt before = begin;
     IndexIt current = begin;
 
-    while(current != end)
-    {
+    while (current != end) {
         // Create the neighbor for the current point
         auto neighborhood = find_data_neighborhood(current, before, after, end, epsilon);
 
         // If the new neighborhood is large enough, extend the points in the cluster
-        if(range_size(neighborhood) >= minPoints)
-        {
-            after = neighborhood.second; // Extended the neighborhood to include it
+        if (range_size(neighborhood) >= minPoints) {
+            after = neighborhood.second;   // Extended the neighborhood to include it
         }
 
-        before = neighborhood.first;    // move the before marker to reduce the amount of search for the next point
-        ++current; // move on to the next point in the range
+        before = neighborhood.first;   // move the before marker to reduce the amount of search for the next point
+        ++current;                     // move on to the next point in the range
 
         // Done if: or , then exit
-        if((current == after)            // point is the last in the ordered neighborhood sequence
-            || (after == end))           // the cluster contains all remaining data
+        if ((current == after)   // point is the last in the ordered neighborhood sequence
+            || (after == end))   // the cluster contains all remaining data
         {
             break;
         }
@@ -173,8 +170,7 @@ IndexRange expand_cluster(IndexIt begin, IndexIt after, IndexIt end, double epsi
 
 #ifdef DEBUG_CLUSTER
     std::cout << "INFO: dbscan_1d: Created cluster:";
-    for(auto it = begin; it != after; ++it)
-    {
+    for (auto it = begin; it != after; ++it) {
         std::cout << **it << ' ';
     }
     std::cout << '\n';
@@ -188,8 +184,7 @@ void add_cluster_to_results(IndexRange cluster, DataIt begin, clustering_result_
 {
     int clusterId = results.numClusters;
 
-    for(IndexIt index = cluster.first; index != cluster.second; ++index)
-    {
+    for (IndexIt index = cluster.first; index != cluster.second; ++index) {
         // The data point is the distance from the start of the input data
         int dataIndex = std::distance(begin, *index);
         results.assignedCluster[dataIndex] = clusterId;
@@ -205,11 +200,9 @@ std::vector<double> calculate_cluster_means(DataIt begin, DataIt end, const clus
     std::vector<double> means(results.numClusters);
     std::fill(means.begin(), means.end(), 0.0);
 
-    for(DataIt it = begin; it != end; ++it)
-    {
+    for (DataIt it = begin; it != end; ++it) {
         int index = results.assignedCluster[std::distance(begin, it)];
-        if(index >= 0)
-        {
+        if (index >= 0) {
             means[index] += (*it) / results.clusterSizes[index];
         }
     }
@@ -217,5 +210,5 @@ std::vector<double> calculate_cluster_means(DataIt begin, DataIt end, const clus
     return means;
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

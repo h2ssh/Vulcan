@@ -8,11 +8,11 @@
 
 
 /**
-* \file     relocalize_in_lpm.cpp
-* \author   Collin Johnson
-* 
-* Definition of RelocalizeInLpmCommand.
-*/
+ * \file     relocalize_in_lpm.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of RelocalizeInLpmCommand.
+ */
 
 #include "hssh/local_metric/commands/relocalize_in_lpm.h"
 #include "hssh/metrical/relocalization/metric_relocalizer.h"
@@ -22,8 +22,8 @@ namespace vulcan
 namespace hssh
 {
 
-RelocalizeInLpmCommand::RelocalizeInLpmCommand(const std::string&                 source, 
-                                               const LocalPerceptualMap&          map,
+RelocalizeInLpmCommand::RelocalizeInLpmCommand(const std::string& source,
+                                               const LocalPerceptualMap& map,
                                                std::shared_ptr<FilterInitializer> initializer)
 : LocalMetricCommand(source)
 , map_(map)
@@ -31,12 +31,12 @@ RelocalizeInLpmCommand::RelocalizeInLpmCommand(const std::string&               
 {
     assert(initializer_);
 }
-    
-    
+
+
 void RelocalizeInLpmCommand::issue(const metric_slam_data_t& data,
-                                   Localizer&   localizer, 
-                                   Mapper&                   mapper, 
-                                   MetricRelocalizer&        relocalizer) const
+                                   Localizer& localizer,
+                                   Mapper& mapper,
+                                   MetricRelocalizer& relocalizer) const
 {
     relocalizer.startRelocalization(data, map_, *initializer_);
 }
@@ -47,5 +47,5 @@ void RelocalizeInLpmCommand::print(std::ostream& out) const
     out << "RelocalizeInLpmCommand from " << source();
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

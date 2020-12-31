@@ -8,17 +8,17 @@
 
 
 /**
-* \file     object_boundary.cpp
-* \author   Collin Johnson
-* 
-* Definition of ObjectBounday.
-*/
+ * \file     object_boundary.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ObjectBounday.
+ */
 
 #include "tracker/object_boundary.h"
 #include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
 #include <iostream>
 
 // #define DEBUG_SHAPE_DECISION
@@ -34,8 +34,7 @@ using DistAcc = accumulator_set<double, stats<tag::mean, tag::min>>;
 
 std::ostream& operator<<(std::ostream& out, BoundaryType type)
 {
-    switch(type)
-    {
+    switch (type) {
     case BoundaryType::rectangle:
         out << "rectangle";
         break;
@@ -58,7 +57,7 @@ std::ostream& operator<<(std::ostream& out, BoundaryType type)
         out << "unknown";
         break;
     }
-    
+
     return out;
 }
 
@@ -67,52 +66,41 @@ struct distance_visitor : public boost::static_visitor<std::tuple<double, double
 {
     ConstPointIter begin;
     ConstPointIter end;
-    
-    std::tuple<double, double> operator()(const Rectangle&  rect);
-    std::tuple<double, double> operator()(const Circle&     circle);
+
+    std::tuple<double, double> operator()(const Rectangle& rect);
+    std::tuple<double, double> operator()(const Circle& circle);
     std::tuple<double, double> operator()(const TwoCircles& circles);
     std::tuple<double, double> operator()(const CircleRect& circleRect);
-    std::tuple<double, double> operator()(const TwoRects&   rects);
-    
-    distance_visitor(ConstPointIter begin, ConstPointIter end)
-    : begin(begin)
-    , end(end)
-    {
-    }
+    std::tuple<double, double> operator()(const TwoRects& rects);
+
+    distance_visitor(ConstPointIter begin, ConstPointIter end) : begin(begin), end(end) { }
 };
 
 struct object_dist_visitor : public boost::static_visitor<std::tuple<double, double>>
 {
     ConstPointIter begin;
     ConstPointIter end;
-    
-    std::tuple<double, double> operator()(const Rectangle&  rect);
-    std::tuple<double, double> operator()(const Circle&     circle);
+
+    std::tuple<double, double> operator()(const Rectangle& rect);
+    std::tuple<double, double> operator()(const Circle& circle);
     std::tuple<double, double> operator()(const TwoCircles& circles);
     std::tuple<double, double> operator()(const CircleRect& circleRect);
-    std::tuple<double, double> operator()(const TwoRects&   rects);
-    
-    object_dist_visitor(ConstPointIter begin, ConstPointIter end)
-    : begin(begin)
-    , end(end)
-    {
-    }
+    std::tuple<double, double> operator()(const TwoRects& rects);
+
+    object_dist_visitor(ConstPointIter begin, ConstPointIter end) : begin(begin), end(end) { }
 };
 
 struct move_boundary_visitor : public boost::static_visitor<ObjectBoundary>
 {
     Position deltaPosition;
-    
-    ObjectBoundary operator()(const Rectangle&  rect);
-    ObjectBoundary operator()(const Circle&     circle);
+
+    ObjectBoundary operator()(const Rectangle& rect);
+    ObjectBoundary operator()(const Circle& circle);
     ObjectBoundary operator()(const TwoCircles& circles);
     ObjectBoundary operator()(const CircleRect& circleRect);
-    ObjectBoundary operator()(const TwoRects&   rects);
-    
-    move_boundary_visitor(const Position& deltaPosition)
-    : deltaPosition(deltaPosition)
-    {
-    }
+    ObjectBoundary operator()(const TwoRects& rects);
+
+    move_boundary_visitor(const Position& deltaPosition) : deltaPosition(deltaPosition) { }
 };
 
 
@@ -171,12 +159,9 @@ void ObjectBoundary::updateApproximation(Circle approx)
 
 std::tuple<double, double> ObjectBoundary::distanceFromBoundary(ConstPointIter begin, ConstPointIter end) const
 {
-    if(begin == end)
-    {
+    if (begin == end) {
         return std::make_tuple(1000.0, 1000.0);
-    }
-    else
-    {
+    } else {
         return visitShape(distance_visitor(begin, end));
     }
 }
@@ -184,12 +169,9 @@ std::tuple<double, double> ObjectBoundary::distanceFromBoundary(ConstPointIter b
 
 std::tuple<double, double> ObjectBoundary::distanceToObject(ConstPointIter begin, ConstPointIter end) const
 {
-    if(begin == end)
-    {
+    if (begin == end) {
         return std::make_tuple(1000.0, 1000.0);
-    }
-    else
-    {
+    } else {
         return visitShape(object_dist_visitor(begin, end));
     }
 }
@@ -356,5 +338,5 @@ ObjectBoundary move_boundary_visitor::operator()(const TwoRects& rects)
     return ObjectBoundary(movedRects);
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

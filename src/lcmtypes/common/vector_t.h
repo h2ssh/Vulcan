@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_VECTOR_H
 #define LCMTYPES_VECTOR_H
 
-#include "lcmtypes/vulcan_lcm_vector_t.h"
 #include "core/vector.h"
+#include "lcmtypes/vulcan_lcm_vector_t.h"
 
 namespace vulcan
 {
@@ -24,7 +24,7 @@ void free_lcm_vector(vulcan_lcm_vector_t& vector);
 void vulcan_vector_to_lcm_vector(const Vector& vulcanVector, vulcan_lcm_vector_t& lcmVector);
 void lcm_vector_to_vulcan_vector(const vulcan_lcm_vector_t& lcmVector, Vector& vulcanVector);
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_VECTOR_H
+#endif   // LCMTYPES_VECTOR_H

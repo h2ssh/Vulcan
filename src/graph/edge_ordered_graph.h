@@ -8,12 +8,12 @@
 
 
 /**
-* \file     edge_ordered_graph.h
-* \author   Collin Johnson
-*
-* Definition of EdgeOrderedGraph, a subclass of Graph that allows for easy creation of
-* edge-ordered graphs for fast checking of map planarity.
-*/
+ * \file     edge_ordered_graph.h
+ * \author   Collin Johnson
+ *
+ * Definition of EdgeOrderedGraph, a subclass of Graph that allows for easy creation of
+ * edge-ordered graphs for fast checking of map planarity.
+ */
 
 #ifndef GRAPH_EDGE_ORDERED_GRAPH_H
 #define GRAPH_EDGE_ORDERED_GRAPH_H
@@ -26,26 +26,19 @@ namespace graph
 {
 
 /**
-* EdgeOrderedGraph
-*/
+ * EdgeOrderedGraph
+ */
 template <class Vertex, class Edge>
 class EdgeOrderedGraph : public Graph<Vertex, Edge>
 {
 public:
-
     // Graph interface
-    virtual void addVertex(const Vertex& vertex)
-    {
-        Graph<Vertex, Edge>::addVertex(vertex);
-    }
+    virtual void addVertex(const Vertex& vertex) { Graph<Vertex, Edge>::addVertex(vertex); }
 
-    virtual void addEdge(const Edge& edge)
-    {
-        Graph<Vertex, Edge>::addEdge(edge);
-    }
+    virtual void addEdge(const Edge& edge) { Graph<Vertex, Edge>::addEdge(edge); }
 };
 
-}
-}
+}   // namespace graph
+}   // namespace vulcan
 
-#endif // GRAPH_EDGE_ORDERED_GRAPH_H
+#endif   // GRAPH_EDGE_ORDERED_GRAPH_H

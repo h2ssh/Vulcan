@@ -8,11 +8,11 @@
 
 
 /**
-* \file     minimum_speed_test.cpp
-* \author   Collin Johnson
-*
-* Definition of MinimumStartSpeedTest and MinimumRollingSpeedTest.
-*/
+ * \file     minimum_speed_test.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of MinimumStartSpeedTest and MinimumRollingSpeedTest.
+ */
 
 #include "calibration/wheelchair/minimum_speed_test.h"
 
@@ -22,4 +22,4 @@ namespace calibration
 {
 
 }
-}
+}   // namespace vulcan

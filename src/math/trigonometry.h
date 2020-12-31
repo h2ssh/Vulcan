@@ -8,15 +8,15 @@
 
 
 /**
-* \file     trigonometry.h
-* \author   Collin Johnson
-*
-* Definition of some functions that fill out the trig functions in the standard library:
-*
-*   - cot
-*   - csc
-*   - sec
-*/
+ * \file     trigonometry.h
+ * \author   Collin Johnson
+ *
+ * Definition of some functions that fill out the trig functions in the standard library:
+ *
+ *   - cot
+ *   - csc
+ *   - sec
+ */
 
 #ifndef MATH_TRIGONOMETRY_H
 #define MATH_TRIGONOMETRY_H
@@ -41,12 +41,9 @@ double sec(T angle)
     double cosAngle = std::cos(angle);
 
     // If cos is 0, then return infinity
-    if(cosAngle == 0.0)
-    {
+    if (cosAngle == 0.0) {
         return std::numeric_limits<double>::infinity();
-    }
-    else
-    {
+    } else {
         return 1.0 / cosAngle;
     }
 }
@@ -57,7 +54,7 @@ double csc(T angle)
     return sec(M_PI_2 - angle);
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_TRIGONOMETRY_H
+#endif   // MATH_TRIGONOMETRY_H

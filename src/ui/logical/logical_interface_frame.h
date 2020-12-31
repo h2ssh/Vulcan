@@ -8,28 +8,28 @@
 
 
 /**
-* \file     logical_interface_frame.h
-* \author   Collin Johnson
-*
-* Declaration of LogicalInterfaceFrame.
-*/
+ * \file     logical_interface_frame.h
+ * \author   Collin Johnson
+ *
+ * Declaration of LogicalInterfaceFrame.
+ */
 
 #ifndef UI_LOGICAL_LOGICAL_INTERFACE_FRAME_H
 #define UI_LOGICAL_LOGICAL_INTERFACE_FRAME_H
 
+#include "hssh/global_topological/global_location.h"
 #include "ui/common/ui_main_frame.h"
 #include "ui/logical/logical_interface.h"
 #include "ui/logical/logical_interface_experiment.h"
-#include "hssh/global_topological/global_location.h"
 #include <memory>
 
 namespace vulcan
 {
 namespace planner
 {
-    class DecisionTarget;
-    class GoalTarget;
-}
+class DecisionTarget;
+class GoalTarget;
+}   // namespace planner
 
 namespace ui
 {
@@ -37,13 +37,12 @@ namespace ui
 class LogicalInterfaceFrame : public LogicalFrame
 {
 public:
-
     /**
-    * Constructor LogicalInterfaceFrame.
-    *
-    * \param    params              Parameters for the logical interface UI
-    * \param    evaluationFile      Filename of the evaluation file
-    */
+     * Constructor LogicalInterfaceFrame.
+     *
+     * \param    params              Parameters for the logical interface UI
+     * \param    evaluationFile      Filename of the evaluation file
+     */
     LogicalInterfaceFrame(const logical_interface_params_t& params);
 
     virtual ~LogicalInterfaceFrame(void);
@@ -53,12 +52,11 @@ public:
     virtual void connectProducersToOutputConsumer(system::ModuleCommunicator* consumer);
 
     // LocalTopologyDataConsumer interface
-//     virtual void handleData(const hssh::local_topology_place_event_t& event);
+    //     virtual void handleData(const hssh::local_topology_place_event_t& event);
 
     virtual void handleData(const hssh::TopologicalMap& map, const std::string& channel);
 
 private:
-
     enum interface_state_t
     {
         INITIALIZING_EXPERIMENT,
@@ -71,26 +69,26 @@ private:
 
     void runInterfaceStateMachine(void);
     void initializeExperiment(void);
-    void assignTask          (void);
-    void selectTask          (void);
-    void executeTask         (void);
-    void completeTask        (void);
-    void completeExperiment  (void);
+    void assignTask(void);
+    void selectTask(void);
+    void executeTask(void);
+    void completeTask(void);
+    void completeExperiment(void);
 
-    void sendSetMapMessage      (const std::string& filename);
+    void sendSetMapMessage(const std::string& filename);
     void sendRelativePlaceTarget(std::shared_ptr<planner::DecisionTarget> target);
-    void sendGlobalPlaceTarget  (std::shared_ptr<planner::GoalTarget>     target);
+    void sendGlobalPlaceTarget(std::shared_ptr<planner::GoalTarget> target);
 
     void decisionButtonPressed(wxCommandEvent& event);
-    void goalButtonPressed    (wxCommandEvent& event);
+    void goalButtonPressed(wxCommandEvent& event);
 
     // redrawing event handlers
     void paint(wxPaintEvent& event);
     void timerFired(wxTimerEvent& event);
 
     LogicalInterfaceExperiment experiment;
-    logical_experiment_task_t  currentTask;
-    hssh::GlobalLocation    currentLocation;
+    logical_experiment_task_t currentTask;
+    hssh::GlobalLocation currentLocation;
 
     int sequenceId;
 
@@ -101,7 +99,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_LOGICAL_LOGICAL_INTERFACE_FRAME_H
+#endif   // UI_LOGICAL_LOGICAL_INTERFACE_FRAME_H

@@ -16,16 +16,16 @@
 // *   - calculate_map_orientation
 // *   - rotate_lpm
 // */
-// 
+//
 // #include "hssh/local_metric/map_rectification.h"
 // #include <cmath>
 // #include "hssh/local_metric/lpm.h"
-// 
+//
 // namespace vulcan
 // {
 // namespace hssh
 // {
-// 
+//
 // float calculate_map_orientation(const LocalPerceptualMap& lpm)
 // {
 //     /*
@@ -48,14 +48,14 @@
 //     *
 //     * tan(2 * theta) = b / (a - c)
 //     */
-// 
+//
 //     int64_t sumX  = 0;
 //     int64_t sumY  = 0;
 //     int64_t sumX2 = 0;
 //     int64_t sumY2 = 0;
 //     int64_t sumXY = 0;
 //     int64_t area  = 0;
-// 
+//
 //     for(int64_t y = 0; y < lpm.getHeightInCells(); ++y)
 //     {
 //         for(int64_t x = 0; x < lpm.getWidthInCells(); ++x)
@@ -67,47 +67,47 @@
 //                 sumX2 += x*x;
 //                 sumY2 += y*y;
 //                 sumXY += x*y;
-// 
+//
 //                 ++area;
 //             }
 //         }
 //     }
-// 
+//
 //     double a = sumX2 - sumX*sumX / area;
 //     double b = sumXY - sumX*sumY / area;
 //     double c = sumY2 - sumY*sumY / area;
-// 
+//
 //     return std::atan(b / (a-c)) / 2.0;
 // }
-// 
-// 
+//
+//
 // LocalPerceptualMap rotate_lpm(const LocalPerceptualMap& lpm, float angle)
 // {
 //     LocalPerceptualMap rotated(lpm);
 //     rotated.reset();
-// 
+//
 //     LPMSubGrid& costs = rotated.getCostGrid();
 //     LPMSubGrid& types = rotated.getTypeGrid();
-// 
+//
 //     float cosAngle = std::cos(angle);
 //     float sinAngle = std::sin(angle);
-// 
+//
 //     Point<uint16_t> rotatedPoint;
-// 
+//
 //     for(size_t y = 0; y < lpm.getHeightInCells(); ++y)
 //     {
 //         for(size_t x = 0; x < lpm.getWidthInCells(); ++x)
 //         {
 //             rotatedPoint.x = x*cosAngle - y*sinAngle;
 //             rotatedPoint.y = x*sinAngle + y*cosAngle;
-// 
+//
 //             costs.setValue(rotatedPoint.x, rotatedPoint.y, lpm.getCostNoCheck(x, y));
 //             types.setValue(rotatedPoint.x, rotatedPoint.y, lpm.getCellTypeNoCheck(x, y));
 //         }
 //     }
-// 
+//
 //     return rotated;
 // }
-// 
+//
 // } // namespace hssh
 // } // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     generator_queue.cpp
-* \author   Collin Johnson
-*
-* Definition of GeneratorQueue abstract base class.
-*/
+ * \file     generator_queue.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GeneratorQueue abstract base class.
+ */
 
 #include "hssh/global_topological/mapping/generator_queue.h"
 #include "hssh/global_topological/mapping/hypothesis_generator.h"
@@ -40,8 +40,7 @@ bool GeneratorQueue::hasGenerator(const TopologicalState& state) const
 void GeneratorQueue::addGenerator(std::unique_ptr<HypothesisGenerator> generator)
 {
     // Maintain invariant that only active generators go into the queue
-    if(!generator->completed())
-    {
+    if (!generator->completed()) {
         HypothesisGenerator* genPtr = generator.get();
         generator->computeProbability(heuristics_);
         queue_.push(genPtr);
@@ -55,8 +54,7 @@ void GeneratorQueue::addGenerator(std::unique_ptr<HypothesisGenerator> generator
 void GeneratorQueue::setProbabilityHeuristics(const ProbabilityHeuristics& heuristics)
 {
     // Recompute the probability for all generators, who rely on the heuristics
-    for(auto& g : boost::adaptors::values(generators_))
-    {
+    for (auto& g : boost::adaptors::values(generators_)) {
         g->computeProbability(heuristics);
     }
 
@@ -78,8 +76,7 @@ void GeneratorQueue::setCompleteDepth(int depth)
 bool GeneratorQueue::hasNext(void) const
 {
     // If there's something in the queue
-    if(!queue_.empty())
-    {
+    if (!queue_.empty()) {
         // Ask a subclass if the condition for stopping the current update has been met or not
         return shouldGenerateMap(*queue_.top());
     }
@@ -91,8 +88,7 @@ bool GeneratorQueue::hasNext(void) const
 
 std::pair<TopologicalState, const TopologicalState*> GeneratorQueue::nextMap(void)
 {
-    if(!queue_.empty())
-    {
+    if (!queue_.empty()) {
         auto generator = queue_.top();
         queue_.pop();
 
@@ -100,19 +96,16 @@ std::pair<TopologicalState, const TopologicalState*> GeneratorQueue::nextMap(voi
         auto parent = generator->parent();
 
         // If the generator isn't finished yet, toss it back on the queue
-        if(!generator->completed())
-        {
+        if (!generator->completed()) {
             queue_.push(generator);
         }
         // Otherwise, the generator completed, so erase it
         // WARNING: Hitting the else statement deletes the generator pointer, so it cannot be used after this statement
-        else
-        {
+        else {
             exhausted_.push_back(generator->parent()->id);
             auto numErased = generators_.erase(generator);
 
-            if(numErased != 1)
-            {
+            if (numErased != 1) {
                 std::cerr << "ERROR: GeneratorQueue: Failed to find and erase a completed generator!\n";
             }
         }
@@ -137,8 +130,7 @@ void GeneratorQueue::rebuildPriorityQueue(void)
     queue_ = GenQueue();
 
     // Then push all existing generators back onto it
-    for(auto& g : boost::adaptors::values(generators_))
-    {
+    for (auto& g : boost::adaptors::values(generators_)) {
         queue_.push(g.get());
     }
 }
@@ -149,5 +141,5 @@ bool GeneratorQueue::GenPtrComparator::operator()(const HypothesisGenerator* lhs
     return lhs->logProbability() < rhs->logProbability();
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,23 +8,23 @@
 
 
 /**
-* \file     navigation_interface_display.h
-* \author   Collin Johnson
-*
-* Declaration of NavigationInterfaceDisplay.
-*/
+ * \file     navigation_interface_display.h
+ * \author   Collin Johnson
+ *
+ * Declaration of NavigationInterfaceDisplay.
+ */
 
 #ifndef UI_NAVIGATION_NAVIGATION_INTERFACE_DISPLAY_H
 #define UI_NAVIGATION_NAVIGATION_INTERFACE_DISPLAY_H
 
-#include "ui/components/grid_based_display_widget.h"
-#include "ui/common/color_interpolator.h"
 #include "hssh/local_metric/lpm.h"
 #include "hssh/local_metric/pose.h"
 #include "hssh/local_topological/local_topo_map.h"
 #include "mpepc/trajectory/trajectory_planner_info.h"
 #include "planner/interface/decision.h"
 #include "tracker/dynamic_object_collection.h"
+#include "ui/common/color_interpolator.h"
+#include "ui/components/grid_based_display_widget.h"
 #include "utils/locked_double_buffer.h"
 
 namespace vulcan
@@ -40,12 +40,12 @@ class DynamicObjectRenderer;
 class LocalAreaRenderer;
 
 /**
-* NavigationInterfaceMode controls the mode in which the display currently operates. There are three modes:
-*
-*   - drive : the robot is driving to a target. keep the robot centered and pointing to the top of the map
-*   - select : the user is selecting goals. allow panning and start zoomed to the entire map
-*   - preview : the user is previewing a goal. zoom to include robot, full path, and goal.
-*/
+ * NavigationInterfaceMode controls the mode in which the display currently operates. There are three modes:
+ *
+ *   - drive : the robot is driving to a target. keep the robot centered and pointing to the top of the map
+ *   - select : the user is selecting goals. allow panning and start zoomed to the entire map
+ *   - preview : the user is previewing a goal. zoom to include robot, full path, and goal.
+ */
 enum class NavigationInterfaceMode
 {
     drive,
@@ -54,42 +54,41 @@ enum class NavigationInterfaceMode
 };
 
 /**
-* NavigationInterfaceDisplay displays information needed to describe the current decision state and to allow the user to
-* see what options are available to them.
-*
-* Unlike other visualizations, this display keeps the robot centered and facing forward.
-*
-* The following information is always displayed:
-*
-*   - The current LPM
-*   - The robot's position in the LPM
-*   - The arrows corresponding to the available Decisions
-*
-* The following information can be optionally displayed:
-*
-*   - DynamicObjects around the robot
-*   - The trajectories being considered by MPEPC
-*/
+ * NavigationInterfaceDisplay displays information needed to describe the current decision state and to allow the user
+ * to see what options are available to them.
+ *
+ * Unlike other visualizations, this display keeps the robot centered and facing forward.
+ *
+ * The following information is always displayed:
+ *
+ *   - The current LPM
+ *   - The robot's position in the LPM
+ *   - The arrows corresponding to the available Decisions
+ *
+ * The following information can be optionally displayed:
+ *
+ *   - DynamicObjects around the robot
+ *   - The trajectories being considered by MPEPC
+ */
 class NavigationInterfaceDisplay : public GridBasedDisplayWidget
 {
 public:
-
     /**
-    * Constructor for NavigationInterfaceDisplay.
-    */
+     * Constructor for NavigationInterfaceDisplay.
+     */
     NavigationInterfaceDisplay(wxWindow* parent,
-                             wxWindowID id = wxID_ANY,
-                             const wxPoint& pos = wxDefaultPosition,
-                             const wxSize& size = wxDefaultSize,
-                             long style = 0,
-                             const wxString& name = wxString((const wxChar*)("GLCanvas")),
-                             const wxPalette& palette = wxNullPalette);
+                               wxWindowID id = wxID_ANY,
+                               const wxPoint& pos = wxDefaultPosition,
+                               const wxSize& size = wxDefaultSize,
+                               long style = 0,
+                               const wxString& name = wxString((const wxChar*)("GLCanvas")),
+                               const wxPalette& palette = wxNullPalette);
 
     virtual ~NavigationInterfaceDisplay(void);
 
     /**
-    * setMode sets the overall display mode, which affects camera behavior as well as the displayed information.
-    */
+     * setMode sets the overall display mode, which affects camera behavior as well as the displayed information.
+     */
     void setMode(NavigationInterfaceMode mode);
 
     void setPose(const pose_t& pose);
@@ -114,7 +113,6 @@ public:
     void showAreas(bool show) { shouldShowAreas_ = show; }
 
 private:
-
     NavigationInterfaceMode mode_;
 
     pose_t pose_;
@@ -154,10 +152,9 @@ private:
 
     // GridBasedDisplayWidget interface
     Point<int> convertWorldToGrid(const Point<float>& world) const override;
-
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_NAVIGATION_NAVIGATION_INTERFACE_DISPLAY_H
+#endif   // UI_NAVIGATION_NAVIGATION_INTERFACE_DISPLAY_H

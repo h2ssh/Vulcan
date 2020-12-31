@@ -8,19 +8,19 @@
 
 
 /**
-* \file     messages.h
-* \author   Collin Johnson
-*
-* Definition of messages for controlling behavior of the planner:
-*
-*   - goal_route_command_message_t
-*/
+ * \file     messages.h
+ * \author   Collin Johnson
+ *
+ * Definition of messages for controlling behavior of the planner:
+ *
+ *   - goal_route_command_message_t
+ */
 
 #ifndef PLANNER_GOAL_MESSAGES_H
 #define PLANNER_GOAL_MESSAGES_H
 
-#include <string>
 #include <cstdint>
+#include <string>
 
 namespace vulcan
 {
@@ -28,29 +28,29 @@ namespace planner
 {
 
 /**
-* route_command_t specifies a set of commands that can be issued to control the behavior
-* of the global topo planner regarding its current route.
-*/
+ * route_command_t specifies a set of commands that can be issued to control the behavior
+ * of the global topo planner regarding its current route.
+ */
 enum route_command_t
 {
-    CANCEL_ROUTE,       ///< Immediately halt execution of the current route and stop the robot
-    CONFIRM_ROUTE       ///< If a route needed confirmation, then confirm it, thereby allowing navigation to begin
+    CANCEL_ROUTE,   ///< Immediately halt execution of the current route and stop the robot
+    CONFIRM_ROUTE   ///< If a route needed confirmation, then confirm it, thereby allowing navigation to begin
 };
 
 /**
-* goal_route_command_message_t controls the handling of a route. The route can be
-* cancelled, stopping navigation, or confirmed, starting navigation.
-*/
+ * goal_route_command_message_t controls the handling of a route. The route can be
+ * cancelled, stopping navigation, or confirmed, starting navigation.
+ */
 struct goal_route_command_message_t
 {
     int64_t timestamp;
 
-    uint32_t        planId;
+    uint32_t planId;
     route_command_t command;
-    std::string     source;
+    std::string source;
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_GOAL_MESSAGES_H
+#endif   // PLANNER_GOAL_MESSAGES_H

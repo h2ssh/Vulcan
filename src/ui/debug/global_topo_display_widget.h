@@ -8,26 +8,26 @@
 
 
 /**
-* \file     global_topo_display_widget.h
-* \author   Collin Johnson
-*
-* Declaration of GlobalTopoDisplayWidget.
-*/
+ * \file     global_topo_display_widget.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GlobalTopoDisplayWidget.
+ */
 
 #ifndef UI_DEBUG_GLOBAL_TOPO_DISPLAY_WIDGET_H
 #define UI_DEBUG_GLOBAL_TOPO_DISPLAY_WIDGET_H
 
-#include "hssh/global_topological/state.h"
 #include "hssh/global_topological/debug/hypothesis_tree.h"
+#include "hssh/global_topological/state.h"
 #include "hssh/global_topological/utils/metric_map_cache.h"
 #include "hssh/local_topological/event.h"
-#include "ui/common/ui_params.h"
 #include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_params.h"
 #include "ui/components/open_gl_widget.h"
 #include "utils/mutex.h"
-#include <wx/wx.h>
 #include <map>
 #include <memory>
+#include <wx/wx.h>
 
 namespace vulcan
 {
@@ -41,17 +41,16 @@ class HypothesisTreeRenderer;
 class GlobalTopoMapPreviewer;
 
 /**
-* GlobalTopoDisplayWidget is an OpenGl-based widget for rendering the global topology layer
-* in the HSSH. The global topo is displayed with places as circles and edges as lines. The
-* places and paths are selectable, which will cause information about the particular place/path
-* to be displayed on the screen.
-*
-* The location of the robot is tracked and visible by a highlighted places or path edge.
-*/
+ * GlobalTopoDisplayWidget is an OpenGl-based widget for rendering the global topology layer
+ * in the HSSH. The global topo is displayed with places as circles and edges as lines. The
+ * places and paths are selectable, which will cause information about the particular place/path
+ * to be displayed on the screen.
+ *
+ * The location of the robot is tracked and visible by a highlighted places or path edge.
+ */
 class GlobalTopoDisplayWidget : public OpenGLWidget
 {
 public:
-
     enum active_view_t
     {
         PLACE_VIEW,
@@ -60,8 +59,8 @@ public:
     };
 
     /**
-    * Constructor for GlobalTopoDisplayWidget.
-    */
+     * Constructor for GlobalTopoDisplayWidget.
+     */
     GlobalTopoDisplayWidget(wxWindow* parent,
                             wxWindowID id = wxID_ANY,
                             const wxPoint& pos = wxDefaultPosition,
@@ -69,43 +68,43 @@ public:
                             long style = 0,
                             const wxString& name = wxString((const wxChar*)("GLCanvas")),
                             const wxPalette& palette = wxNullPalette);
-    
+
     /**
-    * Destructor for GlobalTopoDisplayWidget.
-    */
+     * Destructor for GlobalTopoDisplayWidget.
+     */
     ~GlobalTopoDisplayWidget(void);
 
-    void setStatusBar(wxStatusBar* status) { statusBar     = status; }
+    void setStatusBar(wxStatusBar* status) { statusBar = status; }
 
     /**
-    * setWidgetParams sets the widget parameters for the display of the various bits of the global topology.
-    */
-    void setWidgetParams(const global_topo_display_params_t& globalTopoParams, const lpm_display_params_t& localMetricParams);
+     * setWidgetParams sets the widget parameters for the display of the various bits of the global topology.
+     */
+    void setWidgetParams(const global_topo_display_params_t& globalTopoParams,
+                         const lpm_display_params_t& localMetricParams);
 
     /**
-    * getDisplayedMap retrieves the map currently being drawn.
-    */
+     * getDisplayedMap retrieves the map currently being drawn.
+     */
     hssh::hypothesis_tree_node_t getDisplayedMap(void) const;
 
     /**
-    * getHoverMap retrieves the map over which the mouse is currently hovering displaying the hypothesis tree.
-    */
+     * getHoverMap retrieves the map over which the mouse is currently hovering displaying the hypothesis tree.
+     */
     hssh::hypothesis_tree_node_t getHoverMap(void) const;
 
     // Methods for controlling the rendered
     void setActiveView(active_view_t viewToShow);
-    void setIdToShow  (hssh::Id id);
-    void showBestMap  (bool show);
+    void setIdToShow(hssh::Id id);
+    void showBestMap(bool show);
     void setTreeOfMaps(const std::shared_ptr<hssh::TreeOfMaps>& maps);
-    void setMapCache  (const hssh::MetricMapCache& cache);
-    void clearMaps    (void);
+    void setMapCache(const hssh::MetricMapCache& cache);
+    void clearMaps(void);
 
     void handleData(const hssh::TopologicalState& map, const std::string& channel);
     void handleData(const hssh::HypothesisTree& tree, const std::string& channel);
     void handleData(const hssh::LocalAreaEventVec& events, const std::string& channel);
 
 private:
-
     // Renderers
     std::unique_ptr<PlaceViewTopologicalMapRenderer> placeViewRenderer;
     std::unique_ptr<GraphViewTopologicalMapRenderer> graphViewRenderer;
@@ -121,7 +120,7 @@ private:
 
     bool shouldShowBestMap;
     active_view_t viewToShow;
-    
+
     hssh::Id mapToShowId;
     hssh::Id hoverId;
 
@@ -137,21 +136,21 @@ private:
     void getViewportBoundary(Point<int>& bottomLeft, int& width, int& height);
     void renderWidget(void);
     void drawHypothesisTree(void);
-    
+
     // Event handlers
-    void mouseMotion  (wxMouseEvent& event);
+    void mouseMotion(wxMouseEvent& event);
     void mouseLeftDown(wxMouseEvent& event);
-    void mouseLeftUp  (wxMouseEvent& event);
-    void mouseRightUp (wxMouseEvent& event);
-    
+    void mouseLeftUp(wxMouseEvent& event);
+    void mouseRightUp(wxMouseEvent& event);
+
     hssh::Id nearestTreeNode(const Point<uint16_t>& mousePoint);
-    void previewNode        (hssh::Id nodeId);
-    void highlightHoverNode (hssh::Id nodeId);
+    void previewNode(hssh::Id nodeId);
+    void highlightHoverNode(hssh::Id nodeId);
 
     DECLARE_EVENT_TABLE()
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_GLOBAL_TOPO_DISPLAY_WIDGET_H
+#endif   // UI_DEBUG_GLOBAL_TOPO_DISPLAY_WIDGET_H

@@ -8,31 +8,31 @@
 
 
 /**
-* \file     metric_planner_panel.h
-* \author   Collin Johnson and Jong Jin Park
-*
-* Definition of the MetricPlannerPanel, which provides event handling
-* for the MetricPlanner display tab.
-*/
+ * \file     metric_planner_panel.h
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Definition of the MetricPlannerPanel, which provides event handling
+ * for the MetricPlanner display tab.
+ */
 
 #ifndef UI_DEBUG_METRIC_PLANNER_PANEL_H
 #define UI_DEBUG_METRIC_PLANNER_PANEL_H
 
-#include <wx/wx.h>
 #include "mpepc/control/control_law_coordinates.h"
 #include "ui/common/ui_forward_declarations.h"
-#include "ui/common/ui_params.h"
 #include "ui/common/ui_panel.h"
+#include "ui/common/ui_params.h"
 #include <memory>
+#include <wx/wx.h>
 
 namespace vulcan
 {
 namespace mpepc
 {
-    struct trajectory_planner_debug_info_t;
-    struct robot_trajectory_debug_info_t;
-    struct named_pose_t;
-}
+struct trajectory_planner_debug_info_t;
+struct robot_trajectory_debug_info_t;
+struct named_pose_t;
+}   // namespace mpepc
 
 namespace ui
 {
@@ -44,36 +44,35 @@ struct metric_planner_panel_widgets_t
 {
     MetricPlannerDisplayWidget* displayWidget;
 
-    wxTextCtrl*   scriptNameText;
-    wxTextCtrl*   updatePlanTimeText;
-    wxChoice*     trajectoryCostChoice;
+    wxTextCtrl* scriptNameText;
+    wxTextCtrl* updatePlanTimeText;
+    wxChoice* trajectoryCostChoice;
     wxStaticText* numTrajectoriesLabel;
-    wxTextCtrl*   numTrajectoriesText;
+    wxTextCtrl* numTrajectoriesText;
     wxStaticText* evaluatedCostLabel;
     wxStaticText* evaluatedCostText;
-    wxTextCtrl*   motionTargetRText;
-    wxTextCtrl*   motionTargetThetaText;
-    wxTextCtrl*   motionTargetDeltaText;
-    wxTextCtrl*   motionTargetGainText;
-    wxTextCtrl*   motionTargetK1Text;
-    wxTextCtrl*   motionTargetK2Text;
+    wxTextCtrl* motionTargetRText;
+    wxTextCtrl* motionTargetThetaText;
+    wxTextCtrl* motionTargetDeltaText;
+    wxTextCtrl* motionTargetGainText;
+    wxTextCtrl* motionTargetK1Text;
+    wxTextCtrl* motionTargetK2Text;
     wxStaticText* motionTargetCostText;
 };
 
 
 /**
-* MetricPlannerPanel is responsible for event handling in the metric planner panel.
-*/
+ * MetricPlannerPanel is responsible for event handling in the metric planner panel.
+ */
 class MetricPlannerPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for MetricPlannerPanel.
-    *
-    * \param    params          Parameters to the panel and widget
-    * \param    widget          MetricPlannerDisplayWidget instance to be controlled by the panel
-    */
+     * Constructor for MetricPlannerPanel.
+     *
+     * \param    params          Parameters to the panel and widget
+     * \param    widget          MetricPlannerDisplayWidget instance to be controlled by the panel
+     */
     MetricPlannerPanel(const ui_params_t& params, const metric_planner_panel_widgets_t& widgets);
 
     ~MetricPlannerPanel(void);
@@ -87,7 +86,6 @@ public:
     void loadSettings(const utils::ConfigFile& config) override;
 
 private:
-
     // event handlers
     void showRobotPoseChecked(wxCommandEvent& event);
     void showDestinationPoseChecked(wxCommandEvent& event);
@@ -134,10 +132,10 @@ private:
 
     void updateMotionTargetTexts(void);
 
-    metric_planner_panel_widgets_t widgets_; // interface to display widget
+    metric_planner_panel_widgets_t widgets_;   // interface to display widget
 
-    size_t numTrjEvaluated_; // total number of trajectories evaluated for the most recent cycle
-    size_t numTrjToShow_;    // number (last N) of trajectories to show or id of a single trajectory to show
+    size_t numTrjEvaluated_;   // total number of trajectories evaluated for the most recent cycle
+    size_t numTrjToShow_;      // number (last N) of trajectories to show or id of a single trajectory to show
 
     bool isSelectingDestinationPose_;
     bool isSelectingMotionTarget_;
@@ -146,8 +144,8 @@ private:
     std::shared_ptr<PoseSelector> motionTargetPoseSelector_;
 
     mpepc::control_law_coordinates_t controlLawCoords_;
-    double                           velocityGain_;
-    mpepc::motion_target_t           motionTarget_;
+    double velocityGain_;
+    mpepc::motion_target_t motionTarget_;
 
     std::string scriptPath_;
     std::vector<mpepc::named_pose_t> goals_;
@@ -157,7 +155,7 @@ private:
     metric_planner_display_params_t params_;
 };
 
-} // ui
-} // vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_METRIC_PLANNER_PANEL_H
+#endif   // UI_DEBUG_METRIC_PLANNER_PANEL_H

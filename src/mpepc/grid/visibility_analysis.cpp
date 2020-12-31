@@ -8,15 +8,15 @@
 
 
 /**
-* \file     visibility_analysis.cpp
-* \author   Collin Johnson
-*
-* Definition of VisibilityAnalysis.
-*/
+ * \file     visibility_analysis.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of VisibilityAnalysis.
+ */
 
 #include "mpepc/grid/visibility_analysis.h"
-#include "math/geometry/shape_fitting.h"
 #include "hssh/local_metric/lpm.h"
+#include "math/geometry/shape_fitting.h"
 #include "tracker/dynamic_object_collection.h"
 
 namespace vulcan
@@ -24,15 +24,13 @@ namespace vulcan
 namespace mpepc
 {
 
-math::Polygon<double> static_view_for_laser(const pose_t& pose,
-                                            const laser_configuration_t& laser,
-                                            const hssh::LocalPerceptualMap& map);
+math::Polygon<double>
+  static_view_for_laser(const pose_t& pose, const laser_configuration_t& laser, const hssh::LocalPerceptualMap& map);
 math::Polygon<double> dynamic_view_for_laser(const pose_t& pose,
                                              const laser_configuration_t& laser,
                                              const math::Polygon<double>& staticView,
                                              const tracker::DynamicObjectCollection& objects);
-math::Polygon<double> merge_laser_views(Point<double> origin,
-                                        const std::vector<math::Polygon<double>>& views);
+math::Polygon<double> merge_laser_views(Point<double> origin, const std::vector<math::Polygon<double>>& views);
 
 VisibilityAnalysis::VisibilityAnalysis(const pose_t& pose,
                                        const std::vector<laser_configuration_t>& lasers,
@@ -41,16 +39,14 @@ VisibilityAnalysis::VisibilityAnalysis(const pose_t& pose,
 : origin_(pose.toPoint())
 {
     std::vector<math::Polygon<double>> staticViews;
-    for(auto& l : lasers)
-    {
+    for (auto& l : lasers) {
         staticViews.push_back(static_view_for_laser(pose, l, map));
     }
 
     staticView_ = merge_laser_views(origin_, staticViews);
 
     std::vector<math::Polygon<double>> dynamicViews;
-    for(std::size_t n = 0; n < lasers.size(); ++n)
-    {
+    for (std::size_t n = 0; n < lasers.size(); ++n) {
         dynamicViews.push_back(dynamic_view_for_laser(pose, lasers[n], staticViews[n], objects));
     }
 
@@ -71,9 +67,8 @@ VisibilityAnalysis::VisibilityAnalysis(const pose_t& pose,
 }
 
 
-math::Polygon<double> static_view_for_laser(const pose_t& pose,
-                                            const laser_configuration_t& laser,
-                                            const hssh::LocalPerceptualMap& map)
+math::Polygon<double>
+  static_view_for_laser(const pose_t& pose, const laser_configuration_t& laser, const hssh::LocalPerceptualMap& map)
 {
     // Compute the view of the laser in global coordinates
     auto laserPose = laser.offset.compound(pose);
@@ -85,14 +80,15 @@ math::Polygon<double> static_view_for_laser(const pose_t& pose,
     // Create the ray trace scan of the static environment
     PointVec<double> rays(rotatedRange.numIncrements + 2);
     rays[0] = utils::global_point_to_grid_point(origin, map);
-    utils::trace_range_until_condition(utils::global_point_to_grid_point(origin, map),
-                                       rotatedRange,
-                                       15,
-                                       map,
-                                       [](const auto& lpm, Point<int> cell) {
-        return lpm.getCellType(cell) & (hssh::kObstacleOccGridCell | hssh::kUnobservedOccGridCell);
-    },
-                                       rays.begin() + 1);
+    utils::trace_range_until_condition(
+      utils::global_point_to_grid_point(origin, map),
+      rotatedRange,
+      15,
+      map,
+      [](const auto& lpm, Point<int> cell) {
+          return lpm.getCellType(cell) & (hssh::kObstacleOccGridCell | hssh::kUnobservedOccGridCell);
+      },
+      rays.begin() + 1);
 
     std::transform(rays.begin(), rays.end(), rays.begin(), [&map](const auto ray) {
         return utils::grid_point_to_global_point(ray, map);
@@ -114,14 +110,11 @@ math::Polygon<double> dynamic_view_for_laser(const pose_t& pose,
     // Intersect the static rays with dynamic objects to get the dynamic rays
     PointVec<double> rays(staticView.begin(), staticView.end());
     std::vector<Point<float>> intersections;
-    for(auto& r : rays)
-    {
+    for (auto& r : rays) {
         Line<float> ray(origin, r);
 
-        for(auto& obj : objects)
-        {
-            if(obj->boundary().circleApproximation().intersections(ray, intersections))
-            {
+        for (auto& obj : objects) {
+            if (obj->boundary().circleApproximation().intersections(ray, intersections)) {
                 // If there's a collision, always shorten the ray to ensure that we find the closest
                 // intersection amongst the objects
                 ray.b = intersections.front();
@@ -137,35 +130,29 @@ math::Polygon<double> dynamic_view_for_laser(const pose_t& pose,
 }
 
 
-math::Polygon<double> merge_laser_views(Point<double> origin,
-                                        const std::vector<math::Polygon<double>>& views)
+math::Polygon<double> merge_laser_views(Point<double> origin, const std::vector<math::Polygon<double>>& views)
 {
     PointVec<double> uniquePoints;
 
-    for(std::size_t n = 0; n < views.size(); ++n)
-    {
-        for(auto& p : views[n])
-        {
+    for (std::size_t n = 0; n < views.size(); ++n) {
+        for (auto& p : views[n]) {
             bool isUnique = true;
-            for(std::size_t m = 0; (m < views.size()) && isUnique; ++m)
-            {
+            for (std::size_t m = 0; (m < views.size()) && isUnique; ++m) {
                 isUnique &= (m == n) || !views[m].contains(p);
             }
 
-            if(isUnique)
-            {
+            if (isUnique) {
                 uniquePoints.push_back(p);
             }
         }
     }
 
     std::sort(uniquePoints.begin(), uniquePoints.end(), [&origin](const auto lhs, const auto rhs) {
-        return wrap_to_2pi(angle_to_point(origin, lhs))
-            < wrap_to_2pi(angle_to_point(origin, rhs));
+        return wrap_to_2pi(angle_to_point(origin, lhs)) < wrap_to_2pi(angle_to_point(origin, rhs));
     });
 
     return math::Polygon<double>(uniquePoints);
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

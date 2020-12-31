@@ -7,32 +7,32 @@
 
 #pragma once
 
-#include <wx/artprov.h>
-#include <wx/xrc/xmlres.h>
 #include "ui/common/ui_main_frame.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
+#include <ui/calibration/playground_display_widget.h>
+#include <wx/artprov.h>
+#include <wx/aui/auibook.h>
+#include <wx/bitmap.h>
+#include <wx/button.h>
 #include <wx/colour.h>
+#include <wx/dialog.h>
+#include <wx/font.h>
+#include <wx/frame.h>
+#include <wx/gbsizer.h>
+#include <wx/gdicmn.h>
+#include <wx/grid.h>
+#include <wx/icon.h>
+#include <wx/image.h>
+#include <wx/panel.h>
+#include <wx/radiobox.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
-#include <wx/grid.h>
-#include <wx/radiobox.h>
-#include <wx/button.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/panel.h>
-#include <ui/calibration/playground_display_widget.h>
-#include <wx/textctrl.h>
-#include <wx/gbsizer.h>
-#include <wx/aui/auibook.h>
-#include <wx/statusbr.h>
-#include <wx/frame.h>
 #include <wx/statbox.h>
-#include <wx/dialog.h>
+#include <wx/statline.h>
+#include <wx/stattext.h>
+#include <wx/statusbr.h>
+#include <wx/string.h>
+#include <wx/textctrl.h>
+#include <wx/xrc/xmlres.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -73,66 +73,68 @@
 ///////////////////////////////////////////////////////////////////////////////
 class CalibrationFrame : public UIMainFrame
 {
-	private:
+private:
+protected:
+    wxAuiNotebook* calibrationNotebook;
+    wxPanel* wheelchairPanel;
+    wxStaticText* testNameLabelText;
+    wxStaticText* testNameText;
+    wxStaticText* tasksCompletedLabelText;
+    wxStaticText* tasksCompletedText;
+    wxStaticText* taskNotesLabelText;
+    wxStaticText* taskNotesText;
+    wxStaticLine* taskNotesLine;
+    wxStaticText* testResultsLabelText;
+    wxGrid* testResultsGrid;
+    wxStaticLine* testResultsLine;
+    wxStaticText* systemDataLabel;
+    wxGrid* odometryGrid;
+    wxGrid* imuGrid;
+    wxGrid* cmdVelocityGrid;
+    wxStaticLine* wheelchairTestLine;
+    wxRadioBox* wheelchairTestSelectionBox;
+    wxButton* runTestButton;
+    wxButton* cancelTestButton;
+    wxStaticText* testNotesText;
+    wxPanel* playgroundPanel;
+    PlaygroundDisplayWidget* playgroundWidget;
+    wxStaticLine* playgroundSettingsLine;
+    wxStaticText* controllerParametersLabel;
+    wxButton* createControllerParametersButton;
+    wxButton* loadControllerParametersButton;
+    wxButton* saveControllerParametersButton;
+    wxStaticText* playgroundBoundaryLabel;
+    wxButton* setPlaygroundBoundaryButton;
+    wxButton* donePlaygroundBoundaryButton;
+    wxButton* clearPlaygroundBoundaryButton;
+    wxStaticText* targetRegionLabel;
+    wxButton* setTargetRegionButton;
+    wxButton* doneTargetRegionButton;
+    wxButton* clearTargetRegionButton;
+    wxStaticText* vMaxLabel;
+    wxTextCtrl* vMaxText;
+    wxButton* calcVMaxButton;
+    wxStaticText* numTargetsLabel;
+    wxTextCtrl* numTargetsText;
+    wxStaticText* timePerTargetLabel;
+    wxTextCtrl* timePerTargetText;
+    wxStaticText* timeSecondsLabel;
+    wxStaticText* logNameLabel;
+    wxTextCtrl* logNameText;
+    wxButton* startSessionButton;
+    wxButton* pauseSessionButton;
+    wxButton* stopSessionButton;
+    wxStatusBar* calibrationStatusBar;
 
-	protected:
-		wxAuiNotebook* calibrationNotebook;
-		wxPanel* wheelchairPanel;
-		wxStaticText* testNameLabelText;
-		wxStaticText* testNameText;
-		wxStaticText* tasksCompletedLabelText;
-		wxStaticText* tasksCompletedText;
-		wxStaticText* taskNotesLabelText;
-		wxStaticText* taskNotesText;
-		wxStaticLine* taskNotesLine;
-		wxStaticText* testResultsLabelText;
-		wxGrid* testResultsGrid;
-		wxStaticLine* testResultsLine;
-		wxStaticText* systemDataLabel;
-		wxGrid* odometryGrid;
-		wxGrid* imuGrid;
-		wxGrid* cmdVelocityGrid;
-		wxStaticLine* wheelchairTestLine;
-		wxRadioBox* wheelchairTestSelectionBox;
-		wxButton* runTestButton;
-		wxButton* cancelTestButton;
-		wxStaticText* testNotesText;
-		wxPanel* playgroundPanel;
-		PlaygroundDisplayWidget* playgroundWidget;
-		wxStaticLine* playgroundSettingsLine;
-		wxStaticText* controllerParametersLabel;
-		wxButton* createControllerParametersButton;
-		wxButton* loadControllerParametersButton;
-		wxButton* saveControllerParametersButton;
-		wxStaticText* playgroundBoundaryLabel;
-		wxButton* setPlaygroundBoundaryButton;
-		wxButton* donePlaygroundBoundaryButton;
-		wxButton* clearPlaygroundBoundaryButton;
-		wxStaticText* targetRegionLabel;
-		wxButton* setTargetRegionButton;
-		wxButton* doneTargetRegionButton;
-		wxButton* clearTargetRegionButton;
-		wxStaticText* vMaxLabel;
-		wxTextCtrl* vMaxText;
-		wxButton* calcVMaxButton;
-		wxStaticText* numTargetsLabel;
-		wxTextCtrl* numTargetsText;
-		wxStaticText* timePerTargetLabel;
-		wxTextCtrl* timePerTargetText;
-		wxStaticText* timeSecondsLabel;
-		wxStaticText* logNameLabel;
-		wxTextCtrl* logNameText;
-		wxButton* startSessionButton;
-		wxButton* pauseSessionButton;
-		wxButton* stopSessionButton;
-		wxStatusBar* calibrationStatusBar;
+public:
+    CalibrationFrame(wxWindow* parent,
+                     wxWindowID id = wxID_ANY,
+                     const wxString& title = wxT("Robot Calibration UI"),
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxSize(851, 639),
+                     long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 
-	public:
-
-		CalibrationFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Robot Calibration UI"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 851,639 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-
-		~CalibrationFrame();
-
+    ~CalibrationFrame();
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,22 +142,24 @@ class CalibrationFrame : public UIMainFrame
 ///////////////////////////////////////////////////////////////////////////////
 class WheelchairTestSetup : public wxDialog
 {
-	private:
+private:
+protected:
+    wxTextCtrl* testNameText;
+    wxGrid* testSetupGrid;
+    wxRadioBox* testCommandModeRadioBox;
+    wxStaticText* rampDurationLabel;
+    wxTextCtrl* rampDurationText;
+    wxButton* saveTestButton;
+    wxButton* cancelTestButton;
 
-	protected:
-		wxTextCtrl* testNameText;
-		wxGrid* testSetupGrid;
-		wxRadioBox* testCommandModeRadioBox;
-		wxStaticText* rampDurationLabel;
-		wxTextCtrl* rampDurationText;
-		wxButton* saveTestButton;
-		wxButton* cancelTestButton;
-
-	public:
-
-		WheelchairTestSetup( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Wheelchair Test Setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 374,350 ), long style = wxCAPTION|wxCLOSE_BOX );
-		~WheelchairTestSetup();
-
+public:
+    WheelchairTestSetup(wxWindow* parent,
+                        wxWindowID id = wxID_ANY,
+                        const wxString& title = wxT("Wheelchair Test Setup"),
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxSize(374, 350),
+                        long style = wxCAPTION | wxCLOSE_BOX);
+    ~WheelchairTestSetup();
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -163,36 +167,37 @@ class WheelchairTestSetup : public wxDialog
 ///////////////////////////////////////////////////////////////////////////////
 class ControlLawParameters : public wxDialog
 {
-	private:
+private:
+protected:
+    wxStaticText* k1Label;
+    wxTextCtrl* k1Text;
+    wxStaticText* k2Label;
+    wxTextCtrl* k2Text;
+    wxStaticText* maxLinearLabel;
+    wxTextCtrl* maxLinearVelText;
+    wxStaticText* maxAngularVelLabel;
+    wxTextCtrl* maxAngularVelText;
+    wxStaticText* angVelAtTargetLabel;
+    wxTextCtrl* angVelAtTargetText;
+    wxStaticText* slowdownRadiusLabel;
+    wxTextCtrl* slowdownRadiusText;
+    wxStaticText* convergenceRadius;
+    wxTextCtrl* convergenceRadiusText;
+    wxStaticText* convergenceAngleLabel;
+    wxTextCtrl* convergenceAngleText;
+    wxStaticText* betaLabel;
+    wxTextCtrl* betaText;
+    wxStaticText* lambdaLabel;
+    wxTextCtrl* lambdaText;
+    wxButton* controlLawDialogOkayButton;
+    wxButton* controlLawDialogCancelButton;
 
-	protected:
-		wxStaticText* k1Label;
-		wxTextCtrl* k1Text;
-		wxStaticText* k2Label;
-		wxTextCtrl* k2Text;
-		wxStaticText* maxLinearLabel;
-		wxTextCtrl* maxLinearVelText;
-		wxStaticText* maxAngularVelLabel;
-		wxTextCtrl* maxAngularVelText;
-		wxStaticText* angVelAtTargetLabel;
-		wxTextCtrl* angVelAtTargetText;
-		wxStaticText* slowdownRadiusLabel;
-		wxTextCtrl* slowdownRadiusText;
-		wxStaticText* convergenceRadius;
-		wxTextCtrl* convergenceRadiusText;
-		wxStaticText* convergenceAngleLabel;
-		wxTextCtrl* convergenceAngleText;
-		wxStaticText* betaLabel;
-		wxTextCtrl* betaText;
-		wxStaticText* lambdaLabel;
-		wxTextCtrl* lambdaText;
-		wxButton* controlLawDialogOkayButton;
-		wxButton* controlLawDialogCancelButton;
-
-	public:
-
-		ControlLawParameters( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Control Law Parameters"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,500 ), long style = wxDEFAULT_DIALOG_STYLE );
-		~ControlLawParameters();
-
+public:
+    ControlLawParameters(wxWindow* parent,
+                         wxWindowID id = wxID_ANY,
+                         const wxString& title = wxT("Control Law Parameters"),
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxSize(300, 500),
+                         long style = wxDEFAULT_DIALOG_STYLE);
+    ~ControlLawParameters();
 };
-

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     main.cpp
-* \author   Collin Johnson
-*
-* Definition of the main file to get the vgo_bridge module running.
-*/
+ * \file     main.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of the main file to get the vgo_bridge module running.
+ */
 
 #include "robot/vgo_bridge/bridge.h"
 
@@ -23,8 +23,7 @@ int main(int argc, char** argv)
     robot::VGoBridge bridge;
 
     // The bridge just sits there and does its thing, nothing else needs to happen.
-    while(true)
-    {
+    while (true) {
         sleep(1);
     }
 

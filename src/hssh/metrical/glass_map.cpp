@@ -8,11 +8,11 @@
 
 
 /**
-* \file     glass_map.cpp
-* \author   Collin Johnson
-*
-* Definition of GlassMap.
-*/
+ * \file     glass_map.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlassMap.
+ */
 
 #include "hssh/metrical/glass_map.h"
 #include "hssh/metrical/mapping/glass_map_utils.h"
@@ -55,13 +55,13 @@ GlassMap::GlassMap(void)
 }
 
 
-GlassMap::GlassMap(float                     maxLaserRange,
-                   int                       numAngleBins,
-                   int8_t                    flattenHitThreshold,
-                   int8_t                    flattenMissThreshold,
-                   std::size_t               gridWidth,
-                   std::size_t               gridHeight,
-                   float                     gridScale,
+GlassMap::GlassMap(float maxLaserRange,
+                   int numAngleBins,
+                   int8_t flattenHitThreshold,
+                   int8_t flattenMissThreshold,
+                   std::size_t gridWidth,
+                   std::size_t gridHeight,
+                   float gridScale,
                    const Point<float>& globalCenter)
 : numAngleBins_(round_to_multiple_of_16(numAngleBins))
 , hitThreshold_(std::max(int8_t(1), flattenHitThreshold))
@@ -73,7 +73,7 @@ GlassMap::GlassMap(float                     maxLaserRange,
 , intensityGrid_(gridWidth, gridHeight, gridScale, globalCenter, 0)
 {
     std::cout << "Created Glass Map with hit threshold " << static_cast<int>(flattenHitThreshold)
-        << " and miss threshold " << static_cast<int>(flattenMissThreshold) << '\n';
+              << " and miss threshold " << static_cast<int>(flattenMissThreshold) << '\n';
 
     setGridOffset();
 }
@@ -146,16 +146,14 @@ bool GlassMap::haveOverlappingAngles(int x1, int y1, int x2, int y2) const
     auto secondIt = beginBin(x2, y2);
     auto secondEnd = endBin(x2, y2);
 
-    if ((isHit(*firstIt) && isHit(*(secondEnd - 1))) || (isHit(*(firstEnd - 1)) && isHit(*secondIt)))
-    {
+    if ((isHit(*firstIt) && isHit(*(secondEnd - 1))) || (isHit(*(firstEnd - 1)) && isHit(*secondIt))) {
         return true;
     }
 
-    for(; (firstIt != firstEnd) && (secondIt != secondEnd); ++firstIt, ++secondIt)
-    {
-        if(isHit(*firstIt) && isHit(*secondIt))
-//             || ((*(firstIt - 1) >= hitThreshold_) && (*secondIt >= hitThreshold_))
-//             || ((*(firstIt + 1) >= hitThreshold_) && (*secondIt >= hitThreshold_)))
+    for (; (firstIt != firstEnd) && (secondIt != secondEnd); ++firstIt, ++secondIt) {
+        if (isHit(*firstIt) && isHit(*secondIt))
+        //             || ((*(firstIt - 1) >= hitThreshold_) && (*secondIt >= hitThreshold_))
+        //             || ((*(firstIt + 1) >= hitThreshold_) && (*secondIt >= hitThreshold_)))
         {
             return true;
         }
@@ -167,10 +165,8 @@ bool GlassMap::haveOverlappingAngles(int x1, int y1, int x2, int y2) const
     secondEnd = endBin(x2, y2);
     ++secondIt;
 
-    for(; (firstIt != firstEnd) && (secondIt != secondEnd); ++firstIt, ++secondIt)
-    {
-        if(isHit(*firstIt) && isHit(*secondIt))
-        {
+    for (; (firstIt != firstEnd) && (secondIt != secondEnd); ++firstIt, ++secondIt) {
+        if (isHit(*firstIt) && isHit(*secondIt)) {
             return true;
         }
     }
@@ -181,10 +177,8 @@ bool GlassMap::haveOverlappingAngles(int x1, int y1, int x2, int y2) const
     secondEnd = endBin(x2, y2);
     ++firstIt;
 
-    for(; (firstIt != firstEnd) && (secondIt != secondEnd); ++firstIt, ++secondIt)
-    {
-        if(isHit(*firstIt) && isHit(*secondIt))
-        {
+    for (; (firstIt != firstEnd) && (secondIt != secondEnd); ++firstIt, ++secondIt) {
+        if (isHit(*firstIt) && isHit(*secondIt)) {
             return true;
         }
     }
@@ -196,11 +190,10 @@ bool GlassMap::haveOverlappingAngles(int x1, int y1, int x2, int y2) const
 int GlassMap::angleToBin(double angle) const
 {
     assert(angle >= 0.0);
-    if(angle >= 2*M_PI)
-    {
-        angle -= 2*M_PI;
+    if (angle >= 2 * M_PI) {
+        angle -= 2 * M_PI;
     }
-    assert(angle < 2*M_PI);
+    assert(angle < 2 * M_PI);
 
     constexpr double kOneOverTwoPi = 1.0 / (2 * M_PI);
     return angle * numAngleBins_ * kOneOverTwoPi;
@@ -220,29 +213,23 @@ double GlassMap::binToAngle(int bin) const
 bool GlassMap::observedCell(int x, int y, int angleBin, uint16_t intensity)
 {
     auto flatCell = glassToFlatMap(x, y);
-    if(intensityGrid_.isCellInGrid(flatCell))
-    {
+    if (intensityGrid_.isCellInGrid(flatCell)) {
         intensityGrid_(flatCell.x, flatCell.y) = std::max(intensityGrid_(flatCell.x, flatCell.y), intensity);
     }
 
-    haveIntensity_ |= intensity > 0;    // any intensity measurement clamps to using intensity for the map
+    haveIntensity_ |= intensity > 0;   // any intensity measurement clamps to using intensity for the map
 
-    if(hitGrid_.isCellInActiveRegion(x, y) && (hitGrid_(x, y, angleBin) < kMaxHit))
-    {
+    if (hitGrid_.isCellInActiveRegion(x, y) && (hitGrid_(x, y, angleBin) < kMaxHit)) {
         // Once a miss, always a miss. Otherwise if not below that threshold yet, see what we can see.
-        if(hitGrid_(x, y, angleBin) > kMaxMiss)
-        {
+        if (hitGrid_(x, y, angleBin) > kMaxMiss) {
             ++hitGrid_(x, y, angleBin);
             // If the threshold is hit then we've switched to occupied
-            if((hitGrid_(x, y, angleBin) == hitThreshold_)
-                && hitCount_.isCellInGrid(flatCell))
-            {
+            if ((hitGrid_(x, y, angleBin) == hitThreshold_) && hitCount_.isCellInGrid(flatCell)) {
                 ++hitCount_(flatCell.x, flatCell.y);
                 return true;
             }
             // Had been a miss, but now has switched to unknown
-            else if((hitGrid_(x, y, angleBin) == (missThreshold_ + 1)) && (missCount_.isCellInGrid(flatCell)))
-            {
+            else if ((hitGrid_(x, y, angleBin) == (missThreshold_ + 1)) && (missCount_.isCellInGrid(flatCell))) {
                 --missCount_(flatCell.x, flatCell.y);
             }
         }
@@ -254,18 +241,14 @@ bool GlassMap::observedCell(int x, int y, int angleBin, uint16_t intensity)
 
 bool GlassMap::missedCell(int x, int y, int angleBin)
 {
-    if(hitGrid_.isCellInActiveRegion(x, y) && (hitGrid_(x, y, angleBin) > kMaxMiss))
-    {
+    if (hitGrid_.isCellInActiveRegion(x, y) && (hitGrid_(x, y, angleBin) > kMaxMiss)) {
         --hitGrid_(x, y, angleBin);
         // If the value slips one below then it has changed from occupied to free
         auto flatCell = glassToFlatMap(x, y);
-        if((hitGrid_(x, y, angleBin) == (hitThreshold_ - 1)) && hitCount_.isCellInGrid(flatCell))
-        {
+        if ((hitGrid_(x, y, angleBin) == (hitThreshold_ - 1)) && hitCount_.isCellInGrid(flatCell)) {
             --hitCount_(flatCell.x, flatCell.y);
             return true;
-        }
-        else if((hitGrid_(x, y, angleBin) == missThreshold_) && (missCount_.isCellInGrid(flatCell)))
-        {
+        } else if ((hitGrid_(x, y, angleBin) == missThreshold_) && (missCount_.isCellInGrid(flatCell))) {
             ++missCount_(flatCell.x, flatCell.y);
         }
     }
@@ -276,16 +259,12 @@ bool GlassMap::missedCell(int x, int y, int angleBin)
 
 void GlassMap::reflectedCell(int x, int y, int angleBin)
 {
-    if(hitGrid_.isCellInActiveRegion(x, y) && (hitGrid_(x, y, angleBin) > kMaxMiss))
-    {
+    if (hitGrid_.isCellInActiveRegion(x, y) && (hitGrid_(x, y, angleBin) > kMaxMiss)) {
         // If the value was a hit and we're resetting it, then reduce the hit count
         auto flatCell = glassToFlatMap(x, y);
-        if((hitGrid_(x, y, angleBin) >= hitThreshold_) && hitCount_.isCellInGrid(flatCell))
-        {
+        if ((hitGrid_(x, y, angleBin) >= hitThreshold_) && hitCount_.isCellInGrid(flatCell)) {
             --hitCount_(flatCell.x, flatCell.y);
-        }
-        else if((hitGrid_(x, y, angleBin) <= missThreshold_) && missCount_.isCellInGrid(flatCell))
-        {
+        } else if ((hitGrid_(x, y, angleBin) <= missThreshold_) && missCount_.isCellInGrid(flatCell)) {
             --missCount_(flatCell.x, flatCell.y);
         }
         hitGrid_(x, y, angleBin) = 0;
@@ -312,7 +291,7 @@ void GlassMap::filterDynamicObjectsFromActiveRegion(int minHighlyVisibleRange, u
 {
     // To filter, change all occupied cells to dynamic. Flip cells back to occupied after they confirmed to be
     // attached to a highly visible cell
-    minHighlyVisibleRange = std::max(minHighlyVisibleRange, 1); // must be visible from at least one angle
+    minHighlyVisibleRange = std::max(minHighlyVisibleRange, 1);   // must be visible from at least one angle
 
     int64_t computationStartTimeUs = utils::system_time_us();
 
@@ -323,12 +302,9 @@ void GlassMap::filterDynamicObjectsFromActiveRegion(int minHighlyVisibleRange, u
 
     // Set all occupied and dynamic to be dynamic, which allows easily knowing if a particular cell has been visited
     // or not
-    for(int y = flatActiveRegion.bottomLeft.y; y < flatActiveRegion.topRight.y; ++y)
-    {
-        for(int x = flatActiveRegion.bottomLeft.x; x < flatActiveRegion.topRight.x; ++x)
-        {
-            if(flattenedGrid_.getCellTypeNoCheck(x, y) & kHitCellTypes)
-            {
+    for (int y = flatActiveRegion.bottomLeft.y; y < flatActiveRegion.topRight.y; ++y) {
+        for (int x = flatActiveRegion.bottomLeft.x; x < flatActiveRegion.topRight.x; ++x) {
+            if (flattenedGrid_.getCellTypeNoCheck(x, y) & kHitCellTypes) {
                 flattenedGrid_.setTypeNoCheck(Point<int>(x, y), kDynamicOccGridCell);
             }
         }
@@ -336,17 +312,14 @@ void GlassMap::filterDynamicObjectsFromActiveRegion(int minHighlyVisibleRange, u
 
     // For all highly visible cells, add them to the initial search queue and flip them back to being occupied
     // because the search starts here
-    for(int y = flatActiveRegion.bottomLeft.y; y < flatActiveRegion.topRight.y; ++y)
-    {
-        for(int x = flatActiveRegion.bottomLeft.x; x < flatActiveRegion.topRight.x; ++x)
-        {
+    for (int y = flatActiveRegion.bottomLeft.y; y < flatActiveRegion.topRight.y; ++y) {
+        for (int x = flatActiveRegion.bottomLeft.x; x < flatActiveRegion.topRight.x; ++x) {
             // If the intensity is greater than the min glass intensity, definitely glass
             // If the hit count is higher than the min visible range, definitely highly visible
             // If there's been a hit and no misses, then the hit count might be highly visible, so mark as occupied
-            if((haveIntensity_ && (intensityGrid_(x, y) > minGlassIntensity) && (hitCount_(x, y) > 0))
+            if ((haveIntensity_ && (intensityGrid_(x, y) > minGlassIntensity) && (hitCount_(x, y) > 0))
                 || (!haveIntensity_ && (hitCount_(x, y) >= minHighlyVisibleRange))
-                || ((hitCount_(x, y) > 0) && (missCount_(x, y) == 0)))
-            {
+                || ((hitCount_(x, y) > 0) && (missCount_(x, y) == 0))) {
                 searchQueue.push_back(Point<int>(x, y));
                 flattenedGrid_.setTypeNoCheck(Point<int>(x, y), kOccupiedOccGridCell);
             }
@@ -354,31 +327,27 @@ void GlassMap::filterDynamicObjectsFromActiveRegion(int minHighlyVisibleRange, u
     }
 
     // Use an 8-way search
-    const int xDeltas[8] = { 1, -1, 0, 0, -1, -1, 1, 1 };
-    const int yDeltas[8] = { 0, 0, 1, -1, -1, 1, -1, 1 };
+    const int xDeltas[8] = {1, -1, 0, 0, -1, -1, 1, 1};
+    const int yDeltas[8] = {0, 0, 1, -1, -1, 1, -1, 1};
 
     // Queue up cells that sit right outside the active region. If any of them are occupied and are adjacent in (x,y)
     // to a cell in the active region, then add that active region cell to the queue. This change causes the walls saved
     // during a previous dynamic search to still exist even when they fall outside the active region
-    for(int y = flatActiveRegion.bottomLeft.y-1; y <= flatActiveRegion.topRight.y; ++y)
-    {
-        for(int x = flatActiveRegion.bottomLeft.x-1; x <= flatActiveRegion.topRight.x; ++x)
-        {
+    for (int y = flatActiveRegion.bottomLeft.y - 1; y <= flatActiveRegion.topRight.y; ++y) {
+        for (int x = flatActiveRegion.bottomLeft.x - 1; x <= flatActiveRegion.topRight.x; ++x) {
             // Ignore cells that...
-            if(is_cell_in_region(Point<int>(x, y), flatActiveRegion)  // are in the active region
-                || !flattenedGrid_.isCellInGrid(Point<int>(x, y))     // aren't in the flat map
+            if (is_cell_in_region(Point<int>(x, y), flatActiveRegion)                   // are in the active region
+                || !flattenedGrid_.isCellInGrid(Point<int>(x, y))                       // aren't in the flat map
                 || (flattenedGrid_.getCellTypeNoCheck(x, y) != kOccupiedOccGridCell))   // aren't occupied
             {
                 continue;
             }
 
-            for(int n = 0; n < 8; ++n)
-            {
+            for (int n = 0; n < 8; ++n) {
                 Point<int> adjacentCell(x + xDeltas[n], y + yDeltas[n]);
                 // Ensure the cell is in the active region and it is dynamic -- if so, then it put it on the queue
-                if(is_cell_in_region(adjacentCell, flatActiveRegion)
-                    && flattenedGrid_.getCellType(adjacentCell) == kDynamicOccGridCell)
-                {
+                if (is_cell_in_region(adjacentCell, flatActiveRegion)
+                    && flattenedGrid_.getCellType(adjacentCell) == kDynamicOccGridCell) {
                     flattenedGrid_.setTypeNoCheck(adjacentCell, kOccupiedOccGridCell);
                     searchQueue.push_back(adjacentCell);
                 }
@@ -386,34 +355,29 @@ void GlassMap::filterDynamicObjectsFromActiveRegion(int minHighlyVisibleRange, u
         }
     }
 
-    while(!searchQueue.empty())
-    {
+    while (!searchQueue.empty()) {
         auto cell = searchQueue.front();
         searchQueue.pop_front();
 
         auto angleCell = cell - glassToFlatCellOffset_;
 
-        for(int n = 0; n < 8; ++n)
-        {
+        for (int n = 0; n < 8; ++n) {
             Point<int> adjacentCell(cell.x + xDeltas[n], cell.y + yDeltas[n]);
             auto adjacentAngleCell = adjacentCell - glassToFlatCellOffset_;
             // Ensure the cell is in the map
-            if(!is_cell_in_region(adjacentCell, flatActiveRegion)
-                || !is_cell_in_region(adjacentAngleCell, activeRegion))
-            {
+            if (!is_cell_in_region(adjacentCell, flatActiveRegion)
+                || !is_cell_in_region(adjacentAngleCell, activeRegion)) {
                 continue;
             }
 
             // Skip anything that isn't dynamic because it is either free or already be identified in the search.
-            if(flattenedGrid_.getCellTypeNoCheck(adjacentCell) != kDynamicOccGridCell)
-            {
+            if (flattenedGrid_.getCellTypeNoCheck(adjacentCell) != kDynamicOccGridCell) {
                 continue;
             }
 
             // If the cells are also adjacent across angles, then add the cell to the queue and mark as part of
             // the occupied portion of the environment.
-            if(haveOverlappingAngles(angleCell.x, angleCell.y, adjacentAngleCell.x, adjacentAngleCell.y))
-            {
+            if (haveOverlappingAngles(angleCell.x, angleCell.y, adjacentAngleCell.x, adjacentAngleCell.y)) {
                 flattenedGrid_.setTypeNoCheck(adjacentCell, kOccupiedOccGridCell);
                 searchQueue.push_back(adjacentCell);
             }
@@ -429,14 +393,16 @@ void GlassMap::filterDynamicObjectsFromFullMap(int minHighlyVisibleRange, uint16
 {
     // Find the number of x and y increments in the active regions to fit the whole map
     // If the radius is larger than the grid, make the increment just the center of the grid
-    const double xRegionIncrement = (hitGrid_.activeRegionRadius() < hitGrid_.getWidthInMeters()) ?
-        hitGrid_.activeRegionRadius() : hitGrid_.getWidthInMeters() / 2.0;
+    const double xRegionIncrement = (hitGrid_.activeRegionRadius() < hitGrid_.getWidthInMeters())
+      ? hitGrid_.activeRegionRadius()
+      : hitGrid_.getWidthInMeters() / 2.0;
     // Always at least one increment
     const int numXIncrements = static_cast<int>(hitGrid_.getWidthInMeters() / hitGrid_.activeRegionRadius()) + 1;
 
     // If the radius is larger than the grid, make the increment just the center of the grid
-    const double yRegionIncrement = (hitGrid_.activeRegionRadius() < hitGrid_.getHeightInMeters()) ?
-        hitGrid_.activeRegionRadius() : hitGrid_.getHeightInMeters() / 2.0;
+    const double yRegionIncrement = (hitGrid_.activeRegionRadius() < hitGrid_.getHeightInMeters())
+      ? hitGrid_.activeRegionRadius()
+      : hitGrid_.getHeightInMeters() / 2.0;
     // Always at least one increment
     const int numYIncrements = static_cast<int>(hitGrid_.getHeightInMeters() / hitGrid_.activeRegionRadius()) + 1;
 
@@ -444,25 +410,22 @@ void GlassMap::filterDynamicObjectsFromFullMap(int minHighlyVisibleRange, uint16
     auto originalRegionCenter = hitGrid_.activeRegionCenter();
 
 #ifdef DEBUG_REGION_FILTER
-    std::cout << "DEBUG: GlassMap::filterDynamicObjectsFromFullMap: Num increments (x,y): ("
-        << numXIncrements << ',' << numYIncrements << ") Increment size: (" << xRegionIncrement << ','
-        << yRegionIncrement << ")\n";
+    std::cout << "DEBUG: GlassMap::filterDynamicObjectsFromFullMap: Num increments (x,y): (" << numXIncrements << ','
+              << numYIncrements << ") Increment size: (" << xRegionIncrement << ',' << yRegionIncrement << ")\n";
 #endif
 
     // Create all the regions and filter one-by-one
-    for(int y = 0; y < numYIncrements; ++y)
-    {
+    for (int y = 0; y < numYIncrements; ++y) {
         Point<float> activeCenter = hitGrid_.getBottomLeft();
-        activeCenter.y += (y + 1) * yRegionIncrement; // add one to account for shifting from bottom left to center
+        activeCenter.y += (y + 1) * yRegionIncrement;   // add one to account for shifting from bottom left to center
 
-        for(int x = 0; x < numXIncrements; ++x)
-        {
+        for (int x = 0; x < numXIncrements; ++x) {
             activeCenter.x += xRegionIncrement;
             hitGrid_.recenterActiveRegion(activeCenter);
 
 #ifdef DEBUG_REGION_FILTER
-            std::cout << "Filtering region: Center:" << activeCenter << " Boundary:"
-                << hitGrid_.getActiveRegion() << '\n';
+            std::cout << "Filtering region: Center:" << activeCenter << " Boundary:" << hitGrid_.getActiveRegion()
+                      << '\n';
 #endif
 
             filterDynamicObjectsFromActiveRegion(minHighlyVisibleRange, minGlassIntensity);
@@ -492,49 +455,41 @@ Point<int> GlassMap::glassToFlatMap(int x, int y)
 
 void GlassMap::flattenRegion(math::Rectangle<int> boundaryInCells, int minVisibleRange)
 {
-    minVisibleRange = std::max(minVisibleRange, 1);             // must be visible from at least one angle
+    minVisibleRange = std::max(minVisibleRange, 1);   // must be visible from at least one angle
 
     int64_t computationStartTimeUs = utils::system_time_us();
 
     const int kHitIncrement = 128 / 5;
 
-    for(int y = boundaryInCells.bottomLeft.y; y < boundaryInCells.topRight.y; ++y)
-    {
-        for(int x = boundaryInCells.bottomLeft.x; x < boundaryInCells.topRight.x; ++x)
-        {
+    for (int y = boundaryInCells.bottomLeft.y; y < boundaryInCells.topRight.y; ++y) {
+        for (int x = boundaryInCells.bottomLeft.x; x < boundaryInCells.topRight.x; ++x) {
             uint8_t prevCost = flattenedGrid_.getCostNoCheck(Point<int>(x, y));
             // If there's a hit, then mark full odds.
             // If there's a miss, then mark no odds.
             // Otherwise, leave it as unknown.
             uint8_t cost = 127;
 
-            if(hitCount_(x, y) >= minVisibleRange)
-            {
+            if (hitCount_(x, y) >= minVisibleRange) {
                 cost = (hitCount_(x, y) * kHitIncrement > 128) ? 255 : 127 + hitCount_(x, y) * kHitIncrement;
-            }
-            else if(missCount_(x, y) >= minVisibleRange)
-            {
+            } else if (missCount_(x, y) >= minVisibleRange) {
                 cost = 0;
             }
 
             // If the cost is unchanged, then no need to do anything
-            if(prevCost != cost)
-            {
+            if (prevCost != cost) {
                 cell_type_t type = flattenedGrid_.getCellTypeNoCheck(x, y);
                 flattenedGrid_.setCostNoCheck(Point<int>(x, y), cost);
 
                 // Keep the type for occupied cells the same so as not to erase the results of the dynamic object filter
-                if(cost > 127)
-                {
-                    type = (type & kHitCellTypes) ? type : kOccupiedOccGridCell;    // if type not set, just go with occupied
+                if (cost > 127) {
+                    type =
+                      (type & kHitCellTypes) ? type : kOccupiedOccGridCell;   // if type not set, just go with occupied
                     flattenedGrid_.setTypeNoCheck(Point<int>(x, y), type);
                 }
                 // If the cost has gone to 127, then set to unknown. Otherwise removed reflections get marked dynamic
-                else if(cost == 127)
-                {
+                else if (cost == 127) {
                     flattenedGrid_.setTypeNoCheck(Point<int>(x, y), kUnknownOccGridCell);
-                }
-                else // if(cost < 127)
+                } else   // if(cost < 127)
                 {
                     flattenedGrid_.setTypeNoCheck(Point<int>(x, y), kFreeOccGridCell);
                 }
@@ -554,5 +509,5 @@ void GlassMap::flushCacheToDisk(void) const
     hitGrid_.flush();
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

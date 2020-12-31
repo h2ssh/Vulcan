@@ -8,11 +8,11 @@
 
 
 /**
-* @file
-* @author   Collin Johnson
-*
-* Declaration of PathSummary.
-*/
+ * @file
+ * @author   Collin Johnson
+ *
+ * Declaration of PathSummary.
+ */
 
 #ifndef MPEPC_EVALUATION_PATH_SUMMARY_H
 #define MPEPC_EVALUATION_PATH_SUMMARY_H
@@ -26,26 +26,25 @@ namespace mpepc
 {
 
 /**
-* A path summary loads a file with logs and maps and splits them into two sets of PoseTraces, one for SA-MPEPC logs and
-* one for MPEPC logs.
-*
-* Each collection contains one PoseTrace per log file. They can be iterated over separately for easier processing.
-*/
+ * A path summary loads a file with logs and maps and splits them into two sets of PoseTraces, one for SA-MPEPC logs and
+ * one for MPEPC logs.
+ *
+ * Each collection contains one PoseTrace per log file. They can be iterated over separately for easier processing.
+ */
 class PathSummary
 {
 public:
-
     using const_iterator = std::vector<utils::PoseTrace>::const_iterator;
 
     /**
-    * Create a new summary from a file describing the logs. The format is the same as used by social_norm_results:
-    *
-    *   type    log     ltm
-    *
-    * with type = { social, regular }
-    *
-    * @param    filename        Name of file with log information
-    */
+     * Create a new summary from a file describing the logs. The format is the same as used by social_norm_results:
+     *
+     *   type    log     ltm
+     *
+     * with type = { social, regular }
+     *
+     * @param    filename        Name of file with log information
+     */
     PathSummary(const std::string& filename);
 
     // Iterators for each type of trace
@@ -58,12 +57,11 @@ public:
     const_iterator endRegular(void) const { return regularPoses_.end(); }
 
 private:
-
     std::vector<utils::PoseTrace> socialPoses_;
     std::vector<utils::PoseTrace> regularPoses_;
 };
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_EVALUATION_PATH_SUMMARY_H
+#endif   // MPEPC_EVALUATION_PATH_SUMMARY_H

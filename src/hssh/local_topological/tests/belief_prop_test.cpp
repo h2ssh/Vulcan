@@ -7,8 +7,8 @@
 */
 
 
-#include "hssh/local_topological/area_detection/labeling/factor_graph.h"
 #include "hssh/local_topological/area_detection/labeling/belief_prop.h"
+#include "hssh/local_topological/area_detection/labeling/factor_graph.h"
 
 using namespace vulcan::hssh;
 
@@ -226,8 +226,7 @@ int main(int argc, char** argv)
     FactorGraph graph(variables, factors, edges);
     belief_propagation(graph, UpdateType::sum);
 
-    for(auto v : variables)
-    {
+    for (auto v : variables) {
         std::cout << "Marginal " << v->id() << ":\n" << v->marginal();
     }
 

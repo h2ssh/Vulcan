@@ -8,20 +8,20 @@
 
 
 /**
-* \file     visibility_graph_feature.cpp
-* \author   Collin Johnson
-*
-* Definition of VisibilityGraphFeature.
-*/
+ * \file     visibility_graph_feature.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of VisibilityGraphFeature.
+ */
 
 #include "utils/visibility_graph_feature.h"
+#include <algorithm>
 #include <boost/accumulators/framework/accumulator_set.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/max.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
-#include <algorithm>
 
 namespace vulcan
 {
@@ -30,8 +30,7 @@ namespace utils
 
 std::string feature_type_to_string(VisibilityGraphFeatureType type)
 {
-    switch(type)
-    {
+    switch (type) {
     case VisibilityGraphFeatureType::none:
         return "none";
 
@@ -62,14 +61,12 @@ std::string feature_type_to_string(VisibilityGraphFeatureType type)
 }
 
 
-VisibilityGraphFeature::VisibilityGraphFeature(void)
-: type_(VisibilityGraphFeatureType::none)
+VisibilityGraphFeature::VisibilityGraphFeature(void) : type_(VisibilityGraphFeatureType::none)
 {
 }
 
 
-VisibilityGraphFeature::VisibilityGraphFeature(VisibilityGraphFeatureType type,
-                                               const std::vector<value_type>& values)
+VisibilityGraphFeature::VisibilityGraphFeature(VisibilityGraphFeatureType type, const std::vector<value_type>& values)
 : type_(type)
 , values_(values)
 {
@@ -82,16 +79,14 @@ feature_stats_t VisibilityGraphFeature::stats(std::vector<VisGraphVertex>::const
     using namespace boost::accumulators;
     accumulator_set<double, boost::accumulators::stats<tag::mean, tag::variance, tag::min, tag::max>> statsAcc;
 
-    for(auto& vertToValue : values_)
-    {
-        if((begin == end) || (std::find(begin, end, vertToValue.first) != end))
-        {
+    for (auto& vertToValue : values_) {
+        if ((begin == end) || (std::find(begin, end, vertToValue.first) != end)) {
             statsAcc(vertToValue.second);
         }
     }
 
-    return { min(statsAcc), mean(statsAcc), max(statsAcc), std::sqrt(variance(statsAcc)) };
+    return {min(statsAcc), mean(statsAcc), max(statsAcc), std::sqrt(variance(statsAcc))};
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

@@ -8,18 +8,18 @@
 
 
 /**
-* \file     object.cpp
-* \author   Collin Johnson
-*
-* Definition of TrackingObject.
-*/
+ * \file     object.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of TrackingObject.
+ */
 
 #include "tracker/tracking/object.h"
-#include "tracker/motions/classifier.h"
-#include "tracker/objects/object_factory.h"
-#include "tracker/laser_object.h"
-#include "tracker/object_motion.h"
 #include "tracker/dynamic_object.h"
+#include "tracker/laser_object.h"
+#include "tracker/motions/classifier.h"
+#include "tracker/object_motion.h"
+#include "tracker/objects/object_factory.h"
 #include <iostream>
 
 namespace vulcan
@@ -28,7 +28,7 @@ namespace tracker
 {
 
 TrackingObject::TrackingObject(ObjectId id,
-                               const LaserObject&                      object,
+                               const LaserObject& object,
                                std::unique_ptr<ObjectMotionClassifier> classifier)
 : id_(id)
 , boundary_(object.minErrorBoundary())
@@ -53,8 +53,7 @@ TrackingObject::TrackingObject(const TrackingObject& rhs)
 , updateTime_(rhs.updateTime_)
 , startTime_(rhs.startTime_)
 {
-    if(rhs.currentMotion_)
-    {
+    if (rhs.currentMotion_) {
         currentMotion_ = rhs.currentMotion_->clone();
     }
 }
@@ -69,8 +68,7 @@ TrackingObject& TrackingObject::operator=(const TrackingObject& rhs)
     updateTime_ = rhs.updateTime_;
     startTime_ = rhs.startTime_;
 
-    if(rhs.currentMotion_)
-    {
+    if (rhs.currentMotion_) {
         currentMotion_ = rhs.currentMotion_->clone();
     }
 
@@ -86,8 +84,7 @@ TrackingObject::~TrackingObject(void)
 
 const ObjectMotion& TrackingObject::motion(void) const
 {
-    if(!currentMotion_)
-    {
+    if (!currentMotion_) {
         currentMotion_ = classifier_->createObjectMotion();
         assert(currentMotion_);
     }
@@ -98,10 +95,10 @@ const ObjectMotion& TrackingObject::motion(void) const
 
 LaserObject TrackingObject::updateModel(LaserObject object)
 {
-//     if(isTwoCircles_ && (object.minErrorBoundary().type() != BoundaryType::two_circles))
-//     {
-//         object = object.generateShadowedCircle();
-//     }
+    //     if(isTwoCircles_ && (object.minErrorBoundary().type() != BoundaryType::two_circles))
+    //     {
+    //         object = object.generateShadowedCircle();
+    //     }
 
     updateTime_ = object.timestamp();
     ++updateCount_;
@@ -113,8 +110,7 @@ LaserObject TrackingObject::updateModel(LaserObject object)
     mostRecentPoints_.insert(mostRecentPoints_.end(), object.begin(), object.end());
     classifier_->updateClassification(object);
 
-    if(!currentMotion_ || classifier_->hasClassificationChanged())
-    {
+    if (!currentMotion_ || classifier_->hasClassificationChanged()) {
         currentMotion_ = classifier_->createObjectMotion();
     }
 
@@ -128,8 +124,8 @@ LaserObject TrackingObject::updateModel(LaserObject object)
 std::tuple<double, double> TrackingObject::distanceTo(const LaserObject& object) const
 {
     auto trackedToLaser = boundary_.distanceFromBoundary(object.begin(), object.end());
-    auto laserToTracked = object.minErrorBoundary().distanceFromBoundary(mostRecentPoints_.begin(),
-                                                                       mostRecentPoints_.end());
+    auto laserToTracked =
+      object.minErrorBoundary().distanceFromBoundary(mostRecentPoints_.begin(), mostRecentPoints_.end());
 
     return std::make_tuple(std::min(std::get<0>(trackedToLaser), std::get<0>(laserToTracked)),
                            std::min(std::get<1>(trackedToLaser), std::get<1>(laserToTracked)));
@@ -138,7 +134,8 @@ std::tuple<double, double> TrackingObject::distanceTo(const LaserObject& object)
 
 std::tuple<double, double> TrackingObject::distanceTo(const TrackingObject& object) const
 {
-    auto trackedToObj = boundary_.distanceFromBoundary(object.mostRecentPoints_.begin(), object.mostRecentPoints_.end());
+    auto trackedToObj =
+      boundary_.distanceFromBoundary(object.mostRecentPoints_.begin(), object.mostRecentPoints_.end());
     auto objToTracked = object.boundary_.distanceFromBoundary(mostRecentPoints_.begin(), mostRecentPoints_.end());
 
     return std::make_tuple(std::min(std::get<0>(trackedToObj), std::get<0>(objToTracked)),
@@ -151,5 +148,5 @@ std::shared_ptr<DynamicObject> TrackingObject::toDynamicObject(DynamicObjectFact
     return factory.createDynamicObject(id_, updateTime_, *currentMotion_, boundary_);
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     gl_arrays_helpers.h
-* \author   Collin Johnson
-* 
-* Declaration of helper functions for dealing with GL vertex arrays.
-*/
+ * \file     gl_arrays_helpers.h
+ * \author   Collin Johnson
+ *
+ * Declaration of helper functions for dealing with GL vertex arrays.
+ */
 
 #ifndef UI_COMMON_GL_ARRAYS_HELPERS_H
 #define UI_COMMON_GL_ARRAYS_HELPERS_H
@@ -28,8 +28,8 @@ namespace ui
 // Vertex size = number of points per vertex -- either 2 or 3
 void draw_gl_array(GLfloat* vertexArray, int vertexSize, GLfloat* scanColors, std::size_t arraySize, GLenum mode);
 void draw_gl_array(GLfloat* vertexArray, int vertexSize, std::size_t arraySize, GLenum mode);
-    
-}
-}
 
-#endif // UI_COMMON_GL_ARRAYS_HELPERS_H
+}   // namespace ui
+}   // namespace vulcan
+
+#endif   // UI_COMMON_GL_ARRAYS_HELPERS_H

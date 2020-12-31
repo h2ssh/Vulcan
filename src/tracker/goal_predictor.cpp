@@ -8,11 +8,11 @@
 
 
 /**
-* \file     goal_predictor.cpp
-* \author   Collin Johnson
-*
-* Definition of GoalPredictor.
-*/
+ * \file     goal_predictor.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GoalPredictor.
+ */
 
 #include "tracker/goal_predictor.h"
 #include "tracker/goals/goal_estimator.h"
@@ -41,13 +41,13 @@ GoalPredictor::~GoalPredictor(void)
 }
 
 /**
-* predictGoals predicts goals for the current set of tracking objects in the environment. The objects will then
-* be converted into full DynamicObjects by having an estimated motion and an estimated goal.
-*
-* \param    objects         Tracked objects in the environment to predict goals for
-* \param    environment     Static environment representation in which the robot is operating
-* \return   The collection of DynamicObjects being tracked in the environment with motion states and goals.
-*/
+ * predictGoals predicts goals for the current set of tracking objects in the environment. The objects will then
+ * be converted into full DynamicObjects by having an estimated motion and an estimated goal.
+ *
+ * \param    objects         Tracked objects in the environment to predict goals for
+ * \param    environment     Static environment representation in which the robot is operating
+ * \return   The collection of DynamicObjects being tracked in the environment with motion states and goals.
+ */
 DynamicObjectCollection GoalPredictor::predictGoals(const TrackingObjectSet& objects,
                                                     const tracking_environment_t& environment)
 {
@@ -59,8 +59,7 @@ DynamicObjectCollection GoalPredictor::predictGoals(const TrackingObjectSet& obj
         return objToEst.first;
     });
 
-    for(auto& obj : objects)
-    {
+    for (auto& obj : objects) {
         auto estimatorIt = estimators_.find(obj->id());
 
         // The object exists in the set, so it isn't one of the inactive ids
@@ -71,9 +70,7 @@ DynamicObjectCollection GoalPredictor::predictGoals(const TrackingObjectSet& obj
 
         // If no goal estimator exists yet for this object
         // Or if the type of estimator changes then reassign the
-        if((estimatorIt == estimators_.end())
-            || (typeid(*newEstimator) != typeid(*estimatorIt->second)))
-        {
+        if ((estimatorIt == estimators_.end()) || (typeid(*newEstimator) != typeid(*estimatorIt->second))) {
             estimators_[obj->id()] = std::move(newEstimator);
             estimatorIt = estimators_.find(obj->id());
             assert(estimatorIt != estimators_.end());
@@ -83,8 +80,7 @@ DynamicObjectCollection GoalPredictor::predictGoals(const TrackingObjectSet& obj
         auto goals = estimatorIt->second->estimateGoal(obj->motion(), 5.0, environment, nullptr);
 
         // If the object has been around for long enough, then report it
-        if ((obj->updateCount() > 3) && ((environment.timestamp - obj->lastUpdateTime()) < 200000))
-        {
+        if ((obj->updateCount() > 3) && ((environment.timestamp - obj->lastUpdateTime()) < 200000)) {
             // Convert the obj to a full DynamicObject
             auto dynObj = obj->toDynamicObject(*dynObjFactory_);
             // Set the goals to complete the object
@@ -95,13 +91,12 @@ DynamicObjectCollection GoalPredictor::predictGoals(const TrackingObjectSet& obj
     }
 
     // Erase any invalid estimators -- those not belonging to the current object set
-    for(auto& id : inactiveIds)
-    {
+    for (auto& id : inactiveIds) {
         estimators_.erase(id);
     }
 
     return dynObjects;
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

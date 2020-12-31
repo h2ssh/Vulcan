@@ -8,11 +8,11 @@
 
 
 /**
-* \file     chi.cpp
-* \author   Collin Johnson
-*
-* Definition of Chi.
-*/
+ * \file     chi.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of Chi.
+ */
 
 #include "hssh/global_topological/chi.h"
 #include "hssh/global_topological/global_place.h"
@@ -26,8 +26,7 @@ namespace hssh
 
 Chi::Chi(const TopologicalMap& map)
 {
-    for(auto& p : map.places())
-    {
+    for (auto& p : map.places()) {
         poses_.insert(std::make_pair(p.first, map.referenceFrame(p.second->id())));
     }
 }
@@ -57,8 +56,7 @@ pose_distribution_t Chi::getPlacePose(Id placeId) const
 {
     auto poseIt = poses_.find(placeId);
 
-    if(poseIt != poses_.end())
-    {
+    if (poseIt != poses_.end()) {
         return poseIt->second;
     }
 
@@ -68,13 +66,12 @@ pose_distribution_t Chi::getPlacePose(Id placeId) const
 
 Lambda Chi::getLambda(Id fromPlace, Id toPlace) const
 {
-    if((poses_.find(fromPlace) != poses_.end()) && (poses_.find(toPlace) != poses_.end()))
-    {
+    if ((poses_.find(fromPlace) != poses_.end()) && (poses_.find(toPlace) != poses_.end())) {
         return Lambda(poses_.find(toPlace)->second, poses_.find(fromPlace)->second);
     }
 
     return Lambda();
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

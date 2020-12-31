@@ -8,23 +8,23 @@
 
 
 /**
-* \file     absolute_motion.h
-* \author   Collin Johnson
-*
-* Declaration of AbsoluteMotionTask.
-*/
+ * \file     absolute_motion.h
+ * \author   Collin Johnson
+ *
+ * Declaration of AbsoluteMotionTask.
+ */
 
 #ifndef PLANNER_CONTROL_TASKS_ABSOLUTE_MOTION_H
 #define PLANNER_CONTROL_TASKS_ABSOLUTE_MOTION_H
 
-#include "planner/control/task.h"
 #include "core/pose.h"
+#include "planner/control/task.h"
 
 namespace vulcan
 {
 namespace planner
 {
-    
+
 enum class AbsoluteMotion
 {
     stop,
@@ -34,18 +34,17 @@ enum class AbsoluteMotion
 };
 
 /**
-* AbsoluteMotionTask
-*/
+ * AbsoluteMotionTask
+ */
 class AbsoluteMotionTask : public ControlTask
 {
 public:
-
     /**
-    * Constructor for AbsoluteMotionTask.
-    *
-    * \param    direction       Direction of motion (straight, left, right, stop)
-    * \param    speed           Speed at which to move (m/s or rad/s)
-    */
+     * Constructor for AbsoluteMotionTask.
+     *
+     * \param    direction       Direction of motion (straight, left, right, stop)
+     * \param    speed           Speed at which to move (m/s or rad/s)
+     */
     AbsoluteMotionTask(AbsoluteMotion motion, double speed, int32_t id = 0, ControlTask* parent = nullptr);
 
     // ControlTask interface
@@ -54,13 +53,12 @@ public:
     int pushSubTasks(ControlTaskStack& stack) override;
 
 private:
-    
     // ControlTask interface
     ControlTaskResult doExecute(const ControlState& state) override;
     void childIsDone(ControlTask* child, ControlTaskProgress progress) override;
-    
+
     ControlTaskStatus taskStatus(const ControlState& state) const;
-    
+
     AbsoluteMotion motion_;
     double speed_;
     std::shared_ptr<mpepc::MetricPlannerTask> outgoingTask_;
@@ -69,7 +67,7 @@ private:
     pose_t targetPose_;
 };
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_CONTROL_TASKS_ABSOLUTE_MOTION_H
+#endif   // PLANNER_CONTROL_TASKS_ABSOLUTE_MOTION_H

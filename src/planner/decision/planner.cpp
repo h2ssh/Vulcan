@@ -8,11 +8,11 @@
 
 
 /**
-* \file     planner.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionPlanner.
-*/
+ * \file     planner.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionPlanner.
+ */
 
 #include "planner/decision/planner.h"
 #include "utils/stub.h"
@@ -57,5 +57,5 @@ DecisionResult DecisionPlanner::plan(const DecisionState& state)
     return DecisionResult{};
 }
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan

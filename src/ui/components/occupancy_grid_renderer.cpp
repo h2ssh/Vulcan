@@ -8,15 +8,15 @@
 
 
 #include "ui/components/occupancy_grid_renderer.h"
+#include "hssh/metrical/occupancy_grid.h"
+#include "ui/common/default_colors.h"
 #include "ui/common/gl_texture_helpers.h"
 #include "ui/common/ui_color.h"
-#include "ui/common/default_colors.h"
-#include "hssh/metrical/occupancy_grid.h"
+#include <GL/gl.h>
 #include <cassert>
 #include <cmath>
 #include <cstring>
 #include <iostream>
-#include <GL/gl.h>
 
 
 namespace vulcan
@@ -33,38 +33,32 @@ const uint8_t kTypeGridIndex = 1;
 void draw_grid(Point<float> bottomLeft, float gridWidth, float gridHeight, float textureWidth, float textureHeight);
 
 
-OccupancyGridRenderer::OccupancyGridRenderer(void)
-: gridWidth(0)
-, gridHeight(0)
-, textureNames(0)
-, initialized(false)
+OccupancyGridRenderer::OccupancyGridRenderer(void) : gridWidth(0), gridHeight(0), textureNames(0), initialized(false)
 {
-    numTextures  = kNumGridLayers;
-    textures     = new uint8_t*[numTextures];
+    numTextures = kNumGridLayers;
+    textures = new uint8_t*[numTextures];
 
-    for(int i = numTextures; --i >= 0;)
-    {
+    for (int i = numTextures; --i >= 0;) {
         textures[i] = 0;
     }
-    
-    // Set appealing default colors so they can be adjusted if desired, but otherwise 
-    setOccupiedColor         (occupied_color());
-    setDynamicColor          (dynamic_color());
+
+    // Set appealing default colors so they can be adjusted if desired, but otherwise
+    setOccupiedColor(occupied_color());
+    setDynamicColor(dynamic_color());
     setLimitedVisibilityColor(limited_visibility_color());
-    setHazardColor           (hazard_color());
-    setQuasiStaticColor      (quasi_static_color());
+    setHazardColor(hazard_color());
+    setQuasiStaticColor(quasi_static_color());
 }
 
 
 OccupancyGridRenderer::~OccupancyGridRenderer(void)
 {
-    for(int i = numTextures; --i >= 0;)
-    {
-        delete [] textures[i];
+    for (int i = numTextures; --i >= 0;) {
+        delete[] textures[i];
     }
 
-    delete [] textures;
-    delete [] textureNames;
+    delete[] textures;
+    delete[] textureNames;
 }
 
 
@@ -100,11 +94,10 @@ void OccupancyGridRenderer::setHazardColor(const GLColor& hazard)
 
 void OccupancyGridRenderer::setGrid(const hssh::OccupancyGrid& grid)
 {
-    if((gridWidth != grid.getWidthInCells()) || (gridHeight != grid.getHeightInCells()))
-    {
+    if ((gridWidth != grid.getWidthInCells()) || (gridHeight != grid.getHeightInCells())) {
         free_textures(textures, numTextures);
 
-        gridWidth  = grid.getWidthInCells();
+        gridWidth = grid.getWidthInCells();
         gridHeight = grid.getHeightInCells();
 
         initializeGridTextures(gridWidth, gridHeight);
@@ -112,9 +105,9 @@ void OccupancyGridRenderer::setGrid(const hssh::OccupancyGrid& grid)
 
     updateGridTextures(grid);
 
-    gridWidthInMeters  = grid.getWidthInMeters();
+    gridWidthInMeters = grid.getWidthInMeters();
     gridHeightInMeters = grid.getHeightInMeters();
-    gridOrigin         = grid.getBottomLeft();
+    gridOrigin = grid.getBottomLeft();
 
     disableGridTextures();
 }
@@ -122,14 +115,18 @@ void OccupancyGridRenderer::setGrid(const hssh::OccupancyGrid& grid)
 
 void OccupancyGridRenderer::renderGrid(void)
 {
-    if(initialized)
-    {
+    if (initialized) {
         enableGridTextures();
 
-        float textureXMax = gridWidth  / static_cast<float>(textureWidth);
+        float textureXMax = gridWidth / static_cast<float>(textureWidth);
         float textureYMax = gridHeight / static_cast<float>(textureHeight);
 
-        draw_two_textures_on_rectangle(gridOrigin.x, gridOrigin.y, gridWidthInMeters, gridHeightInMeters, textureXMax, textureYMax);
+        draw_two_textures_on_rectangle(gridOrigin.x,
+                                       gridOrigin.y,
+                                       gridWidthInMeters,
+                                       gridHeightInMeters,
+                                       textureXMax,
+                                       textureYMax);
         disableGridTextures();
     }
 }
@@ -137,28 +134,37 @@ void OccupancyGridRenderer::renderGrid(void)
 
 void OccupancyGridRenderer::setColor(TexColor& dest, const GLColor& source)
 {
-    dest[0] = source.red()   * 255.0f;
+    dest[0] = source.red() * 255.0f;
     dest[1] = source.green() * 255.0f;
-    dest[2] = source.blue()  * 255.0f;
+    dest[2] = source.blue() * 255.0f;
 }
 
 
 void OccupancyGridRenderer::initializeGridTextures(uint16_t gridWidth, uint16_t gridHeight)
 {
-    if(textureNames == 0)
-    {
+    if (textureNames == 0) {
         textureNames = new GLuint[numTextures];
         glGenTextures(kNumGridLayers, textureNames);
     }
 
-    textureWidth  = round_to_power_of_two(gridWidth);
+    textureWidth = round_to_power_of_two(gridWidth);
     textureHeight = round_to_power_of_two(gridHeight);
 
-    textures[kCostGridIndex]  = create_texture(textureWidth, textureHeight, 1);
+    textures[kCostGridIndex] = create_texture(textureWidth, textureHeight, 1);
     textures[kTypeGridIndex] = create_texture(textureWidth, textureHeight, 3);
 
-    initialize_texture(textureNames[kCostGridIndex], textures[kCostGridIndex], textureWidth, textureHeight, GL_ALPHA, GL_ALPHA);
-    initialize_texture(textureNames[kTypeGridIndex], textures[kTypeGridIndex], textureWidth, textureHeight, GL_RGB, GL_RGB);
+    initialize_texture(textureNames[kCostGridIndex],
+                       textures[kCostGridIndex],
+                       textureWidth,
+                       textureHeight,
+                       GL_ALPHA,
+                       GL_ALPHA);
+    initialize_texture(textureNames[kTypeGridIndex],
+                       textures[kTypeGridIndex],
+                       textureWidth,
+                       textureHeight,
+                       GL_RGB,
+                       GL_RGB);
 
     initialized = true;
 }
@@ -201,11 +207,9 @@ void OccupancyGridRenderer::disableGridTextures(void)
 void OccupancyGridRenderer::convertCostGridToTextures(const hssh::OccupancyGrid& map)
 {
     uint8_t* costTexture = textures[kCostGridIndex];
-    
-    for(uint16_t y = 0; y < map.getHeightInCells(); ++y)
-    {
-        for(uint16_t x = 0; x < map.getWidthInCells(); ++x)
-        {
+
+    for (uint16_t y = 0; y < map.getHeightInCells(); ++y) {
+        for (uint16_t x = 0; x < map.getWidthInCells(); ++x) {
             *costTexture++ = map.getCostNoCheck(x, y);
         }
     }
@@ -216,41 +220,30 @@ void OccupancyGridRenderer::convertTypeGridToTextures(const hssh::OccupancyGrid&
 {
     uint8_t* costTexture = textures[kCostGridIndex];
     uint8_t* typeTexture = textures[kTypeGridIndex];
-    
-    for(uint16_t y = 0; y < map.getHeightInCells(); ++y)
-    {
-        for(uint16_t x = 0; x < map.getWidthInCells(); ++x)
-        {
+
+    for (uint16_t y = 0; y < map.getHeightInCells(); ++y) {
+        for (uint16_t x = 0; x < map.getWidthInCells(); ++x) {
             uint8_t dynamic = map.getCellTypeNoCheck(x, y);
-            
-            if(dynamic & hssh::kDynamicOccGridCell)
-            {
+
+            if (dynamic & hssh::kDynamicOccGridCell) {
                 *typeTexture++ = dynamicColor[0];
                 *typeTexture++ = dynamicColor[1];
                 *typeTexture++ = dynamicColor[2];
-            }
-            else if(dynamic & hssh::kLimitedVisibilityOccGridCell)
-            {
+            } else if (dynamic & hssh::kLimitedVisibilityOccGridCell) {
                 *typeTexture++ = limitedVisibilityColor[0];
                 *typeTexture++ = limitedVisibilityColor[1];
                 *typeTexture++ = limitedVisibilityColor[2];
-            }
-            else if(dynamic & hssh::kHazardOccGridCell)
-            {
+            } else if (dynamic & hssh::kHazardOccGridCell) {
                 *typeTexture++ = hazardColor[0];
                 *typeTexture++ = hazardColor[1];
                 *typeTexture++ = hazardColor[2];
-                
+
                 costTexture[utils::cell_to_index(x, y, map.getWidthInCells())] = 255;
-            }
-            else if(dynamic & hssh::kQuasiStaticOccGridCell)
-            {
+            } else if (dynamic & hssh::kQuasiStaticOccGridCell) {
                 *typeTexture++ = quasiStaticColor[0];
                 *typeTexture++ = quasiStaticColor[1];
                 *typeTexture++ = quasiStaticColor[2];
-            }
-            else
-            {
+            } else {
                 *typeTexture++ = occupiedColor[0];
                 *typeTexture++ = occupiedColor[1];
                 *typeTexture++ = occupiedColor[2];
@@ -259,5 +252,5 @@ void OccupancyGridRenderer::convertTypeGridToTextures(const hssh::OccupancyGrid&
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     prior_evaluator_impl.cpp
-* \author   Collin Johnson
-*
-* Definition of the various HypothesisPriorEvaluator subclasses and the create_topo_map_prior_evaluator() factory.
-*/
+ * \file     prior_evaluator_impl.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of the various HypothesisPriorEvaluator subclasses and the create_topo_map_prior_evaluator() factory.
+ */
 
 #include "hssh/global_topological/mapping/prior_evaluator_impl.h"
 #include "hssh/global_topological/state.h"
@@ -23,8 +23,7 @@ namespace hssh
 {
 
 ///////////////////////////////// DirichletPriorEvaluator definition ////////////////////////////////////////////
-DirichletPriorEvaluator::DirichletPriorEvaluator(const dirichlet_prior_evaluator_params_t& params)
-: params(params)
+DirichletPriorEvaluator::DirichletPriorEvaluator(const dirichlet_prior_evaluator_params_t& params) : params(params)
 {
 }
 
@@ -35,8 +34,10 @@ double DirichletPriorEvaluator::calculateLogPrior(const TopologicalState& state)
     return 0.0;
 }
 
-///////////////////////////////// BayesianInformationCriterionEvaluator definition ////////////////////////////////////////////
-BayesianInformationCriterionEvaluator::BayesianInformationCriterionEvaluator(const bayesian_information_criterion_evaluator_params_t& params)
+///////////////////////////////// BayesianInformationCriterionEvaluator definition
+///////////////////////////////////////////////
+BayesianInformationCriterionEvaluator::BayesianInformationCriterionEvaluator(
+  const bayesian_information_criterion_evaluator_params_t& params)
 : params(params)
 {
 }
@@ -48,5 +49,5 @@ double BayesianInformationCriterionEvaluator::calculateLogPrior(const Topologica
     return -1.0 * state.map->numPlaces() * std::log(std::max(state.numPlaceVisits, 1));
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

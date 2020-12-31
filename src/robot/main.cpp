@@ -7,10 +7,10 @@
 */
 
 
-#include "system/module.h"
 #include "robot/director.h"
-#include "utils/config_file.h"
+#include "system/module.h"
 #include "utils/command_line.h"
+#include "utils/config_file.h"
 #include <vector>
 
 using namespace vulcan;
@@ -19,15 +19,15 @@ int main(int argc, char** argv)
 {
     std::vector<utils::command_line_argument_t> arguments;
     arguments.push_back({utils::kConfigFileArgument, "Configuration file controlling the module behavior", true, ""});
-    
+
     utils::CommandLine commandLine(argc, argv, arguments);
     commandLine.verify();
-    
-    utils::ConfigFile  config(commandLine.configName());
-    
+
+    utils::ConfigFile config(commandLine.configName());
+
     system::Module<robot::RobotInterfaceDirector> module(commandLine, config);
-    
+
     module.run();
-    
+
     return 0;
 }

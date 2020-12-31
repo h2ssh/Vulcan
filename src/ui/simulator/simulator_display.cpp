@@ -8,19 +8,19 @@
 
 
 /**
-* \file     simulator_display.cpp
-* \author   Zongtai Luo
-*
-* Definition of SimulatorDisplay.
-*/
+ * \file     simulator_display.cpp
+ * \author   Zongtai Luo
+ *
+ * Definition of SimulatorDisplay.
+ */
 
 #include "ui/simulator/simulator_display.h"
 #include "ui/common/default_colors.h"
 #include "ui/common/gl_shapes.h"
-#include "ui/components/robot_renderer.h"
-#include "ui/components/robot_trajectory_renderer.h"
 #include "ui/components/occupancy_grid_renderer.h"
 #include "ui/components/pose_target_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "ui/components/robot_trajectory_renderer.h"
 
 namespace vulcan
 {
@@ -48,9 +48,11 @@ SimulatorDisplay::SimulatorDisplay(wxWindow* parent,
 , targetRenderer_(new PoseTargetRenderer)
 {
     // Copy the colors used from debug_ui.cfg
-    std::vector<GLColor> trajectoryColors = { GLColor(37, 212, 18, 125),
-                                              GLColor(5, 5, 184, 125),
-                                              GLColor(229, 1, 1, 125),};
+    std::vector<GLColor> trajectoryColors = {
+      GLColor(37, 212, 18, 125),
+      GLColor(5, 5, 184, 125),
+      GLColor(229, 1, 1, 125),
+    };
     interpolator_.setColors(trajectoryColors);
 }
 
@@ -65,17 +67,16 @@ std::string SimulatorDisplay::printCellInformation(Point<int> cell)
     float cost = 0.0;
     cost = static_cast<float>(map_.getCost(cell));
 
-    std::string description = "  Cost: "; 
-    std::string costString  = std::to_string(cost);
-    
+    std::string description = "  Cost: ";
+    std::string costString = std::to_string(cost);
+
     return description.append(costString);
 }
 
 
 void SimulatorDisplay::setMode(NavigationInterfaceMode mode)
 {
-    if(mode == NavigationInterfaceMode::select)
-    {
+    if (mode == NavigationInterfaceMode::select) {
         // Center the camera on the map
         setCameraFocalPoint(map_.getGlobalCenter());
 
@@ -87,13 +88,10 @@ void SimulatorDisplay::setMode(NavigationInterfaceMode mode)
         setCameraPosition(math::SphericalPoint(relativePos.rho, relativePos.phi, 0));
     }
 
-    if(mode != NavigationInterfaceMode::drive)
-    {
+    if (mode != NavigationInterfaceMode::drive) {
         enablePanning();
         enableScrolling();
-    }
-    else
-    {
+    } else {
         disablePanning();
         disableScrolling();
     }
@@ -105,9 +103,8 @@ void SimulatorDisplay::setMode(NavigationInterfaceMode mode)
 void SimulatorDisplay::setPose(const pose_t& pose)
 {
     pose_ = pose;
-    
-    if(mode_ == NavigationInterfaceMode::drive)
-    {
+
+    if (mode_ == NavigationInterfaceMode::drive) {
         // Lock the position of the robot in the center of the map with the robot pointing toward the top of the screen
         setCameraFocalPoint(pose.toPoint());
         setViewRegion(15.0f, 15.0f);
@@ -121,7 +118,7 @@ void SimulatorDisplay::setPose(const pose_t& pose)
 void SimulatorDisplay::setHoverDestinationPose(const pose_t& target)
 {
     haveSelectedDestinationPose_ = true;
-    hoverDestinationPose_     = target;
+    hoverDestinationPose_ = target;
 }
 
 
@@ -129,8 +126,8 @@ void SimulatorDisplay::setDestinationPose(const pose_t& target)
 {
     utils::AutoMutex autoLock(dataLock_);
     haveSelectedDestinationPose_ = true;
-    showDestination_ = true; // this only changes the internal state, not the checkbox in the gui.
-    
+    showDestination_ = true;   // this only changes the internal state, not the checkbox in the gui.
+
     destinationPoses_.clear();
     destinationPoses_.push_back(target);
 }
@@ -140,20 +137,20 @@ void SimulatorDisplay::setDestinationPoses(const std::vector<pose_t>& waypointPo
 {
     utils::AutoMutex autoLock(dataLock_);
     haveSelectedDestinationPose_ = true;
-    
+
     destinationPoses_ = waypointPoses;
 }
 
 
 void SimulatorDisplay::clearDestinationPose(void)
 {
-    haveHoverDestinationPose_    = false;
+    haveHoverDestinationPose_ = false;
     haveSelectedDestinationPose_ = false;
 }
 
 
 void SimulatorDisplay::setLPM(const hssh::LocalPerceptualMap& lpm)
-{ 
+{
     map_ = lpm;
     haveNewMap_ = true;
 }
@@ -161,39 +158,36 @@ void SimulatorDisplay::setLPM(const hssh::LocalPerceptualMap& lpm)
 
 void SimulatorDisplay::renderWidget(void)
 {
-    if(haveNewMap_)
-    {
+    if (haveNewMap_) {
         mapRenderer_->setGrid(map_);
         haveNewMap_ = false;
     }
-    
+
     mapRenderer_->renderGrid();
     robotRenderer_->renderRobot(pose_);
     robot_receivers_->RenderRobots(robotRenderer_);
 
-    if(showDestination_ && haveSelectedDestinationPose_)
-    {
-        for(auto targetIt = destinationPoses_.begin(), targetEnd = destinationPoses_.end(); targetIt != targetEnd; targetIt++)
-        {
+    if (showDestination_ && haveSelectedDestinationPose_) {
+        for (auto targetIt = destinationPoses_.begin(), targetEnd = destinationPoses_.end(); targetIt != targetEnd;
+             targetIt++) {
             targetRenderer_->renderTargetRectangle(*targetIt);
         }
     }
 
-    if(haveHoverDestinationPose_) // draw hover pose on top
+    if (haveHoverDestinationPose_)   // draw hover pose on top
     {
         targetRenderer_->renderTargetRectangle(hoverDestinationPose_);
     }
-    
-    if(false)
-    {
+
+    if (false) {
         // Use a fixed scale for displaying the trajectories
-        for(auto& traj : trajectories_)
-        {
+        for (auto& traj : trajectories_) {
             const float kMinTrajectoryCost = -3.0f;
-            const float kMaxTrajectoryCost =  0.5f;
-            trajectoryRenderer_->renderTrajectory(traj.poses,
-                                                  interpolator_.calculateColor((traj.expectedCost - kMinTrajectoryCost)
-                                                    / (kMaxTrajectoryCost - kMinTrajectoryCost)));
+            const float kMaxTrajectoryCost = 0.5f;
+            trajectoryRenderer_->renderTrajectory(
+              traj.poses,
+              interpolator_.calculateColor((traj.expectedCost - kMinTrajectoryCost)
+                                           / (kMaxTrajectoryCost - kMinTrajectoryCost)));
         }
     }
 }
@@ -204,5 +198,5 @@ Point<int> SimulatorDisplay::convertWorldToGrid(const Point<float>& world) const
     return Point<int>(0, 0);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

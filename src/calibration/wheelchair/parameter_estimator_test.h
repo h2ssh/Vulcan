@@ -8,11 +8,11 @@
 
 
 /**
-* \file     parameter_estimator.h
-* \author   Collin Johnson
-*
-* Declaration of ParameterEstimatorTest for determining joystick calibration values.
-*/
+ * \file     parameter_estimator.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ParameterEstimatorTest for determining joystick calibration values.
+ */
 
 #ifndef CALIBRATION_WHEELCHAIR_PARAMETER_ESTIMATOR_TEST_H
 #define CALIBRATION_WHEELCHAIR_PARAMETER_ESTIMATOR_TEST_H
@@ -25,17 +25,15 @@ namespace calibration
 {
 
 /**
-* ParameterEstimatorTest
-*/
+ * ParameterEstimatorTest
+ */
 class ParameterEstimatorTest : public WheelchairTest
 {
 public:
-
 private:
-
 };
 
-}
-}
+}   // namespace calibration
+}   // namespace vulcan
 
-#endif // CALIBRATION_WHEELCHAIR_PARAMETER_ESTIMATOR_TEST_H
+#endif   // CALIBRATION_WHEELCHAIR_PARAMETER_ESTIMATOR_TEST_H

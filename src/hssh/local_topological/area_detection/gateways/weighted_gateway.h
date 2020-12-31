@@ -8,11 +8,11 @@
 
 
 /**
-* \file     weighted_gateway.h
-* \author   Collin Johnson
-* 
-* Declaration of WeightedGateway and associated operators.
-*/
+ * \file     weighted_gateway.h
+ * \author   Collin Johnson
+ *
+ * Declaration of WeightedGateway and associated operators.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_WEIGHTED_GATEWAY_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_WEIGHTED_GATEWAY_H
@@ -21,13 +21,13 @@
 
 namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
 
 /**
-* WeightedGateway is a gateway with an associated weight and flag indicating if it was part of a
-* transition in the environment.
-*/
+ * WeightedGateway is a gateway with an associated weight and flag indicating if it was part of a
+ * transition in the environment.
+ */
 struct WeightedGateway
 {
     Gateway gateway;
@@ -68,7 +68,7 @@ inline bool operator==(const WeightedGateway& lhs, const Gateway& rhs)
     return lhs.gateway == rhs;
 }
 
-} // namespace vulcan
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_WEIGHTED_GATEWAY_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_WEIGHTED_GATEWAY_H

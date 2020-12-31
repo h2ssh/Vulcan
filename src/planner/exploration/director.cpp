@@ -8,11 +8,11 @@
 
 
 /**
-* \file     director.cpp
-* \author   Collin Johnson
-*
-* Definition of ExplorationDirector.
-*/
+ * \file     director.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ExplorationDirector.
+ */
 
 #include "planner/exploration/director.h"
 #include "planner/exploration/map_explorer.h"
@@ -45,8 +45,7 @@ void ExplorationDirector::subscribeToData(system::ModuleCommunicator& communicat
 system::TriggerStatus ExplorationDirector::waitForTrigger(void)
 {
     // If data is available, then ready for the initial update
-    if(explorer_->hasNewData())
-    {
+    if (explorer_->hasNewData()) {
         return system::TriggerStatus::ready;
     }
 
@@ -59,8 +58,7 @@ system::TriggerStatus ExplorationDirector::waitForTrigger(void)
 
 system::UpdateStatus ExplorationDirector::runUpdate(system::ModuleCommunicator& communicator)
 {
-    if(!initialized_)
-    {
+    if (!initialized_) {
         explorer_->startExploring(communicator);
         initialized_ = true;
     }
@@ -68,12 +66,9 @@ system::UpdateStatus ExplorationDirector::runUpdate(system::ModuleCommunicator& 
     explorer_->continueExploring(communicator);
 
     // If finished exploring, then the exploration module can be shut down.
-    if(explorer_->isFinishedExploring())
-    {
+    if (explorer_->isFinishedExploring()) {
         return system::UpdateStatus::finished;
-    }
-    else
-    {
+    } else {
         return system::UpdateStatus::running;
     }
 }
@@ -84,5 +79,5 @@ void ExplorationDirector::shutdown(system::ModuleCommunicator& communicator)
     explorer_->stopExploring(communicator);
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

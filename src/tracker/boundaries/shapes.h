@@ -8,20 +8,20 @@
 
 
 /**
-* \file     shapes.h
-* \author   Collin Johnson
-*
-* Definition of all valid shapes for boundaries.
-* Definition of support functions for valid BoundaryShape types.
-*/
+ * \file     shapes.h
+ * \author   Collin Johnson
+ *
+ * Definition of all valid shapes for boundaries.
+ * Definition of support functions for valid BoundaryShape types.
+ */
 
 #ifndef TRACKER_BOUNDARIES_SHAPES_H
 #define TRACKER_BOUNDARIES_SHAPES_H
 
-#include "tracker/types.h"
 #include "math/geometry/arc.h"
 #include "math/geometry/circle.h"
 #include "math/geometry/rectangle.h"
+#include "tracker/types.h"
 #include <array>
 
 namespace vulcan
@@ -30,31 +30,30 @@ namespace tracker
 {
 
 /**
-* BoundaryShape defines a simple concept for all shapes used as boundaries in the tracker.
-*
-* A valid shape supports the following free-functions:
-*
-*   - center : the center of the shape
-*/
+ * BoundaryShape defines a simple concept for all shapes used as boundaries in the tracker.
+ *
+ * A valid shape supports the following free-functions:
+ *
+ *   - center : the center of the shape
+ */
 
-using Rectangle  = math::Rectangle<float>;
-using Circle     = math::Circle<float>;
+using Rectangle = math::Rectangle<float>;
+using Circle = math::Circle<float>;
 using TwoCircles = std::array<Circle, 2>;
-using TwoRects   = std::array<Rectangle, 2>;
-using Arc        = math::Arc<float>;
-using TwoArcs    = std::array<Arc, 2>;
+using TwoRects = std::array<Rectangle, 2>;
+using Arc = math::Arc<float>;
+using TwoArcs = std::array<Arc, 2>;
 
 struct CircleRect
 {
-    Circle    circle;
+    Circle circle;
     Rectangle rect;
 
     // Serialization support
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( circle,
-            rect);
+        ar(circle, rect);
     }
 };
 
@@ -83,7 +82,7 @@ inline Position center(const CircleRect& shape)
     return c;
 }
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_BOUNDARIES_SHAPES_H
+#endif   // TRACKER_BOUNDARIES_SHAPES_H

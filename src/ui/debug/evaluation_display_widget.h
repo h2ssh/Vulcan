@@ -8,23 +8,26 @@
 
 
 /**
-* \file     evaluation_widget.h
-* \author   Collin Johnson
-*
-* Declaration of EvaluationDisplayWidget.
-*/
+ * \file     evaluation_widget.h
+ * \author   Collin Johnson
+ *
+ * Declaration of EvaluationDisplayWidget.
+ */
 
 #ifndef UI_DEBUG_EVALUATION_WIDGET_H
 #define UI_DEBUG_EVALUATION_WIDGET_H
 
-#include "ui/components/grid_based_display_widget.h"
 #include "hssh/local_topological/evaluation/stability_analyzer.h"
+#include "ui/components/grid_based_display_widget.h"
 #include "utils/pose_trace.h"
 #include <memory>
 
 namespace vulcan
 {
-namespace mpepc { class PathSummary; }
+namespace mpepc
+{
+class PathSummary;
+}
 namespace ui
 {
 
@@ -34,15 +37,14 @@ class StableAreaRenderer;
 class VoronoiSkeletonGridRenderer;
 
 /**
-* EvaluationDisplayWidget draws information about the evaluation of the topological abstraction for an environment.
-*/
+ * EvaluationDisplayWidget draws information about the evaluation of the topological abstraction for an environment.
+ */
 class EvaluationDisplayWidget : public GridBasedDisplayWidget
 {
 public:
-
     /**
-    * Constructor for EvaluationDisplayWidget.
-    */
+     * Constructor for EvaluationDisplayWidget.
+     */
     EvaluationDisplayWidget(wxWindow* parent,
                             wxWindowID id = wxID_ANY,
                             const wxPoint& pos = wxDefaultPosition,
@@ -52,8 +54,8 @@ public:
                             const wxPalette& palette = wxNullPalette);
 
     /**
-    * Destructor for EvaluationDisplayWidget.
-    */
+     * Destructor for EvaluationDisplayWidget.
+     */
     virtual ~EvaluationDisplayWidget(void);
 
     // Change the content being rendered
@@ -67,7 +69,6 @@ public:
     void shouldDrawStars(bool draw);
 
 private:
-
     std::unique_ptr<VoronoiSkeletonGridRenderer> mapRenderer_;
     std::unique_ptr<StableAreaRenderer> areaRenderer_;
     std::unique_ptr<PoseTraceRenderer> traceRenderer_;
@@ -90,7 +91,7 @@ private:
     void renderTrace(const utils::PoseTrace& trace, const GLColor& color);
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_EVALUATION_WIDGET_H
+#endif   // UI_DEBUG_EVALUATION_WIDGET_H

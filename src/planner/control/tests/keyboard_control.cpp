@@ -9,8 +9,8 @@
 
 #include "lcmtypes/commands/direct_control_command.h"
 #include "utils/timestamp.h"
-#include <lcm/lcm-cpp.hpp>
 #include <iostream>
+#include <lcm/lcm-cpp.hpp>
 #include <string>
 
 int main(int argc, char** argv)
@@ -23,18 +23,17 @@ int main(int argc, char** argv)
     const std::string kSource("keyboard_control");
 
     std::cout << "Simple keyboard control of Vulcan via the AbsoluteMotionTask in the control_planner:\n"
-        << "Straight:   " << kStraight << '\n'
-        << "Stop:       " << kStop << '\n'
-        << "Turn left:  " << kLeft << '\n'
-        << "Turn right: " << kRight << '\n'
-        << "Quit:       " << kQuit << '\n';
+              << "Straight:   " << kStraight << '\n'
+              << "Stop:       " << kStop << '\n'
+              << "Turn left:  " << kLeft << '\n'
+              << "Turn right: " << kRight << '\n'
+              << "Quit:       " << kQuit << '\n';
 
     lcm::LCM transmitter;
 
     char input = 0;
 
-    while(input != kQuit)
-    {
+    while (input != kQuit) {
         std::cin >> input;
         std::cin.ignore(1);
 
@@ -42,35 +41,34 @@ int main(int argc, char** argv)
         command.timestamp = vulcan::utils::system_time_us();
         command.source = kSource;
 
-        switch(input)
-        {
-            case kQuit:
-                std::cout << "Exiting program. Good-bye!\n";
-                command.command = vulcan_lcm::direct_control_command::STOP;
-                break;
+        switch (input) {
+        case kQuit:
+            std::cout << "Exiting program. Good-bye!\n";
+            command.command = vulcan_lcm::direct_control_command::STOP;
+            break;
 
-            case kStraight:
-                std::cout << "Going straight\n";
-                command.command = vulcan_lcm::direct_control_command::GO_STRAIGHT;
-                break;
+        case kStraight:
+            std::cout << "Going straight\n";
+            command.command = vulcan_lcm::direct_control_command::GO_STRAIGHT;
+            break;
 
-            case kStop:
-                std::cout << "Stopping\n";
-                command.command = vulcan_lcm::direct_control_command::STOP;
-                break;
+        case kStop:
+            std::cout << "Stopping\n";
+            command.command = vulcan_lcm::direct_control_command::STOP;
+            break;
 
-            case kLeft:
-                std::cout << "Turning left\n";
-                command.command = vulcan_lcm::direct_control_command::TURN_LEFT;
-                break;
+        case kLeft:
+            std::cout << "Turning left\n";
+            command.command = vulcan_lcm::direct_control_command::TURN_LEFT;
+            break;
 
-            case kRight:
-                std::cout << "Turning right\n";
-                command.command = vulcan_lcm::direct_control_command::TURN_RIGHT;
-                break;
+        case kRight:
+            std::cout << "Turning right\n";
+            command.command = vulcan_lcm::direct_control_command::TURN_RIGHT;
+            break;
 
-            default:
-                std::cout << "ERROR: Unknown command:" << input << '\n';
+        default:
+            std::cout << "ERROR: Unknown command:" << input << '\n';
         }
 
         transmitter.publish("DIRECT_CONTROL_COMMAND", &command);

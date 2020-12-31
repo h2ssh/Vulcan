@@ -8,30 +8,37 @@
 
 
 /**
-* \file     global_topo_planner_display_widget.h
-* \author   Collin Johnson
-*
-* Declaration of GoalPlannerDisplayWidget.
-*/
+ * \file     global_topo_planner_display_widget.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GoalPlannerDisplayWidget.
+ */
 
 #ifndef UI_DEBUG_GOAL_PLANNER_DISPLAY_WIDGET_H
 #define UI_DEBUG_GOAL_PLANNER_DISPLAY_WIDGET_H
 
-#include "ui/components/open_gl_widget.h"
-#include "ui/common/ui_params.h"
-#include "planner/goal/goal_target.h"
-#include "planner/goal/goal_route.h"
-#include "planner/goal/goal_progress.h"
-#include "planner/goal/debug_info.h"
+#include "core/line.h"
 #include "hssh/global_topological/global_location.h"
 #include "hssh/global_topological/topological_map.h"
-#include "core/line.h"
+#include "planner/goal/debug_info.h"
+#include "planner/goal/goal_progress.h"
+#include "planner/goal/goal_route.h"
+#include "planner/goal/goal_target.h"
+#include "ui/common/ui_params.h"
+#include "ui/components/open_gl_widget.h"
 #include "utils/mutex.h"
 
 namespace vulcan
 {
-namespace hssh { class MetricMapCache; }
-namespace math { template <typename T> class Rectangle; }
+namespace hssh
+{
+class MetricMapCache;
+}
+namespace math
+{
+template <typename T>
+class Rectangle;
+}
 
 namespace ui
 {
@@ -40,14 +47,13 @@ class TopologicalMapRenderer;
 class TopologicalGraphRenderer;
 
 /**
-* GoalPlannerDisplayWidget renders data produced by the global topo planner. In particular,
-* the graph used for the search, the topological map, and the route and progress along the route
-* are rendered on the screen.
-*/
+ * GoalPlannerDisplayWidget renders data produced by the global topo planner. In particular,
+ * the graph used for the search, the topological map, and the route and progress along the route
+ * are rendered on the screen.
+ */
 class GoalPlannerDisplayWidget : public OpenGLWidget
 {
 public:
-
     enum widget_mode_t
     {
         VIEW_MAP,
@@ -68,10 +74,10 @@ public:
     };
 
     /**
-    * Constructor for GoalPlannerDisplayWidget.
-    *
-    * \param    parent          Parent window for the widget
-    */
+     * Constructor for GoalPlannerDisplayWidget.
+     *
+     * \param    parent          Parent window for the widget
+     */
     GoalPlannerDisplayWidget(wxWindow* parent,
                              wxWindowID id = wxID_ANY,
                              const wxPoint& pos = wxDefaultPosition,
@@ -85,25 +91,24 @@ public:
     void setMode(widget_mode_t mode);
 
     void showRepresentation(map_representation_t representation) { this->representation = representation; }
-    void showRoute         (route_display_t      display)        { routeDisplay = display; }
+    void showRoute(route_display_t display) { routeDisplay = display; }
 
-    void animateSearch(int fps);  // TODO: How do I do this animation?
+    void animateSearch(int fps);   // TODO: How do I do this animation?
 
     // Methods to set the data to be rendered by the widget
-    void setTopologicalMap(const hssh::TopologicalMap&       map);
-    void setGoalTarget    (const planner::GoalTarget&        target);
-    void setGoalRoute     (const planner::GoalRoute&         route);
-    void setGoalProgress  (const planner::GoalProgress&      progress);
-    void setGoalDebugInfo (const planner::goal_debug_info_t& info);
-    void setPlaceManager  (const hssh::MetricMapCache*   manager);
+    void setTopologicalMap(const hssh::TopologicalMap& map);
+    void setGoalTarget(const planner::GoalTarget& target);
+    void setGoalRoute(const planner::GoalRoute& route);
+    void setGoalProgress(const planner::GoalProgress& progress);
+    void setGoalDebugInfo(const planner::goal_debug_info_t& info);
+    void setPlaceManager(const hssh::MetricMapCache* manager);
 
     // Query the selection process -- only if the mouse is up has a selection actually been made
-    bool                    haveSelectedLocation(void) const { return locationIsValid; }
-    hssh::GlobalLocation getSelectedLocation(void)  const { return selectedLocation; }
-    int32_t                 getSelectedGoal(void)      const { return selectedGoalId; }
+    bool haveSelectedLocation(void) const { return locationIsValid; }
+    hssh::GlobalLocation getSelectedLocation(void) const { return selectedLocation; }
+    int32_t getSelectedGoal(void) const { return selectedGoalId; }
 
 private:
-
     enum selection_state_t
     {
         HOVERING,
@@ -114,48 +119,52 @@ private:
     // OpenGLWidget interface
     virtual void renderWidget(void);
 
-    void setRouteColors   (void);
+    void setRouteColors(void);
     void setProgressColors(void);
-    void setPathColors    (void);
-    void setSequenceColors(const std::vector<planner::goal_route_element_t>& sequence, const GLColor& startColor, const GLColor& endColor);
-    void setElementColor  (const planner::goal_route_element_t& element, const GLColor& color);
+    void setPathColors(void);
+    void setSequenceColors(const std::vector<planner::goal_route_element_t>& sequence,
+                           const GLColor& startColor,
+                           const GLColor& endColor);
+    void setElementColor(const planner::goal_route_element_t& element, const GLColor& color);
 
     // Mouse handlers for selecting locations and goals
-    void handleMouseMotion  (wxMouseEvent& event);
+    void handleMouseMotion(wxMouseEvent& event);
     void handleMouseLeftDown(wxMouseEvent& event);
-    void handleMouseLeftUp  (wxMouseEvent& event);
+    void handleMouseLeftUp(wxMouseEvent& event);
 
     // Return -1 if no place under the cursor
-    void    handlePlaceSelectionEvent(int mouseX, int mouseY);
-    void    handleGoalSelectionEvent    (const Point<float>& cursor);
-    void    handleLocationSelectionEvent(const Point<float>& cursor);
-    int32_t selectPlaceUnderCursor   (const Point<float>& cursor);
-    int32_t selectSegmentUnderCursor (const Point<float>& cursor);
-    bool    cursorIsInsideBoundary   (const Point<float>& cursor, const math::Rectangle<float>& boundary, const pose_t& referenceFrame);
-    void    setPlaceSelectionColor   (int32_t oldId, int32_t selectedId, float alpha);
-    void    setSegmentSelectionColor (int32_t oldId, int32_t selectedId, float alpha);
-    void    populatePathSegmentLines (void);
-    void    convertSelectedLocationsToGlobalLocation(void);
+    void handlePlaceSelectionEvent(int mouseX, int mouseY);
+    void handleGoalSelectionEvent(const Point<float>& cursor);
+    void handleLocationSelectionEvent(const Point<float>& cursor);
+    int32_t selectPlaceUnderCursor(const Point<float>& cursor);
+    int32_t selectSegmentUnderCursor(const Point<float>& cursor);
+    bool cursorIsInsideBoundary(const Point<float>& cursor,
+                                const math::Rectangle<float>& boundary,
+                                const pose_t& referenceFrame);
+    void setPlaceSelectionColor(int32_t oldId, int32_t selectedId, float alpha);
+    void setSegmentSelectionColor(int32_t oldId, int32_t selectedId, float alpha);
+    void populatePathSegmentLines(void);
+    void convertSelectedLocationsToGlobalLocation(void);
 
 
-    widget_mode_t        mode;
+    widget_mode_t mode;
     map_representation_t representation;
-    route_display_t      routeDisplay;
+    route_display_t routeDisplay;
 
-    hssh::TopologicalMap       map;
-    planner::GoalTarget        target;
-    planner::GoalRoute         route;
-    planner::GoalProgress      progress;
+    hssh::TopologicalMap map;
+    planner::GoalTarget target;
+    planner::GoalRoute route;
+    planner::GoalProgress progress;
     planner::goal_debug_info_t info;
 
     hssh::GlobalLocation selectedLocation;
-    bool                    locationIsValid;
-    int32_t                 selectedGoalId;
-    int32_t                 hoverId;
-    bool                    hoverIsPlace;
-    selection_state_t       selectionState;
+    bool locationIsValid;
+    int32_t selectedGoalId;
+    int32_t hoverId;
+    bool hoverIsPlace;
+    selection_state_t selectionState;
 
-    bool    firstSelectedWasPlace;
+    bool firstSelectedWasPlace;
     int32_t firstSelectedLocation;
     int32_t secondSelectedLocation;
 
@@ -167,7 +176,7 @@ private:
     bool haveRoute;
     bool haveTarget;
 
-    TopologicalMapRenderer*   mapRenderer;
+    TopologicalMapRenderer* mapRenderer;
     TopologicalGraphRenderer* graphRenderer;
 
     goal_planner_display_params_t params;
@@ -177,7 +186,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_GOAL_PLANNER_DISPLAY_WIDGET_H
+#endif   // UI_DEBUG_GOAL_PLANNER_DISPLAY_WIDGET_H

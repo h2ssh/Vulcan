@@ -8,16 +8,16 @@
 
 
 /**
-* \file     types.h
-* \author   Collin Johnson
-*
-* Definition of utility types used in the object_tracker:
-*
-*   - velocity_t
-*   - Position
-*   - TwoCircles
-*   - ConstPointIter
-*/
+ * \file     types.h
+ * \author   Collin Johnson
+ *
+ * Definition of utility types used in the object_tracker:
+ *
+ *   - velocity_t
+ *   - Position
+ *   - TwoCircles
+ *   - ConstPointIter
+ */
 
 #ifndef TRACKER_TYPES_H
 #define TRACKER_TYPES_H
@@ -37,47 +37,43 @@ namespace tracker
 struct object_state_t;
 
 /**
-* ObjectId is a unique id assigned to each object.
-*/
+ * ObjectId is a unique id assigned to each object.
+ */
 using ObjectId = int32_t;
 
 /**
-* Position describes the position of an object as a point with x and y coordinates.
-*/
+ * Position describes the position of an object as a point with x and y coordinates.
+ */
 using Position = Point<float>;
 
 /**
-* Endpoints describes the endpoints of a shape.
-*/
+ * Endpoints describes the endpoints of a shape.
+ */
 using Endpoints = std::array<Position, 2>;
 
 /**
-* velocity_t describes the motion of object along the x- and y-axis. The
-*/
+ * velocity_t describes the motion of object along the x- and y-axis. The
+ */
 struct velocity_t
 {
     float x;
     float y;
 
-    explicit velocity_t(float x = 0.0f, float y = 0.0f)
-    : x(x)
-    , y(y)
-    {
-    }
+    explicit velocity_t(float x = 0.0f, float y = 0.0f) : x(x), y(y) { }
 };
 
 const std::size_t kRecentTrajectoryLength = 250;
 
 using ObjectTrajectory = std::deque<object_state_t>;
-using TrajConstIter    = ObjectTrajectory::const_iterator;
+using TrajConstIter = ObjectTrajectory::const_iterator;
 
 using PositionHistory = std::deque<Point<float>>;
 using HistoryConstIter = PositionHistory::const_iterator;
 using ConstPointIter = std::vector<Point<float>>::const_iterator;
 
 /**
-* EstimatedShape stores the shape estimated within a LaserObject.
-*/
+ * EstimatedShape stores the shape estimated within a LaserObject.
+ */
 template <class Shape>
 struct EstimatedShape
 {
@@ -89,10 +85,7 @@ struct EstimatedShape
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( shape,
-            error,
-            uncertainty
-         );
+        ar(shape, error, uncertainty);
     }
 };
 
@@ -110,7 +103,7 @@ enum class BoundaryType
     best,
 };
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_TYPES_H
+#endif   // TRACKER_TYPES_H

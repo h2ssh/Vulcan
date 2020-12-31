@@ -8,11 +8,11 @@
 
 
 /**
-* \file     frame.cpp
-* \author   Collin Johnson
-* 
-* Definition of CalibrationUIFrame.
-*/
+ * \file     frame.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of CalibrationUIFrame.
+ */
 
 #include "ui/calibration/frame.h"
 
@@ -20,7 +20,7 @@ namespace vulcan
 {
 namespace ui
 {
-    
+
 CalibrationUIFrame::CalibrationUIFrame(const calibration_ui_params_t& params)
 {
     setupPlaygroundPanel();
@@ -30,14 +30,12 @@ CalibrationUIFrame::CalibrationUIFrame(const calibration_ui_params_t& params)
 
 void CalibrationUIFrame::setupPlaygroundPanel(void)
 {
-    
 }
 
 
 void CalibrationUIFrame::setupWheelchairPanel(void)
 {
-    
 }
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan

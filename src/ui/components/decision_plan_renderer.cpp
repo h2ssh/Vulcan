@@ -8,11 +8,11 @@
 
 
 /**
-* \file     decision_plan_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionPlanRenderer.
-*/
+ * \file     decision_plan_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionPlanRenderer.
+ */
 
 #include "ui/components/decision_plan_renderer.h"
 #include <GL/gl.h>
@@ -24,8 +24,8 @@ namespace ui
 
 void DecisionPlanRenderer::setRenderColors(const GLColor& entry, const GLColor& exit, const GLColor& target)
 {
-    entryColor  = entry;
-    exitColor   = exit;
+    entryColor = entry;
+    exitColor = exit;
     targetColor = target;
 
     targetRenderer.setRenderColors(target, GLColor());
@@ -34,8 +34,7 @@ void DecisionPlanRenderer::setRenderColors(const GLColor& entry, const GLColor& 
 
 void DecisionPlanRenderer::render(const planner::DecisionPlan& plan)
 {
-    
 }
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan

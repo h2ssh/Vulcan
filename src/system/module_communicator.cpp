@@ -8,11 +8,11 @@
 
 
 /**
-* \file     module_communicator.cpp
-* \author   Collin Johnson
-*
-* Definition of ModuleCommunicator.
-*/
+ * \file     module_communicator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ModuleCommunicator.
+ */
 
 #include "system/module_communicator.h"
 #include <poll.h>
@@ -22,8 +22,7 @@ namespace vulcan
 namespace system
 {
 
-ModuleCommunicator::ModuleCommunicator(void)
-: haveDebugSubscription_(false)
+ModuleCommunicator::ModuleCommunicator(void) : haveDebugSubscription_(false)
 {
 }
 
@@ -48,27 +47,23 @@ int ModuleCommunicator::processIncoming(int waitMs)
     pollfd fds[2];
     int fdIndex = 0;
 
-    fds[fdIndex].fd       = systemConnection_.getFileno();
+    fds[fdIndex].fd = systemConnection_.getFileno();
     fds[fdIndex++].events = POLLIN;
 
     // Don't call getFileno if we don't need to
-    if(haveDebugSubscription_)
-    {
-        fds[fdIndex].fd       = debugConnection_.getFileno();
+    if (haveDebugSubscription_) {
+        fds[fdIndex].fd = debugConnection_.getFileno();
         fds[fdIndex++].events = POLLIN;
     }
 
     int success = 0;
 
-    if(poll(fds, fdIndex, waitMs) > 0)
-    {
-        if(fds[0].revents & POLLIN)
-        {
+    if (poll(fds, fdIndex, waitMs) > 0) {
+        if (fds[0].revents & POLLIN) {
             success = systemConnection_.handle();
         }
 
-        if(haveDebugSubscription_ && fds[1].revents & POLLIN)
-        {
+        if (haveDebugSubscription_ && fds[1].revents & POLLIN) {
             success = debugConnection_.handle();
         }
     }
@@ -76,5 +71,5 @@ int ModuleCommunicator::processIncoming(int waitMs)
     return success;
 }
 
-}
-}
+}   // namespace system
+}   // namespace vulcan

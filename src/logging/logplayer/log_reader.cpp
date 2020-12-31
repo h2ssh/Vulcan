@@ -8,11 +8,11 @@
 
 
 /**
-* \file     log_reader.cpp
-* \author   Collin Johnson
-*
-* Definition of LogReader and factory for loading the various log readers.
-*/
+ * \file     log_reader.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LogReader and factory for loading the various log readers.
+ */
 
 #include "logging/logplayer/log_reader.h"
 #include "logging/logplayer/beeson_reader.h"
@@ -41,8 +41,7 @@ std::map<log_type_t, std::shared_ptr<LogReader>> load_log_readers(const data_cha
 }
 
 
-LogReader::LogReader(const data_channels_t& channels)
-: channels(channels)
+LogReader::LogReader(const data_channels_t& channels) : channels(channels)
 {
 }
 
@@ -61,7 +60,9 @@ std::vector<int64_t> LogReader::getTimestamps(void) const
 {
     std::vector<int64_t> timestamps;
 
-    std::for_each(frames.begin(), frames.end(), [&](const data_frame_t& frame) { timestamps.push_back(frame.timestamp); });
+    std::for_each(frames.begin(), frames.end(), [&](const data_frame_t& frame) {
+        timestamps.push_back(frame.timestamp);
+    });
 
     return timestamps;
 }
@@ -69,25 +70,21 @@ std::vector<int64_t> LogReader::getTimestamps(void) const
 
 bool LogReader::sendFrame(uint32_t index, system::ModuleCommunicator& communicator) const
 {
-    if(index >= frames.size())
-    {
+    if (index >= frames.size()) {
         return false;
     }
 
     const data_frame_t& frame = frames[index];
 
-    if(frame.haveIMU)
-    {
+    if (frame.haveIMU) {
         communicator.sendMessage(frame.imu);
     }
 
-    if(frame.haveOdometry)
-    {
+    if (frame.haveOdometry) {
         communicator.sendMessage(frame.odometry);
     }
 
-    if(frame.haveLaser)
-    {
+    if (frame.haveLaser) {
         communicator.sendMessage(frame.scan, channels.laserChannel);
     }
 
@@ -106,5 +103,5 @@ void LogReader::sortFramesByTimestamp(void)
     std::sort(frames.begin(), frames.end());
 }
 
-}
-}
+}   // namespace logplayer
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* @file
-* @author   Collin Johnson
-*
-* Declaration of agent_state_t, associated type aliases, and some simple save/load functions.
-*/
+ * @file
+ * @author   Collin Johnson
+ *
+ * Declaration of agent_state_t, associated type aliases, and some simple save/load functions.
+ */
 
 #ifndef MPEPC_TRAINING_AGENT_STATE_H
 #define MPEPC_TRAINING_AGENT_STATE_H
@@ -50,28 +50,28 @@ using MotionObs = std::vector<agent_state_t>;
 using MotionObsMap = std::map<int, MotionObs>;
 
 /**
-* Save motion observations. The observations are saved in a file with the provided name.
-*
-* The format is a single agent_state_t per line with six values per line:
-*
-*   area_id x y xVel yVel normDist
-*
-* Area id is the area the agent was in for the particular measurement.
-*
-* \param    filename    Name of the file to save observations in
-* \param    obs         Observations to be saved
-*/
+ * Save motion observations. The observations are saved in a file with the provided name.
+ *
+ * The format is a single agent_state_t per line with six values per line:
+ *
+ *   area_id x y xVel yVel normDist
+ *
+ * Area id is the area the agent was in for the particular measurement.
+ *
+ * \param    filename    Name of the file to save observations in
+ * \param    obs         Observations to be saved
+ */
 void save_motion_observations(const std::string& filename, const MotionObsMap& obs);
 
 /**
-* Load observations of agents from the saved file containing motion observations saved by save_motion_observations.
-*
-* \param    filename    Name of the file containing observations
-* \return   Observations loaded from the file. Will be empty if none are found.
-*/
+ * Load observations of agents from the saved file containing motion observations saved by save_motion_observations.
+ *
+ * \param    filename    Name of the file containing observations
+ * \return   Observations loaded from the file. Will be empty if none are found.
+ */
 MotionObsMap load_motion_observations(const std::string& filename);
 
-} // namespace mpec
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_TRAINING_AGENT_STATE_H
+#endif   // MPEPC_TRAINING_AGENT_STATE_H

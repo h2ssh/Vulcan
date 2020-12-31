@@ -8,19 +8,19 @@
 
 
 /**
-* \file     local_topo_isovist_field.cpp
-* \author   Collin Johnson
-*
-* Definition of VoronoiIsovistField.
-*/
+ * \file     local_topo_isovist_field.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of VoronoiIsovistField.
+ */
 
 #include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "math/statistics.h"
 #include <cassert>
-#include <unordered_map>
 #include <functional>
+#include <unordered_map>
 
 
 namespace vulcan
@@ -31,18 +31,21 @@ namespace hssh
 std::vector<cell_t> extract_isovist_positions(const VoronoiSkeletonGrid& grid, IsovistLocation location);
 
 
-VoronoiIsovistField::VoronoiIsovistField(const VoronoiSkeletonGrid& grid, IsovistLocation location, utils::isovist_options_t options)
+VoronoiIsovistField::VoronoiIsovistField(const VoronoiSkeletonGrid& grid,
+                                         IsovistLocation location,
+                                         utils::isovist_options_t options)
 : VoronoiIsovistField(grid, extract_isovist_positions(grid, location), options)
 {
 }
 
 
-VoronoiIsovistField::VoronoiIsovistField(const VoronoiSkeletonGrid& grid, const std::vector<cell_t>& positions, utils::isovist_options_t options)
+VoronoiIsovistField::VoronoiIsovistField(const VoronoiSkeletonGrid& grid,
+                                         const std::vector<cell_t>& positions,
+                                         utils::isovist_options_t options)
 : field_(positions, grid, VoronoiSkeletonTerminationFunc(), options)
 {
     int nextIndex = 0;
-    for(auto& cell : positions)
-    {
+    for (auto& cell : positions) {
         cellToIsovist_[cell] = nextIndex++;
     }
 }
@@ -56,10 +59,12 @@ VoronoiIsovistField::~VoronoiIsovistField(void)
 
 std::vector<cell_t> extract_isovist_positions(const VoronoiSkeletonGrid& grid, IsovistLocation location)
 {
-    switch(location)
-    {
+    switch (location) {
     case IsovistLocation::FREE_SPACE:
-        return extract_cells_with_mask(grid, SKELETON_CELL_FREE, 2);  // only use every other cell when processing free space -- too slow otherwise!
+        return extract_cells_with_mask(
+          grid,
+          SKELETON_CELL_FREE,
+          2);   // only use every other cell when processing free space -- too slow otherwise!
 
     case IsovistLocation::SKELETON:
         return extract_cells_with_mask(grid, SKELETON_CELL_SKELETON, 1);
@@ -68,11 +73,11 @@ std::vector<cell_t> extract_isovist_positions(const VoronoiSkeletonGrid& grid, I
         return extract_cells_with_mask(grid, SKELETON_CELL_REDUCED_SKELETON, 1);
 
     default:
-        std::cerr<<"ERROR::VoronoiIsovistField: Unknown isovist location\n.";
+        std::cerr << "ERROR::VoronoiIsovistField: Unknown isovist location\n.";
     }
 
     return std::vector<cell_t>();
 }
 
-} // namespace hssh 
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     transition_sequence.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalTransitionSequence and SequencePosition.
-*/
+ * \file     transition_sequence.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalTransitionSequence and SequencePosition.
+ */
 
 #include "hssh/global_topological/transition_sequence.h"
 #include "utils/stub.h"
@@ -31,9 +31,7 @@ inline bool in_range(double start, double end, double value)
 }
 
 
-SequencePosition::SequencePosition(double distFromStart, double length)
-: distFromStart_(distFromStart)
-, length_(length)
+SequencePosition::SequencePosition(double distFromStart, double length) : distFromStart_(distFromStart), length_(length)
 {
 }
 
@@ -45,10 +43,8 @@ bool SequencePosition::overlaps(const SequencePosition& rhs) const
     double rhsStart = rhs.distFromStart_ - (rhs.length_ / 2);
     double rhsEnd = rhs.distFromStart_ + (rhs.length_ / 2);
 
-    return in_range(start, end, rhsStart)
-        || in_range(start, end, rhsEnd)
-        || in_range(rhsStart, rhsEnd, start)
-        || in_range(rhsStart, rhsEnd, end);
+    return in_range(start, end, rhsStart) || in_range(start, end, rhsEnd) || in_range(rhsStart, rhsEnd, start)
+      || in_range(rhsStart, rhsEnd, end);
 }
 
 
@@ -58,8 +54,7 @@ GlobalTransitionSequence::GlobalTransitionSequence(const GlobalArea& area,
                                                    const std::vector<TransitionAffordance>& transitions,
                                                    const Line<float>& centerLine)
 {
-    for(auto& t : transitions)
-    {
+    for (auto& t : transitions) {
         transitions_.emplace_back(next_id(),
                                   area,
                                   GlobalArea(AreaType::destination),
@@ -74,20 +69,17 @@ GlobalTransitionSequence::GlobalTransitionSequence(const GlobalArea& area,
 GlobalTransition GlobalTransitionSequence::next(const GlobalTransition& begin, TopoDirection direction) const
 {
     // Plus direction means next has a higher index
-    if(direction == TopoDirection::plus)
-    {
+    if (direction == TopoDirection::plus) {
         auto transIt = std::find(transitions_.begin(), transitions_.end(), begin);
-        if((transIt != transitions_.end()) && (transIt + 1 != transitions_.end()))
-        {
+        if ((transIt != transitions_.end()) && (transIt + 1 != transitions_.end())) {
             return *(transIt + 1);
         }
     }
     // Minus direction means next has a lower index
-    else // direction == TopoDirection::minus
+    else   // direction == TopoDirection::minus
     {
         auto transIt = std::find(transitions_.rbegin(), transitions_.rend(), begin);
-        if((transIt != transitions_.rend()) && (transIt + 1 != transitions_.rend()))
-        {
+        if ((transIt != transitions_.rend()) && (transIt + 1 != transitions_.rend())) {
             return *(transIt + 1);
         }
     }
@@ -109,7 +101,7 @@ SequencePosition GlobalTransitionSequence::position(const GlobalTransition& tran
     auto transIt = std::find(transitions_.begin(), transitions_.end(), transition);
 
     return (transIt != transitions_.end()) ? positions_[std::distance(transitions_.begin(), transIt)]
-        : SequencePosition();
+                                           : SequencePosition();
 }
 
 
@@ -118,8 +110,7 @@ bool GlobalTransitionSequence::replaceTransition(const GlobalTransition& trans, 
     // Can't use std::replace b/c it doesn't indicate if it actually replaced anything or not
     auto transIt = std::find(transitions_.begin(), transitions_.end(), trans);
 
-    if(transIt != transitions_.end())
-    {
+    if (transIt != transitions_.end()) {
         *transIt = newTrans;
     }
 
@@ -144,13 +135,12 @@ GlobalTransitionSequence GlobalTransitionSequence::reverse(void) const
 
     // Subtract dist from the length to make the dist relative to the start of the reversed path
     double pathLength = length(centerLine_);
-    for(auto& p : reversedSeq.positions_)
-    {
+    for (auto& p : reversedSeq.positions_) {
         p = SequencePosition(pathLength - p.distFromStart(), p.length());
     }
 
     return reversedSeq;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

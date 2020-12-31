@@ -8,13 +8,13 @@
 
 
 /**
-* \file     large_scale_star_utils.cpp
-* \author   Collin Johnson
-*
-* Definition of utility functions for LargeScaleStars:
-*
-* TODO: List functions here
-*/
+ * \file     large_scale_star_utils.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of utility functions for LargeScaleStars:
+ *
+ * TODO: List functions here
+ */
 
 #include "hssh/global_topological/mapping/large_scale_star_utils.h"
 
@@ -23,5 +23,5 @@ namespace vulcan
 namespace hssh
 {
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

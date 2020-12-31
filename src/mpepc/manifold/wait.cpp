@@ -8,18 +8,18 @@
 
 
 /**
-* \file     wait.cpp
-* \author   Collin Johnson 
-* 
-* Definition of WaitTaskManifold that handles the WaitTask of temporarily halting the robot.
-*/
+ * \file     wait.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of WaitTaskManifold that handles the WaitTask of temporarily halting the robot.
+ */
 
 #include "mpepc/manifold/wait.h"
-#include "mpepc/types.h"
 #include "core/angle_functions.h"
 #include "core/motion_state.h"
+#include "mpepc/types.h"
 
-namespace vulcan 
+namespace vulcan
 {
 namespace mpepc
 {
@@ -37,37 +37,36 @@ void WaitTaskManifold::update(const planning_environment_t& env,
 }
 
 
-void WaitTaskManifold::calculateNegativeRewardsOverTrajectory(const std::vector<motion_state_t>& trajectory, 
-                                                              float timestep, 
-                                                              std::size_t stride, 
-                                                              std::vector<float>& rewards) const 
+void WaitTaskManifold::calculateNegativeRewardsOverTrajectory(const std::vector<motion_state_t>& trajectory,
+                                                              float timestep,
+                                                              std::size_t stride,
+                                                              std::vector<float>& rewards) const
 {
-    rewards.clear();  // ensure all rewards are being pushed to the correct index
+    rewards.clear();   // ensure all rewards are being pushed to the correct index
     stride = std::max(stride, std::size_t(1));
-    
+
     timestep *= stride;
-    
-    for(size_t index = stride; index < trajectory.size(); index += stride)
-    {
+
+    for (size_t index = stride; index < trajectory.size(); index += stride) {
         double orientationError = angle_diff_abs(trajectory[index].pose.theta, targetPose_.theta);
         double positionError = distance_between_points(trajectory[index].pose.toPoint(), targetPose_.toPoint());
-        
+
         rewards.push_back(orientationError + positionError - timestep);
     }
 }
 
 
-double WaitTaskManifold::calculateHeuristicCost(const robot_trajectory_info_t& robotTrajectoryInfo) const 
+double WaitTaskManifold::calculateHeuristicCost(const robot_trajectory_info_t& robotTrajectoryInfo) const
 {
     // No heuristic code
     return 0.0;
 }
 
 
-void WaitTaskManifold::sendDebugInfo(system::ModuleCommunicator& transmitter) 
+void WaitTaskManifold::sendDebugInfo(system::ModuleCommunicator& transmitter)
 {
     // There is no debug info
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

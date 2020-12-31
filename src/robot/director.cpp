@@ -8,18 +8,18 @@
 
 
 /**
-* \file     director.cpp
-* \author   Collin Johnson and Jong Jin Park
-*
-* Definition of RobotInterfaceDirector.
-*/
+ * \file     director.cpp
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Definition of RobotInterfaceDirector.
+ */
 
 #include "robot/director.h"
+#include "robot/commands.h"
+#include "robot/motion_checker.h"
 #include "robot/params.h"
 #include "robot/proximity_warning_indices.h"
-#include "robot/motion_checker.h"
 #include "robot/wheelchair.h"
-#include "robot/commands.h"
 #include "system/module_communicator.h"
 #include "utils/auto_mutex.h"
 #include "utils/timestamp.h"
@@ -41,11 +41,11 @@ RobotInterfaceDirector::RobotInterfaceDirector(const utils::CommandLine& command
 , filter(params.filterParams)
 , checker(create_motion_checker(params.checkerParams))
 , wheelchair(create_wheelchair(params.driverParams))
-, updatePeriodUs(params.commandPeriodMs*1000)
+, updatePeriodUs(params.commandPeriodMs * 1000)
 , previousOutputTimeUs(0)
 {
     activeCommand.source = NO_SOURCE;
-    
+
     startWheelchairThread();
 }
 
@@ -65,87 +65,96 @@ void RobotInterfaceDirector::subscribeToData(system::ModuleCommunicator& communi
 
 system::UpdateStatus RobotInterfaceDirector::runUpdate(system::ModuleCommunicator& communicator)
 {
-    motion_command_t     commandToIssue;    // command to be issued to the robot
-    commanded_velocity_t velocityCommanded; // useful for display purposes
+    motion_command_t commandToIssue;          // command to be issued to the robot
+    commanded_velocity_t velocityCommanded;   // useful for display purposes
     commanded_joystick_t joystickCommanded;
-    
+
 #ifdef DEBUG_DIRECTOR_TIMING
     updateStartTimeUs = utils::system_time_us();
 #endif
-        
+
     dataLock.lock();
-    
+
     proximity_warning_indices_t proximityIndices;
-    
-    
+
+
     // Sort the commands so they are considered in order of the most recent command first. The first valid
     // command is used. In the future, if there's an actual prioritization, then that would be the order in which
     // to consider the commands
-    std::sort(commandQueue.begin(), commandQueue.end(), [](const motion_command_t& lhs, const motion_command_t& rhs)
-                                                            {
-                                                                return lhs.timestamp > rhs.timestamp;
-                                                            });
-    
-    if((activeCommand.source != NO_SOURCE) && (activeCommand.source != ONBOARD_JOYSTICK))
-    {
+    std::sort(commandQueue.begin(), commandQueue.end(), [](const motion_command_t& lhs, const motion_command_t& rhs) {
+        return lhs.timestamp > rhs.timestamp;
+    });
+
+    if ((activeCommand.source != NO_SOURCE) && (activeCommand.source != ONBOARD_JOYSTICK)) {
         commandQueue.push_back(activeCommand);
     }
-    
+
     motion_command_t wheelchairMotionCommand = wheelchair->getWheelchairMotionCommand();
-    commandQueue.push_front(wheelchairMotionCommand);   // always include the current joystick position from the wheelchair
-    //         commandQueue.push_back(wheelchair->getWheelchairMotionCommand());   // always include the current joystick position from the wheelchair
-    
+    commandQueue.push_front(
+      wheelchairMotionCommand);   // always include the current joystick position from the wheelchair
+    //         commandQueue.push_back(wheelchair->getWheelchairMotionCommand());   // always include the current
+    //         joystick position from the wheelchair
+
 #ifdef DEBUG_WHEELCHAIR_COMMAND
-    std::cout<<"DEBUG DIRECTOR: Wheelchair command type: "<< wheelchairMotionCommand.commandType <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Wheelchair command timestamp: "<< wheelchairMotionCommand.timestamp <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Wheelchair Linear  velocity command: "<< wheelchairMotionCommand.velocityCommand.linear <<" m/s\n";
-    std::cout<<"DEBUG DIRECTOR: Wheelchair Angular velocity command: "<< wheelchairMotionCommand.velocityCommand.angular <<" rad/s\n";
-    std::cout<<"DEBUG DIRECTOR: Wheelchair Linear velocity command timestamp: "<< wheelchairMotionCommand.velocityCommand.timestamp <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Wheelchair Joystick forward: "<< wheelchairMotionCommand.joystickCommand.forward <<"\n";
-    std::cout<<"DEBUG DIRECTOR: Wheelchair Joystick left: "   << wheelchairMotionCommand.joystickCommand.left <<"\n";
-    std::cout<<"DEBUG DIRECTOR: Wheelchair Joysitck command timestamp: "<< wheelchairMotionCommand.joystickCommand.timestamp <<'\n';
+    std::cout << "DEBUG DIRECTOR: Wheelchair command type: " << wheelchairMotionCommand.commandType << '\n';
+    std::cout << "DEBUG DIRECTOR: Wheelchair command timestamp: " << wheelchairMotionCommand.timestamp << '\n';
+    std::cout << "DEBUG DIRECTOR: Wheelchair Linear  velocity command: "
+              << wheelchairMotionCommand.velocityCommand.linear << " m/s\n";
+    std::cout << "DEBUG DIRECTOR: Wheelchair Angular velocity command: "
+              << wheelchairMotionCommand.velocityCommand.angular << " rad/s\n";
+    std::cout << "DEBUG DIRECTOR: Wheelchair Linear velocity command timestamp: "
+              << wheelchairMotionCommand.velocityCommand.timestamp << '\n';
+    std::cout << "DEBUG DIRECTOR: Wheelchair Joystick forward: " << wheelchairMotionCommand.joystickCommand.forward
+              << "\n";
+    std::cout << "DEBUG DIRECTOR: Wheelchair Joystick left: " << wheelchairMotionCommand.joystickCommand.left << "\n";
+    std::cout << "DEBUG DIRECTOR: Wheelchair Joysitck command timestamp: "
+              << wheelchairMotionCommand.joystickCommand.timestamp << '\n';
 #endif
-    
+
     commandToIssue = selectMotionCommand();
-    
+
 #ifdef DEBUG_ISSUED_COMMAND
-    std::cout<<"DEBUG DIRECTOR: Selected command type: "<< commandToIssue.commandType <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Selected command timestamp: "<< commandToIssue.timestamp <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Selected linear  velocity command: "<< commandToIssue.velocityCommand.linear <<" m/s\n";
-    std::cout<<"DEBUG DIRECTOR: Selected angular velocity command: "<< commandToIssue.velocityCommand.angular <<" rad/s\n";
-    std::cout<<"DEBUG DIRECTOR: Selected velocity command timestamp: "<< commandToIssue.velocityCommand.timestamp <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Selected joystick forward: "<< commandToIssue.joystickCommand.forward <<"\n";
-    std::cout<<"DEBUG DIRECTOR: Selected joystick left: "   << commandToIssue.joystickCommand.left <<"\n";
-    std::cout<<"DEBUG DIRECTOR: Selected joystick command timestamp: "<< commandToIssue.joystickCommand.timestamp <<"\n\n";
+    std::cout << "DEBUG DIRECTOR: Selected command type: " << commandToIssue.commandType << '\n';
+    std::cout << "DEBUG DIRECTOR: Selected command timestamp: " << commandToIssue.timestamp << '\n';
+    std::cout << "DEBUG DIRECTOR: Selected linear  velocity command: " << commandToIssue.velocityCommand.linear
+              << " m/s\n";
+    std::cout << "DEBUG DIRECTOR: Selected angular velocity command: " << commandToIssue.velocityCommand.angular
+              << " rad/s\n";
+    std::cout << "DEBUG DIRECTOR: Selected velocity command timestamp: " << commandToIssue.velocityCommand.timestamp
+              << '\n';
+    std::cout << "DEBUG DIRECTOR: Selected joystick forward: " << commandToIssue.joystickCommand.forward << "\n";
+    std::cout << "DEBUG DIRECTOR: Selected joystick left: " << commandToIssue.joystickCommand.left << "\n";
+    std::cout << "DEBUG DIRECTOR: Selected joystick command timestamp: " << commandToIssue.joystickCommand.timestamp
+              << "\n\n";
 #endif
-    
+
     convertLaserDataToScanPoints();
-    
-    if(commandToIssue.source != ONBOARD_JOYSTICK)
-    {
+
+    if (commandToIssue.source != ONBOARD_JOYSTICK) {
         // FIXME: temporarily turned-off for initial run
-        //             // proximity checker in action. NOTE: Shuold I be using joystick command for this? 
-        //             velocity_command_t safeVelocityCommand = checker->adjustCommandIfNeeded(commandToIssue.velocityCommand, scanPoints, proximityIndices);
+        //             // proximity checker in action. NOTE: Shuold I be using joystick command for this?
+        //             velocity_command_t safeVelocityCommand =
+        //             checker->adjustCommandIfNeeded(commandToIssue.velocityCommand, scanPoints, proximityIndices);
         //             if(checker->hasAdjustedCommand())
         //             {
         //                 commandToIssue.velocityCommand = safeVelocityCommand;
         //                 commandToIssue.commandType     = VELOCITY;
         //             }
-        
+
 #ifdef DEBUG_DIRECTOR
-        std::cout<<"DEBUG DIRECTOR: Setting motor command...\n";
+        std::cout << "DEBUG DIRECTOR: Setting motor command...\n";
 #endif
-        
-        wheelchair->setMotorCommandTarget(commandToIssue); // issuing command to the robot
+
+        wheelchair->setMotorCommandTarget(commandToIssue);   // issuing command to the robot
     }
-    
+
     activeCommand = commandToIssue;
     commandQueue.clear();
     dataLock.unlock();
-    
+
     velocityCommanded = wheelchair->updateCommandedVelocities();
     joystickCommanded = wheelchair->updateCommandedJoystick();
-    
+
     communicator.sendMessage(joystickCommanded);
     communicator.sendMessage(velocityCommanded);
     communicator.sendMessage(proximityIndices);
@@ -167,18 +176,17 @@ void RobotInterfaceDirector::handleData(const motion_command_t& command, const s
     utils::AutoMutex autoLock(dataLock);
 
     commandQueue.push_back(command);
-    
-#ifdef DEBUG_DIRECTOR
-    std::cout<<"DEBUG DIRECTOR: Received command type: "<< command.commandType <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Received command timestamp: "<< command.timestamp <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Received linear  velocity command: "<< command.velocityCommand.linear <<" m/s\n";
-    std::cout<<"DEBUG DIRECTOR: Received angular velocity command: "<< command.velocityCommand.angular <<" rad/s\n";
-    std::cout<<"DEBUG DIRECTOR: Received velocity command timestamp: "<< command.velocityCommand.timestamp <<'\n';
-    std::cout<<"DEBUG DIRECTOR: Received joystick forward: "<< command.joystickCommand.forward <<"\n";
-    std::cout<<"DEBUG DIRECTOR: Received joystick left: "   << command.joystickCommand.left <<"\n";
-    std::cout<<"DEBUG DIRECTOR: Received joystick command timestamp: "<< command.joystickCommand.timestamp <<"\n\n";
-#endif
 
+#ifdef DEBUG_DIRECTOR
+    std::cout << "DEBUG DIRECTOR: Received command type: " << command.commandType << '\n';
+    std::cout << "DEBUG DIRECTOR: Received command timestamp: " << command.timestamp << '\n';
+    std::cout << "DEBUG DIRECTOR: Received linear  velocity command: " << command.velocityCommand.linear << " m/s\n";
+    std::cout << "DEBUG DIRECTOR: Received angular velocity command: " << command.velocityCommand.angular << " rad/s\n";
+    std::cout << "DEBUG DIRECTOR: Received velocity command timestamp: " << command.velocityCommand.timestamp << '\n';
+    std::cout << "DEBUG DIRECTOR: Received joystick forward: " << command.joystickCommand.forward << "\n";
+    std::cout << "DEBUG DIRECTOR: Received joystick left: " << command.joystickCommand.left << "\n";
+    std::cout << "DEBUG DIRECTOR: Received joystick command timestamp: " << command.joystickCommand.timestamp << "\n\n";
+#endif
 }
 
 
@@ -187,10 +195,8 @@ void RobotInterfaceDirector::handleData(const polar_laser_scan_t& scan, const st
     utils::AutoMutex autoLock(dataLock);
 
     // Find the appropriate channel on which this laser data arrived
-    for(auto laserIt = laserScans.begin(), laserEnd = laserScans.end(); laserIt != laserEnd; ++laserIt)
-    {
-        if(laserIt->channel == channel)
-        {
+    for (auto laserIt = laserScans.begin(), laserEnd = laserScans.end(); laserIt != laserEnd; ++laserIt) {
+        if (laserIt->channel == channel) {
             laserIt->scan = scan;
             return;
         }
@@ -222,27 +228,25 @@ motion_command_t RobotInterfaceDirector::selectMotionCommand(void)
     centeredJoystick.timestamp = utils::system_time_us();
 
     motion_command_t commandToIssue(NO_SOURCE, zeroVelocity, centeredJoystick);
-    commandToIssue.timestamp   = utils::system_time_us();
-    
+    commandToIssue.timestamp = utils::system_time_us();
+
 #ifdef DEBUG_DIRECTOR
-    std::cout<<"DEBUG DIRECTOR: Validating command cues...\n";
+    std::cout << "DEBUG DIRECTOR: Validating command cues...\n";
 #endif
-    
+
     // find valid command in the queue and return
-    for(size_t i = 0; i < commandQueue.size(); ++i)
-    {
-        if(filter.validMotionCommand(commandQueue[i]))
-        {
-            
+    for (size_t i = 0; i < commandQueue.size(); ++i) {
+        if (filter.validMotionCommand(commandQueue[i])) {
+
 #ifdef DEBUG_DIRECTOR
-            std::cout<<"DEBUG DIRECTOR: Command validated.\n";
+            std::cout << "DEBUG DIRECTOR: Command validated.\n";
 #endif
-            
+
             commandToIssue = commandQueue[i];
             break;
         }
     }
-    
+
     return commandToIssue;
 }
 
@@ -251,13 +255,12 @@ void RobotInterfaceDirector::convertLaserDataToScanPoints(void)
 {
     scanPoints.clear();
 
-    for(auto laserIt = laserScans.begin(), laserEnd = laserScans.end(); laserIt != laserEnd; ++laserIt)
-    {
+    for (auto laserIt = laserScans.begin(), laserEnd = laserScans.end(); laserIt != laserEnd; ++laserIt) {
         polar_scan_to_cartesian_scan_in_robot_frame(laserIt->scan, cartesianScan, true);
 
         scanPoints.insert(scanPoints.end(), cartesianScan.scanPoints.begin(), cartesianScan.scanPoints.end());
     }
 }
 
-} // namespace robot
-} // namespace vulcan
+}   // namespace robot
+}   // namespace vulcan

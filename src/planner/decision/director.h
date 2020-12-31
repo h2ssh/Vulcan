@@ -8,45 +8,50 @@
 
 
 /**
-* \file     director.h
-* \author   Collin Johnson
-*
-* Declaration of DecisionPlannerDirector.
-*/
+ * \file     director.h
+ * \author   Collin Johnson
+ *
+ * Declaration of DecisionPlannerDirector.
+ */
 
 #ifndef PLANNER_DECISION_DIRECTOR_H
 #define PLANNER_DECISION_DIRECTOR_H
 
-#include <vector>
+#include "planner/decision/params.h"
+#include "planner/decision/planner.h"
+#include "planner/decision/state.h"
 #include "system/director.h"
 #include "utils/condition_variable.h"
 #include "utils/mutex.h"
-#include "planner/decision/planner.h"
-#include "planner/decision/state.h"
-#include "planner/decision/params.h"
+#include <vector>
 
 namespace vulcan
 {
-namespace hssh { class LocalTopoMap;  }
-namespace hssh { class LocalLocation; }
+namespace hssh
+{
+class LocalTopoMap;
+}
+namespace hssh
+{
+class LocalLocation;
+}
 namespace planner
 {
 
 class DecisionCommand;
 
 /**
-* DecisionPlannerDirector coordinates data processing for the DecisionPlanner. It
-* consumes the input, processes it, and sends output in the form of DecisionPlans.
-*/
+ * DecisionPlannerDirector coordinates data processing for the DecisionPlanner. It
+ * consumes the input, processes it, and sends output in the form of DecisionPlans.
+ */
 class DecisionPlannerDirector : public system::Director
 {
 public:
-
     /**
-    * Constructor for DecisionPlannerDirector.
-    *
-    * \param    params          Parameters for the module
-    */
+     * Constructor for DecisionPlannerDirector.
+     *
+     * \param    params          Parameters for the module
+     */
     DecisionPlannerDirector(const utils::CommandLine& commandLine, const utils::ConfigFile& config);
 
     // system::Director interface
@@ -56,17 +61,16 @@ public:
     void shutdown(system::ModuleCommunicator& communicator) override;
 
     // Data handlers
-    void handleData(const DecisionCommand&     command,  const std::string& channel);
-    void handleData(const hssh::LocalTopoMap&  map,      const std::string& channel);
+    void handleData(const DecisionCommand& command, const std::string& channel);
+    void handleData(const hssh::LocalTopoMap& map, const std::string& channel);
     void handleData(const hssh::LocalLocation& location, const std::string& channel);
 
 private:
-
-    utils::Mutex             dataLock;
+    utils::Mutex dataLock;
     utils::ConditionVariable dataTrigger;
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_DECISION_DIRECTOR_H
+#endif   // PLANNER_DECISION_DIRECTOR_H

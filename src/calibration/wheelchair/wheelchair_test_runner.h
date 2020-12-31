@@ -16,16 +16,15 @@ namespace calibration
 {
 
 /**
-* WheelchairTestRunner
-*/
+ * WheelchairTestRunner
+ */
 class WheelchairTestRunner
 {
 public:
-
 private:
 };
 
-}
-}
+}   // namespace calibration
+}   // namespace vulcan
 
-#endif // CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_RUNNER_H
+#endif   // CALIBRATION_WHEELCHAIR_WHEELCHAIR_TEST_RUNNER_H

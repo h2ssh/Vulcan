@@ -7,9 +7,9 @@
 */
 
 
-#include <iostream>
-#include <cassert>
 #include "utils/command_line.h"
+#include <cassert>
+#include <iostream>
 
 //#define ASSERT_ERRORS
 
@@ -21,8 +21,8 @@ struct TestStatus
     TestStatus(int numTests) : totalTests(numTests), testsRun(0), testsPassed(0) { }
 
     const int totalTests;
-    int       testsRun;
-    int       testsPassed;
+    int testsRun;
+    int testsPassed;
 };
 
 
@@ -33,17 +33,20 @@ std::string long_argument(const std::string& argument);
 // Helpers for running tests on the CommandLine
 bool argument_should_exist(const CommandLine& commandLine, const std::string& argument, TestStatus& status);
 bool argument_should_not_exist(const CommandLine& commandLine, const std::string& argument, TestStatus& status);
-bool argument_value_should_equal(const CommandLine& commandLine, const std::string& argument, const std::string& value, TestStatus& status);
+bool argument_value_should_equal(const CommandLine& commandLine,
+                                 const std::string& argument,
+                                 const std::string& value,
+                                 TestStatus& status);
 
 // Helpers for displaying status
 void display_tests_progress(const TestStatus& status);
 
 
 /**
-* command_line_test validates that the CommandLine class works correctly
-* by supplying a hand-coded command-line that consists of both correct and incorrect
-* statements and then checks to see that the arguments are included or excluded properly.
-*/
+ * command_line_test validates that the CommandLine class works correctly
+ * by supplying a hand-coded command-line that consists of both correct and incorrect
+ * statements and then checks to see that the arguments are included or excluded properly.
+ */
 int main(int argc, char** argv)
 {
     const std::string PROCESS_NAME("command_line_test");
@@ -75,16 +78,16 @@ int main(int argc, char** argv)
 
     // First time ever using const_cast<>. It feels dirty.
     // Certainly a better way, but this will do the trick
-    command[0]  = const_cast<char*>(PROCESS_NAME.c_str());
-    command[1]  = const_cast<char*>(ARG0_FULL.c_str());
-    command[2]  = const_cast<char*>(ARG1_FULL.c_str());
-    command[3]  = const_cast<char*>(ARG2.c_str());
-    command[4]  = const_cast<char*>(ARG3.c_str());
-    command[5]  = const_cast<char*>(ARG4_FULL.c_str());
-    command[6]  = const_cast<char*>(ARG5_FULL.c_str());
-    command[7]  = const_cast<char*>(VALUE5.c_str());
-    command[8]  = const_cast<char*>(ARG6_FULL.c_str());
-    command[9]  = const_cast<char*>(VALUE6.c_str());
+    command[0] = const_cast<char*>(PROCESS_NAME.c_str());
+    command[1] = const_cast<char*>(ARG0_FULL.c_str());
+    command[2] = const_cast<char*>(ARG1_FULL.c_str());
+    command[3] = const_cast<char*>(ARG2.c_str());
+    command[4] = const_cast<char*>(ARG3.c_str());
+    command[5] = const_cast<char*>(ARG4_FULL.c_str());
+    command[6] = const_cast<char*>(ARG5_FULL.c_str());
+    command[7] = const_cast<char*>(VALUE5.c_str());
+    command[8] = const_cast<char*>(ARG6_FULL.c_str());
+    command[9] = const_cast<char*>(VALUE6.c_str());
     command[10] = const_cast<char*>(VALUE7.c_str());
     command[11] = const_cast<char*>(ARG7_FULL.c_str());
 
@@ -184,12 +187,9 @@ bool argument_should_exist(const CommandLine& commandLine, const std::string& ar
 {
     bool success = commandLine.argumentExists(argument);
 
-    if(!success)
-    {
-        std::cerr<<"ERROR: Argument "<<argument<<" should exist but doesn't"<<std::endl;
-    }
-    else
-    {
+    if (!success) {
+        std::cerr << "ERROR: Argument " << argument << " should exist but doesn't" << std::endl;
+    } else {
         ++status.testsPassed;
     }
 
@@ -203,12 +203,9 @@ bool argument_should_not_exist(const CommandLine& commandLine, const std::string
 {
     bool success = !commandLine.argumentExists(argument);
 
-    if(!success)
-    {
-        std::cerr<<"ERROR: Argument "<<argument<<" should not exist but does"<<std::endl;
-    }
-    else
-    {
+    if (!success) {
+        std::cerr << "ERROR: Argument " << argument << " should not exist but does" << std::endl;
+    } else {
         ++status.testsPassed;
     }
 
@@ -218,18 +215,18 @@ bool argument_should_not_exist(const CommandLine& commandLine, const std::string
 }
 
 
-bool argument_value_should_equal(const CommandLine& commandLine, const std::string& argument, const std::string& value, TestStatus& status)
+bool argument_value_should_equal(const CommandLine& commandLine,
+                                 const std::string& argument,
+                                 const std::string& value,
+                                 TestStatus& status)
 {
     std::string parsedValue = commandLine.argumentValue(argument);
 
     bool success = value == parsedValue;
 
-    if(!success)
-    {
-        std::cerr<<"ERROR: Parsed argument value was "<<parsedValue<<" but should be "<<value<<std::endl;
-    }
-    else
-    {
+    if (!success) {
+        std::cerr << "ERROR: Parsed argument value was " << parsedValue << " but should be " << value << std::endl;
+    } else {
         ++status.testsPassed;
     }
 
@@ -242,5 +239,6 @@ bool argument_value_should_equal(const CommandLine& commandLine, const std::stri
 // Helpers for displaying status
 void display_tests_progress(const TestStatus& status)
 {
-    std::cout<<"Tests Run: ["<<status.testsRun<<" / "<<status.totalTests<<"] Passed: ["<<status.testsPassed<<" / "<<status.testsRun<<"]"<<std::endl;
+    std::cout << "Tests Run: [" << status.testsRun << " / " << status.totalTests << "] Passed: [" << status.testsPassed
+              << " / " << status.testsRun << "]" << std::endl;
 }

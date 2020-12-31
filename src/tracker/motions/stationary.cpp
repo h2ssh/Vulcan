@@ -8,19 +8,19 @@
 
 
 /**
-* \file     stationary.cpp
-* \author   Collin Johnson
-* 
-* Definition of StationaryMotion.
-*/
+ * \file     stationary.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of StationaryMotion.
+ */
 
 #include "tracker/motions/stationary.h"
 #include "tracker/laser_object.h"
 #include "tracker/motions/visitor.h"
 
-namespace vulcan 
+namespace vulcan
 {
-namespace tracker 
+namespace tracker
 {
 
 StationaryMotion::StationaryMotion(void)
@@ -51,12 +51,9 @@ std::unique_ptr<ObjectMotion> StationaryMotion::clone(void) const
 ObjectMotionStatus StationaryMotion::modelStatus(void) const
 {
     // StationaryMotion is valid as long as the object hasn't moved too far from its initially estimated position
-    if(distance_between_points(position(), initialPosition_) < kMaxStationaryDist_)
-    {
+    if (distance_between_points(position(), initialPosition_) < kMaxStationaryDist_) {
         return ObjectMotionStatus::valid;
-    }
-    else
-    {
+    } else {
         return ObjectMotionStatus::invalid;
     }
 }
@@ -75,5 +72,5 @@ Position StationaryMotion::estimateFuturePosition(int deltaTimeMs) const
     return position();
 }
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan

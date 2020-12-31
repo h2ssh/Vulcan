@@ -8,11 +8,11 @@
 
 
 /**
-* \file     navigation_grid.cpp
-* \author   Jong Jin Park and Collin Johnson
-*
-* Definition of NavigationGrid and NavigationGridBuilder.
-*/
+ * \file     navigation_grid.cpp
+ * \author   Jong Jin Park and Collin Johnson
+ *
+ * Definition of NavigationGrid and NavigationGridBuilder.
+ */
 
 #include "mpepc/grid/navigation_grid.h"
 #include "math/interpolation.h"
@@ -22,21 +22,17 @@ namespace vulcan
 namespace mpepc
 {
 
-float computeNavGridOffset(float fraction); // helper function for interpolation
+float computeNavGridOffset(float fraction);   // helper function for interpolation
 
 ////// Grid ///////////////////////////////////////////////////////////////////////////////////////////////////
-NavigationGrid::NavigationGrid(void)
-: timestamp_(0)
-, id_(2<<30)
-, maxGridCostToGo_(0)
+NavigationGrid::NavigationGrid(void) : timestamp_(0), id_(2 << 30), maxGridCostToGo_(0)
 {
 }
 
 
 void NavigationGrid::setGridCost(const Point<int>& cell, int32_t gridCost)
 {
-    if(isCellInGrid(cell.x, cell.y))
-    {
+    if (isCellInGrid(cell.x, cell.y)) {
         setGridCostNoCheck(cell, gridCost);
     }
 }
@@ -46,8 +42,7 @@ void NavigationGrid::setGridCostNoCheck(const Point<int>& cell, int32_t gridCost
 {
     setValueNoCheck(cell.x, cell.y, gridCost);
 
-    if(gridCost > maxGridCostToGo_)
-    {
+    if (gridCost > maxGridCostToGo_) {
         maxGridCostToGo_ = gridCost;
     }
 }
@@ -55,14 +50,12 @@ void NavigationGrid::setGridCostNoCheck(const Point<int>& cell, int32_t gridCost
 
 float NavigationGrid::getCostToGo(const Point<int>& cell) const
 {
-    if(isCellInGrid(cell))
-    {
+    if (isCellInGrid(cell)) {
         return (getValueNoCheck(cell.x, cell.y) * metersPerCell()) / kStraightCellDist;
-    }
-    else
-    {
+    } else {
         // return some large value for cells out of bound.
-        std::cout<<"WARNING: NavigationGrid: Cell out of bound. Cell location at "<<'('<<cell.x<<','<<cell.y<<')'<<"\n";
+        std::cout << "WARNING: NavigationGrid: Cell out of bound. Cell location at " << '(' << cell.x << ',' << cell.y
+                  << ')' << "\n";
         return getMaxCostToGo();
     }
 }
@@ -81,7 +74,7 @@ float NavigationGrid::getCostToGo(const Point<float>& position) const
     float fractionY = (position.y - bottomLeftCorner.y) * cellsPerMeter();
 
     // fractional location determines which cells to interpolate with
-    int leftIndex   = cell.x - 1 + static_cast<int>(round(fractionX));
+    int leftIndex = cell.x - 1 + static_cast<int>(round(fractionX));
     int bottomIndex = cell.y - 1 + static_cast<int>(round(fractionY));
 
     // fractional location from the bottom left cell to be interpolated
@@ -91,10 +84,10 @@ float NavigationGrid::getCostToGo(const Point<float>& position) const
 
     // values of the cells to be interpolated
     float values[4];
-    values[0] = getCostToGo(Point<int>(leftIndex,   bottomIndex));
-    values[1] = getCostToGo(Point<int>(leftIndex+1, bottomIndex));
-    values[2] = getCostToGo(Point<int>(leftIndex,   bottomIndex+1));
-    values[3] = getCostToGo(Point<int>(leftIndex+1, bottomIndex+1));
+    values[0] = getCostToGo(Point<int>(leftIndex, bottomIndex));
+    values[1] = getCostToGo(Point<int>(leftIndex + 1, bottomIndex));
+    values[2] = getCostToGo(Point<int>(leftIndex, bottomIndex + 1));
+    values[3] = getCostToGo(Point<int>(leftIndex + 1, bottomIndex + 1));
 
     return math::unit_bilinear_interpolation(offset, values);
 }
@@ -106,10 +99,9 @@ float NavigationGrid::getMaxCostToGo(void) const
 }
 
 
-bool NavigationGrid::isPointInGrid(Point< float > position, float margin_m) const
+bool NavigationGrid::isPointInGrid(Point<float> position, float margin_m) const
 {
-    if(getWidthInMeters() < 2.0f * margin_m)
-    {
+    if (getWidthInMeters() < 2.0f * margin_m) {
         return false;
     }
 
@@ -118,10 +110,8 @@ bool NavigationGrid::isPointInGrid(Point< float > position, float margin_m) cons
     int height = getHeightInCells();
     int marginInCells = margin_m / metersPerCell();
 
-    return (cell.x < (width - marginInCells)) &&
-           (cell.x > marginInCells) &&
-           (cell.y < (height - marginInCells)) &&
-           (cell.y > marginInCells);
+    return (cell.x < (width - marginInCells)) && (cell.x > marginInCells) && (cell.y < (height - marginInCells))
+      && (cell.y > marginInCells);
 }
 
 
@@ -134,8 +124,8 @@ Point<int> NavigationGrid::positionToCell(const Point<float>& position) const
 Point<float> NavigationGrid::cellToPosition(const Point<int>& cell) const
 {
     Point<float> cellCenter;
-    cellCenter.x = getBottomLeft().x + (cell.x + 0.5)*metersPerCell();
-    cellCenter.y = getBottomLeft().y + (cell.y + 0.5)*metersPerCell();
+    cellCenter.x = getBottomLeft().x + (cell.x + 0.5) * metersPerCell();
+    cellCenter.y = getBottomLeft().y + (cell.y + 0.5) * metersPerCell();
 
     return cellCenter;
 }
@@ -153,23 +143,18 @@ float computeNavGridOffset(float fraction)
     float offset = (fraction < 0.5f) ? (fraction + 0.5f) : (fraction - 0.5f);
 
     // clamping to prevent floating point error
-    if(offset > 1.0f)
-    {
-        std::cout<<"WARNING: NavigationGrid: Offset out of bound: "<<offset<<"\n";
+    if (offset > 1.0f) {
+        std::cout << "WARNING: NavigationGrid: Offset out of bound: " << offset << "\n";
         return 1.0f;
-    }
-    else if(offset < 0.0f)
-    {
-        std::cout<<"WARNING: NavigationGrid: Offset out of bound: "<<offset<<"\n";
+    } else if (offset < 0.0f) {
+        std::cout << "WARNING: NavigationGrid: Offset out of bound: " << offset << "\n";
         return 0.0f;
-    }
-    else
-    {
+    } else {
         return offset;
     }
 
     return offset;
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.cpp
-* \author   Collin Johnson
-*
-* Definition of load_state_estimator_module_params and associated functions.
-*/
+ * \file     params.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of load_state_estimator_module_params and associated functions.
+ */
 
 #include "robot/state/params.h"
 #include "utils/config_file.h"
@@ -23,7 +23,7 @@ namespace vulcan
 namespace robot
 {
 
-const std::string MODULE_HEADING   ("StateEstimatorModuleParameters");
+const std::string MODULE_HEADING("StateEstimatorModuleParameters");
 const std::string MONITOR_TYPES_KEY("monitor_types");
 const std::string UPDATE_PERIOD_KEY("update_period_ms");
 
@@ -37,12 +37,12 @@ int module_update_period_ms(const utils::ConfigFile& config)
 state_estimator_module_params_t load_state_estimator_module_params(const utils::ConfigFile& config)
 {
     state_estimator_module_params_t params;
-    
-    params.monitorTypes   = utils::split_into_strings(config.getValueAsString(MODULE_HEADING, MONITOR_TYPES_KEY), ',');
+
+    params.monitorTypes = utils::split_into_strings(config.getValueAsString(MODULE_HEADING, MONITOR_TYPES_KEY), ',');
     params.updatePeriodMs = config.getValueAsInt32(MODULE_HEADING, UPDATE_PERIOD_KEY);
-    
+
     return params;
 }
 
-} // namespace robot
-} // namespace vulcan
+}   // namespace robot
+}   // namespace vulcan

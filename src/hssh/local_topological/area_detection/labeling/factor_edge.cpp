@@ -8,20 +8,20 @@
 
 
 /**
-* \file     factor_edge.cpp
-* \author   Collin Johnson
-* 
-* Definition of FactorEdge.
-*/
+ * \file     factor_edge.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of FactorEdge.
+ */
 
 #include "hssh/local_topological/area_detection/labeling/factor_edge.h"
 #include <cassert>
 
-namespace vulcan 
+namespace vulcan
 {
-namespace hssh 
+namespace hssh
 {
-    
+
 int dir_idx(MsgDir direction)
 {
     return static_cast<int>(direction);
@@ -30,8 +30,7 @@ int dir_idx(MsgDir direction)
 
 std::ostream& operator<<(std::ostream& out, MsgDir dir)
 {
-    switch(dir)
-    {
+    switch (dir) {
     case MsgDir::to_var:
         out << "to_var";
         break;
@@ -45,8 +44,7 @@ std::ostream& operator<<(std::ostream& out, MsgDir dir)
 
 std::ostream& operator<<(std::ostream& out, MsgStatus status)
 {
-    switch(status)
-    {
+    switch (status) {
     case MsgStatus::unset:
         out << "unset";
         break;
@@ -60,16 +58,15 @@ std::ostream& operator<<(std::ostream& out, MsgStatus status)
     return out;
 }
 
-    
-FactorEdge::FactorEdge(int varId, int factorId, int numStates)
-: numStates_(numStates)
+
+FactorEdge::FactorEdge(int varId, int factorId, int numStates) : numStates_(numStates)
 {
     ids_[dir_idx(MsgDir::to_var)] = varId;
     ids_[dir_idx(MsgDir::to_factor)] = factorId;
-    
+
     status_[0] = MsgStatus::unset;
     status_[1] = MsgStatus::unset;
-    
+
     msgs_[0] = Vector(numStates);
     msgs_[1] = Vector(numStates);
 }
@@ -102,13 +99,11 @@ MsgStatus FactorEdge::status(MsgDir direction) const
 bool FactorEdge::setMessage(MsgDir direction, const Vector& message)
 {
     assert(msgs_[dir_idx(direction)].n_elem == message.n_elem);
-    
+
     Vector diff = arma::abs(message - msgs_[dir_idx(direction)]);
-    bool shouldChange = (changeThreshold_ == 0.0)
-        || arma::any(diff > changeThreshold_);
-    
-    if(shouldChange)
-    {
+    bool shouldChange = (changeThreshold_ == 0.0) || arma::any(diff > changeThreshold_);
+
+    if (shouldChange) {
         msgs_[dir_idx(direction)] = message;
         setStatus(direction, MsgStatus::fresh);
     }
@@ -131,5 +126,5 @@ void FactorEdge::setMessagesToUnity(void)
     status_[1] = MsgStatus::fresh;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

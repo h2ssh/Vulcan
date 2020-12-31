@@ -8,11 +8,11 @@
 
 
 /**
-* \file     area_extent_renderer.h
-* \author   Collin Johnson
-*
-* Declaration of AreaExtentRenderer.
-*/
+ * \file     area_extent_renderer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of AreaExtentRenderer.
+ */
 
 #ifndef UI_COMPONENTS_AREA_EXTENT_RENDERER_H
 #define UI_COMPONENTS_AREA_EXTENT_RENDERER_H
@@ -21,40 +21,41 @@
 
 namespace vulcan
 {
-namespace hssh { class AreaExtent; }
+namespace hssh
+{
+class AreaExtent;
+}
 namespace ui
 {
 
 class GLColor;
 
 /**
-* AreaExtentRenderer
-*/
+ * AreaExtentRenderer
+ */
 class AreaExtentRenderer
 {
 public:
-
     /**
-    * renderExtentCells draws the extent using the contained cells.
-    */
+     * renderExtentCells draws the extent using the contained cells.
+     */
     void renderExtentCells(const hssh::AreaExtent& extent, float metersPerCell, const GLColor& color) const;
 
     /**
-    * renderExtentRectangle draws the extent using the rough rectangle boundary.
-    */
+     * renderExtentRectangle draws the extent using the rough rectangle boundary.
+     */
     void renderExtentRectangle(const hssh::AreaExtent& extent, const GLColor& color) const;
 
     /**
-    * renderExtentPolygon draws the extent using the convex hull polygon of the extent.
-    */
+     * renderExtentPolygon draws the extent using the convex hull polygon of the extent.
+     */
     void renderExtentPolygon(const hssh::AreaExtent& extent, const GLColor& color) const;
 
 private:
-
     mutable std::vector<float> extentVertices_;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_COMPONENTS_AREA_EXTENT_RENDERER_H
+#endif   // UI_COMPONENTS_AREA_EXTENT_RENDERER_H

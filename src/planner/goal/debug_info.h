@@ -8,17 +8,17 @@
 
 
 /**
-* \file     debug_info.h
-* \author   Collin Johnson
-*
-* Declaration of graph_search_debug_info_t and goal_debug_info_t.
-*/
+ * \file     debug_info.h
+ * \author   Collin Johnson
+ *
+ * Declaration of graph_search_debug_info_t and goal_debug_info_t.
+ */
 
 #ifndef PLANNER_GOAL_DEBUG_INFO_H
 #define PLANNER_GOAL_DEBUG_INFO_H
 
-#include "hssh/global_topological/graph.h"
 #include "graph/path.h"
+#include "hssh/global_topological/graph.h"
 #include <vector>
 
 namespace vulcan
@@ -30,7 +30,7 @@ struct graph_search_debug_info_t
 {
     std::vector<hssh::TopologicalVertex> expansionSequence;
     graph::Path<hssh::TopologicalVertex> path;
-    hssh::TopologicalGraph               graph;
+    hssh::TopologicalGraph graph;
 };
 
 struct goal_debug_info_t
@@ -38,7 +38,7 @@ struct goal_debug_info_t
     graph_search_debug_info_t searchInfo;
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_GOAL_DEBUG_INFO_H
+#endif   // PLANNER_GOAL_DEBUG_INFO_H

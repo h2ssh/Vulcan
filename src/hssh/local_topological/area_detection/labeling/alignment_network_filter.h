@@ -8,14 +8,14 @@
 
 
 /**
-* \file     alignment_network_filter.h
-* \author   Collin Johnson
-*
-* Definition of class templates for various filters for the AlignmentNetwork graph:
-*
-*   - NonDestEdge/Vertex : filters to create a graph containing only path segments and decision points
-*   - ActiveEdge/Vertex : filters to create a subset of the graph with only the specified nodes
-*/
+ * \file     alignment_network_filter.h
+ * \author   Collin Johnson
+ *
+ * Definition of class templates for various filters for the AlignmentNetwork graph:
+ *
+ *   - NonDestEdge/Vertex : filters to create a graph containing only path segments and decision points
+ *   - ActiveEdge/Vertex : filters to create a subset of the graph with only the specified nodes
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_FILTER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_FILTER_H
@@ -37,8 +37,8 @@ struct NonDestEdge
     template <typename Edge>
     bool operator()(Edge edge) const
     {
-        return (network->assignedType(boost::source(edge, *graph)) != HypothesisType::kDest) &&
-            (network->assignedType(boost::target(edge, *graph)) != HypothesisType::kDest);
+        return (network->assignedType(boost::source(edge, *graph)) != HypothesisType::kDest)
+          && (network->assignedType(boost::target(edge, *graph)) != HypothesisType::kDest);
     }
 };
 
@@ -67,15 +67,13 @@ struct NonSplitActiveEdge
     bool operator()(Edge edge) const
     {
         bool isPartOfActive = utils::contains(*activeIds, boost::source(edge, *graph))
-            || utils::contains(*activeIds, boost::target(edge, *graph));
+          || utils::contains(*activeIds, boost::target(edge, *graph));
         bool isNotSplit = (splitId != boost::source(edge, *graph)) && (splitId != boost::target(edge, *graph));
 
         return isPartOfActive && isNotSplit;
     }
 
-    explicit NonSplitActiveEdge(const std::vector<int>* activeIds = nullptr,
-                                int splitId = 0,
-                                Graph* graph = nullptr)
+    explicit NonSplitActiveEdge(const std::vector<int>* activeIds = nullptr, int splitId = 0, Graph* graph = nullptr)
     : activeIds(activeIds)
     , splitId(splitId)
     , graph(graph)
@@ -94,15 +92,16 @@ struct NonSplitGatewayActiveEdge
     bool operator()(Edge edge) const
     {
         bool isPartOfActive = utils::contains(*activeIds, boost::source(edge, *graph))
-            || utils::contains(*activeIds, boost::target(edge, *graph));
-        bool isSplit = ((splitIds.first == boost::source(edge, *graph)) && (splitIds.second == boost::target(edge, *graph)))
-            || ((splitIds.second == boost::source(edge, *graph)) && (splitIds.first == boost::target(edge, *graph)));
+          || utils::contains(*activeIds, boost::target(edge, *graph));
+        bool isSplit =
+          ((splitIds.first == boost::source(edge, *graph)) && (splitIds.second == boost::target(edge, *graph)))
+          || ((splitIds.second == boost::source(edge, *graph)) && (splitIds.first == boost::target(edge, *graph)));
 
         return isPartOfActive && !isSplit;
     }
 
     explicit NonSplitGatewayActiveEdge(const std::vector<int>* activeIds = nullptr,
-                                       std::pair<std::size_t, std::size_t> splitIds = { -1, -1 },
+                                       std::pair<std::size_t, std::size_t> splitIds = {-1, -1},
                                        Graph* graph = nullptr)
     : activeIds(activeIds)
     , splitIds(splitIds)
@@ -123,8 +122,7 @@ struct ActiveVertex
         return utils::contains(*activeIds, vertex);
     }
 
-    explicit ActiveVertex(const std::vector<int>* activeIds = nullptr,
-                          Graph* graph = nullptr)
+    explicit ActiveVertex(const std::vector<int>* activeIds = nullptr, Graph* graph = nullptr)
     : activeIds(activeIds)
     , graph(graph)
     {
@@ -146,12 +144,7 @@ struct InSetVertex
         return idSet->find(vertex) != idSet->end();
     }
 
-    explicit InSetVertex(const IdSet* idSet= nullptr,
-                         Graph* graph = nullptr)
-    : idSet(idSet)
-    , graph(graph)
-    {
-    }
+    explicit InSetVertex(const IdSet* idSet = nullptr, Graph* graph = nullptr) : idSet(idSet), graph(graph) { }
 };
 
 template <class Graph>
@@ -166,15 +159,10 @@ struct InSetEdge
     bool operator()(Edge edge) const
     {
         return (idSet->find(boost::source(edge, *graph)) != idSet->end())
-            && (idSet->find(boost::target(edge, *graph)) != idSet->end());
+          && (idSet->find(boost::target(edge, *graph)) != idSet->end());
     }
 
-    explicit InSetEdge(const IdSet* idSet = nullptr,
-                       Graph* graph = nullptr)
-    : idSet(idSet)
-    , graph(graph)
-    {
-    }
+    explicit InSetEdge(const IdSet* idSet = nullptr, Graph* graph = nullptr) : idSet(idSet), graph(graph) { }
 };
 
 //////////////////// Functors for selecting anything not in a subset of the vertices //////////////
@@ -190,8 +178,7 @@ struct InactiveVertex
         return !utils::contains(*inactiveIds, vertex);
     }
 
-    explicit InactiveVertex(const std::vector<int>* inactiveIds = nullptr,
-                            Graph* graph = nullptr)
+    explicit InactiveVertex(const std::vector<int>* inactiveIds = nullptr, Graph* graph = nullptr)
     : inactiveIds(inactiveIds)
     , graph(graph)
     {
@@ -208,18 +195,17 @@ struct InactiveEdge
     bool operator()(Edge edge) const
     {
         return !utils::contains(*inactiveIds, boost::source(edge, *graph))
-            && !utils::contains(*inactiveIds, boost::target(edge, *graph));
+          && !utils::contains(*inactiveIds, boost::target(edge, *graph));
     }
 
-    explicit InactiveEdge(const std::vector<int>* inactiveIds = nullptr,
-                          Graph* graph = nullptr)
+    explicit InactiveEdge(const std::vector<int>* inactiveIds = nullptr, Graph* graph = nullptr)
     : inactiveIds(inactiveIds)
     , graph(graph)
     {
     }
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_FILTER_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_FILTER_H

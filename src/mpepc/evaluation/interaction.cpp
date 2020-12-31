@@ -8,18 +8,18 @@
 
 
 /**
-* \file     interaction.cpp
-* \author   Collin Johnson
-*
-* Definition of find_interactions.
-*/
+ * \file     interaction.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of find_interactions.
+ */
 
 #include "mpepc/evaluation/interaction.h"
-#include "mpepc/evaluation/mpepc_log.h"
-#include "mpepc/social/social_norm_utils.h"
 #include "hssh/local_topological/area.h"
 #include "hssh/local_topological/local_topo_map.h"
 #include "math/interpolation.h"
+#include "mpepc/evaluation/mpepc_log.h"
+#include "mpepc/social/social_norm_utils.h"
 #include <boost/range/iterator_range.hpp>
 #include <tuple>
 
@@ -28,9 +28,8 @@ namespace vulcan
 namespace mpepc
 {
 
-std::tuple<pose_t, velocity_t> motion_state_at_time(int64_t time,
-                                                                  MPEPCLog::motion_state_iterator begin,
-                                                                  MPEPCLog::motion_state_iterator end);
+std::tuple<pose_t, velocity_t>
+  motion_state_at_time(int64_t time, MPEPCLog::motion_state_iterator begin, MPEPCLog::motion_state_iterator end);
 interaction_t create_interaction(const pose_t& pose,
                                  const velocity_t& velocity,
                                  const tracker::DynamicObjectCollection& objects,
@@ -42,7 +41,6 @@ bool is_interacting_with_object(const pose_t& pose,
                                 const tracker::DynamicObject& object,
                                 double maxDistance,
                                 double ignoreConeAngle);
-
 
 
 std::vector<interaction_t> find_interactions(MPEPCLog& log,
@@ -61,25 +59,17 @@ std::vector<interaction_t> find_interactions(MPEPCLog& log,
     pose_t pose;
     velocity_t velocity;
 
-    while(startTimeUs < log.durationUs())
-    {
+    while (startTimeUs < log.durationUs()) {
         log.loadTimeRange(startTimeUs, startTimeUs + (2 * kChunkDurationUs));
 
         // The objects are detected at a lower rate than the poses, so for each object collection, create an interaction
         // using the interpolated pose
-        for(auto& objs : boost::make_iterator_range(log.beginObjects(startTimeUs),
-                                                    log.endObjects(startTimeUs + kChunkDurationUs)))
-        {
-            std::tie(pose, velocity) = motion_state_at_time(objs.timestamp(),
-                                                            log.beginMotionState(),
-                                                            log.endMotionState());
-            interactions.push_back(create_interaction(pose,
-                                                      velocity,
-                                                      objs,
-                                                      topoMap,
-                                                      numLateralBins,
-                                                      maxDistance,
-                                                      ignoreConeAngle));
+        for (auto& objs : boost::make_iterator_range(log.beginObjects(startTimeUs),
+                                                     log.endObjects(startTimeUs + kChunkDurationUs))) {
+            std::tie(pose, velocity) =
+              motion_state_at_time(objs.timestamp(), log.beginMotionState(), log.endMotionState());
+            interactions.push_back(
+              create_interaction(pose, velocity, objs, topoMap, numLateralBins, maxDistance, ignoreConeAngle));
         }
 
         startTimeUs += kChunkDurationUs;
@@ -89,19 +79,15 @@ std::vector<interaction_t> find_interactions(MPEPCLog& log,
 }
 
 
-std::tuple<pose_t, velocity_t> motion_state_at_time(int64_t time,
-                                                                  MPEPCLog::motion_state_iterator begin,
-                                                                  MPEPCLog::motion_state_iterator end)
+std::tuple<pose_t, velocity_t>
+  motion_state_at_time(int64_t time, MPEPCLog::motion_state_iterator begin, MPEPCLog::motion_state_iterator end)
 {
     // If there's nothing to interpolate, then return one of the ends
     assert(begin != end);
 
-    if(time <= begin->timestamp)
-    {
+    if (time <= begin->timestamp) {
         return std::make_tuple(begin->pose, begin->velocity);
-    }
-    else if(time >= (end - 1)->timestamp)
-    {
+    } else if (time >= (end - 1)->timestamp) {
         return std::make_tuple((end - 1)->pose, (end - 1)->velocity);
     }
 
@@ -111,11 +97,9 @@ std::tuple<pose_t, velocity_t> motion_state_at_time(int64_t time,
     pose.timestamp = time;
     velocity.timestamp = time;
 
-    for(auto next = begin + 1; next < end; ++begin, ++next)
-    {
+    for (auto next = begin + 1; next < end; ++begin, ++next) {
         // Find the range to interpolate between.
-        if((begin->timestamp <= time) && (time <= next->timestamp))
-        {
+        if ((begin->timestamp <= time) && (time <= next->timestamp)) {
             // Ensure the timestamps are converted, since MPEPCLog doesn't deep-change the time
             pose_t startPose = begin->pose;
             startPose.timestamp = begin->timestamp;
@@ -148,12 +132,9 @@ interaction_t create_interaction(const pose_t& pose,
     interaction.velocity = velocity;
     interaction.pose = pose;
 
-    for(auto obj : objects)
-    {
-        if(is_interacting_with_object(pose, *obj, maxDistance, ignoreConeAngle))
-        {
-            if(auto agent = convert_to_topo_agent(obj, topoMap))
-            {
+    for (auto obj : objects) {
+        if (is_interacting_with_object(pose, *obj, maxDistance, ignoreConeAngle)) {
+            if (auto agent = convert_to_topo_agent(obj, topoMap)) {
                 interaction.agents.push_back(*agent);
             }
         }
@@ -161,12 +142,9 @@ interaction_t create_interaction(const pose_t& pose,
 
     auto robotAgent = create_agent_for_robot(motion_state_t(pose, velocity), topoMap);
 
-    if(topoMap.pathSegmentWithId(robotAgent.areaId))
-    {
+    if (topoMap.pathSegmentWithId(robotAgent.areaId)) {
         interaction.pathSituation = PathSituation(robotAgent, interaction.agents, numLateralBins, topoMap);
-    }
-    else if(is_about_to_transition(robotAgent, topoMap))
-    {
+    } else if (is_about_to_transition(robotAgent, topoMap)) {
         interaction.placeSituation = PlaceSituation(robotAgent, interaction.agents, topoMap);
     }
 
@@ -183,12 +161,11 @@ bool is_interacting_with_object(const pose_t& pose,
                                 double ignoreConeAngle)
 {
     bool is_close_enough = distance_between_points(pose.toPoint(), object.position()) < maxDistance;
-    bool is_in_cone = angle_diff_abs(angle_to_point(pose.toPoint(), object.position()), pose.theta)
-        < ignoreConeAngle;
+    bool is_in_cone = angle_diff_abs(angle_to_point(pose.toPoint(), object.position()), pose.theta) < ignoreConeAngle;
 
     return is_close_enough && is_in_cone;
 }
 
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

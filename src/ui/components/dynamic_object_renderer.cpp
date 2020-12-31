@@ -8,23 +8,23 @@
 
 
 /**
-* \file     dynamic_object_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of DynamicObjectRenderer.
-*/
+ * \file     dynamic_object_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DynamicObjectRenderer.
+ */
 
 #include "ui/components/dynamic_object_renderer.h"
-#include "ui/components/object_boundary_renderer.h"
+#include "tracker/dynamic_object.h"
+#include "tracker/dynamic_object_collection.h"
+#include "tracker/objects/person.h"
+#include "tracker/objects/pivoting_object.h"
+#include "tracker/objects/rigid.h"
+#include "tracker/objects/sliding_object.h"
+#include "tracker/objects/unclassified.h"
 #include "ui/common/color_interpolator.h"
 #include "ui/common/gl_shapes.h"
-#include "tracker/dynamic_object_collection.h"
-#include "tracker/dynamic_object.h"
-#include "tracker/objects/person.h"
-#include "tracker/objects/rigid.h"
-#include "tracker/objects/unclassified.h"
-#include "tracker/objects/pivoting_object.h"
-#include "tracker/objects/sliding_object.h"
+#include "ui/components/object_boundary_renderer.h"
 #include <GL/gl.h>
 #include <boost/variant/static_visitor.hpp>
 
@@ -87,8 +87,7 @@ void DynamicObjectRenderer::renderCollectionStateEstimates(const tracker::Dynami
 }
 
 
-void DynamicObjectRenderer::renderObjectStateEstimate(const tracker::DynamicObject& object,
-                                                      uint32_t uncertaintyOptions)
+void DynamicObjectRenderer::renderObjectStateEstimate(const tracker::DynamicObject& object, uint32_t uncertaintyOptions)
 {
     uncertaintyFlags_ = uncertaintyOptions;
     object.accept(*this);
@@ -100,18 +99,16 @@ void DynamicObjectRenderer::renderObjectGoals(const tracker::DynamicObject& obje
     auto goals = object.goals();
 
     // If not showing the full distribution, just erase all not-the-best goals
-    if(!showFullDistribution)
-    {
+    if (!showFullDistribution) {
         goals = tracker::ObjectGoalDistribution{goals.bestGoal()};
     }
 
     GoalRenderer r;
     r.drawDistribution = showFullDistribution;
 
-    ValueColorInterpolator interpolator(GLColor(233./255, 132./255, 255./255, 0.5));
+    ValueColorInterpolator interpolator(GLColor(233. / 255, 132. / 255, 255. / 255, 0.5));
 
-    for(auto& g : goals)
-    {
+    for (auto& g : goals) {
         r.color = interpolator.calculateColor(g.probability());
         r.objectPosition = object.position();
         auto dest = g.destination();
@@ -166,14 +163,14 @@ void DynamicObjectRenderer::drawObject(const tracker::DynamicObject& object, con
 
 void DynamicObjectRenderer::drawBoundary(const tracker::ObjectBoundary& boundary, const GLColor& color, bool filled)
 {
-//     if(filled)
-//     {
-//         boundary.visitShape(ObjectBoundaryRenderer(color));
-//     }
-//     else
-//     {
-//         boundary.visitShape(OutlineObjectBoundaryRenderer(color));
-//     }
+    //     if(filled)
+    //     {
+    //         boundary.visitShape(ObjectBoundaryRenderer(color));
+    //     }
+    //     else
+    //     {
+    //         boundary.visitShape(OutlineObjectBoundaryRenderer(color));
+    //     }
 
     color.set();
     gl_draw_line_circle(boundary.circleApproximation().center(), boundary.circleApproximation().radius());
@@ -196,8 +193,7 @@ void DynamicObjectRenderer::drawVelocity(const tracker::DynamicObject& object, c
     glVertex2f(0.0f, 0.0f);
     glVertex2f(motionState.xVel, motionState.yVel);
 
-    if(uncertaintyFlags_ & kShowAcceleration)
-    {
+    if (uncertaintyFlags_ & kShowAcceleration) {
         accelColor.set();
         glVertex2f(0.0f, 0.0f);
         glVertex2f(motionState.xAccel, motionState.yAccel);
@@ -215,23 +211,20 @@ void DynamicObjectRenderer::drawRigidObjectState(const tracker::RigidObject& obj
     // Draw uncertainty
     auto stateToDraw = (uncertaintyFlags_ & kShowFastState) ? object.fastMotionState() : object.slowMotionState();
 
-    if(uncertaintyFlags_ & (kShowAccelerationUncertainty | kShowVelocityUncertainty | kShowPositionUncertainty))
-    {
+    if (uncertaintyFlags_ & (kShowAccelerationUncertainty | kShowVelocityUncertainty | kShowPositionUncertainty)) {
         Vector mean(2);
         mean[msi::xIndex] = stateToDraw[msi::xIndex];
         mean[msi::yIndex] = stateToDraw[msi::yIndex];
         Matrix cov;
-        if(uncertaintyFlags_ & kShowPositionUncertainty)
-        {
+        if (uncertaintyFlags_ & kShowPositionUncertainty) {
             cov = stateToDraw.getCovariance().submat(msi::xIndex, msi::xIndex, msi::yIndex, msi::yIndex);
-        }
-        else if(uncertaintyFlags_ & kShowVelocityUncertainty)
-        {
+        } else if (uncertaintyFlags_ & kShowVelocityUncertainty) {
             cov = stateToDraw.getCovariance().submat(msi::velXIndex, msi::velXIndex, msi::velYIndex, msi::velYIndex);
-        }
-        else if(uncertaintyFlags_ & kShowAccelerationUncertainty)
-        {
-            cov = stateToDraw.getCovariance().submat(msi::accelXIndex, msi::accelXIndex, msi::accelYIndex, msi::accelYIndex);
+        } else if (uncertaintyFlags_ & kShowAccelerationUncertainty) {
+            cov = stateToDraw.getCovariance().submat(msi::accelXIndex,
+                                                     msi::accelXIndex,
+                                                     msi::accelYIndex,
+                                                     msi::accelYIndex);
         }
 
         MultivariateGaussian uncertainty(mean, cov);
@@ -250,8 +243,7 @@ void DynamicObjectRenderer::drawRigidObjectState(const tracker::RigidObject& obj
     glVertex2f(0.0f, 0.0f);
     glVertex2f(stateToDraw[msi::velXIndex], stateToDraw[msi::velYIndex]);
 
-    if(uncertaintyFlags_ & kShowAcceleration)
-    {
+    if (uncertaintyFlags_ & kShowAcceleration) {
         GLColor accelColor(200, 0, 0, 150);
         accelColor.set();
         glVertex2f(0.0f, 0.0f);
@@ -262,5 +254,5 @@ void DynamicObjectRenderer::drawRigidObjectState(const tracker::RigidObject& obj
     glPopMatrix();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

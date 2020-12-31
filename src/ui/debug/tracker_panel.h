@@ -8,11 +8,11 @@
 
 
 /**
-* \file     tracker_panel.h
-* \author   Collin Johnson
-*
-* Declaration of TrackerPanel.
-*/
+ * \file     tracker_panel.h
+ * \author   Collin Johnson
+ *
+ * Declaration of TrackerPanel.
+ */
 
 #ifndef UI_DEBUG_TRACKER_PANEL_H
 #define UI_DEBUG_TRACKER_PANEL_H
@@ -25,15 +25,15 @@ namespace vulcan
 namespace ui
 {
 
-class  TrackerDisplayWidget;
+class TrackerDisplayWidget;
 struct ui_params_t;
 
 struct tracker_panel_widgets_t
 {
     TrackerDisplayWidget* displayWidget = nullptr;
 
-    wxCheckBox* showLaserObjectsBox     = nullptr;
-    wxCheckBox* showLaserPointsBox      = nullptr;
+    wxCheckBox* showLaserObjectsBox = nullptr;
+    wxCheckBox* showLaserPointsBox = nullptr;
     wxCheckBox* showLaserUncertaintyBox = nullptr;
     wxRadioBox* boundaryToShowRadio = nullptr;
 
@@ -49,18 +49,17 @@ struct tracker_panel_widgets_t
 };
 
 /**
-* TrackerPanel
-*/
+ * TrackerPanel
+ */
 class TrackerPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for TrackerPanel.
-    *
-    * \param    params          Parameters controlling the rendering
-    * \param    widgets         Widgets in the panel
-    */
+     * Constructor for TrackerPanel.
+     *
+     * \param    params          Parameters controlling the rendering
+     * \param    widgets         Widgets in the panel
+     */
     TrackerPanel(const ui_params_t& params, const tracker_panel_widgets_t& widgets);
 
     // UIPanel interface
@@ -72,7 +71,6 @@ public:
     virtual void loadSettings(const utils::ConfigFile& config);
 
 private:
-
     tracker_panel_widgets_t widgets_;
 
     void followRobotChecked(wxCommandEvent& event);
@@ -96,7 +94,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_TRACKER_PANEL_H
+#endif   // UI_DEBUG_TRACKER_PANEL_H

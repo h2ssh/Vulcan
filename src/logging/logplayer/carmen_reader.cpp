@@ -8,11 +8,11 @@
 
 
 /**
-* \file     carmen_reader.cpp
-* \author   Collin Johnson
-*
-* Definition of CarmenReader.
-*/
+ * \file     carmen_reader.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of CarmenReader.
+ */
 
 #include "logging/logplayer/carmen_reader.h"
 #include "core/angle_functions.h"
@@ -32,13 +32,13 @@ namespace logplayer
 {
 
 const std::string OLD_LASER_HEADING("FLASER");
-const std::string PARAM_HEADING    ("PARAM");
+const std::string PARAM_HEADING("PARAM");
 const std::string ROBOT_LASER_HEADING("ROBOTLASER1");
 const std::string COMMENT_HEADING("#");
 
-const std::string PARAM_ROBOT_LENGTH  ("robot_length");
-const std::string PARAM_ROBOT_WIDTH   ("robot_width");
-const std::string PARAM_LASER_OFFSET  ("robot_frontlaser_offset");
+const std::string PARAM_ROBOT_LENGTH("robot_length");
+const std::string PARAM_ROBOT_WIDTH("robot_width");
+const std::string PARAM_LASER_OFFSET("robot_frontlaser_offset");
 const std::string PARAM_LASER_MAXRANGE("robot_front_laser_max");
 
 
@@ -55,8 +55,7 @@ bool CarmenReader::convertLogToFrames(const std::string& filename)
 {
     std::ifstream log(filename);
 
-    if (!log.is_open())
-    {
+    if (!log.is_open()) {
         std::cerr << "ERROR::CarmenReader: Failed to open log " << filename << '\n';
         return false;
     }
@@ -68,15 +67,14 @@ bool CarmenReader::convertLogToFrames(const std::string& filename)
 
     std::string messageType;
 
-    for (std::string message; std::getline(log, message);)
-    {
+    for (std::string message; std::getline(log, message);) {
         std::istringstream in(message);
         in >> messageType;
 
         processMessage(messageTypeFromString(messageType), in);
     }
 
-//     sortFramesByTimestamp();
+    //     sortFramesByTimestamp();
 
     return true;
 }
@@ -84,20 +82,13 @@ bool CarmenReader::convertLogToFrames(const std::string& filename)
 
 CarmenReader::carmen_message_type_t CarmenReader::messageTypeFromString(const std::string& typeString)
 {
-    if(typeString == OLD_LASER_HEADING)
-    {
+    if (typeString == OLD_LASER_HEADING) {
         return OLD_LASER_MESSAGE;
-    }
-    else if(typeString == PARAM_HEADING)
-    {
+    } else if (typeString == PARAM_HEADING) {
         return PARAM_MESSAGE;
-    }
-    else if(typeString == ROBOT_LASER_HEADING)
-    {
+    } else if (typeString == ROBOT_LASER_HEADING) {
         return ROBOT_LASER_MESSAGE;
-    }
-    else
-    {
+    } else {
         return UNKNOWN_MESSAGE;
     }
 }
@@ -105,8 +96,7 @@ CarmenReader::carmen_message_type_t CarmenReader::messageTypeFromString(const st
 
 void CarmenReader::processMessage(carmen_message_type_t type, std::istringstream& message)
 {
-    switch(type)
-    {
+    switch (type) {
     case OLD_LASER_MESSAGE:
         processOldLaserMessage(message);
         break;
@@ -150,7 +140,7 @@ void CarmenReader::processOldLaserMessage(std::istringstream& message)
     scan.angularResolution = M_PI / scan.numRanges;
     scan.startAngle = -M_PI / 2.0;
     scan.maxRange = maxLaserRange;
-    scan.scanPeriod = 1.0 / 75.0;       // assume laser is a SICK @ 75Hz
+    scan.scanPeriod = 1.0 / 75.0;   // assume laser is a SICK @ 75Hz
 
     odometry_t& odom = frame.odometry;
 
@@ -159,8 +149,8 @@ void CarmenReader::processOldLaserMessage(std::istringstream& message)
     message >> odom.theta;
 
     // skip odom x,y,theta
-    std::istream_iterator<double> skipIt(message); // reads odom_x
-    std::advance(skipIt, 2); // odom_y odom_theta
+    std::istream_iterator<double> skipIt(message);   // reads odom_x
+    std::advance(skipIt, 2);                         // odom_y odom_theta
 
     double timestamp = 0.0;
     message >> timestamp;
@@ -173,46 +163,39 @@ void CarmenReader::processOldLaserMessage(std::istringstream& message)
     int64_t timeDelta = frameTimestamp - previousLaserTimestamp;
 
     // If the laser timestamp isn't changing, then create new ones ourselves
-    if(timeDelta == 0)
-    {
+    if (timeDelta == 0) {
         previousAssignedTimestamp += 200000;   // assume 5Hz for non-changing data, as Carmen logs seem around that
         frameTimestamp = previousAssignedTimestamp;
-    }
-    else if(timeDelta > 0)
-    {
+    } else if (timeDelta > 0) {
         previousAssignedTimestamp = frameTimestamp;
         previousLaserTimestamp = frameTimestamp;
-    }
-    else // if(timeDelta < 0)
+    } else   // if(timeDelta < 0)
     {
         std::cout << "WARNING: Laser time went backwards! Amount:" << (-timeDelta / 1000) << '\n';
         return;
     }
 
-    if(havePreviousPose)
-    {
-        odom.translation = std::sqrt(std::pow((odom.x-previousPose.x), 2) + std::pow((odom.y-previousPose.y), 2));
-        odom.rotation    = angle_diff(odom.theta, previousPose.theta);
-    }
-    else
-    {
+    if (havePreviousPose) {
+        odom.translation = std::sqrt(std::pow((odom.x - previousPose.x), 2) + std::pow((odom.y - previousPose.y), 2));
+        odom.rotation = angle_diff(odom.theta, previousPose.theta);
+    } else {
         odom.translation = 0.0;
         odom.rotation = 0.0;
     }
 
-    previousPose.x     = odom.x;
-    previousPose.y     = odom.y;
+    previousPose.x = odom.x;
+    previousPose.y = odom.y;
     previousPose.theta = odom.theta;
     havePreviousPose = true;
 
-    frame.haveLaser    = true;
+    frame.haveLaser = true;
     frame.haveOdometry = true;
-    frame.haveIMU      = false;
+    frame.haveIMU = false;
 
     frame.timestamp = frameTimestamp;
 
 #ifdef DEBUG_MESSAGES
-    std::cout<<"Laser time:"<<frame.timestamp<<" timestamp:"<<timestamp<<'\n';
+    std::cout << "Laser time:" << frame.timestamp << " timestamp:" << timestamp << '\n';
 #endif
 
     addFrame(frame);
@@ -243,21 +226,20 @@ void CarmenReader::processLaserMessage(std::istringstream& message)
     message >> scan.angularResolution;
     message >> scan.maxRange;
 
-    skipIt = std::istream_iterator<double>(message); // accuracy
-    std::advance(skipIt, 1); // remission_mode
+    skipIt = std::istream_iterator<double>(message);   // accuracy
+    std::advance(skipIt, 1);                           // remission_mode
 
     message >> scan.numRanges;
     scan.ranges.resize(scan.numRanges);
     std::copy_n(std::istream_iterator<double>(message), scan.numRanges, scan.ranges.begin());
 
     scan.laserId = 0;
-    scan.scanPeriod = 1.0 / 75.0;       // assume laser is a SICK @ 75Hz
+    scan.scanPeriod = 1.0 / 75.0;   // assume laser is a SICK @ 75Hz
 
     // Skip reading remissions
     int numRemissions = 0;
     message >> numRemissions;
-    if (numRemissions > 0)
-    {
+    if (numRemissions > 0) {
         skipIt = std::istream_iterator<double>(message);
         std::advance(skipIt, numRemissions - 1);
     }
@@ -279,8 +261,8 @@ void CarmenReader::processLaserMessage(std::istringstream& message)
     scan.offset.theta = angle_diff(odom.theta, scan.offset.theta);
 
     // Skip reading safety, velocity
-    skipIt = std::istream_iterator<double>(message); // tv
-    std::advance(skipIt, 4); // rv, safety info
+    skipIt = std::istream_iterator<double>(message);   // tv
+    std::advance(skipIt, 4);                           // rv, safety info
 
     double timestamp = 0.0;
     message >> timestamp;
@@ -293,47 +275,40 @@ void CarmenReader::processLaserMessage(std::istringstream& message)
     int64_t timeDelta = frameTimestamp - previousLaserTimestamp;
 
     // If the laser timestamp isn't changing, then create new ones ourselves
-    if(timeDelta == 0)
-    {
+    if (timeDelta == 0) {
         previousAssignedTimestamp += 200000;   // assume 5Hz for non-changing data, as Carmen logs seem around that
         previousLaserTimestamp = previousAssignedTimestamp;
         frameTimestamp = previousAssignedTimestamp;
-    }
-    else if(timeDelta > 0)
-    {
+    } else if (timeDelta > 0) {
         previousAssignedTimestamp = frameTimestamp;
         previousLaserTimestamp = frameTimestamp;
-    }
-    else // if(timeDelta < 0)
+    } else   // if(timeDelta < 0)
     {
         std::cout << "WARNING: Laser time went backwards! Amount:" << (-timeDelta / 1000) << '\n';
         return;
     }
 
-    if(havePreviousPose)
-    {
-        odom.translation = std::sqrt(std::pow((odom.x-previousPose.x), 2) + std::pow((odom.y-previousPose.y), 2));
-        odom.rotation    = angle_diff(odom.theta, previousPose.theta);
-    }
-    else
-    {
+    if (havePreviousPose) {
+        odom.translation = std::sqrt(std::pow((odom.x - previousPose.x), 2) + std::pow((odom.y - previousPose.y), 2));
+        odom.rotation = angle_diff(odom.theta, previousPose.theta);
+    } else {
         odom.translation = 0.0;
         odom.rotation = 0.0;
     }
 
-    previousPose.x     = odom.x;
-    previousPose.y     = odom.y;
+    previousPose.x = odom.x;
+    previousPose.y = odom.y;
     previousPose.theta = odom.theta;
     havePreviousPose = true;
 
-    frame.haveLaser    = true;
+    frame.haveLaser = true;
     frame.haveOdometry = true;
-    frame.haveIMU      = false;
+    frame.haveIMU = false;
 
     frame.timestamp = frameTimestamp;
 
 #ifdef DEBUG_MESSAGES
-    std::cout<<"Laser time:"<<frame.timestamp<<" timestamp:"<<timestamp<<'\n';
+    std::cout << "Laser time:" << frame.timestamp << " timestamp:" << timestamp << '\n';
 #endif
 
     addFrame(frame);
@@ -347,5 +322,5 @@ void CarmenReader::readParamMessage(std::istringstream& message)
     maxLaserRange = 40.0f;
 }
 
-} // namespace logplayer
-} // namespace vulcan
+}   // namespace logplayer
+}   // namespace vulcan

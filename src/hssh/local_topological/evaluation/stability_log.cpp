@@ -8,11 +8,11 @@
 
 
 /**
-* \file     stability_log.cpp
-* \author   Collin Johnson
-*
-* Definition of AreaStabilityLog.
-*/
+ * \file     stability_log.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AreaStabilityLog.
+ */
 
 #include "hssh/local_topological/evaluation/stability_log.h"
 #include "system/module_communicator.h"
@@ -28,39 +28,26 @@ namespace hssh
 class LCMAreaStabilityCallbacks
 {
 public:
+    LCMAreaStabilityCallbacks(AreaStabilityLog& log) : log_(log) { }
 
-    LCMAreaStabilityCallbacks(AreaStabilityLog& log)
-    : log_(log)
-    {
-    }
+    void handleData(const LocalPose& pose, const std::string& channel) { log_.addLocalPose(pose); }
 
-    void handleData(const LocalPose& pose, const std::string& channel)
-    {
-        log_.addLocalPose(pose);
-    }
-
-    void handleData(const GlobalPose& pose, const std::string& channel)
-    {
-        log_.addGlobalPose(pose);
-    }
+    void handleData(const GlobalPose& pose, const std::string& channel) { log_.addGlobalPose(pose); }
 
     void handleData(const LocalAreaEventVec& events, const std::string& channel)
     {
-        for(auto& e : events)
-        {
+        for (auto& e : events) {
             log_.addEvent(e);
         }
     }
 
 private:
-
-    AreaStabilityLog& log_;        // Log to add the data to
+    AreaStabilityLog& log_;   // Log to add the data to
 };
 
 
 //////////////////////////////////////// AreaStabilityLog implementation ////////////////////////////////////////////
-AreaStabilityLog::AreaStabilityLog(const std::string& logFilename)
-: name_(logFilename)
+AreaStabilityLog::AreaStabilityLog(const std::string& logFilename) : name_(logFilename)
 {
     // Load all values from the provided LCM log. The LCM callbacks instance that will interact with LCM and callback
     // to add the values to the sensor log.
@@ -80,12 +67,13 @@ AreaStabilityLog::AreaStabilityLog(const std::string& logFilename)
     comm.subscribeTo<LocalAreaEventVec>(&callbacks);
 
     // Keep reading messages until the processIncoming doesn't return success, indicating that there's no data left
-    while(comm.processIncoming() == 0);
+    while (comm.processIncoming() == 0)
+        ;
 
     std::cout << "INFO: AreaStabilityLog: Loaded the following data from " << name_ << ":\n"
-        << "Local Poses:  " << localPoses_.size() << '\n'
-        << "Global Poses: " << globalPoses_.size() << '\n'
-        << "Events:       " << events_.size() << '\n';
+              << "Local Poses:  " << localPoses_.size() << '\n'
+              << "Global Poses: " << globalPoses_.size() << '\n'
+              << "Events:       " << events_.size() << '\n';
 }
 
 
@@ -106,5 +94,5 @@ void AreaStabilityLog::addEvent(const LocalAreaEventPtr& event)
     events_.push_back(event);
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

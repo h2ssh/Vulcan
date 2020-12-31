@@ -8,17 +8,17 @@
 
 
 /**
-* \file     exploration_map_renderer.cpp
-* \author   Collin Johnson
-*
-* Definition of ExplorationMapRenderer.
-*/
+ * \file     exploration_map_renderer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ExplorationMapRenderer.
+ */
 
 #include "ui/components/exploration_map_renderer.h"
+#include "planner/exploration/local_topo/exploration_map.h"
 #include "ui/common/default_colors.h"
 #include "ui/common/gl_shapes.h"
 #include "ui/common/ui_color.h"
-#include "planner/exploration/local_topo/exploration_map.h"
 #include <boost/range/iterator_range.hpp>
 
 namespace vulcan
@@ -48,18 +48,14 @@ void ExplorationMapRenderer::renderLocalTopoExplorationMap(const planner::LocalT
 
 void render_local_area_target(const planner::LocalAreaTarget* target, int currentArea, int targetArea)
 {
-    if(target->areaId() == targetArea)
-    {
+    if (target->areaId() == targetArea) {
         draw_local_area_target(target, true);
-    }
-    else
-    {
+    } else {
         draw_local_area_target(target, false);
     }
 
     // Draw the current area twice to make it darker on the screen
-    if(target->areaId() == currentArea)
-    {
+    if (target->areaId() == currentArea) {
         draw_local_area_target(target, false);
     }
 }
@@ -81,8 +77,7 @@ void draw_local_area_target(const planner::LocalAreaTarget* area, bool isTarget)
 
 GLColor color_from_type(hssh::AreaType type)
 {
-    switch(type)
-    {
+    switch (type) {
     case hssh::AreaType::path_segment:
         return path_color();
 
@@ -101,5 +96,5 @@ GLColor color_from_type(hssh::AreaType type)
     return area_color();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

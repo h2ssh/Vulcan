@@ -8,28 +8,28 @@
 
 
 /**
-* \file     pose_trace_.cpp
-* \author   Collin Johnsn
-*
-* Implementation of PoseTrace.
-*/
+ * \file     pose_trace_.cpp
+ * \author   Collin Johnsn
+ *
+ * Implementation of PoseTrace.
+ */
 
 #include "utils/pose_trace.h"
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include <iostream>
-#include <cassert>
 
 namespace vulcan
 {
 namespace utils
 {
 
-// Functor that checks if the timestamp of the input pose occurs before the time specified in the constructor: pose.timestamp < time.
+// Functor that checks if the timestamp of the input pose occurs before the time specified in the constructor:
+// pose.timestamp < time.
 class PoseBeforeTime
 {
 public:
-
     PoseBeforeTime(int64_t time) : time(time) { }
 
     bool operator()(const pose_t& lhs) const { return lhs.timestamp < time; }
@@ -39,13 +39,10 @@ private:
 };
 
 
-PoseTrace::PoseTrace(float distance, std::size_t maxSize)
-: minDistance_(distance)
-, minDuration_(0)
-, maxSize_(maxSize)
+PoseTrace::PoseTrace(float distance, std::size_t maxSize) : minDistance_(distance), minDuration_(0), maxSize_(maxSize)
 {
     assert(minDistance_ >= 0.0f);
-    assert(maxSize_     >  0);
+    assert(maxSize_ > 0);
 }
 
 
@@ -55,7 +52,7 @@ PoseTrace::PoseTrace(int64_t duration, std::size_t maxSize)
 , maxSize_(maxSize)
 {
     assert(minDuration_ >= 0);
-    assert(maxSize_     >  0);
+    assert(maxSize_ > 0);
 }
 
 
@@ -64,26 +61,22 @@ PoseTrace::PoseTrace(const std::string& filename)
     std::ifstream in(filename);
     pose_t loadedPose;
 
-    while(true)
-    {
+    while (true) {
         in >> loadedPose.timestamp;
 
-        if(in.eof())
-        {
+        if (in.eof()) {
             break;
         }
 
         in >> loadedPose.x;
 
-        if(in.eof())
-        {
+        if (in.eof()) {
             break;
         }
 
         in >> loadedPose.y;
 
-        if(in.eof())
-        {
+        if (in.eof()) {
             break;
         }
 
@@ -98,14 +91,12 @@ bool PoseTrace::addPose(const pose_t& pose)
 {
     bool shouldAdd = trace_.empty() || (isFarEnough(pose) && isElapsedEnough(pose));
 
-    if(shouldAdd)
-    {
+    if (shouldAdd) {
         trace_.push_back(pose);
     }
 
-    if((trace_.size() > maxSize_) && (maxSize_ > 0))
-    {
-        assert(trace_.size() == maxSize_ + 1);  // never should be more than one above the maximum size
+    if ((trace_.size() > maxSize_) && (maxSize_ > 0)) {
+        assert(trace_.size() == maxSize_ + 1);   // never should be more than one above the maximum size
         trace_.pop_front();
     }
 
@@ -117,28 +108,22 @@ pose_t PoseTrace::poseAt(int64_t time) const
 {
     pose_t interpolatedPose;
 
-    if(empty())
-    {
+    if (empty()) {
         interpolatedPose.timestamp = time;
         return interpolatedPose;
     }
 
-    if(front().timestamp >= time)
-    {
+    if (front().timestamp >= time) {
         interpolatedPose = front();
-    }
-    else if(back().timestamp <= time)
-    {
+    } else if (back().timestamp <= time) {
         interpolatedPose = back();
-    }
-    else
-    {
+    } else {
         auto poseAfterIt = std::find_if_not(trace_.begin(), trace_.end(), PoseBeforeTime(time));
 
         assert(poseAfterIt != trace_.end());
         assert(poseAfterIt != trace_.begin());
 
-        interpolatedPose = interpolate_pose(*(poseAfterIt-1), *poseAfterIt, time);
+        interpolatedPose = interpolate_pose(*(poseAfterIt - 1), *poseAfterIt, time);
     }
 
     interpolatedPose.timestamp = time;
@@ -160,8 +145,7 @@ bool PoseTrace::hasPoseAfterTime(int64_t time) const
 
 void PoseTrace::changeReferenceFrame(const pose_t& transform)
 {
-    for(auto& pose : trace_)
-    {
+    for (auto& pose : trace_) {
         pose = pose.transformToNewFrame(transform);
     }
 }
@@ -189,7 +173,7 @@ std::size_t PoseTrace::clearAfter(int64_t time)
 
     std::size_t numRemoved = trace_.end() - poseIt;
 
-    if(poseIt != trace_.end()) // only erase if not the end, otherwise, not a valid iterator
+    if (poseIt != trace_.end())   // only erase if not the end, otherwise, not a valid iterator
     {
         trace_.erase(poseIt, trace_.end());
     }
@@ -202,14 +186,12 @@ bool PoseTrace::saveToFile(const std::string& filename) const
 {
     std::ofstream out(filename);
 
-    if(!out.is_open())
-    {
+    if (!out.is_open()) {
         std::cerr << "WARNING: PoseTrace: Failed to open file for saving the PoseTrace: " << filename << '\n';
         return false;
     }
 
-    for(auto p : trace_)
-    {
+    for (auto p : trace_) {
         out << p.timestamp << ' ' << p.x << ' ' << p.y << ' ' << p.theta << '\n';
     }
 
@@ -232,5 +214,5 @@ bool PoseTrace::isElapsedEnough(const pose_t& pose) const
     return pose.timestamp - trace_.back().timestamp >= minDuration_;
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

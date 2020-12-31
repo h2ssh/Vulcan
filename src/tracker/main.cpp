@@ -7,20 +7,20 @@
 */
 
 
+#include "hssh/local_topological/areas/serialization.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include "system/module.h"
 #include "tracker/director.h"
-#include "tracker/object_detector.h"
-#include "tracker/object_tracker.h"
 #include "tracker/goal_predictor.h"
 #include "tracker/goals/goal_estimator_factory.h"
 #include "tracker/motions/classifier.h"
+#include "tracker/object_detector.h"
+#include "tracker/object_tracker.h"
 #include "tracker/objects/object_factory.h"
 #include "tracker/tracking/data_association.h"
 #include "tracker/tracking/object_factory.h"
-#include "hssh/local_topological/local_topo_map.h"
-#include "hssh/local_topological/areas/serialization.h"
-#include "utils/config_file.h"
 #include "utils/command_line.h"
+#include "utils/config_file.h"
 #include "utils/serialized_file_io.h"
 #include <vector>
 
@@ -45,8 +45,7 @@ int main(int argc, char** argv)
     arguments.push_back({kLocalTopoMapArg, "LocalTopoMap to use for goal estimation. Default = none", true, ""});
 
     utils::CommandLine commandLine(argc, argv, arguments);
-    if(!commandLine.verify())
-    {
+    if (!commandLine.verify()) {
         exit(-1);
     }
 
@@ -61,8 +60,8 @@ int main(int argc, char** argv)
     object_tracker_params_t trackerParams(config);
 
     auto associationStrategy = create_data_association_strategy(trackerParams.dataAssociationType, config);
-    auto trackingObjFactory = std::make_unique<TrackingObjectFactory>(std::move(motionClassifier),
-                                                                      std::move(associationStrategy));
+    auto trackingObjFactory =
+      std::make_unique<TrackingObjectFactory>(std::move(motionClassifier), std::move(associationStrategy));
 
     auto tracker = std::make_unique<ObjectTracker>(trackerParams, std::move(trackingObjFactory));
 
@@ -72,22 +71,19 @@ int main(int argc, char** argv)
     gateway_goal_estimator_params_t gatewayParams(config);
     auto goalFactory = std::make_unique<GoalEstimatorFactory>(gatewayParams);
     auto dynamicObjFactory = std::make_unique<DynamicObjectFactory>();
-    auto predictor = std::make_unique<GoalPredictor>(std::move(goalFactory),
-                                                     std::move(dynamicObjFactory));
+    auto predictor = std::make_unique<GoalPredictor>(std::move(goalFactory), std::move(dynamicObjFactory));
 
     int32_t outputPeriodMs = std::atoi(commandLine.argumentValue(kUpdateRateArgument).c_str());
 
     hssh::LocalTopoMap ltm;
     bool haveLTM = commandLine.argumentExists(kLocalTopoMapArg);
-    if(haveLTM)
-    {
+    if (haveLTM) {
         haveLTM = utils::load_serializable_from_file(commandLine.argumentValue(kLocalTopoMapArg), ltm);
     }
 
     hssh::LocalPerceptualMap lpm;
     bool haveLPM = commandLine.argumentExists(kMetricMapArg);
-    if(haveLPM)
-    {
+    if (haveLPM) {
         haveLPM = utils::load_serializable_from_file(commandLine.argumentValue(kMetricMapArg), lpm);
     }
 

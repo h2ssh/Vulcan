@@ -8,11 +8,11 @@
 
 
 /**
-* \file     area.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalArea.
-*/
+ * \file     area.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalArea.
+ */
 
 #include "hssh/global_topological/area.h"
 #include <ostream>
@@ -21,17 +21,14 @@ namespace vulcan
 {
 namespace hssh
 {
-    
-GlobalArea::GlobalArea(Id id, AreaType type)
-: id_(id)
-, type_(type)
+
+GlobalArea::GlobalArea(Id id, AreaType type) : id_(id), type_(type)
 {
     assert(type != AreaType::area);
 }
-    
-    
-GlobalArea::GlobalArea(AreaType type)
-: GlobalArea(kFrontierId, type)
+
+
+GlobalArea::GlobalArea(AreaType type) : GlobalArea(kFrontierId, type)
 {
     assert(type != AreaType::area);
 }
@@ -39,8 +36,7 @@ GlobalArea::GlobalArea(AreaType type)
 
 bool operator==(const GlobalArea& lhs, const GlobalArea& rhs)
 {
-    return (lhs.id() == rhs.id())
-        && (lhs.type() == rhs.type());
+    return (lhs.id() == rhs.id()) && (lhs.type() == rhs.type());
 }
 
 
@@ -56,5 +52,5 @@ std::ostream& operator<<(std::ostream& out, const GlobalArea& area)
     return out;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

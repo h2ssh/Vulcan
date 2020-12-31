@@ -8,11 +8,11 @@
 
 
 /**
-* \file     conversions.cpp
-* \author   Collin Johnson
-*
-* Definition of various pose conversion functions.
-*/
+ * \file     conversions.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of various pose conversion functions.
+ */
 
 #include "core/conversions.h"
 #include "core/pose.h"
@@ -24,8 +24,8 @@ pose_t vector_to_pose(const Vector& v)
 {
     pose_t pose;
 
-    pose.x     = v(0);
-    pose.y     = v(1);
+    pose.x = v(0);
+    pose.y = v(1);
     pose.theta = v(2);
 
     return pose;
@@ -43,4 +43,4 @@ Vector pose_to_vector(const pose_t& p)
     return poseVector;
 }
 
-}
+}   // namespace vulcan

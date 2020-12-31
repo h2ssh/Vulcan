@@ -8,11 +8,11 @@
 
 
 /**
-* \file     occupancy_grid.cpp
-* \author   Collin Johnson
-*
-* Definition of the OccupancyGrid.
-*/
+ * \file     occupancy_grid.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of the OccupancyGrid.
+ */
 
 #include "hssh/metrical/occupancy_grid.h"
 
@@ -21,16 +21,16 @@ namespace vulcan
 namespace hssh
 {
 
-const uint8_t MAX_CELL_COST     = 255u;
+const uint8_t MAX_CELL_COST = 255u;
 const uint8_t INITIAL_CELL_COST = MAX_CELL_COST / 2;
 
 
-OccupancyGrid::OccupancyGrid(std::size_t               widthInCells,
-                             std::size_t               heightInCells, 
-                             float                     cellsToMeters, 
+OccupancyGrid::OccupancyGrid(std::size_t widthInCells,
+                             std::size_t heightInCells,
+                             float cellsToMeters,
                              const Point<float>& globalCenter,
-                             uint8_t                   occupiedCellCost, 
-                             uint8_t                   freeCellCost)
+                             uint8_t occupiedCellCost,
+                             uint8_t freeCellCost)
 : costGrid(widthInCells, heightInCells, cellsToMeters, globalCenter, INITIAL_CELL_COST)
 , typeGrid(widthInCells, heightInCells, cellsToMeters, globalCenter, kUnobservedOccGridCell)
 , occupiedCellCostThreshold(occupiedCellCost)
@@ -70,8 +70,7 @@ void OccupancyGrid::setMetersPerCell(float gridScale)
 // Methods for modifying position of the grid
 void OccupancyGrid::changeGlobalCenter(const Point<float>& newGlobalCenter, uint8_t initialCost)
 {
-    if(newGlobalCenter != costGrid.getGlobalCenter())
-    {
+    if (newGlobalCenter != costGrid.getGlobalCenter()) {
         costGrid.changeGlobalCenter(newGlobalCenter, initialCost);
         typeGrid.changeGlobalCenter(newGlobalCenter, kUnobservedOccGridCell);
     }
@@ -101,12 +100,9 @@ void OccupancyGrid::setCost(const Point<int>& cell, uint8_t cost)
 
 uint8_t OccupancyGrid::updateCost(const Point<int>& cell, int8_t change)
 {
-    if(isCellInGrid(cell))
-    {
+    if (isCellInGrid(cell)) {
         return updateCostNoCheck(cell, change);
-    }
-    else
-    {
+    } else {
         return 0;
     }
 }
@@ -129,8 +125,7 @@ void OccupancyGrid::setCostNoCheck(const Point<int>& cell, uint8_t cost)
 uint8_t OccupancyGrid::updateCostNoCheck(const Point<int>& cell, int8_t change)
 {
     // No need to do anything if the cost isn't actually changing
-    if(!change)
-    {
+    if (!change) {
         return costGrid.getValueNoCheck(cell.x, cell.y);
     }
 
@@ -138,24 +133,20 @@ uint8_t OccupancyGrid::updateCostNoCheck(const Point<int>& cell, int8_t change)
     // values shooting to 0
     int16_t newCost = static_cast<int16_t>(costGrid.getValueNoCheck(cell.x, cell.y)) + change;
 
-    if(newCost < 0)
-    {
+    if (newCost < 0) {
         newCost = 0;
-    }
-    else if(newCost > static_cast<int16_t>(MAX_CELL_COST))
-    {
+    } else if (newCost > static_cast<int16_t>(MAX_CELL_COST)) {
         newCost = MAX_CELL_COST;
     }
-    
+
     auto cellType = setCellTypeNoCheck(cell, static_cast<uint8_t>(newCost));
-    
+
     // If one of the permanent types, then always max cost because these types might be drawn in by hand
     // and they might not be visible features of the environment
-    if(cellType & kPermanentOccGridCell)
-    {
+    if (cellType & kPermanentOccGridCell) {
         newCost = getMaxCellCost();
     }
-    
+
     costGrid.setValueNoCheck(cell.x, cell.y, static_cast<uint8_t>(newCost));
 
     return newCost;
@@ -164,18 +155,15 @@ uint8_t OccupancyGrid::updateCostNoCheck(const Point<int>& cell, int8_t change)
 
 cell_type_t OccupancyGrid::setCellType(const Point<int>& cell, uint8_t cost)
 {
-    if(typeGrid.isCellInGrid(cell))
-    {
+    if (typeGrid.isCellInGrid(cell)) {
         cell_type_t cellType = determineCellType(cost, cell);
         typeGrid.setValueNoCheck(cell.x, cell.y, cellType);
         return cellType;
     }
     // Any cell not in the grid must be unobserved
-    else
-    {
+    else {
         return kUnobservedOccGridCell;
     }
-    
 }
 
 
@@ -190,80 +178,68 @@ cell_type_t OccupancyGrid::setCellTypeNoCheck(const Point<int>& cell, uint8_t co
 cell_type_t OccupancyGrid::determineCellType(uint8_t cost, const Point<int>& cell)
 {
     /*
-    * NOTE: The quasi-static designation isn't great. In general, we need observations over a longer timespan to
-    * determine quasi-staticness. However, at this shorter time scale, the quasi-static exists to hopefully allowed doors
-    * previously seen as open to be seen now as quasi-static, which will let the local_topo_hssh still identify the
-    * appropriate gateways.
-    */
-    
-    cell_type_t currentType = typeGrid.getValueNoCheck(cell.x, cell.y);
-    cell_type_t newType     = kUnobservedOccGridCell;
+     * NOTE: The quasi-static designation isn't great. In general, we need observations over a longer timespan to
+     * determine quasi-staticness. However, at this shorter time scale, the quasi-static exists to hopefully allowed
+     * doors previously seen as open to be seen now as quasi-static, which will let the local_topo_hssh still identify
+     * the appropriate gateways.
+     */
 
-    if(cost <= freeCellCostThreshold)
-    {
+    cell_type_t currentType = typeGrid.getValueNoCheck(cell.x, cell.y);
+    cell_type_t newType = kUnobservedOccGridCell;
+
+    if (cost <= freeCellCostThreshold) {
         newType = kFreeOccGridCell;
-    }
-    else // cost > freeCellCostThreshold
+    } else   // cost > freeCellCostThreshold
     {
         // If a cell is above the free threshold and it was once free, then it must be dynamic, as long as it hasn't
         // hit the maximum cost threshold.
-        if((currentType & (kFreeOccGridCell | kDynamicOccGridCell)) && (cost < MAX_CELL_COST))
-        {
+        if ((currentType & (kFreeOccGridCell | kDynamicOccGridCell)) && (cost < MAX_CELL_COST)) {
             newType = kDynamicOccGridCell;
         }
         // Once the maximum cost threshold is hit, then the cell has been occupied for awhile. We optionally transition
         // to quasi-static at this point, depending on the neighboring cells.
-        else if((currentType & kDynamicOccGridCell) && (cost == MAX_CELL_COST))
-        {
+        else if ((currentType & kDynamicOccGridCell) && (cost == MAX_CELL_COST)) {
             // If a dynamic cell hits the max cost and it is adjacent to a wall, then it is quite possibly a door or
             // moving furniture, so turn it into a quasi-static cell.
-            if(hasOccupiedNeighbor(cell))
-            {
+            if (hasOccupiedNeighbor(cell)) {
                 newType = kQuasiStaticOccGridCell;
             }
             // If the dynamic cell is floating in free space, then it is most likely a person or something similar, so
             // leave it to be tracked by the object tracker
-            else
-            {
+            else {
                 newType = kDynamicOccGridCell;
             }
         }
         // If the cell has crossed the occupied threshold at this point, then it was not a free or dynamic cell.
         // Thus, it is either occupied, or is a cell that transitioned to quasi-static and should remain as such.
-        else if(cost >= occupiedCellCostThreshold)
-        {
+        else if (cost >= occupiedCellCostThreshold) {
             // Once quasi-static, then leave a cell quasi-static forever.
-            if(currentType & kQuasiStaticOccGridCell)
-            {
-               newType = kQuasiStaticOccGridCell;
+            if (currentType & kQuasiStaticOccGridCell) {
+                newType = kQuasiStaticOccGridCell;
             }
             // Everything else should be occupied
-            else
-            {
+            else {
                 newType = kOccupiedOccGridCell;
             }
         }
         // Otherwise, it is a cell that was occupied or quasi-static, but now has gone below the occupied threshold
-        else // cost < occupiedCellCostThreshold
+        else   // cost < occupiedCellCostThreshold
         {
             // Quasi-static cells transition back to dynamic, as we still had strong evidence the cell was free at some
             // point of time in the past.
-            if(currentType & kQuasiStaticOccGridCell)
-            {
+            if (currentType & kQuasiStaticOccGridCell) {
                 newType = kDynamicOccGridCell;
             }
             // Otherwise, the cell is turning into something, probably free, but it should go back to unknown for now.
             // These transitions often are the result of localization uncertainty.
-            else
-            {
+            else {
                 newType = kUnknownOccGridCell;
             }
         }
     }
-    
+
     // If limited visibility, can't also be dynamic
-    if(currentType & kLimitedVisibilityOccGridCell)
-    {
+    if (currentType & kLimitedVisibilityOccGridCell) {
         newType &= ~kDynamicOccGridCell;
         newType |= kOccupiedOccGridCell;
     }
@@ -276,28 +252,24 @@ cell_type_t OccupancyGrid::determineCellType(uint8_t cost, const Point<int>& cel
 bool OccupancyGrid::hasOccupiedNeighbor(const Point<int>& cell)
 {
     const uint8_t kOccupiedMask = kOccupiedOccGridCell | kQuasiStaticOccGridCell | kLimitedVisibilityOccGridCell;
-    
-    if((cell.x > 0) && (typeGrid.getValueNoCheck(cell.x-1, cell.y) & kOccupiedMask))
-    {
+
+    if ((cell.x > 0) && (typeGrid.getValueNoCheck(cell.x - 1, cell.y) & kOccupiedMask)) {
         return true;
     }
-    
+
     int lastCellX = typeGrid.getWidthInCells() > 0 ? typeGrid.getWidthInCells() - 1 : 0;
 
-    if((cell.x < lastCellX) && (typeGrid.getValueNoCheck(cell.x+1, cell.y) & kOccupiedMask))
-    {
+    if ((cell.x < lastCellX) && (typeGrid.getValueNoCheck(cell.x + 1, cell.y) & kOccupiedMask)) {
         return true;
     }
 
-    if((cell.y > 0) && (typeGrid.getValueNoCheck(cell.x, cell.y-1) & kOccupiedMask))
-    {
+    if ((cell.y > 0) && (typeGrid.getValueNoCheck(cell.x, cell.y - 1) & kOccupiedMask)) {
         return true;
     }
-    
+
     int lastCellY = typeGrid.getHeightInCells() > 0 ? typeGrid.getHeightInCells() - 1 : 0;
 
-    if((cell.y < lastCellY) && (typeGrid.getValueNoCheck(cell.x, cell.y+1) & kOccupiedMask))
-    {
+    if ((cell.y < lastCellY) && (typeGrid.getValueNoCheck(cell.x, cell.y + 1) & kOccupiedMask)) {
         return true;
     }
 
@@ -305,5 +277,5 @@ bool OccupancyGrid::hasOccupiedNeighbor(const Point<int>& cell)
 }
 
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

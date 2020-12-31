@@ -8,24 +8,30 @@
 
 
 /**
-* \file     exploration_widget.h
-* \author   Collin Johnson
-*
-* Declaration of ExplorationDisplayWidget.
-*/
+ * \file     exploration_widget.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ExplorationDisplayWidget.
+ */
 
 #ifndef UI_DEBUG_EXPLORATION_WIDGET_H
 #define UI_DEBUG_EXPLORATION_WIDGET_H
 
-#include "ui/components/grid_based_display_widget.h"
 #include "hssh/local_metric/lpm.h"
 #include "mpepc/trajectory/robot_trajectory_info.h"
 #include "planner/exploration/local_topo/exploration_map.h"
+#include "ui/components/grid_based_display_widget.h"
 
 namespace vulcan
 {
-namespace mpepc { class NavigationTask; }
-namespace mpepc { struct dynamic_object_trajectory_debug_info_t; }
+namespace mpepc
+{
+class NavigationTask;
+}
+namespace mpepc
+{
+struct dynamic_object_trajectory_debug_info_t;
+}
 namespace ui
 {
 
@@ -37,32 +43,31 @@ class RobotTrajectoryRenderer;
 class TrackedObjectRenderer;
 
 /**
-* ExplorationDisplayWidget draws the current exploration information for the map. The exploration information is:
-*
-*   - the LPM
-*   - the LocalTopoExplorationMap (showing the current target, current area, visited, and unvisited areas)
-*   - the current planner task being executed by the robot
-*   - trajectory being followed by the robot
-*   - dynamic objects + their estimated trajectories
-*/
+ * ExplorationDisplayWidget draws the current exploration information for the map. The exploration information is:
+ *
+ *   - the LPM
+ *   - the LocalTopoExplorationMap (showing the current target, current area, visited, and unvisited areas)
+ *   - the current planner task being executed by the robot
+ *   - trajectory being followed by the robot
+ *   - dynamic objects + their estimated trajectories
+ */
 class ExplorationDisplayWidget : public GridBasedDisplayWidget
 {
 public:
-
     /**
-    * Constructor for ExplorationDisplayWidget.
-    */
+     * Constructor for ExplorationDisplayWidget.
+     */
     ExplorationDisplayWidget(wxWindow* parent,
-                      wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long int style = 0,
-                      const wxString& name = wxString((const wxChar*)("GLCanvas")),
-                      const wxPalette& palette = wxNullPalette);
+                             wxWindowID id = wxID_ANY,
+                             const wxPoint& pos = wxDefaultPosition,
+                             const wxSize& size = wxDefaultSize,
+                             long int style = 0,
+                             const wxString& name = wxString((const wxChar*)("GLCanvas")),
+                             const wxPalette& palette = wxNullPalette);
 
     /**
-    * Destructor for ExplorationDisplayWidget.
-    */
+     * Destructor for ExplorationDisplayWidget.
+     */
     virtual ~ExplorationDisplayWidget(void);
 
     void shouldCenterOnRobot(bool center) { centerOnRobot_ = center; }
@@ -77,7 +82,6 @@ public:
     void setDynamicObjects(const std::vector<mpepc::dynamic_object_trajectory_debug_info_t>& objects);
 
 private:
-
     pose_t pose_;
     hssh::LocalPerceptualMap lpm_;
     planner::LocalTopoExplorationMap explorationMap_;
@@ -102,7 +106,7 @@ private:
     void renderWidget(void) override;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_EXPLORATION_WIDGET_H
+#endif   // UI_DEBUG_EXPLORATION_WIDGET_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     alignment_network.h
-* \author   Collin Johnson
-*
-* Declaration of AlignmentNetwork.
-*/
+ * \file     alignment_network.h
+ * \author   Collin Johnson
+ *
+ * Declaration of AlignmentNetwork.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_H
@@ -38,55 +38,54 @@ enum class HypothesisType : unsigned char;
 
 
 /**
-* strain_weights_t defines the weights for the different terms used for solving the AlignmentNetwork.
-*
-* No negative weights are allowed and at least one weight must be greater than 0 so the search can progress.
-*/
+ * strain_weights_t defines the weights for the different terms used for solving the AlignmentNetwork.
+ *
+ * No negative weights are allowed and at least one weight must be greater than 0 so the search can progress.
+ */
 struct strain_weights_t
 {
-    double appropriatenessWeight;       ///< Weight in strain for not being max-appropriate type
-    double constraintWeight;            ///< Weight in strain for breaking constraints
+    double appropriatenessWeight;   ///< Weight in strain for not being max-appropriate type
+    double constraintWeight;        ///< Weight in strain for breaking constraints
 };
 
 
 /**
-* AlignmentNetwork is a network of constraints between area hypotheses. The network consists of a set of areas and
-* constraints between them. The goal of the AlignmentNetwork is to find a solution to the constraint satisfaction
-* problem defined by the network that minimizes the overall strain in the network. The strain in the network is
-* determined by a combination of the number of currently failing constraints and the overall likelihood of the area
-* hypotheses in the network.
-*
-* The difficulty of solving the network is that it requires both finding labels for the areas and determining the
-* areas themselves. The input is areas bounded by gateway hypotheses. These hypotheses need to then be
-*/
+ * AlignmentNetwork is a network of constraints between area hypotheses. The network consists of a set of areas and
+ * constraints between them. The goal of the AlignmentNetwork is to find a solution to the constraint satisfaction
+ * problem defined by the network that minimizes the overall strain in the network. The strain in the network is
+ * determined by a combination of the number of currently failing constraints and the overall likelihood of the area
+ * hypotheses in the network.
+ *
+ * The difficulty of solving the network is that it requires both finding labels for the areas and determining the
+ * areas themselves. The input is areas bounded by gateway hypotheses. These hypotheses need to then be
+ */
 class AlignmentNetwork : public AlignmentGraph
 {
 public:
-
     /**
-    * Constructor for AlignmentNetwork.
-    *
-    * \param    evaluator           Evaluator to use for determining appropriateness of hypotheses
-    * \param    strainWeights       Weights to use for evaluating strain
-    */
+     * Constructor for AlignmentNetwork.
+     *
+     * \param    evaluator           Evaluator to use for determining appropriateness of hypotheses
+     * \param    strainWeights       Weights to use for evaluating strain
+     */
     AlignmentNetwork(const AreaHypothesisEvaluator& evaluator, const strain_weights_t& strainWeights);
 
     /**
-    * solve solves the network and returns a CSPSolution.
-    *
-    * \param[out]   debug               Storage for generated debugging info (optional, default = no debug out)
-    * \return   Solution to the CSP, if one exists.
-    */
+     * solve solves the network and returns a CSPSolution.
+     *
+     * \param[out]   debug               Storage for generated debugging info (optional, default = no debug out)
+     * \return   Solution to the CSP, if one exists.
+     */
     CSPSolution solve(CSPDebugInfo* debug = nullptr);
 
     /**
-    * activeId retrieves the id of the active area associated with the provided area id. As the network is solved, the
-    * active id associated with an area via addArea will likely change as areas are merged and split during the solving
-    * process.
-    *
-    * \param    areaId      Id of the area to find the active id for
-    * \return   Active area id.
-    */
+     * activeId retrieves the id of the active area associated with the provided area id. As the network is solved, the
+     * active id associated with an area via addArea will likely change as areas are merged and split during the solving
+     * process.
+     *
+     * \param    areaId      Id of the area to find the active id for
+     * \return   Active area id.
+     */
     Id activeId(Id areaId) const { return original_[areaId].active; }
 
     // AlignmentGraph interface
@@ -101,9 +100,14 @@ public:
     std::size_t numAreas(void) const { return original_.size(); }
 
 private:
-
     using ConstraintVec = std::vector<AlignmentConstraint>;
-    using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::no_property, boost::no_property, boost::vecS>;
+    using Graph = boost::adjacency_list<boost::vecS,
+                                        boost::vecS,
+                                        boost::undirectedS,
+                                        boost::no_property,
+                                        boost::no_property,
+                                        boost::no_property,
+                                        boost::vecS>;
     using AdjVec = std::vector<ConstraintAdjacentArea>;
     using TypeVec = std::vector<HypothesisType>;
 
@@ -121,33 +125,22 @@ private:
         IdVec endpoints;
         IdVec nonendpoints;
 
-        OriginalArea(void)
-        : active(-1)
-        , isFixed(false)
-        , mustBeConnected(true)
-        , hypothesis(nullptr)
-        {
-        }
+        OriginalArea(void) : active(-1), isFixed(false), mustBeConnected(true), hypothesis(nullptr) { }
     };
 
     struct ActiveArea
     {
         Id id;
-        IdVec areas;        // The ids are sorted in ascending order
-        AdjVec adjacent;    // Areas adjacent to the area via a constraint
-                            // Original ids, not active! Use active(adj.id) to access appropriate value
+        IdVec areas;       // The ids are sorted in ascending order
+        AdjVec adjacent;   // Areas adjacent to the area via a constraint
+                           // Original ids, not active! Use active(adj.id) to access appropriate value
         HypothesisType type;
         AreaHypothesis* hypothesis;
-        ConstraintVec constraints;       // constraints created due to merging
+        ConstraintVec constraints;   // constraints created due to merging
         TypeVec possibleTypes;
         HypothesisTypeDistribution distribution;
 
-        explicit ActiveArea(Id id = -1)
-        : id(id)
-        , type(HypothesisType::kPathDest)
-        , hypothesis(nullptr)
-        {
-        }
+        explicit ActiveArea(Id id = -1) : id(id), type(HypothesisType::kPathDest), hypothesis(nullptr) { }
 
         ActiveArea(const OriginalArea& orig, HypothesisType type)
         : id(orig.id)
@@ -161,26 +154,22 @@ private:
         {
         }
 
-        bool operator==(const ActiveArea& rhs) const
-        {
-            return areas == rhs.areas;
-        }
+        bool operator==(const ActiveArea& rhs) const { return areas == rhs.areas; }
     };
 
     struct NetworkChange
     {
-        Id sourceId;    // active area from which this change was created
-        std::vector<ActiveArea> newAreas; // size: 1 for label, 1 for merge, >1 for split
-        std::vector<HypothesisType> newLabels;    // size: 1 = merge/relabel, >1 for split
+        Id sourceId;                             // active area from which this change was created
+        std::vector<ActiveArea> newAreas;        // size: 1 for label, 1 for merge, >1 for split
+        std::vector<HypothesisType> newLabels;   // size: 1 = merge/relabel, >1 for split
         double strain;
-        int changeType; // 0 = label, 1 = merge, 2 = split
+        int changeType;   // 0 = label, 1 = merge, 2 = split
 
         bool operator<(const NetworkChange& rhs) const { return strain < rhs.strain; }
         bool operator==(const NetworkChange& rhs) const
         {
-            return (sourceId == rhs.sourceId)
-                && (changeType == rhs.changeType)
-                && (newAreas == rhs.newAreas);    // unlikely exact same areas involved twice in a row
+            return (sourceId == rhs.sourceId) && (changeType == rhs.changeType)
+              && (newAreas == rhs.newAreas);   // unlikely exact same areas involved twice in a row
         }
         bool operator!=(const NetworkChange& rhs) const { return !(*this == rhs); }
     };
@@ -199,22 +188,22 @@ private:
 
 
     std::vector<OriginalArea> original_;
-    std::vector<ActiveArea> active_;        // contains original_.size() + 2 ActiveAreas (last two for hyp generation)
+    std::vector<ActiveArea> active_;   // contains original_.size() + 2 ActiveAreas (last two for hyp generation)
     std::vector<std::unique_ptr<AreaHypothesis>> mergedHypotheses_;
     std::vector<int> strainIdCache_;
 
     std::vector<NetworkConfiguration> configurations_;
 
-    Graph graph_;       // vertex descriptors in the graph correspond directly to the original ids.
-    std::vector<int> activeComponent_;  // members of the currently active component
-    std::vector<int> components_; // storage for connected components
-    std::vector<Id> disconnectedAreas_; // storage for the areas that are disconnected
+    Graph graph_;                         // vertex descriptors in the graph correspond directly to the original ids.
+    std::vector<int> activeComponent_;    // members of the currently active component
+    std::vector<int> components_;         // storage for connected components
+    std::vector<Id> disconnectedAreas_;   // storage for the areas that are disconnected
 
     std::vector<ChangeVec> changeCache_;
     std::vector<std::pair<IdVec, AreaHypothesis*>> mergedCache_;
     ConstraintVec constraintCache_;
     IdVec testAssignedActive_;
-    std::size_t testSize_;          // number of areas in the test set
+    std::size_t testSize_;   // number of areas in the test set
 
     const AreaHypothesisEvaluator* evaluator_;
     const strain_weights_t strainWeights_;
@@ -282,11 +271,14 @@ private:
     const ActiveArea& active(int origId) const { return active_[original_[origId].active]; }
     ActiveArea& active(int origId) { return active_[original_[origId].active]; }
 
-    std::size_t sizeActive(void) const { assert(active_.size() >= testSize_);  return active_.size() - testSize_; }
+    std::size_t sizeActive(void) const
+    {
+        assert(active_.size() >= testSize_);
+        return active_.size() - testSize_;
+    }
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_H
-
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_H

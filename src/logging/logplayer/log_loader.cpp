@@ -8,11 +8,11 @@
 
 
 /**
-* \file     log_loader.cpp
-* \author   Collin Johnson
-*
-* Definition of LogLoader.
-*/
+ * \file     log_loader.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LogLoader.
+ */
 
 #include "logging/logplayer/log_loader.h"
 
@@ -43,8 +43,7 @@ std::shared_ptr<LogReader> LogLoader::loadLog(const std::string& filename, log_t
 {
     auto logReader = availableReaders.find(type);
 
-    if(logReader != availableReaders.end())
-    {
+    if (logReader != availableReaders.end()) {
         logReader->second->openLog(filename);
         return logReader->second;
     }
@@ -52,29 +51,24 @@ std::shared_ptr<LogReader> LogLoader::loadLog(const std::string& filename, log_t
     size_t extensionStart = filename.rfind('.');
     assert(extensionStart != std::string::npos);
 
-    std::string extension(filename.substr(extensionStart+1));
+    std::string extension(filename.substr(extensionStart + 1));
 
-    if(is_carmen_log(extension))
-    {
-        std::cout<<"INFO:LogLoader: Auto-detected type for "<<filename<<" is LOG_CARMEN.\n";
+    if (is_carmen_log(extension)) {
+        std::cout << "INFO:LogLoader: Auto-detected type for " << filename << " is LOG_CARMEN.\n";
         logReader = availableReaders.find(LOG_CARMEN);
         logReader->second->openLog(filename);
         return logReader->second;
-    }
-    else if(is_saphira_log(extension))
-    {
+    } else if (is_saphira_log(extension)) {
         std::cout << "INFO:LogLoader: Auto-detected type for " << filename << " is LOG_SAPHIRA.\n";
         logReader = availableReaders.find(LOG_SAPHIRA);
         logReader->second->openLog(filename);
         return logReader->second;
-    }
-    else
-    {
-        std::cerr<<"ERROR:LogLoader: Unknown file extension "<<extension<<'\n';
+    } else {
+        std::cerr << "ERROR:LogLoader: Unknown file extension " << extension << '\n';
     }
 
     return std::shared_ptr<LogReader>();
 }
 
-}
-}
+}   // namespace logplayer
+}   // namespace vulcan

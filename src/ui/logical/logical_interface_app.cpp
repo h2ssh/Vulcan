@@ -8,17 +8,17 @@
 
 
 /**
-* \file     logical_interface_app.cpp
-* \author   Collin Johnson
-*
-* Definition of LogicalInterfaceApp.
-*/
+ * \file     logical_interface_app.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LogicalInterfaceApp.
+ */
 
-#include <iostream>
-#include "utils/config_file.h"
-#include "ui/logical/params.h"
 #include "ui/logical/logical_interface_app.h"
 #include "ui/logical/logical_interface_frame.h"
+#include "ui/logical/params.h"
+#include "utils/config_file.h"
+#include <iostream>
 
 using namespace vulcan;
 using namespace vulcan::ui;
@@ -29,9 +29,8 @@ IMPLEMENT_APP(LogicalInterfaceApp)
 bool LogicalInterfaceApp::OnInit(void)
 {
     wxString configFilename("debug_ui.cfg");
-    
-    if(argc > 1)
-    {
+
+    if (argc > 1) {
         configFilename = (argv[1]);
     }
 

@@ -7,13 +7,13 @@
 */
 
 
+#include <boost/shared_ptr.hpp>
 #include <iostream>
 #include <string>
-#include <boost/shared_ptr.hpp>
 
+#include "system/module.h"
 #include "utils/command_line.h"
 #include "utils/config_file.h"
-#include "system/module.h"
 
 #include "vision/navtexture/navtexture_communicator.h"
 #include "vision/navtexture/navtexture_director.h"
@@ -29,53 +29,54 @@ void display_help_if_needed(const vulcan::utils::CommandLine& commandLine);
 
 
 /**
-* navtexture_main launches the navigable texture classification module. The navigable texture
-* classifier works by segmenting an image and associating with each segments a texture. The
-* textures determined to be on the ground plane are then compared against the set of dynamic
-* objects in the world. Those objects moving on the ground plane are then used to help learn
-* classifiers for the navigable ground plane textures in the world
-*
-* The command-line arguments for navtexture are:
-*
-*   -h/--help                   Display the help message
-*   --config-file 'filename'    Location of the configuration file with the settings for navtexture
-*
-*/
+ * navtexture_main launches the navigable texture classification module. The navigable texture
+ * classifier works by segmenting an image and associating with each segments a texture. The
+ * textures determined to be on the ground plane are then compared against the set of dynamic
+ * objects in the world. Those objects moving on the ground plane are then used to help learn
+ * classifiers for the navigable ground plane textures in the world
+ *
+ * The command-line arguments for navtexture are:
+ *
+ *   -h/--help                   Display the help message
+ *   --config-file 'filename'    Location of the configuration file with the settings for navtexture
+ *
+ */
 int main(int argc, char** argv)
 {
     vulcan::utils::CommandLine commandLine(argc, argv);
-    
+
     display_help_if_needed(commandLine);
-    
+
     vulcan::utils::ConfigFile config(commandLine.argumentValue(CONFIG));
-    
+
     vulcan::vision::navtexture_params_t params = vulcan::vision::load_navtexture_params(config);
-    
-    boost::shared_ptr<vulcan::vision::NavTextureCommunicator> communicator(new vulcan::vision::NavTextureCommunicator());
-    boost::shared_ptr<vulcan::vision::NavTextureDirector>     director(new vulcan::vision::NavTextureDirector(params));
-    
-    vulcan::system::Module<vulcan::vision::NavTextureCommunicator, vulcan::vision::NavTextureDirector> module(communicator, director);
-    
+
+    boost::shared_ptr<vulcan::vision::NavTextureCommunicator> communicator(
+      new vulcan::vision::NavTextureCommunicator());
+    boost::shared_ptr<vulcan::vision::NavTextureDirector> director(new vulcan::vision::NavTextureDirector(params));
+
+    vulcan::system::Module<vulcan::vision::NavTextureCommunicator, vulcan::vision::NavTextureDirector> module(
+      communicator,
+      director);
+
     module.run();
-    
+
     return 0;
 }
 
 
 void display_help_if_needed(const vulcan::utils::CommandLine& commandLine)
 {
-    bool help_needed = commandLine.argumentExists(HELP_SHORT) ||
-    commandLine.argumentExists(HELP_LONG)  ||
-    !commandLine.argumentExists(CONFIG);
-    
-    if(help_needed)
-    {
-        std::cout<<"The command-line arguments for navtexture are:\n"
-        <<'\n'
-        <<"-h/--help                   Display the help message\n"
-        <<"--config-file 'filename'    Location of the configuration file with the settings for navtexture\n"
-        <<std::endl;
-        
+    bool help_needed = commandLine.argumentExists(HELP_SHORT) || commandLine.argumentExists(HELP_LONG)
+      || !commandLine.argumentExists(CONFIG);
+
+    if (help_needed) {
+        std::cout << "The command-line arguments for navtexture are:\n"
+                  << '\n'
+                  << "-h/--help                   Display the help message\n"
+                  << "--config-file 'filename'    Location of the configuration file with the settings for navtexture\n"
+                  << std::endl;
+
         exit(1);
     }
 }

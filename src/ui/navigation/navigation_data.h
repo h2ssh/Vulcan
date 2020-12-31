@@ -8,11 +8,11 @@
 
 
 /**
-* \file     navigation_data.h
-* \author   Collin Johnson
-*
-* Declaration of NavigationData.
-*/
+ * \file     navigation_data.h
+ * \author   Collin Johnson
+ *
+ * Declaration of NavigationData.
+ */
 
 #ifndef UI_NAVIGATION_NAVIGATION_DATA_H
 #define UI_NAVIGATION_NAVIGATION_DATA_H
@@ -28,8 +28,8 @@ namespace ui
 {
 
 /**
-* NavigationData contains data relevant to Goal and Decision navigation.
-*/
+ * NavigationData contains data relevant to Goal and Decision navigation.
+ */
 struct NavigationData
 {
     pose_t pose;
@@ -38,7 +38,7 @@ struct NavigationData
     const hssh::LocalTopoMap* topoMap = nullptr;
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_NAVIGATION_NAVIGATION_DATA_H
+#endif   // UI_NAVIGATION_NAVIGATION_DATA_H

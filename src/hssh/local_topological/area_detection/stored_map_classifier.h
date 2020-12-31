@@ -8,11 +8,11 @@
 
 
 /**
-* \file     stored_map_classifier.h
-* \author   Collin Johnson
-* 
-* Declaration of StoredMapClassifier.
-*/
+ * \file     stored_map_classifier.h
+ * \author   Collin Johnson
+ *
+ * Declaration of StoredMapClassifier.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_STORED_MAP_CLASSIFIER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_STORED_MAP_CLASSIFIER_H
@@ -23,42 +23,40 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 const std::string kStoredMapClassifierType("stored-map");
 
 
 /**
-* StoredMapClassifier is an AreaClassifier instance that loads a LocalTopoMap from file and always returns it. It
-* doesn't do any labeling. This classifier allows for using the global_metric_hssh to drive via the Decision interface
-* through a known, either batch-labeled or hand-labeled, environment.
-*/
+ * StoredMapClassifier is an AreaClassifier instance that loads a LocalTopoMap from file and always returns it. It
+ * doesn't do any labeling. This classifier allows for using the global_metric_hssh to drive via the Decision interface
+ * through a known, either batch-labeled or hand-labeled, environment.
+ */
 class StoredMapClassifier : public AreaClassifier
 {
 public:
-    
     /**
-    * Constructor for StoredMapClassifier.
-    * 
-    * \param    mapFilename         File containing the map to be loaded
-    * \throws   
-    */
+     * Constructor for StoredMapClassifier.
+     *
+     * \param    mapFilename         File containing the map to be loaded
+     * \throws
+     */
     StoredMapClassifier(const std::string& mapFilename);
-    
+
     // AreaClassifier interface
     LabelingError classifyAreas(const std::vector<Gateway>& gateways,
-                                const VoronoiSkeletonGrid&  skeleton,
-                                const VoronoiIsovistField&  isovistField,
-                                const LocalPerceptualMap&   lpm) override;
+                                const VoronoiSkeletonGrid& skeleton,
+                                const VoronoiIsovistField& isovistField,
+                                const LocalPerceptualMap& lpm) override;
     void processAreaEvents(const LocalAreaEventVec& events) override;
     Areas currentAreas(void) const override;
-    void  sendDebug(system::DebugCommunicator& communicator) const override;
+    void sendDebug(system::DebugCommunicator& communicator) const override;
 
 private:
-
     Areas areas_;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_STORED_MAP_CLASSIFIER_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_STORED_MAP_CLASSIFIER_H

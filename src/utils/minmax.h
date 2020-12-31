@@ -25,6 +25,6 @@ T max(const T& a, const T& b)
     return (a > b) ? a : b;
 }
 
-}
+}   // namespace vulcan
 
-#endif // UTILS_MINMAX_H
+#endif   // UTILS_MINMAX_H

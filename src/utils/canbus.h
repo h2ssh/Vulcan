@@ -8,17 +8,17 @@
 
 
 /**
-* \file     canbus.h
-* \author   Collin Johnson, Philip McKenna
-*
-* Declaration of CanBus.
-*/
+ * \file     canbus.h
+ * \author   Collin Johnson, Philip McKenna
+ *
+ * Declaration of CanBus.
+ */
 
 #ifndef UTILS_CANBUS_H
 #define UTILS_CANBUS_H
 
-#include <string>
 #include <pcan.h>
+#include <string>
 
 namespace vulcan
 {
@@ -26,49 +26,47 @@ namespace utils
 {
 
 /**
-* CanBus is a wrapper around the libpcan library for communication with PEAK Systems series
-* of PC CANBUS adapters.
-*/
+ * CanBus is a wrapper around the libpcan library for communication with PEAK Systems series
+ * of PC CANBUS adapters.
+ */
 class CanBus
 {
 public:
-
     /**
-    * Constructor for CanBus.
-    *
-    * \param    device          Device to connect to
-    * \param    baud            Baudrate for the connection
-    */
+     * Constructor for CanBus.
+     *
+     * \param    device          Device to connect to
+     * \param    baud            Baudrate for the connection
+     */
     CanBus(const std::string& device, int baud);
 
     /**
-    * Destructor for CanBus.
-    */
+     * Destructor for CanBus.
+     */
     ~CanBus(void);
 
-    void sendMessage    (TPCANMsg&   msg);
-    void readMessage    (TPCANMsg&   rdmsg);
+    void sendMessage(TPCANMsg& msg);
+    void readMessage(TPCANMsg& rdmsg);
     void readMessageTime(TPCANRdMsg& rdmsg);
-    void readTimeout    (TPCANRdMsg& rdmsg, int usec);
-    void sendTimeout    (TPCANMsg&   msg,   int usec);
-    void status         (void);
+    void readTimeout(TPCANRdMsg& rdmsg, int usec);
+    void sendTimeout(TPCANMsg& msg, int usec);
+    void status(void);
 
     /**
-    * getFileHandle retrieves the resource handle for the underlying CanBus to allow
-    * for reading from multiple CanBus instances using select().
-    */
+     * getFileHandle retrieves the resource handle for the underlying CanBus to allow
+     * for reading from multiple CanBus instances using select().
+     */
     int getFileHandle(void) const;
 
 private:
-
     void openCanBus(int baud);
     void closeCanBus(void);
 
-    std::string device;              // sets which port to open for CAN
-    void*       busHandle;           // hardware port
+    std::string device;   // sets which port to open for CAN
+    void* busHandle;      // hardware port
 };
 
-}
-}
+}   // namespace utils
+}   // namespace vulcan
 
-#endif // UTILS_CANBUS_H
+#endif   // UTILS_CANBUS_H

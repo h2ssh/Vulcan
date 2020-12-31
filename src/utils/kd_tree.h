@@ -14,10 +14,9 @@ namespace vulcan
 {
 namespace utils
 {
-    
 
-    
-}
-}
 
-#endif // UTILS_KD_TREE_H
+}
+}   // namespace vulcan
+
+#endif   // UTILS_KD_TREE_H

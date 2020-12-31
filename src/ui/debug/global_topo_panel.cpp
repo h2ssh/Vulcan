@@ -8,29 +8,29 @@
 
 
 /**
-* \file     global_topo_panel.cpp
-* \author   Collin Johnson
-*
-* Definition of GlobalTopoPanel.
-*/
+ * \file     global_topo_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GlobalTopoPanel.
+ */
 
 #include "ui/debug/global_topo_panel.h"
-#include "ui/debug/debug_ui.h"
-#include "ui/debug/global_topo_display_widget.h"
 #include "hssh/global_topological/commands/save_topo_slam_data.h"
 #include "hssh/global_topological/commands/serialization.h"
 #include "hssh/global_topological/debug/hypothesis_tree.h"
 #include "hssh/global_topological/mapping/tree_of_maps.h"
 #include "system/module_communicator.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/global_topo_display_widget.h"
 #include "utils/serialized_file_io.h"
 #include "utils/stub.h"
-#include <wx/grid.h>
-#include <boost/range/iterator_range.hpp>
 #include <algorithm>
+#include <boost/range/iterator_range.hpp>
 #include <iostream>
 #include <iterator>
 #include <map>
 #include <string>
+#include <wx/grid.h>
 
 namespace vulcan
 {
@@ -42,19 +42,19 @@ const std::string kMapCacheFile("current_map_cache.mmc");
 
 
 BEGIN_EVENT_TABLE(GlobalTopoPanel, wxEvtHandler)
-    EVT_RADIOBOX(ID_GLOBAL_TOPO_MAP_VIEW_RADIO_BOX,      GlobalTopoPanel::selectedMapView)
-    EVT_CHECKBOX(ID_SHOW_BEST_TOPO_MAP_CHECK_BOX,        GlobalTopoPanel::showBestMap)
-    EVT_COMBOBOX(ID_TOPO_HYPOTHESIS_COMBO_BOX,           GlobalTopoPanel::activeMapSelected)
-    EVT_BUTTON(ID_PREVIOUS_HYPOTHESIS_BUTTON,            GlobalTopoPanel::previousMapPressed)
-    EVT_BUTTON(ID_NEXT_HYPOTHESIS_BUTTON,                GlobalTopoPanel::nextMapPressed)
-    EVT_BUTTON(ID_USE_GLOBAL_TOPO_MAP_BUTTON,            GlobalTopoPanel::useCurrentMapPressed)
-    EVT_BUTTON(ID_LOAD_GLOBAL_TOPO_MAP_FROM_FILE_BUTTON, GlobalTopoPanel::loadGlobalTopoMapPressed)
-    EVT_BUTTON(ID_SAVE_CURRENT_MAP_BUTTON,               GlobalTopoPanel::saveGlobalTopoMapPressed)
-    EVT_BUTTON(ID_SAVE_TREE_BUTTON,                      GlobalTopoPanel::saveTreePressed)
-    EVT_BUTTON(ID_LOAD_TREE_BUTTON,                      GlobalTopoPanel::loadTreePressed)
-    EVT_BUTTON(ID_SAVE_MAP_CACHE_BUTTON,                 GlobalTopoPanel::saveMapCachePressed)
-    EVT_BUTTON(ID_LOAD_MAP_CACHE_BUTTON,                 GlobalTopoPanel::loadMapCachePressed)
-    EVT_BUTTON(ID_CLEAR_GLOBAL_TOPO_MAPS_BUTTON,         GlobalTopoPanel::clearMapsPressed)
+EVT_RADIOBOX(ID_GLOBAL_TOPO_MAP_VIEW_RADIO_BOX, GlobalTopoPanel::selectedMapView)
+EVT_CHECKBOX(ID_SHOW_BEST_TOPO_MAP_CHECK_BOX, GlobalTopoPanel::showBestMap)
+EVT_COMBOBOX(ID_TOPO_HYPOTHESIS_COMBO_BOX, GlobalTopoPanel::activeMapSelected)
+EVT_BUTTON(ID_PREVIOUS_HYPOTHESIS_BUTTON, GlobalTopoPanel::previousMapPressed)
+EVT_BUTTON(ID_NEXT_HYPOTHESIS_BUTTON, GlobalTopoPanel::nextMapPressed)
+EVT_BUTTON(ID_USE_GLOBAL_TOPO_MAP_BUTTON, GlobalTopoPanel::useCurrentMapPressed)
+EVT_BUTTON(ID_LOAD_GLOBAL_TOPO_MAP_FROM_FILE_BUTTON, GlobalTopoPanel::loadGlobalTopoMapPressed)
+EVT_BUTTON(ID_SAVE_CURRENT_MAP_BUTTON, GlobalTopoPanel::saveGlobalTopoMapPressed)
+EVT_BUTTON(ID_SAVE_TREE_BUTTON, GlobalTopoPanel::saveTreePressed)
+EVT_BUTTON(ID_LOAD_TREE_BUTTON, GlobalTopoPanel::loadTreePressed)
+EVT_BUTTON(ID_SAVE_MAP_CACHE_BUTTON, GlobalTopoPanel::saveMapCachePressed)
+EVT_BUTTON(ID_LOAD_MAP_CACHE_BUTTON, GlobalTopoPanel::loadMapCachePressed)
+EVT_BUTTON(ID_CLEAR_GLOBAL_TOPO_MAPS_BUTTON, GlobalTopoPanel::clearMapsPressed)
 END_EVENT_TABLE()
 
 const std::size_t MAX_HYPOTHESES_FOR_COMBO = 200;
@@ -63,8 +63,7 @@ const std::size_t MAX_HYPOTHESES_FOR_COMBO = 200;
 std::vector<hssh::Id> sort_hypotheses_by_depth(const hssh::TreeOfMaps& treeOfMaps);
 
 
-GlobalTopoPanel::GlobalTopoPanel(const ui_params_t& params,
-                                 const global_topo_panel_widgets_t& widgets)
+GlobalTopoPanel::GlobalTopoPanel(const ui_params_t& params, const global_topo_panel_widgets_t& widgets)
 : widget(widgets.displayWidget)
 , activeMapComboBox(widgets.activeMapComboBox)
 , numHypothesesLabel(widgets.numHypothesesLabel)
@@ -98,8 +97,8 @@ void GlobalTopoPanel::subscribe(system::ModuleCommunicator& producer)
 {
     producer.subscribeTo<hssh::HypothesisTree>(this);
 
-//     producer.subscribeTo<hssh::TopologicalMap>(widget);
-//     producer.subscribeTo<hssh::TopoMapVec>(widget);
+    //     producer.subscribeTo<hssh::TopologicalMap>(widget);
+    //     producer.subscribeTo<hssh::TopoMapVec>(widget);
     producer.subscribeTo<hssh::TopologicalState>(widget);
     producer.subscribeTo<hssh::HypothesisTree>(widget);
     producer.subscribeTo<hssh::LocalAreaEventVec>(widget);
@@ -108,8 +107,7 @@ void GlobalTopoPanel::subscribe(system::ModuleCommunicator& producer)
 
 void GlobalTopoPanel::setConsumer(system::ModuleCommunicator* consumer)
 {
-    if(consumer)
-    {
+    if (consumer) {
         this->consumer = consumer;
     }
 }
@@ -117,8 +115,7 @@ void GlobalTopoPanel::setConsumer(system::ModuleCommunicator* consumer)
 
 void GlobalTopoPanel::update(void)
 {
-    if(hypothesesChanged)
-    {
+    if (hypothesesChanged) {
         activeMapComboBox->Clear();
         activeMapComboBox->Append(numberStrings);
         activeMapComboBox->SetSelection(0);
@@ -132,7 +129,7 @@ void GlobalTopoPanel::update(void)
 
     widget->Refresh();
 
-//     PRINT_PRETTY_STUB()
+    //     PRINT_PRETTY_STUB()
 
     auto activeHypothesis = showingTree ? widget->getHoverMap() : widget->getDisplayedMap();
     hypothesisInfoGrid->SetCellValue(0, 0, wxString::Format(wxT("%li"), activeHypothesis.id));
@@ -140,20 +137,20 @@ void GlobalTopoPanel::update(void)
     hypothesisInfoGrid->SetCellValue(2, 0, wxString::Format(wxT("%f"), activeHypothesis.probability.logPosterior));
     hypothesisInfoGrid->SetCellValue(3, 0, wxString::Format(wxT("%f"), activeHypothesis.probability.logLikelihood));
     hypothesisInfoGrid->SetCellValue(4, 0, wxString::Format(wxT("%f"), activeHypothesis.probability.logPrior));
-    hypothesisInfoGrid->SetCellValue(5, 0, wxString::Format(wxT("%f"), activeHypothesis.probability.estimatedLogLikelihood));
+    hypothesisInfoGrid->SetCellValue(5,
+                                     0,
+                                     wxString::Format(wxT("%f"), activeHypothesis.probability.estimatedLogLikelihood));
     hypothesisInfoGrid->SetCellValue(6, 0, wxString::Format(wxT("%f"), activeHypothesis.probability.estimatedLogPrior));
 }
 
 
 void GlobalTopoPanel::saveSettings(utils::ConfigFileWriter& config)
 {
-
 }
 
 
 void GlobalTopoPanel::loadSettings(const utils::ConfigFile& config)
 {
-
 }
 
 
@@ -161,7 +158,7 @@ void GlobalTopoPanel::handleData(const hssh::HypothesisTree& tree, const std::st
 {
     numActiveHypotheses = tree.numLeafNodes();
     numCompleteHypotheses = tree.numCompleteNodes();
-    hypothesesChanged   = true;
+    hypothesesChanged = true;
 }
 
 
@@ -175,8 +172,7 @@ void GlobalTopoPanel::updateTreeOfMaps(void)
 
     numberStrings.Clear();
     numberStrings.Alloc(numHypothesesInCombo);
-    for(size_t n = 0; n < numHypothesesInCombo; ++n)
-    {
+    for (size_t n = 0; n < numHypothesesInCombo; ++n) {
         numberStrings.Add(wxString::Format(wxT("%li"), sortedIds[n]));
     }
 
@@ -188,16 +184,11 @@ void GlobalTopoPanel::updateTreeOfMaps(void)
 
 void GlobalTopoPanel::selectedMapView(wxCommandEvent& event)
 {
-    if(event.GetSelection() == 0)
-    {
+    if (event.GetSelection() == 0) {
         widget->setActiveView(GlobalTopoDisplayWidget::GRAPH_VIEW);
-    }
-    else if(event.GetSelection() == 1)
-    {
+    } else if (event.GetSelection() == 1) {
         widget->setActiveView(GlobalTopoDisplayWidget::PLACE_VIEW);
-    }
-    else if(event.GetSelection() == 2)
-    {
+    } else if (event.GetSelection() == 2) {
         widget->setActiveView(GlobalTopoDisplayWidget::HYPOTHESIS_TREE);
     }
 
@@ -217,8 +208,7 @@ void GlobalTopoPanel::activeMapSelected(wxCommandEvent& event)
     wxString selected = activeMapComboBox->GetStringSelection();
 
     unsigned long selectedId = 0;
-    if(selected.ToULong(&selectedId))
-    {
+    if (selected.ToULong(&selectedId)) {
         widget->setIdToShow(selectedId);
     }
 }
@@ -228,9 +218,8 @@ void GlobalTopoPanel::previousMapPressed(wxCommandEvent& event)
 {
     int mapIndex = activeMapComboBox->GetSelection();
 
-    if(mapIndex > 0)
-    {
-        activeMapComboBox->SetSelection(mapIndex-1);
+    if (mapIndex > 0) {
+        activeMapComboBox->SetSelection(mapIndex - 1);
         activeMapSelected(event);
     }
 }
@@ -240,9 +229,8 @@ void GlobalTopoPanel::nextMapPressed(wxCommandEvent& event)
 {
     unsigned int mapIndex = activeMapComboBox->GetSelection();
 
-    if(mapIndex < activeMapComboBox->GetCount()-1)
-    {
-        activeMapComboBox->SetSelection(mapIndex+1);
+    if (mapIndex < activeMapComboBox->GetCount() - 1) {
+        activeMapComboBox->SetSelection(mapIndex + 1);
         activeMapSelected(event);
     }
 }
@@ -255,13 +243,10 @@ void GlobalTopoPanel::useCurrentMapPressed(wxCommandEvent& event)
     wxString selected = activeMapComboBox->GetStringSelection();
 
     unsigned long selectedId = 0;
-    if(selected.ToULong(&selectedId))
-    {
+    if (selected.ToULong(&selectedId)) {
         PRINT_PRETTY_STUB()
-    }
-    else
-    {
-        std::cerr<<"ERROR:GlobalTopoPanel:Non-numeric map id. Cannot send correct map message.\n";
+    } else {
+        std::cerr << "ERROR:GlobalTopoPanel:Non-numeric map id. Cannot send correct map message.\n";
     }
 }
 
@@ -273,8 +258,7 @@ void GlobalTopoPanel::loadGlobalTopoMapPressed(wxCommandEvent& event)
     // TODO: Fix me
     wxFileDialog openDialog(widget);
 
-    if(openDialog.ShowModal() == wxID_OK)
-    {
+    if (openDialog.ShowModal() == wxID_OK) {
         wxString path = openDialog.GetPath();
         PRINT_PRETTY_STUB()
     }
@@ -288,8 +272,7 @@ void GlobalTopoPanel::saveGlobalTopoMapPressed(wxCommandEvent& event)
     // TODO: Fix me
     wxFileDialog saveDialog(widget);
 
-    if(saveDialog.ShowModal() == wxID_OK)
-    {
+    if (saveDialog.ShowModal() == wxID_OK) {
         wxString path = saveDialog.GetPath();
         PRINT_PRETTY_STUB()
     }
@@ -301,11 +284,10 @@ void GlobalTopoPanel::saveTreePressed(wxCommandEvent& event)
     assert(consumer && "ERROR: You forgot to set the output consumer for GlobalTopoPanel\n");
 
     // Send a message out to the global_topo_hssh to save the TreeOfMaps
-    hssh::GlobalTopoCommandPtr cmd = std::make_shared<hssh::SaveTopoSlamDataCommand>(
-        hssh::TopoSlamDataType::tree_of_maps,
-        kTreeOfMapsFile,
-        "debug_ui"
-    );
+    hssh::GlobalTopoCommandPtr cmd =
+      std::make_shared<hssh::SaveTopoSlamDataCommand>(hssh::TopoSlamDataType::tree_of_maps,
+                                                      kTreeOfMapsFile,
+                                                      "debug_ui");
 
     consumer->sendMessage(cmd);
 }
@@ -316,14 +298,11 @@ void GlobalTopoPanel::loadTreePressed(wxCommandEvent& event)
     hssh::TreeOfMaps tree;
     bool success = utils::load_serializable_from_file(kTreeOfMapsFile, tree);
 
-    if(success)
-    {
+    if (success) {
         std::cout << "INFO: Successfully loaded TreeOfMaps from " << kTreeOfMapsFile << '\n';
         tree_ = std::make_shared<hssh::TreeOfMaps>(std::move(tree));
         updateTreeOfMaps();
-    }
-    else
-    {
+    } else {
         std::cerr << "ERROR: Failed to load TreeOfMaps from " << kTreeOfMapsFile << '\n';
     }
 }
@@ -334,11 +313,8 @@ void GlobalTopoPanel::saveMapCachePressed(wxCommandEvent& event)
     assert(consumer && "ERROR: You forgot to set the output consumer for GlobalTopoPanel\n");
 
     // Send a message out to the global_topo_hssh to save the MetricMapCache
-    hssh::GlobalTopoCommandPtr cmd = std::make_shared<hssh::SaveTopoSlamDataCommand>(
-        hssh::TopoSlamDataType::map_cache,
-        kMapCacheFile,
-        "debug_ui"
-    );
+    hssh::GlobalTopoCommandPtr cmd =
+      std::make_shared<hssh::SaveTopoSlamDataCommand>(hssh::TopoSlamDataType::map_cache, kMapCacheFile, "debug_ui");
 
     consumer->sendMessage(cmd);
 }
@@ -349,13 +325,10 @@ void GlobalTopoPanel::loadMapCachePressed(wxCommandEvent& event)
     hssh::MetricMapCache cache;
     bool success = utils::load_serializable_from_file(kMapCacheFile, cache);
 
-    if(success)
-    {
+    if (success) {
         std::cout << "INFO: Successfully loaded MetricMapCache from " << kMapCacheFile << '\n';
         widget->setMapCache(cache);
-    }
-    else
-    {
+    } else {
         std::cerr << "ERROR: Failed to load MetricMapCache from " << kMapCacheFile << '\n';
     }
 }
@@ -371,14 +344,13 @@ std::vector<hssh::Id> sort_hypotheses_by_depth(const hssh::TreeOfMaps& treeOfMap
 {
     std::vector<std::tuple<int, double, hssh::Id>> leaves;
 
-    for(auto& l : boost::make_iterator_range(treeOfMaps.beginLeaves(), treeOfMaps.endLeaves()))
-    {
+    for (auto& l : boost::make_iterator_range(treeOfMaps.beginLeaves(), treeOfMaps.endLeaves())) {
         leaves.emplace_back(l->visitDepth, l->probability.logPosterior, l->id);
     }
 
     std::sort(leaves.begin(), leaves.end(), [](const auto& lhs, const auto& rhs) {
         return (std::get<0>(lhs) > std::get<0>(rhs))
-            || ((std::get<0>(lhs) == std::get<0>(rhs)) && (std::get<1>(lhs) > std::get<1>(rhs)));
+          || ((std::get<0>(lhs) == std::get<0>(rhs)) && (std::get<1>(lhs) > std::get<1>(rhs)));
     });
 
     std::vector<hssh::Id> sortedIds(leaves.size());
@@ -389,5 +361,5 @@ std::vector<hssh::Id> sort_hypotheses_by_depth(const hssh::TreeOfMaps& treeOfMap
     return sortedIds;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

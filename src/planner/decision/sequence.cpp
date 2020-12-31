@@ -8,11 +8,11 @@
 
 
 /**
-* \file     sequence.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionTaskSequence.
-*/
+ * \file     sequence.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionTaskSequence.
+ */
 
 #include "planner/decision/sequence.h"
 
@@ -30,8 +30,7 @@ DecisionTaskSequence::~DecisionTaskSequence(void)
 void DecisionTaskSequence::appendTask(std::unique_ptr<DecisionTask> task)
 {
     // Push task to back of sequence if it is a valid task
-    if(task)
-    {
+    if (task) {
         tasks_.push_back(std::move(task));
     }
 }
@@ -40,8 +39,7 @@ void DecisionTaskSequence::appendTask(std::unique_ptr<DecisionTask> task)
 void DecisionTaskSequence::prependTask(std::unique_ptr<DecisionTask> task)
 {
     // Push task on front of sequence if it is a valid task
-    if(task)
-    {
+    if (task) {
         tasks_.push_front(std::move(task));
     }
 }
@@ -50,8 +48,7 @@ void DecisionTaskSequence::prependTask(std::unique_ptr<DecisionTask> task)
 std::unique_ptr<DecisionTask> DecisionTaskSequence::nextTask(void)
 {
     // If there is a task, then pull it off the front of the sequence
-    if(!tasks_.empty())
-    {
+    if (!tasks_.empty()) {
         // Ensure the pointer is moved, so create explicitly. auto would bind to a reference, which wouldn't give
         // the correct type.
         auto frontTask = std::unique_ptr<DecisionTask>{std::move(tasks_.front())};
@@ -63,5 +60,5 @@ std::unique_ptr<DecisionTask> DecisionTaskSequence::nextTask(void)
     return nullptr;
 }
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan

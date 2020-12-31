@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-* 
-* Declaration of metric_relocalizer_params_t and load_metric_relocalizer_params.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of metric_relocalizer_params_t and load_metric_relocalizer_params.
+ */
 
 #ifndef HSSH_UTILS_METRICAL_RELOCALIZATION_PARAMS_H
 #define HSSH_UTILS_METRICAL_RELOCALIZATION_PARAMS_H
@@ -21,31 +21,35 @@
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace hssh
 {
 
 struct metric_relocalizer_params_t
 {
-    int   maxRelocalizationAttempts;        ///< Maximum number of times to update the relocalization before failing
-    float maxPositionStdDev;                ///< Maximum variance of position estimate for successful relocalization
-    float maxOrientationStdDev;             ///< Maximum variance of orientation estimate for successful relocalization
-    
-    int minParticleFilterSamples;           ///< Minimum number of particles for each sampling step -- should be a reasonably large number (>50)
-    
-    std::string filterType;                 ///< Particle filter implementation to be used
-    std::string motionModelType;            ///< Motion model to use in the particle filter
-    std::string observationModelType;       ///< Observation model for weighting the particles
-    
-    particle_filter_params_t   filterParams;
-    motion_model_params_t      motionParams;
+    int maxRelocalizationAttempts;   ///< Maximum number of times to update the relocalization before failing
+    float maxPositionStdDev;         ///< Maximum variance of position estimate for successful relocalization
+    float maxOrientationStdDev;      ///< Maximum variance of orientation estimate for successful relocalization
+
+    int minParticleFilterSamples;   ///< Minimum number of particles for each sampling step -- should be a reasonably
+                                    ///< large number (>50)
+
+    std::string filterType;             ///< Particle filter implementation to be used
+    std::string motionModelType;        ///< Motion model to use in the particle filter
+    std::string observationModelType;   ///< Observation model for weighting the particles
+
+    particle_filter_params_t filterParams;
+    motion_model_params_t motionParams;
     observation_model_params_t observationParams;
-    
+
     metric_relocalizer_params_t(const utils::ConfigFile& config);
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_METRICAL_RELOCALIZATION_PARAMS_H
+#endif   // HSSH_UTILS_METRICAL_RELOCALIZATION_PARAMS_H

@@ -8,45 +8,39 @@
 
 
 /**
-* \file     prior_evaluator.cpp
-* \author   Collin Johnson
-*
-* Definition of create_hypothesis_prior_evaluator() factory function.
-*/
+ * \file     prior_evaluator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_hypothesis_prior_evaluator() factory function.
+ */
 
 #include "hssh/global_topological/mapping/prior_evaluator.h"
 #include "hssh/global_topological/mapping/prior_evaluator_impl.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 namespace vulcan
 {
 namespace hssh
 {
 
-std::unique_ptr<HypothesisPriorEvaluator> create_hypothesis_prior_evaluator(const std::string&                               type,
-                                                                            const hypothesis_probability_evaluator_params_t& params)
+std::unique_ptr<HypothesisPriorEvaluator>
+  create_hypothesis_prior_evaluator(const std::string& type, const hypothesis_probability_evaluator_params_t& params)
 {
-    if(type == UNIFORM_PRIOR_EVALUATOR_TYPE)
-    {
+    if (type == UNIFORM_PRIOR_EVALUATOR_TYPE) {
         return std::unique_ptr<HypothesisPriorEvaluator>(new UniformPriorEvaluator());
-    }
-    else if(type == DIRICHLET_PRIOR_EVALUATOR_TYPE)
-    {
+    } else if (type == DIRICHLET_PRIOR_EVALUATOR_TYPE) {
         return std::unique_ptr<HypothesisPriorEvaluator>(new DirichletPriorEvaluator(params.dirichletParams));
-    }
-    else if(type == BAYESIAN_INFORMATION_CRITERION_EVALUATOR_TYPE)
-    {
-        return std::unique_ptr<HypothesisPriorEvaluator>(new BayesianInformationCriterionEvaluator(params.bayesianInformationParams));
-    }
-    else
-    {
-        std::cerr<<"ERROR:Unknown hypothesis prior type: "<<type<<" Exiting...\n";
+    } else if (type == BAYESIAN_INFORMATION_CRITERION_EVALUATOR_TYPE) {
+        return std::unique_ptr<HypothesisPriorEvaluator>(
+          new BayesianInformationCriterionEvaluator(params.bayesianInformationParams));
+    } else {
+        std::cerr << "ERROR:Unknown hypothesis prior type: " << type << " Exiting...\n";
         assert(false);
     }
 
     return std::unique_ptr<HypothesisPriorEvaluator>();
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

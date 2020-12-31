@@ -7,15 +7,15 @@
 */
 
 
-#include "lcmtypes/commands/save_lpm_command.h"
 #include "lcmtypes/commands/load_lpm_command.h"
+#include "lcmtypes/commands/save_lpm_command.h"
 #include "system/module_communicator.h"
 #include "utils/command_line.h"
+#include <cassert>
+#include <ctime>
 #include <iostream>
 #include <random>
 #include <string>
-#include <cassert>
-#include <ctime>
 
 using namespace vulcan;
 
@@ -34,28 +34,25 @@ int main(int argc, char** argv)
     std::vector<utils::command_line_argument_t> arguments;
     arguments.push_back({kLoad, "Option to load a map", true, ""});
     arguments.push_back({kSave, "Option to save a map", true, ""});
-    arguments.push_back({kMap,  "Map to be loaded or saved", false, ""});
-    
+    arguments.push_back({kMap, "Map to be loaded or saved", false, ""});
+
     utils::CommandLine commandLine(argc, argv, arguments);
-    
-    if(!commandLine.verify())
-    {
+
+    if (!commandLine.verify()) {
         commandLine.printHelp();
         return -1;
     }
-    
+
     system::ModuleCommunicator communicator;
-    
-    if(commandLine.argumentExists(kSave))
-    {
+
+    if (commandLine.argumentExists(kSave)) {
         send_save_lpm(commandLine.argumentValue(kMap), communicator);
     }
-    
-    if(commandLine.argumentExists(kLoad))
-    {
+
+    if (commandLine.argumentExists(kLoad)) {
         send_load_lpm_at_origin(commandLine.argumentValue(kMap), communicator);
     }
-    
+
     return 0;
 }
 
@@ -65,7 +62,7 @@ void send_save_lpm(const std::string& filename, system::ModuleCommunicator& comm
     vulcan_lcm::save_lpm_command command;
     command.filename = filename;
     communicator.sendMessage(command);
-    
+
     std::cout << "Sent command to save current LPM to " << filename << '\n';
 }
 
@@ -76,8 +73,8 @@ void send_load_lpm_at_origin(const std::string& filename, system::ModuleCommunic
     command.filename = filename;
     command.initial_x = 0.0f;
     command.initial_y = 0.0f;
-    
+
     communicator.sendMessage(command);
-    
+
     std::cout << "Sent command to load current LPM from " << filename << '\n';
 }

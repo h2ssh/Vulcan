@@ -8,17 +8,17 @@
 
 
 /**
-* \file     navigation.h
-* \author   Collin Johnson
-*
-* Declaration of NavigationControlTask
-*/
+ * \file     navigation.h
+ * \author   Collin Johnson
+ *
+ * Declaration of NavigationControlTask
+ */
 
 #ifndef PLANNER_CONTROL_TASKS_NAVIGATION_H
 #define PLANNER_CONTROL_TASKS_NAVIGATION_H
 
-#include "planner/control/task.h"
 #include "core/pose.h"
+#include "planner/control/task.h"
 #include <cereal/types/base_class.hpp>
 #include <vector>
 
@@ -28,24 +28,23 @@ namespace planner
 {
 
 /**
-* NavigationControlTask drives the robot to a desired target pose. The shortest path to the target is checked for
-* constrictions. If any constrictions are found, then they will be handled accordingly as subtasks. In the normal case
-* though, the task creates the appropriate PoseTask and waits until it finishes successfully.
-*
-* The NavigationControlTask requires the target pose to be in the LPM when the task is activated. If this condition
-* doesn't hold, then the task will fail. Exploration is not supported by this task.
-*/
+ * NavigationControlTask drives the robot to a desired target pose. The shortest path to the target is checked for
+ * constrictions. If any constrictions are found, then they will be handled accordingly as subtasks. In the normal case
+ * though, the task creates the appropriate PoseTask and waits until it finishes successfully.
+ *
+ * The NavigationControlTask requires the target pose to be in the LPM when the task is activated. If this condition
+ * doesn't hold, then the task will fail. Exploration is not supported by this task.
+ */
 class NavigationControlTask : public ControlTask
 {
 public:
-
     /**
-    * Constructor for NavigationControlTask.
-    *
-    * \param    target          Target pose for the robot to drive to
-    * \param    id              Id of the task
-    * \param    parent          Parent of the task
-    */
+     * Constructor for NavigationControlTask.
+     *
+     * \param    target          Target pose for the robot to drive to
+     * \param    id              Id of the task
+     * \param    parent          Parent of the task
+     */
     NavigationControlTask(const pose_t& target, int32_t id, ControlTask* parent);
 
     // ControlTask interface
@@ -54,7 +53,6 @@ public:
     int pushSubTasks(ControlTaskStack& stack) override;
 
 private:
-
     pose_t target_;
     std::vector<std::shared_ptr<ControlTask>> subtasks_;
     std::vector<bool> completedSubtasks_;
@@ -71,12 +69,11 @@ private:
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( cereal::base_class<ControlTask>(this),
-            target_);
+        ar(cereal::base_class<ControlTask>(this), target_);
     }
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_CONTROL_TASKS_NAVIGATION_H
+#endif   // PLANNER_CONTROL_TASKS_NAVIGATION_H

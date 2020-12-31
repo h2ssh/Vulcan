@@ -8,11 +8,11 @@
 
 
 /**
-* \file     goal_estimator.cpp
-* \author   Collin Johnson
-*
-* Definition of GoalEstimator and goal_estimator_params_t.
-*/
+ * \file     goal_estimator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of GoalEstimator and goal_estimator_params_t.
+ */
 
 #include "tracker/goals/goal_estimator.h"
 #include "tracker/motions/fixed_endpoint.h"
@@ -24,18 +24,18 @@ namespace vulcan
 {
 namespace tracker
 {
-    
-ObjectGoalDistribution GoalEstimator::estimateGoal(const ObjectMotion& motion, 
+
+ObjectGoalDistribution GoalEstimator::estimateGoal(const ObjectMotion& motion,
                                                    double relativeGoalTime,
                                                    const tracking_environment_t& environment,
                                                    goal_estimator_debug_info_t* debug)
 {
     environment_ = &environment;
-    relativeGoalTime_ = std::max(relativeGoalTime, 1.0);    // always look at least one second out
+    relativeGoalTime_ = std::max(relativeGoalTime, 1.0);   // always look at least one second out
     debug_ = debug;
-    
+
     motion.accept(*this);   // visitors will set the goals_ field
-    
+
     return goals_;
 }
 
@@ -63,5 +63,5 @@ void GoalEstimator::visitStriding(const StridingMotion& motion)
     goals_ = estimateStridingGoal(motion);
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

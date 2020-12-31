@@ -8,11 +8,11 @@
 
 
 /**
-* \file     stopping_distance_test.h
-* \author   Collin Johnson
-*
-* Declaration of StoppingDistanceTest.
-*/
+ * \file     stopping_distance_test.h
+ * \author   Collin Johnson
+ *
+ * Declaration of StoppingDistanceTest.
+ */
 
 #ifndef CALIBRATION_WHEELCHAIR_STOPPING_DISTANCE_TEST_H
 #define CALIBRATION_WHEELCHAIR_STOPPING_DISTANCE_TEST_H
@@ -23,17 +23,14 @@ namespace vulcan
 {
 
 /**
-* StoppingDistanceTest
-*/
+ * StoppingDistanceTest
+ */
 class StoppingDistanceTest : public WheelchairTest
 {
 public:
-
 private:
-
-
 };
 
-}
+}   // namespace vulcan
 
-#endif // CALIBRATION_WHEELCHAIR_STOPPING_DISTANCE_TEST_H
+#endif   // CALIBRATION_WHEELCHAIR_STOPPING_DISTANCE_TEST_H

@@ -8,38 +8,38 @@
 
 
 /**
-* \file     tracker_display_widget.h
-* \author   Collin Johnson
-*
-* Declaration of TrackerDisplayWidget.
-*/
+ * \file     tracker_display_widget.h
+ * \author   Collin Johnson
+ *
+ * Declaration of TrackerDisplayWidget.
+ */
 
 #ifndef UI_DEBUG_TRACKER_DISPLAY_WIDGET_H
 #define UI_DEBUG_TRACKER_DISPLAY_WIDGET_H
 
-#include "ui/components/grid_based_display_widget.h"
-#include "tracker/dynamic_object_collection.h"
-#include "tracker/laser_object_collection.h"
-#include "tracker/evaluation/intention_evaluator.h"
-#include "utils/mutex.h"
-#include "hssh/local_metric/lpm.h"
 #include "core/motion_state.h"
+#include "hssh/local_metric/lpm.h"
+#include "tracker/dynamic_object_collection.h"
+#include "tracker/evaluation/intention_evaluator.h"
+#include "tracker/laser_object_collection.h"
+#include "ui/components/grid_based_display_widget.h"
+#include "utils/mutex.h"
 
 namespace vulcan
 {
 namespace ui
 {
 
-class  RobotRenderer;
-class  LaserObjectRenderer;
-class  DynamicObjectRenderer;
-class  ObjectIntentionRenderer;
-class  OccupancyGridRenderer;
+class RobotRenderer;
+class LaserObjectRenderer;
+class DynamicObjectRenderer;
+class ObjectIntentionRenderer;
+class OccupancyGridRenderer;
 struct ui_params_t;
 
 /**
-* RigidObjectState specifies the possible rigid object states to be rendered by the widget.
-*/
+ * RigidObjectState specifies the possible rigid object states to be rendered by the widget.
+ */
 enum class RigidObjectState
 {
     fast,
@@ -47,9 +47,9 @@ enum class RigidObjectState
 };
 
 /**
-* TrackingUncertainty specifies the different types of uncertainty maintained by a tracked object. The type to show
-* is given here.
-*/
+ * TrackingUncertainty specifies the different types of uncertainty maintained by a tracked object. The type to show
+ * is given here.
+ */
 enum class TrackingUncertainty
 {
     none,
@@ -59,8 +59,8 @@ enum class TrackingUncertainty
 };
 
 /**
-* PredictionType defines the different predictions available for a tracked object.
-*/
+ * PredictionType defines the different predictions available for a tracked object.
+ */
 enum class PredictionType
 {
     none,
@@ -70,19 +70,18 @@ enum class PredictionType
 
 
 /**
-* TrackerDisplayWidget visualizes the state estimated by the object_tracker module. The following are rendered:
-*
-*   - Laser objects
-*   - Dynamic objects
-*   - Dynamic object goal predictions
-*   - Dynamic object trajectory predictions
-*/
+ * TrackerDisplayWidget visualizes the state estimated by the object_tracker module. The following are rendered:
+ *
+ *   - Laser objects
+ *   - Dynamic objects
+ *   - Dynamic object goal predictions
+ *   - Dynamic object trajectory predictions
+ */
 class TrackerDisplayWidget : public GridBasedDisplayWidget
 {
 public:
-
     const static int kRectangleModel = 0;
-    const static int kCircleModel    = 1;
+    const static int kCircleModel = 1;
     const static int kTwoCircleModel = 2;
 
     TrackerDisplayWidget(wxWindow* parent,
@@ -100,7 +99,7 @@ public:
     void shouldFollowRobot(bool follow) { shouldFollowRobot_ = follow; }
 
     void showLaserObjects(bool show) { shouldShowLaserObjects_ = show; }
-    void showLaserPoints (bool show) { shouldShowLaserPoints_  = show; }
+    void showLaserPoints(bool show) { shouldShowLaserPoints_ = show; }
     void showLaserUncertainty(bool show) { shouldShowLaserUncertainty_ = show; }
 
     void showTrackedObjects(bool show) { shouldShowDynamicObjects_ = show; }
@@ -116,30 +115,29 @@ public:
     void setTrajectoryPredictionToShow(PredictionType show) { trajectoryPredictionToShow_ = show; }
     void setPredictedTrajectoryDuration(int durationMs) { predictedTrajDurationMs_ = durationMs; }
 
-    void handleData(const motion_state_t&            state,   const std::string& channel);
-    void handleData(const hssh::LocalPerceptualMap&         lpm,     const std::string& channel);
-    void handleData(const tracker::LaserObjectCollection&   objects, const std::string& channel);
+    void handleData(const motion_state_t& state, const std::string& channel);
+    void handleData(const hssh::LocalPerceptualMap& lpm, const std::string& channel);
+    void handleData(const tracker::LaserObjectCollection& objects, const std::string& channel);
     void handleData(const tracker::DynamicObjectCollection& objects, const std::string& channel);
 
 private:
-
     std::vector<tracker::LaserObjectCollection> laserObjects_;
     tracker::DynamicObjectCollection dynObjCollection_;
     hssh::LocalPerceptualMap lpm_;
-    motion_state_t    robotState_;
+    motion_state_t robotState_;
 
     std::unique_ptr<tracker::AreaIntentionEstimates> intentions_;
     bool shouldEvaluateIntentions_ = false;
 
     bool haveNewLPM_;
-    int  laserObjectsIndex_;
+    int laserObjectsIndex_;
 
     utils::Mutex dataLock_;
 
-    std::unique_ptr<OccupancyGridRenderer>   lpmRenderer_;
-    std::unique_ptr<DynamicObjectRenderer>   dynamicObjectRenderer_;
-    std::unique_ptr<LaserObjectRenderer>     laserObjectRenderer_;
-    std::unique_ptr<RobotRenderer>           robotRenderer_;
+    std::unique_ptr<OccupancyGridRenderer> lpmRenderer_;
+    std::unique_ptr<DynamicObjectRenderer> dynamicObjectRenderer_;
+    std::unique_ptr<LaserObjectRenderer> laserObjectRenderer_;
+    std::unique_ptr<RobotRenderer> robotRenderer_;
     std::unique_ptr<ObjectIntentionRenderer> intentionRenderer_;
 
     bool shouldFollowRobot_;
@@ -162,12 +160,12 @@ private:
 
     // GridBasedDisplayWidget interface
     virtual Point<int> convertWorldToGrid(const Point<float>& world) const;
-    virtual void             renderWidget(void);
+    virtual void renderWidget(void);
 
     int createLaserOptions(void) const;
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_TRACKER_DISPLAY_WIDGET_H
+#endif   // UI_DEBUG_TRACKER_DISPLAY_WIDGET_H

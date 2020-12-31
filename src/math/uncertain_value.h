@@ -8,20 +8,20 @@
 
 
 /**
-* \file     uncertain_value.h
-* \author   Collin Johnson
-*
-* Definition of UncertainValue template.
-*/
+ * \file     uncertain_value.h
+ * \author   Collin Johnson
+ *
+ * Definition of UncertainValue template.
+ */
 
 #ifndef MATH_UNCERTAIN_VALUE_H
 #define MATH_UNCERTAIN_VALUE_H
 
+#include <cereal/access.hpp>
 #include <iomanip>
 #include <iostream>
 #include <limits>
 #include <type_traits>
-#include <cereal/access.hpp>
 
 namespace vulcan
 {
@@ -29,13 +29,12 @@ namespace math
 {
 
 /**
-* UncertainValue
-*/
+ * UncertainValue
+ */
 template <typename T = double>
 class UncertainValue
 {
 public:
-
     UncertainValue(void)
     : min_(std::numeric_limits<T>::max())
     , max_(std::numeric_limits<T>::lowest())
@@ -47,8 +46,8 @@ public:
         static_assert(std::is_arithmetic<T>::value, "UncertainValue parameter must be arithmetic");
     }
 
-    T      min(void) const { return min_; }
-    T      max(void) const { return max_; }
+    T min(void) const { return min_; }
+    T max(void) const { return max_; }
     double mean(void) const { return mean_; }
     double variance(void) const { return variance_; }
     int numSamples(void) const { return numSamples_; }
@@ -62,23 +61,21 @@ public:
 
         // Calculate online mean and variance
         auto delta = sample - mean_;
-        mean_  = mean_ + (delta / numSamples_);
-        m2_   += (delta * (sample - mean_));
+        mean_ = mean_ + (delta / numSamples_);
+        m2_ += (delta * (sample - mean_));
 
-        if(numSamples_ > 1)
-        {
+        if (numSamples_ > 1) {
             variance_ = m2_ / (numSamples_ - 1);
         }
     }
 
 private:
-
-    T      min_;
-    T      max_;
+    T min_;
+    T max_;
     double mean_;
     double variance_;
-    T      m2_;            ///< Moment used for inline calculation of variance
-    int    numSamples_;
+    T m2_;   ///< Moment used for inline calculation of variance
+    int numSamples_;
 
     // Serialization support
     friend class cereal::access;
@@ -86,12 +83,7 @@ private:
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar( min_,
-            max_,
-            mean_,
-            variance_,
-            m2_,
-            numSamples_);
+        ar(min_, max_, mean_, variance_, m2_, numSamples_);
     }
 };
 
@@ -99,12 +91,12 @@ private:
 template <typename T>
 std::ostream& operator<<(std::ostream& out, const UncertainValue<T>& value)
 {
-    out << std::setprecision(3) << "Min:" << std::setw(6) << value.min() << " Max:" << value.max() << " Mean:"
-        << value.mean() << " Var:" << value.variance() << " Num samples:" << value.numSamples();
+    out << std::setprecision(3) << "Min:" << std::setw(6) << value.min() << " Max:" << value.max()
+        << " Mean:" << value.mean() << " Var:" << value.variance() << " Num samples:" << value.numSamples();
     return out;
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_UNCERTAIN_VALUE_H
+#endif   // MATH_UNCERTAIN_VALUE_H

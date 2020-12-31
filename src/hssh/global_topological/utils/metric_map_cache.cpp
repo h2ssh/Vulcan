@@ -8,11 +8,11 @@
 
 
 /**
-* \file     metric_place_manager.cpp
-* \author   Collin Johnson
-*
-* Definition of MetricMapCache and load_metric_place_manager_params().
-*/
+ * \file     metric_place_manager.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of MetricMapCache and load_metric_place_manager_params().
+ */
 
 #include "hssh/global_topological/utils/metric_map_cache.h"
 #include "hssh/local_topological/areas/decision_point.h"
@@ -34,8 +34,7 @@ Id id_from_directory_entry(const bfs::path& file);
 
 
 /////   CachedMap implementation   /////
-CachedMap::CachedMap(const std::shared_ptr<LocalArea>& area)
-: area_(area)
+CachedMap::CachedMap(const std::shared_ptr<LocalArea>& area) : area_(area)
 {
 }
 
@@ -52,12 +51,9 @@ const CachedMap* MetricMapCache::loadMap(Id id) const
 {
     auto mapIt = maps_.find(id);
 
-    if(mapIt != maps_.end())
-    {
+    if (mapIt != maps_.end()) {
         return &mapIt->second;
-    }
-    else
-    {
+    } else {
         return nullptr;
     }
 }
@@ -66,19 +62,17 @@ const CachedMap* MetricMapCache::loadMap(Id id) const
 bool MetricMapCache::saveMapsToDisk(const std::string& directory, const std::string& basename)
 {
     // Ensure the directory in which to save the maps exists
-    if(!bfs::create_directories(directory))     // create_directories is like calling mkdir -p
+    if (!bfs::create_directories(directory))   // create_directories is like calling mkdir -p
     {
         std::cerr << "ERROR: MetricMapCache: Unable to create directory for storing maps:" << directory << '\n';
         return false;
     }
 
-    for(auto& idToMap : maps_)
-    {
+    for (auto& idToMap : maps_) {
         std::ostringstream filename;
         filename << directory << '/' << basename << '_' << idToMap.first << ".lpm";
 
-        if(!utils::save_serializable_to_file(filename.str(), idToMap.second))
-        {
+        if (!utils::save_serializable_to_file(filename.str(), idToMap.second)) {
             std::cerr << "ERROR: MetricMapCache: Unable to save LPM to file:" << filename.str() << '\n';
             return false;
         }
@@ -90,8 +84,7 @@ bool MetricMapCache::saveMapsToDisk(const std::string& directory, const std::str
 
 int MetricMapCache::loadMapsFromDisk(const std::string& directory, const std::string& basename)
 {
-    if(!bfs::is_directory(directory))
-    {
+    if (!bfs::is_directory(directory)) {
         std::cerr << "ERROR: MetricMapCache: Cannot load maps from " << directory << ". It isn't a directory!\n";
         return -1;
     }
@@ -99,22 +92,17 @@ int MetricMapCache::loadMapsFromDisk(const std::string& directory, const std::st
     int numLoaded = 0;
     CachedMap map;
 
-    for(bfs::directory_entry& file : bfs::directory_iterator(directory))
-    {
+    for (bfs::directory_entry& file : bfs::directory_iterator(directory)) {
         auto path = file.path();
 
-        if(!utils::load_serializable_from_file(path.native(), map))
-        {
+        if (!utils::load_serializable_from_file(path.native(), map)) {
             std::cerr << "ERROR: MetricMapCache: Failed to load file " << path << '\n';
-        }
-        else
-        {
+        } else {
             // Extract the id from the directory entry and save the LPM in the cache
             Id id = id_from_directory_entry(path);
             maps_[id] = std::move(map);
             ++numLoaded;
         }
-
     }
 
     return numLoaded;
@@ -122,29 +110,26 @@ int MetricMapCache::loadMapsFromDisk(const std::string& directory, const std::st
 
 
 /////   CacheEventVisitor implementation   /////
-CacheEventVisitor::CacheEventVisitor(MetricMapCache& cache)
-: cache_(cache)
+CacheEventVisitor::CacheEventVisitor(MetricMapCache& cache) : cache_(cache)
 {
 }
-    
-    
-void CacheEventVisitor::visitAreaTransition(const AreaTransitionEvent & event)
+
+
+void CacheEventVisitor::visitAreaTransition(const AreaTransitionEvent& event)
 {
     auto entered = event.enteredArea();
-    if(entered)
-    {
+    if (entered) {
         cache_.addMap(entered->id(), CachedMap(entered));
     }
-    
+
     auto exited = event.exitedArea();
-    if(exited)
-    {
+    if (exited) {
         cache_.addMap(exited->id(), CachedMap(exited));
     }
 }
-    
-    
-void CacheEventVisitor::visitTurnAround(const TurnAroundEvent & event) 
+
+
+void CacheEventVisitor::visitTurnAround(const TurnAroundEvent& event)
 {
 }
 
@@ -159,5 +144,5 @@ Id id_from_directory_entry(const bfs::path& file)
     return std::stoll(stem.substr(pos + 1));
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     director.cpp
-* \author   Collin Johnson
-* 
-* Definition of StateEstimatorDirector.
-*/
+ * \file     director.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of StateEstimatorDirector.
+ */
 
 #include "robot/state/director.h"
 #include "robot/state/state_estimator.h"
@@ -23,14 +23,13 @@ namespace vulcan
 {
 namespace robot
 {
-    
+
 StateEstimatorDirector::StateEstimatorDirector(const utils::CommandLine& command, const utils::ConfigFile& config)
 : params_(load_state_estimator_module_params(config))
 , updateTrigger_(false)
 {
-    for(const auto& type : params_.monitorTypes)
-    {
-        std::cout<<"INFO:StateEstimator: Creating monitor "<<type<<'\n';
+    for (const auto& type : params_.monitorTypes) {
+        std::cout << "INFO:StateEstimator: Creating monitor " << type << '\n';
         estimators_.push_back(create_state_estimator(type, config));
     }
 }
@@ -44,11 +43,10 @@ StateEstimatorDirector::~StateEstimatorDirector(void)
 
 system::TriggerStatus StateEstimatorDirector::waitForTrigger(void)
 {
-    if(updateTrigger_.timedWait(1000))
-    {
+    if (updateTrigger_.timedWait(1000)) {
         return system::TriggerStatus::not_ready;
     }
-    
+
     updateTrigger_.setPredicate(false);
     return system::TriggerStatus::ready;
 }
@@ -56,11 +54,10 @@ system::TriggerStatus StateEstimatorDirector::waitForTrigger(void)
 
 void StateEstimatorDirector::subscribeToData(system::ModuleCommunicator& communicator)
 {
-    for(auto& estimator : estimators_)
-    {
+    for (auto& estimator : estimators_) {
         estimator->initialize(communicator);
     }
-    
+
     // Subscribe after the estimators because the data is distributed in order of subscription,
     // so this way all estimators will get the new odometry before the director wakes up
     // and does some computation
@@ -70,8 +67,7 @@ void StateEstimatorDirector::subscribeToData(system::ModuleCommunicator& communi
 
 system::UpdateStatus StateEstimatorDirector::runUpdate(system::ModuleCommunicator& communicator)
 {
-    for(auto& estimator : estimators_)
-    {
+    for (auto& estimator : estimators_) {
         estimator->estimate(communicator);
     }
 
@@ -92,5 +88,5 @@ void StateEstimatorDirector::handleData(const odometry_t& odometry, const std::s
     updateTrigger_.broadcast();
 }
 
-} // namespace robot
-} // namespace vulcan
+}   // namespace robot
+}   // namespace vulcan

@@ -8,17 +8,17 @@
 
 
 /**
-* \file     mpepc_log.h
-* \author   Jong Jin Park and Collin Johnson
-*
-* Declaration of MPEPCLog.
-*/
+ * \file     mpepc_log.h
+ * \author   Jong Jin Park and Collin Johnson
+ *
+ * Declaration of MPEPCLog.
+ */
 
 #ifndef MPEPC_EVALUATION_MPEPC_LOG_H
 #define MPEPC_EVALUATION_MPEPC_LOG_H
 
-#include "mpepc/trajectory/trajectory_planner_info.h"
 #include "core/imu_data.h"
+#include "mpepc/trajectory/trajectory_planner_info.h"
 #include "system/module_communicator.h"
 #include "tracker/dynamic_object_collection.h"
 #include <memory>
@@ -29,20 +29,19 @@ namespace mpepc
 {
 
 /**
-* MPEPCLog is a utility for loading the contents of a driving data log into RAM. MPEPCLog exists to avoid needing to use
-* a logplayer to read all the driving data from a log for processing, be it for doing calculations or converting to a
-* Matlab-friendly format.
-*
-* MPEPCLog is based on SensorLog by Collin Johnson. This version listens to both system and debug messages.
-*
-* Accessing iterators for the data sources all provide two forms. One form provides iterators over the entire sequence.
-* The other form allows for iteration over specific durations of time relative to the start time of the log. This
-* approach provides easy access to a subset of the data of interest.
-*/
+ * MPEPCLog is a utility for loading the contents of a driving data log into RAM. MPEPCLog exists to avoid needing to
+ * use a logplayer to read all the driving data from a log for processing, be it for doing calculations or converting to
+ * a Matlab-friendly format.
+ *
+ * MPEPCLog is based on SensorLog by Collin Johnson. This version listens to both system and debug messages.
+ *
+ * Accessing iterators for the data sources all provide two forms. One form provides iterators over the entire sequence.
+ * The other form allows for iteration over specific durations of time relative to the start time of the log. This
+ * approach provides easy access to a subset of the data of interest.
+ */
 class MPEPCLog
 {
 public:
-
     using debug_info_iterator = std::vector<mpepc::trajectory_planner_debug_info_t>::const_iterator;
     using motion_state_iterator = std::vector<motion_state_t>::const_iterator;
     using joystick_iterator = std::vector<robot::commanded_joystick_t>::const_iterator;
@@ -50,19 +49,19 @@ public:
     using object_iterator = std::vector<tracker::DynamicObjectCollection>::const_iterator;
 
     /**
-    * Default constructor for MPEPCLog.
-    *
-    * Create an empty log.
-    */
+     * Default constructor for MPEPCLog.
+     *
+     * Create an empty log.
+     */
     MPEPCLog(void);
 
     /**
-    * Constructor for MPEPCLog.
-    *
-    * Create a MPEPCLog containing all data in the provided LCM log.
-    *
-    * \param    logFilename         Name of the log to be loaded
-    */
+     * Constructor for MPEPCLog.
+     *
+     * Create a MPEPCLog containing all data in the provided LCM log.
+     *
+     * \param    logFilename         Name of the log to be loaded
+     */
     MPEPCLog(const std::string& logFilename);
 
     // Disable copying, because these logs can be huge. Only moves are allowed for sanity's sake
@@ -73,38 +72,38 @@ public:
     MPEPCLog& operator=(MPEPCLog&&) = default;
 
     /**
-    * name retrieves the name of the sensor log. It is just the end of the filename, not the full path.
-    */
+     * name retrieves the name of the sensor log. It is just the end of the filename, not the full path.
+     */
     std::string name(void) const { return name_; }
 
     /**
-    * loadTimeRange loads all data in the specified time range. This range will toss out currently loaded data that
-    * isn't in the range and then append all data to make it in the range.
-    *
-    * A consequence here is that you need to process the log in increasing order.
-    *
-    * \pre  begin >= startTimeUs
-    * \param    begin           Start time of the range
-    * \param    end             End time of the range
-    * \return   Number of new messages read.
-    */
+     * loadTimeRange loads all data in the specified time range. This range will toss out currently loaded data that
+     * isn't in the range and then append all data to make it in the range.
+     *
+     * A consequence here is that you need to process the log in increasing order.
+     *
+     * \pre  begin >= startTimeUs
+     * \param    begin           Start time of the range
+     * \param    end             End time of the range
+     * \return   Number of new messages read.
+     */
     int loadTimeRange(int64_t begin, int64_t end);
 
     /**
-    * loadAll loads the entire log.
-    *
-    * WARNING: A log might actually be too big to hold in RAM, so this call could fail!
-    */
+     * loadAll loads the entire log.
+     *
+     * WARNING: A log might actually be too big to hold in RAM, so this call could fail!
+     */
     void loadAll(void);
 
     /**
-    * startTimeUs retrieves the start time of the log in microseconds from an arbitrary time in the past.
-    */
+     * startTimeUs retrieves the start time of the log in microseconds from an arbitrary time in the past.
+     */
     int64_t startTimeUs(void) const { return startTime_; }
 
     /**
-    * durationUs retrieves the duration of the full log in microseconds.
-    */
+     * durationUs retrieves the duration of the full log in microseconds.
+     */
     int64_t durationUs(void) const { return duration_; }
 
     // Iterator access for the data in the log
@@ -154,7 +153,6 @@ public:
     void handleData(const tracker::DynamicObjectCollection& objects, const std::string& channel);
 
 private:
-
     std::string name_;
     int64_t startTime_ = 0;
     int64_t endTime_ = 0;
@@ -173,7 +171,7 @@ private:
     void setTimeBase(int64_t timebase);
 };
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
-#endif // MPEPC_EVALUATION_MPEPC_LOG_H
+#endif   // MPEPC_EVALUATION_MPEPC_LOG_H

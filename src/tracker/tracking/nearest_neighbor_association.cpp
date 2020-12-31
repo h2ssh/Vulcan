@@ -8,11 +8,11 @@
 
 
 /**
-* \file     nearest_neighbor_association.cpp
-* \author   Collin Johnson
-* 
-* Definition of NearestNeighborAssociation and nearest_neighbor_params_t.
-*/
+ * \file     nearest_neighbor_association.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of NearestNeighborAssociation and nearest_neighbor_params_t.
+ */
 
 #include "tracker/tracking/nearest_neighbor_association.h"
 #include "tracker/laser_object.h"
@@ -26,12 +26,12 @@ namespace tracker
 {
 
 //////////////// nearest_neighbor_params_t //////////////////////////////
-    
+
 const std::string kNearestNeighborHeading("NearestNeighborAssociationParameters");
 const std::string kMaxDistanceKey("max_boundary_distance_m");
 const std::string kUsePredictedKey("use_predicted_boundary");
 
-    
+
 nearest_neighbor_params_t::nearest_neighbor_params_t(const utils::ConfigFile& config)
 : maxBoundaryDistance(config.getValueAsDouble(kNearestNeighborHeading, kMaxDistanceKey))
 , usePredictedBoundary(config.getValueAsBool(kNearestNeighborHeading, kUsePredictedKey))
@@ -40,47 +40,41 @@ nearest_neighbor_params_t::nearest_neighbor_params_t(const utils::ConfigFile& co
 }
 
 //////////////// NearestNeighborAssociation //////////////////////////////
-    
-NearestNeighborAssociation::NearestNeighborAssociation(const nearest_neighbor_params_t& params)
-: params_(params)
+
+NearestNeighborAssociation::NearestNeighborAssociation(const nearest_neighbor_params_t& params) : params_(params)
 {
 }
 
 
-object_association_t NearestNeighborAssociation::associateLaserWithTracked(const LaserObject& laser, 
+object_association_t NearestNeighborAssociation::associateLaserWithTracked(const LaserObject& laser,
                                                                            const TrackingObjectCollection& objects)
 {
     // Find the object that is closest
     std::size_t minIndex = 0;
     double minMinDist = 1000000.0;
     double minAvgDist = 1000000.0;
-    
-    for(std::size_t n = 0; n < objects.size(); ++n)
-    {
+
+    for (std::size_t n = 0; n < objects.size(); ++n) {
         float dist = 0.0f;
         float avgDist = 0.0f;
-        
+
         std::tie(dist, avgDist) = objects[n]->distanceTo(laser);
-        if((dist < minMinDist) || ((dist == minMinDist) && (avgDist < minAvgDist)))
-        {
+        if ((dist < minMinDist) || ((dist == minMinDist) && (avgDist < minAvgDist))) {
             minMinDist = dist;
             minAvgDist = avgDist;
             minIndex = n;
         }
     }
-    
+
 #ifdef DEBUG_ASSOCIATION
     std::cout << "DEBUG:TrackingObjectSet: Min dist:" << minMinDist << '\n';
 #endif
-    
-    if((minMinDist < params_.maxBoundaryDistance)
+
+    if ((minMinDist < params_.maxBoundaryDistance)
         || objects[minIndex]->boundary().circleApproximation().contains(laser.center())
-        || laser.circleApproximation().contains(objects[minIndex]->boundary().position()))
-    {
+        || laser.circleApproximation().contains(objects[minIndex]->boundary().position())) {
         return object_association_t(minIndex, minMinDist);
-    }
-    else 
-    {
+    } else {
         return object_association_t(-1);
     }
 }
@@ -90,17 +84,14 @@ object_association_t NearestNeighborAssociation::associateObjectWithTracked(cons
                                                                             const TrackingObjectCollection& objects)
 {
     // Return first object found whose boundary is valid -- not necessarily the best choice, but works for now
-    auto objIt = std::find_if(objects.begin(), objects.end(), [&object, this](const std::shared_ptr<TrackingObject>& o) {
-        return std::get<1>(object.distanceTo(*o)) < params_.maxBoundaryDistance;
-    });
-    
-    if(objIt != objects.end())
-    {
-        return object_association_t(std::distance(objects.begin(), objIt), 
-                                    std::get<1>(object.distanceTo(**objIt)));
-    }
-    else
-    {
+    auto objIt =
+      std::find_if(objects.begin(), objects.end(), [&object, this](const std::shared_ptr<TrackingObject>& o) {
+          return std::get<1>(object.distanceTo(*o)) < params_.maxBoundaryDistance;
+      });
+
+    if (objIt != objects.end()) {
+        return object_association_t(std::distance(objects.begin(), objIt), std::get<1>(object.distanceTo(**objIt)));
+    } else {
         return object_association_t(-1);
     }
 }
@@ -112,5 +103,5 @@ std::unique_ptr<DataAssociationStrategy> NearestNeighborAssociation::clone(void)
     return std::unique_ptr<DataAssociationStrategy>(new NearestNeighborAssociation(params_));
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

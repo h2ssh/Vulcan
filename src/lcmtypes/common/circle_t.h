@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_COMMON_CIRCLE_T_H
 #define LCMTYPES_COMMON_CIRCLE_T_H
 
-#include "lcmtypes/vulcan_lcm_circle_t.h"
 #include "lcmtypes/common/point_t.h"
+#include "lcmtypes/vulcan_lcm_circle_t.h"
 #include "math/geometry/circle.h"
 
 namespace vulcan
@@ -34,7 +34,7 @@ auto convert_lcm_to_circle(const CircleMessage& circleMessage) -> math::Circle<d
     return math::Circle<T>(circleMessage.radius, convert_lcm_to_point(circleMessage.center));
 }
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_COMMON_CIRCLE_T_H
+#endif   // LCMTYPES_COMMON_CIRCLE_T_H

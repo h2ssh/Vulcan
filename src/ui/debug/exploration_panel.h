@@ -8,27 +8,39 @@
 
 
 /**
-* \file     exploration_panel.h
-* \author   Collin Johnson
-* 
-* Declaration of ExplorationPanel.
-*/
+ * \file     exploration_panel.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ExplorationPanel.
+ */
 
 #ifndef UI_DEBUG_EXPLORATION_PANEL_H
 #define UI_DEBUG_EXPLORATION_PANEL_H
 
-#include "ui/common/ui_panel.h"
 #include "planner/exploration/local_topo/exploration_status.h"
+#include "ui/common/ui_panel.h"
 #include "utils/mutex.h"
-#include <wx/wx.h>
 #include <memory>
+#include <wx/wx.h>
 
 namespace vulcan
 {
-namespace hssh { class LocalPerceptualMap; }
-namespace hssh { class LocalPose; }
-namespace mpepc { struct dynamic_object_trajectory_debug_info_t; }
-namespace mpepc { struct trajectory_planner_debug_info_t; }
+namespace hssh
+{
+class LocalPerceptualMap;
+}
+namespace hssh
+{
+class LocalPose;
+}
+namespace mpepc
+{
+struct dynamic_object_trajectory_debug_info_t;
+}
+namespace mpepc
+{
+struct trajectory_planner_debug_info_t;
+}
 namespace ui
 {
 
@@ -36,8 +48,8 @@ class ExplorationDisplayWidget;
 struct ui_params_t;
 
 /**
-* exploration_panel_widgets_t contains all widgets that are manipulated by the ExplorationPanel.
-*/
+ * exploration_panel_widgets_t contains all widgets that are manipulated by the ExplorationPanel.
+ */
 struct exploration_panel_widgets_t
 {
     ExplorationDisplayWidget* display = nullptr;
@@ -50,18 +62,17 @@ struct exploration_panel_widgets_t
 };
 
 /**
-* ExplorationPanel displays information related to the map_exploration module.
-*/
+ * ExplorationPanel displays information related to the map_exploration module.
+ */
 class ExplorationPanel : public UIPanel
 {
 public:
-
     /**
-    * Constructor for ExplorationPanel.
-    *
-    * \param    params          Parameters for the rendering
-    * \param    widgets         Interactive widgets on the panel
-    */
+     * Constructor for ExplorationPanel.
+     *
+     * \param    params          Parameters for the rendering
+     * \param    widgets         Interactive widgets on the panel
+     */
     ExplorationPanel(const ui_params_t& params, const exploration_panel_widgets_t& widgets);
 
     // UIPanel interface
@@ -81,7 +92,6 @@ public:
     void handleData(const mpepc::trajectory_planner_debug_info_t& mpepcInfo, const std::string& channel);
 
 private:
-
     exploration_panel_widgets_t widgets_;
     int numLocalTopoVisited_;
     int numLocalTopoRemaining_;
@@ -95,7 +105,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_EXPLORATION_PANEL_H
+#endif   // UI_DEBUG_EXPLORATION_PANEL_H

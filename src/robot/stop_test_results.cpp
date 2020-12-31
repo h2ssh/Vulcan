@@ -14,8 +14,7 @@ using namespace vulcan;
 
 int main(int argc, char** argv)
 {
-    if(argc < 2)
-    {
+    if (argc < 2) {
         std::cerr << "Usage: stop_test_results 'stop log file'\n";
         return 1;
     }

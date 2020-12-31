@@ -8,11 +8,11 @@
 
 
 /**
-* @file
-* @author   Collin Johnson
-*
-* Definition of utility types and functions for evaluating the performance of MPEPC.
-*/
+ * @file
+ * @author   Collin Johnson
+ *
+ * Definition of utility types and functions for evaluating the performance of MPEPC.
+ */
 
 #include "mpepc/evaluation/utils.h"
 #include "utils/serialized_file_io.h"
@@ -35,14 +35,12 @@ std::vector<ResultsLog> load_results_logs(const std::string& filename)
 
     std::ifstream in(filename);
 
-    if(!in.is_open())
-    {
+    if (!in.is_open()) {
         std::cerr << "ERROR: Failed to read logs file: " << filename << '\n';
         return logs;
     }
 
-    for(std::string line; std::getline(in, line);)
-    {
+    for (std::string line; std::getline(in, line);) {
         std::istringstream logIn(line);
         std::string version;
         std::string logName;
@@ -50,8 +48,7 @@ std::vector<ResultsLog> load_results_logs(const std::string& filename)
         logIn >> version >> logName >> mapName;
 
         // If there's no enough info, then done early.
-        if(logName.empty() || mapName.empty())
-        {
+        if (logName.empty() || mapName.empty()) {
             break;
         }
 
@@ -72,12 +69,9 @@ std::vector<ResultsLog> load_results_logs(const std::string& filename)
 
 MPEPCVersion name_to_version(const std::string& versionStr)
 {
-    if(versionStr == kRegularMPEPC)
-    {
+    if (versionStr == kRegularMPEPC) {
         return MPEPCVersion::regular;
-    }
-    else if(versionStr == kSocialMPEPC)
-    {
+    } else if (versionStr == kSocialMPEPC) {
         return MPEPCVersion::social;
     }
 
@@ -87,8 +81,7 @@ MPEPCVersion name_to_version(const std::string& versionStr)
 
 std::string version_to_name(MPEPCVersion version)
 {
-    switch(version)
-    {
+    switch (version) {
     case MPEPCVersion::regular:
         return kRegularMPEPC;
     case MPEPCVersion::social:
@@ -103,8 +96,7 @@ std::string version_to_name(MPEPCVersion version)
 
 std::string version_to_public_name(MPEPCVersion version)
 {
-    switch(version)
-    {
+    switch (version) {
     case MPEPCVersion::regular:
         return "MPEPC";
     case MPEPCVersion::social:
@@ -117,5 +109,5 @@ std::string version_to_public_name(MPEPCVersion version)
     return "ERROR";
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

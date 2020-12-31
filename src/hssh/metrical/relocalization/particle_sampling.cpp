@@ -8,14 +8,14 @@
 
 
 /**
-* \file     particle_sampling.cpp
-* \author   Collin Johnson
-* 
-* Definition of:
-*
-*   - generate_uniform_samples_at_position
-*   - generate_random_samples_at_position
-*/
+ * \file     particle_sampling.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of:
+ *
+ *   - generate_uniform_samples_at_position
+ *   - generate_random_samples_at_position
+ */
 
 #include "hssh/metrical/relocalization/particle_sampling.h"
 #include "hssh/metrical/localization/particle.h"
@@ -24,42 +24,46 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 inline float random_orientation(void)
 {
     return (drand48() * M_PI * 2.0) - M_PI;
 }
 
 
-void generate_uniform_samples_at_position(Point<float> position, int numSamples, double weight, std::vector<particle_t>& samples)
+void generate_uniform_samples_at_position(Point<float> position,
+                                          int numSamples,
+                                          double weight,
+                                          std::vector<particle_t>& samples)
 {
     particle_t sample;
-    float thetaIncrement = 2.0*M_PI / numSamples;
-    
-    while(--numSamples >= 0)
-    {
-        sample.id     = samples.size();
-        sample.pose   = pose_t(position.x, position.y, wrap_to_pi(numSamples*thetaIncrement));
+    float thetaIncrement = 2.0 * M_PI / numSamples;
+
+    while (--numSamples >= 0) {
+        sample.id = samples.size();
+        sample.pose = pose_t(position.x, position.y, wrap_to_pi(numSamples * thetaIncrement));
         sample.weight = weight;
-        
+
         samples.push_back(sample);
     }
 }
 
 
-void generate_random_samples_at_position(Point<float> position, int numSamples, double weight, std::vector<particle_t>& samples)
+void generate_random_samples_at_position(Point<float> position,
+                                         int numSamples,
+                                         double weight,
+                                         std::vector<particle_t>& samples)
 {
     particle_t sample;
-    
-    while(--numSamples >= 0)
-    {
-        sample.id     = samples.size();
-        sample.pose   = pose_t(position.x, position.y, random_orientation());
+
+    while (--numSamples >= 0) {
+        sample.id = samples.size();
+        sample.pose = pose_t(position.x, position.y, random_orientation());
         sample.weight = weight;
-        
+
         samples.push_back(sample);
     }
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

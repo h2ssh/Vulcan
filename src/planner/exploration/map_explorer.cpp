@@ -8,16 +8,16 @@
 
 
 /**
-* \file     map_explorer.cpp
-* \author   Collin Johnson
-* 
-* Definition of create_map_explorer factory function.
-*/
+ * \file     map_explorer.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_map_explorer factory function.
+ */
 
 #include "planner/exploration/map_explorer.h"
-#include "planner/exploration/local_topo/local_topo_explorer.h"
-#include "hssh/local_topological/local_topo_map.h"
 #include "hssh/local_topological/areas/serialization.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "planner/exploration/local_topo/local_topo_explorer.h"
 #include "utils/serialized_file_io.h"
 
 namespace vulcan
@@ -25,20 +25,15 @@ namespace vulcan
 namespace planner
 {
 
-std::unique_ptr<MapExplorer> create_map_explorer(const std::string& explorerType,
-                                                 const std::string& map,
-                                                 const utils::ConfigFile& config)
+std::unique_ptr<MapExplorer>
+  create_map_explorer(const std::string& explorerType, const std::string& map, const utils::ConfigFile& config)
 {
-    if(explorerType == kLocalTopoExplorerType)
-    {
+    if (explorerType == kLocalTopoExplorerType) {
         hssh::LocalTopoMap topoMap;
-        if(utils::load_serializable_from_file(map, topoMap))
-        {
+        if (utils::load_serializable_from_file(map, topoMap)) {
             local_topo_explorer_params_t params(config);
             return std::unique_ptr<MapExplorer>(new LocalTopoExplorer(topoMap, params));
-        }
-        else
-        {
+        } else {
             std::cerr << "ERROR: create_map_explorer: Unable to open file: " << map << " containing a LocalTopoMap.\n";
         }
     }
@@ -46,5 +41,5 @@ std::unique_ptr<MapExplorer> create_map_explorer(const std::string& explorerType
     return std::unique_ptr<MapExplorer>();
 }
 
-} // namespace planner
-} // namespace vulcan
+}   // namespace planner
+}   // namespace vulcan

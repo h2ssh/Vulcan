@@ -8,11 +8,11 @@
 
 
 /**
-* \file     task.cpp
-* \author   Collin Johnson
-* 
-* Definition of ControlTask.
-*/
+ * \file     task.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ControlTask.
+ */
 
 #include "planner/control/task.h"
 
@@ -24,21 +24,18 @@ namespace planner
 ControlTaskResult ControlTask::execute(const ControlState& state)
 {
     auto result = doExecute(state);
-    
-    if(parent_ && (result.status.progress() != ControlTaskProgress::executing))
-    {
+
+    if (parent_ && (result.status.progress() != ControlTaskProgress::executing)) {
         parent_->childIsDone(this, result.status.progress());
     }
-    
+
     return result;
 }
 
 
-ControlTask::ControlTask(int32_t id, ControlTask* parent)
-: id_(id)
-, parent_(parent)
+ControlTask::ControlTask(int32_t id, ControlTask* parent) : id_(id), parent_(parent)
 {
 }
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan

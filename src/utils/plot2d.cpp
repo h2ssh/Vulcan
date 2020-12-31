@@ -8,16 +8,16 @@
 
 
 /**
-* \file     plot2d.cpp
-* \author   Collin Johnson
-*
-* Definition of Plot2D.
-*/
+ * \file     plot2d.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of Plot2D.
+ */
 
 #include "utils/plot2d.h"
-#include <gnuplot-iostream.h>
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>
+#include <gnuplot-iostream.h>
 
 namespace vulcan
 {
@@ -43,8 +43,7 @@ void Plot2D::addData(double x, double y, int type)
 void Plot2D::addData(const std::vector<double>& x, const std::vector<double>& y, int type)
 {
     assert(x.size() == y.size());
-    for(std::size_t n = 0; n < x.size(); ++n)
-    {
+    for (std::size_t n = 0; n < x.size(); ++n) {
         addData(x[n], y[n], type);
     }
 }
@@ -73,16 +72,14 @@ void Plot2D::plot(PlotStyle style)
     Gnuplot plot;
 
     plot << "set title '" << title_ << "'\n"
-        << "set xlabel '" << xLabel_ << "'\n"
-        << "set ylabel '" << yLabel_ << "'\n";
+         << "set xlabel '" << xLabel_ << "'\n"
+         << "set ylabel '" << yLabel_ << "'\n";
 
-    if(xRange_)
-    {
+    if (xRange_) {
         plot << "set xrange [" << xRange_->first << ':' << xRange_->second << "]\n";
     }
 
-    if(yRange_)
-    {
+    if (yRange_) {
         plot << "set yrange [" << yRange_->first << ':' << yRange_->second << "]\n";
     }
 
@@ -92,29 +89,23 @@ void Plot2D::plot(PlotStyle style)
     int numAdded = 0;
     int total = data_.size();
     plot << "plot ";
-    for(auto& d : data_)
-    {
+    for (auto& d : data_) {
         plot << "'-' with " << styleStr;
 
-        if(names_.find(d.first) != names_.end())
-        {
+        if (names_.find(d.first) != names_.end()) {
             plot << " title '" << names_[d.first] << "'";
         }
 
         ++numAdded;
-        if(numAdded != total)
-        {
+        if (numAdded != total) {
             plot << ',';
-        }
-        else
-        {
+        } else {
             plot << '\n';
         }
     }
 
     // Pass all the data in -- plot created with same iteration over hash map, so same ordering will be guaranteed
-    for(auto& d : data_)
-    {
+    for (auto& d : data_) {
         plot.send1d(d.second);
     }
 }
@@ -122,8 +113,7 @@ void Plot2D::plot(PlotStyle style)
 
 std::string style_string(PlotStyle style)
 {
-    switch(style)
-    {
+    switch (style) {
     case PlotStyle::points:
         return "points";
 
@@ -135,5 +125,5 @@ std::string style_string(PlotStyle style)
     }
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

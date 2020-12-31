@@ -8,11 +8,11 @@
 
 
 /**
-* \file     hypothesis_classifier_test.h
-* \author   Collin Johnson
-* 
-* Declaration of HypothesisClassifierTest.
-*/
+ * \file     hypothesis_classifier_test.h
+ * \author   Collin Johnson
+ *
+ * Declaration of HypothesisClassifierTest.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CLASSIFIER_TEST_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CLASSIFIER_TEST_H
@@ -28,8 +28,8 @@ namespace hssh
 {
 
 /**
-* MapTestResults stores the results of tests run on the specified files.
-*/
+ * MapTestResults stores the results of tests run on the specified files.
+ */
 struct MapTestResults
 {
     std::string mapName;
@@ -50,74 +50,72 @@ struct MapTestResults
 };
 
 /**
-* HypothesisClassifierTest trains a HypothesisClassifier and then checks it against test data. The results of the test
-* along with the learned classifier are available via a number of accessor methods.
-* 
-* Additionally, the results can be saved via the saveResults method to save the results of the classification tests to
-* one file per test map. The format of the results files are as follows:
-* 
-*     TODO
-*/
+ * HypothesisClassifierTest trains a HypothesisClassifier and then checks it against test data. The results of the test
+ * along with the learned classifier are available via a number of accessor methods.
+ *
+ * Additionally, the results can be saved via the saveResults method to save the results of the classification tests to
+ * one file per test map. The format of the results files are as follows:
+ *
+ *     TODO
+ */
 class HypothesisClassifierTest
 {
 public:
-    
     using ResultsIter = std::vector<MapTestResults>::const_iterator;
-    
+
     /**
-    * Constructor for HypothesisClassifierTest.
-    * 
-    * \param    classifierType      Type of classifier to train and calculate results for
-    * \param    trainingData        Training data to use to learn the classifier
-    * \param    testData            Test data on which to see how well the classifier works
-    */
+     * Constructor for HypothesisClassifierTest.
+     *
+     * \param    classifierType      Type of classifier to train and calculate results for
+     * \param    trainingData        Training data to use to learn the classifier
+     * \param    testData            Test data on which to see how well the classifier works
+     */
     HypothesisClassifierTest(const std::string& classifierType,
-                             const LabeledAreaData& trainingData, 
+                             const LabeledAreaData& trainingData,
                              const LabeledAreaData& testData);
-    
+
     /**
-    * Destructor for HypothesisClassifierTest.
-    */
+     * Destructor for HypothesisClassifierTest.
+     */
     ~HypothesisClassifierTest(void);
 
     /**
-    * run runs the classification training algorithm to create a classifier and then tests the training and
-    * test data.
-    */
+     * run runs the classification training algorithm to create a classifier and then tests the training and
+     * test data.
+     */
     void run(void);
-    
+
     /**
-    * saveClassifier saves the learned classifier used for these tests to the specified file.
-    * 
-    * \param    basename        Base name of the various classifier files that will be saved
-    */
+     * saveClassifier saves the learned classifier used for these tests to the specified file.
+     *
+     * \param    basename        Base name of the various classifier files that will be saved
+     */
     bool saveClassifier(const std::string& basename) const { return classifier_->save(basename); }
-    
+
     /**
-    * overallTestResults returns the accumulated results across all provided test maps.
-    */
+     * overallTestResults returns the accumulated results across all provided test maps.
+     */
     MapTestResults overallTestResults(void) const { return overallTest_; }
-    
+
     /**
-    * overallTrainingResults returns the accumulated results across all provided training maps.
-    */
+     * overallTrainingResults returns the accumulated results across all provided training maps.
+     */
     MapTestResults overallTrainingResults(void) const { return overallTraining_; }
-    
+
     // Iterator support over all results from the test set to provide more detailed map-by-map analysis
     std::size_t sizeTest(void) const { return testResults_.size(); }
     ResultsIter beginTest(void) const { return testResults_.begin(); }
     ResultsIter endTest(void) const { return testResults_.end(); }
-    
+
     // Iterator support overall results from the training set to provide more detailed map-by-map analysis
     std::size_t sizeTraining(void) const { return trainingResults_.size(); }
     ResultsIter beginTraining(void) const { return trainingResults_.begin(); }
     ResultsIter endTraining(void) const { return trainingResults_.end(); }
 
 private:
-    
     MapTestResults overallTest_;
     MapTestResults overallTraining_;
-    
+
     std::vector<MapTestResults> testResults_;
     std::vector<MapTestResults> trainingResults_;
     std::unique_ptr<HypothesisClassifier> classifier_;
@@ -129,7 +127,7 @@ private:
     MapTestResults accumulateResults(const std::vector<MapTestResults>& results);
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CLASSIFIER_TEST_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CLASSIFIER_TEST_H

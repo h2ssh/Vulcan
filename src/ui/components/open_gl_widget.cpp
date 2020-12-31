@@ -8,19 +8,19 @@
 
 
 /**
-* \file     open_gl_widget.cpp
-* \author   Collin Johnson
-*
-* Implmentation of OpenGLWidget.
-*/
+ * \file     open_gl_widget.cpp
+ * \author   Collin Johnson
+ *
+ * Implmentation of OpenGLWidget.
+ */
 
 #include "ui/components/open_gl_widget.h"
 #include "ui/common/gl_utilities.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <algorithm>
 #include <iostream>
 
 namespace vulcan
@@ -29,20 +29,20 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(OpenGLWidget, wxGLCanvas)
-    EVT_MOUSEWHEEL(OpenGLWidget::mouseWheel)
-    EVT_MOTION(OpenGLWidget::mouseMotion)
-    EVT_LEFT_DOWN(OpenGLWidget::mouseLeftDown)
-    EVT_LEFT_UP(OpenGLWidget::mouseLeftUp)
-    EVT_RIGHT_DOWN(OpenGLWidget::mouseRightDown)
-    EVT_RIGHT_UP(OpenGLWidget::mouseRightUp)
-    EVT_KEY_DOWN(OpenGLWidget::keyDown)
-    EVT_KEY_UP(OpenGLWidget::keyUp)
-    EVT_PAINT(OpenGLWidget::paint)
-    EVT_SIZE(OpenGLWidget::resize)
-    EVT_ERASE_BACKGROUND(OpenGLWidget::erase)
+EVT_MOUSEWHEEL(OpenGLWidget::mouseWheel)
+EVT_MOTION(OpenGLWidget::mouseMotion)
+EVT_LEFT_DOWN(OpenGLWidget::mouseLeftDown)
+EVT_LEFT_UP(OpenGLWidget::mouseLeftUp)
+EVT_RIGHT_DOWN(OpenGLWidget::mouseRightDown)
+EVT_RIGHT_UP(OpenGLWidget::mouseRightUp)
+EVT_KEY_DOWN(OpenGLWidget::keyDown)
+EVT_KEY_UP(OpenGLWidget::keyUp)
+EVT_PAINT(OpenGLWidget::paint)
+EVT_SIZE(OpenGLWidget::resize)
+EVT_ERASE_BACKGROUND(OpenGLWidget::erase)
 END_EVENT_TABLE()
 
-static int glAttrib[] = { WX_GL_RGBA, WX_GL_DEPTH_SIZE, 16, WX_GL_DOUBLEBUFFER, 0};
+static int glAttrib[] = {WX_GL_RGBA, WX_GL_DEPTH_SIZE, 16, WX_GL_DOUBLEBUFFER, 0};
 
 OpenGLWidget::OpenGLWidget(wxWindow* parent,
                            wxWindowID id,
@@ -58,7 +58,7 @@ OpenGLWidget::OpenGLWidget(wxWindow* parent,
 , maxHeight(10.0f)
 , cameraController(new GLCameraController(camera))
 {
-    setCameraPosition(math::SphericalPoint(5.0f, M_PI/2.0f, 0.0f));
+    setCameraPosition(math::SphericalPoint(5.0f, M_PI / 2.0f, 0.0f));
     cameraController->setRegionSize(size.GetWidth(), size.GetHeight());
 
     mouseHandlers.push_back(cameraController.get());
@@ -73,14 +73,14 @@ OpenGLWidget::~OpenGLWidget(void)
 
 void OpenGLWidget::setMinViewDimensions(float minWidth, float minHeight)
 {
-    this->minWidth  = std::max(0.0f, minWidth);
+    this->minWidth = std::max(0.0f, minWidth);
     this->minHeight = std::max(0.0f, minHeight);
 }
 
 
 void OpenGLWidget::setMaxViewDimensions(float maxWidth, float maxHeight)
 {
-    this->maxWidth  = std::max(0.0f, maxWidth);
+    this->maxWidth = std::max(0.0f, maxWidth);
     this->maxHeight = std::max(0.0f, maxHeight);
 }
 
@@ -113,22 +113,20 @@ void OpenGLWidget::setCameraPosition(const math::SphericalPoint& cameraPosition)
 }
 
 
-
 void OpenGLWidget::getViewportBoundary(Point<int>& bottomLeft, int& width, int& height)
 {
     wxSize size = GetSize();
 
     bottomLeft.x = 0;
     bottomLeft.y = 0;
-    width        = size.GetWidth();
-    height       = size.GetHeight();
+    width = size.GetWidth();
+    height = size.GetHeight();
 }
 
 
 void OpenGLWidget::pushMouseHandler(GLMouseHandler* handler)
 {
-    if(handler)
-    {
+    if (handler) {
         mouseHandlers.push_front(handler);
     }
 }
@@ -142,8 +140,7 @@ void OpenGLWidget::removeMouseHandler(GLMouseHandler* handler)
 
 void OpenGLWidget::pushKeyboardHandler(GLKeyboardHandler* handler)
 {
-    if(handler)
-    {
+    if (handler) {
         keyboardHandlers.push_front(handler);
     }
 }
@@ -152,7 +149,7 @@ void OpenGLWidget::pushKeyboardHandler(GLKeyboardHandler* handler)
 void OpenGLWidget::removeKeyboardHandler(GLKeyboardHandler* handler)
 {
     keyboardHandlers.erase(std::remove(keyboardHandlers.begin(), keyboardHandlers.end(), handler),
-        keyboardHandlers.end());
+                           keyboardHandlers.end());
 }
 
 
@@ -160,12 +157,10 @@ void OpenGLWidget::mouseWheel(wxMouseEvent& event)
 {
     GLMouseEvent glEvent = convertWxEventToGlEvent(event);
 
-    for(auto handler : mouseHandlers)
-    {
+    for (auto handler : mouseHandlers) {
         // As soon as the event is captured, then exit the method because the event shouldn't be propagated
         // and it shouldn't be skipped
-        if(handler->handleMouseWheel(glEvent) == GLEventStatus::capture)
-        {
+        if (handler->handleMouseWheel(glEvent) == GLEventStatus::capture) {
             return;
         }
     }
@@ -179,12 +174,10 @@ void OpenGLWidget::mouseMotion(wxMouseEvent& event)
 {
     GLMouseEvent glEvent = convertWxEventToGlEvent(event);
 
-    for(auto handler : mouseHandlers)
-    {
+    for (auto handler : mouseHandlers) {
         // As soon as the event is captured, then exit the method because the event shouldn't be propagated
         // and it shouldn't be skipped
-        if(handler->handleMouseMoved(glEvent) == GLEventStatus::capture)
-        {
+        if (handler->handleMouseMoved(glEvent) == GLEventStatus::capture) {
             return;
         }
     }
@@ -198,12 +191,10 @@ void OpenGLWidget::mouseLeftDown(wxMouseEvent& event)
 {
     GLMouseEvent glEvent = convertWxEventToGlEvent(event);
 
-    for(auto handler : mouseHandlers)
-    {
+    for (auto handler : mouseHandlers) {
         // As soon as the event is captured, then exit the method because the event shouldn't be propagated
         // and it shouldn't be skipped
-        if(handler->handleLeftMouseDown(glEvent) == GLEventStatus::capture)
-        {
+        if (handler->handleLeftMouseDown(glEvent) == GLEventStatus::capture) {
             return;
         }
     }
@@ -217,12 +208,10 @@ void OpenGLWidget::mouseLeftUp(wxMouseEvent& event)
 {
     GLMouseEvent glEvent = convertWxEventToGlEvent(event);
 
-    for(auto handler : mouseHandlers)
-    {
+    for (auto handler : mouseHandlers) {
         // As soon as the event is captured, then exit the method because the event shouldn't be propagated
         // and it shouldn't be skipped
-        if(handler->handleLeftMouseUp(glEvent) == GLEventStatus::capture)
-        {
+        if (handler->handleLeftMouseUp(glEvent) == GLEventStatus::capture) {
             return;
         }
     }
@@ -236,12 +225,10 @@ void OpenGLWidget::mouseRightDown(wxMouseEvent& event)
 {
     GLMouseEvent glEvent = convertWxEventToGlEvent(event);
 
-    for(auto handler : mouseHandlers)
-    {
+    for (auto handler : mouseHandlers) {
         // As soon as the event is captured, then exit the method because the event shouldn't be propagated
         // and it shouldn't be skipped
-        if(handler->handleRightMouseDown(glEvent) == GLEventStatus::capture)
-        {
+        if (handler->handleRightMouseDown(glEvent) == GLEventStatus::capture) {
             return;
         }
     }
@@ -255,12 +242,10 @@ void OpenGLWidget::mouseRightUp(wxMouseEvent& event)
 {
     GLMouseEvent glEvent = convertWxEventToGlEvent(event);
 
-    for(auto handler : mouseHandlers)
-    {
+    for (auto handler : mouseHandlers) {
         // As soon as the event is captured, then exit the method because the event shouldn't be propagated
         // and it shouldn't be skipped
-        if(handler->handleRightMouseUp(glEvent) == GLEventStatus::capture)
-        {
+        if (handler->handleRightMouseUp(glEvent) == GLEventStatus::capture) {
             return;
         }
     }
@@ -272,10 +257,8 @@ void OpenGLWidget::mouseRightUp(wxMouseEvent& event)
 
 void OpenGLWidget::keyDown(wxKeyEvent& event)
 {
-    for(auto handler : keyboardHandlers)
-    {
-        if(handler->keyPressed(event) == GLEventStatus::capture)
-        {
+    for (auto handler : keyboardHandlers) {
+        if (handler->keyPressed(event) == GLEventStatus::capture) {
             return;
         }
     }
@@ -287,10 +270,8 @@ void OpenGLWidget::keyDown(wxKeyEvent& event)
 
 void OpenGLWidget::keyUp(wxKeyEvent& event)
 {
-    for(auto handler : keyboardHandlers)
-    {
-        if(handler->keyReleased(event) == GLEventStatus::capture)
-        {
+    for (auto handler : keyboardHandlers) {
+        if (handler->keyReleased(event) == GLEventStatus::capture) {
             return;
         }
     }
@@ -311,8 +292,7 @@ void OpenGLWidget::resize(wxSizeEvent& event)
 void OpenGLWidget::paint(wxPaintEvent& event)
 {
     // If not shown or context not set yet, then don't attempt to draw!
-    if(!IsShownOnScreen() || !context)
-    {
+    if (!IsShownOnScreen() || !context) {
         return;
     }
 
@@ -323,13 +303,13 @@ void OpenGLWidget::paint(wxPaintEvent& event)
     setup_opengl_context();
 
     Point<int> viewStart;
-    int              width  = 0;
-    int              height = 0;
+    int width = 0;
+    int height = 0;
     getViewportBoundary(viewStart, width, height);
 
     glViewport(viewStart.x, viewStart.y, width, height);
 
-    glClearColor(1.0, 1.0, 1.0, 1.0);  // clear to white screen
+    glClearColor(1.0, 1.0, 1.0, 1.0);   // clear to white screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     camera.setupCamera(width, height);
@@ -351,19 +331,19 @@ GLMouseEvent OpenGLWidget::convertWxEventToGlEvent(const wxMouseEvent& wx)
 
     wxSize size = GetSize();
 
-    gl.screenCoords = Point<int>(wx.GetX(),  size.GetHeight() - wx.GetY());
-    gl.glCoords     = convert_screen_to_world_coordinates(gl.screenCoords, getCameraPosition());
+    gl.screenCoords = Point<int>(wx.GetX(), size.GetHeight() - wx.GetY());
+    gl.glCoords = convert_screen_to_world_coordinates(gl.screenCoords, getCameraPosition());
 
     gl.wheelRotationDirection = wx.GetWheelRotation();
 
-    gl.leftIsDown  = wx.LeftIsDown();
+    gl.leftIsDown = wx.LeftIsDown();
     gl.rightIsDown = wx.RightIsDown();
-    gl.ctrlIsDown  = wx.ControlDown();
-    gl.altIsDown   = wx.AltDown();
+    gl.ctrlIsDown = wx.ControlDown();
+    gl.altIsDown = wx.AltDown();
     gl.shiftIsDown = wx.ShiftDown();
 
     return gl;
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     beta_distribution.cpp
-* \author   Collin Johnson
-* 
-* Definition of BetaDistribution.
-*/
+ * \file     beta_distribution.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of BetaDistribution.
+ */
 
 #include "math/beta_distribution.h"
 #include <boost/math/special_functions/beta.hpp>
@@ -23,8 +23,11 @@ namespace vulcan
 {
 namespace math
 {
-    
-double beta_normalizer(double alpha, double beta) { return 1.0 / boost::math::beta(alpha, beta); }
+
+double beta_normalizer(double alpha, double beta)
+{
+    return 1.0 / boost::math::beta(alpha, beta);
+}
 
 
 BetaDistribution::BetaDistribution(double alpha, double beta)
@@ -33,7 +36,7 @@ BetaDistribution::BetaDistribution(double alpha, double beta)
 , normalizer_(beta_normalizer(alpha_, beta_))
 {
     assert(alpha_ >= 0.0);
-    assert(beta_  >= 0.0);
+    assert(beta_ >= 0.0);
 }
 
 
@@ -46,12 +49,11 @@ double BetaDistribution::sample(void) const
 
 double BetaDistribution::likelihood(double value) const
 {
-    if((value <= 0.0) || (value >= 1.0))
-    {
+    if ((value <= 0.0) || (value >= 1.0)) {
         return 0.0;
     }
-    
-    return std::pow(value, alpha_-1.0) * std::pow(1.0-value, beta_-1.0) * normalizer_;
+
+    return std::pow(value, alpha_ - 1.0) * std::pow(1.0 - value, beta_ - 1.0) * normalizer_;
 }
 
 
@@ -65,14 +67,14 @@ bool BetaDistribution::save(std::ostream& out) const
 bool BetaDistribution::load(std::istream& in)
 {
     in >> alpha_ >> beta_;
-    
+
     assert(alpha_ >= 0.0);
-    assert(beta_  >= 0.0);
-    
+    assert(beta_ >= 0.0);
+
     normalizer_ = beta_normalizer(alpha_, beta_);
-    
+
     return in.good();
 }
 
-}
-}
+}   // namespace math
+}   // namespace vulcan

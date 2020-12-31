@@ -8,17 +8,17 @@
 
 
 /**
-* \file     island_detector.cpp
-* \author   Collin Johnson
-*
-* Definition of IslandDetector.
-*/
+ * \file     island_detector.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of IslandDetector.
+ */
 
 #include "hssh/local_topological/area_detection/voronoi/island_detector.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
-#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
-#include "utils/disjoint_set_forest.h"
 #include "core/point.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "utils/disjoint_set_forest.h"
 #include <iostream>
 
 // #define DEBUG_CARDINAL_SEARCH
@@ -30,32 +30,30 @@ namespace hssh
 {
 
 const unsigned int LARGE_STRUCTURE_SET = 0;
-const unsigned int ISLAND_SET          = 1;
+const unsigned int ISLAND_SET = 1;
 
 const uint8_t OCCUPIED_CELL_MASK = SKELETON_CELL_OCCUPIED | SKELETON_CELL_UNKNOWN | SKELETON_CELL_FRONTIER;
 
 
-bool vertical_path_exists_to_map_edge  (cell_t start, int yIncrement, int yEnd, const VoronoiSkeletonGrid& grid);
+bool vertical_path_exists_to_map_edge(cell_t start, int yIncrement, int yEnd, const VoronoiSkeletonGrid& grid);
 bool horizontal_path_exists_to_map_edge(cell_t start, int xIncrement, int xEnd, const VoronoiSkeletonGrid& grid);
 
 // Helper to get the appropriate set index for a given cell
 unsigned int cell_index_component(cell_t cell, const VoronoiSkeletonGrid& grid)
 {
     // The first two indices are reserved for LARGE_STRUCTURE_SET and ISLAND_SET
-    return cell.x + cell.y*grid.getWidthInCells() + 2;
+    return cell.x + cell.y * grid.getWidthInCells() + 2;
 }
 
 
-IslandDetector::IslandDetector(int maxIslandAreaInCells)
-: maxIslandArea(maxIslandAreaInCells)
+IslandDetector::IslandDetector(int maxIslandAreaInCells) : maxIslandArea(maxIslandAreaInCells)
 {
 }
 
 
 void IslandDetector::reset(void)
 {
-    if(islands.get() != 0)
-    {
+    if (islands.get() != 0) {
         islands->reset();
     }
 }
@@ -68,17 +66,15 @@ bool IslandDetector::cellIsOnIsland(cell_t cell, const VoronoiSkeletonGrid& grid
     // Cardinal direction search is fast, only width+height iterations
     // If cardinal direction search fails, then do a more complete search that is width*height complexity at worst
     return (grid.getClassification(cell.x, cell.y) & OCCUPIED_CELL_MASK) &&
-    // !checkCardinalDirections(cell, grid) &&
-           (findCellComponent(cell, grid) == ISLAND_SET);
+      // !checkCardinalDirections(cell, grid) &&
+      (findCellComponent(cell, grid) == ISLAND_SET);
 }
 
 
 void IslandDetector::createSetForestForGridIfNeeded(const VoronoiSkeletonGrid& grid) const
 {
-    if((islands.get() == 0) ||
-       (grid.getWidthInCells()*grid.getHeightInCells() + 2u != islands->size()))
-    {
-        islands.reset(new utils::DisjointSetForest(grid.getWidthInCells()*grid.getHeightInCells() + 2));
+    if ((islands.get() == 0) || (grid.getWidthInCells() * grid.getHeightInCells() + 2u != islands->size())) {
+        islands.reset(new utils::DisjointSetForest(grid.getWidthInCells() * grid.getHeightInCells() + 2));
     }
 }
 
@@ -86,10 +82,10 @@ void IslandDetector::createSetForestForGridIfNeeded(const VoronoiSkeletonGrid& g
 bool IslandDetector::checkCardinalDirections(cell_t cell, const VoronoiSkeletonGrid& grid) const
 {
     // Do a quick check for to see if there is a clear connection to the edge of the map
-    return horizontal_path_exists_to_map_edge(cell, 1, grid.getWidthInCells()-1, grid) ||
-           horizontal_path_exists_to_map_edge(cell, -1, 0, grid)                ||
-           vertical_path_exists_to_map_edge(cell, 1, grid.getHeightInCells()-1, grid)  ||
-           vertical_path_exists_to_map_edge(cell, -1, 0, grid);
+    return horizontal_path_exists_to_map_edge(cell, 1, grid.getWidthInCells() - 1, grid)
+      || horizontal_path_exists_to_map_edge(cell, -1, 0, grid)
+      || vertical_path_exists_to_map_edge(cell, 1, grid.getHeightInCells() - 1, grid)
+      || vertical_path_exists_to_map_edge(cell, -1, 0, grid);
 }
 
 
@@ -102,10 +98,9 @@ unsigned int IslandDetector::findCellComponent(cell_t cell, const VoronoiSkeleto
     int componentSize = 0;
 
     // If the component has reached the necessary size for a large structure, then exit the search immediately
-    while(!searchQueue.empty() && (componentSize < maxIslandArea) &&
-          (islands->findSet(cell_index_component(cell, grid)) != islands->findSet(LARGE_STRUCTURE_SET)) &&
-          (islands->findSet(cell_index_component(cell, grid)) != islands->findSet(ISLAND_SET)))
-    {
+    while (!searchQueue.empty() && (componentSize < maxIslandArea)
+           && (islands->findSet(cell_index_component(cell, grid)) != islands->findSet(LARGE_STRUCTURE_SET))
+           && (islands->findSet(cell_index_component(cell, grid)) != islands->findSet(ISLAND_SET))) {
         cell_t currentCell = searchQueue.front();
 
         expandCell(currentCell, grid);
@@ -118,26 +113,24 @@ unsigned int IslandDetector::findCellComponent(cell_t cell, const VoronoiSkeleto
         searchQueue.pop_front();
     }
 
-    unsigned int cellSet           = islands->findSet(cell_index_component(cell, grid));
+    unsigned int cellSet = islands->findSet(cell_index_component(cell, grid));
     unsigned int largeStructureSet = islands->findSet(LARGE_STRUCTURE_SET);
 
-    if((cellSet != largeStructureSet) && (componentSize < maxIslandArea))
-    {
+    if ((cellSet != largeStructureSet) && (componentSize < maxIslandArea)) {
         islands->setUnion(cellSet, ISLAND_SET);
         cellSet = ISLAND_SET;
 
 #ifdef DEBUG_ISLANDS
-        std::cout<<"INFO:IslandDetector:Found island with "<<componentSize<<" cells containing "<<cell<<'\n';
+        std::cout << "INFO:IslandDetector:Found island with " << componentSize << " cells containing " << cell << '\n';
 #endif
-    }
-    else if(cellSet != largeStructureSet)
-    {
+    } else if (cellSet != largeStructureSet) {
         // The component was larger than the maximum island size, so it is a large structure
         islands->setUnion(cellSet, LARGE_STRUCTURE_SET);
         cellSet = LARGE_STRUCTURE_SET;
 
 #ifdef DEBUG_ISLANDS
-        std::cout<<"INFO:IslandDetector:Found large structure with "<<componentSize<<" cells containing "<<cell<<'\n';
+        std::cout << "INFO:IslandDetector:Found large structure with " << componentSize << " cells containing " << cell
+                  << '\n';
 #endif
     }
 
@@ -149,13 +142,13 @@ unsigned int IslandDetector::findCellComponent(cell_t cell, const VoronoiSkeleto
 
 void IslandDetector::expandCell(cell_t cell, const VoronoiSkeletonGrid& grid) const
 {
-    unsigned int  cellIndex = cell_index_component(cell, grid);
+    unsigned int cellIndex = cell_index_component(cell, grid);
     NeighborArray neighbors;
-    
-    std::size_t numNeighbors = neighbor_cells_with_classification(cell, OCCUPIED_CELL_MASK, grid, FOUR_THEN_EIGHT_WAY, neighbors);
-    
-    for(std::size_t n = 0; n < numNeighbors; ++n)
-    {
+
+    std::size_t numNeighbors =
+      neighbor_cells_with_classification(cell, OCCUPIED_CELL_MASK, grid, FOUR_THEN_EIGHT_WAY, neighbors);
+
+    for (std::size_t n = 0; n < numNeighbors; ++n) {
         mergeAndEnqueueNeighbor(neighbors[n], cellIndex, grid);
     }
 }
@@ -164,19 +157,20 @@ void IslandDetector::expandCell(cell_t cell, const VoronoiSkeletonGrid& grid) co
 void IslandDetector::processCell(cell_t cell, const VoronoiSkeletonGrid& grid) const
 {
     // Check to see if the cell is at the boundary of the grid. If so, merge it with the large structure set
-//     if(cell.x == 0 || cell.x == grid.getWidthInCells()-1 || cell.y == 0 || cell.y == grid.getHeightInCells()-1)
-//     {
-//         islands->setUnion(cell_index_component(cell, grid), LARGE_STRUCTURE_SET);
-//     }
+    //     if(cell.x == 0 || cell.x == grid.getWidthInCells()-1 || cell.y == 0 || cell.y == grid.getHeightInCells()-1)
+    //     {
+    //         islands->setUnion(cell_index_component(cell, grid), LARGE_STRUCTURE_SET);
+    //     }
 }
 
 
-void IslandDetector::mergeAndEnqueueNeighbor(cell_t neighbor, unsigned int parentIndex, const VoronoiSkeletonGrid& grid) const
+void IslandDetector::mergeAndEnqueueNeighbor(cell_t neighbor,
+                                             unsigned int parentIndex,
+                                             const VoronoiSkeletonGrid& grid) const
 {
     unsigned int neighborIndex = cell_index_component(neighbor, grid);
 
-    if(islands->findSet(parentIndex) != islands->findSet(neighborIndex))
-    {
+    if (islands->findSet(parentIndex) != islands->findSet(neighborIndex)) {
         searchQueue.push_back(neighbor);
 
         islands->setUnion(parentIndex, neighborIndex);
@@ -188,16 +182,14 @@ void IslandDetector::mergeAndEnqueueNeighbor(cell_t neighbor, unsigned int paren
 // to the edge of the map along the desired direction
 bool vertical_path_exists_to_map_edge(cell_t start, int yIncrement, int yEnd, const VoronoiSkeletonGrid& grid)
 {
-    for(int y = start.y; y != yEnd; y += yIncrement)
-    {
-        if(!(grid.getClassification(start.x, y) & OCCUPIED_CELL_MASK))
-        {
+    for (int y = start.y; y != yEnd; y += yIncrement) {
+        if (!(grid.getClassification(start.x, y) & OCCUPIED_CELL_MASK)) {
             return false;
         }
     }
 
 #ifdef DEBUG_CARDINAL_SEARCH
-    std::cout<<"INFO:IslandDetector:Found vertical path from "<<start<<" to edge of grid\n";
+    std::cout << "INFO:IslandDetector:Found vertical path from " << start << " to edge of grid\n";
 #endif
 
     return true;
@@ -206,20 +198,18 @@ bool vertical_path_exists_to_map_edge(cell_t start, int yIncrement, int yEnd, co
 
 bool horizontal_path_exists_to_map_edge(cell_t start, int xIncrement, int xEnd, const VoronoiSkeletonGrid& grid)
 {
-    for(int x = start.x; x != xEnd; x += xIncrement)
-    {
-        if(!(grid.getClassification(x, start.y) & OCCUPIED_CELL_MASK))
-        {
+    for (int x = start.x; x != xEnd; x += xIncrement) {
+        if (!(grid.getClassification(x, start.y) & OCCUPIED_CELL_MASK)) {
             return false;
         }
     }
 
 #ifdef DEBUG_CARDINAL_SEARCH
-    std::cout<<"INFO:IslandDetector:Found horizontal path from "<<start<<" to edge of grid\n";
+    std::cout << "INFO:IslandDetector:Found horizontal path from " << start << " to edge of grid\n";
 #endif
 
     return true;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

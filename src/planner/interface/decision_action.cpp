@@ -8,15 +8,15 @@
 
 
 /**
-* \file     decision_action.cpp
-* \author   Collin Johnson
-*
-* Definition of DecisionAction.
-*/
+ * \file     decision_action.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DecisionAction.
+ */
 
 #include "planner/interface/decision_action.h"
-#include "planner/interface/decision.h"
 #include "mpepc/metric_planner/task/navigation.h"
+#include "planner/interface/decision.h"
 #include "system/system_communicator.h"
 #include "utils/stub.h"
 
@@ -55,13 +55,13 @@ std::shared_ptr<mpepc::NavigationTask> create_task_for_target(const pose_t& targ
     // between areas actually occurs. The target for the affordance defines the correct direction in which to move the
     // target, so it can be used for nudging the target into the adjacent area.
 
-    const float kTargetExtensionLength = 1.0f;      // Move the target one meter into the adjacent area
+    const float kTargetExtensionLength = 1.0f;   // Move the target one meter into the adjacent area
 
     pose_t extendedTarget(target.x + std::cos(target.theta) * kTargetExtensionLength,
-                                    target.y + std::sin(target.theta) * kTargetExtensionLength,
-                                    target.theta);
+                          target.y + std::sin(target.theta) * kTargetExtensionLength,
+                          target.theta);
     return std::make_shared<mpepc::NavigationTask>(extendedTarget);
 }
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan

@@ -8,14 +8,14 @@
 
 
 /**
-* \file     shape_intersection_area.h
-* \author   Collin Johnson
-* 
-* Declaration of various functions to find the area of the intersection between shapes. Currently supported shapes are:
-* 
-*   - circle_rectangle_intersection_area
-*   - circle_circle_intersection_area
-*/
+ * \file     shape_intersection_area.h
+ * \author   Collin Johnson
+ *
+ * Declaration of various functions to find the area of the intersection between shapes. Currently supported shapes are:
+ *
+ *   - circle_rectangle_intersection_area
+ *   - circle_circle_intersection_area
+ */
 
 #ifndef MATH_GEOMETRY_SHAPE_INTERSECTION_AREA_H
 #define MATH_GEOMETRY_SHAPE_INTERSECTION_AREA_H
@@ -29,21 +29,21 @@ namespace math
 {
 
 /**
-* circle_rectangle_intersection_area calculates the area of intersection between a circle and a rectangle.
-* 
-* \pre  circle.radius() > 0
-*/
+ * circle_rectangle_intersection_area calculates the area of intersection between a circle and a rectangle.
+ *
+ * \pre  circle.radius() > 0
+ */
 float circle_rectangle_intersection_area(const Circle<float>& circle, const Rectangle<float>& rectangle);
 
 /**
-* circle_circle_intersection_area calculates the area of intersection between two circles.
-* 
-* \pre  lhs.radius() > 0
-* \pre  rhs.radius() > 0
-*/
+ * circle_circle_intersection_area calculates the area of intersection between two circles.
+ *
+ * \pre  lhs.radius() > 0
+ * \pre  rhs.radius() > 0
+ */
 float circle_circle_intersection_area(const Circle<float>& lhs, const Circle<float>& rhs);
 
-}
-}
+}   // namespace math
+}   // namespace vulcan
 
-#endif // MATH_GEOMETRY_SHAPE_INTERSECTION_AREA_H
+#endif   // MATH_GEOMETRY_SHAPE_INTERSECTION_AREA_H

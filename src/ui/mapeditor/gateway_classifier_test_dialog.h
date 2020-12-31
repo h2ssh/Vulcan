@@ -8,17 +8,17 @@
 
 
 /**
-* \file     gateway_classifier_test_dialog.h
-* \author   Collin Johnson
-* 
-* Declaration of GatewayClassifierTestResultsDialog.
-*/
+ * \file     gateway_classifier_test_dialog.h
+ * \author   Collin Johnson
+ *
+ * Declaration of GatewayClassifierTestResultsDialog.
+ */
 
 #ifndef UI_MAPEDITOR_GATEWAY_CLASSIFIER_TEST_DIALOG_H
 #define UI_MAPEDITOR_GATEWAY_CLASSIFIER_TEST_DIALOG_H
 
-#include "ui/mapeditor/map_editor.h"
 #include "hssh/local_topological/training/gateway_classifier_test.h"
+#include "ui/mapeditor/map_editor.h"
 
 namespace vulcan
 {
@@ -26,24 +26,22 @@ namespace ui
 {
 
 /**
-* GatewayClassifierTestResultsDialog calculates and displays the results of a training/test cycle. The classifier
-* learned for the results can be saved to a file for later use if the results are good enough via the Save Classifier
-* button. Otherwise, the results are thrown away after the dialog is closed.
-*/
+ * GatewayClassifierTestResultsDialog calculates and displays the results of a training/test cycle. The classifier
+ * learned for the results can be saved to a file for later use if the results are good enough via the Save Classifier
+ * button. Otherwise, the results are thrown away after the dialog is closed.
+ */
 class GatewayClassifierTestResultsDialog : public ClassificationTestResultsDialogBase
 {
 public:
-
     /**
-    * Constructor for GatewayClassifierTestResultsDialog.
-    *
-    * \param    results     Results to display
-    * \param    parent      Parent window for the dialog
-    */
+     * Constructor for GatewayClassifierTestResultsDialog.
+     *
+     * \param    results     Results to display
+     * \param    parent      Parent window for the dialog
+     */
     GatewayClassifierTestResultsDialog(const hssh::GeneratorResults& results, wxWindow* parent);
 
 private:
-
     std::shared_ptr<hssh::GatewayClassifier> classifier_;
     bool haveSavedClassifier_;
 
@@ -51,7 +49,7 @@ private:
     void addResultsToDetailsGrid(const hssh::GatewayMapResults& results);
     void addTotalsToDetailsGrid(const hssh::GatewayMapResults& overall);
     void createSummary(const hssh::GatewayMapResults& testResults, const hssh::GatewayMapResults& trainingResults);
-    void setResultsText(const hssh::GatewayMapResults& overall, 
+    void setResultsText(const hssh::GatewayMapResults& overall,
                         wxStaticText* numTestsText,
                         wxStaticText* numCorrectText,
                         wxStaticText* accuracyText);
@@ -63,7 +61,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_MAPEDITOR_GATEWAY_CLASSIFIER_TEST_DIALOG_H
+#endif   // UI_MAPEDITOR_GATEWAY_CLASSIFIER_TEST_DIALOG_H

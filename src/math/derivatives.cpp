@@ -8,13 +8,13 @@
 
 
 /**
-* \file     derivatives.h
-* \author   Collin Johnson
-*
-* Definition of utility function for calculating various derivatives:
-*
-*   - uncertain_time_derivative : take a time derivative between two uncertain measurements
-*/
+ * \file     derivatives.h
+ * \author   Collin Johnson
+ *
+ * Definition of utility function for calculating various derivatives:
+ *
+ *   - uncertain_time_derivative : take a time derivative between two uncertain measurements
+ */
 
 #include "math/derivatives.h"
 #include "utils/timestamp.h"
@@ -25,9 +25,8 @@ namespace vulcan
 namespace math
 {
 
-MultivariateGaussian uncertain_time_derivative(const MultivariateGaussian& start,
-                                               const MultivariateGaussian& end,
-                                               int64_t durationUs)
+MultivariateGaussian
+  uncertain_time_derivative(const MultivariateGaussian& start, const MultivariateGaussian& end, int64_t durationUs)
 {
     assert(durationUs > 0);
 
@@ -39,5 +38,5 @@ MultivariateGaussian uncertain_time_derivative(const MultivariateGaussian& start
     return MultivariateGaussian(derivMean, derivCov);
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     mcl_localizer.h
-* \author   Collin Johnson
-*
-* Declaration of MonteCarloLocalization that uses Monte Carlo localization for maintaining the robot pose.
-*/
+ * \file     mcl_localizer.h
+ * \author   Collin Johnson
+ *
+ * Declaration of MonteCarloLocalization that uses Monte Carlo localization for maintaining the robot pose.
+ */
 
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_MCL_LOCALIZER_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_MCL_LOCALIZER_H
@@ -24,52 +24,50 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 const std::string kMonteCarloType("monte-carlo");
 
 struct particle_filter_debug_info_t;
 struct monte_carlo_localization_params_t;
-class  ParticleFilter;
+class ParticleFilter;
 
 /**
-* MonteCarloLocalization implements a simple particle filter localization approach for grid maps. Odometry and IMU data are used
-* for calculating the proposal distribution and laser data is used for the observation model.
-*/
+ * MonteCarloLocalization implements a simple particle filter localization approach for grid maps. Odometry and IMU data
+ * are used for calculating the proposal distribution and laser data is used for the observation model.
+ */
 class MonteCarloLocalization : public Localizer
 {
 public:
+    /**
+     * Constructor for MonteCarloLocalization.
+     */
+    MonteCarloLocalization(const monte_carlo_localization_params_t& params);
 
     /**
-    * Constructor for MonteCarloLocalization.
-    */
-    MonteCarloLocalization(const monte_carlo_localization_params_t& params);
-    
-    /**
-    * Destructor for MonteCarloLocalization.
-    */
+     * Destructor for MonteCarloLocalization.
+     */
     virtual ~MonteCarloLocalization(void);
 
     /**
-    * changeReferenceFrame changes the reference frame from which the robot pose is estimated. The transform should
-    * first translate and then rotate to the new origin to get the correct pose.
-    *
-    * \param    referenceFrame      New reference frame for the map
-    */
+     * changeReferenceFrame changes the reference frame from which the robot pose is estimated. The transform should
+     * first translate and then rotate to the new origin to get the correct pose.
+     *
+     * \param    referenceFrame      New reference frame for the map
+     */
     void changeReferenceFrame(const pose_t& referenceFrame);
-    
+
     // Localizer interface
     pose_distribution_t initializeLocalization(const metric_slam_data_t& data) override;
     void resetPoseEstimate(const pose_t& pose) override;
-    pose_distribution_t updatePoseEstimate(const metric_slam_data_t& data, 
-                                                  const OccupancyGrid& map,
-                                                  particle_filter_debug_info_t* debug) override;
-    
-private:
+    pose_distribution_t updatePoseEstimate(const metric_slam_data_t& data,
+                                           const OccupancyGrid& map,
+                                           particle_filter_debug_info_t* debug) override;
 
+private:
     std::unique_ptr<ParticleFilter> filter_;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_METRICAL_LOCALIZATION_MCL_LOCALIZER_H
+#endif   // HSSH_UTILS_METRICAL_LOCALIZATION_MCL_LOCALIZER_H

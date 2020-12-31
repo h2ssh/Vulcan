@@ -8,21 +8,21 @@
 
 
 #include <array>
-#include <vector>
-#include <map>
 #include <iostream>
-#include <string>
+#include <map>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
-#include <cereal/access.hpp>
-#include <cereal/cereal.hpp>
-#include <cereal/archives/binary.hpp>
-#include <cereal/types/polymorphic.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/stream.hpp>
+#include <cereal/access.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/cereal.hpp>
+#include <cereal/types/polymorphic.hpp>
 
 #include "system/message_traits.h"
 
@@ -30,7 +30,6 @@
 
 #include <armadillo>
 //#include "lcmtypes/lcm_types.h"
-
 
 
 // #include "core/point.h"

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     params.cpp
-* \author   Collin Johnson
-*
-* Definition of load_multi_floor_mapper_params().
-*/
+ * \file     params.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of load_multi_floor_mapper_params().
+ */
 
 #include "hssh/local_metric/multifloor/params.h"
 
@@ -25,12 +25,12 @@ multi_floor_mapper_params_t load_multi_floor_mapper_params(const utils::ConfigFi
 {
     multi_floor_mapper_params_t params;
 
-    params.floorFilename            = "floor_test";
+    params.floorFilename = "floor_test";
     params.minDistanceBetweenFloors = 2.0;
-    params.shouldMatchElevators     = false;
+    params.shouldMatchElevators = false;
 
     return params;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

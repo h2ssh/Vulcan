@@ -16,17 +16,15 @@ namespace hssh
 {
 
 /**
-* TreeLocalizer
-*/
+ * TreeLocalizer
+ */
 class TreeLocalizer
 {
 public:
-
 private:
-
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_LOCALIZATION_TREE_LOCALIZER_H
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_LOCALIZATION_TREE_LOCALIZER_H

@@ -8,22 +8,25 @@
 
 
 /**
-* \file     params.h
-* \author   Collin Johnson
-*
-* Declaration of the various params structs for the pieces of the robot_controller module.
-*/
+ * \file     params.h
+ * \author   Collin Johnson
+ *
+ * Declaration of the various params structs for the pieces of the robot_controller module.
+ */
 
 #ifndef ROBOT_PARAMS_H
 #define ROBOT_PARAMS_H
 
-#include <string>
 #include "math/geometry/rectangle.h"
 #include "robot/wheelchair.h"
+#include <string>
 
 namespace vulcan
 {
-namespace utils { class ConfigFile; }
+namespace utils
+{
+class ConfigFile;
+}
 
 namespace robot
 {
@@ -46,7 +49,6 @@ struct proximity_checker_params_t
 
 struct safe_stop_checker_params_t
 {
-    
 };
 
 struct motion_checker_params_t
@@ -72,22 +74,22 @@ struct robot_controller_params_t
 
     command_filter_params_t filterParams;
     motion_checker_params_t checkerParams;
-    wheelchair_params_t     driverParams;
+    wheelchair_params_t driverParams;
 };
 
 /**
-* load_command_period_ms loads the command period for the robot_interface from the provided config file.
-*/
+ * load_command_period_ms loads the command period for the robot_interface from the provided config file.
+ */
 int load_command_period_ms(const utils::ConfigFile& config);
 
 /**
-* load_robot_controller_params loads the parameters for the wheelchair from the provided configuration
-* file. The parameters are specified in the low_level_control_design_and_implementation document in the
-* docs/design folder of the Vulcan repository.
-*/
+ * load_robot_controller_params loads the parameters for the wheelchair from the provided configuration
+ * file. The parameters are specified in the low_level_control_design_and_implementation document in the
+ * docs/design folder of the Vulcan repository.
+ */
 robot_controller_params_t load_robot_controller_params(const utils::ConfigFile& config);
 
-}
-}
+}   // namespace robot
+}   // namespace vulcan
 
-#endif // ROBOT_WHEELCHAIR_CONTROLLER_PARAMS_H
+#endif   // ROBOT_WHEELCHAIR_CONTROLLER_PARAMS_H

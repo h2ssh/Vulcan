@@ -18,12 +18,10 @@ namespace ui
 class CalibrationApp
 {
 public:
-
 private:
-
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_CALIBRATION_APP_H
+#endif   // UI_CALIBRATION_APP_H

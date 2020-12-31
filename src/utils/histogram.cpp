@@ -8,36 +8,33 @@
 
 
 /**
-* \file     histogram.cpp
-* \author   Collin Johnson
-*
-* Definition of Histogram.
-*/
+ * \file     histogram.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of Histogram.
+ */
 
 #include "utils/histogram.h"
-#include <boost/algorithm/clamp.hpp>
 #include <algorithm>
-#include <iostream>
+#include <boost/algorithm/clamp.hpp>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 namespace vulcan
 {
 namespace utils
 {
 
-std::vector<HistogramBin> split_data_into_bins(const std::vector<double>& data,
-                                               double minValue,
-                                               double maxValue,
-                                               int numBins);
+std::vector<HistogramBin>
+  split_data_into_bins(const std::vector<double>& data, double minValue, double maxValue, int numBins);
 
 
 /////////////// Operators /////////////////////
 std::ostream& operator<<(std::ostream& out, const Histogram& hist)
 {
-    for(auto& bin : hist)
-    {
-        out << '[' << bin.minValue << ',' <<  bin.maxValue << "]: " << bin.count << '\n';
+    for (auto& bin : hist) {
+        out << '[' << bin.minValue << ',' << bin.maxValue << "]: " << bin.count << '\n';
     }
 
     return out;
@@ -104,15 +101,12 @@ void Histogram::normalize(void)
 
     double total = 0.0;
 
-    for(auto& b : bins_)
-    {
+    for (auto& b : bins_) {
         total += b.count;
     }
 
-    if(total > 0.0)
-    {
-        for(auto& b : bins_)
-        {
+    if (total > 0.0) {
+        for (auto& b : bins_) {
             b.count /= total;
         }
     }
@@ -148,10 +142,8 @@ math::UnivariateGaussianDistribution Histogram::toGaussian(void) const
 
 void Histogram::computeHistogramIfNeeded(void) const
 {
-    if(binsAreDirty_ && !values_.empty())
-    {
-        if(std::isnan(minValue_) || std::isnan(maxValue_))
-        {
+    if (binsAreDirty_ && !values_.empty()) {
+        if (std::isnan(minValue_) || std::isnan(maxValue_)) {
             minValue_ = *std::min_element(values_.begin(), values_.end());
             maxValue_ = *std::max_element(values_.begin(), values_.end());
         }
@@ -162,13 +154,10 @@ void Histogram::computeHistogramIfNeeded(void) const
 }
 
 
-std::vector<HistogramBin> split_data_into_bins(const std::vector<double>& data,
-                                               double minValue,
-                                               double maxValue,
-                                               int numBins)
+std::vector<HistogramBin>
+  split_data_into_bins(const std::vector<double>& data, double minValue, double maxValue, int numBins)
 {
-    if(data.empty() || (numBins == 0))
-    {
+    if (data.empty() || (numBins == 0)) {
         return std::vector<HistogramBin>();
     }
 
@@ -176,8 +165,7 @@ std::vector<HistogramBin> split_data_into_bins(const std::vector<double>& data,
     double binWidth = range / numBins;
 
     // All bins can't be the same
-    if(binWidth == 0.0)
-    {
+    if (binWidth == 0.0) {
         return std::vector<HistogramBin>();
     }
 
@@ -187,16 +175,14 @@ std::vector<HistogramBin> split_data_into_bins(const std::vector<double>& data,
     bins[0].maxValue = minValue + binWidth;
     bins[0].count = 0;
 
-    for(int n = 1; n < numBins; ++n)
-    {
+    for (int n = 1; n < numBins; ++n) {
         bins[n].minValue = bins[n - 1].maxValue;
         bins[n].maxValue = bins[n].minValue + binWidth;
         bins[n].count = 0;
     }
 
     // Populate the bins
-    for(auto value : data)
-    {
+    for (auto value : data) {
         int binIdx = (value - minValue) / binWidth;
         binIdx = boost::algorithm::clamp(binIdx, 0, numBins - 1);
         bins[binIdx].count++;
@@ -205,5 +191,5 @@ std::vector<HistogramBin> split_data_into_bins(const std::vector<double>& data,
     return bins;
 }
 
-} // namespace utils
-} // namespace vulcan
+}   // namespace utils
+}   // namespace vulcan

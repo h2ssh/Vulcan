@@ -17,50 +17,48 @@ namespace vulcan
 
 namespace utils
 {
-    class DisjointSetForest;
+class DisjointSetForest;
 }
 
 namespace sensors
 {
-    class Image;
+class Image;
 }
 
 namespace vision
 {
-    
+
 struct image_segment_t;
 
 /**
-* ImageSegmentClusterer uses k-means to join adjacent image segments that were separated
-* due to lighting conditions, excessive pixel noise, etc. k-means is used to redefine
-* the colors in the image. Each segment is assigned one of the colors. Adjacent segments
-* belonging to the same cluster are merged into the same segment.
-*/
+ * ImageSegmentClusterer uses k-means to join adjacent image segments that were separated
+ * due to lighting conditions, excessive pixel noise, etc. k-means is used to redefine
+ * the colors in the image. Each segment is assigned one of the colors. Adjacent segments
+ * belonging to the same cluster are merged into the same segment.
+ */
 class ImageSegmentClusterer
 {
 public:
-    
     /**
-    * Constructor for ImageSegmentClusterer.
-    */
+     * Constructor for ImageSegmentClusterer.
+     */
     ImageSegmentClusterer(uint16_t numClusters, uint16_t maxIterations);
-    
+
     /**
-    * clusterSegments reduces the number of segments by using k-means clustering
-    * and then merging adjacent segments belonging to the same cluster.
-    */
+     * clusterSegments reduces the number of segments by using k-means clustering
+     * and then merging adjacent segments belonging to the same cluster.
+     */
     void clusterSegments(std::vector<image_segment_t>& segments,
-                         utils::DisjointSetForest&     components,
-                         const Image&         image,
+                         utils::DisjointSetForest& components,
+                         const Image& image,
                          std::vector<image_segment_t>& finalSegments);
-    
+
 private:
-    
     int numClusters;
     int maxIterations;
 };
 
-}
-}
+}   // namespace vision
+}   // namespace vulcan
 
-#endif // SENSORS_VISION_NAVTEXTURE_IMAGE_SEGMENT_CLUSTERER_H
+#endif   // SENSORS_VISION_NAVTEXTURE_IMAGE_SEGMENT_CLUSTERER_H

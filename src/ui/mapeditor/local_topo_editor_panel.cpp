@@ -8,43 +8,43 @@
 
 
 /**
-* \file     local_topo_editor_panel.cpp
-* \author   Collin Johnson
-*
-* Implementation of LocalTopoEditorPanel.
-*/
+ * \file     local_topo_editor_panel.cpp
+ * \author   Collin Johnson
+ *
+ * Implementation of LocalTopoEditorPanel.
+ */
 
 #include "ui/mapeditor/local_topo_editor_panel.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/lpm_io.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_classifier.h"
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/training/area_labels.h"
+#include "hssh/local_topological/training/gateway_classifier_test.h"
+#include "hssh/local_topological/training/labeled_area_data.h"
+#include "hssh/local_topological/training/labeled_boundary_data.h"
+#include "hssh/local_topological/training/local_topo_area_editor.h"
+#include "system/module_communicator.h"
+#include "ui/common/file_dialog_settings.h"
+#include "ui/common/ui_params.h"
 #include "ui/mapeditor/classification_test_results_dialog.h"
 #include "ui/mapeditor/gateway_classifier_test_dialog.h"
 #include "ui/mapeditor/local_topo_editor_widget.h"
 #include "ui/mapeditor/map_editor.h"
-#include "ui/common/file_dialog_settings.h"
-#include "ui/common/ui_params.h"
-#include "hssh/local_topological/training/area_labels.h"
-#include "hssh/local_topological/training/local_topo_area_editor.h"
-#include "hssh/local_metric/lpm.h"
-#include "hssh/local_topological/area_extent.h"
-#include "hssh/local_topological/training/gateway_classifier_test.h"
-#include "hssh/local_topological/training/labeled_area_data.h"
-#include "hssh/local_topological/training/labeled_boundary_data.h"
-#include "hssh/local_topological/area_detection/labeling/hypothesis_classifier.h"
-#include "hssh/local_metric/lpm_io.h"
 #include "utils/serialized_file_io.h"
-#include "system/module_communicator.h"
 #include <cassert>
 #include <iostream>
 
 
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/mean.hpp>
-#include <boost/accumulators/statistics/variance.hpp>
-#include <boost/accumulators/statistics/skewness.hpp>
-#include <boost/accumulators/statistics/min.hpp>
-#include <boost/accumulators/statistics/max.hpp>
-#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
 #include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/max.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/skewness.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
 
 namespace vulcan
 {
@@ -52,30 +52,30 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(LocalTopoEditorPanel, wxEvtHandler)
-    EVT_BUTTON      (ID_LOAD_LOCAL_TOPO_FROM_FILE_BUTTON,   LocalTopoEditorPanel::loadFromFilePressed)
-    EVT_BUTTON      (ID_LOAD_LABELS_BUTTON,                 LocalTopoEditorPanel::loadLabelsPressed)
-    EVT_BUTTON      (ID_SAVE_LABELS_BUTTON,                 LocalTopoEditorPanel::saveLabelsPressed)
-    EVT_BUTTON      (ID_STORE_LABELS_BUTTON,                LocalTopoEditorPanel::storeLabelsPressed)
-    EVT_RADIOBOX    (ID_LOCAL_TOPO_EDIT_MODE_RADIO,         LocalTopoEditorPanel::editModeChanged)
-    EVT_BUTTON      (ID_AUTO_GENERATE_GATEWAYS_BUTTON,      LocalTopoEditorPanel::generateGatewaysPressed)
-    EVT_TOGGLEBUTTON(ID_HAND_CREATE_GATEWAYS_BUTTON,        LocalTopoEditorPanel::createGatewaysPressed)
-    EVT_BUTTON      (ID_LOAD_GATEWAYS_BUTTON,               LocalTopoEditorPanel::loadGatewaysPressed)
-    EVT_BUTTON      (ID_CREATE_AREAS_FROM_GATEWAYS_BUTTON,  LocalTopoEditorPanel::createAreasPressed)
-    EVT_TOGGLEBUTTON(ID_SELECT_LOCAL_AREAS_BUTTON,          LocalTopoEditorPanel::selectAreasPressed)
-    EVT_BUTTON      (ID_MERGE_SELECTED_AREAS_BUTTON,        LocalTopoEditorPanel::mergeSelectedPressed)
-    EVT_BUTTON      (ID_CLEAR_SELECTED_AREAS_BUTTON,        LocalTopoEditorPanel::clearSelectedPressed)
-    EVT_BUTTON      (ID_RESET_MERGED_AREAS_BUTTON,          LocalTopoEditorPanel::resetMergedPressed)
-    EVT_RADIOBOX    (ID_LABEL_TO_ASSIGN_RADIO,              LocalTopoEditorPanel::labelToAssignChanged)
-    EVT_TOGGLEBUTTON(ID_ASSIGN_LABELS_BUTTON,               LocalTopoEditorPanel::assignLabelsPressed)
-    EVT_BUTTON      (ID_LABEL_ALL_AREAS_BUTTON,             LocalTopoEditorPanel::labelAllAreasPressed)
-    EVT_BUTTON      (ID_CLEAR_LOCAL_AREA_LABELS_BUTTON,     LocalTopoEditorPanel::clearLabelsPressed)
-    EVT_BUTTON      (ID_SIMPLIFY_VIA_LABELS_BUTTON,         LocalTopoEditorPanel::simplifyViaLabelsPressed)
-    EVT_BUTTON(ID_TRAIN_GATEWAYS_BUTTON,                    LocalTopoEditorPanel::trainGatewaysPressed)
-    EVT_BUTTON(ID_TRAIN_AND_TEST_BUTTON,                    LocalTopoEditorPanel::trainAndTestPressed)
-    EVT_BUTTON(ID_ADD_TRAINING_DATA_BUTTON,                 LocalTopoEditorPanel::addTrainingDataPressed)
-    EVT_BUTTON(ID_REMOVE_TRAINING_DATA_BUTTON,              LocalTopoEditorPanel::removeTrainingDataPressed)
-    EVT_BUTTON(ID_ADD_TEST_DATA_BUTTON,                     LocalTopoEditorPanel::addTestDataPressed)
-    EVT_BUTTON(ID_REMOVE_TEST_DATA_BUTTON,                  LocalTopoEditorPanel::removeTestDataPressed)
+EVT_BUTTON(ID_LOAD_LOCAL_TOPO_FROM_FILE_BUTTON, LocalTopoEditorPanel::loadFromFilePressed)
+EVT_BUTTON(ID_LOAD_LABELS_BUTTON, LocalTopoEditorPanel::loadLabelsPressed)
+EVT_BUTTON(ID_SAVE_LABELS_BUTTON, LocalTopoEditorPanel::saveLabelsPressed)
+EVT_BUTTON(ID_STORE_LABELS_BUTTON, LocalTopoEditorPanel::storeLabelsPressed)
+EVT_RADIOBOX(ID_LOCAL_TOPO_EDIT_MODE_RADIO, LocalTopoEditorPanel::editModeChanged)
+EVT_BUTTON(ID_AUTO_GENERATE_GATEWAYS_BUTTON, LocalTopoEditorPanel::generateGatewaysPressed)
+EVT_TOGGLEBUTTON(ID_HAND_CREATE_GATEWAYS_BUTTON, LocalTopoEditorPanel::createGatewaysPressed)
+EVT_BUTTON(ID_LOAD_GATEWAYS_BUTTON, LocalTopoEditorPanel::loadGatewaysPressed)
+EVT_BUTTON(ID_CREATE_AREAS_FROM_GATEWAYS_BUTTON, LocalTopoEditorPanel::createAreasPressed)
+EVT_TOGGLEBUTTON(ID_SELECT_LOCAL_AREAS_BUTTON, LocalTopoEditorPanel::selectAreasPressed)
+EVT_BUTTON(ID_MERGE_SELECTED_AREAS_BUTTON, LocalTopoEditorPanel::mergeSelectedPressed)
+EVT_BUTTON(ID_CLEAR_SELECTED_AREAS_BUTTON, LocalTopoEditorPanel::clearSelectedPressed)
+EVT_BUTTON(ID_RESET_MERGED_AREAS_BUTTON, LocalTopoEditorPanel::resetMergedPressed)
+EVT_RADIOBOX(ID_LABEL_TO_ASSIGN_RADIO, LocalTopoEditorPanel::labelToAssignChanged)
+EVT_TOGGLEBUTTON(ID_ASSIGN_LABELS_BUTTON, LocalTopoEditorPanel::assignLabelsPressed)
+EVT_BUTTON(ID_LABEL_ALL_AREAS_BUTTON, LocalTopoEditorPanel::labelAllAreasPressed)
+EVT_BUTTON(ID_CLEAR_LOCAL_AREA_LABELS_BUTTON, LocalTopoEditorPanel::clearLabelsPressed)
+EVT_BUTTON(ID_SIMPLIFY_VIA_LABELS_BUTTON, LocalTopoEditorPanel::simplifyViaLabelsPressed)
+EVT_BUTTON(ID_TRAIN_GATEWAYS_BUTTON, LocalTopoEditorPanel::trainGatewaysPressed)
+EVT_BUTTON(ID_TRAIN_AND_TEST_BUTTON, LocalTopoEditorPanel::trainAndTestPressed)
+EVT_BUTTON(ID_ADD_TRAINING_DATA_BUTTON, LocalTopoEditorPanel::addTrainingDataPressed)
+EVT_BUTTON(ID_REMOVE_TRAINING_DATA_BUTTON, LocalTopoEditorPanel::removeTrainingDataPressed)
+EVT_BUTTON(ID_ADD_TEST_DATA_BUTTON, LocalTopoEditorPanel::addTestDataPressed)
+EVT_BUTTON(ID_REMOVE_TEST_DATA_BUTTON, LocalTopoEditorPanel::removeTestDataPressed)
 END_EVENT_TABLE()
 
 
@@ -90,7 +90,7 @@ enum
 // These need to be in the same order as the labelToAssignRadio options.
 enum
 {
-    kPathIndex  = 0,
+    kPathIndex = 0,
     kDecisionIndex,
     kDestIndex,
     kAreaIndex,
@@ -116,13 +116,14 @@ void add_examples_to_labeled_data(const std::string& mapName,
 int hypothesis_type_to_int(hssh::HypothesisType type);
 hssh::HypothesisType int_to_hypothesis_type(int type);
 
-void brute_force_all_isovist_gradients(const std::map<std::string, std::shared_ptr<hssh::VoronoiSkeletonGrid>>& skeletons,
-                                       const std::map<std::string, std::shared_ptr<hssh::VoronoiIsovistField>>& isovists_);
+void brute_force_all_isovist_gradients(
+  const std::map<std::string, std::shared_ptr<hssh::VoronoiSkeletonGrid>>& skeletons,
+  const std::map<std::string, std::shared_ptr<hssh::VoronoiIsovistField>>& isovists_);
 
 
 LocalTopoEditorPanel::LocalTopoEditorPanel(const local_topo_editor_panel_widgets_t& widgets,
-                                           const ui_params_t&                       params,
-                                           const hssh::local_topology_params_t&     localTopoParams)
+                                           const ui_params_t& params,
+                                           const hssh::local_topology_params_t& localTopoParams)
 : widgets_(widgets)
 , editor_(std::make_unique<hssh::LocalTopoAreaEditor>(localTopoParams))
 , initialData_(std::make_unique<hssh::LabeledAreaData>())
@@ -220,8 +221,7 @@ void LocalTopoEditorPanel::objectExited(hssh::AreaHypothesis*& object)
 {
     // If there was a previous hover area and it wasn't selected, then it should have its type returned to the previous
     // value
-    if(hoverArea_)
-    {
+    if (hoverArea_) {
         hoverArea_->setType(hoverType_);
     }
 
@@ -255,7 +255,7 @@ void LocalTopoEditorPanel::changeLPM(const std::string& path, const std::string&
     skeletons_[mapName_] = std::make_shared<hssh::VoronoiSkeletonGrid>(skeleton);
     isovists_[mapName_] = std::make_shared<hssh::VoronoiIsovistField>(editor_->isovistField());
     widgets_.widget->setSkeleton(skeleton);
-    gatewayEditor_.setSkeleton(std::move(skeleton));    // skeleton isn't needed after this point, so can move it
+    gatewayEditor_.setSkeleton(std::move(skeleton));   // skeleton isn't needed after this point, so can move it
     gatewayEditor_.clearGateways();
     widgets_.widget->setGateways(gatewayEditor_.constructedGateways());
     reloadAreas();
@@ -288,11 +288,9 @@ void LocalTopoEditorPanel::reloadAreas(void)
 
     // Assign the hypotheses to be selected amongst via the mouse
     std::map<Point<int>, hssh::AreaHypothesis*> cellToVisible;
-    for(auto hyp : areas)
-    {
+    for (auto hyp : areas) {
         const auto& extent = hyp->extent();
-        for(auto& cell : extent)
-        {
+        for (auto& cell : extent) {
             cellToVisible.insert(std::make_pair(utils::global_point_to_grid_cell_round(cell, *lpm_), hyp));
         }
     }
@@ -304,8 +302,7 @@ void LocalTopoEditorPanel::reloadAreas(void)
 void LocalTopoEditorPanel::clearSelection(void)
 {
     // Set all areas back to being a generic label
-    for(auto area : selectedAreas_)
-    {
+    for (auto area : selectedAreas_) {
         area->setType(hssh::HypothesisType::kArea);
     }
 
@@ -330,8 +327,7 @@ void LocalTopoEditorPanel::toggleGatewayMode(bool enable)
     widgets_.createAreasButton->Enable(enable);
 
     // Turn-off gateway editing when leaving gateway mode
-    if(!enable)
-    {
+    if (!enable) {
         widgets_.createGatewaysButton->SetValue(false);
         toggleGatewayEditing(false);
     }
@@ -345,8 +341,7 @@ void LocalTopoEditorPanel::toggleMergeMode(bool enable)
     widgets_.clearSelectedButton->Enable(enable);
     widgets_.resetMergedButton->Enable(enable);
 
-    if(!enable)
-    {
+    if (!enable) {
         clearSelection();
     }
 }
@@ -367,8 +362,7 @@ void LocalTopoEditorPanel::toggleGatewayEditing(bool enable)
     // Always remove the gateway editing, just in case
     widgets_.widget->removeMouseHandler(&gatewayEditor_);
 
-    if(enable)
-    {
+    if (enable) {
         // Turn off shape selection for sure
         toggleShapeSelection(false);
 
@@ -380,17 +374,13 @@ void LocalTopoEditorPanel::toggleGatewayEditing(bool enable)
 
 void LocalTopoEditorPanel::toggleShapeSelection(bool enable)
 {
-    if(enable && !amSelecting_)
-    {
+    if (enable && !amSelecting_) {
         widgets_.widget->pushMouseHandler(&areaSelector_);
-    }
-    else if(!enable && amSelecting_)
-    {
+    } else if (!enable && amSelecting_) {
         widgets_.widget->removeMouseHandler(&areaSelector_);
     }
 
-    if(enable)
-    {
+    if (enable) {
         toggleGatewayEditing(false);
     }
 
@@ -406,9 +396,7 @@ void LocalTopoEditorPanel::addEditorAreasToLabeledData(void)
                                  *initialData_);
     add_examples_to_labeled_data(mapName_, editor_->begin(), editor_->end(), *simplifiedData_);
 
-    auto gatewayData = create_labeled_gateway_data(mapName_,
-                                                   gatewayEditor_.constructedGateways(),
-                                                   *editor_);
+    auto gatewayData = create_labeled_gateway_data(mapName_, gatewayEditor_.constructedGateways(), *editor_);
     gatewayData_->addExamples(gatewayData);
 
     auto boundaryData = create_labeled_boundary_data(mapName_, *editor_);
@@ -419,10 +407,8 @@ void LocalTopoEditorPanel::addEditorAreasToLabeledData(void)
 void LocalTopoEditorPanel::addSelectedDataToList(wxListBox* mapList)
 {
     // Iterate through all elements in the labeled data and add all selected ones to the list of maps
-    for(int n = 0; n < widgets_.labeledDataList->GetItemCount(); ++n)
-    {
-        if(widgets_.labeledDataList->GetItemState(n, wxLIST_STATE_SELECTED))
-        {
+    for (int n = 0; n < widgets_.labeledDataList->GetItemCount(); ++n) {
+        if (widgets_.labeledDataList->GetItemState(n, wxLIST_STATE_SELECTED)) {
             // Add the map name to the list
             mapList->Append(widgets_.labeledDataList->GetItemText(n, kMapNameColumn));
             // Unselect the map from the list of selected maps
@@ -435,16 +421,13 @@ void LocalTopoEditorPanel::addSelectedDataToList(wxListBox* mapList)
 void LocalTopoEditorPanel::removeSelectedDataFromList(wxListBox* mapList)
 {
     // Iterate through all elements in the list
-    for(unsigned int n = 0; n < mapList->GetCount();)
-    {
+    for (unsigned int n = 0; n < mapList->GetCount();) {
         // If it is selected, then delete it
-        if(mapList->IsSelected(n))
-        {
+        if (mapList->IsSelected(n)) {
             mapList->Delete(n);
         }
         // Otherwise, move on to the next element
-        else
-        {
+        else {
             ++n;
         }
     }
@@ -454,11 +437,14 @@ void LocalTopoEditorPanel::removeSelectedDataFromList(wxListBox* mapList)
 void LocalTopoEditorPanel::initializeLabeledDataList(void)
 {
     // Same order as the enum above
-    widgets_.labeledDataList->InsertColumn(kMapNameColumn, "Map Name:", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
+    widgets_.labeledDataList
+      ->InsertColumn(kMapNameColumn, "Map Name:", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
     widgets_.labeledDataList->InsertColumn(kPathColumn, "# Paths:", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
-    widgets_.labeledDataList->InsertColumn(kDecisionColumn, "# Decisions:", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
+    widgets_.labeledDataList
+      ->InsertColumn(kDecisionColumn, "# Decisions:", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
     widgets_.labeledDataList->InsertColumn(kDestColumn, "# Dests:", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
-    widgets_.labeledDataList->InsertColumn(kGatewayColumn, "# Gateways:", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
+    widgets_.labeledDataList
+      ->InsertColumn(kGatewayColumn, "# Gateways:", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
 }
 
 
@@ -470,38 +456,15 @@ void LocalTopoEditorPanel::populateLabeledDataList(void)
 
     // For each map in the labeled data
     int mapListRow = 0;
-    for(auto& name : boost::make_iterator_range(simplifiedData_->beginMaps(), simplifiedData_->endMaps()))
-    {
+    for (auto& name : boost::make_iterator_range(simplifiedData_->beginMaps(), simplifiedData_->endMaps())) {
         // Count statistics on the number of each type of example
-        int numDests     = 0;
+        int numDests = 0;
         int numDecisions = 0;
-        int numPaths     = 0;
+        int numPaths = 0;
 
-        for(auto& example : boost::make_iterator_range(initialData_->beginMapExamples(name),
-            initialData_->endMapExamples(name)))
-        {
-            switch(example.type)
-            {
-                case hssh::HypothesisType::kDecision:
-                    ++numDecisions;
-                    break;
-                case hssh::HypothesisType::kDest:
-                    ++numDests;
-                    break;
-                case hssh::HypothesisType::kPath:
-                    ++numPaths;
-                    break;
-                default:
-                    // Don't count other types
-                    break;
-            }
-        }
-
-        for(auto& example : boost::make_iterator_range(simplifiedData_->beginMapExamples(name),
-            simplifiedData_->endMapExamples(name)))
-        {
-            switch(example.type)
-            {
+        for (auto& example :
+             boost::make_iterator_range(initialData_->beginMapExamples(name), initialData_->endMapExamples(name))) {
+            switch (example.type) {
             case hssh::HypothesisType::kDecision:
                 ++numDecisions;
                 break;
@@ -517,12 +480,28 @@ void LocalTopoEditorPanel::populateLabeledDataList(void)
             }
         }
 
-        int numGateways  = 0;
-        for(auto& example : boost::make_iterator_range(gatewayData_->beginMapExamples(name),
-            gatewayData_->endMapExamples(name)))
-        {
-            if(example.isGateway)
-            {
+        for (auto& example : boost::make_iterator_range(simplifiedData_->beginMapExamples(name),
+                                                        simplifiedData_->endMapExamples(name))) {
+            switch (example.type) {
+            case hssh::HypothesisType::kDecision:
+                ++numDecisions;
+                break;
+            case hssh::HypothesisType::kDest:
+                ++numDests;
+                break;
+            case hssh::HypothesisType::kPath:
+                ++numPaths;
+                break;
+            default:
+                // Don't count other types
+                break;
+            }
+        }
+
+        int numGateways = 0;
+        for (auto& example :
+             boost::make_iterator_range(gatewayData_->beginMapExamples(name), gatewayData_->endMapExamples(name))) {
+            if (example.isGateway) {
                 ++numGateways;
             }
         }
@@ -531,10 +510,10 @@ void LocalTopoEditorPanel::populateLabeledDataList(void)
         long itemId = widgets_.labeledDataList->InsertItem(mapListRow, name);
 
         wxString columnFormat("%d");
-        widgets_.labeledDataList->SetItem(itemId, kPathColumn,     wxString::Format(columnFormat, numPaths));
+        widgets_.labeledDataList->SetItem(itemId, kPathColumn, wxString::Format(columnFormat, numPaths));
         widgets_.labeledDataList->SetItem(itemId, kDecisionColumn, wxString::Format(columnFormat, numDecisions));
-        widgets_.labeledDataList->SetItem(itemId, kDestColumn,     wxString::Format(columnFormat, numDests));
-        widgets_.labeledDataList->SetItem(itemId, kGatewayColumn,  wxString::Format(columnFormat, numGateways));
+        widgets_.labeledDataList->SetItem(itemId, kDestColumn, wxString::Format(columnFormat, numDests));
+        widgets_.labeledDataList->SetItem(itemId, kGatewayColumn, wxString::Format(columnFormat, numGateways));
 
         // Make sure the name column is wide enough to hold all names
         widgets_.labeledDataList->SetColumnWidth(kMapNameColumn, wxLIST_AUTOSIZE);
@@ -555,8 +534,7 @@ void LocalTopoEditorPanel::runClassificationTest(void)
     hssh::LabeledAreaData testDataSimplified;
     hssh::LabeledAreaData testDataAll;
 
-    for(unsigned int n = 0; n < widgets_.trainingDataList->GetCount(); ++n)
-    {
+    for (unsigned int n = 0; n < widgets_.trainingDataList->GetCount(); ++n) {
         std::string mapName = widgets_.trainingDataList->GetString(n).ToStdString();
         std::cout << "INFO:LocalTopoEditor: Adding to training data: " << mapName << '\n';
         trainingDataInitial.addExamples(initialData_->findMapExamples(mapName));
@@ -565,8 +543,7 @@ void LocalTopoEditorPanel::runClassificationTest(void)
         trainingDataAll.addExamples(simplifiedData_->findMapExamples(mapName));
     }
 
-    for(unsigned int n = 0; n < widgets_.testDataList->GetCount(); ++n)
-    {
+    for (unsigned int n = 0; n < widgets_.testDataList->GetCount(); ++n) {
         std::string mapName = widgets_.testDataList->GetString(n).ToStdString();
         std::cout << "INFO:LocalTopoEditor: Adding to test data: " << mapName << '\n';
         testDataInitial.addExamples(initialData_->findMapExamples(mapName));
@@ -575,39 +552,40 @@ void LocalTopoEditorPanel::runClassificationTest(void)
         testDataAll.addExamples(simplifiedData_->findMapExamples(mapName));
     }
 
-//     auto resultsInitialFull = new ClassificationTestResultsDialog(hssh::kFullPosteriorClassifierType,
-//                                                                   "initial",
-//                                                                   trainingDataInitial,
-//                                                                   testDataInitial,
-//                                                                   widgets_.widget);
-//     auto resultsInitialLikelihood = new ClassificationTestResultsDialog(hssh::kLikelihoodOnlyClassifierType,
-//                                                                         "initial",
-//                                                                         trainingDataInitial,
-//                                                                         testDataInitial,
-//                                                                         widgets_.widget);
-//     auto resultsSimplifiedFull = new ClassificationTestResultsDialog(hssh::kFullPosteriorClassifierType,
-//                                                                      "simplified",
-//                                                                      trainingDataSimplified,
-//                                                                      testDataSimplified,
-//                                                                      widgets_.widget);
-//     auto resultsSimplifiedLikelihood = new ClassificationTestResultsDialog(hssh::kLikelihoodOnlyClassifierType,
-//                                                                            "simplified",
-//                                                                            trainingDataSimplified,
-//                                                                            testDataSimplified,
-//                                                                            widgets_.widget);
+    //     auto resultsInitialFull = new ClassificationTestResultsDialog(hssh::kFullPosteriorClassifierType,
+    //                                                                   "initial",
+    //                                                                   trainingDataInitial,
+    //                                                                   testDataInitial,
+    //                                                                   widgets_.widget);
+    //     auto resultsInitialLikelihood = new ClassificationTestResultsDialog(hssh::kLikelihoodOnlyClassifierType,
+    //                                                                         "initial",
+    //                                                                         trainingDataInitial,
+    //                                                                         testDataInitial,
+    //                                                                         widgets_.widget);
+    //     auto resultsSimplifiedFull = new ClassificationTestResultsDialog(hssh::kFullPosteriorClassifierType,
+    //                                                                      "simplified",
+    //                                                                      trainingDataSimplified,
+    //                                                                      testDataSimplified,
+    //                                                                      widgets_.widget);
+    //     auto resultsSimplifiedLikelihood = new ClassificationTestResultsDialog(hssh::kLikelihoodOnlyClassifierType,
+    //                                                                            "simplified",
+    //                                                                            trainingDataSimplified,
+    //                                                                            testDataSimplified,
+    //                                                                            widgets_.widget);
 
     std::cout << "All data: Training:" << trainingDataAll.size() << " Test:" << testDataAll.size() << '\n';
-    auto resultsAllLikelihood = new ClassificationTestResultsDialog("",
-                                                                    "all",
-                                                                    trainingDataAll,
-//                                                                     trainingDataSimplified,
-                                                                    testDataAll,
-                                                                    widgets_.widget);
+    auto resultsAllLikelihood = new ClassificationTestResultsDialog(
+      "",
+      "all",
+      trainingDataAll,
+      //                                                                     trainingDataSimplified,
+      testDataAll,
+      widgets_.widget);
 
-//     resultsInitialFull->Show();
-//     resultsSimplifiedFull->Show();
-//     resultsInitialLikelihood->Show();
-//     resultsSimplifiedLikelihood->Show();
+    //     resultsInitialFull->Show();
+    //     resultsSimplifiedFull->Show();
+    //     resultsInitialLikelihood->Show();
+    //     resultsSimplifiedLikelihood->Show();
     resultsAllLikelihood->Show();
 }
 
@@ -617,27 +595,23 @@ void LocalTopoEditorPanel::runGatewayTest(void)
     hssh::LabeledGatewayData trainingData;
     hssh::LabeledGatewayData testData;
 
-    for(unsigned int n = 0; n < widgets_.trainingDataList->GetCount(); ++n)
-    {
+    for (unsigned int n = 0; n < widgets_.trainingDataList->GetCount(); ++n) {
         std::string mapName = widgets_.trainingDataList->GetString(n).ToStdString();
         std::cout << "INFO:LocalTopoEditor: Adding to training data: " << mapName << '\n';
         trainingData.addExamples(gatewayData_->findMapExamples(mapName));
     }
 
-    for(unsigned int n = 0; n < widgets_.testDataList->GetCount(); ++n)
-    {
+    for (unsigned int n = 0; n < widgets_.testDataList->GetCount(); ++n) {
         std::string mapName = widgets_.testDataList->GetString(n).ToStdString();
         std::cout << "INFO:LocalTopoEditor: Adding to test data: " << mapName << '\n';
         testData.addExamples(gatewayData_->findMapExamples(mapName));
     }
 
-    if(!trainingData.empty() && !testData.empty())
-    {
+    if (!trainingData.empty() && !testData.empty()) {
         hssh::GatewayClassifierTest test(localTopoParams_, trainingData, testData, skeletons_, isovists_);
 
         std::vector<GatewayClassifierTestResultsDialog*> dialogs;
-        for(auto& result : test)
-        {
+        for (auto& result : test) {
             dialogs.push_back(new GatewayClassifierTestResultsDialog(result, widgets_.widget));
             dialogs.back()->Show();
         }
@@ -649,8 +623,7 @@ void LocalTopoEditorPanel::loadFromFilePressed(wxCommandEvent& event)
 {
     wxFileDialog loadDialog(widgets_.widget, wxT("Select map file..."), wxT(""), wxT(""), wxT("*.lpm"), kFileOpenFlags);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         wxString name = loadDialog.GetFilename().BeforeLast('.').ToStdString();
 
         mapName_ = name.ToStdString();
@@ -664,24 +637,24 @@ void LocalTopoEditorPanel::loadFromFilePressed(wxCommandEvent& event)
 
 void LocalTopoEditorPanel::loadLabelsPressed(wxCommandEvent& event)
 {
-    wxFileDialog loadDialog(widgets_.widget, wxT("Select labels file..."), wxT(""), wxT(""), wxT("*.lbl"), kFileOpenFlags);
+    wxFileDialog loadDialog(widgets_.widget,
+                            wxT("Select labels file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.lbl"),
+                            kFileOpenFlags);
 
-    if(loadDialog.ShowModal() == wxID_OK)
-    {
+    if (loadDialog.ShowModal() == wxID_OK) {
         wxString path = loadDialog.GetPath();
         auto allLabels = hssh::load_labels_file(path.ToStdString(), localTopoParams_);
 
-        for(auto& building : allLabels.fullMaps)
-        {
-            for(auto& map : building.second)
-            {
-                if(map.gatewayData.empty())
-                {
+        for (auto& building : allLabels.fullMaps) {
+            for (auto& map : building.second) {
+                if (map.gatewayData.empty()) {
                     std::cout << "Computing gateway features for " << map.name.toMapName() << '\n';
                     hssh::compute_gateway_features(map);
                 }
-                if(map.boundaryData.empty() || map.simplifiedData.empty())
-                {
+                if (map.boundaryData.empty() || map.simplifiedData.empty()) {
                     std::cout << "Computing area features for " << map.name.toMapName() << '\n';
                     hssh::compute_area_and_boundary_features(map);
                 }
@@ -695,10 +668,8 @@ void LocalTopoEditorPanel::loadLabelsPressed(wxCommandEvent& event)
             }
         }
 
-        for(auto& building : allLabels.incrementalMaps)
-        {
-            for(auto& map : building.second)
-            {
+        for (auto& building : allLabels.incrementalMaps) {
+            for (auto& map : building.second) {
                 initialData_->addExamples(map.initialData);
                 simplifiedData_->addExamples(map.simplifiedData);
                 gatewayData_->addExamples(map.gatewayData);
@@ -710,19 +681,22 @@ void LocalTopoEditorPanel::loadLabelsPressed(wxCommandEvent& event)
 
         populateLabeledDataList();
 
-//         brute_force_all_isovist_gradients(skeletons_, isovists_);
+        //         brute_force_all_isovist_gradients(skeletons_, isovists_);
     }
 }
 
 
 void LocalTopoEditorPanel::saveLabelsPressed(wxCommandEvent& event)
 {
-    wxFileDialog saveDialog(widgets_.widget, wxT("Select output file..."), wxT(""), wxT(""), wxT("*.lbl"), kFileSaveFlags);
+    wxFileDialog saveDialog(widgets_.widget,
+                            wxT("Select output file..."),
+                            wxT(""),
+                            wxT(""),
+                            wxT("*.lbl"),
+                            kFileSaveFlags);
 
-    if(saveDialog.ShowModal() == wxID_OK)
-    {
-        if(labeledMapNames_.empty())
-        {
+    if (saveDialog.ShowModal() == wxID_OK) {
+        if (labeledMapNames_.empty()) {
             std::cerr << "WARNING: Save Labels: No map data to save.\n";
         }
 
@@ -731,8 +705,7 @@ void LocalTopoEditorPanel::saveLabelsPressed(wxCommandEvent& event)
         // The labels file contains the location of the individually saved labels, which are saved whenever StoreLabels
         // is pressed
         std::ofstream out(baseName);
-        for(auto& map : labeledMapNames_)
-        {
+        for (auto& map : labeledMapNames_) {
             out << map.first << ' ' << map.second << '\n';
         }
     }
@@ -741,8 +714,7 @@ void LocalTopoEditorPanel::saveLabelsPressed(wxCommandEvent& event)
 
 void LocalTopoEditorPanel::storeLabelsPressed(wxCommandEvent& event)
 {
-    if(lpm_ && editor_)
-    {
+    if (lpm_ && editor_) {
         save_map_labels(*lpm_, *editor_, gatewayEditor_.constructedGateways(), mapName_, mapDirectory_);
 
         labeledMapNames_.push_back(std::make_pair(mapName_, mapDirectory_));
@@ -777,12 +749,9 @@ void LocalTopoEditorPanel::loadGatewaysPressed(wxCommandEvent& event)
     gwyFile << mapDirectory_ << '/' << mapName_ << ".gwy";
 
     std::vector<hssh::Gateway> gateways;
-    if(!utils::load_serializable_from_file(gwyFile.str(), gateways))
-    {
+    if (!utils::load_serializable_from_file(gwyFile.str(), gateways)) {
         std::cerr << "ERROR: Failed to load gateways from " << gwyFile.str() << '\n';
-    }
-    else
-    {
+    } else {
         gatewayEditor_.addGateways(gateways);
     }
 }
@@ -802,8 +771,7 @@ void LocalTopoEditorPanel::selectAreasPressed(wxCommandEvent& event)
 
 void LocalTopoEditorPanel::mergeSelectedPressed(wxCommandEvent& event)
 {
-    if(selectedAreas_.empty())
-    {
+    if (selectedAreas_.empty()) {
         return;
     }
 
@@ -850,8 +818,7 @@ void LocalTopoEditorPanel::labelAllAreasPressed(wxCommandEvent& event)
 void LocalTopoEditorPanel::clearLabelsPressed(wxCommandEvent& event)
 {
     // Change all the labels back to area
-    for(auto& area : *editor_)
-    {
+    for (auto& area : *editor_) {
         editor_->labelArea(area, hssh::HypothesisType::kArea);
     }
 }
@@ -908,11 +875,10 @@ void add_examples_to_labeled_data(const std::string& mapName,
     std::vector<hssh::LabeledFeatures> examples;
 
     // Iterate through the hypotheses in the LocalTopoAreaEditor
-    for(auto& hyp : boost::make_iterator_range(begin, end))
-    {
+    for (auto& hyp : boost::make_iterator_range(begin, end)) {
         // For each area, create the appropriate <type, features> data structure
         hssh::LabeledFeatures example;
-        example.type     = hyp->getType();
+        example.type = hyp->getType();
         example.features = hyp->features();
         examples.push_back(std::move(example));
     }
@@ -924,8 +890,7 @@ void add_examples_to_labeled_data(const std::string& mapName,
 
 int hypothesis_type_to_int(hssh::HypothesisType type)
 {
-    switch(type)
-    {
+    switch (type) {
     case hssh::HypothesisType::kDecision:
         return kDecisionIndex;
 
@@ -943,8 +908,7 @@ int hypothesis_type_to_int(hssh::HypothesisType type)
 
 hssh::HypothesisType int_to_hypothesis_type(int type)
 {
-    switch(type)
-    {
+    switch (type) {
     case kDestIndex:
         return hssh::HypothesisType::kDest;
 
@@ -961,8 +925,9 @@ hssh::HypothesisType int_to_hypothesis_type(int type)
 }
 
 
-void brute_force_all_isovist_gradients(const std::map<std::string, std::shared_ptr<hssh::VoronoiSkeletonGrid>>& skeletons,
-                                       const std::map<std::string, std::shared_ptr<hssh::VoronoiIsovistField>>& isovists)
+void brute_force_all_isovist_gradients(
+  const std::map<std::string, std::shared_ptr<hssh::VoronoiSkeletonGrid>>& skeletons,
+  const std::map<std::string, std::shared_ptr<hssh::VoronoiIsovistField>>& isovists)
 {
     using namespace boost::accumulators;
 
@@ -970,40 +935,33 @@ void brute_force_all_isovist_gradients(const std::map<std::string, std::shared_p
 
     std::cerr << "Performing brute-force search in the following maps:\n";
     std::vector<std::string> maps;
-    for(auto& s : skeletons)
-    {
+    for (auto& s : skeletons) {
         maps.push_back(s.first);
         std::cerr << maps.back() << '\n';
     }
 
-    for(int n = 0; n < utils::Isovist::kNumScalars; ++n)
-    {
+    for (int n = 0; n < utils::Isovist::kNumScalars; ++n) {
         auto scalar = static_cast<utils::Isovist::Scalar>(n);
 
         std::cerr << "Brute-forcing " << utils::Isovist::scalarName(scalar) << "...\n";
 
         Acc acc;
 
-        for(auto& m : maps)
-        {
+        for (auto& m : maps) {
             hssh::VoronoiEdges edges(*skeletons.at(m), hssh::SKELETON_CELL_REDUCED_SKELETON);
             hssh::VoronoiIsovistGradients gradients(edges);
             gradients.calculateGradients(scalar, *isovists.at(m));
 
-            for(auto& g : gradients)
-            {
+            for (auto& g : gradients) {
                 acc(std::abs(g.value));
             }
         }
 
         std::cout << utils::Isovist::scalarName(scalar) << ":"
-            << "\n\tMin:  " << min(acc)
-            << "\n\tMax:  " << max(acc)
-            << "\n\tMean: " << mean(acc)
-            << "\n\tVar:  " << variance(acc)
-            << "\n";
+                  << "\n\tMin:  " << min(acc) << "\n\tMax:  " << max(acc) << "\n\tMean: " << mean(acc)
+                  << "\n\tVar:  " << variance(acc) << "\n";
     }
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -21,30 +21,25 @@ namespace hssh
 {
 
 /**
-* LocalTopoCommand provides an interface for issuing commands to control the behavior of the local_topo_hssh module.
-* Currently, it is a hack that just allows for turning on/off the event detection.
-*/
+ * LocalTopoCommand provides an interface for issuing commands to control the behavior of the local_topo_hssh module.
+ * Currently, it is a hack that just allows for turning on/off the event detection.
+ */
 class LocalTopoCommand
 {
 public:
+    /**
+     * Create a new command to set the mode for the module.
+     *
+     * \param    mode    Mode to switch into
+     */
+    LocalTopoCommand(LocalTopoMode mode) : mode_(mode) { }
 
     /**
-    * Create a new command to set the mode for the module.
-    *
-    * \param    mode    Mode to switch into
-    */
-    LocalTopoCommand(LocalTopoMode mode)
-    : mode_(mode)
-    {
-    }
-
-    /**
-    * Retrieve the requested mode.
-    */
+     * Retrieve the requested mode.
+     */
     LocalTopoMode mode(void) const { return mode_; }
 
 private:
-
     LocalTopoMode mode_;
 
     // Serialization support
@@ -59,9 +54,9 @@ private:
     }
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
 DEFINE_SYSTEM_MESSAGE(std::shared_ptr<hssh::LocalTopoCommand>, ("HSSH_LOCAL_TOPO_COMMAND"))
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_COMMAND_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_COMMAND_H

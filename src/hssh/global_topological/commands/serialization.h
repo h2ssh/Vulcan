@@ -8,18 +8,17 @@
 
 
 /**
-* \file     serialization.h
-* \author   Collin Johnson
-* 
-* Serialization support header for GlobalTopoCommand -- register all command types.
-*/
+ * \file     serialization.h
+ * \author   Collin Johnson
+ *
+ * Serialization support header for GlobalTopoCommand -- register all command types.
+ */
 
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_COMMANDS_SERIALIZATION_H
 #define HSSH_GLOBAL_TOPOLOGICAL_COMMANDS_SERIALIZATION_H
 
 /////   Include all concrete type headers here   /////
 #include "hssh/global_topological/commands/save_topo_slam_data.h"
-
 
 
 // Serialization support for smart pointers
@@ -29,4 +28,4 @@
 /////   Register each concrete command type here   /////
 CEREAL_REGISTER_TYPE(vulcan::hssh::SaveTopoSlamDataCommand)
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_COMMANDS_SERIALIZATION_H
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_COMMANDS_SERIALIZATION_H

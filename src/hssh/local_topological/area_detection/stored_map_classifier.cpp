@@ -8,11 +8,11 @@
 
 
 /**
-* \file     stored_map_classifier.cpp
-* \author   Collin Johnson
-*
-* Definition of StoredMapClassifier.
-*/
+ * \file     stored_map_classifier.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of StoredMapClassifier.
+ */
 
 #include "hssh/local_topological/area_detection/stored_map_classifier.h"
 #include "hssh/local_topological/area.h"
@@ -30,15 +30,11 @@ StoredMapClassifier::StoredMapClassifier(const std::string& mapFilename)
 
     areas_.second = 0.0;
 
-    if(utils::load_serializable_from_file(mapFilename, map))
-    {
-        for(auto& area : map)
-        {
+    if (utils::load_serializable_from_file(mapFilename, map)) {
+        for (auto& area : map) {
             areas_.first.push_back(area);
         }
-    }
-    else
-    {
+    } else {
         // TODO: Throw exception if the file doesn't exist
         std::cerr << "ERROR: StoredMapClassifier: Desired map doesn't exist:" << mapFilename << '\n';
         assert(!"Have grouth-truth map");
@@ -47,9 +43,9 @@ StoredMapClassifier::StoredMapClassifier(const std::string& mapFilename)
 
 
 LabelingError StoredMapClassifier::classifyAreas(const std::vector<Gateway>& gateways,
-                                                 const VoronoiSkeletonGrid&  skeleton,
-                                                 const VoronoiIsovistField&  isovistField,
-                                                 const LocalPerceptualMap&   lpm)
+                                                 const VoronoiSkeletonGrid& skeleton,
+                                                 const VoronoiIsovistField& isovistField,
+                                                 const LocalPerceptualMap& lpm)
 {
     // Nothing to label, so always successful as long as some areas were loaded
     return areas_.first.empty() ? LabelingError::no_labeling_solution : LabelingError::success;
@@ -73,5 +69,5 @@ void StoredMapClassifier::sendDebug(system::DebugCommunicator& communicator) con
     // Nothing to send
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     skeleton_graph_rasterization.cpp
-* \author   Collin Johnson
-*
-* Definition of rasterize_graph_onto_grid function.
-*/
+ * \file     skeleton_graph_rasterization.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of rasterize_graph_onto_grid function.
+ */
 
 #include "hssh/local_topological/area_detection/voronoi/skeleton_graph_rasterization.h"
 #include "hssh/local_topological/voronoi_skeleton_grid.h"
@@ -34,8 +34,7 @@ void rasterize_graph_onto_grid(const SkeletonGraph& graph, VoronoiSkeletonGrid& 
 {
     const std::vector<skeleton_graph_vertex_t*>& vertices = graph.getVertices();
 
-    for(int n = vertices.size(); --n >= 0;)
-    {
+    for (int n = vertices.size(); --n >= 0;) {
         rasterize_vertex_edges(vertices[n], grid);
     }
 }
@@ -43,8 +42,7 @@ void rasterize_graph_onto_grid(const SkeletonGraph& graph, VoronoiSkeletonGrid& 
 
 void rasterize_vertex_edges(skeleton_graph_vertex_t* vertex, VoronoiSkeletonGrid& grid)
 {
-    for(int i = vertex->numAdjacent; --i >= 0;)
-    {
+    for (int i = vertex->numAdjacent; --i >= 0;) {
         rasterize_edge(vertex, vertex->adjacent[i], grid);
     }
 }
@@ -60,13 +58,11 @@ bool rasterize_edge(skeleton_graph_vertex_t* start, skeleton_graph_vertex_t* end
     int yDiff = static_cast<int>(end->point.y) - start->point.y;
 
     // Normalize the step sizes if needed
-    if(xDiff != 0)
-    {
+    if (xDiff != 0) {
         xDiff /= std::abs(xDiff);
     }
 
-    if(yDiff != 0)
-    {
+    if (yDiff != 0) {
         yDiff /= std::abs(yDiff);
     }
 
@@ -77,33 +73,28 @@ bool rasterize_edge(skeleton_graph_vertex_t* start, skeleton_graph_vertex_t* end
 
     grid.addClassification(currentX, currentY, SKELETON_CELL_REDUCED_SKELETON);
 
-    while((currentX != end->point.x) || (currentY != end->point.y))
-    {
-        if(currentX != end->point.x)
-        {
+    while ((currentX != end->point.x) || (currentY != end->point.y)) {
+        if (currentX != end->point.x) {
             currentX += xDiff;
         }
 
-        if(currentY != end->point.y)
-        {
+        if (currentY != end->point.y) {
             currentY += yDiff;
         }
 
-//         if(grid.getClassification(currentX, currentY) & SKELETON_CELL_REDUCED_SKELETON)
-//         {
-//             hadSkeletonCell = true;
-//             break;
-//         }
-//         else
-//         {
-            grid.addClassification(currentX, currentY, SKELETON_CELL_REDUCED_SKELETON);
-//         }
-
-
+        //         if(grid.getClassification(currentX, currentY) & SKELETON_CELL_REDUCED_SKELETON)
+        //         {
+        //             hadSkeletonCell = true;
+        //             break;
+        //         }
+        //         else
+        //         {
+        grid.addClassification(currentX, currentY, SKELETON_CELL_REDUCED_SKELETON);
+        //         }
     }
 
     return !hadSkeletonCell;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

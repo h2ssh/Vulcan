@@ -8,11 +8,11 @@
 
 
 /**
-* \file     all_paths.cpp
-* \author   Collin Johnson
-*
-* Definition of AllPaths graph reducer.
-*/
+ * \file     all_paths.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AllPaths graph reducer.
+ */
 
 #include "math/graph/all_paths.h"
 
@@ -21,8 +21,7 @@ namespace vulcan
 namespace math
 {
 
-AllPaths::AllPaths(bool useCachedGraph)
-                : useVertexPool(useCachedGraph)
+AllPaths::AllPaths(bool useCachedGraph) : useVertexPool(useCachedGraph)
 {
 }
 
@@ -47,8 +46,7 @@ void AllPaths::initializeSearch(const std::vector<path_vertex_t*>& vertices)
 
     all_paths_node_t* initialNode = 0;
 
-    for(int n = vertices.size(); --n >= 0;)
-    {
+    for (int n = vertices.size(); --n >= 0;) {
         initialNode = newNode(vertices[n], vertices[n], 0);
         initialNode->numParents = 0;
 
@@ -61,8 +59,7 @@ void AllPaths::initializeSearch(const std::vector<path_vertex_t*>& vertices)
 
 void AllPaths::runSearch(const PathGraph& graph, PathGraph& subgraph)
 {
-    while(!nodeQueue.empty())
-    {
+    while (!nodeQueue.empty()) {
         all_paths_node_t* currentNode = nodeQueue.front();
 
         expandNode(currentNode, subgraph);
@@ -74,15 +71,13 @@ void AllPaths::runSearch(const PathGraph& graph, PathGraph& subgraph)
 
 void AllPaths::expandNode(all_paths_node_t* node, PathGraph& subgraph)
 {
-    for(int n = node->vertex->numAdjacent; --n >= 0;)
-    {
+    for (int n = node->vertex->numAdjacent; --n >= 0;) {
         path_vertex_t* currentVertex = node->vertex->adjacent[n];
 
-        // If not looking at the parent of this node, then the node needs to be expanded. Either a new potential connection
-        // in the subgraph is made. Or the current path is copied to the subgraph if the node is a collision between two
-        // paths
-        if(!isParentNode(node, currentVertex) && expandedNodes.find(currentVertex) == expandedNodes.end())
-        {
+        // If not looking at the parent of this node, then the node needs to be expanded. Either a new potential
+        // connection in the subgraph is made. Or the current path is copied to the subgraph if the node is a collision
+        // between two paths
+        if (!isParentNode(node, currentVertex) && expandedNodes.find(currentVertex) == expandedNodes.end()) {
             std::map<path_vertex_t*, all_paths_node_t*>::iterator nodeIt = activeNodes.find(currentVertex);
 
             // If the node already exists, one of two possibilities exists:
@@ -90,27 +85,22 @@ void AllPaths::expandNode(all_paths_node_t* node, PathGraph& subgraph)
             // safe because it is guaranteed the node isn't a parent of the currently expanding node
             // The node has a different source. Add a vertex to the subgraph that goes between the two nodes and then
             // recursively add all nodes along the path to the subgraph
-            if(nodeIt != activeNodes.end())
-            {
+            if (nodeIt != activeNodes.end()) {
                 handleActiveNodeEdge(node, nodeIt->second, subgraph);
-            }
-            else
-            {
+            } else {
                 handleNewChildVertex(node, currentVertex);
             }
         }
     }
-    
+
     expandedNodes.insert(node->vertex);
 }
 
 
 bool AllPaths::isParentNode(all_paths_node_t* node, path_vertex_t* vertex)
 {
-    for(int n = node->numParents; --n >= 0;)
-    {
-        if(node->parents[n]->vertex == vertex)
-        {
+    for (int n = node->numParents; --n >= 0;) {
+        if (node->parents[n]->vertex == vertex) {
             return true;
         }
     }
@@ -123,8 +113,7 @@ void AllPaths::handleActiveNodeEdge(all_paths_node_t* parent, all_paths_node_t* 
 {
     // When two active nodes collide, then a path has been found through the graph, so trace back the parent
     // pointers for each node and add them all to the subgraph.
-    if(parent->source != child->source)
-    {
+    if (parent->source != child->source) {
         addEdgeBetweenNodes(parent, child, subgraph);
 
         addPathToSubgraph(parent, subgraph);
@@ -147,39 +136,35 @@ void AllPaths::addEdgeBetweenNodes(all_paths_node_t* leftNode, all_paths_node_t*
 {
     // NOTE: left and right don't really have any meaning here beyond being ways to easily distinguish between
     //       the nodes
-    if(leftNode->subgraphVertex == 0)
-    {
+    if (leftNode->subgraphVertex == 0) {
         leftNode->subgraphVertex = newSubgraphVertex(leftNode->vertex);
 
         subgraph.addVertex(leftNode->subgraphVertex);
     }
 
-    if(rightNode->subgraphVertex == 0)
-    {
+    if (rightNode->subgraphVertex == 0) {
         rightNode->subgraphVertex = newSubgraphVertex(rightNode->vertex);
 
         subgraph.addVertex(rightNode->subgraphVertex);
     }
 
-    path_vertex_t* leftVertex  = leftNode->subgraphVertex;
+    path_vertex_t* leftVertex = leftNode->subgraphVertex;
     path_vertex_t* rightVertex = rightNode->subgraphVertex;
 
-    leftVertex->adjacent[leftVertex->numAdjacent++]   = rightVertex;
+    leftVertex->adjacent[leftVertex->numAdjacent++] = rightVertex;
     rightVertex->adjacent[rightVertex->numAdjacent++] = leftVertex;
 }
 
 
 void AllPaths::addPathToSubgraph(all_paths_node_t* node, PathGraph& subgraph)
 {
-    if(node->pathsAdded)
-    {
+    if (node->pathsAdded) {
         return;
     }
 
     node->pathsAdded = true;
 
-    for(int n = node->numParents; --n >= 0;)
-    {
+    for (int n = node->numParents; --n >= 0;) {
         addEdgeBetweenNodes(node, node->parents[n], subgraph);
 
         // Recursively expand all the parents as you go, order doesn't matter
@@ -195,10 +180,10 @@ AllPaths::all_paths_node_t* AllPaths::newNode(path_vertex_t* source, path_vertex
     node->parents[0] = parent;
     node->numParents = 1;
 
-    node->source         = source;
-    node->vertex         = vertex;
+    node->source = source;
+    node->vertex = vertex;
     node->subgraphVertex = 0;
-    node->pathsAdded     = false;
+    node->pathsAdded = false;
 
     return node;
 }
@@ -209,10 +194,10 @@ path_vertex_t* AllPaths::newSubgraphVertex(path_vertex_t* graphVertex)
     path_vertex_t* vertex = useVertexPool ? vertexPool.newObject() : new path_vertex_t();
 
     vertex->numAdjacent = 0;
-    vertex->point       = graphVertex->point;
+    vertex->point = graphVertex->point;
 
     return vertex;
 }
 
-} // namespace math
-} // namespace vulcan
+}   // namespace math
+}   // namespace vulcan

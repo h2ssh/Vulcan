@@ -8,11 +8,11 @@
 
 
 /**
-* \file     safe_stop_checker.h
-* \author   Collin Johnson
-* 
-* Declaration of SafeStopChecker.
-*/
+ * \file     safe_stop_checker.h
+ * \author   Collin Johnson
+ *
+ * Declaration of SafeStopChecker.
+ */
 
 #ifndef CONTROL_ROBOT_CONTROLLER_SAFE_STOP_CHECKER_H
 #define CONTROL_ROBOT_CONTROLLER_SAFE_STOP_CHECKER_H
@@ -24,35 +24,32 @@ namespace vulcan
 {
 namespace robot
 {
-    
+
 const std::string SAFE_STOP_CHECKER_TYPE("safe_stop");
 
 /**
-* SafeStopChecker
-*/
+ * SafeStopChecker
+ */
 class SafeStopChecker : public MotionChecker
 {
 public:
-    
     /**
-    * Constructor for SafeStopChecker.
-    * 
-    * \param    params          Parameters defining the safe stopping distances
-    */
+     * Constructor for SafeStopChecker.
+     *
+     * \param    params          Parameters defining the safe stopping distances
+     */
     SafeStopChecker(const safe_stop_checker_params_t& params);
-    
+
     // MotionChecker interface
-    virtual motion_command_t adjustCommandIfNeeded(const motion_command_t&                command,
+    virtual motion_command_t adjustCommandIfNeeded(const motion_command_t& command,
                                                    const std::vector<Point<float>>& scanPoints,
-                                                   proximity_warning_indices_t&           warningIndices);
+                                                   proximity_warning_indices_t& warningIndices);
 
 private:
-    
-    
     safe_stop_checker_params_t params;
 };
 
-}
-}
+}   // namespace robot
+}   // namespace vulcan
 
-#endif // CONTROL_ROBOT_CONTROLLER_SAFE_STOP_CHECKER_H
+#endif   // CONTROL_ROBOT_CONTROLLER_SAFE_STOP_CHECKER_H

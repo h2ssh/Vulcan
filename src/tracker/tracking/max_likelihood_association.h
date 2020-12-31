@@ -16,17 +16,15 @@ namespace tracker
 {
 
 /**
-* MaxLikelihoodAssociation
-*/
+ * MaxLikelihoodAssociation
+ */
 class MaxLikelihoodAssociation
 {
 public:
-
 private:
-
 };
 
-}
-}
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_TRACKING_MAX_LIKELIHOOD_ASSOCIATION_H
+#endif   // TRACKER_TRACKING_MAX_LIKELIHOOD_ASSOCIATION_H

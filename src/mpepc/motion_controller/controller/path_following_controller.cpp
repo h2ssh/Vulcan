@@ -8,17 +8,17 @@
 
 
 /**
-* \file     path_following_controller.cpp
-* \author   Collin Johnson
-*
-* Definition of PathFollowingController.
-*/
+ * \file     path_following_controller.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of PathFollowingController.
+ */
 
 #include "mpepc/motion_controller/controller/path_following_controller.h"
 #include "mpepc/motion_controller/data.h"
 #include "robot/commands.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 // #define DEBUG_COMMAND
 // #define DEBUG_PATH
@@ -66,25 +66,23 @@ robot::motion_command_t PathFollowingController::updateCommand(const motion_cont
 {
     robot::motion_command_t newCommand;
 
-    if(!decider.shouldContinueDriving(data.state.pose))
-    {
+    if (!decider.shouldContinueDriving(data.state.pose)) {
         newCommand.velocityCommand = robot::velocity_command_t(0.0f, 0.0f, data.state.timestamp);
-    }
-    else
-    {
+    } else {
         newCommand.velocityCommand = follower.calculateVelocityCommand(data.state, data.timestep);
         newCommand.velocityCommand.timestamp = data.state.timestamp;
     }
-    
+
     newCommand.commandType = robot::VELOCITY;
-    newCommand.source      = robot::AUTONOMOUS_CONTROLLER;
-    newCommand.timestamp   = data.currentTimeUs;
+    newCommand.source = robot::AUTONOMOUS_CONTROLLER;
+    newCommand.timestamp = data.currentTimeUs;
 
 
 #ifdef DEBUG_COMMAND
-    if((newCommand.velocityCommand.linearVelocity != 0.0f || newCommand.velocityCommand.angularVelocity != 0.0f) && (++updateCount % 10 == 0))
-    {
-        std::cout<<"INFO: PathFollowingController: command:("<<newCommand.linearVelocity<<','<<newCommand.angularVelocity<<")\n";
+    if ((newCommand.velocityCommand.linearVelocity != 0.0f || newCommand.velocityCommand.angularVelocity != 0.0f)
+        && (++updateCount % 10 == 0)) {
+        std::cout << "INFO: PathFollowingController: command:(" << newCommand.linearVelocity << ','
+                  << newCommand.angularVelocity << ")\n";
     }
 #endif
 
@@ -96,20 +94,16 @@ void PathFollowingController::determineTargetWaypoint(const pose_t& pose)
 {
     reachedWaypoint = decider.haveReachedTargetWaypoint(pose);
 
-    if(reachedWaypoint)
-    {
+    if (reachedWaypoint) {
 #ifdef DEBUG_PATH
-        std::cout<<"INFO: PathFollowingController: Reached waypoint: "<<decider.getTargetWaypoint().pose<<'\n';
+        std::cout << "INFO: PathFollowingController: Reached waypoint: " << decider.getTargetWaypoint().pose << '\n';
 #endif
 
         previousWaypointIndex = decider.selectNextTargetWaypoint(pose) - 1;
 
-        if(decider.shouldContinueDriving(pose))
-        {
+        if (decider.shouldContinueDriving(pose)) {
             follower.setWaypointTarget(decider.getTargetWaypoint());
-        }
-        else
-        {
+        } else {
             follower.pathCompleted();
         }
     }
@@ -128,5 +122,5 @@ void PathFollowingController::resumeCommand(void)
 }
 
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan

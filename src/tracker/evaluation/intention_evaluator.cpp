@@ -8,16 +8,16 @@
 
 
 /**
-* @file
-* @author   Collin Johnson
-*
-* Definition of IntentionEvaluator.
-*/
+ * @file
+ * @author   Collin Johnson
+ *
+ * Definition of IntentionEvaluator.
+ */
 
 #include "tracker/evaluation/intention_evaluator.h"
+#include "hssh/local_topological/area.h"
 #include "tracker/dynamic_object_visitor.h"
 #include "tracker/objects/rigid.h"
-#include "hssh/local_topological/area.h"
 
 namespace vulcan
 {
@@ -29,13 +29,9 @@ struct PositionVisitor : public tracker::DynamicObjectVisitor
     tracker::Position position;
 
     // tracker::DynamicObjectVisitor interface
-    void visitPerson(const tracker::Person& person)
-    {
-    }
+    void visitPerson(const tracker::Person& person) { }
 
-    void visitPivotingObject(const tracker::PivotingObject& door)
-    {
-    }
+    void visitPivotingObject(const tracker::PivotingObject& door) { }
 
     void visitRigid(const tracker::RigidObject& object)
     {
@@ -44,23 +40,17 @@ struct PositionVisitor : public tracker::DynamicObjectVisitor
         position.y = slowState[1];
     }
 
-    void visitSlidingObject(const tracker::SlidingObject& door)
-    {
-    }
+    void visitSlidingObject(const tracker::SlidingObject& door) { }
 
-    void visitUnclassified(const tracker::UnclassifiedObject& object)
-    {
-    }
+    void visitUnclassified(const tracker::UnclassifiedObject& object) { }
 };
 
 /////   AreaIntentionEstimates definition   /////
 
-AreaIntentionEstimates::AreaIntentionEstimates(int areaId, const ObjectGoalDistribution& distribution)
-: areaId_(areaId)
+AreaIntentionEstimates::AreaIntentionEstimates(int areaId, const ObjectGoalDistribution& distribution) : areaId_(areaId)
 {
     // Populate the destinations
-    for(auto& goal : distribution)
-    {
+    for (auto& goal : distribution) {
         destinations_.push_back(goal.destination());
     }
 }
@@ -70,13 +60,11 @@ void AreaIntentionEstimates::addSample(const DynamicObject& object)
 {
     // Extract the probability for each estimate
     std::vector<double> destProbs(destinations_.size(), 0.0);
-    for(auto& goal : object.goals())
-    {
+    for (auto& goal : object.goals()) {
         auto destIt = std::find(destinations_.begin(), destinations_.end(), goal.destination());
-        if(destIt == destinations_.end())
-        {
+        if (destIt == destinations_.end()) {
             std::cerr << "ERROR: AreaIntentionEstimates: DynamicObject goals don't match area destinations."
-                << " Ignorning object measurement.\n";
+                      << " Ignorning object measurement.\n";
             return;
         }
 
@@ -88,8 +76,7 @@ void AreaIntentionEstimates::addSample(const DynamicObject& object)
 
     Estimate estimate;
     estimate.destProbs = destProbs;
-    estimate.maxProbIndex = std::distance(destProbs.begin(),
-                                          std::max_element(destProbs.begin(), destProbs.end()));
+    estimate.maxProbIndex = std::distance(destProbs.begin(), std::max_element(destProbs.begin(), destProbs.end()));
     auto state = object.motionState();
     estimate.objPose = pose_t(visitor.position.x, visitor.position.y, std::atan2(state.yVel, state.xVel));
 
@@ -101,8 +88,7 @@ void AreaIntentionEstimates::saveToFile(const std::string& filename) const
 {
     std::ofstream out(filename);
 
-    for(auto est : estimates_)
-    {
+    for (auto est : estimates_) {
         std::copy(est.destProbs.begin(), est.destProbs.end(), std::ostream_iterator<double>(out, " "));
         out << '\n';
     }
@@ -111,8 +97,7 @@ void AreaIntentionEstimates::saveToFile(const std::string& filename) const
 
 /////   IntentionEvaluator definition   /////
 
-IntentionEvaluator::IntentionEvaluator(const hssh::LocalTopoMap& topoMap)
-: topoMap_(topoMap)
+IntentionEvaluator::IntentionEvaluator(const hssh::LocalTopoMap& topoMap) : topoMap_(topoMap)
 {
 }
 
@@ -123,13 +108,11 @@ void IntentionEvaluator::addSample(const DynamicObject& object)
     auto area = topoMap_.areaContaining(object.position());
 
     // Ignore if there's no area associated with the position of the object
-    if(!area)
-    {
+    if (!area) {
         return;
     }
 
-    if(estimates_.empty() || (estimates_.back().areaId() != area->id()))
-    {
+    if (estimates_.empty() || (estimates_.back().areaId() != area->id())) {
         estimates_.emplace_back(area->id(), object.goals());
     }
 
@@ -140,10 +123,8 @@ void IntentionEvaluator::addSample(const DynamicObject& object)
 
 void IntentionEvaluator::saveEstimates(const std::string& basename) const
 {
-    for(auto& est : estimates_)
-    {
-        if(!est.empty())
-        {
+    for (auto& est : estimates_) {
+        if (!est.empty()) {
             std::ostringstream filename;
             filename << basename << '_' << est.areaId() << '_' << (est.begin()->objPose.timestamp / 1000) << ".txt";
             est.saveToFile(filename.str());
@@ -151,5 +132,5 @@ void IntentionEvaluator::saveEstimates(const std::string& basename) const
     }
 }
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan

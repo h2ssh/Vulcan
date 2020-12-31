@@ -8,21 +8,21 @@
 
 
 /**
-* \file     messages.h
-* \author   Collin Johnson and Jong Jin Park
-*
-* Declaration of message types for the motion controller :
-* 
-*  - command to pause, resume or cancel the controller
-*/
+ * \file     messages.h
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Declaration of message types for the motion controller :
+ *
+ *  - command to pause, resume or cancel the controller
+ */
 
 #ifndef MPEPC_MOTION_CONTROLLER_MESSAGES_H
 #define MPEPC_MOTION_CONTROLLER_MESSAGES_H
 
+#include "system/message_traits.h"
+#include <cereal/access.hpp>
 #include <cstdint>
 #include <string>
-#include <cereal/access.hpp>
-#include "system/message_traits.h"
 
 namespace vulcan
 {
@@ -30,9 +30,9 @@ namespace mpepc
 {
 
 /**
-* motion_controller_command_message_t allows for control of the behavior of the motion controller.
-* The motion controller action can be paused, resumed, or outright cancelled.
-*/
+ * motion_controller_command_message_t allows for control of the behavior of the motion controller.
+ * The motion controller action can be paused, resumed, or outright cancelled.
+ */
 enum motion_controller_command_t
 {
     MOTION_CONTROLLER_PAUSE,
@@ -42,7 +42,7 @@ enum motion_controller_command_t
 
 struct motion_controller_command_message_t
 {
-    int64_t                     timestamp;
+    int64_t timestamp;
     motion_controller_command_t command;
 };
 
@@ -50,13 +50,12 @@ struct motion_controller_command_message_t
 template <class Archive>
 void serialize(Archive& ar, motion_controller_command_message_t& message)
 {
-    ar (message.timestamp,
-        message.command);
+    ar(message.timestamp, message.command);
 }
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
 DEFINE_SYSTEM_MESSAGE(mpepc::motion_controller_command_message_t, ("MOTION_CONTROLLER_COMMAND_MESSAGE"))
 
-#endif // MPEPC_MOTION_CONTROLLER_MESSAGES_H
+#endif   // MPEPC_MOTION_CONTROLLER_MESSAGES_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     area_classifier.cpp
-* \author   Collin Johnson
-*
-* Definition of AffordanceLabelingClassifier.
-*/
+ * \file     area_classifier.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of AffordanceLabelingClassifier.
+ */
 
 #include "hssh/local_topological/area_detection/affordance_labeling_classifier.h"
 #include "hssh/local_topological/area_detection/labeling/area_creator.h"
@@ -21,8 +21,8 @@
 #include "hssh/local_topological/area_detection/labeling/loops_and_trees.h"
 #include "hssh/local_topological/area_detection/labeling/parser.h"
 #include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
-#include "hssh/local_topological/events/area_transition.h"
 #include "hssh/local_topological/debug_info.h"
+#include "hssh/local_topological/events/area_transition.h"
 #include "hssh/local_topological/params.h"
 #include "system/debug_communicator.h"
 #include "utils/timestamp.h"
@@ -36,9 +36,7 @@ AffordanceLabelingClassifier::AffordanceLabelingClassifier(const area_classifier
                                                            const std::string& mapName)
 : starBuilder(create_small_scale_star_builder(params.starBuilderParams))
 , areaBuilder(std::make_shared<AreaBuilder>(starBuilder))
-, parser(new AreaParser(starBuilder,
-                        params.mcmcParams,
-                        mapName))
+, parser(new AreaParser(starBuilder, params.mcmcParams, mapName))
 , debug(new local_area_debug_info_t)
 {
 }
@@ -50,9 +48,9 @@ AffordanceLabelingClassifier::~AffordanceLabelingClassifier(void)
 
 
 LabelingError AffordanceLabelingClassifier::classifyAreas(const std::vector<Gateway>& gateways,
-                                                          const VoronoiSkeletonGrid&  skeleton,
-                                                          const VoronoiIsovistField&  isovistField,
-                                                          const LocalPerceptualMap&   lpm)
+                                                          const VoronoiSkeletonGrid& skeleton,
+                                                          const VoronoiIsovistField& isovistField,
+                                                          const LocalPerceptualMap& lpm)
 {
     HypothesisFeatures::ClearCache();
 
@@ -61,29 +59,25 @@ LabelingError AffordanceLabelingClassifier::classifyAreas(const std::vector<Gate
     int64_t elapsedTime = utils::system_time_us() - startTime;
     totalTime += elapsedTime;
     ++numUpdates;
-    std::cout << "INFO: AffordanceLabelingClassifier: Parse time: " << (elapsedTime / 1000) << "ms Average:"
-        << (totalTime / numUpdates / 1000) << "ms\n";
+    std::cout << "INFO: AffordanceLabelingClassifier: Parse time: " << (elapsedTime / 1000)
+              << "ms Average:" << (totalTime / numUpdates / 1000) << "ms\n";
 
-    if(result.result == LabelingError::success)
-    {
+    if (result.result == LabelingError::success) {
         assert(!result.proposals.empty());
         areas_.second = result.logProb;
         createAreasFromProposals(result.proposals, skeleton, isovistField, lpm);
         return LabelingError::success;
     }
     // Failed to create proposals, so the graph couldn't be parsed
-    else
-    {
+    else {
         return result.result;
     }
-
 }
 
 
 void AffordanceLabelingClassifier::processAreaEvents(const LocalAreaEventVec& events)
 {
-    for(auto& e : events)
-    {
+    for (auto& e : events) {
         e->accept(*this);
     }
 }
@@ -105,11 +99,8 @@ void AffordanceLabelingClassifier::sendDebug(system::DebugCommunicator& communic
 void AffordanceLabelingClassifier::visitAreaTransition(const AreaTransitionEvent& event)
 {
     // Not guaranteed to have exited an area. The initial transition doesn't have an exit.
-    if(event.exitedArea())
-    {
-        parser->handleTransition(event.exitedArea()->id(),
-                                 event.enteredArea()->id(),
-                                 event.transitionGateway());
+    if (event.exitedArea()) {
+        parser->handleTransition(event.exitedArea()->id(), event.enteredArea()->id(), event.transitionGateway());
     }
 }
 
@@ -132,5 +123,5 @@ void AffordanceLabelingClassifier::createAreasFromProposals(const std::vector<Ar
     });
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

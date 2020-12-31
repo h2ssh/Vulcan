@@ -8,15 +8,15 @@
 
 
 /**
-* \file     skeleton_graph_extractor.cpp
-* \author   Collin Johnson
-*
-* Definition of SkeletonGraphExtractor.
-*/
+ * \file     skeleton_graph_extractor.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of SkeletonGraphExtractor.
+ */
 
 #include "hssh/local_topological/area_detection/voronoi/skeleton_graph_extractor.h"
-#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include <cassert>
 #include <iostream>
 
@@ -28,16 +28,11 @@ namespace vulcan
 namespace hssh
 {
 
-cell_t find_vertex_along_edge(cell_t                      start,
-                              const Point<int16_t>& direction,
-                              VoronoiSkeletonGrid&        grid);
-bool is_node_vertex(cell_t                      node,
-                    const Point<int16_t>& direction,
-                    const VoronoiSkeletonGrid&  grid);
+cell_t find_vertex_along_edge(cell_t start, const Point<int16_t>& direction, VoronoiSkeletonGrid& grid);
+bool is_node_vertex(cell_t node, const Point<int16_t>& direction, const VoronoiSkeletonGrid& grid);
 
 
-SkeletonGraphExtractor::SkeletonGraphExtractor(float minVertexDistance)
-: minVertexDistance_(minVertexDistance)
+SkeletonGraphExtractor::SkeletonGraphExtractor(float minVertexDistance) : minVertexDistance_(minVertexDistance)
 {
 }
 
@@ -51,8 +46,7 @@ SkeletonGraph SkeletonGraphExtractor::extractGraph(const std::set<cell_t>& start
 {
     initializeExtraction();
 
-    for(auto cell : startCells)
-    {
+    for (auto cell : startCells) {
         skeleton_graph_vertex_t* initialVertex = newSkeletonVertex(cell);
         activeVertices.insert(std::make_pair(cell, initialVertex));
         vertexQueue.push(initialVertex);
@@ -64,13 +58,12 @@ SkeletonGraph SkeletonGraphExtractor::extractGraph(const std::set<cell_t>& start
 
     // Convert the active vertices into a SkeletonGraph
     SkeletonGraph graph;
-    for(auto graphIt = activeVertices.begin(), endIt = activeVertices.end(); graphIt != endIt; ++graphIt)
-    {
+    for (auto graphIt = activeVertices.begin(), endIt = activeVertices.end(); graphIt != endIt; ++graphIt) {
         graph.addVertex(graphIt->second);
     }
 
 #ifdef DEBUG_GRAPH_SIZE
-    std::cout<<"INFO: Extractor: Vertices:"<<numVertices<<" Edges:"<<numEdges<<'\n';
+    std::cout << "INFO: Extractor: Vertices:" << numVertices << " Edges:" << numEdges << '\n';
 #endif
 
     return graph;
@@ -82,7 +75,7 @@ void SkeletonGraphExtractor::initializeExtraction(void)
     activeVertices.clear();
     vertexPool.reset();
 
-    numEdges    = 0;
+    numEdges = 0;
     numVertices = 0;
 }
 
@@ -91,12 +84,11 @@ void SkeletonGraphExtractor::runExtraction(VoronoiSkeletonGrid& grid)
 {
     skeleton_graph_vertex_t* vertex = 0;
 
-    while(!vertexQueue.empty())
-    {
+    while (!vertexQueue.empty()) {
         vertex = vertexQueue.front();
 
 #ifdef DEBUG_VERTICES
-        std::cout<<"INFO: Extractor: Vertex:"<<vertex->point<<'\n';
+        std::cout << "INFO: Extractor: Vertex:" << vertex->point << '\n';
 #endif
 
         expandVertex(vertex, grid);
@@ -108,8 +100,7 @@ void SkeletonGraphExtractor::runExtraction(VoronoiSkeletonGrid& grid)
 
 void SkeletonGraphExtractor::expandVertex(skeleton_graph_vertex_t* vertex, VoronoiSkeletonGrid& grid)
 {
-    if(grid.getMetricDistance(vertex->point.x, vertex->point.y) >= minVertexDistance_)
-    {
+    if (grid.getMetricDistance(vertex->point.x, vertex->point.y) >= minVertexDistance_) {
         // Expand to all children
         findAdjacentVertices(vertex, grid);
 
@@ -123,45 +114,41 @@ void SkeletonGraphExtractor::expandVertex(skeleton_graph_vertex_t* vertex, Voron
 void SkeletonGraphExtractor::findAdjacentVertices(skeleton_graph_vertex_t* vertex, VoronoiSkeletonGrid& grid)
 {
     NeighborArray neighbors;
-    std::size_t numNeighbors = neighbor_cells_with_classification(vertex->point, SKELETON_CELL_SKELETON, grid, FOUR_THEN_EIGHT_WAY, neighbors);
-    
-    for(std::size_t n = 0; n < numNeighbors; ++n)
-    {
+    std::size_t numNeighbors =
+      neighbor_cells_with_classification(vertex->point, SKELETON_CELL_SKELETON, grid, FOUR_THEN_EIGHT_WAY, neighbors);
+
+    for (std::size_t n = 0; n < numNeighbors; ++n) {
         considerVertex(vertex, neighbors[n], neighbors[n] - vertex->point, grid);
     }
 }
 
 
-bool SkeletonGraphExtractor::considerVertex(skeleton_graph_vertex_t*    parent,
-                                            cell_t                      pointToConsider,
+bool SkeletonGraphExtractor::considerVertex(skeleton_graph_vertex_t* parent,
+                                            cell_t pointToConsider,
                                             const Point<int16_t>& vertexDirection,
-                                            VoronoiSkeletonGrid&        grid)
+                                            VoronoiSkeletonGrid& grid)
 {
     // Only need to consider SKELETON. Everything else is unimportant.
     uint8_t vertexClassification = grid.getClassification(pointToConsider.x, pointToConsider.y);
     bool considered = vertexClassification & SKELETON_CELL_SKELETON;
 
     // Ignore those marked temp, as that means the cell has been visited already
-    if(considered && !(vertexClassification & SKELETON_CELL_TEMP))
-    {
+    if (considered && !(vertexClassification & SKELETON_CELL_TEMP)) {
         // Once a new vertex has been found, need to check if it exists already. If so, then just use
         // the existing vertex, otherwise create a new one and add it to the active list
-//         pointToConsider = find_vertex_along_edge(pointToConsider, vertexDirection, grid);
+        //         pointToConsider = find_vertex_along_edge(pointToConsider, vertexDirection, grid);
 
         auto mapVertex = activeVertices.find(pointToConsider);
 
         skeleton_graph_vertex_t* newVertex = 0;
 
-        if(mapVertex != activeVertices.end())
-        {
+        if (mapVertex != activeVertices.end()) {
             newVertex = mapVertex->second;
 
 #ifdef DEBUG_VERTICES
-            std::cout<<"INFO: Extractor: Considered was active:"<<pointToConsider<<'\n';
+            std::cout << "INFO: Extractor: Considered was active:" << pointToConsider << '\n';
 #endif
-        }
-        else
-        {
+        } else {
             newVertex = newSkeletonVertex(pointToConsider);
             activeVertices.insert(std::make_pair(pointToConsider, newVertex));
 
@@ -170,14 +157,13 @@ bool SkeletonGraphExtractor::considerVertex(skeleton_graph_vertex_t*    parent,
             vertexQueue.push(newVertex);
 
 #ifdef DEBUG_VERTICES
-            std::cout<<"INFO: Extractor: Considered was new:"<<pointToConsider<<'\n';
+            std::cout << "INFO: Extractor: Considered was new:" << pointToConsider << '\n';
 #endif
 
             ++numVertices;
         }
 
-        if(addEdge(parent, newVertex))
-        {
+        if (addEdge(parent, newVertex)) {
             ++numEdges;
         }
     }
@@ -194,12 +180,12 @@ bool SkeletonGraphExtractor::addEdge(skeleton_graph_vertex_t* parent, skeleton_g
     assert(parent->numAdjacent < MAX_ADJACENT_VERTICES);
     assert(child->numAdjacent < MAX_ADJACENT_VERTICES);
 
-    parent->distance[parent->numAdjacent]   = edgeDistance;
+    parent->distance[parent->numAdjacent] = edgeDistance;
     parent->adjacent[parent->numAdjacent++] = child;
 
-    child->distance[child->numAdjacent]   = edgeDistance;
+    child->distance[child->numAdjacent] = edgeDistance;
     child->adjacent[child->numAdjacent++] = parent;
-    
+
     return true;
 }
 
@@ -208,39 +194,32 @@ skeleton_graph_vertex_t* SkeletonGraphExtractor::newSkeletonVertex(const Point<u
 {
     skeleton_graph_vertex_t* newVertex = vertexPool.newObject();
 
-    newVertex->point       = point;
+    newVertex->point = point;
     newVertex->numAdjacent = 0;
 
     return newVertex;
 }
 
 
-cell_t find_vertex_along_edge(cell_t                      node,
-                              const Point<int16_t>& direction,
-                              VoronoiSkeletonGrid&        grid)
+cell_t find_vertex_along_edge(cell_t node, const Point<int16_t>& direction, VoronoiSkeletonGrid& grid)
 {
     // Use a recursive formulation for finding the vertex.
-    if(is_node_vertex(node, direction, grid))
-    {
+    if (is_node_vertex(node, direction, grid)) {
         return node;
     }
 
     // If along an edge, then recurse to find the edge vertex. Add TEMP bit before passing on the vertex value
     // so the edge doesn't get explored again
     // Recursion baby!
-    cell_t edgeVertex = find_vertex_along_edge(node + direction,
-                                               direction,
-                                               grid);
+    cell_t edgeVertex = find_vertex_along_edge(node + direction, direction, grid);
 
     grid.addClassification(node.x, node.y, SKELETON_CELL_TEMP);
-    
+
     return edgeVertex;
 }
 
 
-bool is_node_vertex(cell_t                      node,
-                    const Point<int16_t>& direction,
-                    const VoronoiSkeletonGrid&  grid)
+bool is_node_vertex(cell_t node, const Point<int16_t>& direction, const VoronoiSkeletonGrid& grid)
 {
     // The invariants are:
     // The cell in -direction is SKELETON, as that is the parent of this cell, it must hold
@@ -249,21 +228,19 @@ bool is_node_vertex(cell_t                      node,
     // the node
 
     // Bottomed out by reaching the edge of the grid
-    int width  = grid.getWidthInCells();
+    int width = grid.getWidthInCells();
     int height = grid.getHeightInCells();
-    if(node.x == 0 || node.x+1 == width || node.y == 0 || node.y+1 == height)
-    {
+    if (node.x == 0 || node.x + 1 == width || node.y == 0 || node.y + 1 == height) {
         return true;
     }
-    
-    if(!(grid.getClassification(node.x+direction.x, node.y+direction.y) & SKELETON_CELL_SKELETON))
-    {
+
+    if (!(grid.getClassification(node.x + direction.x, node.y + direction.y) & SKELETON_CELL_SKELETON)) {
         return true;
     }
-    
+
     NeighborArray neighbors;
     return neighbor_cells_with_classification(node, SKELETON_CELL_SKELETON, grid, FOUR_WAY, neighbors) > 2;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

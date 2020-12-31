@@ -8,11 +8,11 @@
 
 
 /**
-* \file     robot_trajectory_info.cpp
-* \author   Collin Johnson
-*
-* Definition of methods for robot_trajectory_info_t and robot_trajectory_debug_info_t.
-*/
+ * \file     robot_trajectory_info.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of methods for robot_trajectory_info_t and robot_trajectory_debug_info_t.
+ */
 
 #include "mpepc/trajectory/robot_trajectory_info.h"
 
@@ -23,8 +23,7 @@ namespace mpepc
 
 void robot_trajectory_info_t::getPoses(std::vector<pose_t>& poses) const
 {
-    for(auto stateIt = states.begin(); stateIt != states.end(); stateIt++)
-    {
+    for (auto stateIt = states.begin(); stateIt != states.end(); stateIt++) {
         poses.push_back(stateIt->pose);
     }
 }
@@ -55,19 +54,18 @@ void robot_trajectory_debug_info_t::assign(const robot_trajectory_info_t& trjInf
     poses.clear();
     trjInfo.getPoses(poses);
 
-    motionTarget           = trjInfo.motionTarget;
+    motionTarget = trjInfo.motionTarget;
     piecewiseSurvivability = trjInfo.piecewiseSurvivability;
-    piecewiseRawProgress   = trjInfo.piecewiseRawProgress;
+    piecewiseRawProgress = trjInfo.piecewiseRawProgress;
     piecewiseCollisionCost = trjInfo.piecewiseCollisionCost;
-    piecewiseActionCost    = trjInfo.piecewiseActionCost;
-    expectedCost           = trjInfo.expectedCost;
-    totalSurvivability     = trjInfo.totalSurvivability;
-    expectedProgress       = trjInfo.expectedProgress;
-    expectedCollisionCost  = trjInfo.expectedCollisionCost;
-    expectedActionCost     = trjInfo.expectedActionCost;
-    hasCollision           = trjInfo.hasStaticCollision || trjInfo.hasDynamicCollision;
-
+    piecewiseActionCost = trjInfo.piecewiseActionCost;
+    expectedCost = trjInfo.expectedCost;
+    totalSurvivability = trjInfo.totalSurvivability;
+    expectedProgress = trjInfo.expectedProgress;
+    expectedCollisionCost = trjInfo.expectedCollisionCost;
+    expectedActionCost = trjInfo.expectedActionCost;
+    hasCollision = trjInfo.hasStaticCollision || trjInfo.hasDynamicCollision;
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

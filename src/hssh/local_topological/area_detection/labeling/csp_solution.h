@@ -8,11 +8,11 @@
 
 
 /**
-* \file     csp_solution.h
-* \author   Collin Johnson
-*
-* Declaration of AreaLabel and CSPSolution.
-*/
+ * \file     csp_solution.h
+ * \author   Collin Johnson
+ *
+ * Declaration of AreaLabel and CSPSolution.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_SOLUTION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_SOLUTION_H
@@ -30,19 +30,16 @@ class AreaHypothesis;
 class HypothesisGraph;
 
 /**
-* AreaLabel defines the hypotheses that form a single area in the final graph, along with the label to apply to this
-* area.
-*/
+ * AreaLabel defines the hypotheses that form a single area in the final graph, along with the label to apply to this
+ * area.
+ */
 struct AreaLabel
 {
     std::vector<AreaHypothesis*> areaHypotheses;
     HypothesisType label;
-    HypothesisTypeDistribution distribution;        // distribution across possible label types
+    HypothesisTypeDistribution distribution;   // distribution across possible label types
 
-    AreaLabel(void)
-    : label(HypothesisType::kArea)
-    {
-    }
+    AreaLabel(void) : label(HypothesisType::kArea) { }
 
     AreaLabel(const std::vector<AreaHypothesis*>& areas, HypothesisType label, HypothesisTypeDistribution dist)
     : areaHypotheses(areas)
@@ -54,12 +51,11 @@ struct AreaLabel
 
 
 /**
-* CSPSolution defines the solution to a CSP. The solution can be applied to the graph from which it was created.
-*/
+ * CSPSolution defines the solution to a CSP. The solution can be applied to the graph from which it was created.
+ */
 class CSPSolution
 {
 public:
-
     enum ErrorCode
     {
         too_many_attempts,
@@ -72,49 +68,48 @@ public:
     CSPSolution(void) = default;
 
     /**
-    * Constructor for CSPSolution.
-    *
-    * Create an error solution.
-    */
+     * Constructor for CSPSolution.
+     *
+     * Create an error solution.
+     */
     CSPSolution(ErrorCode error);
 
     /**
-    * Constructor for CSPSolution.
-    *
-    * \param    labels          Final labels to be applied to the graph
-    * \param    logProb         Log-probability of labels for the solution
-    */
+     * Constructor for CSPSolution.
+     *
+     * \param    labels          Final labels to be applied to the graph
+     * \param    logProb         Log-probability of labels for the solution
+     */
     CSPSolution(const std::vector<AreaLabel>& labels, double logProb);
 
     /**
-    * apply applies this solution to the provided HypothesisGraph, which results in a new HypothesisGraph with
-    * consistent labels being created.
-    *
-    * \param[in,out]    graph           Graph to apply the solution to
-    */
+     * apply applies this solution to the provided HypothesisGraph, which results in a new HypothesisGraph with
+     * consistent labels being created.
+     *
+     * \param[in,out]    graph           Graph to apply the solution to
+     */
     void apply(HypothesisGraph& graph);
 
     /**
-    * logProb retrieves the log probability of the solution.
-    */
+     * logProb retrieves the log probability of the solution.
+     */
     double logProb(void) const { return logProb_; }
 
     /**
-    * errorCode retrieves the error code associated with the solution.
-    */
+     * errorCode retrieves the error code associated with the solution.
+     */
     ErrorCode errorCode(void) const { return error_; }
 
     // Output operator:  success? SUCCESS: num areas  log prob  error? ERROR: error code
     friend std::ostream& operator<<(std::ostream& out, const CSPSolution& solution);
 
 private:
-
     std::vector<AreaLabel> labels_;
     double logProb_;
     ErrorCode error_;
 };
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_SOLUTION_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_SOLUTION_H

@@ -8,14 +8,14 @@
 
 
 /**
-* \file     scan_weighting.h
-* \author   Collin Johnson
-*
-* Declaration of functions that calculate various types of weights for scans:
-*
-*   - calculate_covariance_weights : scan points orthogonal to highest uncertainty in proposal distribution receive
-*                                    higher weights
-*/
+ * \file     scan_weighting.h
+ * \author   Collin Johnson
+ *
+ * Declaration of functions that calculate various types of weights for scans:
+ *
+ *   - calculate_covariance_weights : scan points orthogonal to highest uncertainty in proposal distribution receive
+ *                                    higher weights
+ */
 
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_SCAN_WEIGHTING_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_SCAN_WEIGHTING_H
@@ -27,24 +27,27 @@ namespace vulcan
 
 class MultivariateGaussian;
 
-namespace laser { struct laser_scan_lines_t; }
+namespace laser
+{
+struct laser_scan_lines_t;
+}
 namespace hssh
 {
 
 /**
-* calculate_covariance_weights
-*
-* \param[in]    scan                    Scan with calculated lines to be weighted
-* \param[in]    proposalDistribution    Proposal distribution that defines estimated uncertainty of robot pose
-* \param[in]    stride                  Stride to take through the rays in the scan
-* \param[out]   weights                 Calculated covariance weights -- size == (scan.numRanges / stride)
-*/
-void calculate_covariance_weights(const laser::laser_scan_lines_t&  scan,
+ * calculate_covariance_weights
+ *
+ * \param[in]    scan                    Scan with calculated lines to be weighted
+ * \param[in]    proposalDistribution    Proposal distribution that defines estimated uncertainty of robot pose
+ * \param[in]    stride                  Stride to take through the rays in the scan
+ * \param[out]   weights                 Calculated covariance weights -- size == (scan.numRanges / stride)
+ */
+void calculate_covariance_weights(const laser::laser_scan_lines_t& scan,
                                   const MultivariateGaussian& proposalDistribution,
                                   int stride,
                                   std::vector<float>& weights);
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_UTILS_METRICAL_LOCALIZATION_SCAN_WEIGHTING_H
+#endif   // HSSH_UTILS_METRICAL_LOCALIZATION_SCAN_WEIGHTING_H

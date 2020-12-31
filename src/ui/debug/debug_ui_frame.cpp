@@ -8,30 +8,30 @@
 
 
 /**
-* \file     debug_ui_frame.cpp
-* \author   Collin Johnson
-*
-* Definition of DebugUIFrame.
-*/
+ * \file     debug_ui_frame.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of DebugUIFrame.
+ */
 
 #include "ui/debug/debug_ui_frame.h"
+#include "ui/common/ui_params.h"
+#include "ui/debug/calibration_panel.h"
+#include "ui/debug/decision_planner_panel.h"
 #include "ui/debug/evaluation_panel.h"
 #include "ui/debug/exploration_panel.h"
-#include "ui/debug/local_metric_panel.h"
+#include "ui/debug/global_metric_panel.h"
+#include "ui/debug/global_topo_panel.h"
+#include "ui/debug/goal_planner_panel.h"
 #include "ui/debug/local_metric_display_widget.h"
+#include "ui/debug/local_metric_panel.h"
 #include "ui/debug/local_metric_panel_text_updater.h"
 #include "ui/debug/local_topo_panel.h"
-#include "ui/debug/global_topo_panel.h"
-#include "ui/debug/global_metric_panel.h"
-#include "ui/debug/calibration_panel.h"
 #include "ui/debug/metric_planner_panel.h"
 #include "ui/debug/relocalization_panel.h"
 #include "ui/debug/scripting_panel.h"
 #include "ui/debug/tracker_panel.h"
-#include "ui/debug/decision_planner_panel.h"
-#include "ui/debug/goal_planner_panel.h"
 #include "ui/debug/vision_panel.h"
-#include "ui/common/ui_params.h"
 #include "utils/timestamp.h"
 #include <iostream>
 
@@ -56,24 +56,24 @@ DebugUIFrame::DebugUIFrame(const utils::ConfigFile& config)
 {
     ui_params_t params = load_ui_params(config);
 
-    setupLocalMetricPanel    (params);
-    setupLocalTopologyPanel  (params);
-    setupGlobalTopologyPanel (params);
-    setupGlobalMetricPanel   (params);
-    setupRelocalizationPanel (params);
-    setupScriptingPanel      (params);
-    setupCalibrationPanel    (params);
-    setupTrackerPanel        (params);
-    setupMetricPlannerPanel  (params);
+    setupLocalMetricPanel(params);
+    setupLocalTopologyPanel(params);
+    setupGlobalTopologyPanel(params);
+    setupGlobalMetricPanel(params);
+    setupRelocalizationPanel(params);
+    setupScriptingPanel(params);
+    setupCalibrationPanel(params);
+    setupTrackerPanel(params);
+    setupMetricPlannerPanel(params);
     setupDecisionPlannerPanel(params);
-    setupGoalPlannerPanel    (params);
-    setupVisionPanel         (params);
-    setupSystemPanel         (params);
-    setupExplorationPanel    (params);
-    setupEvaluationPanel     (params);
+    setupGoalPlannerPanel(params);
+    setupVisionPanel(params);
+    setupSystemPanel(params);
+    setupExplorationPanel(params);
+    setupEvaluationPanel(params);
 
     // Now that all panels are setup, do the final initialization for the frame
-    initialize(frameNotebook ,params.mainFrameParams.framesPerSecond, localMetricWidget, gridCellStatusBar);
+    initialize(frameNotebook, params.mainFrameParams.framesPerSecond, localMetricWidget, gridCellStatusBar);
 }
 
 
@@ -87,39 +87,39 @@ DebugUIFrame::~DebugUIFrame(void)
 void DebugUIFrame::setupLocalMetricPanel(const ui_params_t& params)
 {
     local_metric_panel_text_widgets_t updaterWidgets;
-    updaterWidgets.pose           = poseDisplay;
-    updaterWidgets.velocity       = velocityDisplay;
-    updaterWidgets.command        = commandDisplay;
-    updaterWidgets.imuAccel       = imuAccelDisplay;
-    updaterWidgets.imuVelocity    = imuVelocityDisplay;
+    updaterWidgets.pose = poseDisplay;
+    updaterWidgets.velocity = velocityDisplay;
+    updaterWidgets.command = commandDisplay;
+    updaterWidgets.imuAccel = imuAccelDisplay;
+    updaterWidgets.imuVelocity = imuVelocityDisplay;
     updaterWidgets.imuOrientation = imuOrientationDisplay;
-    updaterWidgets.leftWheel      = leftWheelDisplay;
-    updaterWidgets.rightWheel     = rightWheelDisplay;
+    updaterWidgets.leftWheel = leftWheelDisplay;
+    updaterWidgets.rightWheel = rightWheelDisplay;
 
     LocalMetricPanelTextUpdater* lpmInfo = new LocalMetricPanelTextUpdater(updaterWidgets);
 
     local_metric_panel_widgets_t widgets;
-    widgets.lpmWidget          = localMetricWidget;
-    widgets.updater            = lpmInfo;
+    widgets.lpmWidget = localMetricWidget;
+    widgets.updater = lpmInfo;
     widgets.localizationModeCheck = localMetricModeBox;
-    widgets.gridToShowRadio    = metricGridToShowRadio;
+    widgets.gridToShowRadio = metricGridToShowRadio;
     widgets.centerOnRobotCheck = centerOnRobotCheckBox;
-    widgets.laserToShowRadio   = laserToShowRadio;
-    widgets.showRaysCheck      = scanLineCheckBox;
+    widgets.laserToShowRadio = laserToShowRadio;
+    widgets.showRaysCheck = scanLineCheckBox;
     widgets.showExtractedCheck = showExtractedLinesCheckBox;
     widgets.showIntensityCheck = showIntensityPlotsCheckBox;
-    widgets.showPoseTraceCheck   = showPoseTraceCheckBox;
+    widgets.showPoseTraceCheck = showPoseTraceCheckBox;
     widgets.showMotionTraceCheck = showMotionTraceCheckBox;
-    widgets.showErrorCheck     = showUncertaintyEllipseCheckBox;
+    widgets.showErrorCheck = showUncertaintyEllipseCheckBox;
     widgets.showParticlesCheck = showParticlesCheckBox;
     widgets.showGlassIntensityCheck = showGlassIntensityCheckBox;
-    widgets.showWallsCheck     = showGlassWallsCheckBox;
-    widgets.showAnglesCheck    = showGlassAnglesCheckBox;
-    widgets.anglesToShowRadio  = glassAnglesToShowRadio;
+    widgets.showWallsCheck = showGlassWallsCheckBox;
+    widgets.showAnglesCheck = showGlassAnglesCheckBox;
+    widgets.anglesToShowRadio = glassAnglesToShowRadio;
     widgets.flattenThresholdSlider = glassFlattenThreshSlider;
     widgets.highlyVisibleThresholdSlider = glassHighlyVisibleThreshSlider;
-    widgets.rotationAngleText  = rotateLPMText;
-    widgets.mainFrame          = this;
+    widgets.rotationAngleText = rotateLPMText;
+    widgets.mainFrame = this;
 
     lpmPanel_ = new LocalMetricPanel(params, widgets);
 
@@ -130,39 +130,39 @@ void DebugUIFrame::setupLocalMetricPanel(const ui_params_t& params)
 void DebugUIFrame::setupLocalTopologyPanel(const ui_params_t& params)
 {
     local_topo_panel_widgets_t widgets;
-    widgets.displayWidget              = localTopoWidget;
-    widgets.showVoronoiGridBox         = showVoronoiGridCheckbox;
-    widgets.showDistanceGradientBox    = showDistanceGradientCheckBox;
-    widgets.showFullSkeletonBox        = showFullSkeletonCheckBox;
-    widgets.showReducedSkeletonBox     = showReducedSkeletonCheckBox;
-    widgets.showFrontiersBox           = showFrontiersCheckbox;
-    widgets.centerOnRobotBox           = followRobotTopoCheckBox;
-    widgets.gatewayTypeChoice          = gatewayTypeChoice;
-    widgets.showAreaGraphBox           = showAreaGraphCheckBox;
-    widgets.showVisibilityGraphBox     = showVisibilityGraphBox;
-    widgets.areaHypothesisValueRadio   = areaHypothesisValueRadio;
-    widgets.hypValueText               = hypFeatureValueText;
-    widgets.hypFeatureChoice           = hypFeatureChoice;
-    widgets.hypothesesToShowRadio      = hypothesesToShowRadio;
-    widgets.labelDistributionText      = labelDistributionText;
-    widgets.cspIterationSlider         = cspIterationSlider;
-    widgets.cspSpeedSlider             = cspSpeedSlider;
-    widgets.showHeatMapBox             = showLocalHeatMapCheckBox;
-    widgets.numPathsText               = numHeatMapPathsText;
-    widgets.eventsList                 = localTopoEventList;
+    widgets.displayWidget = localTopoWidget;
+    widgets.showVoronoiGridBox = showVoronoiGridCheckbox;
+    widgets.showDistanceGradientBox = showDistanceGradientCheckBox;
+    widgets.showFullSkeletonBox = showFullSkeletonCheckBox;
+    widgets.showReducedSkeletonBox = showReducedSkeletonCheckBox;
+    widgets.showFrontiersBox = showFrontiersCheckbox;
+    widgets.centerOnRobotBox = followRobotTopoCheckBox;
+    widgets.gatewayTypeChoice = gatewayTypeChoice;
+    widgets.showAreaGraphBox = showAreaGraphCheckBox;
+    widgets.showVisibilityGraphBox = showVisibilityGraphBox;
+    widgets.areaHypothesisValueRadio = areaHypothesisValueRadio;
+    widgets.hypValueText = hypFeatureValueText;
+    widgets.hypFeatureChoice = hypFeatureChoice;
+    widgets.hypothesesToShowRadio = hypothesesToShowRadio;
+    widgets.labelDistributionText = labelDistributionText;
+    widgets.cspIterationSlider = cspIterationSlider;
+    widgets.cspSpeedSlider = cspSpeedSlider;
+    widgets.showHeatMapBox = showLocalHeatMapCheckBox;
+    widgets.numPathsText = numHeatMapPathsText;
+    widgets.eventsList = localTopoEventList;
     widgets.showEventsVisualizationBox = showLocalTopoEventCheckbox;
-    widgets.isovistLocationRadio       = isovistLocationRadio;
-    widgets.selectIsovistsButton       = selectIsovistsButton;
-    widgets.isovistScalarChoice        = fieldScalarChoice;
-    widgets.showIsovistBox             = showIsovistBox;
-    widgets.showIsovistFieldBox        = showIsovistFieldBox;
-    widgets.showIsovistDerivFieldBox   = showIsovistFieldDerivBox;
-    widgets.showGradientsBox           = showCellGradientsCheckbox;
-    widgets.showLocalMaximaBox         = showIsovistMaximaCheckbox;
+    widgets.isovistLocationRadio = isovistLocationRadio;
+    widgets.selectIsovistsButton = selectIsovistsButton;
+    widgets.isovistScalarChoice = fieldScalarChoice;
+    widgets.showIsovistBox = showIsovistBox;
+    widgets.showIsovistFieldBox = showIsovistFieldBox;
+    widgets.showIsovistDerivFieldBox = showIsovistFieldDerivBox;
+    widgets.showGradientsBox = showCellGradientsCheckbox;
+    widgets.showLocalMaximaBox = showIsovistMaximaCheckbox;
     widgets.showGatewayProbabilitiesBox = showGatewayProbabilitiesBox;
-    widgets.gatewayProbabilitySlider    = gatewayCutoffSlider;
-    widgets.classifierToUseRadio        = gatewayClassifierRadio;
-    widgets.visibilityFeatureChoice    = visibilityFeatureChoice;
+    widgets.gatewayProbabilitySlider = gatewayCutoffSlider;
+    widgets.classifierToUseRadio = gatewayClassifierRadio;
+    widgets.visibilityFeatureChoice = visibilityFeatureChoice;
 
     localTopoPanel_ = new LocalTopoPanel(params, widgets);
     addPanel(localTopoPanel_, localTopologyPanel);
@@ -186,9 +186,9 @@ void DebugUIFrame::setupGlobalTopologyPanel(const ui_params_t& params)
 void DebugUIFrame::setupGlobalMetricPanel(const ui_params_t& params)
 {
     global_metric_panel_widgets_t widgets;
-    widgets.display          = globalMetricWidget;
-    widgets.mapNameText      = globalMetricMapNameText;
-    widgets.saveMapButton    = saveGlobalMapButton;
+    widgets.display = globalMetricWidget;
+    widgets.mapNameText = globalMetricMapNameText;
+    widgets.saveMapButton = saveGlobalMapButton;
     widgets.relocalizeButton = globalMetricRelocalizeButton;
 
     globalMetricPanel_ = new GlobalMetricPanel(widgets, params);
@@ -200,16 +200,16 @@ void DebugUIFrame::setupRelocalizationPanel(const ui_params_t& params)
 {
     relocalization_widgets_t widgets;
 
-    widgets.displayWidget             = relocalizationWidget;
-    widgets.loadGMMButton             = relocalizeLoadGMMButton;
-    widgets.loadLPMButton             = relocalizeLoadLPMButton;
-    widgets.showLaserBox              = relocalizeShowLaserCheckBox;
-    widgets.showErrorBox              = relocalizeShowErrorCheckBox;
-    widgets.showParticlesBox          = relocalizeShowParticlesCheckBox;
+    widgets.displayWidget = relocalizationWidget;
+    widgets.loadGMMButton = relocalizeLoadGMMButton;
+    widgets.loadLPMButton = relocalizeLoadLPMButton;
+    widgets.showLaserBox = relocalizeShowLaserCheckBox;
+    widgets.showErrorBox = relocalizeShowErrorCheckBox;
+    widgets.showParticlesBox = relocalizeShowParticlesCheckBox;
     widgets.freeSpacePosesPerCellText = freeSpacePosesPerCellText;
-    widgets.freeSpaceStrideText       = freeSpaceCellStrideText;
-    widgets.regionNumSamplesText      = regionNumSamplesText;
-    widgets.regionPosesPerPosText     = regionPosesPerPositionText;
+    widgets.freeSpaceStrideText = freeSpaceCellStrideText;
+    widgets.regionNumSamplesText = regionNumSamplesText;
+    widgets.regionPosesPerPosText = regionPosesPerPositionText;
 
     relocalizationPanel_ = new RelocalizationPanel(params, widgets);
     addPanel(relocalizationPanel_, relocalizationPanel);
@@ -220,13 +220,13 @@ void DebugUIFrame::setupScriptingPanel(const ui_params_t& params)
 {
     scripting_panel_widgets_t widgets;
 
-    widgets.scriptingWidget    = scriptingWidget;
-    widgets.poseTaskButton     = scriptPoseTargetButton;
+    widgets.scriptingWidget = scriptingWidget;
+    widgets.poseTaskButton = scriptPoseTargetButton;
     widgets.elevatorTaskButton = scriptElevatorTargetButton;
-    widgets.targetSetList      = scriptingTargetSetList;
-    widgets.targetNameText     = scriptTargetNameText;
-    widgets.targetPoseText     = scriptTargetPoseText;
-    widgets.scriptList         = scriptTargetsList;
+    widgets.targetSetList = scriptingTargetSetList;
+    widgets.targetNameText = scriptTargetNameText;
+    widgets.targetPoseText = scriptTargetPoseText;
+    widgets.scriptList = scriptTargetsList;
 
     scriptingPanel_ = new ScriptingPanel(params, widgets);
     addPanel(scriptingPanel_, plannerScriptingPanel);
@@ -237,19 +237,19 @@ void DebugUIFrame::setupCalibrationPanel(const ui_params_t& params)
 {
     calibration_panel_widgets_t widgets;
 
-    widgets.displayWidget       = calibrationWidget;
-    widgets.showFrontLaser      = showFrontLaserCheckBox;
-    widgets.showBackLaser       = showBackLaserCheckBox;
-    widgets.frontLaserTextX     = frontLaserCoordsXText;
-    widgets.frontLaserTextY     = frontLaserCoordsYText;
+    widgets.displayWidget = calibrationWidget;
+    widgets.showFrontLaser = showFrontLaserCheckBox;
+    widgets.showBackLaser = showBackLaserCheckBox;
+    widgets.frontLaserTextX = frontLaserCoordsXText;
+    widgets.frontLaserTextY = frontLaserCoordsYText;
     widgets.frontLaserTextTheta = frontLaserCoordsThetaText;
     widgets.frontLaserTextPitch = frontLaserPitchText;
-    widgets.frontLaserTextRoll  = frontLaserRollText;
-    widgets.backLaserTextX      = backLaserCoordsXText;
-    widgets.backLaserTextY      = backLaserCoordsYText;
-    widgets.backLaserTextTheta  = backLaserCoordsThetaText;
-    widgets.backLaserTextPitch  = backLaserPitchText;
-    widgets.backLaserTextRoll   = backLaserRollText;
+    widgets.frontLaserTextRoll = frontLaserRollText;
+    widgets.backLaserTextX = backLaserCoordsXText;
+    widgets.backLaserTextY = backLaserCoordsYText;
+    widgets.backLaserTextTheta = backLaserCoordsThetaText;
+    widgets.backLaserTextPitch = backLaserPitchText;
+    widgets.backLaserTextRoll = backLaserRollText;
 
     widgets.calibratePitchButton = calibratePitchButton;
     widgets.calibrateRollButton = calibrateRollButton;
@@ -292,20 +292,20 @@ void DebugUIFrame::setupMetricPlannerPanel(const ui_params_t& params)
 {
     metric_planner_panel_widgets_t widgets;
 
-    widgets.displayWidget         = metricPlannerWidget;
-    widgets.scriptNameText        = metricScriptFileText;
-    widgets.trajectoryCostChoice  = trajectoryCostChoice;
-    widgets.numTrajectoriesLabel  = trajectoryCountLabel;
-    widgets.numTrajectoriesText   = numTrajectoriesText;
-    widgets.evaluatedCostLabel    = evaluatedCostLabel;
-    widgets.evaluatedCostText     = evaluatedCostText;
-    widgets.motionTargetRText     = motionTargetRText;
+    widgets.displayWidget = metricPlannerWidget;
+    widgets.scriptNameText = metricScriptFileText;
+    widgets.trajectoryCostChoice = trajectoryCostChoice;
+    widgets.numTrajectoriesLabel = trajectoryCountLabel;
+    widgets.numTrajectoriesText = numTrajectoriesText;
+    widgets.evaluatedCostLabel = evaluatedCostLabel;
+    widgets.evaluatedCostText = evaluatedCostText;
+    widgets.motionTargetRText = motionTargetRText;
     widgets.motionTargetThetaText = motionTargetThetaText;
     widgets.motionTargetDeltaText = motionTargetDeltaText;
-    widgets.motionTargetGainText  = motionTargetGainText;
-    widgets.motionTargetK1Text    = motionTargetK1Text;
-    widgets.motionTargetK2Text    = motionTargetK2Text;
-    widgets.motionTargetCostText  = motionTargetCostText;
+    widgets.motionTargetGainText = motionTargetGainText;
+    widgets.motionTargetK1Text = motionTargetK1Text;
+    widgets.motionTargetK2Text = motionTargetK2Text;
+    widgets.motionTargetCostText = motionTargetCostText;
 
     metricPlannerPanel_ = new MetricPlannerPanel(params, widgets);
     addPanel(metricPlannerPanel_, metricPlannerPanel);
@@ -316,10 +316,10 @@ void DebugUIFrame::setupDecisionPlannerPanel(const ui_params_t& params)
 {
     decision_planner_panel_widgets_t widgets;
 
-    widgets.widget           = decisionPlannerWidget;
+    widgets.widget = decisionPlannerWidget;
     widgets.commandQueueList = decisionCommandQueueList;
-    widgets.placeState       = localPlaceStateGrid;
-    widgets.pathState        = localPathStateGrid;
+    widgets.placeState = localPlaceStateGrid;
+    widgets.pathState = localPathStateGrid;
 
     decisionPlannerPanel_ = new DecisionPlannerPanel(params, widgets);
     addPanel(decisionPlannerPanel_, decisionPlannerPanel);
@@ -330,10 +330,10 @@ void DebugUIFrame::setupGoalPlannerPanel(const ui_params_t& params)
 {
     goal_planner_panel_widgets_t widgets;
 
-    widgets.displayWidget       = goalPlannerWidget;
-    widgets.representationBox   = globalTopoMapViewRadioBox;
-    widgets.routeDisplayBox     = globalRouteDisplayRadioBox;
-    widgets.animateFPSText      = animateFPSText;
+    widgets.displayWidget = goalPlannerWidget;
+    widgets.representationBox = globalTopoMapViewRadioBox;
+    widgets.routeDisplayBox = globalRouteDisplayRadioBox;
+    widgets.animateFPSText = animateFPSText;
 
     goalPlannerPanel_ = new GoalPlannerPanel(params, widgets);
     addPanel(goalPlannerPanel_, goalPlannerPanel);
@@ -343,12 +343,12 @@ void DebugUIFrame::setupGoalPlannerPanel(const ui_params_t& params)
 void DebugUIFrame::setupVisionPanel(const ui_params_t& params)
 {
     vision_panel_widgets_t widgets;
-    widgets.displayWidget          = visionWidget;
-    widgets.minEdgeWeightSlider    = minEdgeWeightSlider;
-    widgets.maxEdgeWeightSlider    = maxEdgeWeightSlider;
-    widgets.pixelSigmaSlider       = pixelSigmaSlider;
+    widgets.displayWidget = visionWidget;
+    widgets.minEdgeWeightSlider = minEdgeWeightSlider;
+    widgets.maxEdgeWeightSlider = maxEdgeWeightSlider;
+    widgets.pixelSigmaSlider = pixelSigmaSlider;
     widgets.creditMultiplierSlider = creditMultiplierSlider;
-    widgets.filterWidthSlider      = filterWidthSlider;
+    widgets.filterWidthSlider = filterWidthSlider;
 
     visionPanel_ = new VisionPanel(params, widgets);
     addPanel(visionPanel_, visionPanel);
@@ -386,5 +386,5 @@ void DebugUIFrame::setupEvaluationPanel(const ui_params_t& params)
     addPanel(evaluationPanel_, evaluationPanel);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     small_scale_space_boundary.h
-* \author   Collin Johnson
-*
-* Declaration of SmallScaleSpaceBoundary interface and create_small_scale_space_boundary factory.
-*/
+ * \file     small_scale_space_boundary.h
+ * \author   Collin Johnson
+ *
+ * Declaration of SmallScaleSpaceBoundary interface and create_small_scale_space_boundary factory.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_SPACE_BOUNDARY_H
 #define HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_SPACE_BOUNDARY_H
@@ -34,42 +34,41 @@ class LocalTopoMap;
 class SmallScaleSpaceBoundary;
 
 /**
-* create_small_scale_space_boundary creates an appropriate instance of SmallScaleSpaceBoundary.
-*
-* \param    type        Subclass of SSSB to be created
-* \pre  type is a valid type string descriptor of a subclass of SmallScaleSpaceBoundary.
-* \return   An instance of the desired subclass of SmallScaleSpaceBoundary.
-*/
+ * create_small_scale_space_boundary creates an appropriate instance of SmallScaleSpaceBoundary.
+ *
+ * \param    type        Subclass of SSSB to be created
+ * \pre  type is a valid type string descriptor of a subclass of SmallScaleSpaceBoundary.
+ * \return   An instance of the desired subclass of SmallScaleSpaceBoundary.
+ */
 std::unique_ptr<SmallScaleSpaceBoundary> create_small_scale_space_boundary(const std::string& type);
 
 
 /**
-* SmallScaleSpaceBoundary is an interface for controlling the size of small-scale space based on the local topology of
-* the environment. The boundary is updated whenever a new LocalAreaEvent occurs.
-*
-* The boundary is computed using the current LocalTopoMap, LPM, and the LocalAreaEvents that have occurred.
-*
-* Not all events will generate a new boundary. Thus, the new boundary is optional when being computed.
-*/
+ * SmallScaleSpaceBoundary is an interface for controlling the size of small-scale space based on the local topology of
+ * the environment. The boundary is updated whenever a new LocalAreaEvent occurs.
+ *
+ * The boundary is computed using the current LocalTopoMap, LPM, and the LocalAreaEvents that have occurred.
+ *
+ * Not all events will generate a new boundary. Thus, the new boundary is optional when being computed.
+ */
 class SmallScaleSpaceBoundary
 {
 public:
-
     using MapBoundary = math::Rectangle<float>;
 
     /**
-    * computeBoundary computes the current boundary of small-scale space based on new LocalTopoEvents that indicate
-    * the robot has moved within the local topological structure of the environment.
-    *
-    * Not all events generate new boundaries, though the returned boundary is optional, depending on exactly what
-    * events occurred.
-    *
-    * \param    events          Events that occurred
-    * \param    topoMap         Local topological map of the current LPM
-    * \param    pose            Pose of the robot in the LPM
-    * \param    lpm             Current LPM
-    * \return   An updated boundary for small-scale space, if a new boundary happens to be needed.
-    */
+     * computeBoundary computes the current boundary of small-scale space based on new LocalTopoEvents that indicate
+     * the robot has moved within the local topological structure of the environment.
+     *
+     * Not all events generate new boundaries, though the returned boundary is optional, depending on exactly what
+     * events occurred.
+     *
+     * \param    events          Events that occurred
+     * \param    topoMap         Local topological map of the current LPM
+     * \param    pose            Pose of the robot in the LPM
+     * \param    lpm             Current LPM
+     * \return   An updated boundary for small-scale space, if a new boundary happens to be needed.
+     */
     virtual boost::optional<MapBoundary> computeBoundary(const LocalAreaEventVec& events,
                                                          const LocalTopoMap& topoMap,
                                                          const LocalPose& pose,
@@ -79,7 +78,7 @@ public:
 };
 
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_SPACE_BOUNDARY_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_SPACE_BOUNDARY_H

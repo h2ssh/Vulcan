@@ -8,22 +8,22 @@
 
 
 /**
-* \file     topo_situation.cpp
-* \author   Collin Johnson
-*
-* Definition of PathSituation, PlaceSituation, and TopoSituationResponse.
-*/
+ * \file     topo_situation.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of PathSituation, PlaceSituation, and TopoSituationResponse.
+ */
 
 #include "mpepc/social/topo_situation.h"
-#include "mpepc/social/social_norm_utils.h"
 #include "hssh/local_topological/local_topo_map.h"
+#include "mpepc/social/social_norm_utils.h"
 
 namespace vulcan
 {
 namespace mpepc
 {
 
-const double kMaxStationaryVel = 0.25;  // maximum velocity of an agent for it to be considered stationary
+const double kMaxStationaryVel = 0.25;   // maximum velocity of an agent for it to be considered stationary
 
 
 struct path_situation_matcher_t : public boost::static_visitor<bool>
@@ -31,16 +31,10 @@ struct path_situation_matcher_t : public boost::static_visitor<bool>
     const PathSituation* situation;
 
     // Match a path if they have the same configuration of lateral bins as represented by the situation
-    bool operator()(const PathSituation& path)
-    {
-        return path.situation() == situation->situation();
-    }
+    bool operator()(const PathSituation& path) { return path.situation() == situation->situation(); }
 
     // Never match a place
-    bool operator()(const PlaceSituation& /*place*/)
-    {
-        return false;
-    }
+    bool operator()(const PlaceSituation& /*place*/) { return false; }
 };
 
 struct place_situation_matcher_t : public boost::static_visitor<bool>
@@ -48,35 +42,20 @@ struct place_situation_matcher_t : public boost::static_visitor<bool>
     const PlaceSituation* situation;
 
     // Never match a path
-    bool operator()(const PathSituation& /*path*/)
-    {
-        return false;
-    }
+    bool operator()(const PathSituation& /*path*/) { return false; }
 
     // Match a place if there's the same number of incoming agents
-    bool operator()(const PlaceSituation& place)
-    {
-        return place.situation() == situation->situation();
-    }
+    bool operator()(const PlaceSituation& place) { return place.situation() == situation->situation(); }
 };
 
 struct situation_printer_t : public boost::static_visitor<>
 {
     std::ostream& out;
-    situation_printer_t(std::ostream& out)
-    : out(out)
-    {
-    }
+    situation_printer_t(std::ostream& out) : out(out) { }
 
-    void operator()(const PathSituation& path)
-    {
-        out << "path " << path;
-    }
+    void operator()(const PathSituation& path) { out << "path " << path; }
 
-    void operator()(const PlaceSituation& place)
-    {
-        out << "place " << place;
-    }
+    void operator()(const PlaceSituation& place) { out << "place " << place; }
 };
 
 // See if the agent is in the direction self is moving
@@ -98,10 +77,8 @@ PathSituation::PathSituation(const topo_agent_t& agent,
     // when another agent is detected in that bin
     std::vector<double> distInBin(numLateralBins, HUGE_VAL);
 
-    for(auto& ag : others)
-    {
-        if(!is_agent_of_interest(ag, agent))
-        {
+    for (auto& ag : others) {
+        if (!is_agent_of_interest(ag, agent)) {
             continue;
         }
 
@@ -110,18 +87,16 @@ PathSituation::PathSituation(const topo_agent_t& agent,
         // If the goals aren't the same, then they are moving in opposite directions, so the position
         // of the other agent is the opposite of its internal normalized position since the left side of
         // the path segment is opposite
-        if(ag.gatewayId != agent.gatewayId)
-        {
+        if (ag.gatewayId != agent.gatewayId) {
             pathPosition = 1.0 - pathPosition;
         }
 
         int bin = std::floor(pathPosition * numLateralBins);
-        bin = std::max(std::min(bin, numLateralBins - 1), 0);    // make sure we end up in the proper range
+        bin = std::max(std::min(bin, numLateralBins - 1), 0);   // make sure we end up in the proper range
 
         double distToAgent = distance_between_points(agent.state.x, agent.state.y, ag.state.x, ag.state.y);
         // Ignore agents that are further than the closest agent for the bin
-        if(distToAgent > distInBin[bin])
-        {
+        if (distToAgent > distInBin[bin]) {
             continue;
         }
 
@@ -129,12 +104,9 @@ PathSituation::PathSituation(const topo_agent_t& agent,
 
         double vel = std::sqrt(std::pow(ag.state.xVel, 2.0) + std::pow(ag.state.yVel, 2.0));
         // If heading to the same gateway, then moving in the same direction. Otherwise opposite directions
-        if(vel < kMaxStationaryVel)
-        {
+        if (vel < kMaxStationaryVel) {
             situation_[bin] = stationary;
-        }
-        else
-        {
+        } else {
             situation_[bin] = (ag.gatewayId == agent.gatewayId) ? away : toward;
         }
     }
@@ -145,10 +117,8 @@ std::ostream& operator<<(std::ostream& out, const PathSituation& situation)
 {
     out << situation.situation_.size() << ' ';
 
-    for(auto& bin : situation.situation_)
-    {
-        switch(bin)
-        {
+    for (auto& bin : situation.situation_) {
+        switch (bin) {
         case PathSituation::empty:
             out << "empty ";
             break;
@@ -179,28 +149,18 @@ std::istream& operator>>(std::istream& in, PathSituation& situation)
     situation.situation_.resize(numBins);
 
     std::string binName;
-    for(int n = 0; n < numBins; ++n)
-    {
+    for (int n = 0; n < numBins; ++n) {
         in >> binName;
 
-        if(binName == "empty")
-        {
+        if (binName == "empty") {
             situation.situation_[n] = PathSituation::empty;
-        }
-        else if(binName == "toward")
-        {
+        } else if (binName == "toward") {
             situation.situation_[n] = PathSituation::toward;
-        }
-        else if(binName == "away")
-        {
+        } else if (binName == "away") {
             situation.situation_[n] = PathSituation::away;
-        }
-        else if(binName == "stationary")
-        {
+        } else if (binName == "stationary") {
             situation.situation_[n] = PathSituation::stationary;
-        }
-        else
-        {
+        } else {
             std::cerr << "ERROR: PathSituation: Unknown bin state: " << binName << '\n';
             assert(false);
         }
@@ -219,10 +179,8 @@ PlaceSituation::PlaceSituation(const topo_agent_t& agent,
 , agentCount_(0)
 {
     // Count agents with the same gateway goal, but a different current area
-    for(auto& ag : others)
-    {
-        if((ag.gatewayId == agent.gatewayId) && (ag.areaId != agent.areaId))
-        {
+    for (auto& ag : others) {
+        if ((ag.gatewayId == agent.gatewayId) && (ag.areaId != agent.areaId)) {
             ++agentCount_;
         }
     }
@@ -252,8 +210,7 @@ TopoSituationResponse::TopoSituationResponse(const std::vector<double>& distribu
     binWidth_ = 1.0 / dist_.size();
     normalizeDistribution();
 
-    switch(type)
-    {
+    switch (type) {
     case place:
         situation_ = PlaceSituation();
         break;
@@ -303,19 +260,15 @@ double TopoSituationResponse::distanceCost(double distance) const
     // Cost of being in a particular spot is probability that something was not in that location when observed.
     // The stored distribution is the probability of being in a location at a given time, so the inverse dist gives
     // the desired cost value. The inverse dist is cached for efficiency.
-    if(distance < 0.0)
-    {
+    if (distance < 0.0) {
         return invDist_.front();
-    }
-    else if(distance > 1.0)
-    {
+    } else if (distance > 1.0) {
         return invDist_.back();
     }
 
     std::size_t bin = distance * dist_.size();
 
-    if(bin < dist_.size())
-    {
+    if (bin < dist_.size()) {
         return invDist_[bin];
     }
 
@@ -326,20 +279,16 @@ double TopoSituationResponse::distanceCost(double distance) const
 
 void TopoSituationResponse::addExample(double normDistance)
 {
-    if((normDistance < 0.0) || (normDistance > 1.0))
-    {
+    if ((normDistance < 0.0) || (normDistance > 1.0)) {
         std::cerr << "WARN: TopoSituationResponse: Example was not a normalized distance: " << normDistance << '\n';
         return;
     }
 
     std::size_t bin = std::lrint(normDistance * dist_.size());
 
-    if(bin < dist_.size())
-    {
+    if (bin < dist_.size()) {
         dist_[bin] += 1.0;
-    }
-    else
-    {
+    } else {
         dist_.back() += 1.0;
     }
 
@@ -351,8 +300,7 @@ void TopoSituationResponse::normalizeDistribution(void)
 {
     double totalExamples = std::accumulate(dist_.begin(), dist_.end(), 0.0);
 
-    if(totalExamples > 0)
-    {
+    if (totalExamples > 0) {
         std::transform(dist_.begin(), dist_.end(), dist_.begin(), [totalExamples](double val) {
             return val / totalExamples;
         });
@@ -391,29 +339,23 @@ bool TopoSituationResponse::loadExamples(std::istream& in)
     std::string type;
     in >> type;
 
-    if(type == "path")
-    {
+    if (type == "path") {
         PathSituation situation;
         in >> situation;
         situation_ = situation;
         success = true;
-    }
-    else if(type == "place")
-    {
+    } else if (type == "place") {
         PlaceSituation situation;
         in >> situation;
         situation_ = situation;
         success = true;
-    }
-    else
-    {
+    } else {
         std::cerr << "ERROR: TopoSituationResponse: Unknown situation type: " << type << '\n';
         success = false;
     }
 
     // If good so far, then load the examples
-    if(success)
-    {
+    if (success) {
         int numExamples = 0;
         in >> numExamples;
         examples_.resize(numExamples);
@@ -429,18 +371,17 @@ bool TopoSituationResponse::loadExamples(std::istream& in)
 bool is_agent_of_interest(const topo_agent_t& other, const topo_agent_t& self)
 {
     // Don't care about agents on other paths
-    if(other.areaId != self.areaId)
-    {
+    if (other.areaId != self.areaId) {
         return false;
     }
 
     double heading = std::atan2(self.state.yVel, self.state.xVel);
-    double otherHeading = angle_to_point(Point<float>(self.state.x, self.state.y),
-                                               Point<float>(other.state.x, other.state.y));
+    double otherHeading =
+      angle_to_point(Point<float>(self.state.x, self.state.y), Point<float>(other.state.x, other.state.y));
 
     // The other agent must be in front, which means the difference in heading angles is less than pi/2
     return angle_diff_abs(otherHeading, heading) < 2.0 * M_PI / 3.0;
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

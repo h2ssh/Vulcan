@@ -8,11 +8,11 @@
 
 
 /**
-* \file     rotate_lpm.cpp
-* \author   Collin Johnson
-* 
-* Definition of RotateLpmCommand.
-*/
+ * \file     rotate_lpm.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of RotateLpmCommand.
+ */
 
 #include "hssh/local_metric/commands/rotate_lpm.h"
 #include "hssh/metrical/mapping/mapper.h"
@@ -29,19 +29,19 @@ RotateLpmCommand::RotateLpmCommand(const std::string& source, float radians)
 }
 
 
-void RotateLpmCommand::issue(const metric_slam_data_t& data, 
-                             Localizer&   localizer, 
-                             Mapper&                   mapper, 
-                             MetricRelocalizer&        relocalizer) const
+void RotateLpmCommand::issue(const metric_slam_data_t& data,
+                             Localizer& localizer,
+                             Mapper& mapper,
+                             MetricRelocalizer& relocalizer) const
 {
     mapper.rotateMap(radians_);
 }
-            
-            
+
+
 void RotateLpmCommand::print(std::ostream& out) const
 {
     out << "RotateLpmCommand from " << source() << " Radians:" << radians_;
 }
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan

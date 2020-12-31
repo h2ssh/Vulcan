@@ -8,11 +8,11 @@
 
 
 /**
-* \file     transition.h
-* \author   Collin Johnson
-*
-* Declaration of TransitionAffordance.
-*/
+ * \file     transition.h
+ * \author   Collin Johnson
+ *
+ * Declaration of TransitionAffordance.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_TRANSITION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_TRANSITION_H
@@ -25,61 +25,56 @@ namespace vulcan
 {
 namespace hssh
 {
-    
+
 /**
-* TransitionAffordance describes the transition from one area to another area. The area transition is from the current area
-* to a different area. The transition is represented as a gateway through which the robot will travel.
-*/
+ * TransitionAffordance describes the transition from one area to another area. The area transition is from the current
+ * area to a different area. The transition is represented as a gateway through which the robot will travel.
+ */
 class TransitionAffordance : public NavigationAffordance
 {
 public:
-    
     /**
-    * Default constructor for TransitionAffordance.
-    */
+     * Default constructor for TransitionAffordance.
+     */
     TransitionAffordance(void);
-    
+
     /**
-    * Constructor for TransitionAffordance.
-    *
-    * \param    gateway         Gateway for the transition
-    * \param    type            Type of area the transition leads to
-    */
+     * Constructor for TransitionAffordance.
+     *
+     * \param    gateway         Gateway for the transition
+     * \param    type            Type of area the transition leads to
+     */
     TransitionAffordance(const Gateway& gateway, AreaType type);
 
     /**
-    * gateway retrieves the gateway that provides the affordance.
-    */
+     * gateway retrieves the gateway that provides the affordance.
+     */
     Gateway gateway(void) const { return gateway_; }
-    
+
     /**
-    * type retrieves the type of area that the transition leads to.
-    */
+     * type retrieves the type of area that the transition leads to.
+     */
     AreaType type(void) const { return type_; }
 
     // NavigationAffordance interface
     virtual void accept(NavigationAffordanceVisitor& visitor) const override;
-    
+
 private:
-    
     Gateway gateway_;
     AreaType type_;
-    
+
     // Serialization support
     friend class cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar (cereal::base_class<NavigationAffordance>(this),
-            gateway_,
-            type_
-        );
+        ar(cereal::base_class<NavigationAffordance>(this), gateway_, type_);
     }
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
 // Serialization support via smart pointer
 #include <cereal/archives/binary.hpp>
@@ -87,4 +82,4 @@ private:
 
 CEREAL_REGISTER_TYPE(vulcan::hssh::TransitionAffordance)
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_TRANSITION_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_TRANSITION_H

@@ -8,11 +8,11 @@
 
 
 /**
-* \file     remote_encoders.cpp
-* \author   Collin Johnson
-*
-* Definition of RemoteEncoders.
-*/
+ * \file     remote_encoders.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of RemoteEncoders.
+ */
 
 #include "sensors/remote_encoders.h"
 #include "system/module_communicator.h"
@@ -23,9 +23,7 @@ namespace vulcan
 namespace sensors
 {
 
-RemoteEncoders::RemoteEncoders(const wheel_encoders_params_t& params)
-    : WheelEncoders(params)
-    , dataTrigger(false)
+RemoteEncoders::RemoteEncoders(const wheel_encoders_params_t& params) : WheelEncoders(params), dataTrigger(false)
 {
 }
 
@@ -66,5 +64,5 @@ void RemoteEncoders::resetEncoders(void)
     // TODO
 }
 
-}
-}
+}   // namespace sensors
+}   // namespace vulcan

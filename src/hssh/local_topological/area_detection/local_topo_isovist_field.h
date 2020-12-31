@@ -8,11 +8,11 @@
 
 
 /**
-* \file     local_topo_isovist_field.h
-* \author   Collin Johnson
-*
-* Declaration of VoronoiIsovistField.
-*/
+ * \file     local_topo_isovist_field.h
+ * \author   Collin Johnson
+ *
+ * Declaration of VoronoiIsovistField.
+ */
 
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_ISOVIST_FIELD_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_ISOVIST_FIELD_H
@@ -27,9 +27,9 @@ namespace hssh
 {
 
 /**
-* IsovistLocation defines the possible locations for the isovists to be calculated when not using the
-* constructor that accepts a set of points.
-*/
+ * IsovistLocation defines the possible locations for the isovists to be calculated when not using the
+ * constructor that accepts a set of points.
+ */
 enum class IsovistLocation
 {
     FREE_SPACE,
@@ -38,17 +38,13 @@ enum class IsovistLocation
 };
 
 /**
-* VoronoiSkeletonTerminationFunc is a termination function for the ray tracing that is performed when the IsovistField
-* is constructed.
-*/
+ * VoronoiSkeletonTerminationFunc is a termination function for the ray tracing that is performed when the IsovistField
+ * is constructed.
+ */
 struct VoronoiSkeletonTerminationFunc
 {
 public:
-
-    VoronoiSkeletonTerminationFunc(uint8_t mask = SKELETON_CELL_OCCUPIED | SKELETON_CELL_UNKNOWN)
-    : mask_(mask)
-    {
-    }
+    VoronoiSkeletonTerminationFunc(uint8_t mask = SKELETON_CELL_OCCUPIED | SKELETON_CELL_UNKNOWN) : mask_(mask) { }
 
     bool operator()(const VoronoiSkeletonGrid& grid, Point<int> cell) const
     {
@@ -56,61 +52,62 @@ public:
     }
 
 private:
-
     uint8_t mask_;
 };
 
 /**
-* VoronoiIsovistField is a wrapper around the generic IsovistField that crafts isovists using the representation of space
-* in the VoronoiSkeletonGrid. The isovist field can be generated using known points in the grid -- free space or junctions --
-* or some otherwise defined positions, perhaps locations within a LocalArea, like the center or frontiers.
-*/
+ * VoronoiIsovistField is a wrapper around the generic IsovistField that crafts isovists using the representation of
+ * space in the VoronoiSkeletonGrid. The isovist field can be generated using known points in the grid -- free space or
+ * junctions -- or some otherwise defined positions, perhaps locations within a LocalArea, like the center or frontiers.
+ */
 class VoronoiIsovistField
 {
 public:
-
     using Iter = utils::IsovistField::Iter;
 
     /**
      * Constructor for VoronoiIsovistField.
-    *
-    * \param    grid        Grid to use for constructing the field
-    * \param    location    Locations where the isovists should be generated
-    */
-    VoronoiIsovistField(const VoronoiSkeletonGrid& grid, IsovistLocation location, utils::isovist_options_t options = utils::isovist_options_t());
+     *
+     * \param    grid        Grid to use for constructing the field
+     * \param    location    Locations where the isovists should be generated
+     */
+    VoronoiIsovistField(const VoronoiSkeletonGrid& grid,
+                        IsovistLocation location,
+                        utils::isovist_options_t options = utils::isovist_options_t());
 
     /**
-    * Constructor for VoronoiIsovistField.
-    *
-    * \param    grid        Grid to use for constructing the field
-    * \param    positions   Positions at which to generate the isovists
-    */
-    VoronoiIsovistField(const VoronoiSkeletonGrid& grid, const std::vector<cell_t>& positions, utils::isovist_options_t options = utils::isovist_options_t());
+     * Constructor for VoronoiIsovistField.
+     *
+     * \param    grid        Grid to use for constructing the field
+     * \param    positions   Positions at which to generate the isovists
+     */
+    VoronoiIsovistField(const VoronoiSkeletonGrid& grid,
+                        const std::vector<cell_t>& positions,
+                        utils::isovist_options_t options = utils::isovist_options_t());
 
     /**
-    * Destructor for VoronoiIsovistField.
-    */
+     * Destructor for VoronoiIsovistField.
+     */
     ~VoronoiIsovistField(void);
 
     // Iterators
-    Iter        begin(void) const { return field_.begin(); }
-    Iter        end(void)   const { return field_.end(); }
-    std::size_t size(void)  const { return field_.size(); }
+    Iter begin(void) const { return field_.begin(); }
+    Iter end(void) const { return field_.end(); }
+    std::size_t size(void) const { return field_.size(); }
     const utils::Isovist& at(std::size_t n) const { return operator[](n); }
     const utils::Isovist& at(cell_t cell) const { return operator[](cell); }
-    
+
     const utils::Isovist& operator[](std::size_t n) const { return *(field_.begin() + n); }
     const utils::Isovist& operator[](cell_t cell) const { return field_[cellToIsovist_.at(cell)]; }
-    
+
     bool contains(cell_t cell) const { return cellToIsovist_.find(cell) != cellToIsovist_.end(); }
 
 private:
-
     utils::IsovistField field_;
-    CellToIntMap        cellToIsovist_;
+    CellToIntMap cellToIsovist_;
 };
 
-}
-}
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_ISOVIST_FIELD_H
+#endif   // HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_ISOVIST_FIELD_H

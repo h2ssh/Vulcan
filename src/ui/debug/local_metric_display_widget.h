@@ -8,34 +8,34 @@
 
 
 /**
-* \file     local_metric_display_widget.h
-* \author   Collin Johnson
-*
-* Definition of LocalMetricDisplayWidget for rendering LPM state.
-*/
+ * \file     local_metric_display_widget.h
+ * \author   Collin Johnson
+ *
+ * Definition of LocalMetricDisplayWidget for rendering LPM state.
+ */
 
 #ifndef UI_DEBUG_LPM_DISPLAY_WIDGET_H
 #define UI_DEBUG_LPM_DISPLAY_WIDGET_H
 
+#include "core/motion_state.h"
 #include "core/point.h"
 #include "core/pose_distribution.h"
-#include "core/motion_state.h"
-#include "utils/mutex.h"
-#include "robot/proximity_warning_indices.h"
-#include "hssh/local_metric/lpm.h"
 #include "hssh/local_metric/debug_info.h"
+#include "hssh/local_metric/lpm.h"
 #include "hssh/metrical/glass_map.h"
 #include "hssh/metrical/mapping/glass_walls.h"
-#include "mpepc/motion_controller/task/path.h"
 #include "laser/laser_scan_lines.h"
 #include "laser/moving_laser_scan.h"
 #include "laser/reflected_laser_scan.h"
+#include "mpepc/motion_controller/task/path.h"
+#include "robot/proximity_warning_indices.h"
 #include "ui/common/ui_forward_declarations.h"
 #include "ui/common/ui_params.h"
 #include "ui/components/grid_based_display_widget.h"
-#include <gnuplot-iostream.h>
+#include "utils/mutex.h"
 #include <atomic>
 #include <deque>
+#include <gnuplot-iostream.h>
 #include <memory>
 
 namespace vulcan
@@ -70,15 +70,14 @@ enum class LaserToShowType
 };
 
 /**
-* LocalMetricDisplayWidget is a widget that displays the state information generated
-* by the LPM using OpenGL.
-*
-* The various data to display can be turned on/off using show/hideXXXX methods.
-*/
+ * LocalMetricDisplayWidget is a widget that displays the state information generated
+ * by the LPM using OpenGL.
+ *
+ * The various data to display can be turned on/off using show/hideXXXX methods.
+ */
 class LocalMetricDisplayWidget : public GridBasedDisplayWidget
 {
 public:
-
     LocalMetricDisplayWidget(wxWindow* parent,
                              wxWindowID id = wxID_ANY,
                              const wxPoint& pos = wxDefaultPosition,
@@ -104,7 +103,7 @@ public:
     void showParticles(bool show);
 
     // Various commands for controlling the data
-    void clearPoseTrace(void);  // clear the trace of poses -- useful when starting a new mapping operation
+    void clearPoseTrace(void);   // clear the trace of poses -- useful when starting a new mapping operation
     void clearMotionTrace(void);
 
     void setGlassMap(const hssh::GlassMap& glass);
@@ -137,7 +136,6 @@ public:
     void handleData(const hssh::local_metric_localization_debug_info_t& particles, const std::string& channel);
 
 private:
-
     enum particle_view_mode_t
     {
         NOT_IN_VIEW_MODE,
@@ -147,33 +145,33 @@ private:
 
     struct laser_data_t
     {
-        polar_laser_scan_t          rawScan;
-        laser::MovingLaserScan             mappingScan;
-        laser::ReflectedLaserScan          reflectedScan;
+        polar_laser_scan_t rawScan;
+        laser::MovingLaserScan mappingScan;
+        laser::ReflectedLaserScan reflectedScan;
         robot::proximity_warning_indices_t proximity;
-        laser::laser_scan_lines_t          scanLines;
-        GLColor                            color;
+        laser::laser_scan_lines_t scanLines;
+        GLColor color;
         Gnuplot plot;
     };
 
     std::unique_ptr<OccupancyGridRenderer> gridRenderer;
-    std::unique_ptr<GlassMapRenderer>   glassRenderer;
-    std::unique_ptr<LaserScanRenderer>  laserRenderer;
-    std::unique_ptr<LinesRenderer>      extractedLinesRenderer;
-    std::unique_ptr<PoseTraceRenderer>  poseTraceRenderer;
-    std::unique_ptr<PoseTraceRenderer>  motionTraceRenderer;
-    std::unique_ptr<ParticlesRenderer>  particlesRenderer;
-    std::unique_ptr<RobotRenderer>      robotRenderer;
+    std::unique_ptr<GlassMapRenderer> glassRenderer;
+    std::unique_ptr<LaserScanRenderer> laserRenderer;
+    std::unique_ptr<LinesRenderer> extractedLinesRenderer;
+    std::unique_ptr<PoseTraceRenderer> poseTraceRenderer;
+    std::unique_ptr<PoseTraceRenderer> motionTraceRenderer;
+    std::unique_ptr<ParticlesRenderer> particlesRenderer;
+    std::unique_ptr<RobotRenderer> robotRenderer;
 
     std::vector<laser_data_t> laserData;
-    int64_t                   mostRecentLaserTime;
+    int64_t mostRecentLaserTime;
 
-    pose_t              pose;
+    pose_t pose;
     pose_distribution_t poseDistribution;
-    motion_state_t      motionState;
+    motion_state_t motionState;
     pose_distribution_t stateEstimatorDistribution;
-    hssh::LocalPerceptualMap   grid;
-    hssh::GlassMap             glass;
+    hssh::LocalPerceptualMap grid;
+    hssh::GlassMap glass;
     std::vector<hssh::GlassWall> glassWalls;
 
     Point<int> glassCell_;
@@ -181,7 +179,7 @@ private:
 
     std::deque<pose_t> poseTrace;
     std::deque<pose_t> motionStateTrace;
-    std::size_t               maxTraceLength;
+    std::size_t maxTraceLength;
 
     LocalMetricMapType mapToShow;
     LaserToShowType laserToShow_;
@@ -203,7 +201,7 @@ private:
     bool haveNewGlass;
 
     particle_view_mode_t particleMode;
-    std::size_t          selectedParticleId;
+    std::size_t selectedParticleId;
 
     lpm_display_params_t params;
 
@@ -213,17 +211,17 @@ private:
     void renderWidget(void) override;
     std::string printCellInformation(Point<int> cell) override;
 
-    void handleMouseDown (wxMouseEvent& event);
-    void handleMouseUp   (wxMouseEvent& event);
+    void handleMouseDown(wxMouseEvent& event);
+    void handleMouseUp(wxMouseEvent& event);
     void handleMouseMoved(wxMouseEvent& event);
     void handleParticleMouseEvent(wxMouseEvent& event);
-    int  findClosestParticle(const Point<float>& worldPosition);
+    int findClosestParticle(const Point<float>& worldPosition);
     bool updateTrace(const pose_t& pose, std::deque<pose_t>& trace);
 
     DECLARE_EVENT_TABLE()
 };
 
-}
-}
+}   // namespace ui
+}   // namespace vulcan
 
-#endif // UI_DEBUG_LPM_DISPLAY_WIDGET_H
+#endif   // UI_DEBUG_LPM_DISPLAY_WIDGET_H

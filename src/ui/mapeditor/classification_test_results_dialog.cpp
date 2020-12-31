@@ -8,16 +8,16 @@
 
 
 /**
-* \file     classification_test_results_dialog.cpp
-* \author   Collin Johnson
-*
-* Definition of ClassificationTestResultsDialog.
-*/
+ * \file     classification_test_results_dialog.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of ClassificationTestResultsDialog.
+ */
 
 #include "ui/mapeditor/classification_test_results_dialog.h"
 #include "ui/common/file_dialog_settings.h"
-#include <wx/variant.h>
 #include <boost/range/iterator_range.hpp>
+#include <wx/variant.h>
 
 namespace vulcan
 {
@@ -25,8 +25,8 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(ClassificationTestResultsDialog, ClassificationTestResultsDialogBase)
-    EVT_BUTTON(ID_SAVE_CLASSIFIER_BUTTON,   ClassificationTestResultsDialog::saveClassifierPressed)
-    EVT_BUTTON(ID_CLOSE_CLASSIFIER_BUTTON, ClassificationTestResultsDialog::closePressed)
+EVT_BUTTON(ID_SAVE_CLASSIFIER_BUTTON, ClassificationTestResultsDialog::saveClassifierPressed)
+EVT_BUTTON(ID_CLOSE_CLASSIFIER_BUTTON, ClassificationTestResultsDialog::closePressed)
 END_EVENT_TABLE()
 
 
@@ -42,10 +42,9 @@ ClassificationTestResultsDialog::ClassificationTestResultsDialog(const std::stri
 , haveSavedClassifier_(false)
 {
     test_.run();
-    
+
     setupDetailsGrid();
-    for(auto& result : boost::make_iterator_range(test_.beginTest(), test_.endTest()))
-    {
+    for (auto& result : boost::make_iterator_range(test_.beginTest(), test_.endTest())) {
         addResultsToDetailsGrid(result);
     }
     addTotalsToDetailsGrid();
@@ -56,10 +55,10 @@ ClassificationTestResultsDialog::ClassificationTestResultsDialog(const std::stri
 void ClassificationTestResultsDialog::setupDetailsGrid(void)
 {
     /*
-    * The data view for the details is a grid with 9 columns:
-    *
-    *   name num-areas correct-label dec->dest dec->path dest->path dest->dec path->dest path->dec
-    */
+     * The data view for the details is a grid with 9 columns:
+     *
+     *   name num-areas correct-label dec->dest dec->path dest->path dest->dec path->dest path->dec
+     */
 
     classificationDetailsList->AppendTextColumn("Map Name");
     classificationDetailsList->AppendTextColumn("Total Areas");
@@ -92,7 +91,7 @@ void ClassificationTestResultsDialog::addResultsToDetailsGrid(const hssh::MapTes
 void ClassificationTestResultsDialog::addTotalsToDetailsGrid(void)
 {
     auto overall = test_.overallTestResults();
-    
+
     wxVector<wxVariant> totalData;
     totalData.push_back(wxVariant(wxString("Total")));
     totalData.push_back(wxVariant(wxString::Format("%i", overall.numTests)));
@@ -109,10 +108,11 @@ void ClassificationTestResultsDialog::addTotalsToDetailsGrid(void)
 
 void ClassificationTestResultsDialog::createSummary(void)
 {
-    classificationResultsSummaryLabel->SetLabel(wxString::Format("Summary: Data: %s Classifier: %s", dataType_, classifierType_));
-    
-    setResultsText(test_.overallTestResults(), 
-                   totalClassificationTestsText, 
+    classificationResultsSummaryLabel->SetLabel(
+      wxString::Format("Summary: Data: %s Classifier: %s", dataType_, classifierType_));
+
+    setResultsText(test_.overallTestResults(),
+                   totalClassificationTestsText,
                    correctClassificationTestsText,
                    classificationAccuracyText);
     setResultsText(test_.overallTrainingResults(),
@@ -122,7 +122,7 @@ void ClassificationTestResultsDialog::createSummary(void)
 }
 
 
-void ClassificationTestResultsDialog::setResultsText(const hssh::MapTestResults& overall, 
+void ClassificationTestResultsDialog::setResultsText(const hssh::MapTestResults& overall,
                                                      wxStaticText* numTestsText,
                                                      wxStaticText* numCorrectText,
                                                      wxStaticText* accuracyText)
@@ -132,8 +132,7 @@ void ClassificationTestResultsDialog::setResultsText(const hssh::MapTestResults&
 
     double accuracy = 0.0;
 
-    if(overall.numTests > 0)
-    {
+    if (overall.numTests > 0) {
         accuracy = (100.0 * overall.numCorrectTests) / overall.numTests;
     }
 
@@ -145,13 +144,11 @@ void ClassificationTestResultsDialog::saveClassifierPressed(wxCommandEvent& even
 {
     wxFileDialog saveDialog(this, wxT("Select output file..."), wxT(""), wxT(""), wxT(""), kFileSaveFlags);
 
-    if(saveDialog.ShowModal() == wxID_OK)
-    {
+    if (saveDialog.ShowModal() == wxID_OK) {
         wxString filename = saveDialog.GetPath();
         haveSavedClassifier_ = test_.saveClassifier(filename.ToStdString());
 
-        if(!haveSavedClassifier_)
-        {
+        if (!haveSavedClassifier_) {
             std::cerr << "ERROR:ClassificationTestResultsDialog: Failed to save classifier to " << filename << '\n';
         }
     }
@@ -160,15 +157,12 @@ void ClassificationTestResultsDialog::saveClassifierPressed(wxCommandEvent& even
 
 void ClassificationTestResultsDialog::closePressed(wxCommandEvent& event)
 {
-    if(IsModal())
-    {
+    if (IsModal()) {
         EndModal((haveSavedClassifier_ ? wxID_OK : wxID_CANCEL));
-    }
-    else
-    {
+    } else {
         Destroy();
     }
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

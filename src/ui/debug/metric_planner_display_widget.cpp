@@ -8,16 +8,24 @@
 
 
 /**
-* \file     metric_planner_display_widget.cpp
-* \author   Collin Johnson and Jong Jin Park
-*
-* Definition of MetricPlannerDisplayWidget.
-*/
+ * \file     metric_planner_display_widget.cpp
+ * \author   Collin Johnson and Jong Jin Park
+ *
+ * Definition of MetricPlannerDisplayWidget.
+ */
 
 #include "ui/debug/metric_planner_display_widget.h"
-#include "ui/common/ui_params.h"
-#include "ui/common/gl_shapes.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "mpepc/grid/navigation_grid_utils.h"
+#include "mpepc/manifold/navigation.h"
+#include "mpepc/metric_planner/params.h"
+#include "mpepc/metric_planner/task/navigation.h"
+#include "mpepc/simulator/robot_simulator.h"
+#include "mpepc/trajectory/trajectory_evaluator.h"
+#include "robot/model/params.h"
 #include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/ui_params.h"
 #include "ui/components/cell_grid_renderer.h"
 #include "ui/components/cost_map_renderer.h"
 #include "ui/components/gradient_grid_renderer.h"
@@ -25,23 +33,15 @@
 #include "ui/components/path_renderer.h"
 #include "ui/components/pose_target_renderer.h"
 #include "ui/components/pose_trace_renderer.h"
-#include "ui/components/robot_trajectory_renderer.h"
 #include "ui/components/robot_renderer.h"
+#include "ui/components/robot_trajectory_renderer.h"
 #include "ui/components/rrt_renderer.h"
 #include "ui/components/topo_situation_renderer.h"
 #include "ui/components/tracked_object_renderer.h"
-#include "hssh/local_topological/local_topo_map.h"
-#include "mpepc/grid/navigation_grid_utils.h"
-#include "mpepc/metric_planner/params.h"
-#include "mpepc/metric_planner/task/navigation.h"
-#include "mpepc/manifold/navigation.h"
-#include "mpepc/simulator/robot_simulator.h"
-#include "mpepc/trajectory/trajectory_evaluator.h"
-#include "robot/model/params.h"
 #include "utils/auto_mutex.h"
 #include "utils/config_file.h"
-#include <boost/range/iterator_range.hpp>
 #include <algorithm>
+#include <boost/range/iterator_range.hpp>
 #include <iostream>
 
 namespace vulcan
@@ -118,7 +118,7 @@ MetricPlannerDisplayWidget::~MetricPlannerDisplayWidget(void)
 
 
 void MetricPlannerDisplayWidget::setWidgetParams(const metric_planner_display_params_t& plannerDisplayParams,
-                                                 const lpm_display_params_t&            lpmParams)
+                                                 const lpm_display_params_t& lpmParams)
 {
     utils::ConfigFile mpepcConfig(plannerDisplayParams.mpepcConfig);
     mpepcParams_ = std::make_unique<mpepc::metric_planner_params_t>(mpepc::load_metric_planner_params(mpepcConfig));
@@ -141,19 +141,19 @@ void MetricPlannerDisplayWidget::setWidgetParams(const metric_planner_display_pa
     occGridRenderer_->setQuasiStaticColor(quasi_static_color());
     targetRenderer_->setRenderColors(lpmParams.targetCircleColor, lpmParams.targetArrowColor);
 
-    robotRenderer_->setRobotColor(plannerDisplayParams.robotColorGrey); // default robot color
-    robotRenderer_->setRobotShape(collisionParams); // robot shape
+    robotRenderer_->setRobotColor(plannerDisplayParams.robotColorGrey);   // default robot color
+    robotRenderer_->setRobotShape(collisionParams);                       // robot shape
 
     objectRenderer_->setRenderColor(lpmParams.activeTrackingColor);
 
-    robotTrajectoryRenderer_->setRenderColor(plannerDisplayParams.trajectoryColorBlue); // default trajectory color
+    robotTrajectoryRenderer_->setRenderColor(plannerDisplayParams.trajectoryColorBlue);   // default trajectory color
 
-//     rrtRenderer_->setRenderColors(plannerDisplayParams.edgeColor,
-//                                   plannerDisplayParams.nodeColor,
-//                                   plannerDisplayParams.startColor,
-//                                   plannerDisplayParams.targetColor,
-//                                   plannerDisplayParams.goalPathColor,
-//                                   plannerDisplayParams.goalRegionColor);
+    //     rrtRenderer_->setRenderColors(plannerDisplayParams.edgeColor,
+    //                                   plannerDisplayParams.nodeColor,
+    //                                   plannerDisplayParams.startColor,
+    //                                   plannerDisplayParams.targetColor,
+    //                                   plannerDisplayParams.goalPathColor,
+    //                                   plannerDisplayParams.goalRegionColor);
 
     robotSimulator_.reset(new mpepc::RobotSimulator(mpepcParams_->trajectoryPlannerParams.simulatorParams));
     trajectoryEvaluator_.reset(new mpepc::TrajectoryEvaluator(mpepcParams_->trajectoryPlannerParams.evaluatorParams,
@@ -161,9 +161,9 @@ void MetricPlannerDisplayWidget::setWidgetParams(const metric_planner_display_pa
 
     mpepcInfo_.clear();
 
-    std::vector<GLColor> trajectoryColors = { plannerDisplayParams.trajectoryColorGreen,
-                                              plannerDisplayParams.trajectoryColorBlue,
-                                              plannerDisplayParams.trajectoryColorRed };
+    std::vector<GLColor> trajectoryColors = {plannerDisplayParams.trajectoryColorGreen,
+                                             plannerDisplayParams.trajectoryColorBlue,
+                                             plannerDisplayParams.trajectoryColorRed};
     interpolator_.setColors(trajectoryColors);
 
     params_ = plannerDisplayParams;
@@ -174,33 +174,32 @@ std::string MetricPlannerDisplayWidget::printCellInformation(Point<int> cell)
 {
     float cost = 0.0;
 
-    switch(mapType_)
-    {
-        case MPEPCMapType::lpm:
-            cost = lpmGrid_.getCost(cell);
-            break;
+    switch (mapType_) {
+    case MPEPCMapType::lpm:
+        cost = lpmGrid_.getCost(cell);
+        break;
 
-        case MPEPCMapType::obstacles:
-            cost = distGrid_.getObstacleDistance(cell);
-            break;
+    case MPEPCMapType::obstacles:
+        cost = distGrid_.getObstacleDistance(cell);
+        break;
 
-        case MPEPCMapType::costs:
-            cost = costMap_.getValue(cell.x, cell.y);
-            break;
+    case MPEPCMapType::costs:
+        cost = costMap_.getValue(cell.x, cell.y);
+        break;
 
-        case MPEPCMapType::navigation:
-            cost = navGrid_.getCostToGo(cell);
-            break;
+    case MPEPCMapType::navigation:
+        cost = navGrid_.getCostToGo(cell);
+        break;
 
-//         case SHOW_FLOW_GRID:
-//             break;
+        //         case SHOW_FLOW_GRID:
+        //             break;
 
-        case MPEPCMapType::none:
-            break;
+    case MPEPCMapType::none:
+        break;
     }
 
     std::string description = "  Cost: ";
-    std::string costString  = std::to_string(cost);
+    std::string costString = std::to_string(cost);
 
     return description.append(costString);
 }
@@ -211,14 +210,15 @@ wxArrayString MetricPlannerDisplayWidget::setupCostDescriptions(void)
     wxArrayString costDescriptions;
     costDescriptions.Alloc(static_cast<int>(mpepc::NUM_COST_TYPES));
 
-    for(int costEnum = 0; costEnum != mpepc::NUM_COST_TYPES; costEnum++)
-    {
-        mpepc::robot_trajectory_debug_cost_type_t costType = static_cast<mpepc::robot_trajectory_debug_cost_type_t>(costEnum);
+    for (int costEnum = 0; costEnum != mpepc::NUM_COST_TYPES; costEnum++) {
+        mpepc::robot_trajectory_debug_cost_type_t costType =
+          static_cast<mpepc::robot_trajectory_debug_cost_type_t>(costEnum);
         costDescriptions.Add(wxString(mpepc::get_trj_debug_cost_text(costType)));
     }
 
     // NOTE: Iterating over enum this way gives me some irks but I don't know a simpler alternative to this.
-    //       I want to specify cost types in robot_trajectory_info_t and read them over her to generate description lists.
+    //       I want to specify cost types in robot_trajectory_info_t and read them over her to generate description
+    //       lists.
 
     return costDescriptions;
 }
@@ -226,18 +226,15 @@ wxArrayString MetricPlannerDisplayWidget::setupCostDescriptions(void)
 
 size_t MetricPlannerDisplayWidget::getNumTrjEvaluatedToShow(void)
 {
-    if(trjGroup_ == TRJ_HISTORY)
-    {
+    if (trjGroup_ == TRJ_HISTORY) {
         size_t totalNumTrjEvaluated = 0;
-        for(auto trjIter = trajectoryEvaluationHistory_.begin(); trjIter != trajectoryEvaluationHistory_.end(); trjIter++)
-        {
+        for (auto trjIter = trajectoryEvaluationHistory_.begin(); trjIter != trajectoryEvaluationHistory_.end();
+             trjIter++) {
             totalNumTrjEvaluated += trjIter->size();
         }
 
         return totalNumTrjEvaluated;
-    }
-    else
-    {
+    } else {
         return mpepcInfo_.trajectories.size();
     }
 }
@@ -245,16 +242,13 @@ size_t MetricPlannerDisplayWidget::getNumTrjEvaluatedToShow(void)
 
 std::string MetricPlannerDisplayWidget::getEvaluatedCostLabelString(void)
 {
-    switch(trjGroup_)
-    {
-    case TRJ_CURRENT:
-    {
-        switch(trjDispMode_)
-        {
+    switch (trjGroup_) {
+    case TRJ_CURRENT: {
+        switch (trjDispMode_) {
         case DISP_ALL:
             return "Evaluated Cost (Optimal)";
 
-        case DISP_LAST_N: // intentional fall-through
+        case DISP_LAST_N:   // intentional fall-through
 
         case DISP_SINGLE:
             return "Evaluated Cost (Single)";
@@ -262,14 +256,14 @@ std::string MetricPlannerDisplayWidget::getEvaluatedCostLabelString(void)
         default:
             return " ";
         }
-    } // no break needed due to return
+    }   // no break needed due to return
 
     case TRJ_OPTIMAL:
         return "Evaluated Cost (Optimal)";
 
-    case TRJ_HISTORY: // intentional fall-through
+    case TRJ_HISTORY:   // intentional fall-through
 
-    case TRJ_NONE: // intentional fall-through
+    case TRJ_NONE:   // intentional fall-through
 
     default:
         return " ";
@@ -279,53 +273,42 @@ std::string MetricPlannerDisplayWidget::getEvaluatedCostLabelString(void)
 
 float MetricPlannerDisplayWidget::getEvaluatedCostToShow(void)
 {
-    if(mpepcInfo_.iteration == 0)
-    {
+    if (mpepcInfo_.iteration == 0) {
         return 0.0f;
-    }
-    else
-    {
-        switch(trjGroup_)
-        {
-        case TRJ_CURRENT:
-        {
-            switch(trjDispMode_) // this is only relevant when TRJ_CURRENT is selected.
+    } else {
+        switch (trjGroup_) {
+        case TRJ_CURRENT: {
+            switch (trjDispMode_)   // this is only relevant when TRJ_CURRENT is selected.
             {
-            case DISP_ALL:
-            {
+            case DISP_ALL: {
                 return mpepcInfo_.plannedTrajectory.expectedCost;
             }
 
-            case DISP_LAST_N: // intentional fall-through
+            case DISP_LAST_N:   // intentional fall-through
 
-            case DISP_SINGLE:
-            {
-                if(trajectoryNumber_ == 0)
-                {
+            case DISP_SINGLE: {
+                if (trajectoryNumber_ == 0) {
                     return 0.0f;
-                }
-                else
-                {
-                    auto   trjIt = mpepcInfo_.trajectories.rbegin();
-                    size_t n     = std::min(trajectoryNumber_, mpepcInfo_.trajectories.size()) - 1;
+                } else {
+                    auto trjIt = mpepcInfo_.trajectories.rbegin();
+                    size_t n = std::min(trajectoryNumber_, mpepcInfo_.trajectories.size()) - 1;
 
                     return (trjIt + n)->expectedCost;
                 }
             }
 
-            default:
-            {
+            default: {
                 return 0.0f;
             }
             }
-        } // no break needed due to return
+        }   // no break needed due to return
 
         case TRJ_OPTIMAL:
             return mpepcInfo_.plannedTrajectory.expectedCost;
 
-        case TRJ_HISTORY: // intentional fall-through
+        case TRJ_HISTORY:   // intentional fall-through
 
-        case TRJ_NONE: // intentional fall-through
+        case TRJ_NONE:   // intentional fall-through
 
         default:
             return 0.0f;
@@ -337,7 +320,7 @@ float MetricPlannerDisplayWidget::getEvaluatedCostToShow(void)
 void MetricPlannerDisplayWidget::setHoverDestinationPose(const pose_t& target)
 {
     haveHoverDestinationPose_ = true;
-    hoverDestinationPose_     = target;
+    hoverDestinationPose_ = target;
 }
 
 
@@ -345,7 +328,7 @@ void MetricPlannerDisplayWidget::setDestinationPose(const pose_t& target)
 {
     utils::AutoMutex autoLock(dataLock_);
     haveSelectedDestinationPose_ = true;
-    showDestination_ = true; // this only changes the internal state, not the checkbox in the gui.
+    showDestination_ = true;   // this only changes the internal state, not the checkbox in the gui.
 
     destinationPoses_.clear();
     destinationPoses_.push_back(target);
@@ -354,7 +337,7 @@ void MetricPlannerDisplayWidget::setDestinationPose(const pose_t& target)
 
 void MetricPlannerDisplayWidget::clearDestinationPose(void)
 {
-    haveHoverDestinationPose_    = false;
+    haveHoverDestinationPose_ = false;
     haveSelectedDestinationPose_ = false;
 }
 
@@ -362,10 +345,9 @@ void MetricPlannerDisplayWidget::clearDestinationPose(void)
 void MetricPlannerDisplayWidget::setHoverMotionTargetPose(const pose_t& target)
 {
     haveHoverMotionTargetPose_ = true;
-    hoverMotionTargetPose_     = target;
+    hoverMotionTargetPose_ = target;
 
-    if(!haveSelectedMotionTargetPose_)
-    {
+    if (!haveSelectedMotionTargetPose_) {
         controlLawCoords_ = mpepc::control_law_coordinates_t(robotPoseForControlLawCoords_, target);
     }
 }
@@ -373,19 +355,19 @@ void MetricPlannerDisplayWidget::setHoverMotionTargetPose(const pose_t& target)
 
 void MetricPlannerDisplayWidget::setMotionTargetPose(const pose_t& target)
 {
-    haveSelectedMotionTargetPose_     = true;
-    controlLawCoords_                 = mpepc::control_law_coordinates_t(robotPoseForControlLawCoords_, target);
-    motionTargetToEvaluate_.pose      = target;
+    haveSelectedMotionTargetPose_ = true;
+    controlLawCoords_ = mpepc::control_law_coordinates_t(robotPoseForControlLawCoords_, target);
+    motionTargetToEvaluate_.pose = target;
     motionTargetToEvaluate_.direction = mpepc::FORWARD;
 }
 
 
 void MetricPlannerDisplayWidget::clearMotionTarget(void)
 {
-    haveHoverMotionTargetPose_    = false;
+    haveHoverMotionTargetPose_ = false;
     haveSelectedMotionTargetPose_ = false;
     haveTrajectoryToMotionTarget_ = false;
-    controlLawCoords_             = mpepc::control_law_coordinates_t();
+    controlLawCoords_ = mpepc::control_law_coordinates_t();
 }
 
 
@@ -404,15 +386,12 @@ void MetricPlannerDisplayWidget::clearTrace(void)
 void MetricPlannerDisplayWidget::setMotionTargetR(double coord)
 {
     haveSelectedMotionTargetPose_ = true;
-    controlLawCoords_.r           = coord;
-    motionTargetToEvaluate_.pose  = controlLawCoords_.toTargetPose(robotPoseForControlLawCoords_);
+    controlLawCoords_.r = coord;
+    motionTargetToEvaluate_.pose = controlLawCoords_.toTargetPose(robotPoseForControlLawCoords_);
 
-    if(controlLawCoords_.r < 0.0)
-    {
+    if (controlLawCoords_.r < 0.0) {
         motionTargetToEvaluate_.direction = mpepc::BACKWARD;
-    }
-    else
-    {
+    } else {
         motionTargetToEvaluate_.direction = mpepc::FORWARD;
     }
 }
@@ -421,16 +400,16 @@ void MetricPlannerDisplayWidget::setMotionTargetR(double coord)
 void MetricPlannerDisplayWidget::setMotionTargetTheta(double coord)
 {
     haveSelectedMotionTargetPose_ = true;
-    controlLawCoords_.theta       = coord;
-    motionTargetToEvaluate_.pose  = controlLawCoords_.toTargetPose(robotPoseForControlLawCoords_);
+    controlLawCoords_.theta = coord;
+    motionTargetToEvaluate_.pose = controlLawCoords_.toTargetPose(robotPoseForControlLawCoords_);
 }
 
 
 void MetricPlannerDisplayWidget::setMotionTargetDelta(double coord)
 {
     haveSelectedMotionTargetPose_ = true;
-    controlLawCoords_.delta       = coord;
-    motionTargetToEvaluate_.pose  = controlLawCoords_.toTargetPose(robotPoseForControlLawCoords_);
+    controlLawCoords_.delta = coord;
+    motionTargetToEvaluate_.pose = controlLawCoords_.toTargetPose(robotPoseForControlLawCoords_);
 }
 
 
@@ -458,17 +437,14 @@ void MetricPlannerDisplayWidget::setMotionTargetK2(double coord)
 void MetricPlannerDisplayWidget::evaluateMotionTarget(void)
 {
     // make sure we have non-empty mpepcInfo and the task
-    if(mpepcInfo_.iteration == 0 || !taskManifold)
-    {
+    if (mpepcInfo_.iteration == 0 || !taskManifold) {
         robotSimulator_->estimateRobotTrajectoryFromIntialState(motionTargetToEvaluate_,
                                                                 robotState_,
                                                                 0,
                                                                 mpepcParams_->simulatorTimeStep,
                                                                 mpepcParams_->trajectoryTimeLength,
                                                                 trajectoryToMotionTarget_);
-    }
-    else
-    {
+    } else {
         robotSimulator_->estimateRobotTrajectoryFromIntialState(motionTargetToEvaluate_,
                                                                 mpepcInfo_.trajectoryToInitialState.back(),
                                                                 0,
@@ -477,11 +453,9 @@ void MetricPlannerDisplayWidget::evaluateMotionTarget(void)
                                                                 trajectoryToMotionTarget_);
 
         // Trajectory evaluator needs pointers to various pieces of data.
-        trajectoryEvaluator_->setTaskEnvironment(*taskManifold,
-                                                 distGrid_,
-                                                 objectTrajectoriesWithLaserObjects_);
+        trajectoryEvaluator_->setTaskEnvironment(*taskManifold, distGrid_, objectTrajectoriesWithLaserObjects_);
 
-        std::cout<<"NumObjects : "<<objectTrajectoriesWithLaserObjects_.size()<<'\n';
+        std::cout << "NumObjects : " << objectTrajectoriesWithLaserObjects_.size() << '\n';
 
         trajectoryEvaluator_->evaluateTrajectory(trajectoryToMotionTarget_);
 
@@ -489,100 +463,101 @@ void MetricPlannerDisplayWidget::evaluateMotionTarget(void)
         // set precision
         int prevCoutPrecision = std::cout.precision();
         std::cout.precision(4);
-        std::cout.setf(std::ios::fixed, std:: ios::floatfield);
+        std::cout.setf(std::ios::fixed, std::ios::floatfield);
 
-        std::cout<<"Evaluated Trajectory to Motion Target: Expected cost          : "<<trajectoryToMotionTarget_.expectedCost <<"\n";
-        std::cout<<"Evaluated Trajectory to Motion Target: Total survivability    : "<<trajectoryToMotionTarget_.totalSurvivability <<"\n";
-        std::cout<<"Evaluated Trajectory to Motion Target: Expected progress      : "<<trajectoryToMotionTarget_.expectedProgress <<"\n";
-        std::cout<<"Evaluated Trajectory to Motion Target: Expected collision cost: "<<trajectoryToMotionTarget_.expectedCollisionCost <<"\n";
-        std::cout<<"Evaluated Trajectory to Motion Target: Expected action cost   : "<<trajectoryToMotionTarget_.expectedActionCost <<"\n";
-        std::cout<<"Evaluated Trajectory to Motion Target: Used heuristic cost    : "<<trajectoryToMotionTarget_.heuristicCost <<"\n";
+        std::cout << "Evaluated Trajectory to Motion Target: Expected cost          : "
+                  << trajectoryToMotionTarget_.expectedCost << "\n";
+        std::cout << "Evaluated Trajectory to Motion Target: Total survivability    : "
+                  << trajectoryToMotionTarget_.totalSurvivability << "\n";
+        std::cout << "Evaluated Trajectory to Motion Target: Expected progress      : "
+                  << trajectoryToMotionTarget_.expectedProgress << "\n";
+        std::cout << "Evaluated Trajectory to Motion Target: Expected collision cost: "
+                  << trajectoryToMotionTarget_.expectedCollisionCost << "\n";
+        std::cout << "Evaluated Trajectory to Motion Target: Expected action cost   : "
+                  << trajectoryToMotionTarget_.expectedActionCost << "\n";
+        std::cout << "Evaluated Trajectory to Motion Target: Used heuristic cost    : "
+                  << trajectoryToMotionTarget_.heuristicCost << "\n";
 
-        std::cout<<"Evaluated Trajectory to Motion Target: Distance to the nearest static object: \n(";
-        for(auto sampleIt = trajectoryToMotionTarget_.distanceToStaticObj.begin(), sampleEnd = trajectoryToMotionTarget_.distanceToStaticObj.end();
-            sampleIt != sampleEnd;
-            sampleIt++)
-        {
-            if(*sampleIt >= 0)
-            {
-                std::cout<<' ';
+        std::cout << "Evaluated Trajectory to Motion Target: Distance to the nearest static object: \n(";
+        for (auto sampleIt = trajectoryToMotionTarget_.distanceToStaticObj.begin(),
+                  sampleEnd = trajectoryToMotionTarget_.distanceToStaticObj.end();
+             sampleIt != sampleEnd;
+             sampleIt++) {
+            if (*sampleIt >= 0) {
+                std::cout << ' ';
             }
-            std::cout<<*sampleIt;
-            (sampleIt+1 == sampleEnd) ? std::cout<<")\n" : std::cout<<',';
+            std::cout << *sampleIt;
+            (sampleIt + 1 == sampleEnd) ? std::cout << ")\n" : std::cout << ',';
         }
 
-        std::cout<<"Evaluated Trajectory to Motion Target: Distance to the nearest dynamic object: \n(";
-        for(auto sampleIt = trajectoryToMotionTarget_.distanceToDynamicObj.begin(), sampleEnd = trajectoryToMotionTarget_.distanceToDynamicObj.end();
-            sampleIt != sampleEnd;
-            sampleIt++)
-        {
-            if(*sampleIt >= 0)
-            {
-                std::cout<<' ';
+        std::cout << "Evaluated Trajectory to Motion Target: Distance to the nearest dynamic object: \n(";
+        for (auto sampleIt = trajectoryToMotionTarget_.distanceToDynamicObj.begin(),
+                  sampleEnd = trajectoryToMotionTarget_.distanceToDynamicObj.end();
+             sampleIt != sampleEnd;
+             sampleIt++) {
+            if (*sampleIt >= 0) {
+                std::cout << ' ';
             }
-            std::cout<<*sampleIt;
-            (sampleIt+1 == sampleEnd) ? std::cout<<")\n" : std::cout<<',';
+            std::cout << *sampleIt;
+            (sampleIt + 1 == sampleEnd) ? std::cout << ")\n" : std::cout << ',';
         }
 
-        std::cout<<"Evaluated Trajectory to Motion Target: Piecewise survivability values: \n(";
-        for(auto sampleIt = trajectoryToMotionTarget_.piecewiseSurvivability.begin(), sampleEnd = trajectoryToMotionTarget_.piecewiseSurvivability.end();
-            sampleIt != sampleEnd;
-            sampleIt++)
-        {
-            if(*sampleIt >= 0)
-            {
-                std::cout<<' ';
+        std::cout << "Evaluated Trajectory to Motion Target: Piecewise survivability values: \n(";
+        for (auto sampleIt = trajectoryToMotionTarget_.piecewiseSurvivability.begin(),
+                  sampleEnd = trajectoryToMotionTarget_.piecewiseSurvivability.end();
+             sampleIt != sampleEnd;
+             sampleIt++) {
+            if (*sampleIt >= 0) {
+                std::cout << ' ';
             }
-            std::cout<<*sampleIt;
-            (sampleIt+1 == sampleEnd) ? std::cout<<")\n" : std::cout<<',';
+            std::cout << *sampleIt;
+            (sampleIt + 1 == sampleEnd) ? std::cout << ")\n" : std::cout << ',';
         }
 
-        std::cout<<"Evaluated Trajectory to Motion Target: Piecewise progress values: \n(";
-        for(auto sampleIt = trajectoryToMotionTarget_.piecewiseRawProgress.begin(), sampleEnd = trajectoryToMotionTarget_.piecewiseRawProgress.end();
-            sampleIt != sampleEnd;
-            sampleIt++)
-        {
-            if(*sampleIt >= 0)
-            {
-                std::cout<<' ';
+        std::cout << "Evaluated Trajectory to Motion Target: Piecewise progress values: \n(";
+        for (auto sampleIt = trajectoryToMotionTarget_.piecewiseRawProgress.begin(),
+                  sampleEnd = trajectoryToMotionTarget_.piecewiseRawProgress.end();
+             sampleIt != sampleEnd;
+             sampleIt++) {
+            if (*sampleIt >= 0) {
+                std::cout << ' ';
             }
-            std::cout<<*sampleIt;
-            (sampleIt+1 == sampleEnd) ? std::cout<<")\n" : std::cout<<',';
+            std::cout << *sampleIt;
+            (sampleIt + 1 == sampleEnd) ? std::cout << ")\n" : std::cout << ',';
         }
 
-        std::cout<<"Evaluated Trajectory to Motion Target: Piecewise collision cost values: \n(";
-        for(auto sampleIt = trajectoryToMotionTarget_.piecewiseCollisionCost.begin(), sampleEnd = trajectoryToMotionTarget_.piecewiseCollisionCost.end();
-            sampleIt != sampleEnd;
-            sampleIt++)
-        {
-            if(*sampleIt >= 0)
-            {
-                std::cout<<' ';
+        std::cout << "Evaluated Trajectory to Motion Target: Piecewise collision cost values: \n(";
+        for (auto sampleIt = trajectoryToMotionTarget_.piecewiseCollisionCost.begin(),
+                  sampleEnd = trajectoryToMotionTarget_.piecewiseCollisionCost.end();
+             sampleIt != sampleEnd;
+             sampleIt++) {
+            if (*sampleIt >= 0) {
+                std::cout << ' ';
             }
-            std::cout<<*sampleIt;
-            (sampleIt+1 == sampleEnd) ? std::cout<<")\n" : std::cout<<',';
+            std::cout << *sampleIt;
+            (sampleIt + 1 == sampleEnd) ? std::cout << ")\n" : std::cout << ',';
         }
 
-        std::cout<<"Evaluated Trajectory to Motion Target: Piecewise action cost values: \n(";
-        for(auto sampleIt = trajectoryToMotionTarget_.piecewiseActionCost.begin(), sampleEnd = trajectoryToMotionTarget_.piecewiseActionCost.end();
-            sampleIt != sampleEnd;
-            sampleIt++)
-        {
-            if(*sampleIt >= 0)
-            {
-                std::cout<<' ';
+        std::cout << "Evaluated Trajectory to Motion Target: Piecewise action cost values: \n(";
+        for (auto sampleIt = trajectoryToMotionTarget_.piecewiseActionCost.begin(),
+                  sampleEnd = trajectoryToMotionTarget_.piecewiseActionCost.end();
+             sampleIt != sampleEnd;
+             sampleIt++) {
+            if (*sampleIt >= 0) {
+                std::cout << ' ';
             }
-            std::cout<<*sampleIt;
-            (sampleIt+1 == sampleEnd) ? std::cout<<")\n" : std::cout<<',';
+            std::cout << *sampleIt;
+            (sampleIt + 1 == sampleEnd) ? std::cout << ")\n" : std::cout << ',';
         }
 
-        std::cout<<"MPEPC Info: Clearance to static obstacles :"<<mpepcInfo_.clearanceToStaticObs<<"\n";
-        std::cout<<"MPEPC Info: Clearance to dynamic obstacles:"<<mpepcInfo_.clearanceToDynObs<<"\n";
+        std::cout << "MPEPC Info: Clearance to static obstacles :" << mpepcInfo_.clearanceToStaticObs << "\n";
+        std::cout << "MPEPC Info: Clearance to dynamic obstacles:" << mpepcInfo_.clearanceToDynObs << "\n";
 
-        std::cout<<"MPEPC Info: Distance to static obstacles from robot center:"<< distGrid_.getObstacleDistance(robotState_.pose.toPoint()) <<"\n\n";
+        std::cout << "MPEPC Info: Distance to static obstacles from robot center:"
+                  << distGrid_.getObstacleDistance(robotState_.pose.toPoint()) << "\n\n";
 
         std::cout.precision(prevCoutPrecision);
-        std::cout.unsetf(std:: ios::floatfield);
+        std::cout.unsetf(std::ios::floatfield);
     }
 
     haveTrajectoryToMotionTarget_ = true;
@@ -606,8 +581,7 @@ void MetricPlannerDisplayWidget::handleData(const motion_state_t& robotState, co
 
     robotTrace_.push_front(robotState.pose);
 
-    if(robotTrace_.size() > maxTraceLength_)
-    {
+    if (robotTrace_.size() > maxTraceLength_) {
         robotTrace_.pop_back();
     }
 
@@ -619,13 +593,15 @@ void MetricPlannerDisplayWidget::handleData(const motion_state_t& robotState, co
 }
 
 
-void MetricPlannerDisplayWidget::handleData(const robot::commanded_joystick_t& commandedJoystick, const std::string& channel)
+void MetricPlannerDisplayWidget::handleData(const robot::commanded_joystick_t& commandedJoystick,
+                                            const std::string& channel)
 {
     utils::AutoMutex autoLock(dataLock_);
 }
 
 
-void MetricPlannerDisplayWidget::handleData(const robot::commanded_velocity_t& commandedVelocity, const std::string& channel)
+void MetricPlannerDisplayWidget::handleData(const robot::commanded_velocity_t& commandedVelocity,
+                                            const std::string& channel)
 {
     utils::AutoMutex autoLock(dataLock_);
 }
@@ -669,7 +645,8 @@ void MetricPlannerDisplayWidget::handleData(const tracker::DynamicObjectCollecti
 }
 
 
-void MetricPlannerDisplayWidget::handleData(const mpepc::trajectory_planner_debug_info_t& mpepcInfo, const std::string& channel)
+void MetricPlannerDisplayWidget::handleData(const mpepc::trajectory_planner_debug_info_t& mpepcInfo,
+                                            const std::string& channel)
 {
     dataLock_.lock();
     mpepcInfo_ = mpepcInfo;
@@ -677,14 +654,12 @@ void MetricPlannerDisplayWidget::handleData(const mpepc::trajectory_planner_debu
     mpepcInfo_.trajectories.erase(mpepcInfo_.trajectories.begin() + mpepcInfo_.numTrajectories,
                                   mpepcInfo_.trajectories.end());
 
-    if(mpepcInfo_.iteration != 0)
-    {
+    if (mpepcInfo_.iteration != 0) {
         robotPoseForControlLawCoords_ = mpepcInfo.trajectoryToInitialState.back().pose;
 
         sortedEvaluatedTrajectories_.resize(mpepcInfo.numTrajectories);
 
-        for(std::size_t n = 0; n < mpepcInfo_.numTrajectories; ++n)
-        {
+        for (std::size_t n = 0; n < mpepcInfo_.numTrajectories; ++n) {
             // new set of simplified trajectories for sorting.
             sortedEvaluatedTrajectories_[n] = mpepc::robot_trajectory_debug_info_simple_t(mpepcInfo_.trajectories[n]);
         }
@@ -693,14 +668,12 @@ void MetricPlannerDisplayWidget::handleData(const mpepc::trajectory_planner_debu
         dataLock_.unlock();
         sortTrajectories();
         dataLock_.lock();
-    }
-    else
-    {
+    } else {
         sortedEvaluatedTrajectories_.clear();
     }
 
     // Keep recent trajectory history.
-    if(trajectoryEvaluationHistory_.size() > 600) // Don't keep around too many trajectories! At 5 hz 1 min ~ 300.
+    if (trajectoryEvaluationHistory_.size() > 600)   // Don't keep around too many trajectories! At 5 hz 1 min ~ 300.
     {
         trajectoryEvaluationHistory_.pop_front();
     }
@@ -720,20 +693,20 @@ void MetricPlannerDisplayWidget::handleData(const mpepc::ObstacleDistanceGrid& d
 }
 
 
-void MetricPlannerDisplayWidget::handleData(const std::vector<mpepc::dynamic_object_trajectory_debug_info_t>& objectTrajectories, const std::string& channel)
+void MetricPlannerDisplayWidget::handleData(
+  const std::vector<mpepc::dynamic_object_trajectory_debug_info_t>& objectTrajectories,
+  const std::string& channel)
 {
     utils::AutoMutex autoLock(dataLock_);
 
     objectTrajectories_ = objectTrajectories;
 
     // Store the trajectory state for the brief history view
-    if(!objectTrajectories.empty())
-    {
+    if (!objectTrajectories.empty()) {
         dynamic_objects_t objs;
         objs.timestamp = objectTrajectories.front().timestamp;
 
-        for(auto& traj : objectTrajectories)
-        {
+        for (auto& traj : objectTrajectories) {
             objs.states.push_back(traj.states.front());
         }
 
@@ -743,7 +716,9 @@ void MetricPlannerDisplayWidget::handleData(const std::vector<mpepc::dynamic_obj
 }
 
 
-void MetricPlannerDisplayWidget::handleData(const std::vector<mpepc::dynamic_object_trajectory_t>& objectTrajectoriesWithLaserObjects, const std::string& channel)
+void MetricPlannerDisplayWidget::handleData(
+  const std::vector<mpepc::dynamic_object_trajectory_t>& objectTrajectoriesWithLaserObjects,
+  const std::string& channel)
 {
     utils::AutoMutex autoLock(dataLock_);
     objectTrajectoriesWithLaserObjects_ = objectTrajectoriesWithLaserObjects;
@@ -755,9 +730,10 @@ void MetricPlannerDisplayWidget::handleData(const mpepc::NavigationGrid& navGrid
     utils::AutoMutex autoLock(dataLock_);
 
     navGrid_ = navGrid;
-    taskManifold = std::make_shared<mpepc::NavigationTaskManifold>(navGrid,
-                                                                   mpepcParams_->taskParams.navigationTaskParams,
-                                                                   mpepcParams_->taskManifoldBuilderParams.navigationTaskManifoldParams);
+    taskManifold = std::make_shared<mpepc::NavigationTaskManifold>(
+      navGrid,
+      mpepcParams_->taskParams.navigationTaskParams,
+      mpepcParams_->taskManifoldBuilderParams.navigationTaskManifoldParams);
     newNavGrid_ = true;
 }
 
@@ -778,11 +754,12 @@ void MetricPlannerDisplayWidget::handleData(const mpepc::VisibilityAnalysis& vis
 }
 
 
-void MetricPlannerDisplayWidget::handleData(const mpepc::metric_planner_status_message_t& plannerStatus, const std::string& channel)
+void MetricPlannerDisplayWidget::handleData(const mpepc::metric_planner_status_message_t& plannerStatus,
+                                            const std::string& channel)
 {
     utils::AutoMutex autoLock(dataLock_);
     plannerStatusMessage_ = plannerStatus;
-    newPlannerStatusMessage_    = true;
+    newPlannerStatusMessage_ = true;
 }
 
 
@@ -793,7 +770,8 @@ void MetricPlannerDisplayWidget::handleData(const mpepc::learned_norm_info_t& no
 }
 
 
-void MetricPlannerDisplayWidget::handleData(const std::shared_ptr<mpepc::MetricPlannerTask>& task, const std::string& channel)
+void MetricPlannerDisplayWidget::handleData(const std::shared_ptr<mpepc::MetricPlannerTask>& task,
+                                            const std::string& channel)
 {
     auto manifold = task->createTaskManifold();
     setDestinationPose(manifold->target());
@@ -805,149 +783,117 @@ void MetricPlannerDisplayWidget::renderWidget(void)
     utils::AutoMutex autoLock(dataLock_);
 
     // redering grids
-    switch(mapType_)
-    {
-    case MPEPCMapType::lpm:
-    {
-        if(newLPM_)
-        {
+    switch (mapType_) {
+    case MPEPCMapType::lpm: {
+        if (newLPM_) {
             occGridRenderer_->setGrid(lpmGrid_);
             newLPM_ = false;
         }
 
         occGridRenderer_->renderGrid();
-    }
-    break;
+    } break;
 
-    case MPEPCMapType::obstacles:
-    {
-        if(newDistGrid_)
-        {
-//             distGridRenderer_->setMaxValue(distGrid_.getMaxGridDist());
+    case MPEPCMapType::obstacles: {
+        if (newDistGrid_) {
+            //             distGridRenderer_->setMaxValue(distGrid_.getMaxGridDist());
             distGridRenderer_->setMaxValue(200);
             distGridRenderer_->setCellGrid(distGrid_);
             newDistGrid_ = false;
         }
 
         distGridRenderer_->renderGrid(true);
-    }
-    break;
+    } break;
 
-    case MPEPCMapType::costs:
-    {
-        if(newCostMap_)
-        {
+    case MPEPCMapType::costs: {
+        if (newCostMap_) {
             costMapRenderer_->setCostMap(costMap_);
             newCostMap_ = false;
         }
 
         costMapRenderer_->renderCosts();
-    }
-    break;
+    } break;
 
-    case MPEPCMapType::navigation:
-    {
-        if(newNavGrid_)
-        {
+    case MPEPCMapType::navigation: {
+        if (newNavGrid_) {
             navGridRenderer_->setMaxValue(navGrid_.getMaxGridCostToGo());
             navGridRenderer_->setCellGrid(navGrid_);
             newNavGrid_ = false;
         }
 
         navGridRenderer_->renderGrid(true);
-    }
-    break;
+    } break;
 
-    case MPEPCMapType::none:
-    {
-    }
-    break;
+    case MPEPCMapType::none: {
+    } break;
     }
 
     // rendering rrts
-    if(showRRT_ && newRRT_)
-    {
-//         rrtRenderer_->renderRRT(rrtInfo_);
+    if (showRRT_ && newRRT_) {
+        //         rrtRenderer_->renderRRT(rrtInfo_);
     }
 
-    if(showTopoSituation_ && topoMap_)
-    {
+    if (showTopoSituation_ && topoMap_) {
         renderSituations();
     }
 
     // redering dynamic objects and their estimated trajectories
-    if(showTrackedObjects_)
-    {
+    if (showTrackedObjects_) {
         // direct tracker outputs
-        for(const auto& object : trackedObjects_)
-        {
+        for (const auto& object : trackedObjects_) {
             objectRenderer_->renderObject(*object);
         }
 
         // tracker output used by the trajectory planner
-        for(const mpepc::dynamic_object_trajectory_t& objectTrajectory : objectTrajectoriesWithLaserObjects_)
-        {
+        for (const mpepc::dynamic_object_trajectory_t& objectTrajectory : objectTrajectoriesWithLaserObjects_) {
             objectRenderer_->renderObject(*objectTrajectory.laserObject);
         }
     }
 
-    if(showEstimatedObjectMotion_)
-    {
+    if (showEstimatedObjectMotion_) {
         // info reported by the trajectory planner
-        for(const mpepc::dynamic_object_trajectory_debug_info_t& objectTrajectory : objectTrajectories_)
-        {
+        for (const mpepc::dynamic_object_trajectory_debug_info_t& objectTrajectory : objectTrajectories_) {
             objectRenderer_->renderEstimatedObjectTrajectory(objectTrajectory);
         }
     }
 
-    if(showOptimalPath_)
-    {
+    if (showOptimalPath_) {
         auto path = mpepc::minimum_cost_path(robotState_.pose.toPoint(), navGrid_);
         pathRenderer_->render(path, navGrid_.metersPerCell());
     }
 
-    if(showVisibilityAnalysis_)
-    {
+    if (showVisibilityAnalysis_) {
         renderVisibility();
     }
 
     // rendering destination poses
-    if(showDestination_ && haveSelectedDestinationPose_)
-    {
-        for(auto targetIt = destinationPoses_.begin(), targetEnd = destinationPoses_.end(); targetIt != targetEnd; targetIt++)
-        {
+    if (showDestination_ && haveSelectedDestinationPose_) {
+        for (auto targetIt = destinationPoses_.begin(), targetEnd = destinationPoses_.end(); targetIt != targetEnd;
+             targetIt++) {
             targetRenderer_->renderTargetRectangle(*targetIt);
         }
     }
 
-    if(haveHoverDestinationPose_) // draw hover pose on top
+    if (haveHoverDestinationPose_)   // draw hover pose on top
     {
         targetRenderer_->renderTargetRectangle(hoverDestinationPose_);
     }
 
     // rendering motion target for evaulation
-    if(haveSelectedMotionTargetPose_)
-    {
+    if (haveSelectedMotionTargetPose_) {
         targetRenderer_->renderTargetTriangle(motionTargetToEvaluate_.pose);
     }
 
-    if(haveHoverMotionTargetPose_)
-    {
+    if (haveHoverMotionTargetPose_) {
         targetRenderer_->renderTargetTriangle(hoverMotionTargetPose_);
     }
 
-    if(haveTrajectoryToMotionTarget_)
-    {
-        if(trjGroup_ == TRJ_CURRENT && trjDispMode_ == DISP_ALL)
-        {
+    if (haveTrajectoryToMotionTarget_) {
+        if (trjGroup_ == TRJ_CURRENT && trjDispMode_ == DISP_ALL) {
             renderPlannedTrajectory(mpepc::robot_trajectory_debug_info_t(trajectoryToMotionTarget_));
-        }
-        else
-        {
+        } else {
             renderEvaluatedTrajectory(mpepc::robot_trajectory_debug_info_t(trajectoryToMotionTarget_));
 
-            if(overlayRobotPosesOverTrajectory_)
-            {
+            if (overlayRobotPosesOverTrajectory_) {
                 std::vector<pose_t> poses;
                 trajectoryToMotionTarget_.getPoses(poses);
                 robotTrajectoryRenderer_->renderRobotsOverTrajectory(poses, *robotRenderer_, 5);
@@ -956,40 +902,37 @@ void MetricPlannerDisplayWidget::renderWidget(void)
     }
 
     // rendering robot trajectories
-    if(newTrajectoryPlannerInfo_)
-    {
+    if (newTrajectoryPlannerInfo_) {
         displayTrajectoryPlannerInfo();
     }
 
     // select robot color
-    if(newPlannerStatusMessage_)
-    {
+    if (newPlannerStatusMessage_) {
         associatePlannerStatusToRobotColor(plannerStatusMessage_.status);
         newPlannerStatusMessage_ = false;
     }
 
     // render robot pose
-    if(showRobot_)
-    {
+    if (showRobot_) {
         // render robot using the specified color.
         robotRenderer_->renderRobot(robotState_.pose);
 
         // draw a bounding box around the robot if there is an obstacle nearby.
-//         if(mpepcInfo_.clearanceToStaticObs < 2.0)
-//         {
-//             // TODO (maybe): add code here to determine color.
-//             robotRenderer_->renderBoundingBox(robotState_.pose, mpepcInfo_.clearanceToStaticObs);
-//         }
-//
-//         if(!objectTrajectories_.empty() && mpepcInfo_.clearanceToDynObs < 2.0)
-//         {
-//             // TODO (maybe): add code here to determine color.
-//             robotRenderer_->renderBoundingBox(robotState_.pose, mpepcInfo_.clearanceToDynObs);
-//         }
+        //         if(mpepcInfo_.clearanceToStaticObs < 2.0)
+        //         {
+        //             // TODO (maybe): add code here to determine color.
+        //             robotRenderer_->renderBoundingBox(robotState_.pose, mpepcInfo_.clearanceToStaticObs);
+        //         }
+        //
+        //         if(!objectTrajectories_.empty() && mpepcInfo_.clearanceToDynObs < 2.0)
+        //         {
+        //             // TODO (maybe): add code here to determine color.
+        //             robotRenderer_->renderBoundingBox(robotState_.pose, mpepcInfo_.clearanceToDynObs);
+        //         }
 
         // render robot trace
-//         traceRenderer_->setPoseTrace(robotTrace_);
-//         traceRenderer_->renderTrace();
+        //         traceRenderer_->setPoseTrace(robotTrace_);
+        //         traceRenderer_->renderTrace();
     }
 }
 
@@ -1007,9 +950,9 @@ void MetricPlannerDisplayWidget::sortTrajectories(void)
     // simply sort using the expected cost.
     std::sort(sortedEvaluatedTrajectories_.begin(),
               sortedEvaluatedTrajectories_.end(),
-              [](const mpepc::robot_trajectory_debug_info_simple_t& lhs, const mpepc::robot_trajectory_debug_info_simple_t& rhs)
-              {
-                  return lhs.expectedCost < rhs.expectedCost; // smaller is better
+              [](const mpepc::robot_trajectory_debug_info_simple_t& lhs,
+                 const mpepc::robot_trajectory_debug_info_simple_t& rhs) {
+                  return lhs.expectedCost < rhs.expectedCost;   // smaller is better
               });
 }
 
@@ -1017,60 +960,42 @@ void MetricPlannerDisplayWidget::sortTrajectories(void)
 void MetricPlannerDisplayWidget::associatePlannerStatusToRobotColor(mpepc::metric_planner_status_t status)
 {
     // reset robot color if new status message has been received.
-    switch(status)
-    {
-        case mpepc::IDLE:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorGrey);
-        }
-        break;
+    switch (status) {
+    case mpepc::IDLE: {
+        robotRenderer_->setRobotColor(params_.robotColorGrey);
+    } break;
 
-        case mpepc::PAUSED:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorGrey);
-        }
-        break;
+    case mpepc::PAUSED: {
+        robotRenderer_->setRobotColor(params_.robotColorGrey);
+    } break;
 
-        case mpepc::ACTIVE_NORMAL:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorGreen);
-        }
-        break;
+    case mpepc::ACTIVE_NORMAL: {
+        robotRenderer_->setRobotColor(params_.robotColorGreen);
+    } break;
 
-        case mpepc::ACTIVE_SPECIAL:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorLightBlue);
-        }
-        break;
+    case mpepc::ACTIVE_SPECIAL: {
+        robotRenderer_->setRobotColor(params_.robotColorLightBlue);
+    } break;
 
-        case mpepc::ACTIVE_RRT:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorLightBlue);
-        }
-        break;
+    case mpepc::ACTIVE_RRT: {
+        robotRenderer_->setRobotColor(params_.robotColorLightBlue);
+    } break;
 
-        case mpepc::SUCCESS_REACHED_POSE:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorBlue);
-        }
-        break;
+    case mpepc::SUCCESS_REACHED_POSE: {
+        robotRenderer_->setRobotColor(params_.robotColorBlue);
+    } break;
 
-        case mpepc::FAILURE_CANNOT_ASSIGN_TASK:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorRed);
-        }
-        break;
+    case mpepc::FAILURE_CANNOT_ASSIGN_TASK: {
+        robotRenderer_->setRobotColor(params_.robotColorRed);
+    } break;
 
-        case mpepc::FAILURE_UNABLE_TO_PROGRESS:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorViolet);
-        }   break;
+    case mpepc::FAILURE_UNABLE_TO_PROGRESS: {
+        robotRenderer_->setRobotColor(params_.robotColorViolet);
+    } break;
 
-        case mpepc::FAILURE_CANNOT_FIND_SOLUTION:
-        {
-            robotRenderer_->setRobotColor(params_.robotColorRed);
-        }
-        break;
+    case mpepc::FAILURE_CANNOT_FIND_SOLUTION: {
+        robotRenderer_->setRobotColor(params_.robotColorRed);
+    } break;
     }
 }
 
@@ -1081,8 +1006,7 @@ void MetricPlannerDisplayWidget::renderVisibility(void)
 
     glBegin(GL_TRIANGLE_FAN);
     glVertex2f(visibility_.origin().x, visibility_.origin().y);
-    for(auto ray : boost::make_iterator_range(visibility_.beginStatic(), visibility_.endStatic()))
-    {
+    for (auto ray : boost::make_iterator_range(visibility_.beginStatic(), visibility_.endStatic())) {
         glVertex2f(ray.x, ray.y);
     }
     glEnd();
@@ -1091,8 +1015,7 @@ void MetricPlannerDisplayWidget::renderVisibility(void)
 
     glBegin(GL_TRIANGLE_FAN);
     glVertex2f(visibility_.origin().x, visibility_.origin().y);
-    for(auto ray : boost::make_iterator_range(visibility_.beginDynamic(), visibility_.endDynamic()))
-    {
+    for (auto ray : boost::make_iterator_range(visibility_.beginDynamic(), visibility_.endDynamic())) {
         glVertex2f(ray.x, ray.y);
     }
     glEnd();
@@ -1102,22 +1025,18 @@ void MetricPlannerDisplayWidget::renderVisibility(void)
 void MetricPlannerDisplayWidget::renderSituations(void)
 {
     // Need the topo map to draw this information
-    if(!topoMap_)
-    {
-        if(!situationInfo_.pathSituations.empty())
-        {
+    if (!topoMap_) {
+        if (!situationInfo_.pathSituations.empty()) {
             std::cout << "INFO: Have situations, but need topo map.\n";
         }
         return;
     }
 
-    for(auto& path : situationInfo_.pathSituations)
-    {
+    for (auto& path : situationInfo_.pathSituations) {
         situationRenderer_->renderSituationPath(path, *topoMap_);
     }
 
-    for(auto& place : situationInfo_.placeSituations)
-    {
+    for (auto& place : situationInfo_.placeSituations) {
         situationRenderer_->renderSituationPlace(place, *topoMap_);
     }
 }
@@ -1127,379 +1046,322 @@ void MetricPlannerDisplayWidget::displayTrajectoryPlannerInfo(void)
 {
     // converting intial states to initial poses
     std::vector<pose_t> initialPoses;
-    for(auto stateIt =  mpepcInfo_.trajectoryToInitialState.begin();
-             stateIt != mpepcInfo_.trajectoryToInitialState.end();
-           ++stateIt)
-    {
-            initialPoses.push_back(stateIt->pose);
+    for (auto stateIt = mpepcInfo_.trajectoryToInitialState.begin();
+         stateIt != mpepcInfo_.trajectoryToInitialState.end();
+         ++stateIt) {
+        initialPoses.push_back(stateIt->pose);
     }
 
-    switch(trjGroup_)
-    {
-        case TRJ_CURRENT:
-        {
-            // render trajectory to the beginning of the next plannign cycle (the initial state for the planner)
-            robotTrajectoryRenderer_->renderTrajectory(initialPoses);
+    switch (trjGroup_) {
+    case TRJ_CURRENT: {
+        // render trajectory to the beginning of the next plannign cycle (the initial state for the planner)
+        robotTrajectoryRenderer_->renderTrajectory(initialPoses);
 
-            // render trajectories without sorting so that we can iterate through optimizer action
-            setTrajectoryColors();
-            renderEvaluatedTrajectories(mpepcInfo_.trajectories);
+        // render trajectories without sorting so that we can iterate through optimizer action
+        setTrajectoryColors();
+        renderEvaluatedTrajectories(mpepcInfo_.trajectories);
 
-            // render optimizer outputs
-    //        robotTrajectoryRenderer_->renderTrajectory(mpepcInfo_.coarseOptimizerOutput.poses, ui::GLColor(0,0,0,125),     5.0);
-            robotTrajectoryRenderer_->renderTrajectory(mpepcInfo_.localOptimizerOutput.poses, GLColor(200,200,0,125), 5.0);
-        }
+        // render optimizer outputs
+        //        robotTrajectoryRenderer_->renderTrajectory(mpepcInfo_.coarseOptimizerOutput.poses,
+        //        ui::GLColor(0,0,0,125),     5.0);
+        robotTrajectoryRenderer_->renderTrajectory(mpepcInfo_.localOptimizerOutput.poses,
+                                                   GLColor(200, 200, 0, 125),
+                                                   5.0);
+    } break;
+
+    case TRJ_OPTIMAL: {
+        robotTrajectoryRenderer_->renderTrajectory(initialPoses);
+
+        // render optimizer outputs
+        //        robotTrajectoryRenderer_->renderTrajectory(mpepcInfo_.coarseOptimizerOutput.poses,
+        //        ui::GLColor(0,0,0,255));
+
+        // render final planned trajectory
+        renderPlannedTrajectory(mpepcInfo_.plannedTrajectory);
+    } break;
+
+    case TRJ_HISTORY: {
+        renderEvaluationHistory(trajectoryEvaluationHistory_);
+    } break;
+
+    case TRJ_NONE: {
+        // do nothing
+    } break;
+
+    case TRJ_THREE_SEC:
+        renderRecentHistory(threeSecRobotHistory_, threeSecObjHistory_);
         break;
 
-        case TRJ_OPTIMAL:
-        {
-            robotTrajectoryRenderer_->renderTrajectory(initialPoses);
-
-            // render optimizer outputs
-    //        robotTrajectoryRenderer_->renderTrajectory(mpepcInfo_.coarseOptimizerOutput.poses, ui::GLColor(0,0,0,255));
-
-            // render final planned trajectory
-            renderPlannedTrajectory(mpepcInfo_.plannedTrajectory);
-        }
+    case TRJ_FIVE_SEC:
+        renderRecentHistory(fiveSecRobotHistory_, fiveSecObjHistory_);
         break;
 
-        case TRJ_HISTORY:
-        {
-            renderEvaluationHistory(trajectoryEvaluationHistory_);
-        }
+    default:
+        std::cerr << "ERROR: Invalid trajectory display type: " << trjGroup_ << '\n';
+        assert(false);
         break;
-
-        case TRJ_NONE:
-        {
-            // do nothing
-        }
-        break;
-
-        case TRJ_THREE_SEC:
-            renderRecentHistory(threeSecRobotHistory_, threeSecObjHistory_);
-            break;
-
-        case TRJ_FIVE_SEC:
-            renderRecentHistory(fiveSecRobotHistory_, fiveSecObjHistory_);
-            break;
-
-        default:
-            std::cerr << "ERROR: Invalid trajectory display type: " << trjGroup_ << '\n';
-            assert(false);
-            break;
     }
 }
 
 
 void MetricPlannerDisplayWidget::renderEvaluatedTrajectories(const robot_trajectories_t& evaluatedTrajectories)
 {
-    switch(trjDispMode_)
-    {
-        case DISP_ALL:
-        {
-            for(auto trjIt = evaluatedTrajectories.begin(); trjIt != evaluatedTrajectories.end(); trjIt++)
-            {
-                renderEvaluatedTrajectory(*trjIt);
-            }
+    switch (trjDispMode_) {
+    case DISP_ALL: {
+        for (auto trjIt = evaluatedTrajectories.begin(); trjIt != evaluatedTrajectories.end(); trjIt++) {
+            renderEvaluatedTrajectory(*trjIt);
         }
-        break;
+    } break;
 
-        case DISP_LAST_N:
-        {
-            // we know trajectoryNumber_ is at least zero but need to check if it is out of bound. Draw the last trajectory at the end.
-            for(auto trjIt = evaluatedTrajectories.end() - std::min(trajectoryNumber_, evaluatedTrajectories.size()); trjIt != evaluatedTrajectories.end(); trjIt++)
-            {
-                renderEvaluatedTrajectory(*trjIt);
-            }
+    case DISP_LAST_N: {
+        // we know trajectoryNumber_ is at least zero but need to check if it is out of bound. Draw the last trajectory
+        // at the end.
+        for (auto trjIt = evaluatedTrajectories.end() - std::min(trajectoryNumber_, evaluatedTrajectories.size());
+             trjIt != evaluatedTrajectories.end();
+             trjIt++) {
+            renderEvaluatedTrajectory(*trjIt);
         }
-        break;
+    } break;
 
-        case DISP_SINGLE:
-        {
-            if(trajectoryNumber_ > 0)
-            {
-                auto trjIt = evaluatedTrajectories.rbegin() + std::min(trajectoryNumber_, evaluatedTrajectories.size()) - 1;
-                renderEvaluatedTrajectory(*trjIt);
-            }
+    case DISP_SINGLE: {
+        if (trajectoryNumber_ > 0) {
+            auto trjIt = evaluatedTrajectories.rbegin() + std::min(trajectoryNumber_, evaluatedTrajectories.size()) - 1;
+            renderEvaluatedTrajectory(*trjIt);
         }
-        break;
+    } break;
 
-        default:
-        {
-            // TODO: send out a warning here
-        }
-        break;
+    default: {
+        // TODO: send out a warning here
+    } break;
     }
-
 }
 
 
 void MetricPlannerDisplayWidget::setTrajectoryColors(void)
 {
     // Low values will be displayed in green, and high values will be in red.
-    switch(trjCostType_)
-    {
-        case mpepc::EXPECTED_COST:
-        {
-            float kNominalGoodProgress = -mpepcParams_->trajectoryTimeLength *
-                                          mpepcParams_->trajectoryPlannerParams.optimizerParams.maxVelocityGain;
-            minTrajectoryCost_ = std::max(0.8f * mpepcInfo_.plannedTrajectory.expectedCost, kNominalGoodProgress); // take value from the planned one, but limit it by some nominal value.
+    switch (trjCostType_) {
+    case mpepc::EXPECTED_COST: {
+        float kNominalGoodProgress =
+          -mpepcParams_->trajectoryTimeLength * mpepcParams_->trajectoryPlannerParams.optimizerParams.maxVelocityGain;
+        minTrajectoryCost_ =
+          std::max(0.8f * mpepcInfo_.plannedTrajectory.expectedCost,
+                   kNominalGoodProgress);   // take value from the planned one, but limit it by some nominal value.
 
-            // use absolute scale when everyting is bad
-            if(minTrajectoryCost_ > 0.0)
-            {
-                minTrajectoryCost_ = 0.0;
-            }
-
-            float kNominalBadCollisionCost = mpepcParams_->trajectoryTimeLength *
-                                             mpepcParams_->trajectoryPlannerParams.evaluatorParams.baseCostOfCollision;
-            maxTrajectoryCost_ = std::max(0.8f * kNominalBadCollisionCost, minTrajectoryCost_ + 1.0f); // ensure the max is larger than min by meaningful amount.
-        }
-        break;
-
-        case mpepc::TOTAL_SURVIVABILITY:
-        {
-            minTrajectoryCost_ = 1.0;
-            maxTrajectoryCost_ = 0.0;
-        }
-        break;
-
-        case mpepc::EXPECTED_PROGRESS:
-        {
-            float kNominalGoodProgress = -mpepcParams_->trajectoryTimeLength *
-                                          mpepcParams_->trajectoryPlannerParams.optimizerParams.maxVelocityGain;
-            minTrajectoryCost_ = std::max(0.8f * mpepcInfo_.plannedTrajectory.expectedCost, kNominalGoodProgress); // take value from the planned one, but limit it by some nominal value.
-
-            // use absolute scale when everything is bad
-            if(minTrajectoryCost_ > -0.5)
-            {
-                minTrajectoryCost_ = -0.5;
-            }
-
-            maxTrajectoryCost_ = 0.0;
-        }
-        break;
-
-        case mpepc::EXPECTED_COLLISION_COST:
-        {
+        // use absolute scale when everyting is bad
+        if (minTrajectoryCost_ > 0.0) {
             minTrajectoryCost_ = 0.0;
-
-            float kNominalBadCollisionCost = mpepcParams_->trajectoryTimeLength *
-                                             mpepcParams_->trajectoryPlannerParams.evaluatorParams.baseCostOfCollision;
-            maxTrajectoryCost_ = kNominalBadCollisionCost * 1.2f;
         }
-        break;
 
-        case mpepc::EXPECTED_ACTION_COST:
-        {
-            minTrajectoryCost_ = 0.0;
+        float kNominalBadCollisionCost = mpepcParams_->trajectoryTimeLength
+          * mpepcParams_->trajectoryPlannerParams.evaluatorParams.baseCostOfCollision;
+        maxTrajectoryCost_ =
+          std::max(0.8f * kNominalBadCollisionCost,
+                   minTrajectoryCost_ + 1.0f);   // ensure the max is larger than min by meaningful amount.
+    } break;
 
-            float kNominalLargeActionCost =  mpepcParams_->trajectoryTimeLength *
-                                             mpepcParams_->trajectoryPlannerParams.evaluatorParams.linearVelocityActionWeight;
-            maxTrajectoryCost_ = kNominalLargeActionCost;
+    case mpepc::TOTAL_SURVIVABILITY: {
+        minTrajectoryCost_ = 1.0;
+        maxTrajectoryCost_ = 0.0;
+    } break;
+
+    case mpepc::EXPECTED_PROGRESS: {
+        float kNominalGoodProgress =
+          -mpepcParams_->trajectoryTimeLength * mpepcParams_->trajectoryPlannerParams.optimizerParams.maxVelocityGain;
+        minTrajectoryCost_ =
+          std::max(0.8f * mpepcInfo_.plannedTrajectory.expectedCost,
+                   kNominalGoodProgress);   // take value from the planned one, but limit it by some nominal value.
+
+        // use absolute scale when everything is bad
+        if (minTrajectoryCost_ > -0.5) {
+            minTrajectoryCost_ = -0.5;
         }
-        break;
 
-        // Nothing to be done for piecewise components
-        case mpepc::PIECEWISE_SURVIVABILITY:
-        {
-        }
-        break;
+        maxTrajectoryCost_ = 0.0;
+    } break;
 
-        case mpepc::PIECEWISE_PROGRESS:
-        {
-        }
-        break;
+    case mpepc::EXPECTED_COLLISION_COST: {
+        minTrajectoryCost_ = 0.0;
 
-        case mpepc::PIECEWISE_RAW_PROGRESS:
-        {
-        }
-        break;
+        float kNominalBadCollisionCost = mpepcParams_->trajectoryTimeLength
+          * mpepcParams_->trajectoryPlannerParams.evaluatorParams.baseCostOfCollision;
+        maxTrajectoryCost_ = kNominalBadCollisionCost * 1.2f;
+    } break;
 
-        case mpepc::PIECEWISE_COLLSION_COST:
-        {
-        }
-        break;
+    case mpepc::EXPECTED_ACTION_COST: {
+        minTrajectoryCost_ = 0.0;
 
-        case mpepc::PIECEWISE_ACTION_COST:
-        {
-        }
-        break;
+        float kNominalLargeActionCost = mpepcParams_->trajectoryTimeLength
+          * mpepcParams_->trajectoryPlannerParams.evaluatorParams.linearVelocityActionWeight;
+        maxTrajectoryCost_ = kNominalLargeActionCost;
+    } break;
 
-        case mpepc::NUM_COST_TYPES: // intentional fall-through
+    // Nothing to be done for piecewise components
+    case mpepc::PIECEWISE_SURVIVABILITY: {
+    } break;
 
-        default:
-        {
-        }
-        break;
+    case mpepc::PIECEWISE_PROGRESS: {
+    } break;
+
+    case mpepc::PIECEWISE_RAW_PROGRESS: {
+    } break;
+
+    case mpepc::PIECEWISE_COLLSION_COST: {
+    } break;
+
+    case mpepc::PIECEWISE_ACTION_COST: {
+    } break;
+
+    case mpepc::NUM_COST_TYPES:   // intentional fall-through
+
+    default: {
+    } break;
     }
 }
 
 
-void MetricPlannerDisplayWidget::renderEvaluatedTrajectory(const mpepc::robot_trajectory_debug_info_t& evaluatedTrajectory)
+void MetricPlannerDisplayWidget::renderEvaluatedTrajectory(
+  const mpepc::robot_trajectory_debug_info_t& evaluatedTrajectory)
 {
-    // NOTE: This requires the minTrajectoryCost and maxTrajectory costs to be computed beforehand according to the appropriate
-    //       showTrajectoriesCost type. That is currently done in in the sortTrajectories(). That means, if renderRobotTrajectory
-    //       runs without proper preceeding run of sortTrajectories() the colors will be messed up.
-    float              piecewiseCost;
+    // NOTE: This requires the minTrajectoryCost and maxTrajectory costs to be computed beforehand according to the
+    // appropriate
+    //       showTrajectoriesCost type. That is currently done in in the sortTrajectories(). That means, if
+    //       renderRobotTrajectory runs without proper preceeding run of sortTrajectories() the colors will be messed
+    //       up.
+    float piecewiseCost;
     std::vector<float> costsToDisplay;
 
-    float timeBetweenSamples        = mpepcParams_->trajectoryPlannerParams.evaluatorParams.timeBetweenSamples;
-    float nominalLargeCollisionCost = mpepcParams_->trajectoryPlannerParams.evaluatorParams.baseCostOfCollision * timeBetweenSamples;
-    float nominalLargeActionCost    = mpepcParams_->trajectoryPlannerParams.evaluatorParams.linearVelocityActionWeight * timeBetweenSamples;
+    float timeBetweenSamples = mpepcParams_->trajectoryPlannerParams.evaluatorParams.timeBetweenSamples;
+    float nominalLargeCollisionCost =
+      mpepcParams_->trajectoryPlannerParams.evaluatorParams.baseCostOfCollision * timeBetweenSamples;
+    float nominalLargeActionCost =
+      mpepcParams_->trajectoryPlannerParams.evaluatorParams.linearVelocityActionWeight * timeBetweenSamples;
 
-    switch(trjCostType_)
-    {
-    // Low values will be displayed in green, and high values will be in red.
-        case mpepc::EXPECTED_COST:
-        {
-            robotTrajectoryRenderer_->renderTrajectory(evaluatedTrajectory.poses,
-                                                       interpolator_.calculateColor((evaluatedTrajectory.expectedCost - minTrajectoryCost_) / (maxTrajectoryCost_ - minTrajectoryCost_)));
-        }
-        break;
+    switch (trjCostType_) {
+        // Low values will be displayed in green, and high values will be in red.
+    case mpepc::EXPECTED_COST: {
+        robotTrajectoryRenderer_->renderTrajectory(
+          evaluatedTrajectory.poses,
+          interpolator_.calculateColor((evaluatedTrajectory.expectedCost - minTrajectoryCost_)
+                                       / (maxTrajectoryCost_ - minTrajectoryCost_)));
+    } break;
 
-        case mpepc::TOTAL_SURVIVABILITY:
-        {
-            robotTrajectoryRenderer_->renderTrajectory(evaluatedTrajectory.poses,
-                                                       interpolator_.calculateColor(1.0 - evaluatedTrajectory.totalSurvivability)); // [0,1]
-        }
-        break;
+    case mpepc::TOTAL_SURVIVABILITY: {
+        robotTrajectoryRenderer_->renderTrajectory(
+          evaluatedTrajectory.poses,
+          interpolator_.calculateColor(1.0 - evaluatedTrajectory.totalSurvivability));   // [0,1]
+    } break;
 
-        case mpepc::EXPECTED_PROGRESS:
-        {
-            robotTrajectoryRenderer_->renderTrajectory(evaluatedTrajectory.poses,
-                                                       interpolator_.calculateColor((evaluatedTrajectory.expectedProgress - minTrajectoryCost_) / (maxTrajectoryCost_ - minTrajectoryCost_)));
-        }
-        break;
+    case mpepc::EXPECTED_PROGRESS: {
+        robotTrajectoryRenderer_->renderTrajectory(
+          evaluatedTrajectory.poses,
+          interpolator_.calculateColor((evaluatedTrajectory.expectedProgress - minTrajectoryCost_)
+                                       / (maxTrajectoryCost_ - minTrajectoryCost_)));
+    } break;
 
-        case mpepc::EXPECTED_COLLISION_COST:
-        {
-            robotTrajectoryRenderer_->renderTrajectory(evaluatedTrajectory.poses,
-                                                       interpolator_.calculateColor((evaluatedTrajectory.expectedCollisionCost - minTrajectoryCost_) / (maxTrajectoryCost_ - minTrajectoryCost_)));
-        }
-        break;
+    case mpepc::EXPECTED_COLLISION_COST: {
+        robotTrajectoryRenderer_->renderTrajectory(
+          evaluatedTrajectory.poses,
+          interpolator_.calculateColor((evaluatedTrajectory.expectedCollisionCost - minTrajectoryCost_)
+                                       / (maxTrajectoryCost_ - minTrajectoryCost_)));
+    } break;
 
-        case mpepc::EXPECTED_ACTION_COST:
-        {
-            robotTrajectoryRenderer_->renderTrajectory(evaluatedTrajectory.poses,
-                                                       interpolator_.calculateColor((evaluatedTrajectory.expectedActionCost - minTrajectoryCost_) / (maxTrajectoryCost_ - minTrajectoryCost_)));
-        }
-        break;
+    case mpepc::EXPECTED_ACTION_COST: {
+        robotTrajectoryRenderer_->renderTrajectory(
+          evaluatedTrajectory.poses,
+          interpolator_.calculateColor((evaluatedTrajectory.expectedActionCost - minTrajectoryCost_)
+                                       / (maxTrajectoryCost_ - minTrajectoryCost_)));
+    } break;
 
-        // TODO: lots of add-hoc values floating around below...
-        case mpepc::PIECEWISE_SURVIVABILITY:
-        {
-            for(auto costIt = evaluatedTrajectory.piecewiseSurvivability.begin(); costIt != evaluatedTrajectory.piecewiseSurvivability.end(); ++costIt)
-            {
-                piecewiseCost = 1.0 - (*costIt);
-                if(piecewiseCost > 1.0f)
-                {
-                    piecewiseCost = 1.0f;
-                }
-                else if (piecewiseCost < 0.0f)
-                {
-                    piecewiseCost = 0.0f;
-                }
-                costsToDisplay.push_back(piecewiseCost);
+    // TODO: lots of add-hoc values floating around below...
+    case mpepc::PIECEWISE_SURVIVABILITY: {
+        for (auto costIt = evaluatedTrajectory.piecewiseSurvivability.begin();
+             costIt != evaluatedTrajectory.piecewiseSurvivability.end();
+             ++costIt) {
+            piecewiseCost = 1.0 - (*costIt);
+            if (piecewiseCost > 1.0f) {
+                piecewiseCost = 1.0f;
+            } else if (piecewiseCost < 0.0f) {
+                piecewiseCost = 0.0f;
             }
-            robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+            costsToDisplay.push_back(piecewiseCost);
         }
-        break;
+        robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+    } break;
 
-        case mpepc::PIECEWISE_PROGRESS:
-        {
-            for(auto progressIt = evaluatedTrajectory.piecewiseRawProgress.begin(), survivabilityIt = evaluatedTrajectory.piecewiseSurvivability.begin();
-                progressIt != evaluatedTrajectory.piecewiseRawProgress.end();
-                ++progressIt, ++survivabilityIt)
-            {
-                piecewiseCost = ((*progressIt) * (*survivabilityIt) + timeBetweenSamples) / timeBetweenSamples;
-                if(piecewiseCost > 1.0f)
-                {
-                    piecewiseCost = 1.0f;
-                }
-                else if (piecewiseCost < 0.0f)
-                {
-                    piecewiseCost = 0.0f;
-                }
-                costsToDisplay.push_back(piecewiseCost);
+    case mpepc::PIECEWISE_PROGRESS: {
+        for (auto progressIt = evaluatedTrajectory.piecewiseRawProgress.begin(),
+                  survivabilityIt = evaluatedTrajectory.piecewiseSurvivability.begin();
+             progressIt != evaluatedTrajectory.piecewiseRawProgress.end();
+             ++progressIt, ++survivabilityIt) {
+            piecewiseCost = ((*progressIt) * (*survivabilityIt) + timeBetweenSamples) / timeBetweenSamples;
+            if (piecewiseCost > 1.0f) {
+                piecewiseCost = 1.0f;
+            } else if (piecewiseCost < 0.0f) {
+                piecewiseCost = 0.0f;
             }
-            robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+            costsToDisplay.push_back(piecewiseCost);
         }
-        break;
+        robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+    } break;
 
-        case mpepc::PIECEWISE_RAW_PROGRESS:
-        {
-            for(auto costIt = evaluatedTrajectory.piecewiseRawProgress.begin(); costIt != evaluatedTrajectory.piecewiseRawProgress.end(); ++costIt)
-            {
-                piecewiseCost = ((*costIt) + timeBetweenSamples) / timeBetweenSamples;
-                if(piecewiseCost > 1.0f)
-                {
-                    piecewiseCost = 1.0f;
-                }
-                else if (piecewiseCost < 0.0f)
-                {
-                    piecewiseCost = 0.0f;
-                }
-                costsToDisplay.push_back(piecewiseCost);
+    case mpepc::PIECEWISE_RAW_PROGRESS: {
+        for (auto costIt = evaluatedTrajectory.piecewiseRawProgress.begin();
+             costIt != evaluatedTrajectory.piecewiseRawProgress.end();
+             ++costIt) {
+            piecewiseCost = ((*costIt) + timeBetweenSamples) / timeBetweenSamples;
+            if (piecewiseCost > 1.0f) {
+                piecewiseCost = 1.0f;
+            } else if (piecewiseCost < 0.0f) {
+                piecewiseCost = 0.0f;
             }
-            robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+            costsToDisplay.push_back(piecewiseCost);
         }
-        break;
+        robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+    } break;
 
-        case mpepc::PIECEWISE_COLLSION_COST:
-        {
-            for(auto costIt = evaluatedTrajectory.piecewiseCollisionCost.begin(); costIt != evaluatedTrajectory.piecewiseCollisionCost.end(); ++costIt)
-            {
-                piecewiseCost = (*costIt) / nominalLargeCollisionCost;
-                if(piecewiseCost > 1.0f)
-                {
-                    piecewiseCost = 1.0f;
-                }
-                else if (piecewiseCost < 0.0f)
-                {
-                    piecewiseCost = 0.0f;
-                }
-                costsToDisplay.push_back(piecewiseCost);
+    case mpepc::PIECEWISE_COLLSION_COST: {
+        for (auto costIt = evaluatedTrajectory.piecewiseCollisionCost.begin();
+             costIt != evaluatedTrajectory.piecewiseCollisionCost.end();
+             ++costIt) {
+            piecewiseCost = (*costIt) / nominalLargeCollisionCost;
+            if (piecewiseCost > 1.0f) {
+                piecewiseCost = 1.0f;
+            } else if (piecewiseCost < 0.0f) {
+                piecewiseCost = 0.0f;
             }
-            robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+            costsToDisplay.push_back(piecewiseCost);
         }
-        break;
+        robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+    } break;
 
-        case mpepc::PIECEWISE_ACTION_COST:
-        {
-            for(auto costIt = evaluatedTrajectory.piecewiseActionCost.begin(); costIt != evaluatedTrajectory.piecewiseActionCost.end(); ++costIt)
-            {
+    case mpepc::PIECEWISE_ACTION_COST: {
+        for (auto costIt = evaluatedTrajectory.piecewiseActionCost.begin();
+             costIt != evaluatedTrajectory.piecewiseActionCost.end();
+             ++costIt) {
 
-                piecewiseCost = (*costIt) / nominalLargeActionCost;
-                if(piecewiseCost > 1.0f)
-                {
-                    piecewiseCost = 1.0f;
-                }
-                else if (piecewiseCost < 0.0f)
-                {
-                    piecewiseCost = 0.0f;
-                }
-                costsToDisplay.push_back(piecewiseCost);
+            piecewiseCost = (*costIt) / nominalLargeActionCost;
+            if (piecewiseCost > 1.0f) {
+                piecewiseCost = 1.0f;
+            } else if (piecewiseCost < 0.0f) {
+                piecewiseCost = 0.0f;
             }
-            robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+            costsToDisplay.push_back(piecewiseCost);
         }
-        break;
+        robotTrajectoryRenderer_->renderPiecewiseCosts(evaluatedTrajectory.poses, costsToDisplay);
+    } break;
 
-        case mpepc::NUM_COST_TYPES: // intentional fall-through
+    case mpepc::NUM_COST_TYPES:   // intentional fall-through
 
-        default:
-        {
-        }
-        break;
+    default: {
+    } break;
     }
 
-    if(showMotionTargets_)
-    {
+    if (showMotionTargets_) {
         robotTrajectoryRenderer_->renderMotionTarget(evaluatedTrajectory.motionTarget);
     }
 
-    if(trjGroup_ == TRJ_CURRENT && trjDispMode_ == DISP_SINGLE && overlayRobotPosesOverTrajectory_)
-    {
+    if (trjGroup_ == TRJ_CURRENT && trjDispMode_ == DISP_SINGLE && overlayRobotPosesOverTrajectory_) {
         robotTrajectoryRenderer_->renderRobotsOverTrajectory(evaluatedTrajectory.poses, *robotRenderer_, 5);
     }
 }
@@ -1507,70 +1369,58 @@ void MetricPlannerDisplayWidget::renderEvaluatedTrajectory(const mpepc::robot_tr
 
 void MetricPlannerDisplayWidget::renderPlannedTrajectory(const mpepc::robot_trajectory_debug_info_t& plannedTajectory)
 {
-    if(plannedTajectory.hasCollision)
-    {
+    if (plannedTajectory.hasCollision) {
         robotTrajectoryRenderer_->renderTrajectory(plannedTajectory.poses, params_.trajectoryColorRed);
-    }
-    else
-    {
+    } else {
         robotTrajectoryRenderer_->renderTrajectory(plannedTajectory.poses, params_.trajectoryColorBlue);
     }
 
-    if(showMotionTargets_)
-    {
+    if (showMotionTargets_) {
         robotTrajectoryRenderer_->renderMotionTarget(plannedTajectory.motionTarget);
     }
 
-    if(overlayRobotPosesOverTrajectory_)
-    {
+    if (overlayRobotPosesOverTrajectory_) {
         robotTrajectoryRenderer_->renderRobotsOverTrajectory(plannedTajectory.poses, *robotRenderer_, 5);
     }
 }
 
 
-void MetricPlannerDisplayWidget::renderEvaluationHistory(const std::deque<robot_trajectories_simple_t>& pastTrajectories)
+void MetricPlannerDisplayWidget::renderEvaluationHistory(
+  const std::deque<robot_trajectories_simple_t>& pastTrajectories)
 {
     // use some absolute scale
     float kMaxTrajectoryCost = -4.5;
-    float kMinTrajectoryCost =  0.75;
+    float kMinTrajectoryCost = 0.75;
     float kCostScale = kMaxTrajectoryCost - kMinTrajectoryCost;
 
-    for(auto planningCycleIt = pastTrajectories.begin(); planningCycleIt != pastTrajectories.end(); ++planningCycleIt)
-    {
+    for (auto planningCycleIt = pastTrajectories.begin(); planningCycleIt != pastTrajectories.end();
+         ++planningCycleIt) {
 
         size_t numTrjsToShow;
-        switch(trjDispMode_)
-        {
-            case(DISP_ALL):
-            {
-                numTrjsToShow = planningCycleIt->size();
-            }
-            break;
+        switch (trjDispMode_) {
+        case (DISP_ALL): {
+            numTrjsToShow = planningCycleIt->size();
+        } break;
 
-            case(DISP_LAST_N):
-            {
-                numTrjsToShow = std::min(trajectoryNumber_, planningCycleIt->size());
-            }
-            break;
+        case (DISP_LAST_N): {
+            numTrjsToShow = std::min(trajectoryNumber_, planningCycleIt->size());
+        } break;
 
-            case(DISP_SINGLE):
-            {
-                numTrjsToShow = 1;
-            }
-            break;
+        case (DISP_SINGLE): {
+            numTrjsToShow = 1;
+        } break;
 
-            default:
-            {
-                numTrjsToShow = 0;
-            }
-            break;
+        default: {
+            numTrjsToShow = 0;
+        } break;
         }
 
         auto trjEnd = planningCycleIt->begin() + numTrjsToShow;
-        for(auto evaluatedTrajectoryIt = planningCycleIt->begin(); evaluatedTrajectoryIt != trjEnd; ++evaluatedTrajectoryIt)
-        {
-            robotTrajectoryRenderer_->renderTrajectory(evaluatedTrajectoryIt->poses,
-                                                       interpolator_.calculateColor((evaluatedTrajectoryIt->expectedCost - kMinTrajectoryCost) / kCostScale));
+        for (auto evaluatedTrajectoryIt = planningCycleIt->begin(); evaluatedTrajectoryIt != trjEnd;
+             ++evaluatedTrajectoryIt) {
+            robotTrajectoryRenderer_->renderTrajectory(
+              evaluatedTrajectoryIt->poses,
+              interpolator_.calculateColor((evaluatedTrajectoryIt->expectedCost - kMinTrajectoryCost) / kCostScale));
         }
     }
 }
@@ -1581,32 +1431,29 @@ void MetricPlannerDisplayWidget::renderRecentHistory(const utils::FixedDurationB
 {
     const int64_t kRenderIntervalUs = 1000000;
 
-//     if(!objectHistory.empty())
-//     {
-//         int64_t lastTime = 0;
-//         for(auto& objects : objectHistory)
-//         {
-//             if(objects.timestamp - lastTime > kRenderIntervalUs/2)
-//             {
-//                 for(auto& obj : objects.states)
-//                 {
-//                     Point<float> center(obj.x, obj.y);
-//                     glColor4f(0.5f, 0.1f, 0.6f, 0.5);
-//                     gl_draw_line_circle(center, 0.2); // draw small circle
-//                 }
-//
-//                 lastTime = objects.timestamp;
-//             }
-//         }
-//     }
+    //     if(!objectHistory.empty())
+    //     {
+    //         int64_t lastTime = 0;
+    //         for(auto& objects : objectHistory)
+    //         {
+    //             if(objects.timestamp - lastTime > kRenderIntervalUs/2)
+    //             {
+    //                 for(auto& obj : objects.states)
+    //                 {
+    //                     Point<float> center(obj.x, obj.y);
+    //                     glColor4f(0.5f, 0.1f, 0.6f, 0.5);
+    //                     gl_draw_line_circle(center, 0.2); // draw small circle
+    //                 }
+    //
+    //                 lastTime = objects.timestamp;
+    //             }
+    //         }
+    //     }
 
-    if(!poseHistory.empty())
-    {
+    if (!poseHistory.empty()) {
         int64_t lastTime = 0;
-        for(auto& pose : poseHistory)
-        {
-            if(pose.timestamp - lastTime > kRenderIntervalUs)
-            {
+        for (auto& pose : poseHistory) {
+            if (pose.timestamp - lastTime > kRenderIntervalUs) {
                 robotRenderer_->renderBoundary(pose);
                 lastTime = pose.timestamp;
             }
@@ -1614,8 +1461,7 @@ void MetricPlannerDisplayWidget::renderRecentHistory(const utils::FixedDurationB
 
         glBegin(GL_LINE_STRIP);
         frontier_color().set();
-        for(auto& pose : poseHistory)
-        {
+        for (auto& pose : poseHistory) {
             glVertex2f(pose.x, pose.y);
         }
         glEnd();
@@ -1624,8 +1470,8 @@ void MetricPlannerDisplayWidget::renderRecentHistory(const utils::FixedDurationB
     robotRenderer_->renderRobot(robotState_.pose);
 
     robotTrajectoryRenderer_->renderTrajectory(mpepcInfo_.plannedTrajectory.poses, params_.trajectoryColorBlue);
-//     robotTrajectoryRenderer_->renderRobotsOverTrajectory(mpepcInfo_.plannedTrajectory.poses, *robotRenderer_, 5);
+    //     robotTrajectoryRenderer_->renderRobotsOverTrajectory(mpepcInfo_.plannedTrajectory.poses, *robotRenderer_, 5);
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

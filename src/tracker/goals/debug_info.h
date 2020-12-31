@@ -16,14 +16,13 @@ namespace tracker
 {
 
 /**
-* goal_estimator_debug_info_t
-*/
+ * goal_estimator_debug_info_t
+ */
 struct goal_estimator_debug_info_t
 {
-
 };
 
-} // namespace tracker
-} // namespace vulcan
+}   // namespace tracker
+}   // namespace vulcan
 
-#endif // TRACKER_GOALS_DEBUG_INFO_H
+#endif   // TRACKER_GOALS_DEBUG_INFO_H

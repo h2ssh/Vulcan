@@ -8,11 +8,11 @@
 
 
 /**
-* \file     kld_sample_size_calculator.cpp
-* \author   Collin Johnson
-*
-* Definition of KLDSampleSizeCalculator.
-*/
+ * \file     kld_sample_size_calculator.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of KLDSampleSizeCalculator.
+ */
 
 
 #include "hssh/metrical/localization/kld_sample_size_calculator.h"
@@ -29,7 +29,10 @@ namespace hssh
 
 int calculate_samples_needed(int numFilledBins, float z, float epsilon);
 
-inline bool valid_bin(int binIndex, int numBins) { return (binIndex >= 0) && (binIndex < numBins); }
+inline bool valid_bin(int binIndex, int numBins)
+{
+    return (binIndex >= 0) && (binIndex < numBins);
+}
 
 
 KLDSampleSizeCalculator::KLDSampleSizeCalculator(const kld_sampling_params_t& params)
@@ -43,13 +46,13 @@ KLDSampleSizeCalculator::KLDSampleSizeCalculator(const kld_sampling_params_t& pa
 
 KLDSampleSizeCalculator::~KLDSampleSizeCalculator(void)
 {
-    delete [] sampleBins;
+    delete[] sampleBins;
 }
 
 
 void KLDSampleSizeCalculator::startNewCalculation(const particle_t& meanSample)
 {
-    centerSample  = meanSample;
+    centerSample = meanSample;
     numFilledBins = 0;
     samplesNeeded = 0;
     ++calculationID;
@@ -58,13 +61,12 @@ void KLDSampleSizeCalculator::startNewCalculation(const particle_t& meanSample)
 
 void KLDSampleSizeCalculator::addSample(const particle_t& sample)
 {
-    if(addSampleToBins(sample))
-    {
+    if (addSampleToBins(sample)) {
         ++numFilledBins;
         samplesNeeded = calculate_samples_needed(numFilledBins, params.z, params.epsilon);
 
 #ifdef DEBUG_KLD
-        std::cout<<"INFO: KLDSampleSizeCalculator: k="<<numFilledBins<<" samples="<<samplesNeeded<<'\n';
+        std::cout << "INFO: KLDSampleSizeCalculator: k=" << numFilledBins << " samples=" << samplesNeeded << '\n';
 #endif
     }
 }
@@ -84,18 +86,19 @@ bool KLDSampleSizeCalculator::haveDrawnEnoughSamples(std::size_t numSamples) con
 
 bool KLDSampleSizeCalculator::addSampleToBins(const particle_t& sample)
 {
-    int binX     = (sample.pose.x - centerSample.pose.x) / params.xBinWidth + params.numXBins/2;
-    int binY     = (sample.pose.y - centerSample.pose.y) / params.yBinWidth + params.numYBins/2;
-    int binTheta = (angle_diff(sample.pose.theta, centerSample.pose.theta) / params.thetaBinWidth) + params.numThetaBins/2;
+    int binX = (sample.pose.x - centerSample.pose.x) / params.xBinWidth + params.numXBins / 2;
+    int binY = (sample.pose.y - centerSample.pose.y) / params.yBinWidth + params.numYBins / 2;
+    int binTheta =
+      (angle_diff(sample.pose.theta, centerSample.pose.theta) / params.thetaBinWidth) + params.numThetaBins / 2;
 
     bool binWasEmpty = false;
-    
-    binX     = boost::algorithm::clamp(binX,     0, params.numXBins-1);
-    binY     = boost::algorithm::clamp(binY,     0, params.numYBins-1);
-    binTheta = boost::algorithm::clamp(binTheta, 0, params.numThetaBins-1);
 
-    int index         = binIndex(binX, binY, binTheta);
-    binWasEmpty       = sampleBins[index] != calculationID;
+    binX = boost::algorithm::clamp(binX, 0, params.numXBins - 1);
+    binY = boost::algorithm::clamp(binY, 0, params.numYBins - 1);
+    binTheta = boost::algorithm::clamp(binTheta, 0, params.numThetaBins - 1);
+
+    int index = binIndex(binX, binY, binTheta);
+    binWasEmpty = sampleBins[index] != calculationID;
     sampleBins[index] = calculationID;
 
     return binWasEmpty;
@@ -105,17 +108,16 @@ bool KLDSampleSizeCalculator::addSampleToBins(const particle_t& sample)
 int calculate_samples_needed(int numFilledBins, float z, float epsilon)
 {
     /*
-    * KL-distance = (k-1)/(2*epsilon) * {1 - 2/(9(k-1)) + z*sqrt(2/(9(k-1)))}^3
-    *
-    * k == numFilledBins
-    */
+     * KL-distance = (k-1)/(2*epsilon) * {1 - 2/(9(k-1)) + z*sqrt(2/(9(k-1)))}^3
+     *
+     * k == numFilledBins
+     */
 
     int samplesNeeded = 0;
 
-    if(numFilledBins > 1)
-    {
-        float coefficient = (numFilledBins-1) / (2*epsilon);
-        float insidePow   = 1.0f - 2/(9*(numFilledBins-1)) + z*sqrt(2/(9*(numFilledBins-1)));
+    if (numFilledBins > 1) {
+        float coefficient = (numFilledBins - 1) / (2 * epsilon);
+        float insidePow = 1.0f - 2 / (9 * (numFilledBins - 1)) + z * sqrt(2 / (9 * (numFilledBins - 1)));
 
         samplesNeeded = static_cast<std::size_t>(coefficient * pow(insidePow, 3));
     }
@@ -123,5 +125,5 @@ int calculate_samples_needed(int numFilledBins, float z, float epsilon)
     return samplesNeeded;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

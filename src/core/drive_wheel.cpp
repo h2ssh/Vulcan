@@ -8,11 +8,11 @@
 
 
 /**
-* \file     drive_wheel.cpp
-* \author   Collin Johnson
-*
-* Definition of utility functions for drive_wheel_t.
-*/
+ * \file     drive_wheel.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of utility functions for drive_wheel_t.
+ */
 
 #include "core/drive_wheel.h"
 #include <iostream>
@@ -23,8 +23,8 @@ namespace vulcan
 // Output operator: (wheelSpeed, motorAccel)
 std::ostream& operator<<(std::ostream& out, const drive_wheel_t& driveWheel)
 {
-    out<<'('<<driveWheel.speed<<','<<driveWheel.motorAccel<<')';
+    out << '(' << driveWheel.speed << ',' << driveWheel.motorAccel << ')';
     return out;
 }
 
-} // namespace vulcan
+}   // namespace vulcan

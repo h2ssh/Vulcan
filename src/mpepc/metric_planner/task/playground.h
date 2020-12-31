@@ -8,18 +8,18 @@
 
 
 /**
-* \file     playground.h
-* \author   Jong Jin Park
-* 
-* Declaration of PlaygroundTask, which encapsulates a rectangular boundary of an area.
-*/
+ * \file     playground.h
+ * \author   Jong Jin Park
+ *
+ * Declaration of PlaygroundTask, which encapsulates a rectangular boundary of an area.
+ */
 
 #ifndef MPEPC_PLAYGROUND_TASK_H
 #define MPEPC_PLAYGROUND_TASK_H
 
-#include "mpepc/metric_planner/task/task.h"
-#include "mpepc/metric_planner/task/params.h"
 #include "math/geometry/rectangle.h"
+#include "mpepc/metric_planner/task/params.h"
+#include "mpepc/metric_planner/task/task.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 
@@ -28,58 +28,55 @@ namespace vulcan
 
 namespace mpepc
 {
-    
+
 class PlaygroundTask : public MetricPlannerTask
 {
     static const int32_t kPlaygroundTaskID = 3;
-    
+
     /**
-    * Constructor for PlaygroundTask.
-    * 
-    * \param    target          Target to be associated with the task
-    */
-    PlaygroundTask(const math::Rectangle<float>& target)
-    : MetricPlannerTask()
-    , target_(target)
-    {
-    }
-    
+     * Constructor for PlaygroundTask.
+     *
+     * \param    target          Target to be associated with the task
+     */
+    PlaygroundTask(const math::Rectangle<float>& target) : MetricPlannerTask(), target_(target) { }
+
     /**
-    * getTarget retrieves the target associated with this task.
-    * 
-    * \return   Intial location of the person for the robot to follow or to pace with
-    */
+     * getTarget retrieves the target associated with this task.
+     *
+     * \return   Intial location of the person for the robot to follow or to pace with
+     */
     math::Rectangle<float> getTarget(void) const { return target_; }
-    
+
     // MetricPlannerTask interface
     virtual int32_t getId(void) const { return kPlaygroundTaskID; } /* override */
-    virtual bool    isSafeToExecute(const ObstacleDistanceGrid& map) { return false;}; /* override */ // TODO: Implement this!
-    
+    virtual bool isSafeToExecute(const ObstacleDistanceGrid& map)
+    {
+        return false;
+    }; /* override */   // TODO: Implement this!
+
 protected:
-    
     // For serialization support, allow subclasses to default construct
     PlaygroundTask(void) { }
-    
+
 private:
-    
     math::Rectangle<float> target_;
-    
+
     // Serialization support
     friend class ::cereal::access;
-    
+
     template <class Archive>
     void serialize(Archive& ar)
     {
-        ar & target_;
+        ar& target_;
     }
 };
 
-} // mpepc
-} // vulcan
+}   // namespace mpepc
+}   // namespace vulcan
 
 // Serialization support via smart pointer
 #include <cereal/types/polymorphic.hpp>
 
 CEREAL_REGISTER_TYPE(vulcan::mpepc::PlaygroundTask)
 
-#endif // MPEPC_PLAYGROUND_TASK_H
+#endif   // MPEPC_PLAYGROUND_TASK_H

@@ -8,17 +8,17 @@
 
 
 /**
-* \file     map_probability.h
-* \author   Collin Johnson
-* 
-* Definition of TopoMapProbability.
-*/
+ * \file     map_probability.h
+ * \author   Collin Johnson
+ *
+ * Definition of TopoMapProbability.
+ */
 
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAP_PROBABILITY_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAP_PROBABILITY_H
 
-#include <cereal/types/vector.hpp>
 #include <cereal/access.hpp>
+#include <cereal/types/vector.hpp>
 
 namespace vulcan
 {
@@ -26,8 +26,8 @@ namespace hssh
 {
 
 /**
-* TopoMapProbability defines all probability terms pertaining to the probability of a TopologicalMap.
-*/
+ * TopoMapProbability defines all probability terms pertaining to the probability of a TopologicalMap.
+ */
 struct TopoMapProbability
 {
     std::vector<double> measurementLogLikelihoods;
@@ -36,22 +36,16 @@ struct TopoMapProbability
     double logPosterior = 0.0;
     double estimatedLogLikelihood = 0.0;
     double estimatedLogPrior = 0.0;
-    
+
     // Serialization support
     template <class Archive>
     void serialize(Archive& ar, const unsigned int version)
     {
-        ar (measurementLogLikelihoods,
-            logLikelihood,
-            logPrior,
-            logPosterior,
-            estimatedLogLikelihood,
-            estimatedLogPrior
-        );
+        ar(measurementLogLikelihoods, logLikelihood, logPrior, logPosterior, estimatedLogLikelihood, estimatedLogPrior);
     }
 };
 
-} // namespace hssh 
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan
 
-#endif // HSSH_GLOBAL_TOPOLOGICAL_MAP_PROBABILITY_H
+#endif   // HSSH_GLOBAL_TOPOLOGICAL_MAP_PROBABILITY_H

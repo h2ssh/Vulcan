@@ -8,16 +8,16 @@
 
 
 /**
-* \file     logical_interface_frame.cpp
-* \author   Collin Johnson
-*
-* Definition of LogicalInterfaceFrame.
-*/
+ * \file     logical_interface_frame.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LogicalInterfaceFrame.
+ */
 
 #include "ui/logical/logical_interface_frame.h"
-#include "ui/logical/logical_interface_dialogs.h"
 #include "hssh/global_topological/messages.h"
 #include "system/module_communicator.h"
+#include "ui/logical/logical_interface_dialogs.h"
 
 namespace vulcan
 {
@@ -25,21 +25,22 @@ namespace ui
 {
 
 BEGIN_EVENT_TABLE(LogicalInterfaceFrame, wxFrame)
-    EVT_BUTTON(ID_DECISION_BUTTON, LogicalInterfaceFrame::decisionButtonPressed)
-    EVT_BUTTON(ID_GOAL_BUTTON,     LogicalInterfaceFrame::goalButtonPressed)
-    EVT_PAINT(LogicalInterfaceFrame::paint)
+EVT_BUTTON(ID_DECISION_BUTTON, LogicalInterfaceFrame::decisionButtonPressed)
+EVT_BUTTON(ID_GOAL_BUTTON, LogicalInterfaceFrame::goalButtonPressed)
+EVT_PAINT(LogicalInterfaceFrame::paint)
 //     EVT_TIMER(TIMER_ID, LogicalInterfaceFrame::timerFired)
 END_EVENT_TABLE()
 
 
-LogicalInterfaceFrame::LogicalInterfaceFrame(const logical_interface_params_t& params, const std::string& evaluationFile)
-    : LogicalFrame(0)
-    , experiment(params.experimentParams, evaluationFile)
-    , sequenceId(0)
-    , consumer(0)
+LogicalInterfaceFrame::LogicalInterfaceFrame(const logical_interface_params_t& params,
+                                             const std::string& evaluationFile)
+: LogicalFrame(0)
+, experiment(params.experimentParams, evaluationFile)
+, sequenceId(0)
+, consumer(0)
 {
-//     plannerWidget->setRenderContext(glContext);
-//     plannerWidget->setPlaceManager(&placeManager);
+    //     plannerWidget->setRenderContext(glContext);
+    //     plannerWidget->setPlaceManager(&placeManager);
 
     initialize(nullptr, 15, plannerWidget);
 }
@@ -53,7 +54,6 @@ LogicalInterfaceFrame::~LogicalInterfaceFrame(void)
 
 void LogicalInterfaceFrame::connectConsumersToDataDistributor(system::ModuleCommunicator& producer)
 {
-    
 }
 
 
@@ -76,12 +76,10 @@ void LogicalInterfaceFrame::runInterfaceStateMachine(void)
 {
     interface_state_t currentState = state;
 
-    do
-    {
+    do {
         currentState = state;
 
-        switch(state)
-        {
+        switch (state) {
         case INITIALIZING_EXPERIMENT:
             initializeExperiment();
             break;
@@ -107,9 +105,9 @@ void LogicalInterfaceFrame::runInterfaceStateMachine(void)
             break;
 
         default:
-            std::cerr<<"ERROR:LogicalInterfaceFrame: Invalid state machine state. WTF, yo?\n";
+            std::cerr << "ERROR:LogicalInterfaceFrame: Invalid state machine state. WTF, yo?\n";
         }
-    } while(currentState != state);
+    } while (currentState != state);
 }
 
 
@@ -126,8 +124,7 @@ void LogicalInterfaceFrame::initializeExperiment(void)
 
 void LogicalInterfaceFrame::assignTask(void)
 {
-    if(experiment.hasNextTask())
-    {
+    if (experiment.hasNextTask()) {
         currentTask = experiment.nextTask();
 
         LogicalTaskDialog dialog(this, currentTask.description, currentTask.level);
@@ -135,9 +132,7 @@ void LogicalInterfaceFrame::assignTask(void)
         dialog.ShowModal();
 
         state = SELECTING_TASK;
-    }
-    else
-    {
+    } else {
         state = COMPLETED_EXPERIMENT;
     }
 }
@@ -145,8 +140,7 @@ void LogicalInterfaceFrame::assignTask(void)
 
 void LogicalInterfaceFrame::selectTask(void)
 {
-    switch(currentTask.level)
-    {
+    switch (currentTask.level) {
     case LOGICAL_ANY:
         goalButton->Enable();
         decisionButton->Enable();
@@ -163,7 +157,8 @@ void LogicalInterfaceFrame::selectTask(void)
         break;
 
     default:
-        std::cerr<<"ERROR:LogicalInterfaceFrame: Invalid logical level detected for current task:"<<currentTask.level<<" Skipping task and trying the next one.\n";
+        std::cerr << "ERROR:LogicalInterfaceFrame: Invalid logical level detected for current task:"
+                  << currentTask.level << " Skipping task and trying the next one.\n";
         state = ASSIGNING_TASK;
     }
 
@@ -173,8 +168,7 @@ void LogicalInterfaceFrame::selectTask(void)
 
 void LogicalInterfaceFrame::executeTask(void)
 {
-    if(experiment.isTaskComplete(currentLocation))
-    {
+    if (experiment.isTaskComplete(currentLocation)) {
         state = COMPLETED_TASK;
 
         experiment.finishedTask(currentTask);
@@ -184,16 +178,13 @@ void LogicalInterfaceFrame::executeTask(void)
 
 void LogicalInterfaceFrame::completeTask(void)
 {
-    if(experiment.hasNextTask())
-    {
+    if (experiment.hasNextTask()) {
         LogicalTaskCompleteDialog dialog(this);
 
         dialog.ShowModal();
 
         state = ASSIGNING_TASK;
-    }
-    else
-    {
+    } else {
         state = COMPLETED_EXPERIMENT;
     }
 }
@@ -210,10 +201,9 @@ void LogicalInterfaceFrame::completeExperiment(void)
 void LogicalInterfaceFrame::sendSetMapMessage(const std::string& filename)
 {
     hssh::global_topo_message_t message;
-    message.type                = hssh::CORRECT_GLOBAL_MAP;
-    message.correctMap.source   = hssh::SOURCE_FILE;
+    message.type = hssh::CORRECT_GLOBAL_MAP;
+    message.correctMap.source = hssh::SOURCE_FILE;
     message.correctMap.filename = filename;
-
 }
 
 
@@ -222,15 +212,13 @@ void LogicalInterfaceFrame::sendRelativePlaceTarget(std::shared_ptr<planner::Dec
     std::vector<std::shared_ptr<planner::DecisionTarget>> targets;
 
     targets.push_back(target);
-    targets.push_back(std::shared_ptr<planner::DecisionTarget>(new planner::LocalPathTarget(planner::LOCAL_TOPO_PATH_END)));
-
-    
+    targets.push_back(
+      std::shared_ptr<planner::DecisionTarget>(new planner::LocalPathTarget(planner::LOCAL_TOPO_PATH_END)));
 }
 
 
 void LogicalInterfaceFrame::sendGlobalPlaceTarget(std::shared_ptr<planner::GoalTarget> target)
 {
-    
 }
 
 
@@ -240,8 +228,7 @@ void LogicalInterfaceFrame::decisionButtonPressed(wxCommandEvent& event)
 
     experiment.startedSelection(currentTask);
 
-    if(dialog.ShowModal() == wxID_OK)
-    {
+    if (dialog.ShowModal() == wxID_OK) {
         experiment.finishedSelection(currentTask);
 
         sendRelativePlaceTarget(dialog.getDecisionTarget());
@@ -257,8 +244,7 @@ void LogicalInterfaceFrame::goalButtonPressed(wxCommandEvent& event)
 
     experiment.startedSelection(currentTask);
 
-    if(dialog.ShowModal() == wxID_OK)
-    {
+    if (dialog.ShowModal() == wxID_OK) {
         experiment.finishedSelection(currentTask);
 
         sendGlobalPlaceTarget(dialog.getGoalTarget());
@@ -281,5 +267,5 @@ void LogicalInterfaceFrame::timerFired(wxTimerEvent& event)
     Refresh();
 }
 
-} // namespace ui
-} // namespace vulcan
+}   // namespace ui
+}   // namespace vulcan

@@ -8,11 +8,11 @@
 
 
 /**
-* @file
-* @author   Collin Johnson
-*
-* Definition of utility functions for dealing with agent_state_t observations.
-*/
+ * @file
+ * @author   Collin Johnson
+ *
+ * Definition of utility functions for dealing with agent_state_t observations.
+ */
 
 #include "mpepc/training/agent_state.h"
 #include <fstream>
@@ -26,11 +26,16 @@ void save_motion_observations(const std::string& filename, const MotionObsMap& o
 {
     FILE* out = fopen(filename.c_str(), "a");
 
-    for(auto& areaObs : obs)
-    {
-        for(auto& motion : areaObs.second)
-        {
-            fprintf(out, "%d %.2f %.2f %.2f %.2f %.2f\n", areaObs.first, motion.x, motion.y, motion.xVel, motion.yVel, motion.normDist);
+    for (auto& areaObs : obs) {
+        for (auto& motion : areaObs.second) {
+            fprintf(out,
+                    "%d %.2f %.2f %.2f %.2f %.2f\n",
+                    areaObs.first,
+                    motion.x,
+                    motion.y,
+                    motion.xVel,
+                    motion.yVel,
+                    motion.normDist);
         }
     }
 
@@ -45,8 +50,7 @@ MotionObsMap load_motion_observations(const std::string& filename)
     std::ifstream in(filename);
     std::string line;
 
-    while(std::getline(in, line))
-    {
+    while (std::getline(in, line)) {
         std::istringstream inStr(line);
         int areaId = 0;
         agent_state_t state;
@@ -58,5 +62,5 @@ MotionObsMap load_motion_observations(const std::string& filename)
     return observations;
 }
 
-} // namespace mpepc
-} // namespace vulcan
+}   // namespace mpepc
+}   // namespace vulcan

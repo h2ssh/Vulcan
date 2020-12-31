@@ -8,11 +8,11 @@
 
 
 /**
-* \file     data_queue.cpp
-* \author   Collin Johnson
-*
-* Definition of MetricSLAMDataQueue.
-*/
+ * \file     data_queue.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of MetricSLAMDataQueue.
+ */
 
 #include "hssh/metrical/data_queue.h"
 #include "hssh/metrical/data.h"
@@ -59,10 +59,10 @@ MetricSLAMDataQueue::MetricSLAMDataQueue(double targetUpdateHz)
 
 void MetricSLAMDataQueue::subscribeToData(system::ModuleCommunicator& communicator)
 {
-    communicator.subscribeTo<imu_data_t>      (this);
-    communicator.subscribeTo<odometry_t>      (this);
+    communicator.subscribeTo<imu_data_t>(this);
+    communicator.subscribeTo<odometry_t>(this);
     communicator.subscribeTo<polar_laser_scan_t>(this);
-    communicator.subscribeTo<motion_state_t>    (this);
+    communicator.subscribeTo<motion_state_t>(this);
 }
 
 
@@ -70,20 +70,16 @@ void MetricSLAMDataQueue::handleData(const imu_data_t& imu, const std::string& c
 {
     utils::AutoMutex autoMutex(queueLock_);
 
-    if(imuQueue_.empty() || (imu.timestamp > imuQueue_.back().timestamp))
-    {
+    if (imuQueue_.empty() || (imu.timestamp > imuQueue_.back().timestamp)) {
         imuQueue_.push_back(imu);
         imuQueue_.back().sequenceNumber += imuSequenceOffset_;
-    }
-    else
-    {
+    } else {
         std::cerr << "WARNING:MetricSLAMDataQueue: Ignored IMU data with time in the past.\n";
     }
 
     isReceivingIMU_ = true;
 
-    if(!motionQueuesAreSynced_ && !odometryQueue_.empty())
-    {
+    if (!motionQueuesAreSynced_ && !odometryQueue_.empty()) {
         synchronizeMotionDataQueues();
     }
 
@@ -97,12 +93,9 @@ void MetricSLAMDataQueue::handleData(const odometry_t& odometry, const std::stri
 {
     utils::AutoMutex autoMutex(queueLock_);
 
-    if(odometryQueue_.empty() || (odometry.timestamp > odometryQueue_.back().timestamp))
-    {
+    if (odometryQueue_.empty() || (odometry.timestamp > odometryQueue_.back().timestamp)) {
         odometryQueue_.push_back(odometry);
-    }
-    else
-    {
+    } else {
         std::cerr << "WARNING:MetricSLAMDataQueue: Ignored odometry data with time in the past.\n";
     }
 
@@ -116,22 +109,18 @@ void MetricSLAMDataQueue::handleData(const polar_laser_scan_t& scan, const std::
 {
     utils::AutoMutex autoMutex(queueLock_);
 
-    if(!utils::contains(laserIds_, scan.laserId))
-    {
+    if (!utils::contains(laserIds_, scan.laserId)) {
         laserIds_.push_back(scan.laserId);
     }
 
     auto& queue = laserQueues_[scan.laserId];
 
     // Only bother taking data more recent than the most recent laser data
-    if((queue.empty() || (scan.timestamp > queue.back().timestamp))
+    if ((queue.empty() || (scan.timestamp > queue.back().timestamp))
         && ((!isReceivingIMU_ || has_data_before_time(imuQueue_, scan.timestamp))
-            && has_data_before_time(odometryQueue_, scan.timestamp)))
-    {
+            && has_data_before_time(odometryQueue_, scan.timestamp))) {
         queue.push_back(scan);
-    }
-    else
-    {
+    } else {
         std::cerr << "WARNING:MetricSLAMDataQueue: Ignoring laser data from the past.\n";
     }
 
@@ -161,19 +150,19 @@ metric_slam_data_t MetricSLAMDataQueue::readData(void)
 {
     utils::AutoMutex autoMutex(queueLock_);
 
-    assert(sensorInputHasArrived());  // Must only get sensor input if it has actually arrived, otherwise inconsistent state can result
+    assert(sensorInputHasArrived());   // Must only get sensor input if it has actually arrived, otherwise inconsistent
+                                       // state can result
     assert(motionQueuesAreSynced_ || !isReceivingIMU_);
 
     metric_slam_data_t data;
 
     moveQueuedDataToSensorInput(data, laserTimestamp_);
 
-    data.startTime   = previousEndTime_;
-    data.endTime     = laserTimestamp_;
+    data.startTime = previousEndTime_;
+    data.endTime = laserTimestamp_;
     previousEndTime_ = data.endTime;
 
-    if(data.startTime > data.endTime)
-    {
+    if (data.startTime > data.endTime) {
         std::cout << "Laser timestamp:" << laserTimestamp_ << " Laser period:" << data.laser.scanPeriod << '\n';
         assert(data.startTime < data.endTime);
     }
@@ -194,12 +183,10 @@ bool MetricSLAMDataQueue::sensorInputHasArrived(void)
 bool MetricSLAMDataQueue::hasMotionDataForTime(int64_t time) const
 {
     // Ensure enough odometry data has arrived
-    return (has_data_before_time(odometryQueue_, time)
-        && has_data_after_time(odometryQueue_, time))
-        // Don't require IMU data, but if it is arriving, then ensure we have enough data and the queues are synced
-        && (!isReceivingIMU_ ||
-            (motionQueuesAreSynced_ && has_data_before_time(imuQueue_, time)
-            && has_data_after_time(imuQueue_, time)));
+    return (has_data_before_time(odometryQueue_, time) && has_data_after_time(odometryQueue_, time))
+      // Don't require IMU data, but if it is arriving, then ensure we have enough data and the queues are synced
+      && (!isReceivingIMU_
+          || (motionQueuesAreSynced_ && has_data_before_time(imuQueue_, time) && has_data_after_time(imuQueue_, time)));
 }
 
 
@@ -207,8 +194,7 @@ void MetricSLAMDataQueue::updateNextLaserData(void)
 {
     // Once a scan has arrived after the desired period, select the laser scan that produces a time closest to the
     // desired update period
-    if(laserIds_.empty())
-    {
+    if (laserIds_.empty()) {
         return;
     }
 
@@ -216,17 +202,13 @@ void MetricSLAMDataQueue::updateNextLaserData(void)
 
     // If there is data in the queue and enough time has elapsed for an update to be considered, then see if new data
     // has actually arrived.
-    if(!laserQueue.empty() && (laserQueue.back().timestamp - laserTimestamp_) >= targetUpdatePeriodUs_)
-    {
+    if (!laserQueue.empty() && (laserQueue.back().timestamp - laserTimestamp_) >= targetUpdatePeriodUs_) {
         // The laser to use is the most recent one for which proper odometry data exists
-        auto laserIt = std::find_if(laserQueue.rbegin(),
-                                    laserQueue.rend(),
-                                    [this](const polar_laser_scan_t& scan) {
+        auto laserIt = std::find_if(laserQueue.rbegin(), laserQueue.rend(), [this](const polar_laser_scan_t& scan) {
             return hasMotionDataForTime(scan.timestamp);
         });
 
-        if(laserIt != laserQueue.rend())
-        {
+        if (laserIt != laserQueue.rend()) {
             laserData_ = *laserIt;
             laserTimestamp_ = laserData_.timestamp;
 
@@ -239,41 +221,35 @@ void MetricSLAMDataQueue::updateNextLaserData(void)
 
 void MetricSLAMDataQueue::moveQueuedDataToSensorInput(metric_slam_data_t& data, int64_t endTime)
 {
-    data.laser    = laserData_;
+    data.laser = laserData_;
     data.velocity = velocity_;
 
-    move_sensor_data(data.imu,      imuQueue_,      0, endTime);
+    move_sensor_data(data.imu, imuQueue_, 0, endTime);
     move_sensor_data(data.odometry, odometryQueue_, 0, endTime);
 
     // Interpolate an IMU measurement (if there's data)
     // Only need to interpolate if the data time is less than the end time (which is almost every single case)
-    if(!imuQueue_.empty() && (data.imu.back().timestamp < endTime))
-    {
+    if (!imuQueue_.empty() && (data.imu.back().timestamp < endTime)) {
         auto interpolatedIMU = interpolate_imu_data(data.imu.back(), imuQueue_.front(), endTime);
         data.imu.push_back(interpolatedIMU.first);
-        imuQueue_.front() = interpolatedIMU.second; // Replace the previous IMU measurement with the measurement updated with correct time deltas
+        imuQueue_.front() =
+          interpolatedIMU
+            .second;   // Replace the previous IMU measurement with the measurement updated with correct time deltas
         imuQueue_.push_front(interpolatedIMU.first);
 
         // Every time an interpolated measurement is created, it pushes back the IMU sequence number by 1
         ++imuSequenceOffset_;
-    }
-    else if(!data.imu.empty() && (data.imu.back().timestamp == endTime))
-    {
+    } else if (!data.imu.empty() && (data.imu.back().timestamp == endTime)) {
         imuQueue_.push_front(data.imu.back());
     }
 
     // Interpolate an odometry measurement for the front of the queue if it was exactly matched with the laser time
     // which is unlikely
-    if(data.odometry.back().timestamp < endTime)
-    {
-        auto interpolatedOdometry = interpolate_odometry(data.odometry.back(),
-                                                                  odometryQueue_.front(),
-                                                                  endTime);
+    if (data.odometry.back().timestamp < endTime) {
+        auto interpolatedOdometry = interpolate_odometry(data.odometry.back(), odometryQueue_.front(), endTime);
         data.odometry.push_back(interpolatedOdometry);
         odometryQueue_.push_front(interpolatedOdometry);
-    }
-    else if(data.odometry.back().timestamp == endTime)
-    {
+    } else if (data.odometry.back().timestamp == endTime) {
         odometryQueue_.push_front(data.odometry.back());
     }
 
@@ -295,15 +271,13 @@ void MetricSLAMDataQueue::synchronizeMotionDataQueues(void)
 
     // There must be at least two IMU values and an odometry value to attempt (though not guarantee) the success
     // of the synchronization
-    if((imuQueue_.size() < 2) || odometryQueue_.empty())
-    {
+    if ((imuQueue_.size() < 2) || odometryQueue_.empty()) {
         return;
     }
 
     // If there isn't any odometry before the IMU data, then find the first odometry value with IMU before and after it
     // and erase all odometry up to this time. Then the sync can be performed
-    if(imuQueue_.front().timestamp > odometryQueue_.front().timestamp)
-    {
+    if (imuQueue_.front().timestamp > odometryQueue_.front().timestamp) {
         int64_t startImuTime = imuQueue_.front().timestamp;
 
         utils::erase_remove_if(odometryQueue_, [startImuTime](const odometry_t& odom) {
@@ -312,8 +286,7 @@ void MetricSLAMDataQueue::synchronizeMotionDataQueues(void)
     }
 
     // If there wasn't any valid odometry data, then keep waiting for it to arrive
-    if(odometryQueue_.empty())
-    {
+    if (odometryQueue_.empty()) {
         return;
     }
 
@@ -329,9 +302,9 @@ void MetricSLAMDataQueue::synchronizeMotionDataQueues(void)
 
     // imuAfterIt > begin -- need to be able to subtract 1 fromt after it to get range for the interpolation
     assert(imuAfterIt > imuQueue_.begin());
-    imuQueue_.erase(imuQueue_.begin(), imuAfterIt - 1); // erase everything up to one before the after, which will
-                                                        // mean the first two values hold the IMU values on either side
-                                                        // of the first odometry data time
+    imuQueue_.erase(imuQueue_.begin(), imuAfterIt - 1);   // erase everything up to one before the after, which will
+                                                          // mean the first two values hold the IMU values on either
+                                                          // side of the first odometry data time
 
     assert(imuQueue_.size() >= 2);
 
@@ -366,21 +339,16 @@ std::pair<std::size_t, std::size_t> indices_between(const std::deque<T>& data, i
 {
     std::pair<std::size_t, std::size_t> indices(0, 0);
 
-    for(std::size_t n = 0; n < data.size(); ++n)
-    {
-        if(data[n].timestamp <= startTime)
-        {
+    for (std::size_t n = 0; n < data.size(); ++n) {
+        if (data[n].timestamp <= startTime) {
             indices.first = n;
-        }
-        else if(data[n].timestamp > endTime)
-        {
+        } else if (data[n].timestamp > endTime) {
             indices.second = n;
             break;
         }
     }
 
-    if(indices.second == 0)
-    {
+    if (indices.second == 0) {
         indices.second = data.size();
     }
 
@@ -395,11 +363,10 @@ void move_sensor_data(std::vector<T>& to, std::deque<T>& from, int64_t startTime
 
     to.clear();
 
-    if(!from.empty())
-    {
+    if (!from.empty()) {
         to.insert(to.begin(), from.begin() + range.first, from.begin() + range.second);
 
-        from.erase(from.begin(), from.begin()+range.second);
+        from.erase(from.begin(), from.begin() + range.second);
     }
 }
 
@@ -408,9 +375,9 @@ laser::laser_scan_lines_t calculate_scan_lines(const polar_laser_scan_t& scan)
 {
     // Hard-code in the parameters that have been used for years for calculating the scan lines
     laser::quick_split_params_t params;
-    params.clusterDistance     = 0.5;
+    params.clusterDistance = 0.5;
     params.maxDistanceFromLine = 0.05;
-    params.minPoints           = 8;
+    params.minPoints = 8;
 
     cartesian_laser_scan_t cartesian;
     polar_scan_to_cartesian_scan_in_robot_frame(scan, cartesian, true);
@@ -418,11 +385,11 @@ laser::laser_scan_lines_t calculate_scan_lines(const polar_laser_scan_t& scan)
     auto extracted = laser::quick_split(scan, cartesian, params);
 
     laser::laser_scan_lines_t lines;
-    lines.lines                  = extracted.lines;
+    lines.lines = extracted.lines;
     lines.scanPointToLineIndices = extracted.indices;
-    lines.scan                   = scan;
+    lines.scan = scan;
     return lines;
 }
 
-} // namespace hssh
-} // namespace vulcan
+}   // namespace hssh
+}   // namespace vulcan

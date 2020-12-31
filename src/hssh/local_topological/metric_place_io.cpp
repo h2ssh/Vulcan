@@ -8,30 +8,29 @@
 
 
 /**
-* \file     metric_place_io.cpp
-* \author   Collin Johnson
-*
-* Definition of create_metric_place_io factory function.
-*/
+ * \file     metric_place_io.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of create_metric_place_io factory function.
+ */
 
+#include "hssh/local_topological/metric_place_io.h"
 #include <cassert>
 #include <iostream>
-#include "hssh/local_topological/metric_place_io.h"
 
 namespace vulcan
 {
 namespace hssh
 {
 
-boost::shared_ptr<MetricPlaceIO> create_metric_place_io(const std::string& type,
-                                                        const std::string& directory,
-                                                        const std::string& basename)
+boost::shared_ptr<MetricPlaceIO>
+  create_metric_place_io(const std::string& type, const std::string& directory, const std::string& basename)
 {
-    std::cerr<<"ERROR: create_metric_place_io: Unknown type: "<<type<<std::endl;
+    std::cerr << "ERROR: create_metric_place_io: Unknown type: " << type << std::endl;
     assert(false);
-    
+
     return boost::shared_ptr<MetricPlaceIO>();
 }
-    
-}
-}
+
+}   // namespace hssh
+}   // namespace vulcan

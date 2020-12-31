@@ -17,6 +17,6 @@ namespace utils
 template class CellGrid<uint8_t>;
 template class CellGrid<int16_t>;
 template class CellGrid<uint16_t>;
-    
-}
-}
+
+}   // namespace utils
+}   // namespace vulcan

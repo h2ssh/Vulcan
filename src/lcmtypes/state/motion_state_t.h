@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_MOTION_STATE_T_H
 #define LCMTYPES_MOTION_STATE_T_H
 
-#include <string>
 #include "lcmtypes/vulcan_lcm_motion_state_t.h"
+#include <string>
 
 namespace vulcan
 {
@@ -26,9 +26,12 @@ void convert_lcm_to_vulcan(const vulcan_lcm_motion_state_t& stateMessage, motion
 void convert_vulcan_to_lcm(const motion_state_t& state, vulcan_lcm_motion_state_t& stateMessage);
 
 void publish_data(lcm_t* lcm, const motion_state_t& state, std::string channel = MOTION_STATE_CHANNEL);
-void subscribe_to_message(lcm_t* lcm, void (*callback)(const motion_state_t&, const std::string&, void*), void* userdata, std::string channel = MOTION_STATE_CHANNEL);
+void subscribe_to_message(lcm_t* lcm,
+                          void (*callback)(const motion_state_t&, const std::string&, void*),
+                          void* userdata,
+                          std::string channel = MOTION_STATE_CHANNEL);
 
-}
-}
+}   // namespace lcm
+}   // namespace vulcan
 
-#endif // LCMTYPES_MOTION_STATE_T_H
+#endif   // LCMTYPES_MOTION_STATE_T_H

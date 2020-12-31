@@ -8,11 +8,11 @@
 
 
 /**
-* \file     velocity.cpp
-* \author   Collin Johnson
-*
-* Definition of helper functions for velocity_t and acceleration_t.
-*/
+ * \file     velocity.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of helper functions for velocity_t and acceleration_t.
+ */
 
 #include "core/velocity.h"
 #include <iostream>
@@ -22,7 +22,7 @@ namespace vulcan
 
 std::ostream& operator<<(std::ostream& out, const velocity_t& v)
 {
-    out<<'('<<v.linear<<','<<v.angular<<')';
+    out << '(' << v.linear << ',' << v.angular << ')';
     return out;
 }
 
@@ -31,8 +31,8 @@ std::ostream& operator<<(std::ostream& out, const velocity_t& v)
 template <typename ostream>
 std::ostream& operator<<(std::ostream& out, const acceleration_t& a)
 {
-    out<<'('<<a.linear<<','<<a.angular<<')';
+    out << '(' << a.linear << ',' << a.angular << ')';
     return out;
 }
 
-} // namespace vulcan
+}   // namespace vulcan

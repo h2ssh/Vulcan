@@ -8,16 +8,16 @@
 
 
 /**
-* \file     logplayer_app.cpp
-* \author   Collin Johnson
-*
-* Definition of LogplayerApp.
-*/
+ * \file     logplayer_app.cpp
+ * \author   Collin Johnson
+ *
+ * Definition of LogplayerApp.
+ */
 
 #include "ui/logplayer/logplayer_app.h"
-#include "ui/logplayer/logplayer_frame.h"
 #include "logging/logplayer/log_player.h"
 #include "logging/logplayer/params.h"
+#include "ui/logplayer/logplayer_frame.h"
 #include "utils/config_file.h"
 
 using namespace vulcan;
@@ -28,7 +28,7 @@ bool ui::LogplayerApp::OnInit(void)
 {
     wxString configFilename(argv[1]);
 
-    utils::ConfigFile              config(std::string(configFilename.mb_str()));
+    utils::ConfigFile config(std::string(configFilename.mb_str()));
     logplayer::log_player_params_t params = logplayer::load_log_player_params(config);
 
     std::unique_ptr<logplayer::LogPlayer> player(new logplayer::LogPlayer(params));

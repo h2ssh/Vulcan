@@ -8,53 +8,52 @@
 
 
 /**
-* \file     director.h
-* \author   Collin Johnson
-* 
-* Declaration of ControlPlannerDirector.
-*/
+ * \file     director.h
+ * \author   Collin Johnson
+ *
+ * Declaration of ControlPlannerDirector.
+ */
 
 #ifndef PLANNER_CONTROL_DIRECTOR_H
 #define PLANNER_CONTROL_DIRECTOR_H
 
+#include "lcmtypes/commands/direct_control_command.h"
 #include "planner/control/command.h"
 #include "planner/control/state.h"
 #include "system/director.h"
 #include "utils/condition_variable.h"
 #include "utils/locked_double_buffer.h"
-#include "lcmtypes/commands/direct_control_command.h"
 
 namespace vulcan
 {
 namespace planner
 {
-    
+
 class ControlPlanner;
 
 /**
-* ControlPlannerDirector
-*/
+ * ControlPlannerDirector
+ */
 class ControlPlannerDirector : public system::Director
 {
 public:
-    
     /**
-    * Constructor for ControlPlannerDirector.
-    */
+     * Constructor for ControlPlannerDirector.
+     */
     ControlPlannerDirector(std::unique_ptr<ControlPlanner> planner);
-    
+
     /**
-    * Destructor for ControlPlannerDirector.
-    */
+     * Destructor for ControlPlannerDirector.
+     */
     virtual ~ControlPlannerDirector(void);
-    
+
     // Data handlers
     void handleData(const ControlCommand& command, const std::string& channel);
     void handleData(const hssh::LocalPose& pose, const std::string& channel);
     void handleData(const hssh::LocalPerceptualMap& lpm, const std::string& channel);
     void handleData(const mpepc::metric_planner_status_message_t& status, const std::string& channel);
     void handleData(const vulcan_lcm::direct_control_command& command, const std::string& channel);
-    
+
     // system::Director interface
     void subscribeToData(system::ModuleCommunicator& communicator) override;
     void shutdown(system::ModuleCommunicator& communicator) override;
@@ -62,20 +61,19 @@ public:
     system::UpdateStatus runUpdate(system::ModuleCommunicator& communicator) override;
 
 private:
-    
     template <class T>
     using Buffer = utils::LockedDoubleBuffer<T>;
-    
+
     Buffer<ControlCommand> command_;
     Buffer<hssh::LocalPose> pose_;
     Buffer<hssh::LocalPerceptualMap> map_;
     Buffer<mpepc::metric_planner_status_message_t> mpepcStatus_;
-    
-    bool haveLPM_;                  ///< True if an LPM has ever been received
-    bool executingCommand_;         ///< True if a command is currently executing
-    
+
+    bool haveLPM_;            ///< True if an LPM has ever been received
+    bool executingCommand_;   ///< True if a command is currently executing
+
     std::unique_ptr<ControlPlanner> planner_;
-    
+
     utils::ConditionVariable dataTrigger_;
 
     ControlState loadState(void);
@@ -83,7 +81,7 @@ private:
     ControlTaskResult executeTask(const ControlState& state);
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_CONTROL_DIRECTOR_H
+#endif   // PLANNER_CONTROL_DIRECTOR_H

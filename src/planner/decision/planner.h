@@ -8,11 +8,11 @@
 
 
 /**
-* \file     planner.h
-* \author   Collin Johnson
-*
-* Declaration of DecisionPlanner.
-*/
+ * \file     planner.h
+ * \author   Collin Johnson
+ *
+ * Declaration of DecisionPlanner.
+ */
 
 #ifndef PLANNER_DECISION_PLANNER_H
 #define PLANNER_DECISION_PLANNER_H
@@ -31,76 +31,74 @@ class DecisionTask;
 class DecisionTaskExecutor;
 
 /**
-* DecisionPlanner organizes the execution of a DecisionTaskSequence. The planner runs the provided tasks in order until
-* no tasks remain. Each new task yields a DecisionTaskExecutor that is used for determining the task to send to the
-* metric_planner and determining when the task is completed.
-*
-* The tasks to be executed by the DecisionPlanner can be provided via the addTaskToXXXX methods.
-*
-* Calculating a new result based on changed state in the local topological layer is performed via the plan method.
-*/
+ * DecisionPlanner organizes the execution of a DecisionTaskSequence. The planner runs the provided tasks in order until
+ * no tasks remain. Each new task yields a DecisionTaskExecutor that is used for determining the task to send to the
+ * metric_planner and determining when the task is completed.
+ *
+ * The tasks to be executed by the DecisionPlanner can be provided via the addTaskToXXXX methods.
+ *
+ * Calculating a new result based on changed state in the local topological layer is performed via the plan method.
+ */
 class DecisionPlanner
 {
 public:
-
     /**
-    * Constructor for DecisionPlanner.
-    */
+     * Constructor for DecisionPlanner.
+     */
     DecisionPlanner(void);
 
     /**
-    * Destructor for DecisionPlanner.
-    *
-    * For std::unique_ptr use.
-    */
+     * Destructor for DecisionPlanner.
+     *
+     * For std::unique_ptr use.
+     */
     ~DecisionPlanner(void);
 
     // Not a value type
     DecisionPlanner(const DecisionPlanner&) = delete;
-    DecisionPlanner(DecisionPlanner&&)      = delete;
+    DecisionPlanner(DecisionPlanner&&) = delete;
 
     DecisionPlanner& operator=(const DecisionPlanner&) = delete;
-    DecisionPlanner& operator=(DecisionPlanner&&)      = delete;
+    DecisionPlanner& operator=(DecisionPlanner&&) = delete;
 
     //////// Task management methods //////////////
 
     /**
-    * addTaskToFront adds a new task to the end of the sequence of tasks for the planner.
-    *
-    * \param    task            Task to be added to the sequence
-    */
+     * addTaskToFront adds a new task to the end of the sequence of tasks for the planner.
+     *
+     * \param    task            Task to be added to the sequence
+     */
     void addTaskToFront(std::unique_ptr<DecisionTask> task);
 
     /**
-    * addTaskToBack adds a new task to the end of the sequence of tasks being executed by the planner.
-    *
-    * \param    task            Task to be added to the sequence
-    */
+     * addTaskToBack adds a new task to the end of the sequence of tasks being executed by the planner.
+     *
+     * \param    task            Task to be added to the sequence
+     */
     void addTaskToBack(std::unique_ptr<DecisionTask> task);
 
     /**
-    * clearTasks erases all tasks currently being executed or waiting to be executed by the planner.
-    */
+     * clearTasks erases all tasks currently being executed or waiting to be executed by the planner.
+     */
     void clearTasks(void);
 
     ///////// Planning methods ////////////
 
     /**
-    * plan updates the plan execution based on updated state information. When executing the current plan, a task may
-    * finish, in which case, a new task will be put in the queue. If no tasks remain, the robot will be told to stop.
-    *
-    * \param    state           Current local topological state of the robot
-    * \return   Result of the current planning action to be sent away.
-    */
+     * plan updates the plan execution based on updated state information. When executing the current plan, a task may
+     * finish, in which case, a new task will be put in the queue. If no tasks remain, the robot will be told to stop.
+     *
+     * \param    state           Current local topological state of the robot
+     * \return   Result of the current planning action to be sent away.
+     */
     DecisionResult plan(const DecisionState& state);
 
 private:
-
     DecisionTaskSequence tasks_;
     std::unique_ptr<DecisionTaskExecutor> currentExecutor_;
 };
 
-}
-}
+}   // namespace planner
+}   // namespace vulcan
 
-#endif // PLANNER_DECISION_PLANNER_H
+#endif   // PLANNER_DECISION_PLANNER_H
