@@ -14,15 +14,15 @@
 * Definition of a number of functions for drawing various primitive shapes using OpenGL.
 */
 
-#include <ui/common/gl_shapes.h>
-#include <ui/common/ui_color.h>
-#include <math/angle_range.h>
-#include <core/point.h>
-#include <core/multivariate_gaussian.h>
-#include <math/geometry/arc.h>
-#include <math/geometry/circle.h>
-#include <math/geometry/rectangle.h>
-#include <math/geometry/polygon.h>
+#include "ui/common/gl_shapes.h"
+#include "ui/common/ui_color.h"
+#include "math/angle_range.h"
+#include "core/point.h"
+#include "core/multivariate_gaussian.h"
+#include "math/geometry/arc.h"
+#include "math/geometry/circle.h"
+#include "math/geometry/rectangle.h"
+#include "math/geometry/polygon.h"
 #include <boost/range/iterator_range.hpp>
 #include <GL/gl.h>
 

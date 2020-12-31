@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_BOUNDARY_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_BOUNDARY_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
 #include <array>
 #include <memory>
 

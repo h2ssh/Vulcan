@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAY_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAY_H
 
-#include <hssh/types.h>
-#include <core/line.h>
-#include <math/coordinates.h>
+#include "hssh/types.h"
+#include "core/line.h"
+#include "math/coordinates.h"
 #include <cereal/access.hpp>
 #include <cstdint>
 

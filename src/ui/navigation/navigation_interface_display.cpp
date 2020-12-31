@@ -14,15 +14,15 @@
 * Definition of NavigationInterfaceDisplay.
 */
 
-#include <ui/navigation/navigation_interface_display.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <ui/components/gateways_renderer.h>
-#include <ui/components/robot_renderer.h>
-#include <ui/components/robot_trajectory_renderer.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/components/dynamic_object_renderer.h>
-#include <ui/components/local_area_renderer.h>
+#include "ui/navigation/navigation_interface_display.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/components/gateways_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "ui/components/robot_trajectory_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/dynamic_object_renderer.h"
+#include "ui/components/local_area_renderer.h"
 
 namespace vulcan
 {

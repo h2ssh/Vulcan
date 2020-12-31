@@ -7,7 +7,7 @@
 */
 
 
-#include <sensors/sensor_log.h>
+#include "sensors/sensor_log.h"
 #include <iostream>
 
 using namespace vulcan;

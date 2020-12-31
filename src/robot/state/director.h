@@ -17,9 +17,9 @@
 #ifndef ROBOT_STATE_DIRECTOR_H
 #define ROBOT_STATE_DIRECTOR_H
 
-#include <robot/state/params.h>
-#include <system/director.h>
-#include <utils/condition_variable.h>
+#include "robot/state/params.h"
+#include "system/director.h"
+#include "utils/condition_variable.h"
 #include <memory>
 
 namespace vulcan

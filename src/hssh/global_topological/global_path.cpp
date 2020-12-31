@@ -14,8 +14,8 @@
 * Definition of GlobalPath.
 */
 
-#include <hssh/global_topological/global_path.h>
-#include <utils/stub.h>
+#include "hssh/global_topological/global_path.h"
+#include "utils/stub.h"
 #include <iostream>
 #include <cassert>
 

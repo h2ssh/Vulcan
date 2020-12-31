@@ -17,9 +17,9 @@
 #ifndef TRACKER_MOTIONS_CLASSIFIER_H
 #define TRACKER_MOTIONS_CLASSIFIER_H
 
-#include <tracker/types.h>
-#include <tracker/object_state.h>
-#include <tracker/motions/motion_tracker.h>
+#include "tracker/types.h"
+#include "tracker/object_state.h"
+#include "tracker/motions/motion_tracker.h"
 
 namespace vulcan
 {

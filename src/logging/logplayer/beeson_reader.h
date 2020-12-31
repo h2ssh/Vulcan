@@ -17,8 +17,8 @@
 #ifndef LOGPLAYER_BEESON_READER_H
 #define LOGPLAYER_BEESON_READER_H
 
-#include <logging/logplayer/log_reader.h>
-#include <logging/logplayer/params.h>
+#include "logging/logplayer/log_reader.h"
+#include "logging/logplayer/params.h"
 
 namespace vulcan
 {

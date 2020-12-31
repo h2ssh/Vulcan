@@ -7,7 +7,7 @@
 */
 
 
-#include <lcmtypes/message_helpers.h>
+#include "lcmtypes/message_helpers.h"
 #include <algorithm>
 #include <iostream>
 #include <cassert>

@@ -17,11 +17,11 @@
 #ifndef HSSH_LOCAL_METRIC_GLASS_MAP_H
 #define HSSH_LOCAL_METRIC_GLASS_MAP_H
 
-#include <hssh/local_metric/lpm.h>
-#include <math/angle_range.h>
-#include <math/geometry/rectangle.h>
-#include <utils/discretized_angle_grid.h>
-#include <system/message_traits.h>
+#include "hssh/local_metric/lpm.h"
+#include "math/angle_range.h"
+#include "math/geometry/rectangle.h"
+#include "utils/discretized_angle_grid.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

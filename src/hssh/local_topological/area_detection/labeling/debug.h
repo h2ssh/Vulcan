@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_DEBUG_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_DEBUG_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/labeling/type_distribution.h>
-#include <hssh/local_topological/area_extent.h>
-#include <core/point.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/type_distribution.h"
+#include "hssh/local_topological/area_extent.h"
+#include "core/point.h"
 #include <array>
 #include <cereal/types/vector.hpp>
 #include <cassert>

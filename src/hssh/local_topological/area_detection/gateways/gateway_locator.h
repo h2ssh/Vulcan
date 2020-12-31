@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_VISIBILITY_GRADIENT_LOCATOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_VISIBILITY_GRADIENT_LOCATOR_H
 
-#include <hssh/local_topological/area_detection/gateways/weighted_gateway.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/area_detection/gateways/weighted_gateway.h"
+#include "hssh/local_topological/params.h"
 #include <memory>
 #include <vector>
 

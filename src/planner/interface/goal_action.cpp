@@ -14,13 +14,13 @@
 * Definition of GoalAction.
 */
 
-#include <planner/interface/goal_action.h>
-#include <planner/interface/goal.h>
-#include <planner/utils/local_area_tasks.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <mpepc/metric_planner/task/navigation.h>
-#include <system/system_communicator.h>
-#include <utils/stub.h>
+#include "planner/interface/goal_action.h"
+#include "planner/interface/goal.h"
+#include "planner/utils/local_area_tasks.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "mpepc/metric_planner/task/navigation.h"
+#include "system/system_communicator.h"
+#include "utils/stub.h"
 #include <cassert>
 
 namespace vulcan

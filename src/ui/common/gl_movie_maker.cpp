@@ -14,7 +14,7 @@
 * Definition of GLMovieMaker.
 */
 
-#include <ui/common/gl_movie_maker.h>
+#include "ui/common/gl_movie_maker.h"
 
 namespace vulcan
 {

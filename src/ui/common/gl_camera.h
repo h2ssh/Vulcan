@@ -17,8 +17,8 @@
 #ifndef UI_COMMON_GL_CAMERA_H
 #define UI_COMMON_GL_CAMERA_H
 
-#include <core/point.h>
-#include <math/spherical_point.h>
+#include "core/point.h"
+#include "math/spherical_point.h"
 
 namespace vulcan
 {

@@ -17,7 +17,7 @@
 #ifndef TRACKER_OBJECTS_LEG_H
 #define TRACKER_OBJECTS_LEG_H
 
-#include <tracker/boundaries/shapes.h>
+#include "tracker/boundaries/shapes.h"
 #include <cereal/access.hpp>
 #include <deque>
 

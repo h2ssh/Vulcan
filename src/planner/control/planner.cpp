@@ -14,9 +14,9 @@
 * Definition of ControlPlanner.
 */
 
-#include <planner/control/planner.h>
-#include <planner/control/command.h>
-#include <planner/control/state.h>
+#include "planner/control/planner.h"
+#include "planner/control/command.h"
+#include "planner/control/state.h"
 #include <iostream>
 
 namespace vulcan

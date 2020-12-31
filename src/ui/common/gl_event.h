@@ -23,7 +23,7 @@
 #ifndef UI_COMMON_GL_MOUSE_H
 #define UI_COMMON_GL_MOUSE_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <wx/event.h>
 
 namespace vulcan

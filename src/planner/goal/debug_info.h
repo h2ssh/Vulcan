@@ -17,8 +17,8 @@
 #ifndef PLANNER_GOAL_DEBUG_INFO_H
 #define PLANNER_GOAL_DEBUG_INFO_H
 
-#include <hssh/global_topological/graph.h>
-#include <graph/path.h>
+#include "hssh/global_topological/graph.h"
+#include "graph/path.h"
 #include <vector>
 
 namespace vulcan

@@ -17,7 +17,7 @@
 #ifndef CORE_IMAGE_H
 #define CORE_IMAGE_H
 
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/cereal.hpp>
 #include <cstdint>

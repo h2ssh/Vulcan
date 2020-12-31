@@ -14,10 +14,10 @@
 * Definition of GlobalTransitionCycle.
 */
 
-#include <hssh/global_topological/transition_cycle.h>
-#include <hssh/global_topological/utils/local_to_global.h>
-#include <hssh/global_topological/utils/visit.h>
-#include <utils/cyclic_iterator.h>
+#include "hssh/global_topological/transition_cycle.h"
+#include "hssh/global_topological/utils/local_to_global.h"
+#include "hssh/global_topological/utils/visit.h"
+#include "utils/cyclic_iterator.h"
 #include <algorithm>
 #include <iterator>
 #include <cassert>

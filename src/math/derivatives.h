@@ -19,7 +19,7 @@
 #ifndef MATH_DERIVATIVES_H
 #define MATH_DERIVATIVES_H
 
-#include <core/multivariate_gaussian.h>
+#include "core/multivariate_gaussian.h"
 
 namespace vulcan
 {

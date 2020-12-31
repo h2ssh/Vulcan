@@ -14,12 +14,12 @@
 * Definition of LocalTopoEventRenderer.
 */
 
-#include <ui/components/local_area_event_renderer.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <ui/common/ui_color.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_topological/events/turn_around.h>
+#include "ui/components/local_area_event_renderer.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/ui_color.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/events/turn_around.h"
 
 namespace vulcan
 {

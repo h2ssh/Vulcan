@@ -14,9 +14,9 @@
 * Definition of StationaryMotion.
 */
 
-#include <tracker/motions/stationary.h>
-#include <tracker/laser_object.h>
-#include <tracker/motions/visitor.h>
+#include "tracker/motions/stationary.h"
+#include "tracker/laser_object.h"
+#include "tracker/motions/visitor.h"
 
 namespace vulcan 
 {

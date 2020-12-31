@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_BOUNDARY_SHRINK_AND_STRETCH_H
 #define HSSH_LOCAL_TOPOLOGICAL_BOUNDARY_SHRINK_AND_STRETCH_H
 
-#include <hssh/local_topological/event_visitor.h>
-#include <hssh/local_topological/small_scale_space_boundary.h>
+#include "hssh/local_topological/event_visitor.h"
+#include "hssh/local_topological/small_scale_space_boundary.h"
 
 namespace vulcan
 {

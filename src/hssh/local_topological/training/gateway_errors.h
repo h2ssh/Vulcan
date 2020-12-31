@@ -20,7 +20,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_TRAINING_GATEWAY_ERRORS_H
 #define HSSH_LOCAL_TOPOLOGICAL_TRAINING_GATEWAY_ERRORS_H
 
-#include <hssh/types.h>
+#include "hssh/types.h"
 #include <vector>
 
 namespace vulcan

@@ -17,8 +17,8 @@
 #ifndef UI_COMMON_METRIC_PATH_CREATOR_H
 #define UI_COMMON_METRIC_PATH_CREATOR_H
 
-#include <core/pose.h>
-#include <ui/common/gl_event.h>
+#include "core/pose.h"
+#include "ui/common/gl_event.h"
 
 namespace vulcan
 {

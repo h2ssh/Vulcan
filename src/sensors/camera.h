@@ -10,7 +10,7 @@
 #ifndef SENSORS_CAMERA_H
 #define SENSORS_CAMERA_H
 
-#include <core/image.h>
+#include "core/image.h"
 
 namespace vulcan
 {

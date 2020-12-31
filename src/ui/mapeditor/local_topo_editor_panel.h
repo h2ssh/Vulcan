@@ -17,13 +17,13 @@
 #ifndef UI_MAPEDITOR_LOCAL_TOPO_EDITOR_PANEL_H
 #define UI_MAPEDITOR_LOCAL_TOPO_EDITOR_PANEL_H
 
-#include <ui/mapeditor/gateway_editor.h>
-#include <ui/common/ui_panel.h>
-#include <ui/common/grid_object_selector.h>
-#include <ui/common/object_selector_event_handler.h>
-#include <ui/common/ui_color.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/params.h>
+#include "ui/mapeditor/gateway_editor.h"
+#include "ui/common/ui_panel.h"
+#include "ui/common/grid_object_selector.h"
+#include "ui/common/object_selector_event_handler.h"
+#include "ui/common/ui_color.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/params.h"
 #include <wx/wx.h>
 #include <wx/listctrl.h>
 #include <wx/tglbtn.h>

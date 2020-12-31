@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CLASSIFIER_TEST_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_CLASSIFIER_TEST_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_classifier.h>
-#include <hssh/local_topological/training/labeled_area_data.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_classifier.h"
+#include "hssh/local_topological/training/labeled_area_data.h"
 #include <string>
 #include <vector>
 

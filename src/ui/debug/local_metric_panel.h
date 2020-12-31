@@ -17,9 +17,9 @@
 #ifndef UI_DEBUG_LOCAL_METRIC_PANEL_H
 #define UI_DEBUG_LOCAL_METRIC_PANEL_H
 
-#include <ui/common/metric_path_creator.h>
-#include <ui/common/ui_panel.h>
-#include <hssh/local_metric/lpm.h>
+#include "ui/common/metric_path_creator.h"
+#include "ui/common/ui_panel.h"
+#include "hssh/local_metric/lpm.h"
 #include <wx/wx.h>
 #include <memory>
 

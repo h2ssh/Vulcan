@@ -19,8 +19,8 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/lpm_io.h>
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/lpm_io.h"
 
 using namespace vulcan::hssh;
 

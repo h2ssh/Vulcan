@@ -1,26 +1,14 @@
-/* Copyright (C) 2010-2019, The Regents of The University of Michigan.
- All rights reserved.
-
- This software was developed as part of the The Vulcan project in the Intelligent Robotics Lab
- under the direction of Benjamin Kuipers, kuipers@umich.edu. Use of this code is governed by an
- MIT-style License that can be found at "https://github.com/h2ssh/Vulcan".
-*/
-
-
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 19 2012)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 31 2020)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __CALIBRATION_UI_H__
-#define __CALIBRATION_UI_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-class UIMainFrame;
-
 #include "ui/common/ui_main_frame.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -33,10 +21,10 @@ class UIMainFrame;
 #include <wx/grid.h>
 #include <wx/radiobox.h>
 #include <wx/button.h>
-#include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/panel.h>
 #include <ui/calibration/playground_display_widget.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
@@ -86,7 +74,7 @@ class UIMainFrame;
 class CalibrationFrame : public UIMainFrame
 {
 	private:
-	
+
 	protected:
 		wxAuiNotebook* calibrationNotebook;
 		wxPanel* wheelchairPanel;
@@ -138,22 +126,22 @@ class CalibrationFrame : public UIMainFrame
 		wxButton* pauseSessionButton;
 		wxButton* stopSessionButton;
 		wxStatusBar* calibrationStatusBar;
-	
+
 	public:
-		
+
 		CalibrationFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Robot Calibration UI"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 851,639 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-		
+
 		~CalibrationFrame();
-	
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class WheelchairTestSetup
 ///////////////////////////////////////////////////////////////////////////////
-class WheelchairTestSetup : public wxDialog 
+class WheelchairTestSetup : public wxDialog
 {
 	private:
-	
+
 	protected:
 		wxTextCtrl* testNameText;
 		wxGrid* testSetupGrid;
@@ -162,21 +150,21 @@ class WheelchairTestSetup : public wxDialog
 		wxTextCtrl* rampDurationText;
 		wxButton* saveTestButton;
 		wxButton* cancelTestButton;
-	
+
 	public:
-		
-		WheelchairTestSetup( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Wheelchair Test Setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 374,350 ), long style = wxCAPTION|wxCLOSE_BOX ); 
+
+		WheelchairTestSetup( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Wheelchair Test Setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 374,350 ), long style = wxCAPTION|wxCLOSE_BOX );
 		~WheelchairTestSetup();
-	
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class ControlLawParameters
 ///////////////////////////////////////////////////////////////////////////////
-class ControlLawParameters : public wxDialog 
+class ControlLawParameters : public wxDialog
 {
 	private:
-	
+
 	protected:
 		wxStaticText* k1Label;
 		wxTextCtrl* k1Text;
@@ -200,12 +188,11 @@ class ControlLawParameters : public wxDialog
 		wxTextCtrl* lambdaText;
 		wxButton* controlLawDialogOkayButton;
 		wxButton* controlLawDialogCancelButton;
-	
+
 	public:
-		
-		ControlLawParameters( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Control Law Parameters"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,500 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+
+		ControlLawParameters( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Control Law Parameters"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,500 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~ControlLawParameters();
-	
+
 };
 
-#endif //__CALIBRATION_UI_H__

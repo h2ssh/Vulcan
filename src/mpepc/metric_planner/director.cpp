@@ -14,17 +14,17 @@
 * Definition of MetricPlannerDirector.
 */
 
-#include <mpepc/metric_planner/director.h>
-#include <mpepc/metric_planner/task/serialization.h>
-#include <mpepc/manifold/task_manifold.h>
-#include <hssh/local_topological/areas/serialization.h>
-#include <lcmtypes/mpepc/metric_pose_target_status_t.h>
-#include <tracker/objects/serialization.h>
-#include <system/module_communicator.h>
+#include "mpepc/metric_planner/director.h"
+#include "mpepc/metric_planner/task/serialization.h"
+#include "mpepc/manifold/task_manifold.h"
+#include "hssh/local_topological/areas/serialization.h"
+#include "lcmtypes/mpepc/metric_pose_target_status_t.h"
+#include "tracker/objects/serialization.h"
+#include "system/module_communicator.h"
 #include <time.h>
-#include <utils/timestamp.h>
-#include <utils/command_line.h>
-#include <utils/serialized_file_io.h>
+#include "utils/timestamp.h"
+#include "utils/command_line.h"
+#include "utils/serialized_file_io.h"
 #include <iostream>
 
 // #define DEBUG_DIRECTOR

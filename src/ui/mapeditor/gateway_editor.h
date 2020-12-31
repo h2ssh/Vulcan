@@ -17,10 +17,10 @@
 #ifndef UI_MAPEDITOR_GATEWAY_EDITOR_H
 #define UI_MAPEDITOR_GATEWAY_EDITOR_H
 
-#include <ui/common/gl_event.h>
-#include <ui/common/grid_object_selector.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
+#include "ui/common/gl_event.h"
+#include "ui/common/grid_object_selector.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include <vector>
 
 namespace vulcan

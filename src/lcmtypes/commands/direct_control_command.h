@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_COMMANDS_DIRECT_CONTROL_COMMAND_H
 #define LCMTYPES_COMMANDS_DIRECT_CONTROL_COMMAND_H
 
-#include <lcmtypes/vulcan_lcm/direct_control_command.hpp>
-#include <system/message_traits.h>
+#include "lcmtypes/vulcan_lcm/direct_control_command.hpp>
+#include "system/message_traits.h"
 
 namespace vulcan
 {

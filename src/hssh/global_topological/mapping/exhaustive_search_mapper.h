@@ -21,7 +21,7 @@
 #include <memory>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <hssh/global_topological/mapping/topological_mapper.h>
+#include "hssh/global_topological/mapping/topological_mapper.h"
 
 namespace vulcan
 {

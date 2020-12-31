@@ -17,10 +17,10 @@
 #ifndef MPEPC_POSE_FOLLOWER_H
 #define MPEPC_POSE_FOLLOWER_H
 
-#include <mpepc/trajectory/params.h>
-#include <mpepc/trajectory/robot_trajectory_info.h>
-#include <core/pose.h>
-#include <mpepc/control/control_law_coordinates.h>
+#include "mpepc/trajectory/params.h"
+#include "mpepc/trajectory/robot_trajectory_info.h"
+#include "core/pose.h"
+#include "mpepc/control/control_law_coordinates.h"
 #include <nlopt.h>
 #include <vector>
 #include <memory>

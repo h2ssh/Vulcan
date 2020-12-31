@@ -17,8 +17,8 @@
 #ifndef LASER_SCAN_LIKELIHOOD_GRID_H
 #define LASER_SCAN_LIKELIHOOD_GRID_H
 
-#include <utils/cell_grid.h>
-#include <core/laser_scan.h>
+#include "utils/cell_grid.h"
+#include "core/laser_scan.h"
 #include <vector>
 #include <cstdint>
 

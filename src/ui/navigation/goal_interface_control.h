@@ -17,9 +17,9 @@
 #ifndef UI_NAVIGATION_GOAL_INTERFACE_CONTROL_H
 #define UI_NAVIGATION_GOAL_INTERFACE_CONTROL_H
 
-#include <ui/common/gl_event.h>
-#include <ui/common/grid_object_selector.h>
-#include <core/pose.h>
+#include "ui/common/gl_event.h"
+#include "ui/common/grid_object_selector.h"
+#include "core/pose.h"
 #include <wx/wx.h>
 #include <wx/tglbtn.h>
 #include <unordered_map>

@@ -17,7 +17,7 @@
 #ifndef SENSORS_LASER_RANGEFINDER_H
 #define SENSORS_LASER_RANGEFINDER_H
 
-#include <core/laser_scan.h>
+#include "core/laser_scan.h"
 #include <string>
 
 namespace vulcan

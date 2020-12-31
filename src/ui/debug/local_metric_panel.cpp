@@ -14,22 +14,22 @@
 * Definition of LocalMetricPanel.
 */
 
-#include <ui/debug/local_metric_panel.h>
-#include <ui/debug/local_metric_panel_text_updater.h>
-#include <ui/debug/debug_ui.h>
-#include <utils/timestamp.h>
-#include <hssh/local_metric/commands/glass_evaluation.h>
-#include <hssh/local_metric/commands/toggle_glass_mapping.h>
-#include <hssh/local_metric/commands/set_slam_mode.h>
-#include <hssh/local_metric/lpm_io.h>
-#include <ui/debug/local_metric_display_widget.h>
-#include <ui/common/grid_cell_selector.h>
-#include <ui/common/file_dialog_settings.h>
-#include <ui/components/glass_map_renderer.h>
-#include <ui/debug/debug_ui.h>
-#include <utils/serialized_file_io.h>
-#include <utils/stub.h>
-#include <system/module_communicator.h>
+#include "ui/debug/local_metric_panel.h"
+#include "ui/debug/local_metric_panel_text_updater.h"
+#include "ui/debug/debug_ui.h"
+#include "utils/timestamp.h"
+#include "hssh/local_metric/commands/glass_evaluation.h"
+#include "hssh/local_metric/commands/toggle_glass_mapping.h"
+#include "hssh/local_metric/commands/set_slam_mode.h"
+#include "hssh/local_metric/lpm_io.h"
+#include "ui/debug/local_metric_display_widget.h"
+#include "ui/common/grid_cell_selector.h"
+#include "ui/common/file_dialog_settings.h"
+#include "ui/components/glass_map_renderer.h"
+#include "ui/debug/debug_ui.h"
+#include "utils/serialized_file_io.h"
+#include "utils/stub.h"
+#include "system/module_communicator.h"
 #include <cassert>
 
 // Use a separate namespace declaration for the event table to help KDevelop parse the code. The macros throw it off.

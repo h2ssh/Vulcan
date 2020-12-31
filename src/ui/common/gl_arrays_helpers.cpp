@@ -14,7 +14,7 @@
 * Definition of helper functions for dealing with vertex arrays.
 */
 
-#include <ui/common/gl_arrays_helpers.h>
+#include "ui/common/gl_arrays_helpers.h"
 #include <GL/gl.h>
 
 namespace vulcan

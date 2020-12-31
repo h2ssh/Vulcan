@@ -14,9 +14,9 @@
 * Definition of GeneratorQueue abstract base class.
 */
 
-#include <hssh/global_topological/mapping/generator_queue.h>
-#include <hssh/global_topological/mapping/hypothesis_generator.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/global_topological/mapping/generator_queue.h"
+#include "hssh/global_topological/mapping/hypothesis_generator.h"
+#include "utils/algorithm_ext.h"
 #include <boost/range/adaptor/map.hpp>
 #include <cassert>
 

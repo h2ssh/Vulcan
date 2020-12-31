@@ -17,7 +17,7 @@
 #ifndef MPEPC_MOTION_CONTROLLER_WAYPOINT_TARGET_DECIDER_H
 #define MPEPC_MOTION_CONTROLLER_WAYPOINT_TARGET_DECIDER_H
 
-#include <mpepc/motion_controller/task/path.h>
+#include "mpepc/motion_controller/task/path.h"
 #include <fstream>
 
 namespace vulcan

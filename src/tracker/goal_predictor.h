@@ -17,8 +17,8 @@
 #ifndef TRACKER_GOAL_PREDICTOR_H
 #define TRACKER_GOAL_PREDICTOR_H
 
-#include <tracker/dynamic_object_collection.h>
-#include <tracker/types.h>
+#include "tracker/dynamic_object_collection.h"
+#include "tracker/types.h"
 #include <memory>
 #include <unordered_map>
 

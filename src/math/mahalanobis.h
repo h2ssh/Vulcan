@@ -10,7 +10,7 @@
 #ifndef MATH_MAHALANOBIS_H
 #define MATH_MAHALANOBIS_H
 
-#include <core/vector.h>
+#include "core/vector.h"
 
 namespace vulcan
 {

@@ -28,7 +28,7 @@
 #ifndef HSSH_UTILS_METRICAL_RELOCALIZATION_TYPES_H
 #define HSSH_UTILS_METRICAL_RELOCALIZATION_TYPES_H
 
-#include <core/pose.h>
+#include "core/pose.h"
 
 namespace vulcan
 {

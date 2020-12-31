@@ -14,9 +14,9 @@
 * Definition of Chi.
 */
 
-#include <hssh/global_topological/chi.h>
-#include <hssh/global_topological/global_place.h>
-#include <hssh/global_topological/topological_map.h>
+#include "hssh/global_topological/chi.h"
+#include "hssh/global_topological/global_place.h"
+#include "hssh/global_topological/topological_map.h"
 #include <cassert>
 
 namespace vulcan

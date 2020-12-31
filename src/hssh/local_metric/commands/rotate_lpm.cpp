@@ -14,8 +14,8 @@
 * Definition of RotateLpmCommand.
 */
 
-#include <hssh/local_metric/commands/rotate_lpm.h>
-#include <hssh/metrical/mapping/mapper.h>
+#include "hssh/local_metric/commands/rotate_lpm.h"
+#include "hssh/metrical/mapping/mapper.h"
 
 namespace vulcan
 {

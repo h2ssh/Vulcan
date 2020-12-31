@@ -7,9 +7,9 @@
 */
 
 
-#include <lcmtypes/legacy/laser_t.h>
-#include <lcmtypes/subscription_manager.h>
-#include <lcmtypes/message_helpers.h>
+#include "lcmtypes/legacy/laser_t.h"
+#include "lcmtypes/subscription_manager.h"
+#include "lcmtypes/message_helpers.h"
 #include <vector>
 
 namespace vulcan

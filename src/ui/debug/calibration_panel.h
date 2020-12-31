@@ -17,12 +17,12 @@
 #ifndef UI_DEBUG_CALIBRATION_PANEL_H
 #define UI_DEBUG_CALIBRATION_PANEL_H
 
-#include <ui/common/ui_forward_declarations.h>
-#include <ui/common/ui_params.h>
-#include <ui/common/ui_panel.h>
-#include <core/laser_scan.h>
-#include <utils/mutex.h>
-#include <sensors/sensor_log.h>
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_params.h"
+#include "ui/common/ui_panel.h"
+#include "core/laser_scan.h"
+#include "utils/mutex.h"
+#include "sensors/sensor_log.h"
 #include <wx/wx.h>
 #include <atomic>
 

@@ -21,7 +21,7 @@
 #ifndef MATH_CLUSTERING_H
 #define MATH_CLUSTERING_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <vector>
 
 namespace vulcan

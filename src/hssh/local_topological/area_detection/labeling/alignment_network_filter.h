@@ -20,7 +20,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_FILTER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_NETWORK_FILTER_H
 
-#include <utils/algorithm_ext.h>
+#include "utils/algorithm_ext.h"
 
 namespace vulcan
 {

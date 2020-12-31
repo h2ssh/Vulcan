@@ -17,8 +17,8 @@
 #ifndef UI_COMPONENTS_LASER_OBJECT_RENDERER_H
 #define UI_COMPONENTS_LASER_OBJECT_RENDERER_H
 
-#include <ui/common/ui_color.h>
-#include <tracker/types.h>
+#include "ui/common/ui_color.h"
+#include "tracker/types.h"
 #include <vector>
 
 namespace vulcan

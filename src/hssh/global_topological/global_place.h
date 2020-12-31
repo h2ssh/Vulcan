@@ -17,10 +17,10 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_PLACE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_PLACE_H
 
-#include <hssh/global_topological/area.h>
-#include <hssh/global_topological/transition_cycle.h>
-#include <hssh/utils/id.h>
-#include <core/pose.h>
+#include "hssh/global_topological/area.h"
+#include "hssh/global_topological/transition_cycle.h"
+#include "hssh/utils/id.h"
+#include "core/pose.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 #include <memory>

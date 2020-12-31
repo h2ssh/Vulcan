@@ -14,8 +14,8 @@
 * Definition of TopologicalGraphRenderer.
 */
 
-#include <ui/components/topological_graph_renderer.h>
-#include <ui/common/gl_shapes.h>
+#include "ui/components/topological_graph_renderer.h"
+#include "ui/common/gl_shapes.h"
 #include <GL/gl.h>
 
 namespace vulcan

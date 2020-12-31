@@ -14,10 +14,10 @@
 * Implementation of PathDirectionDetector.
 */
 
-#include <hssh/local_topological/event_detection/path_direction_detector.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/local_topological/events/turn_around.h>
+#include "hssh/local_topological/event_detection/path_direction_detector.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/events/turn_around.h"
 #include <iostream>
 #include <cassert>
 

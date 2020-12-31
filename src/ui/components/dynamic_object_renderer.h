@@ -17,8 +17,8 @@
 #ifndef UI_COMPONENTS_DYNAMIC_OBJECT_RENDERER_H
 #define UI_COMPONENTS_DYNAMIC_OBJECT_RENDERER_H
 
-#include <tracker/dynamic_object_visitor.h>
-#include <ui/common/ui_color.h>
+#include "tracker/dynamic_object_visitor.h"
+#include "ui/common/ui_color.h"
 #include <vector>
 
 namespace vulcan

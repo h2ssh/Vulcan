@@ -14,9 +14,9 @@
 * Definition of UIMainFrame abstract base class.
 */
 
-#include <ui/common/ui_main_frame.h>
-#include <ui/common/ui_panel.h>
-#include <ui/components/open_gl_widget.h>
+#include "ui/common/ui_main_frame.h"
+#include "ui/common/ui_panel.h"
+#include "ui/components/open_gl_widget.h"
 #include <wx/aui/auibook.h>
 #include <iostream>
 

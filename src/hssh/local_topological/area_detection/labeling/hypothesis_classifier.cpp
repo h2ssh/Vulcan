@@ -14,11 +14,11 @@
 * Definition of HypothesisClassifier.
 */
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_classifier.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <hssh/local_topological/training/labeled_area_data.h>
-#include <hssh/local_topological/area_detection/labeling/type_distribution.h>
-#include <utils/timestamp.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_classifier.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "hssh/local_topological/training/labeled_area_data.h"
+#include "hssh/local_topological/area_detection/labeling/type_distribution.h"
+#include "utils/timestamp.h"
 
 // #define DEBUG_LIKELIHOODS
 

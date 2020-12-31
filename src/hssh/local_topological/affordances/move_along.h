@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_MOVE_ALONG_H
 #define HSSH_LOCAL_TOPOLOGICAL_AFFORDANCES_MOVE_ALONG_H
 
-#include <hssh/local_topological/affordance.h>
-#include <hssh/types.h>
+#include "hssh/local_topological/affordance.h"
+#include "hssh/types.h"
 #include <cereal/types/base_class.hpp>
 
 namespace vulcan

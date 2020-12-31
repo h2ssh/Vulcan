@@ -15,8 +15,8 @@
 */
 
 
-#include <hssh/metrical/localization/kld_sample_size_calculator.h>
-#include <core/angle_functions.h>
+#include "hssh/metrical/localization/kld_sample_size_calculator.h"
+#include "core/angle_functions.h"
 #include <boost/algorithm/clamp.hpp>
 #include <iostream>
 

@@ -17,8 +17,8 @@
 #ifndef HSSH_UTILS_METRICAL_RELOCALIZATION_DEBUG_INFO_H
 #define HSSH_UTILS_METRICAL_RELOCALIZATION_DEBUG_INFO_H
 
-#include <core/pose_distribution.h>
-#include <hssh/metrical/localization/debug_info.h>
+#include "core/pose_distribution.h"
+#include "hssh/metrical/localization/debug_info.h"
 
 namespace vulcan
 {

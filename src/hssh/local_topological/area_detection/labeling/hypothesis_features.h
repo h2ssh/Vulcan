@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_HYPOTHESIS_FEATURES_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_HYPOTHESIS_FEATURES_H
 
-#include <core/matrix.h>
-#include <core/vector.h>
+#include "core/matrix.h"
+#include "core/vector.h"
 #include <memory>
 
 namespace vulcan

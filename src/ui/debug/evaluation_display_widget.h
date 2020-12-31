@@ -17,9 +17,9 @@
 #ifndef UI_DEBUG_EVALUATION_WIDGET_H
 #define UI_DEBUG_EVALUATION_WIDGET_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <hssh/local_topological/evaluation/stability_analyzer.h>
-#include <utils/pose_trace.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "hssh/local_topological/evaluation/stability_analyzer.h"
+#include "utils/pose_trace.h"
 #include <memory>
 
 namespace vulcan

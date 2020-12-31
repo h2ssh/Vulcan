@@ -22,7 +22,7 @@ namespace vulcan
 namespace ui
 {
 
-#include <ui/common/ui_panel.h>
+#include "ui/common/ui_panel.h"
 
 /**
 * WheelchairPanel

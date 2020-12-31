@@ -17,12 +17,12 @@
 #ifndef MPEPC_MANIFOLDS_NAVIGATION_H
 #define MPEPC_MANIFOLDS_NAVIGATION_H
 
-#include <mpepc/cost/social_cost.h>
-#include <mpepc/manifold/task_manifold.h>
-#include <mpepc/grid/navigation_grid.h>
-#include <mpepc/grid/navigation_grid_builder.h>
-#include <mpepc/metric_planner/task/params.h>
-#include <hssh/local_topological/local_topo_route.h>
+#include "mpepc/cost/social_cost.h"
+#include "mpepc/manifold/task_manifold.h"
+#include "mpepc/grid/navigation_grid.h"
+#include "mpepc/grid/navigation_grid_builder.h"
+#include "mpepc/metric_planner/task/params.h"
+#include "hssh/local_topological/local_topo_route.h"
 
 namespace vulcan
 {

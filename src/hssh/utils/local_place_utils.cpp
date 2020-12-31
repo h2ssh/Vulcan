@@ -16,8 +16,8 @@
 *   LocalPlace rotate_local_place(LocalPlace, theta)
 */
 
-#include <hssh/utils/local_place_utils.h>
-#include <hssh/local_topological/local_place.h>
+#include "hssh/utils/local_place_utils.h"
+#include "hssh/local_topological/local_place.h"
 
 namespace vulcan
 {

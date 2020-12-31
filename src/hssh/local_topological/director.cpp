@@ -14,21 +14,21 @@
 * Definition of LocalTopologyDirector.
 */
 
-#include <hssh/local_topological/director.h>
-#include <hssh/local_topological/command.h>
-#include <hssh/local_topological/location.h>
-#include <hssh/local_topological/debug_info.h>
-#include <hssh/local_topological/params.h>
-#include <hssh/local_topological/small_scale_space_boundary.h>
-#include <core/pose_distribution.h>
-#include <utils/auto_mutex.h>
-#include <utils/command_line.h>
-#include <utils/serialized_file_io.h>
-#include <utils/timestamp.h>
-#include <hssh/local_metric/commands/truncate_lpm.h>
-#include <system/debug_communicator.h>
-#include <system/module_communicator.h>
-#include <utils/config_file.h>
+#include "hssh/local_topological/director.h"
+#include "hssh/local_topological/command.h"
+#include "hssh/local_topological/location.h"
+#include "hssh/local_topological/debug_info.h"
+#include "hssh/local_topological/params.h"
+#include "hssh/local_topological/small_scale_space_boundary.h"
+#include "core/pose_distribution.h"
+#include "utils/auto_mutex.h"
+#include "utils/command_line.h"
+#include "utils/serialized_file_io.h"
+#include "utils/timestamp.h"
+#include "hssh/local_metric/commands/truncate_lpm.h"
+#include "system/debug_communicator.h"
+#include "system/module_communicator.h"
+#include "utils/config_file.h"
 #include <iostream>
 
 #define DEBUG_TIMING

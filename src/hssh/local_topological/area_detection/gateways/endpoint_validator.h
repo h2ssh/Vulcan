@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ENDPOINT_VALIDATOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ENDPOINT_VALIDATOR_H
 
-#include <hssh/local_topological/area_detection/voronoi/frontiers_set.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/area_detection/voronoi/frontiers_set.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/params.h"
 
 namespace vulcan
 {

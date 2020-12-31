@@ -14,14 +14,14 @@
 * Definition of ClassifierBasedGenerator.
 */
 
-#include <hssh/local_topological/area_detection/gateways/classifier_based_generator.h>
-#include <hssh/local_topological/area_detection/gateways/feature_extraction.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_edges.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/params.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
+#include "hssh/local_topological/area_detection/gateways/classifier_based_generator.h"
+#include "hssh/local_topological/area_detection/gateways/feature_extraction.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/params.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 
 namespace vulcan
 {

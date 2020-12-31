@@ -19,8 +19,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_TRANSITION_CYCLE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_TRANSITION_CYCLE_H
 
-#include <hssh/global_topological/transition.h>
-#include <hssh/local_topological/small_scale_star.h>
+#include "hssh/global_topological/transition.h"
+#include "hssh/local_topological/small_scale_star.h"
 #include <cereal/access.hpp>
 #include <iosfwd>
 

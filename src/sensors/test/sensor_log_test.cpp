@@ -14,7 +14,7 @@
 * sensor_log_test is a test program that loads the requested log file and outputs how much data was found inside.
 */
 
-#include <sensors/sensor_log.h>
+#include "sensors/sensor_log.h"
 #include <gtest/gtest.h>
 #include <iostream>
 #include <string>

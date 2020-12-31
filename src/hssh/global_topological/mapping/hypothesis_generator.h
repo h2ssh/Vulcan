@@ -17,9 +17,9 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_H
 
-#include <hssh/global_topological/localization/location_distribution.h>
-#include <hssh/global_topological/utils/visit.h>
-#include <hssh/global_topological/state.h>
+#include "hssh/global_topological/localization/location_distribution.h"
+#include "hssh/global_topological/utils/visit.h"
+#include "hssh/global_topological/state.h"
 #include <vector>
 
 namespace vulcan

@@ -18,7 +18,7 @@
 #ifndef TRACKER_TRACKING_NEAREST_NEIGHBOR_ASSOCIATION_H
 #define TRACKER_TRACKING_NEAREST_NEIGHBOR_ASSOCIATION_H
 
-#include <tracker/tracking/data_association.h>
+#include "tracker/tracking/data_association.h"
 
 namespace vulcan
 {

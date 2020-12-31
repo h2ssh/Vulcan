@@ -18,8 +18,8 @@
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_TREE_EXPLORATION_MAPPER_H
 
 #include <string>
-#include <hssh/global_topological/global_topo_data.h>
-#include <hssh/global_topological/mapping/topological_mapper.h>
+#include "hssh/global_topological/global_topo_data.h"
+#include "hssh/global_topological/mapping/topological_mapper.h"
 
 namespace vulcan
 {

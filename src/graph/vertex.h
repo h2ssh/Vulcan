@@ -18,7 +18,7 @@
 #ifndef GRAPH_VERTEX_H
 #define GRAPH_VERTEX_H
 
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

@@ -8,7 +8,7 @@
 
 
 #include <cassert>
-#include <lcmtypes/common/matrix_t.h>
+#include "lcmtypes/common/matrix_t.h"
 
 
 void vulcan::lcm::allocate_lcm_matrix(vulcan_lcm_matrix_t& matrix, int numRows, int numColumns)

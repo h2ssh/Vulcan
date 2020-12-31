@@ -16,8 +16,8 @@
 #ifndef MPEPC_KINEMATIC_CONTROL_LAW_H
 #define MPEPC_KINEMATIC_CONTROL_LAW_H
 
-#include <mpepc/control/control_law_coordinates.h>
-#include <mpepc/control/params.h>
+#include "mpepc/control/control_law_coordinates.h"
+#include "mpepc/control/params.h"
 
 /*
 * More on the controller implementation:

@@ -14,8 +14,8 @@
 * Definition of functions for creating the params structs from a ConfigFile.
 */
 
-#include <simulator/topo/params.h>
-#include <utils/config_file.h>
+#include "simulator/topo/params.h"
+#include "utils/config_file.h"
 
 namespace vulcan
 {

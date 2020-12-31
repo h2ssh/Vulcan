@@ -14,8 +14,8 @@
 * Definition of RelocalizeInLpmCommand.
 */
 
-#include <hssh/local_metric/commands/relocalize_in_lpm.h>
-#include <hssh/metrical/relocalization/metric_relocalizer.h>
+#include "hssh/local_metric/commands/relocalize_in_lpm.h"
+#include "hssh/metrical/relocalization/metric_relocalizer.h"
 
 namespace vulcan
 {

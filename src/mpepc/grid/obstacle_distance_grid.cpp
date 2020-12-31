@@ -14,8 +14,8 @@
 * Definition of ObstacleDistanceGrid and ObstacleDistanceGridBuilder.
 */
 
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <math/interpolation.h>
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "math/interpolation.h"
 
 #define DEBUG_OBSTACLE_DISTANCE_GRID
 

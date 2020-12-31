@@ -14,11 +14,11 @@
  * Definition of WaypointFollower.
  */
 
-#include <mpepc/motion_controller/waypoint_follower/waypoint_follower.h>
-#include <core/motion_state.h>
-#include <robot/commands.h>
-#include <core/angle_functions.h>
-#include <utils/timestamp.h>
+#include "mpepc/motion_controller/waypoint_follower/waypoint_follower.h"
+#include "core/motion_state.h"
+#include "robot/commands.h"
+#include "core/angle_functions.h"
+#include "utils/timestamp.h"
 #include <iostream>
 #include <cassert>
 

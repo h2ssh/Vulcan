@@ -17,7 +17,7 @@
 #ifndef PLANNER_INTERFACE_DECISION_ACTION_H
 #define PLANNER_INTERFACE_DECISION_ACTION_H
 
-#include <planner/interface/decision.h>
+#include "planner/interface/decision.h"
 #include <memory>
 
 namespace vulcan

@@ -18,7 +18,7 @@
 */
 
 
-#include <math/geometry/shape_intersection_area.h>
+#include "math/geometry/shape_intersection_area.h"
 #include <cassert>
 
 namespace vulcan 

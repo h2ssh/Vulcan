@@ -17,9 +17,9 @@
 *   - GatewayErrors
 */
 
-#include <hssh/local_topological/training/gateway_errors.h>
-#include <hssh/local_topological/training/labeled_gateway_data.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_edges.h>
+#include "hssh/local_topological/training/gateway_errors.h"
+#include "hssh/local_topological/training/labeled_gateway_data.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
 
 namespace vulcan 
 {

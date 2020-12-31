@@ -17,8 +17,8 @@
 #ifndef CONTROL_ROBOT_CONTROLLER_SAFE_STOP_CHECKER_H
 #define CONTROL_ROBOT_CONTROLLER_SAFE_STOP_CHECKER_H
 
-#include <robot/motion_checker.h>
-#include <robot/params.h>
+#include "robot/motion_checker.h"
+#include "robot/params.h"
 
 namespace vulcan
 {

@@ -14,9 +14,9 @@
 * Definition of VoronoiGraphBuilder.
 */
 
-#include <hssh/local_topological/area_detection/voronoi_graph_builder.h>
-#include <hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h>
-#include <hssh/local_topological/area_detection/voronoi/frontiers_set.h>
+#include "hssh/local_topological/area_detection/voronoi_graph_builder.h"
+#include "hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h"
+#include "hssh/local_topological/area_detection/voronoi/frontiers_set.h"
 
 namespace vulcan
 {

@@ -14,7 +14,7 @@
 * Definition of GoalInterface.
 */
 
-#include <planner/interface/goal_interface.h>
+#include "planner/interface/goal_interface.h"
 #include <iostream>
 #include <iterator>
 

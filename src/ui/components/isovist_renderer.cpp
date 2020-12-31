@@ -14,10 +14,10 @@
 * Implementation of IsovistRenderer.
 */
 
-#include <ui/components/isovist_renderer.h>
-#include <ui/common/default_colors.h>
-#include <utils/histogram.h>
-#include <math/geometry/convex_hull.h>
+#include "ui/components/isovist_renderer.h"
+#include "ui/common/default_colors.h"
+#include "utils/histogram.h"
+#include "math/geometry/convex_hull.h"
 #include <GL/gl.h>
 #include <algorithm>
 

@@ -7,8 +7,8 @@
 */
 
 
-#include <vision/navtexture/navtexture_params.h>
-#include <utils/config_file.h>
+#include "vision/navtexture/navtexture_params.h"
+#include "utils/config_file.h"
 
 namespace vulcan
 {

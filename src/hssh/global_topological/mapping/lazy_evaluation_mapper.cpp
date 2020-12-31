@@ -14,10 +14,10 @@
 * Definition of LazyEvaluationMapper.
 */
 
-#include <hssh/global_topological/mapping/lazy_evaluation_mapper.h>
-#include <hssh/global_topological/mapping/localizer.h>
-#include <hssh/global_topological/mapping/map_optimizer.h>
-#include <utils/timestamp.h>
+#include "hssh/global_topological/mapping/lazy_evaluation_mapper.h"
+#include "hssh/global_topological/mapping/localizer.h"
+#include "hssh/global_topological/mapping/map_optimizer.h"
+#include "utils/timestamp.h"
 #include <algorithm>
 #include <iostream>
 #include <cassert>

@@ -14,7 +14,7 @@
 * Unit tests for ensuring proper functionality of LabeledAreaData.
 */
 
-#include <hssh/local_topological/training/labeled_area_data.h>
+#include "hssh/local_topological/training/labeled_area_data.h"
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <sstream>

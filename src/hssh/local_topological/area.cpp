@@ -14,8 +14,8 @@
 * Definition of constructors and methods in the LocalArea class hierarchy.
 */
 
-#include <hssh/local_topological/area.h>
-#include <utils/pose_trace.h>
+#include "hssh/local_topological/area.h"
+#include "utils/pose_trace.h"
 #include <algorithm>
 #include <sstream>
 

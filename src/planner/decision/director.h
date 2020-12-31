@@ -18,12 +18,12 @@
 #define PLANNER_DECISION_DIRECTOR_H
 
 #include <vector>
-#include <system/director.h>
-#include <utils/condition_variable.h>
-#include <utils/mutex.h>
-#include <planner/decision/planner.h>
-#include <planner/decision/state.h>
-#include <planner/decision/params.h>
+#include "system/director.h"
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
+#include "planner/decision/planner.h"
+#include "planner/decision/state.h"
+#include "planner/decision/params.h"
 
 namespace vulcan
 {

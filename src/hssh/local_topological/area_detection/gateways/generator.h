@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_MAXIMUM_GATEWAY_GENERATOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_MAXIMUM_GATEWAY_GENERATOR_H
 
-#include <hssh/local_topological/area_detection/gateways/weighted_gateway.h>
+#include "hssh/local_topological/area_detection/gateways/weighted_gateway.h"
 #include <memory>
 #include <string>
 #include <vector>

@@ -20,8 +20,8 @@
 #ifndef MATH_GEOMETRY_SHAPE_INTERSECTION_AREA_H
 #define MATH_GEOMETRY_SHAPE_INTERSECTION_AREA_H
 
-#include <math/geometry/circle.h>
-#include <math/geometry/rectangle.h>
+#include "math/geometry/circle.h"
+#include "math/geometry/rectangle.h"
 
 namespace vulcan
 {

@@ -20,7 +20,7 @@
 #ifndef MPEPC_COSTS_SOCIAL_NORM_UTILS_H
 #define MPEPC_COSTS_SOCIAL_NORM_UTILS_H
 
-#include <hssh/types.h>
+#include "hssh/types.h"
 
 namespace vulcan
 {

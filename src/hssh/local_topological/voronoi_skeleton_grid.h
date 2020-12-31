@@ -17,11 +17,11 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_VORONOI_SKELETON_GRID_H
 #define HSSH_LOCAL_TOPOLOGICAL_VORONOI_SKELETON_GRID_H
 
-// #include <utils/tiled_cell_grid.h>
-#include <hssh/types.h>
-#include <utils/cell_grid.h>
-#include <core/pose.h>
-#include <system/message_traits.h>
+// #include "utils/tiled_cell_grid.h"
+#include "hssh/types.h"
+#include "utils/cell_grid.h"
+#include "core/pose.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/set.hpp>

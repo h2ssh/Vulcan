@@ -14,13 +14,13 @@
 * Definition of DecisionInterface.
 */
 
-#include <planner/interface/decision_interface.h>
-#include <hssh/local_topological/areas/decision_point.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/local_topological/areas/destination.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/location.h>
-#include <utils/stub.h>
+#include "planner/interface/decision_interface.h"
+#include "hssh/local_topological/areas/decision_point.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/areas/destination.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/location.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

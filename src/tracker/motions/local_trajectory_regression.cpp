@@ -14,8 +14,8 @@
 * Definition of LocalTrajectoryRegression.
 */
 
-#include <tracker/motions/local_trajectory_regression.h>
-#include <utils/timestamp.h>
+#include "tracker/motions/local_trajectory_regression.h"
+#include "utils/timestamp.h"
 #include <cassert>
 #include <cmath>
 #include <iostream>

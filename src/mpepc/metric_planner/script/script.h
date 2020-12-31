@@ -17,8 +17,8 @@
 #ifndef MPEPC_METRIC_PLANNER_SCRIPT_H
 #define MPEPC_METRIC_PLANNER_SCRIPT_H
 
-#include <mpepc/metric_planner/script/script_task.h>
-#include <system/message_traits.h>
+#include "mpepc/metric_planner/script/script_task.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <memory>
 #include <string>

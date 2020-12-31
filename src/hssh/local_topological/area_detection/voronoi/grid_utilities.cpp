@@ -14,10 +14,10 @@
 * Definition of trace_ray_to_cell.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/island_detector.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/voronoi/grid_utilities.h>
-#include <core/angle_functions.h>
+#include "hssh/local_topological/area_detection/voronoi/island_detector.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/voronoi/grid_utilities.h"
+#include "core/angle_functions.h"
 
 namespace vulcan
 {

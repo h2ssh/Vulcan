@@ -18,10 +18,10 @@
 #ifndef SENSORS_PHIDGET_ENCODER_BOARD_H
 #define SENSORS_PHIDGET_ENCODER_BOARD_H
 
-#include <sensors/wheel_encoders.h>
-#include <utils/condition_variable.h>
-#include <utils/mutex.h>
-#include <utils/sensor_time.h>
+#include "sensors/wheel_encoders.h"
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
+#include "utils/sensor_time.h"
 #include <phidget21.h>
 
 namespace vulcan

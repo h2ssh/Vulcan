@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_GRID_UTILITIES_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_GRID_UTILITIES_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <cstdint>
 #include <vector>
 

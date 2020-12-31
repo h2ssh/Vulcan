@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENT_DETECTOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENT_DETECTOR_H
 
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/event.h>
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/event.h"
 #include <vector>
 
 namespace vulcan

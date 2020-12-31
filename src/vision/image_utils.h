@@ -11,7 +11,7 @@
 #define SENSORS_VISION_IMAGE_UTILS_H
 
 #include <string>
-#include <core/image.h>
+#include "core/image.h"
 
 namespace vulcan
 {

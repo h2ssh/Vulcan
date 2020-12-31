@@ -18,7 +18,7 @@
 #ifndef CALIBRATION_LASER_PITCH_CALIBRATION_H
 #define CALIBRATION_LASER_PITCH_CALIBRATION_H
 
-#include <core/laser_scan.h>
+#include "core/laser_scan.h"
 #include <vector>
 
 namespace vulcan

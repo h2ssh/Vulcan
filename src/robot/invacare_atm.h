@@ -19,10 +19,10 @@
 #ifndef ROBOT_INVACARE_ATM_H
 #define ROBOT_INVACARE_ATM_H
 
-#include <robot/wheelchair.h>
+#include "robot/wheelchair.h"
 #include <sys/select.h>
-#include <utils/serial.h>
-#include <utils/mutex.h>
+#include "utils/serial.h"
+#include "utils/mutex.h"
 
 namespace vulcan
 {

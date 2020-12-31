@@ -18,7 +18,7 @@
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_H
 
 #include <cstdint>
-#include <math/graph/graph.h>
+#include "math/graph/graph.h"
 
 namespace vulcan
 {

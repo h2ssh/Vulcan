@@ -14,15 +14,15 @@
 * Definition of DiscreteBeamModel.
 */
 
-#include <hssh/metrical/localization/discrete_beam_model.h>
-#include <hssh/metrical/localization/params.h>
-#include <hssh/metrical/localization/particle.h>
-#include <hssh/metrical/localization/scan_weighting.h>
-#include <hssh/metrical/occupancy_grid.h>
-#include <laser/laser_scan_lines.h>
-#include <laser/moving_laser_scan.h>
-#include <utils/cell_grid_utils.h>
-#include <utils/ray_tracing.h>
+#include "hssh/metrical/localization/discrete_beam_model.h"
+#include "hssh/metrical/localization/params.h"
+#include "hssh/metrical/localization/particle.h"
+#include "hssh/metrical/localization/scan_weighting.h"
+#include "hssh/metrical/occupancy_grid.h"
+#include "laser/laser_scan_lines.h"
+#include "laser/moving_laser_scan.h"
+#include "utils/cell_grid_utils.h"
+#include "utils/ray_tracing.h"
 #include <cassert>
 
 namespace vulcan

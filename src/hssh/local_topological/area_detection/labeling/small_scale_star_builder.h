@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_STAR_BUILDER_H
 #define HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_STAR_BUILDER_H
 
-#include <math/geometry/rectangle.h>
+#include "math/geometry/rectangle.h"
 #include <memory>
 #include <vector>
 

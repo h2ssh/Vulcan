@@ -22,9 +22,9 @@
 #ifndef UTILS_RAY_TRACING_H
 #define UTILS_RAY_TRACING_H
 
-#include <utils/cell_grid_utils.h>
-#include <core/line.h>
-#include <core/point.h>
+#include "utils/cell_grid_utils.h"
+#include "core/line.h"
+#include "core/point.h"
 #include <boost/algorithm/clamp.hpp>
 #include <array>
 #include <cmath>

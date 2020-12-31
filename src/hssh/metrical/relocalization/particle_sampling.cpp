@@ -17,8 +17,8 @@
 *   - generate_random_samples_at_position
 */
 
-#include <hssh/metrical/relocalization/particle_sampling.h>
-#include <hssh/metrical/localization/particle.h>
+#include "hssh/metrical/relocalization/particle_sampling.h"
+#include "hssh/metrical/localization/particle.h"
 
 namespace vulcan
 {

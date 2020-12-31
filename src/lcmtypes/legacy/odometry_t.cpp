@@ -7,10 +7,10 @@
 */
 
 
-#include <lcmtypes/legacy/odometry_t.h>
-#include <core/odometry.h>
-#include <lcmtypes/subscription_manager.h>
-#include <lcmtypes/message_helpers.h>
+#include "lcmtypes/legacy/odometry_t.h"
+#include "core/odometry.h"
+#include "lcmtypes/subscription_manager.h"
+#include "lcmtypes/message_helpers.h"
 
 static vulcan::lcm::SubscriptionManager<vulcan_lcm_odometry_t, vulcan::odometry_t> subscribers;
 

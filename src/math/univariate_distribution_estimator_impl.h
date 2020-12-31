@@ -24,7 +24,7 @@
 #ifndef MATH_UNIVARIATE_DISTRIBUTION_ESTIMATOR_IMPL_H
 #define MATH_UNIVARIATE_DISTRIBUTION_ESTIMATOR_IMPL_H
 
-#include <math/univariate_distribution_estimator.h>
+#include "math/univariate_distribution_estimator.h"
 
 namespace vulcan
 {

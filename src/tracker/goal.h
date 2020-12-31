@@ -17,8 +17,8 @@
 #ifndef TRACKER_GOAL_H
 #define TRACKER_GOAL_H
 
-#include <core/angle_functions.h>
-#include <core/line.h>
+#include "core/angle_functions.h"
+#include "core/line.h"
 #include <cereal/access.hpp>
 #include <cereal/types/boost_variant.hpp>
 #include <numeric>

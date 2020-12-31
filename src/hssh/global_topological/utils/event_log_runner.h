@@ -17,8 +17,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_UTILS_EVENT_LOG_RUNNER_H
 #define HSSH_GLOBAL_TOPOLOGICAL_UTILS_EVENT_LOG_RUNNER_H
 
-#include <hssh/local_metric/pose.h>
-#include <hssh/local_topological/event.h>
+#include "hssh/local_metric/pose.h"
+#include "hssh/local_topological/event.h"
 #include <vector>
 
 namespace vulcan

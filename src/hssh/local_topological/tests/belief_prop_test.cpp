@@ -7,8 +7,8 @@
 */
 
 
-#include <hssh/local_topological/area_detection/labeling/factor_graph.h>
-#include <hssh/local_topological/area_detection/labeling/belief_prop.h>
+#include "hssh/local_topological/area_detection/labeling/factor_graph.h"
+#include "hssh/local_topological/area_detection/labeling/belief_prop.h"
 
 using namespace vulcan::hssh;
 

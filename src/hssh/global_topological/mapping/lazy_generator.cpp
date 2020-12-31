@@ -14,8 +14,8 @@
 * Definition of LazyGenerator.
 */
 
-#include <hssh/global_topological/mapping/lazy_generator.h>
-#include <utils/stub.h>
+#include "hssh/global_topological/mapping/lazy_generator.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

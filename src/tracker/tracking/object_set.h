@@ -17,7 +17,7 @@
 #ifndef TRACKER_TRACKING_OBJECT_SET_H
 #define TRACKER_TRACKING_OBJECT_SET_H
 
-#include <tracker/tracking/object.h>
+#include "tracker/tracking/object.h"
 #include <boost/optional.hpp>
 #include <memory>
 #include <vector>

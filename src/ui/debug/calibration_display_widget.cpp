@@ -14,13 +14,13 @@
 * Implemenation of CalibrationDisplayWidget.
 */
 
-#include <ui/debug/calibration_display_widget.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/ui_params.h>
-#include <ui/components/laser_scan_renderer.h>
-#include <ui/components/corner_renderer.h>
-#include <core/laser_scan.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/calibration_display_widget.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/ui_params.h"
+#include "ui/components/laser_scan_renderer.h"
+#include "ui/components/corner_renderer.h"
+#include "core/laser_scan.h"
+#include "utils/auto_mutex.h"
 
 namespace vulcan
 {

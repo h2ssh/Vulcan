@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_METRIC_MAPPING_LASER_SCAN_RASTERIZER_H
 #define HSSH_LOCAL_METRIC_MAPPING_LASER_SCAN_RASTERIZER_H
 
-#include <core/point.h>
-#include <utils/tiled_cell_grid.h>
-#include <hssh/metrical/mapping/mapping_params.h>
+#include "core/point.h"
+#include "utils/tiled_cell_grid.h"
+#include "hssh/metrical/mapping/mapping_params.h"
 
 namespace vulcan
 {

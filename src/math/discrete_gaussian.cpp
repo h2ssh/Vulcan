@@ -14,7 +14,7 @@
 * Definition of DiscreteGaussianDistribution.
 */
 
-#include <math/discrete_gaussian.h>
+#include "math/discrete_gaussian.h"
 #include <cmath>
 #include <iostream>
 

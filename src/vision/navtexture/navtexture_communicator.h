@@ -10,8 +10,8 @@
 #ifndef SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_COMMUNICATOR_H
 #define SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_COMMUNICATOR_H
 
-#include <system/communicator.h>
-#include <vision/navtexture/navtexture_output_consumer.h>
+#include "system/communicator.h"
+#include "vision/navtexture/navtexture_output_consumer.h"
 
 namespace vulcan
 {

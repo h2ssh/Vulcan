@@ -17,7 +17,7 @@
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_DISCRETE_BEAM_MODEL_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_DISCRETE_BEAM_MODEL_H
 
-#include <hssh/metrical/localization/observation_model.h>
+#include "hssh/metrical/localization/observation_model.h"
 #include <vector>
 
 namespace vulcan

@@ -14,7 +14,7 @@
 * Definition of WheelchairTestRunner.
 */
 
-#include <calibration/wheelchair/wheelchair_test_runner.h>
+#include "calibration/wheelchair/wheelchair_test_runner.h"
 
 namespace vulcan
 {

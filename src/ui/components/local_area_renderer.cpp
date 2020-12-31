@@ -14,21 +14,21 @@
 * Definition of LocalAreaRenderer.
 */
 
-#include <ui/components/local_area_renderer.h>
-#include <ui/components/area_extent_renderer.h>
-#include <ui/components/gateways_renderer.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/components/small_scale_star_renderer.h>
-#include <ui/common/hssh_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/areas/decision_point.h>
-#include <hssh/local_topological/areas/destination.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/local_topological/area_detection/labeling/area_proposal.h>
-#include <hssh/local_topological/evaluation/heat_map.h>
+#include "ui/components/local_area_renderer.h"
+#include "ui/components/area_extent_renderer.h"
+#include "ui/components/gateways_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/small_scale_star_renderer.h"
+#include "ui/common/hssh_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/areas/decision_point.h"
+#include "hssh/local_topological/areas/destination.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/area_detection/labeling/area_proposal.h"
+#include "hssh/local_topological/evaluation/heat_map.h"
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/min.hpp>

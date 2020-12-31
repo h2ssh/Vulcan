@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTOR_H
 
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/error.h>
-#include <hssh/local_topological/event.h>
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/error.h"
+#include "hssh/local_topological/event.h"
 #include <boost/optional.hpp>
 #include <memory>
 #include <cassert>

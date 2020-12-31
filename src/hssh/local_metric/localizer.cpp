@@ -16,7 +16,7 @@
 
 #include <cassert>
 #include <iostream>
-#include <hssh/metrical/localization/localizer.h>
+#include "hssh/metrical/localization/localizer.h"
 
 namespace vulcan
 {

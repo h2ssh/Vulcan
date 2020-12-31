@@ -16,8 +16,8 @@
 * plane.
 */
 
-#include <mpepc/math/unicycle_chart.h>
-#include <core/angle_functions.h>
+#include "mpepc/math/unicycle_chart.h"
+#include "core/angle_functions.h"
 
 namespace vulcan
 {

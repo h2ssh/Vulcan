@@ -17,9 +17,9 @@
 #ifndef HSSH_AREA_DETECTION_LABELING_LABELED_AREA_DATA_H
 #define HSSH_AREA_DETECTION_LABELING_LABELED_AREA_DATA_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <hssh/local_topological/training/topo_training_data.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "hssh/local_topological/training/topo_training_data.h"
 
 namespace vulcan
 {

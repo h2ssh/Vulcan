@@ -14,9 +14,9 @@
 * Definition of Variable.
 */
 
-#include <hssh/local_topological/area_detection/labeling/variable.h>
-#include <hssh/local_topological/area_detection/labeling/factor_graph_utils.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/area_detection/labeling/variable.h"
+#include "hssh/local_topological/area_detection/labeling/factor_graph_utils.h"
+#include "utils/algorithm_ext.h"
 #include <cassert>
 
 // #define DEBUG_MSGS

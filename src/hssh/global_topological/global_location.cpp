@@ -14,7 +14,7 @@
 * Definition of constructors and operators for GlobalLocation.
 */
 
-#include <hssh/global_topological/global_location.h>
+#include "hssh/global_topological/global_location.h"
 #include <ostream>
 
 namespace vulcan

@@ -17,10 +17,10 @@
 #ifndef SIMULATOR_TOPO_TOPOLOGICAL_MAP_SIMULATOR_H
 #define SIMULATOR_TOPO_TOPOLOGICAL_MAP_SIMULATOR_H
 
-#include <simulator/topo/params.h>
-#include <hssh/global_topological/global_location.h>
-#include <hssh/global_topological/topological_map.h>
-#include <hssh/local_topological/local_topology_events.h>
+#include "simulator/topo/params.h"
+#include "hssh/global_topological/global_location.h"
+#include "hssh/global_topological/topological_map.h"
+#include "hssh/local_topological/local_topology_events.h"
 
 namespace vulcan
 {

@@ -14,14 +14,14 @@
  * Definition of MaxLikelihoodCSP.
  */
 
-#include <hssh/local_topological/area_detection/labeling/max_likelihood_csp.h>
-#include <hssh/local_topological/area_detection/labeling/mcmc_sampling.h>
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_graph.h>
-#include <hssh/local_topological/area_detection/labeling/small_scale_star_builder.h>
-#include <system/debug_communicator.h>
-#include <utils/algorithm_ext.h>
-#include <utils/serialized_file_io.h>
+#include "hssh/local_topological/area_detection/labeling/max_likelihood_csp.h"
+#include "hssh/local_topological/area_detection/labeling/mcmc_sampling.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_graph.h"
+#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
+#include "system/debug_communicator.h"
+#include "utils/algorithm_ext.h"
+#include "utils/serialized_file_io.h"
 #include <boost/range/iterator_range.hpp>
 #include <cassert>
 

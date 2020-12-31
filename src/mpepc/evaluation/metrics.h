@@ -18,7 +18,7 @@
 #ifndef MPEPC_EVALUATION_METRICS_H
 #define MPEPC_EVALUATION_METRICS_H
 
-#include <mpepc/evaluation/mpepc_log.h>
+#include "mpepc/evaluation/mpepc_log.h"
 
 namespace vulcan
 {

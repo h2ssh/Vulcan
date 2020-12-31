@@ -14,10 +14,10 @@
 * Definition of MPEPCLog.
 */
 
-#include <mpepc/evaluation/mpepc_log.h>
-#include <tracker/objects/serialization.h>
-#include <system/module_communicator.h>
-#include <utils/algorithm_ext.h>
+#include "mpepc/evaluation/mpepc_log.h"
+#include "tracker/objects/serialization.h"
+#include "system/module_communicator.h"
+#include "utils/algorithm_ext.h"
 #include <algorithm>
 #include <limits>
 #include <sstream>

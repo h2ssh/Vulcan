@@ -17,7 +17,7 @@
 #ifndef TRACKER_GOALS_BALLISTIC_ESTIMATOR_H
 #define TRACKER_GOALS_BALLISTIC_ESTIMATOR_H
 
-#include <tracker/goals/goal_estimator.h>
+#include "tracker/goals/goal_estimator.h"
 
 namespace vulcan
 {

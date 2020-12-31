@@ -14,8 +14,8 @@
 * Definition of GlobalTopoDataQueue.
 */
 
-#include <hssh/global_topological/utils/global_topo_data_queue.h>
-#include <utils/auto_mutex.h>
+#include "hssh/global_topological/utils/global_topo_data_queue.h"
+#include "utils/auto_mutex.h"
 
 namespace vulcan
 {

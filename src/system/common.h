@@ -24,17 +24,17 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/stream.hpp>
 
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 
 #include <boost/optional.hpp>
 
 #include <armadillo>
-//#include <lcmtypes/lcm_types.h>
+//#include "lcmtypes/lcm_types.h"
 
 
 
-// #include <core/point.h>
-// #include <core/line.h>
+// #include "core/point.h"
+// #include "core/line.h"
 
-// #include <math/geometry/rectangle.h>
-// #include <math/geometry/polygon.h>
+// #include "math/geometry/rectangle.h"
+// #include "math/geometry/polygon.h"

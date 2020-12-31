@@ -17,8 +17,8 @@
 #ifndef MATH_GEOMETRY_RECTANGLE_H
 #define MATH_GEOMETRY_RECTANGLE_H
 
-#include <math/geometry/shape.h>
-#include <core/line.h>
+#include "math/geometry/shape.h"
+#include "core/line.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

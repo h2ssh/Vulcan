@@ -10,8 +10,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_COMMAND_H
 #define HSSH_LOCAL_TOPOLOGICAL_COMMAND_H
 
-#include <hssh/local_topological/mode.h>
-#include <system/message_traits.h>
+#include "hssh/local_topological/mode.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>
 

@@ -15,10 +15,10 @@
 */
 
 #include <iostream>
-#include <logging/logplayer/log_player.h>
-#include <logging/logplayer/params.h>
-#include <utils/command_line.h>
-#include <utils/config_file.h>
+#include "logging/logplayer/log_player.h"
+#include "logging/logplayer/params.h"
+#include "utils/command_line.h"
+#include "utils/config_file.h"
 
 using namespace vulcan;
 

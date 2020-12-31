@@ -14,9 +14,9 @@
 * Definition of CellGridAlphaRenderer.
 */
 
-#include <ui/components/cell_grid_renderer.h>
-#include <ui/common/gl_texture_helpers.h>
-#include <utils/cell_grid.h>
+#include "ui/components/cell_grid_renderer.h"
+#include "ui/common/gl_texture_helpers.h"
+#include "utils/cell_grid.h"
 #include <cassert>
 #include <iostream>
 

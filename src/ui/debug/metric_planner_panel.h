@@ -19,10 +19,10 @@
 #define UI_DEBUG_METRIC_PLANNER_PANEL_H
 
 #include <wx/wx.h>
-#include <mpepc/control/control_law_coordinates.h>
-#include <ui/common/ui_forward_declarations.h>
-#include <ui/common/ui_params.h>
-#include <ui/common/ui_panel.h>
+#include "mpepc/control/control_law_coordinates.h"
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_params.h"
+#include "ui/common/ui_panel.h"
 #include <memory>
 
 namespace vulcan

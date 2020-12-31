@@ -17,7 +17,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_TREE_OF_MAPS_H
 #define HSSH_GLOBAL_TOPOLOGICAL_TREE_OF_MAPS_H
 
-#include <hssh/global_topological/topological_map_hypothesis.h>
+#include "hssh/global_topological/topological_map_hypothesis.h"
 #include <boost/shared_ptr.hpp>
 #include <set>
 

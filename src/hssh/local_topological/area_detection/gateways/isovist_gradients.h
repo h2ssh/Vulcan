@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_GRADIENTS_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_GRADIENTS_H
 
-#include <hssh/types.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_edges.h>
-#include <utils/isovist.h>
+#include "hssh/types.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include "utils/isovist.h"
 #include <memory>
 
 namespace vulcan

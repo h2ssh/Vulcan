@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_SPACE_BOUNDARY_H
 #define HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_SPACE_BOUNDARY_H
 
-#include <hssh/local_topological/event.h>
-#include <math/geometry/rectangle.h>
+#include "hssh/local_topological/event.h"
+#include "math/geometry/rectangle.h"
 #include <boost/optional.hpp>
 #include <memory>
 #include <string>

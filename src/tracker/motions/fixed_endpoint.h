@@ -17,8 +17,8 @@
 #ifndef TRACKER_MOTIONS_FIXED_ENDPOINT_MOTION_H
 #define TRACKER_MOTIONS_FIXED_ENDPOINT_MOTION_H
 
-#include <tracker/object_motion.h>
-#include <tracker/objects/fixed_object_model.h>
+#include "tracker/object_motion.h"
+#include "tracker/objects/fixed_object_model.h"
 
 namespace vulcan
 {

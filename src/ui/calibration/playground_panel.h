@@ -17,8 +17,8 @@
 #ifndef UI_CALIBRATION_PLAYGROUND_PANEL_H
 #define UI_CALIBRATION_PLAYGROUND_PANEL_H
 
-#include <ui/common/ui_panel.h>
-#include <ui/common/lpm_data_consumer.h>
+#include "ui/common/ui_panel.h"
+#include "ui/common/lpm_data_consumer.h"
 
 namespace vulcan
 {

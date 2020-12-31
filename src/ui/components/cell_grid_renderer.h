@@ -19,8 +19,8 @@
 #define UI_COMPONENTS_CELL_GRID_RENDERER_H
 
 #include <GL/gl.h>
-#include <core/point.h>
-#include <ui/common/ui_color.h>
+#include "core/point.h"
+#include "ui/common/ui_color.h"
 
 namespace vulcan
 {

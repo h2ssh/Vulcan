@@ -17,7 +17,7 @@
 #ifndef TRACKER_BOUNDARIES_CIRCLE_H
 #define TRACKER_BOUNDARIES_CIRCLE_H
 
-#include <tracker/boundaries/shapes.h>
+#include "tracker/boundaries/shapes.h"
 
 namespace vulcan
 {

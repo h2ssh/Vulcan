@@ -14,8 +14,8 @@
 * Definition of convert_map_to_graph.
 */
 
-#include <hssh/global_topological/graph.h>
-#include <hssh/global_topological/topological_map.h>
+#include "hssh/global_topological/graph.h"
+#include "hssh/global_topological/topological_map.h"
 #include <boost/range/adaptor/map.hpp>
 #include <cassert>
 

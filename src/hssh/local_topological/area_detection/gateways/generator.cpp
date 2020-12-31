@@ -14,11 +14,11 @@
 * Definition of create_gateway_generator factory.
 */
 
-#include <hssh/local_topological/area_detection/gateways/generator.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_orientation_gateway_generator.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_voronoi_gateway_generator.h>
-#include <hssh/local_topological/area_detection/gateways/classifier_based_generator.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/area_detection/gateways/generator.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_orientation_gateway_generator.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_voronoi_gateway_generator.h"
+#include "hssh/local_topological/area_detection/gateways/classifier_based_generator.h"
+#include "hssh/local_topological/params.h"
 
 namespace vulcan
 {

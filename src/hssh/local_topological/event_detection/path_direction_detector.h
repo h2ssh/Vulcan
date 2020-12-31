@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENTS_PATH_DIRECTION_DETECTOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENTS_PATH_DIRECTION_DETECTOR_H
 
-#include <hssh/local_topological/event_detection/area_event_detector.h>
-#include <hssh/local_topological/area_visitor.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/event_detection/area_event_detector.h"
+#include "hssh/local_topological/area_visitor.h"
+#include "hssh/local_topological/params.h"
 
 namespace vulcan
 {

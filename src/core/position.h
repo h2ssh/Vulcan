@@ -17,7 +17,7 @@
 #ifndef CORE_POSITION_H
 #define CORE_POSITION_H
 
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

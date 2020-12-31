@@ -11,7 +11,7 @@
 #define LCMTYPES_STATE_ELEVATOR_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_elevator_t.h>
+#include "lcmtypes/vulcan_lcm_elevator_t.h"
 
 namespace vulcan
 {

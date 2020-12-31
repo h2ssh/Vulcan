@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_POINT_ARRAY_T_H
 #define LCMTYPES_POINT_ARRAY_T_H
 
-#include <lcmtypes/vulcan_lcm_point_array_t.h>
-#include <core/point.h>
+#include "lcmtypes/vulcan_lcm_point_array_t.h"
+#include "core/point.h"
 #include <type_traits>
 #include <vector>
 

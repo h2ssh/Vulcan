@@ -11,8 +11,8 @@
 #define SENSORS_VISION_WASSENBERG_SEGMENTER_H
 
 #include <string>
-#include <vision/vision_params.h>
-#include <vision/graph_based_segmenter.h>
+#include "vision/vision_params.h"
+#include "vision/graph_based_segmenter.h"
 
 namespace vulcan
 {

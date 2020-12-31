@@ -17,10 +17,10 @@
 #ifndef UI_DEBUG_EXPLORATION_WIDGET_H
 #define UI_DEBUG_EXPLORATION_WIDGET_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <hssh/local_metric/lpm.h>
-#include <mpepc/trajectory/robot_trajectory_info.h>
-#include <planner/exploration/local_topo/exploration_map.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "hssh/local_metric/lpm.h"
+#include "mpepc/trajectory/robot_trajectory_info.h"
+#include "planner/exploration/local_topo/exploration_map.h"
 
 namespace vulcan
 {

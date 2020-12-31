@@ -17,7 +17,7 @@
 #ifndef UTILS_POSE_TRACE_H
 #define UTILS_POSE_TRACE_H
 
-#include <core/pose.h>
+#include "core/pose.h"
 #include <deque>
 
 namespace vulcan

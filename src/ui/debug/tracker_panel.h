@@ -17,7 +17,7 @@
 #ifndef UI_DEBUG_TRACKER_PANEL_H
 #define UI_DEBUG_TRACKER_PANEL_H
 
-#include <ui/common/ui_panel.h>
+#include "ui/common/ui_panel.h"
 #include <wx/wx.h>
 
 namespace vulcan

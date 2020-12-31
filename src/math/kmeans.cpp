@@ -14,7 +14,7 @@
 * Definition of kmeans_1d_linear.
 */
 
-#include <math/clustering.h>
+#include "math/clustering.h"
 #include <algorithm>
 #include <iomanip>
 #include <iostream>

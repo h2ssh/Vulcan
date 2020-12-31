@@ -14,9 +14,9 @@
 * Definition of topological_edit_distance function.
 */
 
-#include <hssh/local_topological/evaluation/topological_edit_distance.h>
-#include <hssh/local_topological/local_topo_route.h>
-#include <utils/edit_distance.h>
+#include "hssh/local_topological/evaluation/topological_edit_distance.h"
+#include "hssh/local_topological/local_topo_route.h"
+#include "utils/edit_distance.h"
 #include <sstream>
 
 namespace vulcan

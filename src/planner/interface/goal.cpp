@@ -14,7 +14,7 @@
 * Definition of Goal.
 */
 
-#include <planner/interface/goal.h>
+#include "planner/interface/goal.h"
 
 namespace vulcan
 {

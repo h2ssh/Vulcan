@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_ISOVIST_FIELD_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_ISOVIST_FIELD_H
 
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <utils/isovist.h>
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "utils/isovist.h"
 #include <memory>
 
 namespace vulcan

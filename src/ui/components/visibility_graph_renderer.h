@@ -17,9 +17,9 @@
 #ifndef UI_COMPONENTS_VISIBILITY_GRAPH_RENDERER_H
 #define UI_COMPONENTS_VISIBILITY_GRAPH_RENDERER_H
 
-#include <ui/common/color_interpolator.h>
-#include <ui/common/ui_color.h>
-#include <core/point.h>
+#include "ui/common/color_interpolator.h"
+#include "ui/common/ui_color.h"
+#include "core/point.h"
 
 namespace vulcan
 {

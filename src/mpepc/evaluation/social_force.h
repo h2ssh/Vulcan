@@ -25,9 +25,9 @@
 #ifndef MPEPC_EVALUATION_SOCIAL_FORCE_H
 #define MPEPC_EVALUATION_SOCIAL_FORCE_H
 
-#include <math/geometry/rectangle.h>
-#include <core/pose.h>
-#include <core/position.h>
+#include "math/geometry/rectangle.h"
+#include "core/pose.h"
+#include "core/position.h"
 #include <vector>
 
 namespace vulcan

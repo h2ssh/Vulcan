@@ -17,13 +17,13 @@
 *   - IsovistField
 */
 
-#include <utils/isovist.h>
-#include <math/covariance.h>
-#include <math/geometry/convex_hull.h>
-#include <math/moments_features.h>
-#include <math/trigonometry.h>
-#include <math/zernike_moments.h>
-#include <math/geometry/shape_fitting.h>
+#include "utils/isovist.h"
+#include "math/covariance.h"
+#include "math/geometry/convex_hull.h"
+#include "math/moments_features.h"
+#include "math/trigonometry.h"
+#include "math/zernike_moments.h"
+#include "math/geometry/shape_fitting.h"
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>

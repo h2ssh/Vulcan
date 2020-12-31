@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_GRAPH_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_GRAPH_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
 #include <vector>
 
 namespace vulcan

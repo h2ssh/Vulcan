@@ -14,14 +14,14 @@
 * Definition of ShrinkAndStretchBoundary.
 */
 
-#include <hssh/local_topological/boundary/shrink_and_stretch.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/pose.h>
-#include <math/geometry/shape_fitting.h>
-#include <utils/isovist.h>
+#include "hssh/local_topological/boundary/shrink_and_stretch.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/pose.h"
+#include "math/geometry/shape_fitting.h"
+#include "utils/isovist.h"
 
 namespace vulcan
 {

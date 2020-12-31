@@ -14,8 +14,8 @@
 * Definition of LegModel.
 */
 
-#include <tracker/objects/leg.h>
-#include <utils/timestamp.h>
+#include "tracker/objects/leg.h"
+#include "utils/timestamp.h"
 #include <limits>
 #include <cassert>
 

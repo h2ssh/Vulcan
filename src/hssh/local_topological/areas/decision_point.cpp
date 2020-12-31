@@ -14,8 +14,8 @@
 * Definition of LocalDecisionPoint.
 */
 
-#include <hssh/local_topological/areas/decision_point.h>
-#include <hssh/local_topological/area_visitor.h>
+#include "hssh/local_topological/areas/decision_point.h"
+#include "hssh/local_topological/area_visitor.h"
 #include <sstream>
 
 namespace vulcan 

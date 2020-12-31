@@ -14,8 +14,8 @@
 * Definition of the default color accessor functions.
 */
 
-#include <ui/common/default_colors.h>
-#include <ui/common/ui_color.h>
+#include "ui/common/default_colors.h"
+#include "ui/common/ui_color.h"
 
 namespace vulcan
 {

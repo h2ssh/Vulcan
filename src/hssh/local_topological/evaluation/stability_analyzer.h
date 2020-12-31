@@ -17,15 +17,15 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVALUATION_STABILITY_ANALYZER_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVALUATION_STABILITY_ANALYZER_H
 
-#include <hssh/types.h>
-#include <hssh/local_topological/evaluation/stability_log.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/event_visitor.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/small_scale_star.h>
-#include <math/geometry/polygon.h>
-#include <math/geometry/rectangle.h>
-#include <utils/pose_trace.h>
+#include "hssh/types.h"
+#include "hssh/local_topological/evaluation/stability_log.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/event_visitor.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/small_scale_star.h"
+#include "math/geometry/polygon.h"
+#include "math/geometry/rectangle.h"
+#include "utils/pose_trace.h"
 
 namespace vulcan
 {

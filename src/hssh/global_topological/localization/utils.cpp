@@ -17,8 +17,8 @@
 *   - apply_turn_around_events : finds the topological direction after all path events are applied
 */
 
-#include <hssh/global_topological/localization/utils.h>
-#include <hssh/global_topological/state.h>
+#include "hssh/global_topological/localization/utils.h"
+#include "hssh/global_topological/state.h"
 #include <boost/range/iterator_range.hpp>
 
 namespace vulcan

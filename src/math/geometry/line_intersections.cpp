@@ -22,8 +22,8 @@
 #include <map>
 #include <set>
 #include <algorithm>
-#include <core/float_comparison.h>
-#include <math/geometry/line_intersections.h>
+#include "core/float_comparison.h"
+#include "math/geometry/line_intersections.h"
 
 // #define DEBUG_INITIAL_EVENT_QUEUE
 // #define DEBUG_EVENT_QUEUE

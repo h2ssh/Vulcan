@@ -10,8 +10,8 @@
 #ifndef MATH_GEOMETRY_CONVEX_HULL_H
 #define MATH_GEOMETRY_CONVEX_HULL_H
 
-#include <math/geometry/polygon.h>
-#include <core/line.h>
+#include "math/geometry/polygon.h"
+#include "core/line.h"
 #include <algorithm>
 #include <vector>
 #include <cassert>

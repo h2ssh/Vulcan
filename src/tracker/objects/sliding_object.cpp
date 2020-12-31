@@ -14,10 +14,10 @@
 * Definition of SlidingObject.
 */
 
-#include <tracker/objects/sliding_object.h>
-#include <tracker/dynamic_object_visitor.h>
-#include <tracker/object_state.h>
-#include <utils/stub.h>
+#include "tracker/objects/sliding_object.h"
+#include "tracker/dynamic_object_visitor.h"
+#include "tracker/object_state.h"
+#include "utils/stub.h"
 #include <boost/range/iterator_range.hpp>
 
 namespace vulcan

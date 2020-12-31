@@ -17,7 +17,7 @@
 #ifndef PLANNER_GOAL_GOAL_TARGET_H
 #define PLANNER_GOAL_GOAL_TARGET_H
 
-#include <hssh/global_topological/global_place.h>
+#include "hssh/global_topological/global_place.h"
 #include <cstdint>
 
 namespace vulcan

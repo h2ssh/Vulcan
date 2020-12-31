@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_EXTENT_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_EXTENT_H
 
-#include <hssh/types.h>
-#include <math/geometry/polygon.h>
-#include <math/geometry/rectangle.h>
-#include <math/coordinates.h>
+#include "hssh/types.h"
+#include "math/geometry/polygon.h"
+#include "math/geometry/rectangle.h"
+#include "math/coordinates.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 #include <vector>

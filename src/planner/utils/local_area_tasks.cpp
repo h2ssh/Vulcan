@@ -16,9 +16,9 @@
 *   - create_navigation_task_for_local_area
 */
 
-#include <planner/utils/local_area_tasks.h>
-#include <hssh/local_topological/area.h>
-#include <mpepc/metric_planner/task/navigation.h>
+#include "planner/utils/local_area_tasks.h"
+#include "hssh/local_topological/area.h"
+#include "mpepc/metric_planner/task/navigation.h"
 
 namespace vulcan
 {

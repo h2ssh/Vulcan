@@ -17,9 +17,9 @@
 #ifndef MPEPC_PACING_TASK_H
 #define MPEPC_PACING_TASK_H
 
-#include <mpepc/metric_planner/task/task.h>
-#include <mpepc/metric_planner/task/params.h>
-#include <core/point.h>
+#include "mpepc/metric_planner/task/task.h"
+#include "mpepc/metric_planner/task/params.h"
+#include "core/point.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 

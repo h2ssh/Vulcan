@@ -11,7 +11,7 @@
 #define LCMTYPES_POSE_DISTRIBUTION_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_pose_distribution_t.h>
+#include "lcmtypes/vulcan_lcm_pose_distribution_t.h"
 
 namespace vulcan
 {

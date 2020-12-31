@@ -14,8 +14,8 @@
 * Definition of TopoMapDirector.
 */
 
-#include <simulator/topo/director.h>
-#include <simulator/topo/params.h>
+#include "simulator/topo/director.h"
+#include "simulator/topo/params.h"
 
 namespace vulcan
 {

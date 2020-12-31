@@ -14,11 +14,11 @@
 * Definition of DecisionAction.
 */
 
-#include <planner/interface/decision_action.h>
-#include <planner/interface/decision.h>
-#include <mpepc/metric_planner/task/navigation.h>
-#include <system/system_communicator.h>
-#include <utils/stub.h>
+#include "planner/interface/decision_action.h"
+#include "planner/interface/decision.h"
+#include "mpepc/metric_planner/task/navigation.h"
+#include "system/system_communicator.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

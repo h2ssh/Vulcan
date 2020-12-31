@@ -17,9 +17,9 @@
 #ifndef HSSH_METRICAL_MAPPING_GLASS_WALLS_H
 #define HSSH_METRICAL_MAPPING_GLASS_WALLS_H
 
-#include <hssh/types.h>
-#include <core/line.h>
-#include <core/point.h>
+#include "hssh/types.h"
+#include "core/line.h"
+#include "core/point.h"
 #include <vector>
 
 namespace vulcan

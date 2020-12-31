@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_SET_MAP_H
 #define HSSH_LOCAL_METRIC_COMMANDS_SET_MAP_H
 
-#include <hssh/local_metric/command.h>
-#include <hssh/local_metric/lpm.h>
+#include "hssh/local_metric/command.h"
+#include "hssh/local_metric/lpm.h"
 
 namespace vulcan
 {

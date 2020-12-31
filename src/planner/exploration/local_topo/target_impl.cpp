@@ -14,12 +14,12 @@
 * Definition of LocalAreaTarget and GatewayTarget subclasses of LocalTopoExplorationTarget.
 */
 
-#include <planner/exploration/local_topo/target_impl.h>
-#include <planner/utils/local_area_tasks.h>
-#include <hssh/local_topological/event.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <mpepc/metric_planner/task/navigation.h>
-#include <utils/stub.h>
+#include "planner/exploration/local_topo/target_impl.h"
+#include "planner/utils/local_area_tasks.h"
+#include "hssh/local_topological/event.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "mpepc/metric_planner/task/navigation.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

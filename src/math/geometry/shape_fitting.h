@@ -22,8 +22,8 @@
 #ifndef MATH_GEOMETRY_SHAPE_FITTING_H
 #define MATH_GEOMETRY_SHAPE_FITTING_H
 
-#include <math/geometry/circle.h>
-#include <math/geometry/rectangle.h>
+#include "math/geometry/circle.h"
+#include "math/geometry/rectangle.h"
 #include <algorithm>
 #include <cassert>
 

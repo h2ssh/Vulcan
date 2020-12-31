@@ -14,14 +14,14 @@
 * Definition of VisionDisplayWidget.
 */
 
-#include <ui/debug/vision_display_widget.h>
+#include "ui/debug/vision_display_widget.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <utils/auto_mutex.h>
-#include <core/point.h>
-#include <ui/common/gl_utilities.h>
-#include <ui/components/image_renderer.h>
-#include <ui/components/image_segment_renderer.h>
+#include "utils/auto_mutex.h"
+#include "core/point.h"
+#include "ui/common/gl_utilities.h"
+#include "ui/components/image_renderer.h"
+#include "ui/components/image_segment_renderer.h"
 
 namespace vulcan
 {

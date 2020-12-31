@@ -14,7 +14,7 @@
 * Definition of VoronoiSkeletonGrid.
 */
 
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 
 namespace vulcan
 {

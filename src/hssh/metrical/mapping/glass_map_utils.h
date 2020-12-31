@@ -21,9 +21,9 @@
 #ifndef HSSH_METRICAL_MAPPING_GLASS_MAP_UTILS_H
 #define HSSH_METRICAL_MAPPING_GLASS_MAP_UTILS_H
 
-#include <hssh/metrical/glass_map.h>
-#include <math/angle_range.h>
-#include <math/geometry/rectangle.h>
+#include "hssh/metrical/glass_map.h"
+#include "math/angle_range.h"
+#include "math/geometry/rectangle.h"
 #include <cmath>
 
 namespace vulcan

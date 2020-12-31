@@ -16,7 +16,7 @@
 * TODO: List functions here
 */
 
-#include <hssh/global_topological/mapping/large_scale_star_utils.h>
+#include "hssh/global_topological/mapping/large_scale_star_utils.h"
 
 namespace vulcan
 {

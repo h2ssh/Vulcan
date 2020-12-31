@@ -17,10 +17,10 @@
 #ifndef PLANNER_GOAL_GOAL_PLANNER_H
 #define PLANNER_GOAL_GOAL_PLANNER_H
 
-#include <planner/goal/goal_route.h>
-#include <planner/decision/decision_target_sequence.h>
-#include <hssh/global_topological/graph.h>
-#include <graph/path.h>
+#include "planner/goal/goal_route.h"
+#include "planner/decision/decision_target_sequence.h"
+#include "hssh/global_topological/graph.h"
+#include "graph/path.h"
 
 namespace vulcan
 {

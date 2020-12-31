@@ -14,7 +14,7 @@
 * Implementation of some simple unit tests for the HoughTransform class.
 */
 
-#include <utils/hough_transform.h>
+#include "utils/hough_transform.h"
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <iostream>

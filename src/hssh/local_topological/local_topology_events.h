@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPOLOGY_EVENTS_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPOLOGY_EVENTS_H
 
-#include <hssh/local_topological/local_place.h>
-#include <hssh/local_topological/lambda.h>
+#include "hssh/local_topological/local_place.h"
+#include "hssh/local_topological/lambda.h"
 
 namespace vulcan
 {

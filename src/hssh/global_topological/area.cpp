@@ -14,7 +14,7 @@
 * Definition of GlobalArea.
 */
 
-#include <hssh/global_topological/area.h>
+#include "hssh/global_topological/area.h"
 #include <ostream>
 
 namespace vulcan

@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_BUILDER_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_BUILDER_H
 
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/voronoi/island_detector.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/voronoi/island_detector.h"
+#include "hssh/local_topological/params.h"
 #include <memory>
 
 namespace vulcan

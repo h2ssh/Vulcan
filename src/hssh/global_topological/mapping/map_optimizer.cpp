@@ -14,8 +14,8 @@
 * Definition of create_map_optimizer factory.
 */
 
-#include <hssh/global_topological/mapping/map_optimizer.h>
-#include <hssh/global_topological/mapping/lev_mar_optimizer.h>
+#include "hssh/global_topological/mapping/map_optimizer.h"
+#include "hssh/global_topological/mapping/lev_mar_optimizer.h"
 #include <iostream>
 #include <cassert>
 

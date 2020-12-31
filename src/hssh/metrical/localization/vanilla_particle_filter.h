@@ -17,9 +17,9 @@
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_VANILLA_PARTICLE_FILTER_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_VANILLA_PARTICLE_FILTER_H
 
-#include <hssh/metrical/localization/particle_sampler.h>
-#include <hssh/metrical/localization/sample_set_distribution_calculator.h>
-#include <hssh/metrical/localization/particle.h>
+#include "hssh/metrical/localization/particle_sampler.h"
+#include "hssh/metrical/localization/sample_set_distribution_calculator.h"
+#include "hssh/metrical/localization/particle.h"
 
 namespace vulcan
 {

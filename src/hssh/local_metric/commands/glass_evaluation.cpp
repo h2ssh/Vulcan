@@ -14,10 +14,10 @@
 * Definition of GlassEvaluationCommand.
 */
 
-#include <hssh/local_metric/commands/glass_evaluation.h>
-#include <hssh/metrical/mapping/mapper.h>
-#include <utils/serialized_file_io.h>
-#include <utils/stub.h>
+#include "hssh/local_metric/commands/glass_evaluation.h"
+#include "hssh/metrical/mapping/mapper.h"
+#include "utils/serialized_file_io.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

@@ -14,9 +14,9 @@
 * Definition of calculate_transform_to_reference_place.
 */
 
-#include <core/conversions.h>
-#include <hssh/utils/local_place_transform.h>
-#include <hssh/local_topological/areas/place.h>
+#include "core/conversions.h"
+#include "hssh/utils/local_place_transform.h"
+#include "hssh/local_topological/areas/place.h"
 #include <iostream>
 
 // #define DEBUG_TRANSFORM

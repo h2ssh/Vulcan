@@ -14,8 +14,8 @@
 * Definition of rasterize_graph_onto_grid function.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph_rasterization.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_rasterization.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include <cstdlib>
 
 namespace vulcan

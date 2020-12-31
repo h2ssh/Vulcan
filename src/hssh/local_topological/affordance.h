@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AFFORDANCE_H
 #define HSSH_LOCAL_TOPOLOGICAL_AFFORDANCE_H
 
-#include <core/pose.h>
+#include "core/pose.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

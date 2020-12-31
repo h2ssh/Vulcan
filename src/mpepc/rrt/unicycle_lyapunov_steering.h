@@ -18,7 +18,7 @@
 #ifndef UNICYCLE_LYAPUNOV_STEERING_H
 #define UNICYCLE_LYAPUNOV_STEERING_H
 
-#include <core/pose.h>
+#include "core/pose.h"
 #include <vector>
 
 namespace vulcan

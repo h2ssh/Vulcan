@@ -11,7 +11,7 @@
 #define LCMTYPES_COMMANDED_VELOCITY_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_commanded_velocity_t.h>
+#include "lcmtypes/vulcan_lcm_commanded_velocity_t.h"
 
 namespace vulcan
 {

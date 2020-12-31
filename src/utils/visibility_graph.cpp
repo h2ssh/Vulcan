@@ -14,8 +14,8 @@
 * Definition of VisibilityGraph.
 */
 
-#include <utils/visibility_graph.h>
-#include <utils/algorithm_ext.h>
+#include "utils/visibility_graph.h"
+#include "utils/algorithm_ext.h"
 #include <boost/graph/betweenness_centrality.hpp>
 #include <boost/graph/closeness_centrality.hpp>
 #include <boost/graph/clustering_coefficient.hpp>

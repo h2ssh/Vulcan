@@ -17,9 +17,9 @@
 #ifndef UI_DEBUG_EXPLORATION_PANEL_H
 #define UI_DEBUG_EXPLORATION_PANEL_H
 
-#include <ui/common/ui_panel.h>
-#include <planner/exploration/local_topo/exploration_status.h>
-#include <utils/mutex.h>
+#include "ui/common/ui_panel.h"
+#include "planner/exploration/local_topo/exploration_status.h"
+#include "utils/mutex.h"
 #include <wx/wx.h>
 #include <memory>
 

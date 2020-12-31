@@ -17,9 +17,9 @@
 #ifndef UI_COMMON_GL_SHAPES_H
 #define UI_COMMON_GL_SHAPES_H
 
-#include <core/point.h>
-#include <math/mathfwd.h>
-#include <math/geometry/shapefwd.h>
+#include "core/point.h"
+#include "math/mathfwd.h"
+#include "math/geometry/shapefwd.h"
 #include <vector>
 
 

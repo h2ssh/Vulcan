@@ -14,9 +14,9 @@
 * Definition of obstacle_distance_cost.
 */
 
-#include <mpepc/cost/obstacle_cost.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <core/float_comparison.h>
+#include "mpepc/cost/obstacle_cost.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "core/float_comparison.h"
 #include <cassert>
 #include <cstdint>
 

@@ -14,11 +14,11 @@
 * Definition of create_robot_collision_model factory, RectangleCollisionModel, and CircleCollisionModel.
 */
 
-#include <mpepc/collision/robot_collision_model.h>
-#include <mpepc/collision/collision_detection.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <robot/model/params.h>
-#include <core/pose.h>
+#include "mpepc/collision/robot_collision_model.h"
+#include "mpepc/collision/collision_detection.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "robot/model/params.h"
+#include "core/pose.h"
 #include <cassert>
 
 // #define DEBUG_POLYGON

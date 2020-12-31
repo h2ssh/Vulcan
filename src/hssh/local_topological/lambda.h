@@ -19,7 +19,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LAMBDA_H
 #define HSSH_LOCAL_TOPOLOGICAL_LAMBDA_H
 
-#include <core/multivariate_gaussian.h>
+#include "core/multivariate_gaussian.h"
 #include <cereal/access.hpp>
 #include <ostream>
 

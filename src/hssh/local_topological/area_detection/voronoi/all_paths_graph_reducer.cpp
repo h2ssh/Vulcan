@@ -14,7 +14,7 @@
 * Definition of AllPathsGraphReducer.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/all_paths_graph_reducer.h>
+#include "hssh/local_topological/area_detection/voronoi/all_paths_graph_reducer.h"
 
 namespace vulcan
 {

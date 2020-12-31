@@ -14,8 +14,8 @@
 * Definition of GlobalTransitionSequence and SequencePosition.
 */
 
-#include <hssh/global_topological/transition_sequence.h>
-#include <utils/stub.h>
+#include "hssh/global_topological/transition_sequence.h"
+#include "utils/stub.h"
 #include <algorithm>
 
 namespace vulcan

@@ -17,11 +17,11 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_PLACE_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_PLACE_H
 
-#include <core/pose.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_topological/small_scale_star.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/place_extent.h>
+#include "core/pose.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_topological/small_scale_star.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/place_extent.h"
 
 namespace vulcan
 {

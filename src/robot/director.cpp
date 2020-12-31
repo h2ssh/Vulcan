@@ -14,15 +14,15 @@
 * Definition of RobotInterfaceDirector.
 */
 
-#include <robot/director.h>
-#include <robot/params.h>
-#include <robot/proximity_warning_indices.h>
-#include <robot/motion_checker.h>
-#include <robot/wheelchair.h>
-#include <robot/commands.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
-#include <utils/timestamp.h>
+#include "robot/director.h"
+#include "robot/params.h"
+#include "robot/proximity_warning_indices.h"
+#include "robot/motion_checker.h"
+#include "robot/wheelchair.h"
+#include "robot/commands.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
+#include "utils/timestamp.h"
 #include <iostream>
 
 // #define DEBUG_DIRECTOR_TIMING

@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_METRIC_MULTIFLOOR_FLOOR_H
 #define HSSH_LOCAL_METRIC_MULTIFLOOR_FLOOR_H
 
-#include <hssh/local_metric/lpm.h>
+#include "hssh/local_metric/lpm.h"
 #include <memory>
 #include <string>
 #include <vector>

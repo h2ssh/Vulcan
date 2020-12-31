@@ -14,10 +14,10 @@
 * Definition of Microstrain3DMGX3.
 */
 
-#include <sensors/microstrain_3dmgx3.h>
-#include <utils/auto_mutex.h>
-#include <utils/byte_conversion.h>
-#include <utils/timestamp.h>
+#include "sensors/microstrain_3dmgx3.h"
+#include "utils/auto_mutex.h"
+#include "utils/byte_conversion.h"
+#include "utils/timestamp.h"
 #include <cassert>
 #include <cmath>
 #include <iostream>

@@ -14,9 +14,9 @@
 * Definition of load_local_topology_params and associated ConfigFile processing functions.
 */
 
-#include <utils/config_file.h>
-#include <utils/config_file_utils.h>
-#include <hssh/local_topological/params.h>
+#include "utils/config_file.h"
+#include "utils/config_file_utils.h"
+#include "hssh/local_topological/params.h"
 #include <cassert>
 
 namespace vulcan

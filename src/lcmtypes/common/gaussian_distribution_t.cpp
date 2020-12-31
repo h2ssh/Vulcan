@@ -7,13 +7,13 @@
 */
 
 
-#include <lcmtypes/common/gaussian_distribution_t.h>
-#include <core/matrix.h>
-#include <core/vector.h>
-#include <core/multivariate_gaussian.h>
-#include <lcmtypes/subscription_manager.h>
-#include <lcmtypes/common/matrix_t.h>
-#include <lcmtypes/common/vector_t.h>
+#include "lcmtypes/common/gaussian_distribution_t.h"
+#include "core/matrix.h"
+#include "core/vector.h"
+#include "core/multivariate_gaussian.h"
+#include "lcmtypes/subscription_manager.h"
+#include "lcmtypes/common/matrix_t.h"
+#include "lcmtypes/common/vector_t.h"
 #include <cassert>
 
 

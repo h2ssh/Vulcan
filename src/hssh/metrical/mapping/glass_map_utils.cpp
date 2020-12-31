@@ -17,7 +17,7 @@
 *   - active_region_in_flat_map
 */
 
-#include <hssh/metrical/mapping/glass_map_utils.h>
+#include "hssh/metrical/mapping/glass_map_utils.h"
 #include <boost/algorithm/clamp.hpp>
 
 namespace vulcan

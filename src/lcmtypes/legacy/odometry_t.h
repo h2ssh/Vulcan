@@ -11,7 +11,7 @@
 #define LCMTYPES_SENSORS_ODOMETRY_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_odometry_t.h>
+#include "lcmtypes/vulcan_lcm_odometry_t.h"
 
 namespace vulcan
 {

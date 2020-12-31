@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_PLACE_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_PLACE_H
 
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/small_scale_star.h>
-#include <hssh/local_topological/affordances/transition.h>
-#include <hssh/local_metric/lpm.h>
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/small_scale_star.h"
+#include "hssh/local_topological/affordances/transition.h"
+#include "hssh/local_metric/lpm.h"
 #include <boost/optional.hpp>
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>

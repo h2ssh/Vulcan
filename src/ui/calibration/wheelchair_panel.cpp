@@ -14,7 +14,7 @@
 * Definition of WheelchairPanel.
 */
 
-#include <ui/calibration/wheelchair_panel.h>
+#include "ui/calibration/wheelchair_panel.h"
 
 namespace vulcan
 {

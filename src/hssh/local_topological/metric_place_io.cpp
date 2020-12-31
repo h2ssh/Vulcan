@@ -16,7 +16,7 @@
 
 #include <cassert>
 #include <iostream>
-#include <hssh/local_topological/metric_place_io.h>
+#include "hssh/local_topological/metric_place_io.h"
 
 namespace vulcan
 {

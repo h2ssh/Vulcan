@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_TYPE_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_HYPOTHESIS_TYPE_H
 
-#include <utils/enum_operators.h>
+#include "utils/enum_operators.h"
 #include <iosfwd>
 
 namespace vulcan

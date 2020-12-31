@@ -14,8 +14,8 @@
 * Definition of edit_distance function.
 */
 
-#include <utils/edit_distance.h>
-#include <utils/cell_grid.h>
+#include "utils/edit_distance.h"
+#include "utils/cell_grid.h"
 #include <iostream>
 #include <sstream>
 

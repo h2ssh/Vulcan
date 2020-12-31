@@ -14,13 +14,13 @@
 * Implementation of HypothesisGraph.
 */
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_graph.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <hssh/local_topological/area_extent.h>
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/area_proposal.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_graph.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/area_proposal.h"
 #include <boost/graph/connected_components.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <cassert>

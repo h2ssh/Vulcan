@@ -14,8 +14,8 @@
 * Definition of label_loops_and_trees function.
 */
 
-#include <hssh/local_topological/area_detection/labeling/loops_and_trees.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
+#include "hssh/local_topological/area_detection/labeling/loops_and_trees.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
 #include <boost/graph/exterior_property.hpp>
 #include <boost/graph/johnson_all_pairs_shortest.hpp>
 #include <boost/graph/breadth_first_search.hpp>

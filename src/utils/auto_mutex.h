@@ -10,7 +10,7 @@
 #ifndef UTILS_AUTO_MUTEX_H
 #define UTILS_AUTO_MUTEX_H
 
-#include <utils/mutex.h>
+#include "utils/mutex.h"
 
 namespace vulcan
 {

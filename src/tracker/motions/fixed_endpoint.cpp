@@ -14,10 +14,10 @@
 * Defintion of FixedEndpointMotion.
 */
 
-#include <tracker/motions/fixed_endpoint.h>
-#include <tracker/motions/visitor.h>
-#include <tracker/laser_object.h>
-#include <tracker/object_state.h>
+#include "tracker/motions/fixed_endpoint.h"
+#include "tracker/motions/visitor.h"
+#include "tracker/laser_object.h"
+#include "tracker/object_state.h"
 
 namespace vulcan
 {

@@ -17,7 +17,7 @@
 #ifndef HSSH_UTILS_LOCAL_PLACE_TRANSFORM_H
 #define HSSH_UTILS_LOCAL_PLACE_TRANSFORM_H
 
-#include <core/pose.h>
+#include "core/pose.h"
 
 namespace vulcan
 {

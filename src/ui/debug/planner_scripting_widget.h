@@ -17,10 +17,10 @@
 #ifndef UI_DEBUG_PLANNER_SCRIPTING_WIDGET_H
 #define UI_DEBUG_PLANNER_SCRIPTING_WIDGET_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <ui/common/ui_color.h>
-#include <mpepc/metric_planner/script/target_set.h>
-#include <utils/mutex.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "ui/common/ui_color.h"
+#include "mpepc/metric_planner/script/target_set.h"
+#include "utils/mutex.h"
 #include <memory>
 
 namespace vulcan

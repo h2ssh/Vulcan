@@ -17,9 +17,9 @@
 #ifndef GJK_SUPPORT_FUNCTIONS_H
 #define GJK_SUPPORT_FUNCTIONS_H
 
-#include <core/point.h>
-#include <core/line.h>
-#include <core/pose.h>
+#include "core/point.h"
+#include "core/line.h"
+#include "core/pose.h"
 #include <cmath>
 
 namespace vulcan

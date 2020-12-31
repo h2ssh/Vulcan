@@ -14,10 +14,10 @@
 * Definition of TrackerPanel.
 */
 
-#include <ui/debug/tracker_panel.h>
-#include <ui/debug/debug_ui.h>
-#include <ui/debug/tracker_display_widget.h>
-#include <system/module_communicator.h>
+#include "ui/debug/tracker_panel.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/tracker_display_widget.h"
+#include "system/module_communicator.h"
 #include <cassert>
 
 namespace vulcan

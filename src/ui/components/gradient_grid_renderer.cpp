@@ -14,8 +14,8 @@
 * Definition of GradientGridRenderer.
 */
 
-#include <utils/cell_grid.h>
-#include <ui/components/gradient_grid_renderer.h>
+#include "utils/cell_grid.h"
+#include "ui/components/gradient_grid_renderer.h"
 
 namespace vulcan
 {

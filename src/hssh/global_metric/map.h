@@ -17,8 +17,8 @@
 #ifndef HSSH_GLOBAL_METRIC_MAP_H
 #define HSSH_GLOBAL_METRIC_MAP_H
 
-#include <hssh/metrical/occupancy_grid.h>
-#include <system/message_traits.h>
+#include "hssh/metrical/occupancy_grid.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/string.hpp>

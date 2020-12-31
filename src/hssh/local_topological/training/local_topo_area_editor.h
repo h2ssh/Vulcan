@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_AREA_EDITOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_AREA_EDITOR_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/gateways/feature_extraction.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/local_topo_map.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/gateways/feature_extraction.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include <boost/optional.hpp>
 #include <memory>
 #include <vector>

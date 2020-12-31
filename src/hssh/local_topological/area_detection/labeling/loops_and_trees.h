@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_PARSING_LOOPS_AND_TREES_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_PARSING_LOOPS_AND_TREES_H
 
-#include <utils/algorithm_ext.h>
+#include "utils/algorithm_ext.h"
 #include <boost/graph/adjacency_list.hpp>
 #include <unordered_map>
 

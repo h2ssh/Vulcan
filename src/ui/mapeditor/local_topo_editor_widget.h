@@ -17,10 +17,10 @@
 #ifndef UI_MAPEDITOR_LOCAL_TOPO_EDITOR_WIDGET_H
 #define UI_MAPEDITOR_LOCAL_TOPO_EDITOR_WIDGET_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <utils/mutex.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "utils/mutex.h"
 #include <boost/optional.hpp>
 #include <vector>
 

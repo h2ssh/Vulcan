@@ -11,7 +11,7 @@
 #define LCMTYPES_SENSORS_IMU_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_imu_t.h>
+#include "lcmtypes/vulcan_lcm_imu_t.h"
 
 namespace vulcan
 {

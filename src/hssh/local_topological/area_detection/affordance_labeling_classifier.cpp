@@ -14,18 +14,18 @@
 * Definition of AffordanceLabelingClassifier.
 */
 
-#include <hssh/local_topological/area_detection/affordance_labeling_classifier.h>
-#include <hssh/local_topological/area_detection/labeling/area_creator.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <hssh/local_topological/area_detection/labeling/loops_and_trees.h>
-#include <hssh/local_topological/area_detection/labeling/parser.h>
-#include <hssh/local_topological/area_detection/labeling/small_scale_star_builder.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_topological/debug_info.h>
-#include <hssh/local_topological/params.h>
-#include <system/debug_communicator.h>
-#include <utils/timestamp.h>
+#include "hssh/local_topological/area_detection/affordance_labeling_classifier.h"
+#include "hssh/local_topological/area_detection/labeling/area_creator.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "hssh/local_topological/area_detection/labeling/loops_and_trees.h"
+#include "hssh/local_topological/area_detection/labeling/parser.h"
+#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/debug_info.h"
+#include "hssh/local_topological/params.h"
+#include "system/debug_communicator.h"
+#include "utils/timestamp.h"
 
 namespace vulcan
 {

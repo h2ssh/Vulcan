@@ -17,8 +17,8 @@
 #ifndef PLANNER_DECISION_PLANNER_H
 #define PLANNER_DECISION_PLANNER_H
 
-#include <planner/decision/result.h>
-#include <planner/decision/sequence.h>
+#include "planner/decision/result.h"
+#include "planner/decision/sequence.h"
 #include <memory>
 
 namespace vulcan

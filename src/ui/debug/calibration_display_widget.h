@@ -17,12 +17,12 @@
 #ifndef UI_DEBUG_CALIBRATION_DISPLAY_WIDGET_H
 #define UI_DEBUG_CALIBRATION_DISPLAY_WIDGET_H
 
-#include <ui/components/open_gl_widget.h>
-#include <ui/common/ui_forward_declarations.h>
-#include <ui/common/ui_params.h>
-#include <core/laser_scan.h>
-#include <core/pose.h>
-#include <utils/mutex.h>
+#include "ui/components/open_gl_widget.h"
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_params.h"
+#include "core/laser_scan.h"
+#include "core/pose.h"
+#include "utils/mutex.h"
 #include <wx/wx.h>
 #include <wx/glcanvas.h>
 #include <deque>

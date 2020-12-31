@@ -23,9 +23,9 @@
 #ifndef UI_MAPEDITOR_LPM_EDITING_H
 #define UI_MAPEDITOR_LPM_EDITING_H
 
-#include <hssh/local_metric/lpm.h>
-#include <core/line.h>
-#include <core/point.h>
+#include "hssh/local_metric/lpm.h"
+#include "core/line.h"
+#include "core/point.h"
 #include <stack>
 #include <vector>
 

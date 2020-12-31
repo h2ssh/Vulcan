@@ -14,9 +14,9 @@
 * Definition of learn_linear_classifier.
 */
 
-#include <utils/liblinear.h>
-#include <core/float_comparison.h>
-#include <core/vector.h>
+#include "utils/liblinear.h"
+#include "core/float_comparison.h"
+#include "core/vector.h"
 #include <map>
 
 namespace vulcan

@@ -16,11 +16,11 @@
 
 #include <cassert>
 #include <iostream>
-#include <hssh/global_topological/actions.h>
-#include <hssh/global_topological/measurements.h>
-#include <hssh/global_topological/topological_map_hypothesis.h>
-#include <hssh/global_topological/tree_of_maps.h>
-#include <hssh/global_topological/mapping/tree_exploration_mapper.h>
+#include "hssh/global_topological/actions.h"
+#include "hssh/global_topological/measurements.h"
+#include "hssh/global_topological/topological_map_hypothesis.h"
+#include "hssh/global_topological/tree_of_maps.h"
+#include "hssh/global_topological/mapping/tree_exploration_mapper.h"
 
 #define DEBUG_PLACE_ENTRY
 

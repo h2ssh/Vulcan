@@ -14,8 +14,8 @@
 * Definition of ObjectMotion.
 */
 
-#include <tracker/object_motion.h>
-#include <tracker/laser_object.h>
+#include "tracker/object_motion.h"
+#include "tracker/laser_object.h"
 #include <iostream>
 #include <cassert>
 

@@ -17,8 +17,8 @@
 #ifndef UI_LOGPLAYER_LOGPLAYER_FRAME_H
 #define UI_LOGPLAYER_LOGPLAYER_FRAME_H
 
-#include <ui/logplayer/logplayer_ui.h>
-#include <utils/mutex.h>
+#include "ui/logplayer/logplayer_ui.h"
+#include "utils/mutex.h"
 #include <wx/wx.h>
 #include <memory>
 #include <string>

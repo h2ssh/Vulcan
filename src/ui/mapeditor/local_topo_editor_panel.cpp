@@ -14,24 +14,24 @@
 * Implementation of LocalTopoEditorPanel.
 */
 
-#include <ui/mapeditor/local_topo_editor_panel.h>
-#include <ui/mapeditor/classification_test_results_dialog.h>
-#include <ui/mapeditor/gateway_classifier_test_dialog.h>
-#include <ui/mapeditor/local_topo_editor_widget.h>
-#include <ui/mapeditor/map_editor.h>
-#include <ui/common/file_dialog_settings.h>
-#include <ui/common/ui_params.h>
-#include <hssh/local_topological/training/area_labels.h>
-#include <hssh/local_topological/training/local_topo_area_editor.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_topological/area_extent.h>
-#include <hssh/local_topological/training/gateway_classifier_test.h>
-#include <hssh/local_topological/training/labeled_area_data.h>
-#include <hssh/local_topological/training/labeled_boundary_data.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_classifier.h>
-#include <hssh/local_metric/lpm_io.h>
-#include <utils/serialized_file_io.h>
-#include <system/module_communicator.h>
+#include "ui/mapeditor/local_topo_editor_panel.h"
+#include "ui/mapeditor/classification_test_results_dialog.h"
+#include "ui/mapeditor/gateway_classifier_test_dialog.h"
+#include "ui/mapeditor/local_topo_editor_widget.h"
+#include "ui/mapeditor/map_editor.h"
+#include "ui/common/file_dialog_settings.h"
+#include "ui/common/ui_params.h"
+#include "hssh/local_topological/training/area_labels.h"
+#include "hssh/local_topological/training/local_topo_area_editor.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/training/gateway_classifier_test.h"
+#include "hssh/local_topological/training/labeled_area_data.h"
+#include "hssh/local_topological/training/labeled_boundary_data.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_classifier.h"
+#include "hssh/local_metric/lpm_io.h"
+#include "utils/serialized_file_io.h"
+#include "system/module_communicator.h"
 #include <cassert>
 #include <iostream>
 
@@ -43,8 +43,8 @@
 #include <boost/accumulators/statistics/skewness.hpp>
 #include <boost/accumulators/statistics/min.hpp>
 #include <boost/accumulators/statistics/max.hpp>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_edges.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_gradients.h>
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
 
 namespace vulcan
 {

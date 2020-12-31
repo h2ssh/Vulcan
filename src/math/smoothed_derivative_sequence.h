@@ -17,7 +17,7 @@
 #ifndef MATH_SMOOTHED_DERIVATIVE_SEQUENCE_H
 #define MATH_SMOOTHED_DERIVATIVE_SEQUENCE_H
 
-#include <math/statistics.h>
+#include "math/statistics.h"
 #include <boost/optional.hpp>
 #include <deque>
 #include <iomanip>

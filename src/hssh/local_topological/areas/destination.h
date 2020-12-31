@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_DESTINATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_DESTINATION_H
 
-#include <hssh/local_topological/areas/place.h>
-#include <hssh/local_topological/affordances/transition.h>
+#include "hssh/local_topological/areas/place.h"
+#include "hssh/local_topological/affordances/transition.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/vector.hpp>

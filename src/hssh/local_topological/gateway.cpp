@@ -14,14 +14,14 @@
 * Implementation of Gateway.
 */
 
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <math/covariance.h>
-#include <core/pose.h>
-#include <utils/ray_tracing.h>
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "math/covariance.h"
+#include "core/pose.h"
+#include "utils/ray_tracing.h"
 #include <cassert>
 
 namespace vulcan

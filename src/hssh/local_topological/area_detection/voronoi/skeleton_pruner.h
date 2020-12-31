@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_PRUNER_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_PRUNER_H
 
-#include <hssh/local_topological/params.h>
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph_extractor.h>
-#include <math/graph/connected_components.h>
+#include "hssh/local_topological/params.h"
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_extractor.h"
+#include "math/graph/connected_components.h"
 #include <memory>
 
 namespace vulcan

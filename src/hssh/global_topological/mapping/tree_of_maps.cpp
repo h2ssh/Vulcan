@@ -14,11 +14,11 @@
 * Definition of TreeOfMaps.
 */
 
-#include <hssh/global_topological/mapping/tree_of_maps.h>
-#include <hssh/global_topological/mapping/probability_heuristics.h>
-#include <hssh/global_topological/debug/hypothesis_tree.h>
-#include <utils/algorithm_ext.h>
-#include <utils/stub.h>
+#include "hssh/global_topological/mapping/tree_of_maps.h"
+#include "hssh/global_topological/mapping/probability_heuristics.h"
+#include "hssh/global_topological/debug/hypothesis_tree.h"
+#include "utils/algorithm_ext.h"
+#include "utils/stub.h"
 #include <boost/range/adaptor/map.hpp>
 
 namespace vulcan

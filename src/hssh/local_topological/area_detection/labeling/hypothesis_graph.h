@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_HYPOTHESIS_GRAPH_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_HYPOTHESIS_GRAPH_H
 
-#include <hssh/local_topological/area_detection/labeling/type_distribution.h>
-#include <utils/ptr.h>
-#include <utils/visibility_graph.h>
+#include "hssh/local_topological/area_detection/labeling/type_distribution.h"
+#include "utils/ptr.h"
+#include "utils/visibility_graph.h"
 #include <map>
 #include <set>
 #include <vector>

@@ -17,8 +17,8 @@
 #ifndef MPEPC_MANIFOLDS_TASK_MANIFOLD_H
 #define MPEPC_MANIFOLDS_TASK_MANIFOLD_H
 
-#include <mpepc/simulator/dynamic_object_trajectory.h>
-#include <core/pose.h>
+#include "mpepc/simulator/dynamic_object_trajectory.h"
+#include "core/pose.h"
 #include <vector>
 
 namespace vulcan

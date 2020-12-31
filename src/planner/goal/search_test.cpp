@@ -14,8 +14,8 @@
 * This file tests and exercises the AStarSearch.
 */
 
-#include <planner/goal/search.h>
-#include <hssh/global_topological/graph.h>
+#include "planner/goal/search.h"
+#include "hssh/global_topological/graph.h"
 #include <string>
 #include <sstream>
 #include <iostream>

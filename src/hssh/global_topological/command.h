@@ -17,7 +17,7 @@
 #ifndef HSSH_GLOBAL_TOPO_COMMAND_H
 #define HSSH_GLOBAL_TOPO_COMMAND_H
 
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 #include <iostream>
 #include <string>
 #include <cereal/access.hpp>

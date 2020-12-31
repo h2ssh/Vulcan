@@ -7,9 +7,9 @@
 */
 
 
-#include <math/regression.h>
-#include <math/statistics.h>
-#include <sensors/sensor_log.h>
+#include "math/regression.h"
+#include "math/statistics.h"
+#include "sensors/sensor_log.h"
 #include <gnuplot-iostream.h>
 #include <boost/range/iterator_range.hpp>
 #include <iostream>

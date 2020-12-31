@@ -14,11 +14,11 @@
 * Definition of load_graceful_motion_params() and GracefulMotionControlLaw.
 */
 
-#include <mpepc/motion_controller/waypoint_follower/graceful_motion_control_law.h>
-#include <core/velocity.h>
-#include <core/motion_state.h>
-#include <utils/config_file.h>
-#include <utils/timestamp.h>
+#include "mpepc/motion_controller/waypoint_follower/graceful_motion_control_law.h"
+#include "core/velocity.h"
+#include "core/motion_state.h"
+#include "utils/config_file.h"
+#include "utils/timestamp.h"
 #include <iostream>
 
 // #define DEBUG_COMMAND

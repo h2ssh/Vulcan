@@ -19,9 +19,9 @@
 #ifndef MPEPC_ROBOT_TRAJECTORY_INFO_H
 #define MPEPC_ROBOT_TRAJECTORY_INFO_H
 
-#include <mpepc/control/control_law_coordinates.h>
-#include <core/motion_state.h>
-#include <robot/commands.h>
+#include "mpepc/control/control_law_coordinates.h"
+#include "core/motion_state.h"
+#include "robot/commands.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 

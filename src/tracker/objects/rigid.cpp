@@ -14,8 +14,8 @@
 * Definition of RigidObject.
 */
 
-#include <tracker/objects/rigid.h>
-#include <tracker/dynamic_object_visitor.h>
+#include "tracker/objects/rigid.h"
+#include "tracker/dynamic_object_visitor.h"
 
 namespace vulcan
 {

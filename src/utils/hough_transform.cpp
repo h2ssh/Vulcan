@@ -14,8 +14,8 @@
 * Definition of HoughTransform.
 */
 
-#include <utils/hough_transform.h>
-#include <core/angle_functions.h>
+#include "utils/hough_transform.h"
+#include "core/angle_functions.h"
 #include <algorithm>
 #include <cassert>
 

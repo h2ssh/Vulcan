@@ -14,8 +14,8 @@
 * Definition of LocalDestination.
 */
 
-#include <hssh/local_topological/areas/destination.h>
-#include <hssh/local_topological/area_visitor.h>
+#include "hssh/local_topological/areas/destination.h"
+#include "hssh/local_topological/area_visitor.h"
 #include <sstream>
 
 namespace vulcan 

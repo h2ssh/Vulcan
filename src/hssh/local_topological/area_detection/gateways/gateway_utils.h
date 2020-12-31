@@ -21,8 +21,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_GATEWAY_UTILS_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_GATEWAY_UTILS_H
 
-#include <core/line.h>
-#include <hssh/types.h>
+#include "core/line.h"
+#include "hssh/types.h"
 #include <boost/optional.hpp>
 
 namespace vulcan

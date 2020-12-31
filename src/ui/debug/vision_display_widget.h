@@ -17,11 +17,11 @@
 #ifndef UI_DEBUG_VISION_DISPLAY_WIDGET_H
 #define UI_DEBUG_VISION_DISPLAY_WIDGET_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <ui/common/ui_params.h>
-#include <core/image.h>
-#include <vision/image_segment.h>
-#include <utils/mutex.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "ui/common/ui_params.h"
+#include "core/image.h"
+#include "vision/image_segment.h"
+#include "utils/mutex.h"
 #include <wx/wx.h>
 
 namespace vulcan

@@ -14,9 +14,9 @@
 * Definition of TopologicalMapHypothesis as defined in topological_map_hypothesis.h
 */
 
-#include <hssh/global_topological/mapping/topological_map_hypothesis.h>
-#include <hssh/global_topological/topological_map.h>
-#include <core/angle_functions.h>
+#include "hssh/global_topological/mapping/topological_map_hypothesis.h"
+#include "hssh/global_topological/topological_map.h"
+#include "core/angle_functions.h"
 #include <iostream>
 #include <queue>
 #include <cassert>

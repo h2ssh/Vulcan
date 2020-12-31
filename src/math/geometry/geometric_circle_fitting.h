@@ -22,8 +22,8 @@
 #ifndef MATH_GEOMETRY_GEOMETRIC_CIRCLE_FITTING_H
 #define MATH_GEOMETRY_GEOMETRIC_CIRCLE_FITTING_H
 
-#include <math/geometry/circle.h>
-#include <math/geometry/circle_fitting_utils.h>
+#include "math/geometry/circle.h"
+#include "math/geometry/circle_fitting_utils.h"
 
 namespace vulcan
 {

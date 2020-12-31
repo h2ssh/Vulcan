@@ -18,7 +18,7 @@
 #ifndef MPEPC_METRIC_PLANNER_TASKS_WAIT_H
 #define MPEPC_METRIC_PLANNER_TASKS_WAIT_H
 
-#include <mpepc/metric_planner/task/task.h>
+#include "mpepc/metric_planner/task/task.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

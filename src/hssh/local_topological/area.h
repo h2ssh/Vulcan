@@ -10,12 +10,12 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_H
 
-#include <hssh/local_topological/affordance.h>
-#include <hssh/local_topological/area_extent.h>
-#include <hssh/local_topological/gateway.h>
-#include <math/coordinates.h>
-#include <core/point.h>
-#include <utils/pose_trace.h>
+#include "hssh/local_topological/affordance.h"
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/gateway.h"
+#include "math/coordinates.h"
+#include "core/point.h"
+#include "utils/pose_trace.h"
 #include <boost/optional.hpp>
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>

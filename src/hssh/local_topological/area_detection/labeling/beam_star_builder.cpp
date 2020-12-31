@@ -14,10 +14,10 @@
 * Definition of BeamStarBuilder.
 */
 
-#include <hssh/local_topological/area_detection/labeling/beam_star_builder.h>
-#include <hssh/local_topological/small_scale_star.h>
-#include <core/line.h>
-#include <utils/stub.h>
+#include "hssh/local_topological/area_detection/labeling/beam_star_builder.h"
+#include "hssh/local_topological/small_scale_star.h"
+#include "core/line.h"
+#include "utils/stub.h"
 #include <algorithm>
 #include <iostream>
 

@@ -18,7 +18,7 @@
 *   - savitzky_golay_second_deriv : smoothed second derivative of the data
 */
 
-#include <math/savitzky_golay.h>
+#include "math/savitzky_golay.h"
 #include <array>
 #include <iostream>
 #include <iterator>

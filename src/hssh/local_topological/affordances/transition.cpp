@@ -14,8 +14,8 @@
 * Definition of TransitionAffordance.
 */
 
-#include <hssh/local_topological/affordances/transition.h>
-#include <hssh/local_topological/affordance_visitor.h>
+#include "hssh/local_topological/affordances/transition.h"
+#include "hssh/local_topological/affordance_visitor.h"
 
 namespace vulcan
 {

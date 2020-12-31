@@ -14,10 +14,10 @@
 * Definition of create_area_classifier factory function.
 */
 
-#include <hssh/local_topological/area_detection/area_classifier.h>
-#include <hssh/local_topological/area_detection/affordance_labeling_classifier.h>
-#include <hssh/local_topological/area_detection/stored_map_classifier.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/area_detection/area_classifier.h"
+#include "hssh/local_topological/area_detection/affordance_labeling_classifier.h"
+#include "hssh/local_topological/area_detection/stored_map_classifier.h"
+#include "hssh/local_topological/params.h"
 #include <iostream>
 #include <cassert>
 

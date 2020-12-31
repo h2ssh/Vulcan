@@ -14,7 +14,7 @@
 * Definition of SaphiraReader for reading Saphira log files -- .slf
 */
 
-#include <logging/logplayer/saphira_reader.h>
+#include "logging/logplayer/saphira_reader.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>

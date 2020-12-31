@@ -18,7 +18,7 @@
 #ifndef GRAPH_EDGE_ORDERED_GRAPH_H
 #define GRAPH_EDGE_ORDERED_GRAPH_H
 
-#include <graph/graph.h>
+#include "graph/graph.h"
 
 namespace vulcan
 {

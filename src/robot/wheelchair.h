@@ -18,8 +18,8 @@
 #define ROBOT_WHEELCHAIR_H
 
 #include <boost/shared_ptr.hpp>
-#include <utils/thread.h>
-#include <robot/commands.h>
+#include "utils/thread.h"
+#include "robot/commands.h"
 
 namespace vulcan
 {

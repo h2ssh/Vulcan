@@ -17,11 +17,11 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_TOPO_SLAM_H
 #define HSSH_GLOBAL_TOPOLOGICAL_TOPO_SLAM_H
 
-#include <hssh/global_topological/mapping/tree_of_maps.h>
-#include <hssh/global_topological/mapping/probability_heuristics.h>
-#include <hssh/global_topological/state.h>
-#include <hssh/global_topological/utils/visit_sequence.h>
-#include <hssh/global_topological/utils/metric_map_cache.h>
+#include "hssh/global_topological/mapping/tree_of_maps.h"
+#include "hssh/global_topological/mapping/probability_heuristics.h"
+#include "hssh/global_topological/state.h"
+#include "hssh/global_topological/utils/visit_sequence.h"
+#include "hssh/global_topological/utils/metric_map_cache.h"
 #include <fstream>
 #include <memory>
 

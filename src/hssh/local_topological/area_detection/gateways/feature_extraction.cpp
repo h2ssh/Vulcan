@@ -16,11 +16,11 @@
 *   - extract_gateway_features_default
 */
 
-#include <hssh/local_topological/area_detection/gateways/feature_extraction.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_gradients.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_edges.h>
-#include <utils/plot2d.h>
+#include "hssh/local_topological/area_detection/gateways/feature_extraction.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include "utils/plot2d.h"
 #include <array>
 #include <cassert>
 

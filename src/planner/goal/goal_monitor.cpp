@@ -14,9 +14,9 @@
 * Definition of GoalMonitor.
 */
 
-#include <planner/goal/goal_monitor.h>
-#include <planner/goal/goal_progress.h>
-#include <hssh/global_topological/global_location.h>
+#include "planner/goal/goal_monitor.h"
+#include "planner/goal/goal_progress.h"
+#include "hssh/global_topological/global_location.h"
 #include <iostream>
 #include <cassert>
 

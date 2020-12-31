@@ -14,19 +14,19 @@
 * Definition of AreaBuilder.
 */
 
-#include <hssh/local_topological/area_detection/labeling/area_creator.h>
-#include <hssh/local_topological/affordances/transition.h>
-#include <hssh/local_topological/affordances/exploration.h>
-#include <hssh/local_topological/areas/decision_point.h>
-#include <hssh/local_topological/areas/destination.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
-#include <hssh/local_topological/area_detection/labeling/area_proposal.h>
-#include <hssh/local_topological/area_detection/labeling/small_scale_star_builder.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/area_detection/labeling/area_creator.h"
+#include "hssh/local_topological/affordances/transition.h"
+#include "hssh/local_topological/affordances/exploration.h"
+#include "hssh/local_topological/areas/decision_point.h"
+#include "hssh/local_topological/areas/destination.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "hssh/local_topological/area_detection/labeling/area_proposal.h"
+#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "utils/algorithm_ext.h"
 #include <algorithm>
 #include <array>
 #include <iostream>

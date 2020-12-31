@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_TRAINING_LABELED_GATEWAY_DATA_H
 #define HSSH_LOCAL_TOPOLOGICAL_TRAINING_LABELED_GATEWAY_DATA_H
 
-#include <hssh/local_topological/training/topo_training_data.h>
-#include <hssh/types.h>
-#include <utils/feature_vector.h>
+#include "hssh/local_topological/training/topo_training_data.h"
+#include "hssh/types.h"
+#include "utils/feature_vector.h"
 
 namespace vulcan
 {

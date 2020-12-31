@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_PATH_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_PATH_H
 
-#include <core/point.h>
-#include <hssh/local_topological/lambda.h>
+#include "core/point.h"
+#include "hssh/local_topological/lambda.h"
 
 namespace vulcan
 {

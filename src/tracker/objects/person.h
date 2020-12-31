@@ -17,9 +17,9 @@
 #ifndef TRACKER_OBJECTS_PERSON_H
 #define TRACKER_OBJECTS_PERSON_H
 
-#include <tracker/objects/bounded_moving.h>
-#include <tracker/boundaries/circle.h>
-#include <tracker/motions/striding.h>
+#include "tracker/objects/bounded_moving.h"
+#include "tracker/boundaries/circle.h"
+#include "tracker/motions/striding.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/array.hpp>

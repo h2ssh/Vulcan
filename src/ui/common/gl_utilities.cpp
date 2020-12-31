@@ -7,7 +7,7 @@
 */
 
 
-#include <ui/common/gl_utilities.h>
+#include "ui/common/gl_utilities.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <cmath>

@@ -16,9 +16,9 @@
 
 #ifndef VGO_ROBOT
 
-#include <sensors/phidget_encoder_board.h>
-#include <utils/auto_mutex.h>
-#include <utils/timestamp.h>
+#include "sensors/phidget_encoder_board.h"
+#include "utils/auto_mutex.h"
+#include "utils/timestamp.h"
 #include <iostream>
 #include <cassert>
 

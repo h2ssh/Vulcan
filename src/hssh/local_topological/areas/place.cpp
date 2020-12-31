@@ -14,7 +14,7 @@
 * Definition of LocalPlace.
 */
 
-#include <hssh/local_topological/areas/place.h>
+#include "hssh/local_topological/areas/place.h"
 
 namespace vulcan
 {

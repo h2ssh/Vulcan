@@ -14,13 +14,13 @@
 * Definition of EvaluationDisplayWidget.
 */
 
-#include <ui/debug/evaluation_display_widget.h>
-#include <ui/common/default_colors.h>
-#include <ui/components/place_grid_renderer.h>
-#include <ui/components/pose_trace_renderer.h>
-#include <ui/components/stable_area_renderer.h>
-#include <mpepc/evaluation/path_summary.h>
-#include <utils/cell_grid_utils.h>
+#include "ui/debug/evaluation_display_widget.h"
+#include "ui/common/default_colors.h"
+#include "ui/components/place_grid_renderer.h"
+#include "ui/components/pose_trace_renderer.h"
+#include "ui/components/stable_area_renderer.h"
+#include "mpepc/evaluation/path_summary.h"
+#include "utils/cell_grid_utils.h"
 
 namespace vulcan
 {

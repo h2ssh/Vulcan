@@ -14,10 +14,10 @@
 * Definition of EndpointModel.
 */
 
-#include <tracker/objects/endpoint_model.h>
-#include <math/geometry/shape_fitting.h>
-#include <math/regression.h>
-#include <math/statistics.h>
+#include "tracker/objects/endpoint_model.h"
+#include "math/geometry/shape_fitting.h"
+#include "math/regression.h"
+#include "math/statistics.h"
 
 // #define DEBUG_MEASUREMENTS
 // #define DEBUG_TYPE

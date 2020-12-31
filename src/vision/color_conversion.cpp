@@ -9,8 +9,8 @@
 
 #include <cmath>
 #include <iostream>
-#include <utils/minmax.h>
-#include <vision/color_conversion.h>
+#include "utils/minmax.h"
+#include "vision/color_conversion.h"
 
 
 using namespace vulcan::vision;

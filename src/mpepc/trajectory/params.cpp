@@ -14,9 +14,9 @@
 * Definition of constructor for params struct for the TraejctoryPlanner.
 */
 
-#include <mpepc/trajectory/params.h>
-#include <utils/config_file.h>
-#include <utils/config_file_utils.h>
+#include "mpepc/trajectory/params.h"
+#include "utils/config_file.h"
+#include "utils/config_file_utils.h"
 
 namespace vulcan
 {

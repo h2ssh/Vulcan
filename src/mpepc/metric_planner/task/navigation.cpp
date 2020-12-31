@@ -14,12 +14,12 @@
 * Definition of NavigationTask and NavigationTaskManifold.
 */
 
-#include <mpepc/metric_planner/task/navigation.h>
-#include <mpepc/manifold/navigation.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <core/motion_state.h>
-#include <utils/timestamp.h>
-#include <core/float_comparison.h>
+#include "mpepc/metric_planner/task/navigation.h"
+#include "mpepc/manifold/navigation.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "core/motion_state.h"
+#include "utils/timestamp.h"
+#include "core/float_comparison.h"
 
 #define DEBUG_NAVIGATION_TASK
 // #define DEBUG_SAFE_CHECK

@@ -14,7 +14,7 @@
 * Definition of the OccupancyGrid.
 */
 
-#include <hssh/metrical/occupancy_grid.h>
+#include "hssh/metrical/occupancy_grid.h"
 
 namespace vulcan
 {

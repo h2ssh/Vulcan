@@ -18,8 +18,8 @@
 #ifndef MPEPC_DYNAMIC_OBJECT_SIMULATOR_H
 #define MPEPC_DYNAMIC_OBJECT_SIMULATOR_H
 
-#include <mpepc/simulator/dynamic_object_trajectory.h>
-#include <mpepc/simulator/params.h>
+#include "mpepc/simulator/dynamic_object_trajectory.h"
+#include "mpepc/simulator/params.h"
 
 namespace vulcan
 {

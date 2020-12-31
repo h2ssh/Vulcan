@@ -14,9 +14,9 @@
  * Definition of FeatureVector.
  */
 
-#include <utils/feature_vector.h>
-#include <core/float_comparison.h>
-#include <utils/float_io.h>
+#include "utils/feature_vector.h"
+#include "core/float_comparison.h"
+#include "utils/float_io.h"
 #include <boost/range/iterator_range.hpp>
 #include <cassert>
 #include <cmath>

@@ -14,8 +14,8 @@
 * Definition of TruncatedGaussianDistribution.
 */
 
-#include <math/truncated_gaussian_distribution.h>
-#include <math/statistics.h>
+#include "math/truncated_gaussian_distribution.h"
+#include "math/statistics.h"
 #include <cassert>
 #include <cmath>
 #include <iostream>

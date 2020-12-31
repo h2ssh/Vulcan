@@ -12,11 +12,11 @@
 *	definition of each robot object.
 */
 
-#include <core/velocity.h>
-#include <mpepc/metric_planner/messages.h>
-#include <mpepc/metric_planner/script/script.h>
-#include <simulator/robot_object.h>
-#include <simulator/simulator_utils.h>
+#include "core/velocity.h"
+#include "mpepc/metric_planner/messages.h"
+#include "mpepc/metric_planner/script/script.h"
+#include "simulator/robot_object.h"
+#include "simulator/simulator_utils.h"
 
 namespace vulcan{
 namespace sim{

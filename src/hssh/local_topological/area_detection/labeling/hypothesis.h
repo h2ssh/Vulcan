@@ -17,12 +17,12 @@
 #ifndef HSSH_AREA_DETECTION_LABELING_HYPOTHESIS_H
 #define HSSH_AREA_DETECTION_LABELING_HYPOTHESIS_H
 
-#include <hssh/local_topological/small_scale_star.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
-#include <hssh/local_topological/area_detection/labeling/type_distribution.h>
-#include <hssh/types.h>
-#include <math/geometry/rectangle.h>
-#include <utils/visibility_graph.h>
+#include "hssh/local_topological/small_scale_star.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
+#include "hssh/local_topological/area_detection/labeling/type_distribution.h"
+#include "hssh/types.h"
+#include "math/geometry/rectangle.h"
+#include "utils/visibility_graph.h"
 #include <array>
 #include <memory>
 #include <set>

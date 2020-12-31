@@ -17,9 +17,9 @@
 #ifndef MATH_GEOMETRY_POLYGON_H
 #define MATH_GEOMETRY_POLYGON_H
 
-#include <math/geometry/shape.h>
-#include <core/line.h>
-#include <core/point.h>
+#include "math/geometry/shape.h"
+#include "core/line.h"
+#include "core/point.h"
 #include <ostream>
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>

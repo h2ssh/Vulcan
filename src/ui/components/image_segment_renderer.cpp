@@ -14,9 +14,9 @@
 * Definition of ImageSegmentRenderer.
 */
 
-#include <ui/components/image_segment_renderer.h>
-#include <ui/common/gl_texture_helpers.h>
-#include <vision/image_segment.h>
+#include "ui/components/image_segment_renderer.h"
+#include "ui/common/gl_texture_helpers.h"
+#include "vision/image_segment.h"
 #include <GL/gl.h>
 #include <cassert>
 #include <cstring>

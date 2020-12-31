@@ -20,9 +20,9 @@
 #ifndef MATH_COVARIANCE_H
 #define MATH_COVARIANCE_H
 
-#include <core/matrix.h>
-#include <core/vector.h>
-#include <core/angle_functions.h>
+#include "core/matrix.h"
+#include "core/vector.h"
+#include "core/angle_functions.h"
 
 namespace vulcan
 {

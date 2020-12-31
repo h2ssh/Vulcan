@@ -19,7 +19,7 @@
 
 #include <map>
 #include <boost/shared_ptr.hpp>
-#include <logging/logplayer/log_reader.h>
+#include "logging/logplayer/log_reader.h"
 
 namespace vulcan
 {

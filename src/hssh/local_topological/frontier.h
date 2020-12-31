@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_FRONTIER_H
 #define HSSH_LOCAL_TOPOLOGICAL_FRONTIER_H
 
-#include <hssh/types.h>
-#include <core/line.h>
+#include "hssh/types.h"
+#include "core/line.h"
 #include <cstdint>
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>

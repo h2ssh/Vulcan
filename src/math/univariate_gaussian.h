@@ -17,8 +17,8 @@
 #ifndef MATH_UNIVARIATE_GAUSSIAN_H
 #define MATH_UNIVARIATE_GAUSSIAN_H
 
-#include <math/univariate_distribution.h>
-#include <math/statistics.h>
+#include "math/univariate_distribution.h"
+#include "math/statistics.h"
 #include <random>
 
 namespace vulcan

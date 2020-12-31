@@ -14,18 +14,18 @@
 * Definition of NavigationTaskManifold.
 */
 
-#include <mpepc/manifold/navigation.h>
-#include <mpepc/cost/obstacle_cost.h>
-#include <mpepc/cost/quasi_static_cost.h>
-#include <mpepc/simulator/dynamic_object_trajectory.h>
-#include <mpepc/control/control_law_coordinates.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <mpepc/trajectory/robot_trajectory_info.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/local_topo_graph.h>
-#include <system/module_communicator.h>
-#include <utils/ray_tracing.h>
-#include <utils/timestamp.h>
+#include "mpepc/manifold/navigation.h"
+#include "mpepc/cost/obstacle_cost.h"
+#include "mpepc/cost/quasi_static_cost.h"
+#include "mpepc/simulator/dynamic_object_trajectory.h"
+#include "mpepc/control/control_law_coordinates.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "mpepc/trajectory/robot_trajectory_info.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/local_topo_graph.h"
+#include "system/module_communicator.h"
+#include "utils/ray_tracing.h"
+#include "utils/timestamp.h"
 
 namespace vulcan
 {

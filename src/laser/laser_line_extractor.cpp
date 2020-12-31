@@ -16,11 +16,11 @@
 
 #include <iostream>
 #include <string>
-#include <core/laser_scan.h>
-#include <laser/laser_scan_lines.h>
-#include <laser/line_extractor_params.h>
-#include <laser/line_extraction.h>
-#include <laser/laser_line_extractor.h>
+#include "core/laser_scan.h"
+#include "laser/laser_scan_lines.h"
+#include "laser/line_extractor_params.h"
+#include "laser/line_extraction.h"
+#include "laser/laser_line_extractor.h"
 
 
 namespace vulcan

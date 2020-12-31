@@ -8,11 +8,11 @@
 
 
 #include <cassert>
-#include <math/geometry/convex_hull.h>
-#include <vision/image_segment.h>
-#include <vision/felzenszwalb_segmenter.h>
-#include <vision/wassenberg_segmenter.h>
-#include <vision/image_segmenter.h>
+#include "math/geometry/convex_hull.h"
+#include "vision/image_segment.h"
+#include "vision/felzenszwalb_segmenter.h"
+#include "vision/wassenberg_segmenter.h"
+#include "vision/image_segmenter.h"
 
 namespace vulcan
 {

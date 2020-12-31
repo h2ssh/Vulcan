@@ -17,12 +17,12 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENTS_AREA_TRANSITION_DETECTOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENTS_AREA_TRANSITION_DETECTOR_H
 
-#include <hssh/local_topological/event_detection/area_event_detector.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/params.h>
-#include <math/geometry/rectangle.h>
-#include <utils/pose_trace.h>
-#include <utils/timed_sequence.h>
+#include "hssh/local_topological/event_detection/area_event_detector.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/params.h"
+#include "math/geometry/rectangle.h"
+#include "utils/pose_trace.h"
+#include "utils/timed_sequence.h"
 #include <fstream>
 
 namespace vulcan

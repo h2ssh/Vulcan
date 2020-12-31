@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_PATH_SEGMENT_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_PATH_SEGMENT_H
 
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/lambda.h>
-#include <hssh/local_topological/affordances/transition.h>
-#include <hssh/local_topological/affordances/move_along.h>
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/lambda.h"
+#include "hssh/local_topological/affordances/transition.h"
+#include "hssh/local_topological/affordances/move_along.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/vector.hpp>

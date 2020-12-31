@@ -19,11 +19,11 @@
 #ifndef PLANNER_GOAL_SEARCH_H
 #define PLANNER_GOAL_SEARCH_H
 
-#include <hssh/global_topological/graph.h>
-#include <planner/goal/debug_info.h>
-#include <graph/path.h>
-#include <utils/object_pool.h>
-#include <utils/binary_heap.h>
+#include "hssh/global_topological/graph.h"
+#include "planner/goal/debug_info.h"
+#include "graph/path.h"
+#include "utils/object_pool.h"
+#include "utils/binary_heap.h"
 #include <vector>
 #include <set>
 #include <map>

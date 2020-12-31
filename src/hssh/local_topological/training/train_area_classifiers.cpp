@@ -48,17 +48,17 @@
 *   ./train_area_classifier --labels 'maps.lbl' --output-dir 'path_to_output_directory' --config-file 'local_topo_hssh.cfg'
 */
 
-#include <hssh/local_topological/training/area_labels.h>
-#include <hssh/local_topological/training/hypothesis_classifier_test.h>
-#include <hssh/local_topological/training/labeled_boundary_data.h>
-#include <hssh/local_topological/training/local_topo_area_editor.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_classifier.h>
-#include <hssh/local_topological/area_detection/gateways/classifier_based_generator.h>
-#include <hssh/local_topological/area_detection/labeling/boundary_classifier.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_classifier.h>
-#include <hssh/local_topological/params.h>
-#include <utils/command_line.h>
-#include <utils/config_file.h>
+#include "hssh/local_topological/training/area_labels.h"
+#include "hssh/local_topological/training/hypothesis_classifier_test.h"
+#include "hssh/local_topological/training/labeled_boundary_data.h"
+#include "hssh/local_topological/training/local_topo_area_editor.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_classifier.h"
+#include "hssh/local_topological/area_detection/gateways/classifier_based_generator.h"
+#include "hssh/local_topological/area_detection/labeling/boundary_classifier.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_classifier.h"
+#include "hssh/local_topological/params.h"
+#include "utils/command_line.h"
+#include "utils/config_file.h"
 
 using namespace vulcan;
 using namespace vulcan::hssh;

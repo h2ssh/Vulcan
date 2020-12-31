@@ -14,15 +14,15 @@
 * Definition of LocalTopoExplorer.
 */
 
-#include <planner/exploration/local_topo/local_topo_explorer.h>
-#include <planner/exploration/local_topo/exploration_status.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_topological/events/turn_around.h>
-#include <mpepc/metric_planner/task/navigation.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
-#include <utils/stub.h>
-#include <utils/timestamp.h>
+#include "planner/exploration/local_topo/local_topo_explorer.h"
+#include "planner/exploration/local_topo/exploration_status.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/events/turn_around.h"
+#include "mpepc/metric_planner/task/navigation.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
+#include "utils/stub.h"
+#include "utils/timestamp.h"
 #include <iostream>
 #include <cassert>
 

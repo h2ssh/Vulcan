@@ -17,9 +17,9 @@
 #ifndef ROBOT_PROXIMITY_CHECKER_H
 #define ROBOT_PROXIMITY_CHECKER_H
 
-#include <core/laser_scan.h>
-#include <robot/params.h>
-#include <robot/motion_checker.h>
+#include "core/laser_scan.h"
+#include "robot/params.h"
+#include "robot/motion_checker.h"
 
 namespace vulcan
 {

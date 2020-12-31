@@ -14,9 +14,9 @@
 * Definition of LogicalDecisionDialog, LogicalGoalDialog, and LogicalTaskDialog.
 */
 
-#include <ui/logical/logical_interface_dialogs.h>
-#include <ui/logical/logical_interface_experiment.h>
-#include <planner/decision/decision_target.h>
+#include "ui/logical/logical_interface_dialogs.h"
+#include "ui/logical/logical_interface_experiment.h"
+#include "planner/decision/decision_target.h"
 #include <cassert>
 
 namespace vulcan

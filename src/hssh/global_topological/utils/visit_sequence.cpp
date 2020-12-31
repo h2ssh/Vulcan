@@ -14,8 +14,8 @@
 * Definition of TopologicalVisitSequence.
 */
 
-#include <hssh/global_topological/utils/visit_sequence.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/global_topological/utils/visit_sequence.h"
+#include "utils/algorithm_ext.h"
 #include <iostream>
 
 // Turn this on to get a warning message if the entry and exit area ids don't match

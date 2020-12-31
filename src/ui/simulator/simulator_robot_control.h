@@ -18,22 +18,22 @@
 #define UI_SIMULATOR_SIMULATOR_ROBOT_CONTROL_H
 
 #include <wx/wx.h>
-#include <ui/common/gl_event.h>
-#include <ui/common/ui_panel.h>
+#include "ui/common/gl_event.h"
+#include "ui/common/ui_panel.h"
 
-#include <ui/common/metric_path_creator.h> // maybe needed for compiling
-#include <ui/simulator/simulator_robot_group_receiver.h>
-#include <planner/interface/navigation_interface.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/location.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/pose.h>
-#include <mpepc/trajectory/trajectory_planner_info.h>
-#include <mpepc/metric_planner/messages.h>
-#include <tracker/dynamic_object_collection.h>
-#include <utils/locked_double_buffer.h>
-#include <simulator/robot_group.h>
-// #include <simulator/simulator_robot_group_message.h>
+#include "ui/common/metric_path_creator.h" // maybe needed for compiling
+#include "ui/simulator/simulator_robot_group_receiver.h"
+#include "planner/interface/navigation_interface.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/location.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/pose.h"
+#include "mpepc/trajectory/trajectory_planner_info.h"
+#include "mpepc/metric_planner/messages.h"
+#include "tracker/dynamic_object_collection.h"
+#include "utils/locked_double_buffer.h"
+#include "simulator/robot_group.h"
+// #include "simulator/simulator_robot_group_message.h"
 
 namespace vulcan
 {

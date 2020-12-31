@@ -14,8 +14,8 @@
 * Definition of create_hypothesis_likelihood_evaluator factory.
 */
 
-#include <hssh/global_topological/mapping/likelihood_evaluator.h>
-#include <hssh/global_topological/mapping/likelihood_evaluator_impl.h>
+#include "hssh/global_topological/mapping/likelihood_evaluator.h"
+#include "hssh/global_topological/mapping/likelihood_evaluator_impl.h"
 #include <cassert>
 #include <iostream>
 

@@ -18,9 +18,9 @@
 #define UI_DEBUG_RELOCALIZATION_PANEL_H
 
 #include <wx/wx.h>
-#include <ui/common/ui_forward_declarations.h>
-#include <ui/common/ui_panel.h>
-#include <math/geometry/rectangle.h>
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_panel.h"
+#include "math/geometry/rectangle.h"
 #include <memory>
 
 namespace vulcan

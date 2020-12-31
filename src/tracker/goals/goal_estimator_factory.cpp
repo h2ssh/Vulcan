@@ -14,12 +14,12 @@
 * Definition of GoalEstimatorFactory.
 */
 
-#include <tracker/goals/goal_estimator_factory.h>
-#include <tracker/goals/ballistic_estimator.h>
-#include <tracker/goals/fixed_estimator.h>
-#include <tracker/goals/gateway_estimator.h>
-#include <tracker/object_motion.h>
-#include <tracker/tracking_environment.h>
+#include "tracker/goals/goal_estimator_factory.h"
+#include "tracker/goals/ballistic_estimator.h"
+#include "tracker/goals/fixed_estimator.h"
+#include "tracker/goals/gateway_estimator.h"
+#include "tracker/object_motion.h"
+#include "tracker/tracking_environment.h"
 
 namespace vulcan
 {

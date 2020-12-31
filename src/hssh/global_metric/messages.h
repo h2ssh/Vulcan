@@ -19,9 +19,9 @@
 #ifndef HSSH_GLOBAL_METRIC_MESSAGES_H
 #define HSSH_GLOBAL_METRIC_MESSAGES_H
 
-#include <hssh/global_metric/map.h>
-#include <hssh/metrical/relocalization/filter_initializer.h>
-#include <system/message_traits.h>
+#include "hssh/global_metric/map.h"
+#include "hssh/metrical/relocalization/filter_initializer.h"
+#include "system/message_traits.h"
 #include <cereal/types/polymorphic.hpp>
 
 namespace vulcan

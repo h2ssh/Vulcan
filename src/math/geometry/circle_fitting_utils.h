@@ -23,8 +23,8 @@
 #ifndef MATH_GEOMETRY_CIRCLE_FITTING_UTILS_H
 #define MATH_GEOMETRY_CIRCLE_FITTING_UTILS_H
 
-#include <core/point.h>
-#include <math/geometry/circle.h>
+#include "core/point.h"
+#include "math/geometry/circle.h"
 #include <limits>
 #include <vector>
 #include <cmath>

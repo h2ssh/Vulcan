@@ -7,9 +7,9 @@
 */
 
 
-#include <ui/components/place_grid_renderer.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <ui/common/gl_texture_helpers.h>
+#include "ui/components/place_grid_renderer.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "ui/common/gl_texture_helpers.h"
 #include <cassert>
 
 namespace vulcan

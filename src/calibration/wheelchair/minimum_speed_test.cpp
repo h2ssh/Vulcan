@@ -14,7 +14,7 @@
 * Definition of MinimumStartSpeedTest and MinimumRollingSpeedTest.
 */
 
-#include <calibration/wheelchair/minimum_speed_test.h>
+#include "calibration/wheelchair/minimum_speed_test.h"
 
 namespace vulcan
 {

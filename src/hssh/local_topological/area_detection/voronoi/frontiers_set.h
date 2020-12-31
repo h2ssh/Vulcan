@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_VORONOI_FRONTIERS_SET_H
 #define HSSH_LOCAL_TOPOLOGICAL_VORONOI_FRONTIERS_SET_H
 
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/frontier.h>
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/frontier.h"
 #include <map>
 #include <vector>
 

@@ -17,10 +17,10 @@
 #ifndef UI_COMPONENTS_AREA_SUBGRAPH_RENDERER_H
 #define UI_COMPONENTS_AREA_SUBGRAPH_RENDERER_H
 
-#include <ui/components/area_extent_renderer.h>
-#include <ui/common/ui_color.h>
-#include <ui/common/color_interpolator.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
+#include "ui/components/area_extent_renderer.h"
+#include "ui/common/ui_color.h"
+#include "ui/common/color_interpolator.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
 
 namespace vulcan
 {

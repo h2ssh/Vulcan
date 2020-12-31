@@ -18,8 +18,8 @@
 #ifndef MPEPC_METRIC_PLANNER_TASKS_SERIALIZATION_H
 #define MPEPC_METRIC_PLANNER_TASKS_SERIALIZATION_H
 
-#include <mpepc/metric_planner/task/navigation.h>
-#include <mpepc/metric_planner/task/rotate.h>
-#include <mpepc/metric_planner/task/wait.h>
+#include "mpepc/metric_planner/task/navigation.h"
+#include "mpepc/metric_planner/task/rotate.h"
+#include "mpepc/metric_planner/task/wait.h"
 
 #endif // MPEPC_METRIC_PLANNER_TASKS_SERIALIZATION_H

@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVALUATION_STABILITY_LOG_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVALUATION_STABILITY_LOG_H
 
-#include <hssh/local_topological/event.h>
-#include <hssh/local_metric/pose.h>
-#include <hssh/global_metric/pose.h>
+#include "hssh/local_topological/event.h"
+#include "hssh/local_metric/pose.h"
+#include "hssh/global_metric/pose.h"
 
 namespace vulcan
 {

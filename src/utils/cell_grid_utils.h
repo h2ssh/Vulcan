@@ -42,9 +42,9 @@
 #ifndef UTILS_CELL_GRID_UTILS_H
 #define UTILS_CELL_GRID_UTILS_H
 
-#include <core/point.h>
-#include <math/geometry/rectangle.h>
-#include <core/float_comparison.h>
+#include "core/point.h"
+#include "math/geometry/rectangle.h"
+#include "core/float_comparison.h"
 #include <cassert>
 #include <cstdint>
 #include <cstring> // for memcpy

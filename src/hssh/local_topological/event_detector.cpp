@@ -14,9 +14,9 @@
 * Implementation of EventDetector.
 */
 
-#include <hssh/local_topological/event_detector.h>
-#include <hssh/local_topological/event_detection/area_event_detector.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/event_detector.h"
+#include "hssh/local_topological/event_detection/area_event_detector.h"
+#include "hssh/local_topological/params.h"
 #include <iterator>
 
 namespace vulcan

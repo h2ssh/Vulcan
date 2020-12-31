@@ -18,11 +18,11 @@
 #ifndef CORE_MOTION_STATE_H
 #define CORE_MOTION_STATE_H
 
-#include <core/pose.h>
-#include <core/pose_distribution.h>
-#include <core/velocity.h>
-#include <core/drive_wheel.h>
-#include <system/message_traits.h>
+#include "core/pose.h"
+#include "core/pose_distribution.h"
+#include "core/velocity.h"
+#include "core/drive_wheel.h"
+#include "system/message_traits.h"
 #include <cassert>
 
 namespace vulcan

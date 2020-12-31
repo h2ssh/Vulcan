@@ -17,11 +17,11 @@
 #ifndef TRACKER_DYNAMIC_OBJECT_H
 #define TRACKER_DYNAMIC_OBJECT_H
 
-#include <tracker/goal.h>
-#include <tracker/object_boundary.h>
-#include <tracker/object_state.h>
-#include <tracker/types.h>
-#include <core/pose.h>
+#include "tracker/goal.h"
+#include "tracker/object_boundary.h"
+#include "tracker/object_state.h"
+#include "tracker/types.h"
+#include "core/pose.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 #include <memory>

@@ -12,10 +12,10 @@
 * \author   Collin Johnson
 */
 
-#include <system/module.h>
-#include <mpepc/metric_planner/director.h>
-#include <utils/config_file.h>
-#include <utils/command_line.h>
+#include "system/module.h"
+#include "mpepc/metric_planner/director.h"
+#include "utils/config_file.h"
+#include "utils/command_line.h"
 #include <vector>
 
 using namespace vulcan;

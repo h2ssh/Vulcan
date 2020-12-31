@@ -17,14 +17,14 @@
 #ifndef UI_DEBUG_GLOBAL_TOPO_DISPLAY_WIDGET_H
 #define UI_DEBUG_GLOBAL_TOPO_DISPLAY_WIDGET_H
 
-#include <hssh/global_topological/state.h>
-#include <hssh/global_topological/debug/hypothesis_tree.h>
-#include <hssh/global_topological/utils/metric_map_cache.h>
-#include <hssh/local_topological/event.h>
-#include <ui/common/ui_params.h>
-#include <ui/common/ui_forward_declarations.h>
-#include <ui/components/open_gl_widget.h>
-#include <utils/mutex.h>
+#include "hssh/global_topological/state.h"
+#include "hssh/global_topological/debug/hypothesis_tree.h"
+#include "hssh/global_topological/utils/metric_map_cache.h"
+#include "hssh/local_topological/event.h"
+#include "ui/common/ui_params.h"
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/components/open_gl_widget.h"
+#include "utils/mutex.h"
 #include <wx/wx.h>
 #include <map>
 #include <memory>

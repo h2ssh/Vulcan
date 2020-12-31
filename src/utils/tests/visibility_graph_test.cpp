@@ -7,7 +7,7 @@
 */
 
 
-#include <utils/visibility_graph.h>
+#include "utils/visibility_graph.h"
 #include <gtest/gtest.h>
 #include <iostream>
 

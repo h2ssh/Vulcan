@@ -21,9 +21,9 @@
 #include <queue>
 #include <vector>
 #include <set>
-#include <utils/object_pool.h>
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
+#include "utils/object_pool.h"
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 
 namespace vulcan
 {

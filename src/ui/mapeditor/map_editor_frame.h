@@ -17,7 +17,7 @@
 #ifndef UI_MAPEDITOR_MAP_EDITOR_FRAME_H
 #define UI_MAPEDITOR_MAP_EDITOR_FRAME_H
 
-#include <ui/mapeditor/map_editor.h>
+#include "ui/mapeditor/map_editor.h"
 #include <memory>
 
 namespace vulcan

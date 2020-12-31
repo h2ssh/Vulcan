@@ -10,9 +10,9 @@
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_DEBUG_INFO_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_DEBUG_INFO_H
 
-#include <hssh/metrical/localization/particle.h>
-#include <core/multivariate_gaussian.h>
-#include <core/laser_scan.h>
+#include "hssh/metrical/localization/particle.h"
+#include "core/multivariate_gaussian.h"
+#include "core/laser_scan.h"
 #include <cereal/types/vector.hpp>
 
 namespace vulcan

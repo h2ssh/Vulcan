@@ -14,9 +14,9 @@
 * Definition of KinematicControlLaw.
 */
 
-#include <mpepc/control/kinematic_control_law.h>
-#include <core/pose.h>
-#include <core/angle_functions.h>
+#include "mpepc/control/kinematic_control_law.h"
+#include "core/pose.h"
+#include "core/angle_functions.h"
 
 // #define DEBUG_KINEMATIC_CONTROL_LAW
 

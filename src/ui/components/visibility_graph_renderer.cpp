@@ -14,10 +14,10 @@
 * Declaration of VisibilityGraphRenderer.
 */
 
-#include <ui/components/visibility_graph_renderer.h>
-#include <ui/common/gl_shapes.h>
-#include <utils/visibility_graph.h>
-#include <utils/visibility_graph_feature.h>
+#include "ui/components/visibility_graph_renderer.h"
+#include "ui/common/gl_shapes.h"
+#include "utils/visibility_graph.h"
+#include "utils/visibility_graph_feature.h"
 #include <GL/gl.h>
 
 namespace vulcan

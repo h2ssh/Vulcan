@@ -15,10 +15,10 @@
 * without needing to send a separate message.
 */
 
-#include <mpepc/metric_planner/task/wait.h>
-#include <mpepc/manifold/wait.h>
-#include <core/motion_state.h>
-#include <utils/timestamp.h>
+#include "mpepc/metric_planner/task/wait.h"
+#include "mpepc/manifold/wait.h"
+#include "core/motion_state.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 namespace vulcan

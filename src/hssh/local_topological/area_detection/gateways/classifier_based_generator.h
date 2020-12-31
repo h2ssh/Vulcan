@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_CLASSIFIER_BASED_GENERATOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_CLASSIFIER_BASED_GENERATOR_H
 
-#include <hssh/local_topological/area_detection/gateways/generator.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_classifier.h>
+#include "hssh/local_topological/area_detection/gateways/generator.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_classifier.h"
 #include <memory>
 
 namespace vulcan

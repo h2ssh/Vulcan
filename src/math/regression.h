@@ -10,7 +10,7 @@
 #ifndef MATH_REGRESSION_H
 #define MATH_REGRESSION_H
 
-#include <core/line.h>
+#include "core/line.h"
 #include <cassert>
 #include <cmath>
 #include <numeric>

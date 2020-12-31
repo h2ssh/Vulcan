@@ -14,7 +14,7 @@
 * Definition of utility functions for drive_wheel_t.
 */
 
-#include <core/drive_wheel.h>
+#include "core/drive_wheel.h"
 #include <iostream>
 
 namespace vulcan

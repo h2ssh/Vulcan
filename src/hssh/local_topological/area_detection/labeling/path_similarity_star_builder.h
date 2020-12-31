@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_PATH_SIMILARITY_STAR_BUILDER_H
 #define HSSH_LOCAL_TOPOLOGICAL_PATH_SIMILARITY_STAR_BUILDER_H
 
-#include <hssh/local_topological/area_detection/labeling/small_scale_star_builder.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/params.h>
-#include <core/line.h>
+#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/params.h"
+#include "core/line.h"
 #include <map>
 #include <vector>
 

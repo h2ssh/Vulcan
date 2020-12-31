@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_RELOCALIZE_IN_LPM_H
 #define HSSH_LOCAL_METRIC_COMMANDS_RELOCALIZE_IN_LPM_H
 
-#include <hssh/local_metric/command.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/metrical/relocalization/filter_initializer.h>
+#include "hssh/local_metric/command.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/metrical/relocalization/filter_initializer.h"
 #include <cereal/types/base_class.hpp>
 
 namespace vulcan

@@ -14,12 +14,12 @@
 * Definition of DecisionPlannerDisplayWidget.
 */
 
-#include <ui/debug/decision_planner_display_widget.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/components/robot_renderer.h>
-#include <ui/components/decision_plan_renderer.h>
-#include <ui/common/ui_params.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/decision_planner_display_widget.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "ui/components/decision_plan_renderer.h"
+#include "ui/common/ui_params.h"
+#include "utils/auto_mutex.h"
 
 namespace vulcan
 {

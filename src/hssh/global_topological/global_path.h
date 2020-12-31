@@ -17,7 +17,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_PATH_H
 #define HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_PATH_H
 
-#include <hssh/global_topological/global_path_segment.h>
+#include "hssh/global_topological/global_path_segment.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 #include <iosfwd>

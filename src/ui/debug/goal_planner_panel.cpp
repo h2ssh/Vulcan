@@ -14,13 +14,13 @@
 * Definition of GoalPlannerPanel.
 */
 
-#include <ui/debug/goal_planner_panel.h>
-#include <ui/debug/goal_planner_display_widget.h>
-#include <ui/debug/debug_ui.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
-#include <utils/stub.h>
-#include <utils/timestamp.h>
+#include "ui/debug/goal_planner_panel.h"
+#include "ui/debug/goal_planner_display_widget.h"
+#include "ui/debug/debug_ui.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
+#include "utils/stub.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 namespace vulcan

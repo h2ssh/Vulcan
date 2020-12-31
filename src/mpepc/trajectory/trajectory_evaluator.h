@@ -17,10 +17,10 @@
 #ifndef MPEPC_TRAJECTORY_EVALUATOR_H
 #define MPEPC_TRAJECTORY_EVALUATOR_H
 
-#include <mpepc/trajectory/params.h>
-#include <mpepc/collision/robot_collision_model.h>
-#include <mpepc/simulator/dynamic_object_trajectory.h>
-#include <mpepc/metric_planner/task/task.h>
+#include "mpepc/trajectory/params.h"
+#include "mpepc/collision/robot_collision_model.h"
+#include "mpepc/simulator/dynamic_object_trajectory.h"
+#include "mpepc/metric_planner/task/task.h"
 #include <string>
 #include <memory>
 

@@ -15,9 +15,9 @@
 * into params structs.
 */
 
-#include <planner/goal/params.h>
+#include "planner/goal/params.h"
 #include <cassert>
-#include <utils/config_file.h>
+#include "utils/config_file.h"
 
 namespace vulcan
 {

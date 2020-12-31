@@ -11,11 +11,11 @@
 #define SENSORS_VISION_GRAPH_BASED_SEGMENTER_H
 
 #include <vector>
-#include <utils/disjoint_set_forest.h>
-#include <core/image.h>
-#include <vision/filters.h>
-#include <vision/vision_params.h>
-#include <vision/image_segmenter.h>
+#include "utils/disjoint_set_forest.h"
+#include "core/image.h"
+#include "vision/filters.h"
+#include "vision/vision_params.h"
+#include "vision/image_segmenter.h"
 
 namespace vulcan
 {

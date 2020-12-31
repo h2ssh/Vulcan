@@ -14,14 +14,14 @@
 * Definition of TopologicalMapRenderer.
 */
 
-#include <ui/components/topological_map_renderer.h>
-#include <hssh/global_topological/state.h>
-#include <hssh/global_topological/topological_map.h>
-#include <hssh/local_topological/areas/place.h>
-#include <hssh/global_topological/utils/metric_map_cache.h>
-#include <math/geometry/shape_fitting.h>
-#include <ui/common/gl_shapes.h>
-#include <utils/stub.h>
+#include "ui/components/topological_map_renderer.h"
+#include "hssh/global_topological/state.h"
+#include "hssh/global_topological/topological_map.h"
+#include "hssh/local_topological/areas/place.h"
+#include "hssh/global_topological/utils/metric_map_cache.h"
+#include "math/geometry/shape_fitting.h"
+#include "ui/common/gl_shapes.h"
+#include "utils/stub.h"
 #include <GL/gl.h>
 #include <boost/range/adaptor/map.hpp>
 #include <iostream>

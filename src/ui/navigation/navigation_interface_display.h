@@ -17,15 +17,15 @@
 #ifndef UI_NAVIGATION_NAVIGATION_INTERFACE_DISPLAY_H
 #define UI_NAVIGATION_NAVIGATION_INTERFACE_DISPLAY_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <ui/common/color_interpolator.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/pose.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <mpepc/trajectory/trajectory_planner_info.h>
-#include <planner/interface/decision.h>
-#include <tracker/dynamic_object_collection.h>
-#include <utils/locked_double_buffer.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "ui/common/color_interpolator.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/pose.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "mpepc/trajectory/trajectory_planner_info.h"
+#include "planner/interface/decision.h"
+#include "tracker/dynamic_object_collection.h"
+#include "utils/locked_double_buffer.h"
 
 namespace vulcan
 {

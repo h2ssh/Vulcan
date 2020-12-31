@@ -18,8 +18,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_AREA_H
 #define HSSH_GLOBAL_TOPOLOGICAL_AREA_H
 
-#include <hssh/utils/id.h>
-#include <hssh/types.h>
+#include "hssh/utils/id.h"
+#include "hssh/types.h"
 #include <cereal/access.hpp>
 #include <iosfwd>
 #include <cassert>

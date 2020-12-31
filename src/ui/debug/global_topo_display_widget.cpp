@@ -14,17 +14,17 @@
 * Definition of GlobalTopoDisplayWidget.
 */
 
-#include <ui/debug/global_topo_display_widget.h>
-#include <ui/components/topological_map_renderer.h>
-#include <ui/components/place_view_topological_map_renderer.h>
-#include <ui/components/graph_view_topological_map_renderer.h>
-#include <ui/components/hypothesis_tree_renderer.h>
-#include <ui/components/global_topo_map_previewer.h>
-#include <ui/common/gl_utilities.h>
-#include <hssh/global_topological/topological_map.h>
-#include <hssh/global_topological/mapping/tree_of_maps.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/global_topo_display_widget.h"
+#include "ui/components/topological_map_renderer.h"
+#include "ui/components/place_view_topological_map_renderer.h"
+#include "ui/components/graph_view_topological_map_renderer.h"
+#include "ui/components/hypothesis_tree_renderer.h"
+#include "ui/components/global_topo_map_previewer.h"
+#include "ui/common/gl_utilities.h"
+#include "hssh/global_topological/topological_map.h"
+#include "hssh/global_topological/mapping/tree_of_maps.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "utils/auto_mutex.h"
 #include <GL/gl.h>
 #include <iostream>
 

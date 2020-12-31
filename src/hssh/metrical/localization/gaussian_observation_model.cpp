@@ -14,12 +14,12 @@
 * Definition of GaussianObservationModel.
 */
 
-#include <hssh/metrical/localization/gaussian_observation_model.h>
-#include <hssh/metrical/localization/params.h>
-#include <hssh/metrical/localization/particle.h>
-#include <hssh/metrical/occupancy_grid.h>
-#include <laser/laser_scan_lines.h>
-#include <laser/moving_laser_scan.h>
+#include "hssh/metrical/localization/gaussian_observation_model.h"
+#include "hssh/metrical/localization/params.h"
+#include "hssh/metrical/localization/particle.h"
+#include "hssh/metrical/occupancy_grid.h"
+#include "laser/laser_scan_lines.h"
+#include "laser/moving_laser_scan.h"
 
 namespace vulcan
 {

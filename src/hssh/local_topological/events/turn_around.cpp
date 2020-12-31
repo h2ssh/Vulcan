@@ -14,9 +14,9 @@
 * Definition of TurnAroundEvent.
 */
 
-#include <hssh/local_topological/events/turn_around.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/local_topological/event_visitor.h>
+#include "hssh/local_topological/events/turn_around.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/event_visitor.h"
 #include <sstream>
 
 namespace vulcan

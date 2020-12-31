@@ -14,7 +14,7 @@
 * Definition of binomial_proportion_z_test.
 */
 
-#include <math/z_test.h>
+#include "math/z_test.h"
 #include <boost/math/distributions/normal.hpp>
 
 namespace vulcan

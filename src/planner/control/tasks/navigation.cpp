@@ -14,9 +14,9 @@
 * Definition of NavigationControlTask
 */
 
-#include <planner/control/tasks/navigation.h>
-#include <planner/control/tasks/pose.h>
-#include <planner/control/state.h>
+#include "planner/control/tasks/navigation.h"
+#include "planner/control/tasks/pose.h"
+#include "planner/control/state.h"
 
 namespace vulcan
 {

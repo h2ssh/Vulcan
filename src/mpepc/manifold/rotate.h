@@ -17,9 +17,9 @@
 #ifndef MPEPC_MANIFOLDS_ROTATE_H
 #define MPEPC_MANIFOLDS_ROTATE_H
 
-#include <mpepc/types.h>
-#include <mpepc/manifold/task_manifold.h>
-#include <core/pose.h>
+#include "mpepc/types.h"
+#include "mpepc/manifold/task_manifold.h"
+#include "core/pose.h"
 
 namespace vulcan
 {

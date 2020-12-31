@@ -14,9 +14,9 @@
 * Definition of create_area_event_detectors.
 */
 
-#include <hssh/local_topological/event_detection/area_event_detector.h>
-#include <hssh/local_topological/event_detection/area_transition_detector.h>
-#include <hssh/local_topological/event_detection/path_direction_detector.h>
+#include "hssh/local_topological/event_detection/area_event_detector.h"
+#include "hssh/local_topological/event_detection/area_transition_detector.h"
+#include "hssh/local_topological/event_detection/path_direction_detector.h"
 
 namespace vulcan
 {

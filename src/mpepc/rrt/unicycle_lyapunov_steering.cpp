@@ -15,8 +15,8 @@
 * Definition of numerically stable steering via lyapunov function.
 */
 
-#include <mpepc/rrt/unicycle_lyapunov_steering.h>
-#include <mpepc/math/unicycle_lyapunov_distance.h>
+#include "mpepc/rrt/unicycle_lyapunov_steering.h"
+#include "mpepc/math/unicycle_lyapunov_distance.h"
 
 namespace vulcan
 {

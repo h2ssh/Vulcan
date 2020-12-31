@@ -17,8 +17,8 @@
 *   - minimum_cost_path
 */
 
-#include <mpepc/grid/navigation_grid_utils.h>
-#include <mpepc/grid/navigation_grid.h>
+#include "mpepc/grid/navigation_grid_utils.h"
+#include "mpepc/grid/navigation_grid.h"
 
 namespace vulcan
 {

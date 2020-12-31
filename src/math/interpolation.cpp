@@ -14,8 +14,8 @@
 * Definition of interpolation functions declared in interpolation.h.
 */
 
-#include <math/interpolation.h>
-#include <core/point.h>
+#include "math/interpolation.h"
+#include "core/point.h"
 #include <cassert>
 
 namespace vulcan

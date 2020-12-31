@@ -14,11 +14,11 @@
 * Definition of VoronoiIsovistGradientsRenderer.
 */
 
-#include <ui/components/voronoi_isovist_gradients_renderer.h>
-#include <ui/common/gl_shapes.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_gradients.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_maxima.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
+#include "ui/components/voronoi_isovist_gradients_renderer.h"
+#include "ui/common/gl_shapes.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_maxima.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 
 namespace vulcan
 {

@@ -7,8 +7,8 @@
 */
 
 
-#include <ui/common/color_generator.h>
-#include <ui/common/ui_color.h>
+#include "ui/common/color_generator.h"
+#include "ui/common/ui_color.h"
 #include <wx/image.h>
 #include <cstdlib>
 #include <ctime>

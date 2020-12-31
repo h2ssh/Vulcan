@@ -17,10 +17,10 @@
 #ifndef TRACKER_GOALS_GATEWAY_ESTIMATOR_H
 #define TRACKER_GOALS_GATEWAY_ESTIMATOR_H
 
-#include <tracker/goals/goal_estimator.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/utils/id.h>
-#include <utils/fixed_duration_buffer.h>
+#include "tracker/goals/goal_estimator.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/utils/id.h"
+#include "utils/fixed_duration_buffer.h"
 
 #include <gnuplot-iostream.h>
 

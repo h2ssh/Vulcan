@@ -21,8 +21,8 @@
 #ifndef UI_COMMON_SHAPE_CREATORS_H
 #define UI_COMMON_SHAPE_CREATORS_H
 
-#include <ui/common/gl_event.h>
-#include <math/geometry/rectangle.h>
+#include "ui/common/gl_event.h"
+#include "math/geometry/rectangle.h"
 
 namespace vulcan
 {

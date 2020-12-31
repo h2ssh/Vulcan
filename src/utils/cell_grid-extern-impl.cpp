@@ -7,7 +7,7 @@
 */
 
 
-#include <utils/cell_grid.h>
+#include "utils/cell_grid.h"
 
 namespace vulcan
 {

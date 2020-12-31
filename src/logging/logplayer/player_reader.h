@@ -17,7 +17,7 @@
 #ifndef LOGGING_LOGPLAYER_PLAYER_READER_H
 #define LOGGING_LOGPLAYER_PLAYER_READER_H
 
-#include <logging/logplayer/log_reader.h>
+#include "logging/logplayer/log_reader.h"
 
 namespace vulcan 
 {

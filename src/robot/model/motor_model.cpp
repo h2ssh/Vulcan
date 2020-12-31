@@ -13,7 +13,7 @@
 *
 */
 
-#include <robot/model/motor_model.h>
+#include "robot/model/motor_model.h"
 #include <cmath>
 
 namespace vulcan

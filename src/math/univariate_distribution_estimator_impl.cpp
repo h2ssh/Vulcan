@@ -20,14 +20,14 @@
 *   - TruncatedGaussianDistribution
 */
 
-#include <math/univariate_distribution_estimator_impl.h>
-#include <math/univariate_gaussian.h>
-#include <math/discrete_gaussian.h>
-#include <math/beta_distribution.h>
-#include <math/exponential_distribution.h>
-#include <math/gamma_distribution.h>
-#include <math/truncated_gaussian_distribution.h>
-#include <math/statistics.h>
+#include "math/univariate_distribution_estimator_impl.h"
+#include "math/univariate_gaussian.h"
+#include "math/discrete_gaussian.h"
+#include "math/beta_distribution.h"
+#include "math/exponential_distribution.h"
+#include "math/gamma_distribution.h"
+#include "math/truncated_gaussian_distribution.h"
+#include "math/statistics.h"
 #include <boost/math/special_functions/digamma.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <iostream>

@@ -14,7 +14,7 @@
 * Definition of ExponentialDistribution.
 */
 
-#include <math/exponential_distribution.h>
+#include "math/exponential_distribution.h"
 #include <cmath>
 #include <iostream>
 #include <limits>

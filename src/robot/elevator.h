@@ -20,7 +20,7 @@
 #ifndef STATE_ELEVATOR_H
 #define STATE_ELEVATOR_H
 
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 #include <cstdint>
 
 namespace vulcan

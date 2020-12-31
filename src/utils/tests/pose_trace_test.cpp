@@ -14,7 +14,7 @@
 * pose_trace_test is a test program that tests the functionality of PoseTrace.
 */
 
-#include <utils/pose_trace.h>
+#include "utils/pose_trace.h"
 #include <gtest/gtest.h>
 #include <iostream>
 #include <string>

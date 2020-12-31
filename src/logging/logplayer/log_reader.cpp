@@ -14,12 +14,12 @@
 * Definition of LogReader and factory for loading the various log readers.
 */
 
-#include <logging/logplayer/log_reader.h>
-#include <logging/logplayer/beeson_reader.h>
-#include <logging/logplayer/carmen_reader.h>
-#include <logging/logplayer/player_reader.h>
-#include <logging/logplayer/saphira_reader.h>
-#include <system/module_communicator.h>
+#include "logging/logplayer/log_reader.h"
+#include "logging/logplayer/beeson_reader.h"
+#include "logging/logplayer/carmen_reader.h"
+#include "logging/logplayer/player_reader.h"
+#include "logging/logplayer/saphira_reader.h"
+#include "system/module_communicator.h"
 #include <algorithm>
 
 

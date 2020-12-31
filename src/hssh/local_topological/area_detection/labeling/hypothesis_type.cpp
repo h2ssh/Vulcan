@@ -14,7 +14,7 @@
 * Definition of HypothesisType.
 */
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
 #include <iostream>
 #include <string>
 

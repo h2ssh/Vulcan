@@ -17,7 +17,7 @@
 #ifndef UI_COMMON_GL_CAMERA_CONTROLLER_H
 #define UI_COMMON_GL_CAMERA_CONTROLLER_H
 
-#include <ui/common/gl_event.h>
+#include "ui/common/gl_event.h"
 #include <wx/event.h>
 
 class wxKeyEvent;

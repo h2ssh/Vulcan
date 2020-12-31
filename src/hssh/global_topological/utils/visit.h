@@ -17,11 +17,11 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_UTILS_VISIT_H
 #define HSSH_GLOBAL_TOPOLOGICAL_UTILS_VISIT_H
 
-#include <hssh/local_metric/pose.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_topological/events/turn_around.h>
-#include <hssh/utils/id.h>
+#include "hssh/local_metric/pose.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/events/turn_around.h"
+#include "hssh/utils/id.h"
 #include <boost/optional.hpp>
 #include <cereal/access.hpp>
 #include <memory>

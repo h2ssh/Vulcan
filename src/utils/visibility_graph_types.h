@@ -17,7 +17,7 @@
 #ifndef UTILS_VISIBILITY_GRAPH_TYPES_H
 #define UTILS_VISIBILITY_GRAPH_TYPES_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <vector>
 
 namespace vulcan

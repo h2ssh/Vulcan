@@ -21,8 +21,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_TRANSITION_H
 #define HSSH_GLOBAL_TOPOLOGICAL_TRANSITION_H
 
-#include <hssh/global_topological/area.h>
-#include <hssh/utils/id.h>
+#include "hssh/global_topological/area.h"
+#include "hssh/utils/id.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_GRAPH_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_GRAPH_H
 
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/local_topo_route.h>
-#include <core/point.h>
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/local_topo_route.h"
+#include "core/point.h"
 #include <boost/graph/adjacency_list.hpp>
 #include <unordered_map>
 

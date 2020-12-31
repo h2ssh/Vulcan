@@ -14,7 +14,7 @@
 * Definition of ModuleCommunicator.
 */
 
-#include <system/module_communicator.h>
+#include "system/module_communicator.h"
 #include <poll.h>
 
 namespace vulcan

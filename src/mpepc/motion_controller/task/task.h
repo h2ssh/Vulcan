@@ -17,9 +17,9 @@
 #ifndef MPEPC_MOTION_CONTROLLER_TASK_H
 #define MPEPC_MOTION_CONTROLLER_TASK_H
 
-#include <utils/timestamp.h>
+#include "utils/timestamp.h"
 #include <string>
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>
 

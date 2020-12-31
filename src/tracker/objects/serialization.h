@@ -10,10 +10,10 @@
 #ifndef TRACKER_OBJECTS_SERIALIZATION_H
 #define TRACKER_OBJECTS_SERIALIZATION_H
 
-#include <tracker/objects/person.h>
-#include <tracker/objects/unclassified.h>
-#include <tracker/objects/rigid.h>
-#include <tracker/objects/sliding_object.h>
-#include <tracker/objects/pivoting_object.h>
+#include "tracker/objects/person.h"
+#include "tracker/objects/unclassified.h"
+#include "tracker/objects/rigid.h"
+#include "tracker/objects/sliding_object.h"
+#include "tracker/objects/pivoting_object.h"
 
 #endif // TRACKER_OBJECTS_SERIALIZATION_H

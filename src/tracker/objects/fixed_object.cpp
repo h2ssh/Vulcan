@@ -14,8 +14,8 @@
 * Definition of FixedObject.
 */
 
-#include <tracker/objects/fixed_object.h>
-#include <tracker/laser_object.h>
+#include "tracker/objects/fixed_object.h"
+#include "tracker/laser_object.h"
 
 namespace vulcan
 {

@@ -7,10 +7,10 @@
 */
 
 
-#include <ui/debug/debug_ui_app.h>
-#include <utils/config_file.h>
-#include <ui/common/ui_params.h>
-#include <ui/debug/debug_ui_frame.h>
+#include "ui/debug/debug_ui_app.h"
+#include "utils/config_file.h"
+#include "ui/common/ui_params.h"
+#include "ui/debug/debug_ui_frame.h"
 
 
 using vulcan::ui::DebugUIApp;

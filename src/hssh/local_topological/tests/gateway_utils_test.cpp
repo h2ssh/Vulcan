@@ -14,8 +14,8 @@
 * Unit tests for ensuring proper functionality of the functions defined in gateway_utils.h.
 */
 
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
 #include <gtest/gtest.h>
 
 using namespace vulcan;

@@ -14,7 +14,7 @@
 * Implementation of GLColor.
 */
 
-#include <ui/common/ui_color.h>
+#include "ui/common/ui_color.h"
 #include <boost/algorithm/clamp.hpp>
 #include <GL/gl.h>
 #include <cstdint>

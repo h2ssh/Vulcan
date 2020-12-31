@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENTS_AREA_TRANSITION_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENTS_AREA_TRANSITION_H
 
-#include <hssh/local_topological/event.h>
-#include <hssh/local_topological/gateway.h>
+#include "hssh/local_topological/event.h"
+#include "hssh/local_topological/gateway.h"
 #include <boost/optional.hpp>
 #include <cereal/types/base_class.hpp>
 #include <memory>

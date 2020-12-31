@@ -19,8 +19,8 @@
 #ifndef MPEPC_TYPES_H
 #define MPEPC_TYPES_H
 
-#include <core/line.h>
-#include <core/motion_state.h>
+#include "core/line.h"
+#include "core/motion_state.h"
 
 namespace vulcan
 {

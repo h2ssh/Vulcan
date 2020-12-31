@@ -17,13 +17,13 @@
 #ifndef UI_DEBUG_LOCALTOPO_PANEL_H
 #define UI_DEBUG_LOCALTOPO_PANEL_H
 
-#include <ui/common/ui_panel.h>
-#include <ui/common/grid_object_selector.h>
-#include <ui/common/object_selector_event_handler.h>
-#include <hssh/local_topological/debug_info.h>
-#include <hssh/local_topological/event.h>
-#include <hssh/local_topological/area_detection/labeling/csp_debug.h>
-#include <utils/mutex.h>
+#include "ui/common/ui_panel.h"
+#include "ui/common/grid_object_selector.h"
+#include "ui/common/object_selector_event_handler.h"
+#include "hssh/local_topological/debug_info.h"
+#include "hssh/local_topological/event.h"
+#include "hssh/local_topological/area_detection/labeling/csp_debug.h"
+#include "utils/mutex.h"
 #include <wx/wx.h>
 #include <wx/tglbtn.h>
 #include <atomic>

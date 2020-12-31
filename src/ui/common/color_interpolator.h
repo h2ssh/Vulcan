@@ -17,7 +17,7 @@
 #ifndef UI_COMMON_COLOR_INTERPOLATOR_H
 #define UI_COMMON_COLOR_INTERPOLATOR_H
 
-#include <ui/common/ui_color.h>
+#include "ui/common/ui_color.h"
 #include <array>
 #include <vector>
 

@@ -10,7 +10,7 @@
 #ifndef LCMTYPES_GAUSSIAN_DISTRIBUTION_T_H
 #define LCMTYPES_GAUSSIAN_DISTRIBUTION_T_H
 
-#include <lcmtypes/vulcan_lcm_gaussian_distribution_t.h>
+#include "lcmtypes/vulcan_lcm_gaussian_distribution_t.h"
 #include <string>
 
 namespace vulcan

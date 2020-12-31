@@ -17,8 +17,8 @@
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_KLD_SAMPLE_SIZE_CALCULATOR_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_KLD_SAMPLE_SIZE_CALCULATOR_H
 
-#include <hssh/metrical/localization/params.h>
-#include <hssh/metrical/localization/particle.h>
+#include "hssh/metrical/localization/params.h"
+#include "hssh/metrical/localization/particle.h"
 
 namespace vulcan
 {

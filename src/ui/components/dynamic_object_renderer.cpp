@@ -14,17 +14,17 @@
 * Definition of DynamicObjectRenderer.
 */
 
-#include <ui/components/dynamic_object_renderer.h>
-#include <ui/components/object_boundary_renderer.h>
-#include <ui/common/color_interpolator.h>
-#include <ui/common/gl_shapes.h>
-#include <tracker/dynamic_object_collection.h>
-#include <tracker/dynamic_object.h>
-#include <tracker/objects/person.h>
-#include <tracker/objects/rigid.h>
-#include <tracker/objects/unclassified.h>
-#include <tracker/objects/pivoting_object.h>
-#include <tracker/objects/sliding_object.h>
+#include "ui/components/dynamic_object_renderer.h"
+#include "ui/components/object_boundary_renderer.h"
+#include "ui/common/color_interpolator.h"
+#include "ui/common/gl_shapes.h"
+#include "tracker/dynamic_object_collection.h"
+#include "tracker/dynamic_object.h"
+#include "tracker/objects/person.h"
+#include "tracker/objects/rigid.h"
+#include "tracker/objects/unclassified.h"
+#include "tracker/objects/pivoting_object.h"
+#include "tracker/objects/sliding_object.h"
 #include <GL/gl.h>
 #include <boost/variant/static_visitor.hpp>
 

@@ -12,8 +12,8 @@
 
 #include <stdint.h>
 #include <vector>
-#include <core/point.h>
-#include <math/geometry/polygon.h>
+#include "core/point.h"
+#include "math/geometry/polygon.h"
 
 namespace vulcan
 {

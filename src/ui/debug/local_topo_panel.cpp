@@ -14,26 +14,26 @@
 * Definition of LocalTopoPanel.
 */
 
-#include <ui/debug/local_topo_panel.h>
-#include <ui/debug/local_topo_display_widget.h>
-#include <ui/debug/debug_ui.h>
-#include <ui/components/labeling_csp_player.h>
-#include <ui/common/file_dialog_settings.h>
-#include <hssh/local_metric/pose.h>
-#include <hssh/local_topological/command.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/gateways/feature_extraction.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_classifier.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_gradients.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_maxima.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
-#include <utils/serialized_file_io.h>
-#include <utils/visibility_graph_feature.h>
-#include <utils/stub.h>
+#include "ui/debug/local_topo_panel.h"
+#include "ui/debug/local_topo_display_widget.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/components/labeling_csp_player.h"
+#include "ui/common/file_dialog_settings.h"
+#include "hssh/local_metric/pose.h"
+#include "hssh/local_topological/command.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/gateways/feature_extraction.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_classifier.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_maxima.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
+#include "utils/serialized_file_io.h"
+#include "utils/visibility_graph_feature.h"
+#include "utils/stub.h"
 #include <cassert>
 
 // For KDevelop code completion to work with the wxWidgets event table. It doesn't like the togglebutton.

@@ -17,10 +17,10 @@
 #ifndef MPEPC_PATH_FOLLOWING_CONTROLLER_H
 #define MPEPC_PATH_FOLLOWING_CONTROLLER_H
 
-#include <mpepc/motion_controller/controller/motion_controller.h>
-#include <mpepc/motion_controller/waypoint_follower/waypoint_follower.h>
-#include <mpepc/motion_controller/waypoint_follower/waypoint_decider.h>
-#include <mpepc/motion_controller/task/path.h>
+#include "mpepc/motion_controller/controller/motion_controller.h"
+#include "mpepc/motion_controller/waypoint_follower/waypoint_follower.h"
+#include "mpepc/motion_controller/waypoint_follower/waypoint_decider.h"
+#include "mpepc/motion_controller/task/path.h"
 
 namespace vulcan
 {

@@ -14,8 +14,8 @@
 * Definition of SetMapCommand.
 */
 
-#include <hssh/local_metric/commands/set_map.h>
-#include <hssh/metrical/mapping/mapper.h>
+#include "hssh/local_metric/commands/set_map.h"
+#include "hssh/metrical/mapping/mapper.h"
 
 namespace vulcan 
 {

@@ -17,12 +17,12 @@
 #ifndef MPEPC_MOTION_TARGET_FOLLOWING_CONTROLLER_H
 #define MPEPC_MOTION_TARGET_FOLLOWING_CONTROLLER_H
 
-#include <mpepc/motion_controller/controller/motion_controller.h>
-#include <mpepc/motion_controller/task/target.h>
-#include <mpepc/motion_controller/params.h>
-#include <mpepc/control/kinematic_control_law.h>
-#include <mpepc/control/joystick_control_law.h>
-#include <robot/commands.h>
+#include "mpepc/motion_controller/controller/motion_controller.h"
+#include "mpepc/motion_controller/task/target.h"
+#include "mpepc/motion_controller/params.h"
+#include "mpepc/control/kinematic_control_law.h"
+#include "mpepc/control/joystick_control_law.h"
+#include "robot/commands.h"
 
 namespace vulcan
 {

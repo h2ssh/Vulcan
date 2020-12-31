@@ -14,8 +14,8 @@
 * Definition of DifferentialTorqueDrive.
 */
 
-#include <robot/model/differential_torque_plant.h>
-#include <utils/timestamp.h>
+#include "robot/model/differential_torque_plant.h"
+#include "utils/timestamp.h"
 
 namespace vulcan
 {

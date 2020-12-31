@@ -14,15 +14,15 @@
 * Definition of GatewayClassifier.
 */
 
-#include <hssh/local_topological/area_detection/gateways/gateway_classifier.h>
-#include <hssh/local_topological/area_detection/gateways/feature_extraction.h>
-#include <hssh/local_topological/training/labeled_gateway_data.h>
-#include <utils/histogram.h>
-#include <utils/plot2d.h>
-#include <math/statistics.h>
-#include <utils/boosting.h>
-#include <utils/feature_vector.h>
-#include <utils/timestamp.h>
+#include "hssh/local_topological/area_detection/gateways/gateway_classifier.h"
+#include "hssh/local_topological/area_detection/gateways/feature_extraction.h"
+#include "hssh/local_topological/training/labeled_gateway_data.h"
+#include "utils/histogram.h"
+#include "utils/plot2d.h"
+#include "math/statistics.h"
+#include "utils/boosting.h"
+#include "utils/feature_vector.h"
+#include "utils/timestamp.h"
 #include <random>
 #include <cassert>
 

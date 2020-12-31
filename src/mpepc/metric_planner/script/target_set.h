@@ -17,7 +17,7 @@
 #ifndef MPEPC_METRIC_TARGET_SET_H
 #define MPEPC_METRIC_TARGET_SET_H
 
-#include <core/pose.h>
+#include "core/pose.h"
 #include <iosfwd>
 #include <string>
 #include <vector>

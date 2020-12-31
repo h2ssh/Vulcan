@@ -17,8 +17,8 @@
 *   - save_scans       :  dumps the stored scans to disk
 */
 
-#include <hssh/metrical/mapping/map_builder.h>
-#include <laser/moving_laser_scan.h>
+#include "hssh/metrical/mapping/map_builder.h"
+#include "laser/moving_laser_scan.h"
 #include <string>
 #include <vector>
 

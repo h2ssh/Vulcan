@@ -17,9 +17,9 @@
 #ifndef PLANNER_DECISION_STATE_H
 #define PLANNER_DECISION_STATE_H
 
-#include <core/pose.h>
-#include <hssh/local_topological/local_topology_events.h>
-#include <hssh/local_topological/local_path.h>
+#include "core/pose.h"
+#include "hssh/local_topological/local_topology_events.h"
+#include "hssh/local_topological/local_path.h"
 
 namespace vulcan
 {

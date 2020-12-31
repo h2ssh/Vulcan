@@ -17,8 +17,8 @@
 #ifndef UI_COMPONENTS_POSE_TRACE_RENDERER_H
 #define UI_COMPONENTS_POSE_TRACE_RENDERER_H
 
-#include <ui/common/ui_color.h>
-#include <core/pose.h>
+#include "ui/common/ui_color.h"
+#include "core/pose.h"
 #include <deque>
 #include <vector>
 

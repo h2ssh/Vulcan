@@ -19,12 +19,12 @@
 #define SENSORS_MICROSTRAIN_3DMGX3_H
 
 #include <vector>
-#include <sensors/imu.h>
-#include <utils/sensor_time.h>
-#include <utils/thread.h>
-#include <utils/mutex.h>
-#include <utils/condition_variable.h>
-#include <utils/serial.h>
+#include "sensors/imu.h"
+#include "utils/sensor_time.h"
+#include "utils/thread.h"
+#include "utils/mutex.h"
+#include "utils/condition_variable.h"
+#include "utils/serial.h"
 
 namespace vulcan
 {

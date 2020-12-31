@@ -14,7 +14,7 @@
 * Definition of GaussianCreator.
 */
 
-#include <ui/common/gaussian_creator.h>
+#include "ui/common/gaussian_creator.h"
 
 namespace vulcan
 {

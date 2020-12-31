@@ -7,8 +7,8 @@
 */
 
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <utils/boosting.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "utils/boosting.h"
 #include <boost/filesystem.hpp>
 #include <algorithm>
 #include <iostream>

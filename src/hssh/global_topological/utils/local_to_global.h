@@ -23,7 +23,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_UTILS_LOCAL_TO_GLOBAL_H
 #define HSSH_GLOBAL_TOPOLOGICAL_UTILS_LOCAL_TO_GLOBAL_H
 
-#include <hssh/global_topological/transition_cycle.h>
+#include "hssh/global_topological/transition_cycle.h"
 #include <boost/optional.hpp>
 
 namespace vulcan

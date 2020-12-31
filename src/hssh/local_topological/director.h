@@ -17,26 +17,26 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_DIRECTOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_DIRECTOR_H
 
-#include <system/director.h>
+#include "system/director.h"
 
-#include <utils/mutex.h>
-#include <utils/condition_variable.h>
+#include "utils/mutex.h"
+#include "utils/condition_variable.h"
 
-#include <core/pose.h>
-#include <laser/laser_scan_lines.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/pose.h>
+#include "core/pose.h"
+#include "laser/laser_scan_lines.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/pose.h"
 
-#include <hssh/local_topological/cmd_line.h>
-#include <hssh/local_topological/params.h>
-#include <hssh/local_topological/mode.h>
-#include <hssh/local_topological/area_detector.h>
-#include <hssh/local_topological/event_detector.h>
-#include <hssh/local_topological/localizer.h>
+#include "hssh/local_topological/cmd_line.h"
+#include "hssh/local_topological/params.h"
+#include "hssh/local_topological/mode.h"
+#include "hssh/local_topological/area_detector.h"
+#include "hssh/local_topological/event_detector.h"
+#include "hssh/local_topological/localizer.h"
 
-#include <hssh/utils/lpm_axes_calculator.h>
-#include <utils/locked_bool.h>
-#include <utils/locked_double_buffer.h>
+#include "hssh/utils/lpm_axes_calculator.h"
+#include "utils/locked_bool.h"
+#include "utils/locked_double_buffer.h"
 
 #include <atomic>
 #include <vector>

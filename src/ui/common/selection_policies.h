@@ -20,7 +20,7 @@
 #ifndef UI_COMMON_SELECTION_POLICIES_H
 #define UI_COMMON_SELECTION_POLICIES_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <algorithm>
 #include <vector>
 

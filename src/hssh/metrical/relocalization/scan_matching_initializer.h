@@ -17,7 +17,7 @@
 #ifndef HSSH_UTILS_METRICAL_RELOCALIZATION_SCAN_MATCHING_INITIALIZER_H
 #define HSSH_UTILS_METRICAL_RELOCALIZATION_SCAN_MATCHING_INITIALIZER_H
 
-#include <hssh/metrical/relocalization/filter_initializer.h>
+#include "hssh/metrical/relocalization/filter_initializer.h"
 #include <cereal/access.hpp>
 #include <vector>
 

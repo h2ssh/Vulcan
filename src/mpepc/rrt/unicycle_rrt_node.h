@@ -17,7 +17,7 @@
 #ifndef UNICYCLE_RRT_NODE_H
 #define UNICYCLE_RRT_NODE_H
 
-#include <core/pose.h>
+#include "core/pose.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 

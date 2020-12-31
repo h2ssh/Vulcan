@@ -14,9 +14,9 @@
 * Definition of GlassMap.
 */
 
-#include <hssh/metrical/glass_map.h>
-#include <hssh/metrical/mapping/glass_map_utils.h>
-#include <utils/timestamp.h>
+#include "hssh/metrical/glass_map.h"
+#include "hssh/metrical/mapping/glass_map_utils.h"
+#include "utils/timestamp.h"
 #include <boost/algorithm/clamp.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <cstdlib>

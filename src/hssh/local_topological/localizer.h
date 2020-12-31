@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCALIZER_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCALIZER_H
 
-#include <hssh/local_topological/event.h>
-#include <hssh/local_topological/event_visitor.h>
-#include <hssh/local_topological/location.h>
+#include "hssh/local_topological/event.h"
+#include "hssh/local_topological/event_visitor.h"
+#include "hssh/local_topological/location.h"
 
 namespace vulcan 
 {

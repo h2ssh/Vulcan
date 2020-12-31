@@ -17,7 +17,7 @@
 #ifndef TRACKER_TRACKING_OBJECT_FACTORY_H
 #define TRACKER_TRACKING_OBJECT_FACTORY_H
 
-#include <tracker/types.h>
+#include "tracker/types.h"
 #include <memory>
 
 namespace vulcan

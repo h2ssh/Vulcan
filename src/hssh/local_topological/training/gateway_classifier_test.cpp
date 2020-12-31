@@ -14,15 +14,15 @@
 * Definition of GatewayClassifierTest.
 */
 
-#include <hssh/local_topological/training/gateway_classifier_test.h>
-#include <hssh/local_topological/training/gateway_errors.h>
-#include <hssh/local_topological/training/labeled_gateway_data.h>
-#include <hssh/local_topological/area_detection/gateways/classifier_based_generator.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_voronoi_gateway_generator.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_orientation_gateway_generator.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_classifier.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_locator.h>
-#include <utils/histogram.h>
+#include "hssh/local_topological/training/gateway_classifier_test.h"
+#include "hssh/local_topological/training/gateway_errors.h"
+#include "hssh/local_topological/training/labeled_gateway_data.h"
+#include "hssh/local_topological/area_detection/gateways/classifier_based_generator.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_voronoi_gateway_generator.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_orientation_gateway_generator.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_classifier.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_locator.h"
+#include "utils/histogram.h"
 #include <gnuplot-iostream.h>
 #include <boost/range/iterator_range.hpp>
 #include <tuple>

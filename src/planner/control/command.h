@@ -17,9 +17,9 @@
 #ifndef PLANNER_CONTROL_COMMAND_H
 #define PLANNER_CONTROL_COMMAND_H
 
-#include <planner/control/task.h>
-#include <mpepc/metric_planner/task/task.h>
-#include <system/message_traits.h>
+#include "planner/control/task.h"
+#include "mpepc/metric_planner/task/task.h"
+#include "system/message_traits.h"
 #include <cereal/types/memory.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>

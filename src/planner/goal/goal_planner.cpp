@@ -14,12 +14,12 @@
 * Definition of GoalPlanner.
 */
 
-#include <planner/goal/goal_planner.h>
-#include <planner/goal/goal_target.h>
-#include <planner/goal/search.h>
-#include <planner/goal/debug_info.h>
-#include <hssh/global_topological/topological_map.h>
-#include <planner/decision/decision_target.h>
+#include "planner/goal/goal_planner.h"
+#include "planner/goal/goal_target.h"
+#include "planner/goal/search.h"
+#include "planner/goal/debug_info.h"
+#include "hssh/global_topological/topological_map.h"
+#include "planner/decision/decision_target.h"
 #include <iostream>
 #include <cassert>
 

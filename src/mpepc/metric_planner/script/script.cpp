@@ -14,12 +14,12 @@
 * Definition of MetricPlannerScript.
 */
 
-#include <mpepc/metric_planner/script/script.h>
-#include <mpepc/metric_planner/script/script_task.h>
-#include <mpepc/metric_planner/task/navigation.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <utils/config_file_utils.h>
-#include <utils/tagged_file.h>
+#include "mpepc/metric_planner/script/script.h"
+#include "mpepc/metric_planner/script/script_task.h"
+#include "mpepc/metric_planner/task/navigation.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "utils/config_file_utils.h"
+#include "utils/tagged_file.h"
 #include <map>
 #include <memory>
 #include <iostream>

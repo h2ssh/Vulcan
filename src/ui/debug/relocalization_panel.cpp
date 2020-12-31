@@ -14,19 +14,19 @@
 * Definition of RelocalizationPanel.
 */
 
-#include <ui/debug/relocalization_panel.h>
-#include <ui/debug/relocalization_display_widget.h>
-#include <ui/debug/debug_ui.h>
-#include <ui/common/shape_creators.h>
-#include <hssh/local_metric/lpm_io.h>
-#include <hssh/local_metric/commands/relocalize_in_lpm.h>
-#include <hssh/global_metric/debug_info.h>
-#include <hssh/global_metric/map.h>
-#include <hssh/global_metric/messages.h>
-#include <hssh/metrical/relocalization/filter_initializer_impl.h>
-#include <hssh/metrical/relocalization/scan_matching_initializer.h>
-#include <system/module_communicator.h>
-#include <utils/timestamp.h>
+#include "ui/debug/relocalization_panel.h"
+#include "ui/debug/relocalization_display_widget.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/common/shape_creators.h"
+#include "hssh/local_metric/lpm_io.h"
+#include "hssh/local_metric/commands/relocalize_in_lpm.h"
+#include "hssh/global_metric/debug_info.h"
+#include "hssh/global_metric/map.h"
+#include "hssh/global_metric/messages.h"
+#include "hssh/metrical/relocalization/filter_initializer_impl.h"
+#include "hssh/metrical/relocalization/scan_matching_initializer.h"
+#include "system/module_communicator.h"
+#include "utils/timestamp.h"
 #include <cassert>
 #include <iostream>
 

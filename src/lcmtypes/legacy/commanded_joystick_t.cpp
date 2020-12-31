@@ -7,10 +7,10 @@
 */
 
 
-#include <lcmtypes/legacy/commanded_joystick_t.h>
-#include <robot/commands.h>
-#include <lcmtypes/subscription_manager.h>
-#include <lcmtypes/message_helpers.h>
+#include "lcmtypes/legacy/commanded_joystick_t.h"
+#include "robot/commands.h"
+#include "lcmtypes/subscription_manager.h"
+#include "lcmtypes/message_helpers.h"
 
 static vulcan::lcm::SubscriptionManager<vulcan_lcm_commanded_joystick_t, vulcan::robot::commanded_joystick_t> subscribers;
 

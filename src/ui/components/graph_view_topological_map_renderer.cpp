@@ -14,15 +14,15 @@
 * Definition of GraphViewTopologicalMapRenderer.
 */
 
-#include <ui/components/graph_view_topological_map_renderer.h>
-#include <ui/components/small_scale_star_renderer.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <core/point.h>
-#include <core/pose.h>
-#include <hssh/global_topological/global_place.h>
-#include <hssh/global_topological/global_path_segment.h>
-#include <hssh/local_topological/areas/place.h>
+#include "ui/components/graph_view_topological_map_renderer.h"
+#include "ui/components/small_scale_star_renderer.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "core/point.h"
+#include "core/pose.h"
+#include "hssh/global_topological/global_place.h"
+#include "hssh/global_topological/global_path_segment.h"
+#include "hssh/local_topological/areas/place.h"
 #include <cmath>
 #include <GL/gl.h>
 

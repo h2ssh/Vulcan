@@ -14,8 +14,8 @@
 * Definition of UnicycleLyapunovDistance.
 */
 
-#include <mpepc/math/unicycle_lyapunov_distance.h>
-#include <core/pose.h>
+#include "mpepc/math/unicycle_lyapunov_distance.h"
+#include "core/pose.h"
 
 namespace vulcan
 {

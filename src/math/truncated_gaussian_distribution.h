@@ -17,7 +17,7 @@
 #ifndef MATH_TRUNCATED_GAUSSIAN_DISTRIBUTION_H
 #define MATH_TRUNCATED_GAUSSIAN_DISTRIBUTION_H
 
-#include <math/univariate_distribution.h>
+#include "math/univariate_distribution.h"
 
 namespace vulcan
 {

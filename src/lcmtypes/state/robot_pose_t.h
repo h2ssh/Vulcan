@@ -11,7 +11,7 @@
 #define LCMTYPES_ROBOT_POSE_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_robot_pose_t.h>
+#include "lcmtypes/vulcan_lcm_robot_pose_t.h"
 
 namespace vulcan
 {

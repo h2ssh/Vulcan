@@ -17,7 +17,7 @@
 #ifndef UI_COMPONENTS_LPM_RENDERER_H
 #define UI_COMPONENTS_LPM_RENDERER_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <array>
 
 namespace vulcan

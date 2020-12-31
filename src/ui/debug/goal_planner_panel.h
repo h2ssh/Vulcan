@@ -17,13 +17,13 @@
 #ifndef UI_DEBUG_GOAL_PLANNER_PANEL_H
 #define UI_DEBUG_GOAL_PLANNER_PANEL_H
 
-#include <ui/common/ui_forward_declarations.h>
-#include <ui/common/ui_params.h>
-#include <ui/common/ui_panel.h>
-#include <planner/goal/messages.h>
-#include <hssh/global_topological/topological_map.h>
-#include <hssh/global_topological/utils/metric_map_cache.h>
-#include <utils/mutex.h>
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_params.h"
+#include "ui/common/ui_panel.h"
+#include "planner/goal/messages.h"
+#include "hssh/global_topological/topological_map.h"
+#include "hssh/global_topological/utils/metric_map_cache.h"
+#include "utils/mutex.h"
 #include <wx/wx.h>
 
 namespace vulcan

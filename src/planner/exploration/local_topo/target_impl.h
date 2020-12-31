@@ -17,10 +17,10 @@
 #ifndef PLANNER_EXPLORATION_LOCAL_TOPO_TARGET_IMPL_H
 #define PLANNER_EXPLORATION_LOCAL_TOPO_TARGET_IMPL_H
 
-#include <planner/exploration/local_topo/target.h>
-#include <hssh/local_topological/event_visitor.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/gateway.h>
+#include "planner/exploration/local_topo/target.h"
+#include "hssh/local_topological/event_visitor.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/gateway.h"
 
 namespace vulcan
 {

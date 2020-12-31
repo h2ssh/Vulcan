@@ -17,7 +17,7 @@
 #ifndef UI_SIMULATOR_SIMULATOR_FRAME_H
 #define UI_SIMULATOR_SIMULATOR_FRAME_H
 
-#include <ui/simulator/simulator_ui.h>
+#include "ui/simulator/simulator_ui.h"
 
 namespace vulcan
 {

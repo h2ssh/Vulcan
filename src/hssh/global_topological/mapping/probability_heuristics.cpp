@@ -14,7 +14,7 @@
 * Definition of ProbabilityHeuristics.
 */
 
-#include <hssh/global_topological/mapping/probability_heuristics.h>
+#include "hssh/global_topological/mapping/probability_heuristics.h"
 #include <cmath>
 
 namespace vulcan

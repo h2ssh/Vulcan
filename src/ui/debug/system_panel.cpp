@@ -14,7 +14,7 @@
 * Definition of SystemPanel.
 */
 
-#include <ui/debug/system_panel.h>
+#include "ui/debug/system_panel.h"
 
 namespace vulcan
 {

@@ -14,7 +14,7 @@
 * Definition of GlobalPose.
 */
 
-#include <hssh/global_metric/pose.h>
+#include "hssh/global_metric/pose.h"
 
 namespace vulcan
 {

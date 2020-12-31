@@ -17,8 +17,8 @@
 #ifndef CORE_MULTIVARIATE_GAUSSIAN_H
 #define CORE_MULTIVARIATE_GAUSSIAN_H
 
-#include <core/matrix.h>
-#include <core/vector.h>
+#include "core/matrix.h"
+#include "core/vector.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

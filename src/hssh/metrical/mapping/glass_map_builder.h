@@ -17,12 +17,12 @@
 #ifndef HSSH_LOCAL_METRIC_MAPPING_GLASS_MAP_BUILDER_H
 #define HSSH_LOCAL_METRIC_MAPPING_GLASS_MAP_BUILDER_H
 
-#include <hssh/metrical/mapping/map_builder.h>
-#include <hssh/metrical/glass_map.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/types.h>
-#include <laser/reflected_laser_scan.h>
-#include <utils/discretized_angle_grid.h>
+#include "hssh/metrical/mapping/map_builder.h"
+#include "hssh/metrical/glass_map.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/types.h"
+#include "laser/reflected_laser_scan.h"
+#include "utils/discretized_angle_grid.h"
 #include <map>
 
 namespace vulcan

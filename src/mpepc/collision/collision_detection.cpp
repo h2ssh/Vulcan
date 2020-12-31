@@ -15,12 +15,12 @@
 * the detect_collisions function.
 */
 
-#include <mpepc/collision/collision_detection.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <core/float_comparison.h>
-#include <math/geometry/rectangle.h>
-#include <core/pose.h>
-#include <hssh/local_metric/lpm.h>
+#include "mpepc/collision/collision_detection.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "core/float_comparison.h"
+#include "math/geometry/rectangle.h"
+#include "core/pose.h"
+#include "hssh/local_metric/lpm.h"
 #include <cassert>
 #include <iostream>
 #include <algorithm>

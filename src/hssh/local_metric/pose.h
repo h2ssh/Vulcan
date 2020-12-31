@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_METRIC_POSE_H
 #define HSSH_LOCAL_METRIC_POSE_H
 
-#include <core/pose_distribution.h>
-#include <system/message_traits.h>
+#include "core/pose_distribution.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

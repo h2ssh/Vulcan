@@ -17,7 +17,7 @@
 #ifndef UI_COMPONENTS_LOCAL_AREA_EVENT_RENDERER_H
 #define UI_COMPONENTS_LOCAL_AREA_EVENT_RENDERER_H
 
-#include <hssh/local_topological/event_visitor.h>
+#include "hssh/local_topological/event_visitor.h"
 
 namespace vulcan
 {

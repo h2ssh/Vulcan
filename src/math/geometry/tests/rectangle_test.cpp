@@ -14,7 +14,7 @@
 * Unit tests for ensuring proper functionality of the Rectangle shape.
 */
 
-#include <math/geometry/rectangle.h>
+#include "math/geometry/rectangle.h"
 #include <gtest/gtest.h>
 
 using namespace vulcan;

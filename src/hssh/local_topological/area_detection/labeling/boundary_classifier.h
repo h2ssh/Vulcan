@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_BOUNDARY_CLASSIFIER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_BOUNDARY_CLASSIFIER_H
 
-#include <hssh/local_topological/area_detection/labeling/type_distribution.h>
-#include <core/matrix.h>
+#include "hssh/local_topological/area_detection/labeling/type_distribution.h"
+#include "core/matrix.h"
 #include <memory>
 #include <string>
 

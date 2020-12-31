@@ -14,12 +14,12 @@
 * Definition of TrackedObjectRenderer.
 */
 
-#include <ui/components/tracked_object_renderer.h>
-#include <ui/components/object_boundary_renderer.h>
-#include <ui/common/color_generator.h>
-#include <ui/common/gl_shapes.h>
-#include <tracker/dynamic_object_collection.h>
-#include <mpepc/simulator/dynamic_object_trajectory.h>
+#include "ui/components/tracked_object_renderer.h"
+#include "ui/components/object_boundary_renderer.h"
+#include "ui/common/color_generator.h"
+#include "ui/common/gl_shapes.h"
+#include "tracker/dynamic_object_collection.h"
+#include "mpepc/simulator/dynamic_object_trajectory.h"
 #include <GL/gl.h>
 
 namespace vulcan

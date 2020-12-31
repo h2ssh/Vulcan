@@ -14,9 +14,9 @@
 * Definition of DecisionPlannerDirector.
 */
 
-#include <planner/decision/director.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
+#include "planner/decision/director.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
 
 namespace vulcan
 {

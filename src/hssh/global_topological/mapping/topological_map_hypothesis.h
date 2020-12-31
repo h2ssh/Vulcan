@@ -17,8 +17,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_TOPOLOGICAL_MAP_HYPOTHESIS_H
 #define HSSH_GLOBAL_TOPOLOGICAL_TOPOLOGICAL_MAP_HYPOTHESIS_H
 
-#include <hssh/global_topological/topological_map.h>
-#include <hssh/global_topological/chi.h>
+#include "hssh/global_topological/topological_map.h"
+#include "hssh/global_topological/chi.h"
 #include <boost/shared_ptr.hpp>
 #include <set>
 

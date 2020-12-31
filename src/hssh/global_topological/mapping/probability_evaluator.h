@@ -17,7 +17,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_PROBABILITY_EVALUATOR_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_PROBABILITY_EVALUATOR_H
 
-#include <hssh/global_topological/map_probability.h>
+#include "hssh/global_topological/map_probability.h"
 #include <memory>
 #include <vector>
 

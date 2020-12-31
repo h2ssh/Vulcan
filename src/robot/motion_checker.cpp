@@ -14,9 +14,9 @@
 * Definition of create_motion_checker factory.
 */
 
-#include <robot/motion_checker.h>
-#include <robot/params.h>
-#include <robot/proximity_checker.h>
+#include "robot/motion_checker.h"
+#include "robot/params.h"
+#include "robot/proximity_checker.h"
 #include <cassert>
 #include <iostream>
 #include <string>

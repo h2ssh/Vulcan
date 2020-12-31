@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_PARSER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_PARSER_H
 
-#include <hssh/local_topological/error.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/labeling/max_likelihood_csp.h>
+#include "hssh/local_topological/error.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/labeling/max_likelihood_csp.h"
 #include <array>
 #include <map>
 #include <memory>

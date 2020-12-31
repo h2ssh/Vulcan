@@ -17,7 +17,7 @@
 #ifndef PLANNER_INTERFACE_GOAL_ACTION_H
 #define PLANNER_INTERFACE_GOAL_ACTION_H
 
-#include <planner/interface/goal.h>
+#include "planner/interface/goal.h"
 #include <memory>
 
 namespace vulcan

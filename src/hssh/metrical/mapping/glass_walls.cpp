@@ -14,15 +14,15 @@
 * Definition of GlassWall and associated predict_glass_walls function.
 */
 
-#include <hssh/metrical/mapping/glass_walls.h>
-#include <hssh/metrical/mapping/glass_map_utils.h>
-#include <hssh/metrical/glass_map.h>
-#include <core/laser_scan.h>
-#include <laser/line_extraction.h>
-#include <laser/line_extractor_params.h>
-#include <math/regression.h>
-#include <math/clustering.h>
-#include <utils/timestamp.h>
+#include "hssh/metrical/mapping/glass_walls.h"
+#include "hssh/metrical/mapping/glass_map_utils.h"
+#include "hssh/metrical/glass_map.h"
+#include "core/laser_scan.h"
+#include "laser/line_extraction.h"
+#include "laser/line_extractor_params.h"
+#include "math/regression.h"
+#include "math/clustering.h"
+#include "utils/timestamp.h"
 #include <boost/optional.hpp>
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>

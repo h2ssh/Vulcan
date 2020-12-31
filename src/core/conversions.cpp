@@ -14,8 +14,8 @@
 * Definition of various pose conversion functions.
 */
 
-#include <core/conversions.h>
-#include <core/pose.h>
+#include "core/conversions.h"
+#include "core/pose.h"
 
 namespace vulcan
 {

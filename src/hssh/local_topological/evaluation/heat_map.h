@@ -18,9 +18,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVALUATION_HEAT_MAP_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVALUATION_HEAT_MAP_H
 
-#include <hssh/local_topological/local_topo_graph.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/types.h>
+#include "hssh/local_topological/local_topo_graph.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/types.h"
 
 namespace vulcan
 {

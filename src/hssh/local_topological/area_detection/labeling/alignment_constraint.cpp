@@ -14,10 +14,10 @@
 * Definition of AlignmentConstraint.
 */
 
-#include <hssh/local_topological/area_detection/labeling/alignment_constraint.h>
-#include <hssh/local_topological/area_detection/labeling/alignment_graph.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/area_detection/labeling/alignment_constraint.h"
+#include "hssh/local_topological/area_detection/labeling/alignment_graph.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "utils/algorithm_ext.h"
 #include <boost/range/iterator_range.hpp>
 #include <cassert>
 

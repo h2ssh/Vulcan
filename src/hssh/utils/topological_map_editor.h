@@ -19,7 +19,7 @@
 
 #include <string>
 #include <vector>
-#include <hssh/global_topological/topological_map_hypothesis.h>
+#include "hssh/global_topological/topological_map_hypothesis.h"
 
 namespace vulcan
 {

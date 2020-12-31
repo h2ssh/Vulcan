@@ -17,8 +17,8 @@
 *   - loopy_belief_propagation
 */
 
-#include <hssh/local_topological/area_detection/labeling/belief_prop.h>
-#include <hssh/local_topological/area_detection/labeling/factor_graph.h>
+#include "hssh/local_topological/area_detection/labeling/belief_prop.h"
+#include "hssh/local_topological/area_detection/labeling/factor_graph.h"
 #include <boost/range/iterator_range.hpp>
 #include <cassert>
 

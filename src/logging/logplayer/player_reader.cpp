@@ -14,7 +14,7 @@
 * Definition of PlayerReader for reading Player/Stage log files.
 */
 
-#include <logging/logplayer/player_reader.h>
+#include "logging/logplayer/player_reader.h"
 
 namespace vulcan 
 {

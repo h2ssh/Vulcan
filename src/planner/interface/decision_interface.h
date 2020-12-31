@@ -17,9 +17,9 @@
 #ifndef PLANNER_INTERFACE_DECISION_INTEFACE_H
 #define PLANNER_INTERFACE_DECISION_INTEFACE_H
 
-#include <planner/interface/decision.h>
-#include <hssh/local_topological/area_visitor.h>
-#include <hssh/local_topological/location.h>
+#include "planner/interface/decision.h"
+#include "hssh/local_topological/area_visitor.h"
+#include "hssh/local_topological/location.h"
 #include <vector>
 
 namespace vulcan

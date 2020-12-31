@@ -18,8 +18,8 @@
 #define UI_LOGICAL_LOGICAL_INTERFACE_DIALOGS_H
 
 #include <memory>
-#include <ui/logical/logical_interface.h>
-#include <ui/logical/logical_interface_experiment.h>
+#include "ui/logical/logical_interface.h"
+#include "ui/logical/logical_interface_experiment.h"
 
 namespace vulcan
 {

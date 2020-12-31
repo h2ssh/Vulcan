@@ -14,7 +14,7 @@
 * Definition of LabeledGatewayFeatures.
 */
 
-#include <hssh/local_topological/training/labeled_gateway_data.h>
+#include "hssh/local_topological/training/labeled_gateway_data.h"
 
 namespace vulcan
 {

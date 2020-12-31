@@ -14,7 +14,7 @@
 * Definition of SmallScaleStar.
 */
 
-#include <hssh/local_topological/small_scale_star.h>
+#include "hssh/local_topological/small_scale_star.h"
 #include <cassert>
 #include <iostream>
 

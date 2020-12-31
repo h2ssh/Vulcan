@@ -14,11 +14,11 @@
 * Definition of GLCamera.
 */
 
-#include <ui/common/gl_camera.h>
+#include "ui/common/gl_camera.h"
 #include <cmath>
 #include <iostream>
 #include <GL/glu.h>
-#include <core/angle_functions.h>
+#include "core/angle_functions.h"
 
 #define DEBUG_CAMERA_FOCAL_POINT
 #define DEBUG_CAMERA_POSITION

@@ -14,10 +14,10 @@
 * Definition of IntentionEvaluator.
 */
 
-#include <tracker/evaluation/intention_evaluator.h>
-#include <tracker/dynamic_object_visitor.h>
-#include <tracker/objects/rigid.h>
-#include <hssh/local_topological/area.h>
+#include "tracker/evaluation/intention_evaluator.h"
+#include "tracker/dynamic_object_visitor.h"
+#include "tracker/objects/rigid.h"
+#include "hssh/local_topological/area.h"
 
 namespace vulcan
 {

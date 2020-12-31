@@ -14,7 +14,7 @@
 * Definition of DisjointSetForest.
 */
 
-#include <utils/disjoint_set_forest.h>
+#include "utils/disjoint_set_forest.h"
 #include <cassert>
 
 namespace vulcan

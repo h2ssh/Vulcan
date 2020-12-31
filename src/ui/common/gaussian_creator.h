@@ -17,8 +17,8 @@
 #ifndef UI_COMMON_GAUSSIAN_CREATOR_H
 #define UI_COMMON_GAUSSIAN_CREATOR_H
 
-#include <ui/common/gl_event.h>
-#include <core/multivariate_gaussian.h>
+#include "ui/common/gl_event.h"
+#include "core/multivariate_gaussian.h"
 
 namespace vulcan
 {

@@ -14,8 +14,8 @@
 * Definition of ExplorationAffordance.
 */
 
-#include <hssh/local_topological/affordances/exploration.h>
-#include <hssh/local_topological/affordance_visitor.h>
+#include "hssh/local_topological/affordances/exploration.h"
+#include "hssh/local_topological/affordance_visitor.h"
 
 namespace vulcan
 {

@@ -17,11 +17,11 @@
 #ifndef MPEPC_TRAJECTORY_PLANNER_H
 #define MPEPC_TRAJECTORY_PLANNER_H
 
-#include <mpepc/simulator/robot_simulator.h>
-#include <mpepc/trajectory/trajectory_evaluator.h>
-#include <mpepc/trajectory//mpepc_optimizer.h>
-#include <mpepc/trajectory//mpepc_pose_follower.h>
-#include <mpepc/trajectory/params.h>
+#include "mpepc/simulator/robot_simulator.h"
+#include "mpepc/trajectory/trajectory_evaluator.h"
+#include "mpepc/trajectory//mpepc_optimizer.h"
+#include "mpepc/trajectory//mpepc_pose_follower.h"
+#include "mpepc/trajectory/params.h"
 #include <memory>
 
 namespace vulcan

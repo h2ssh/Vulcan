@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_DECISION_POINT_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_DECISION_POINT_H
 
-#include <hssh/local_topological/areas/place.h>
+#include "hssh/local_topological/areas/place.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/vector.hpp>

@@ -17,7 +17,7 @@
 #ifndef MATH_ANGLE_RANGE_H
 #define MATH_ANGLE_RANGE_H
 
-#include <core/angle_functions.h>
+#include "core/angle_functions.h"
 #include <iosfwd>
 
 namespace vulcan

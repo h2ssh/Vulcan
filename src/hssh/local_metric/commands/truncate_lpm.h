@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_TRUNCATE_LPM_H
 #define HSSH_LOCAL_METRIC_COMMANDS_TRUNCATE_LPM_H
 
-#include <hssh/local_metric/command.h>
-#include <math/geometry/rectangle.h>
+#include "hssh/local_metric/command.h"
+#include "math/geometry/rectangle.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

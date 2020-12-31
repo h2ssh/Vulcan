@@ -7,7 +7,7 @@
 */
 
 
-#include <utils/thread.h>
+#include "utils/thread.h"
 #include <iostream>
 #include <errno.h>
 #include <sys/time.h>

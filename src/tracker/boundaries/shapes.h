@@ -18,10 +18,10 @@
 #ifndef TRACKER_BOUNDARIES_SHAPES_H
 #define TRACKER_BOUNDARIES_SHAPES_H
 
-#include <tracker/types.h>
-#include <math/geometry/arc.h>
-#include <math/geometry/circle.h>
-#include <math/geometry/rectangle.h>
+#include "tracker/types.h"
+#include "math/geometry/arc.h"
+#include "math/geometry/circle.h"
+#include "math/geometry/rectangle.h"
 #include <array>
 
 namespace vulcan

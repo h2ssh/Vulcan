@@ -20,7 +20,7 @@
 #ifndef UTILS_ICP_H
 #define UTILS_ICP_H
 
-#include <core/pose.h>
+#include "core/pose.h"
 #include <vector>
 
 namespace vulcan

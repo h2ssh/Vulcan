@@ -17,8 +17,8 @@
 #ifndef ROBOT_VGO_BRIDGE_H
 #define ROBOT_VGO_BRIDGE_H
 
-#include <system/module_communicator.h>
-#include <utils/thread.h>
+#include "system/module_communicator.h"
+#include "utils/thread.h"
 #include <ros/ros.h>
 #include <vgo_msgs/Bumper.h>
 #include <vgo_msgs/Encoders.h>

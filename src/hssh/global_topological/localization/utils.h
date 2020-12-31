@@ -20,7 +20,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_LOCALIZATION_UTILS_H
 #define HSSH_GLOBAL_TOPOLOGICAL_LOCALIZATION_UTILS_H
 
-#include <hssh/global_topological/utils/visit.h>
+#include "hssh/global_topological/utils/visit.h"
 
 namespace vulcan
 {

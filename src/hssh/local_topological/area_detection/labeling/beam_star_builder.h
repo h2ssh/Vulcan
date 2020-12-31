@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_BEAM_STAR_BUILDER_H
 #define HSSH_LOCAL_TOPOLOGICAL_BEAM_STAR_BUILDER_H
 
-#include <hssh/local_topological/area_detection/labeling/small_scale_star_builder.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
+#include "hssh/local_topological/params.h"
 
 namespace vulcan
 {

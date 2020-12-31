@@ -17,8 +17,8 @@
 #ifndef UTILS_HOUGH_TRANSFORM_H
 #define UTILS_HOUGH_TRANSFORM_H
 
-#include <utils/cell_grid.h>
-#include <utils/grid_iterators.h>
+#include "utils/cell_grid.h"
+#include "utils/grid_iterators.h"
 #include <cmath>
 
 namespace vulcan

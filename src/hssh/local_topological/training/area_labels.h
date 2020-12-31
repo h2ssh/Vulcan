@@ -64,14 +64,14 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_TRAINING_AREA_LABELS_H
 #define HSSH_LOCAL_TOPOLOGICAL_TRAINING_AREA_LABELS_H
 
-#include <hssh/local_topological/training/labeled_area_data.h>
-#include <hssh/local_topological/training/labeled_boundary_data.h>
-#include <hssh/local_topological/training/labeled_gateway_data.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/gateways/feature_extraction.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_edges.h>
+#include "hssh/local_topological/training/labeled_area_data.h"
+#include "hssh/local_topological/training/labeled_boundary_data.h"
+#include "hssh/local_topological/training/labeled_gateway_data.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/gateways/feature_extraction.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
 #include <string>
 #include <vector>
 #include <utility>

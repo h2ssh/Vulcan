@@ -17,10 +17,10 @@
 #ifndef UI_NAVIGATION_NAVIGATION_DATA_H
 #define UI_NAVIGATION_NAVIGATION_DATA_H
 
-#include <core/pose.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/location.h>
+#include "core/pose.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/location.h"
 
 namespace vulcan
 {

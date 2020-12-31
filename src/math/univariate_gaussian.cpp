@@ -14,7 +14,7 @@
 * Definition of UnivariateGaussianDistribution.
 */
 
-#include <math/univariate_gaussian.h>
+#include "math/univariate_gaussian.h"
 #include <cassert>
 #include <cmath>
 #include <iostream>

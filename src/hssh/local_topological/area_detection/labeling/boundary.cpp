@@ -14,9 +14,9 @@
 * Implementation of AreaHypothesisBoundary.
 */
 
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
 #include <cassert>
 #include <iostream>
 #include <memory>

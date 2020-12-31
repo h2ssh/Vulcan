@@ -17,7 +17,7 @@
 #ifndef MPEPC_TOPO_AGENT_H
 #define MPEPC_TOPO_AGENT_H
 
-#include <mpepc/simulator/dynamic_object_trajectory.h>
+#include "mpepc/simulator/dynamic_object_trajectory.h"
 #include <boost/optional.hpp>
 #include <vector>
 

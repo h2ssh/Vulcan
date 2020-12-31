@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_VECTOR_H
 #define LCMTYPES_VECTOR_H
 
-#include <lcmtypes/vulcan_lcm_vector_t.h>
-#include <core/vector.h>
+#include "lcmtypes/vulcan_lcm_vector_t.h"
+#include "core/vector.h"
 
 namespace vulcan
 {

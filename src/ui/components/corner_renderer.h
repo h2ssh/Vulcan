@@ -18,9 +18,9 @@
 #define UI_COMPONENTS_CORNER_RENDERER_H
 
 #include <vector>
-#include <ui/common/ui_color.h>
-#include <core/line.h>
-// #include <ui/common/gl_shapes.h>
+#include "ui/common/ui_color.h"
+#include "core/line.h"
+// #include "ui/common/gl_shapes.h"
 
 namespace vulcan
 {

@@ -17,14 +17,14 @@
 #ifndef MPEPC_MOTION_CONTROLLER_DIRECTOR_H
 #define MPEPC_MOTION_CONTROLLER_DIRECTOR_H
 
-#include <system/director.h>
-#include <utils/condition_variable.h>
-#include <utils/mutex.h>
+#include "system/director.h"
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
 
-#include <mpepc/motion_controller/controller/controller_chain.h>
-#include <mpepc/motion_controller/params.h>
-#include <core/motion_state.h>
-#include <robot/commands.h>
+#include "mpepc/motion_controller/controller/controller_chain.h"
+#include "mpepc/motion_controller/params.h"
+#include "core/motion_state.h"
+#include "robot/commands.h"
 
 namespace vulcan
 {

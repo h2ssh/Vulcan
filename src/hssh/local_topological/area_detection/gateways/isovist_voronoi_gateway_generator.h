@@ -17,12 +17,12 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_VORONOI_GATEWAY_GENERATOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_VORONOI_GATEWAY_GENERATOR_H
 
-#include <hssh/local_topological/area_detection/gateways/generator.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_maxima.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/params.h>
-#include <hssh/types.h>
+#include "hssh/local_topological/area_detection/gateways/generator.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_maxima.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/params.h"
+#include "hssh/types.h"
 #include <boost/optional.hpp>
 #include <vector>
 

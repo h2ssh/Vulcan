@@ -14,12 +14,12 @@
 * Implementation of MapEditorFrame.
 */
 
-#include <ui/mapeditor/map_editor_frame.h>
-#include <ui/mapeditor/global_topo_editor_panel.h>
-#include <ui/mapeditor/local_topo_editor_panel.h>
-#include <ui/mapeditor/metric_editor_panel.h>
-#include <ui/mapeditor/metric_editor_widget.h>
-#include <ui/common/ui_params.h>
+#include "ui/mapeditor/map_editor_frame.h"
+#include "ui/mapeditor/global_topo_editor_panel.h"
+#include "ui/mapeditor/local_topo_editor_panel.h"
+#include "ui/mapeditor/metric_editor_panel.h"
+#include "ui/mapeditor/metric_editor_widget.h"
+#include "ui/common/ui_params.h"
 
 namespace vulcan
 {

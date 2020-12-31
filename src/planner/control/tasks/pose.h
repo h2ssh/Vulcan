@@ -17,8 +17,8 @@
 #ifndef PLANNER_CONTROL_TASKS_POSE_H
 #define PLANNER_CONTROL_TASKS_POSE_H
 
-#include <planner/control/task.h>
-#include <core/pose.h>
+#include "planner/control/task.h"
+#include "core/pose.h"
 
 namespace vulcan
 {

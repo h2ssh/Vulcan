@@ -14,7 +14,7 @@
 * Definition of PedestrianGenerator.
 */
 
-#include <mpepc/simulator/pedestrian_generator.h>
+#include "mpepc/simulator/pedestrian_generator.h"
 
 namespace vulcan
 {

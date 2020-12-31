@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_VORONOI_SKELETON_BUILDER_H
 #define HSSH_LOCAL_TOPOLOGICAL_VORONOI_SKELETON_BUILDER_H
 
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h>
-#include <hssh/local_topological/area_detection/voronoi/skeleton_pruner.h>
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h"
+#include "hssh/local_topological/area_detection/voronoi/skeleton_pruner.h"
 
 namespace vulcan
 {

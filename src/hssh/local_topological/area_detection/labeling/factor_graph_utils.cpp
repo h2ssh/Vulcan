@@ -16,7 +16,7 @@
 *   - should_send_message_on_edge
 */
 
-#include <hssh/local_topological/area_detection/labeling/factor_graph_utils.h>
+#include "hssh/local_topological/area_detection/labeling/factor_graph_utils.h"
 
 namespace vulcan 
 {

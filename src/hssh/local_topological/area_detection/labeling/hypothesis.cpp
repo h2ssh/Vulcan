@@ -14,23 +14,23 @@
 * Implementation of AreaHypothesis.
 */
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/area_proposal.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
-#include <hssh/local_topological/area_detection/labeling/loops_and_trees.h>
-#include <hssh/local_topological/area_detection/labeling/small_scale_star_builder.h>
-#include <hssh/local_topological/area_detection/labeling/path_endpoints.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/labeling/debug.h>
-#include <hssh/local_topological/area_extent.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <math/covariance.h>
-#include <math/geometry/convex_hull.h>
-#include <math/geometry/shape_fitting.h>
-#include <utils/algorithm_ext.h>
-#include <utils/func_ptr.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/area_proposal.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include "hssh/local_topological/area_detection/labeling/loops_and_trees.h"
+#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
+#include "hssh/local_topological/area_detection/labeling/path_endpoints.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/labeling/debug.h"
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "math/covariance.h"
+#include "math/geometry/convex_hull.h"
+#include "math/geometry/shape_fitting.h"
+#include "utils/algorithm_ext.h"
+#include "utils/func_ptr.h"
 #include <boost/core/null_deleter.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/range/as_array.hpp>

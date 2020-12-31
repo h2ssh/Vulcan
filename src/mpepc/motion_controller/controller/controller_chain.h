@@ -17,8 +17,8 @@
 #ifndef MPEPC_MOTION_CONTROLLER_CHAIN_H
 #define MPEPC_MOTION_CONTROLLER_CHAIN_H
 
-#include <mpepc/motion_controller/controller/motion_controller.h>
-#include <mpepc/motion_controller/params.h>
+#include "mpepc/motion_controller/controller/motion_controller.h"
+#include "mpepc/motion_controller/params.h"
 #include <string>
 
 namespace vulcan

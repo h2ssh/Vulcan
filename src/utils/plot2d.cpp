@@ -14,7 +14,7 @@
 * Definition of Plot2D.
 */
 
-#include <utils/plot2d.h>
+#include "utils/plot2d.h"
 #include <gnuplot-iostream.h>
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>

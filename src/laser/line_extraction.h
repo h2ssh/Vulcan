@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 #include <vector>
-#include <core/line.h>
+#include "core/line.h"
 
 /**
 * \file     line_extraction.h

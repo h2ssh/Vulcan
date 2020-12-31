@@ -14,7 +14,7 @@
 * Definition of LocalTopoRoute and LocalTopoRouteVisit.
 */
 
-#include <hssh/local_topological/local_topo_route.h>
+#include "hssh/local_topological/local_topo_route.h"
 
 namespace vulcan
 {

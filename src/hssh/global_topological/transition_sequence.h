@@ -17,8 +17,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_TRANSITION_SEQUENCE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_TRANSITION_SEQUENCE_H
 
-#include <hssh/global_topological/transition.h>
-#include <hssh/local_topological/affordances/transition.h>
+#include "hssh/global_topological/transition.h"
+#include "hssh/local_topological/affordances/transition.h"
 #include <cereal/access.hpp>
 #include <iosfwd>
 

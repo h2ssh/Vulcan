@@ -14,11 +14,11 @@
 * Definition of the create_observation_model factory.
 */
 
-#include <hssh/metrical/localization/observation_model.h>
-#include <hssh/metrical/localization/grid_based_observation_models.h>
-#include <hssh/metrical/localization/discrete_beam_model.h>
-#include <hssh/metrical/localization/gaussian_observation_model.h>
-#include <hssh/metrical/localization/params.h>
+#include "hssh/metrical/localization/observation_model.h"
+#include "hssh/metrical/localization/grid_based_observation_models.h"
+#include "hssh/metrical/localization/discrete_beam_model.h"
+#include "hssh/metrical/localization/gaussian_observation_model.h"
+#include "hssh/metrical/localization/params.h"
 #include <cassert>
 #include <iostream>
 

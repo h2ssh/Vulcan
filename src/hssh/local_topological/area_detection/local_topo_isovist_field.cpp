@@ -14,10 +14,10 @@
 * Definition of VoronoiIsovistField.
 */
 
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <math/statistics.h>
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "math/statistics.h"
 #include <cassert>
 #include <unordered_map>
 #include <functional>

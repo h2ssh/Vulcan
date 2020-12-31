@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_AFFORDANCE_LABELING_CLASSIFIER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_AFFORDANCE_LABELING_CLASSIFIER_H
 
-#include <hssh/local_topological/area_detection/area_classifier.h>
-#include <hssh/local_topological/event_visitor.h>
+#include "hssh/local_topological/area_detection/area_classifier.h"
+#include "hssh/local_topological/event_visitor.h"
 #include <memory>
 #include <vector>
 

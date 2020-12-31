@@ -30,9 +30,9 @@
 #ifndef HSSH_LOCAL_METRIC_MESSAGES_H
 #define HSSH_LOCAL_METRIC_MESSAGES_H
 
-#include <hssh/local_metric/lpm.h>
-#include <hssh/metrical/relocalization/filter_initializer.h>
-#include <system/message_traits.h>
+#include "hssh/local_metric/lpm.h"
+#include "hssh/metrical/relocalization/filter_initializer.h"
+#include "system/message_traits.h"
 #include <cereal/types/polymorphic.hpp>
 #include <cstdint>
 

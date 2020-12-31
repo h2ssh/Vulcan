@@ -14,9 +14,9 @@
 * Definition of PathSituation, PlaceSituation, and TopoSituationResponse.
 */
 
-#include <mpepc/social/topo_situation.h>
-#include <mpepc/social/social_norm_utils.h>
-#include <hssh/local_topological/local_topo_map.h>
+#include "mpepc/social/topo_situation.h"
+#include "mpepc/social/social_norm_utils.h"
+#include "hssh/local_topological/local_topo_map.h"
 
 namespace vulcan
 {

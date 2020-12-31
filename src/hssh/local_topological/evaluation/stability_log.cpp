@@ -14,8 +14,8 @@
 * Definition of AreaStabilityLog.
 */
 
-#include <hssh/local_topological/evaluation/stability_log.h>
-#include <system/module_communicator.h>
+#include "hssh/local_topological/evaluation/stability_log.h"
+#include "system/module_communicator.h"
 #include <algorithm>
 #include <sstream>
 

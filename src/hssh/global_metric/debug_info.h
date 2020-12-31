@@ -17,9 +17,9 @@
 #ifndef HSSH_GLOBAL_METRIC_DEBUG_INFO_H
 #define HSSH_GLOBAL_METRIC_DEBUG_INFO_H
 
-#include <hssh/metrical/localization/debug_info.h>
-#include <hssh/metrical/relocalization/debug_info.h>
-#include <system/message_traits.h>
+#include "hssh/metrical/localization/debug_info.h"
+#include "hssh/metrical/relocalization/debug_info.h"
+#include "system/message_traits.h"
 
 namespace vulcan
 {

@@ -14,7 +14,7 @@
 * Definition of ParameterEstimatorTest.
 */
 
-#include <calibration/wheelchair/parameter_estimator_test.h>
+#include "calibration/wheelchair/parameter_estimator_test.h"
 
 namespace vulcan
 {

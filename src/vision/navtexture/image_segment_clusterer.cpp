@@ -11,10 +11,10 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
-#include <utils/disjoint_set_forest.h>
-#include <core/image.h>
-#include <vision/image_segment.h>
-#include <vision/navtexture/image_segment_clusterer.h>
+#include "utils/disjoint_set_forest.h"
+#include "core/image.h"
+#include "vision/image_segment.h"
+#include "vision/navtexture/image_segment_clusterer.h"
 
 
 // #define DEBUG_K_MEANS

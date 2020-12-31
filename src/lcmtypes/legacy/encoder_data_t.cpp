@@ -7,10 +7,10 @@
 */
 
 
-#include <lcmtypes/legacy/encoder_data_t.h>
-#include <core/odometry.h>
-#include <lcmtypes/subscription_manager.h>
-#include <lcmtypes/message_helpers.h>
+#include "lcmtypes/legacy/encoder_data_t.h"
+#include "core/odometry.h"
+#include "lcmtypes/subscription_manager.h"
+#include "lcmtypes/message_helpers.h"
 
 static vulcan::lcm::SubscriptionManager<vulcan_lcm_encoder_data_t, vulcan::encoder_data_t> subscribers;
 

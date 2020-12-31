@@ -14,9 +14,9 @@
 * Definition of KinematicRobotPlant.
 */
 
-#include <robot/model/kinematic_robot_plant.h>
-#include <core/velocity.h>
-#include <utils/timestamp.h>
+#include "robot/model/kinematic_robot_plant.h"
+#include "core/velocity.h"
+#include "utils/timestamp.h"
 
 namespace vulcan
 {

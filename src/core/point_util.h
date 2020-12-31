@@ -18,7 +18,7 @@
 #ifndef CORE_POINT_UTIL_H
 #define CORE_POINT_UTIL_H
 
-#include <core/point.h>
+#include "core/point.h"
 
 #include <type_traits>
 #include <unordered_map>

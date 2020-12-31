@@ -18,13 +18,13 @@
 *   - are_compatible_places
 */
 
-#include <hssh/global_topological/mapping/loop_closures.h>
-#include <hssh/global_topological/area.h>
-#include <hssh/global_topological/transition.h>
-#include <hssh/global_topological/global_location.h>
-#include <hssh/global_topological/global_path_segment.h>
-#include <hssh/global_topological/global_place.h>
-#include <utils/stub.h>
+#include "hssh/global_topological/mapping/loop_closures.h"
+#include "hssh/global_topological/area.h"
+#include "hssh/global_topological/transition.h"
+#include "hssh/global_topological/global_location.h"
+#include "hssh/global_topological/global_path_segment.h"
+#include "hssh/global_topological/global_place.h"
+#include "utils/stub.h"
 #include <string>
 
 // #define DEBUG_PATH_LOOPS 1

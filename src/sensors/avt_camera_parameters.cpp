@@ -8,8 +8,8 @@
 
 
 #include <iostream>
-#include <utils/config_file.h>
-#include <sensors/avt_camera_parameters.h>
+#include "utils/config_file.h"
+#include "sensors/avt_camera_parameters.h"
 
 
 using namespace vulcan::sensors;

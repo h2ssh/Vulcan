@@ -17,7 +17,7 @@
 #ifndef MATH_MOMENTS_H
 #define MATH_MOMENTS_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <algorithm>
 #include <array>
 #include <stdexcept>

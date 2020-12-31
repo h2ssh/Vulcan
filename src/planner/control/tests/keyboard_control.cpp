@@ -7,8 +7,8 @@
 */
 
 
-#include <lcmtypes/commands/direct_control_command.h>
-#include <utils/timestamp.h>
+#include "lcmtypes/commands/direct_control_command.h"
+#include "utils/timestamp.h"
 #include <lcm/lcm-cpp.hpp>
 #include <iostream>
 #include <string>

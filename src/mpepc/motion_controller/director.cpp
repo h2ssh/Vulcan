@@ -14,13 +14,13 @@
 * Definition of the MotionControllerDirector.
 */
 
-#include <mpepc/motion_controller/director.h>
-#include <mpepc/motion_controller/messages.h>
-#include <mpepc/motion_controller/task/task.h>
-#include <mpepc/motion_controller/data.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
-#include <utils/timestamp.h>
+#include "mpepc/motion_controller/director.h"
+#include "mpepc/motion_controller/messages.h"
+#include "mpepc/motion_controller/task/task.h"
+#include "mpepc/motion_controller/data.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
+#include "utils/timestamp.h"
 #include <iostream>
 
 namespace vulcan

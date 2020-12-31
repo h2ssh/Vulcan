@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

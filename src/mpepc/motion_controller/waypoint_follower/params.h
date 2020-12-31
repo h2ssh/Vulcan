@@ -17,7 +17,7 @@
 #ifndef MPEPC_MOTION_CONTROLLER_WAYPOINT_FOLLOWER_PARAMS_H
 #define MPEPC_MOTION_CONTROLLER_WAYPOINT_FOLLOWER_PARAMS_H
 
-#include <mpepc/motion_controller/waypoint_follower/graceful_motion_control_law.h>
+#include "mpepc/motion_controller/waypoint_follower/graceful_motion_control_law.h"
 #include <string>
 
 namespace vulcan

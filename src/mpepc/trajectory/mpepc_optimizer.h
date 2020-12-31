@@ -17,9 +17,9 @@
 #ifndef MPEPC_OPTIMIZER_H
 #define MPEPC_OPTIMIZER_H
 
-#include <mpepc/trajectory/params.h>
-#include <mpepc/trajectory/robot_trajectory_info.h>
-#include <core/pose.h>
+#include "mpepc/trajectory/params.h"
+#include "mpepc/trajectory/robot_trajectory_info.h"
+#include "core/pose.h"
 #include <nlopt.h>
 #include <vector>
 #include <memory>

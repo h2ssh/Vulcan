@@ -14,11 +14,11 @@
 * Definition of RotateTask and RotateTaskManifold.
 */
 
-#include <mpepc/metric_planner/task/rotate.h>
-#include <mpepc/manifold/rotate.h>
-#include <core/angle_functions.h>
-#include <core/motion_state.h>
-#include <utils/timestamp.h>
+#include "mpepc/metric_planner/task/rotate.h"
+#include "mpepc/manifold/rotate.h"
+#include "core/angle_functions.h"
+#include "core/motion_state.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 namespace vulcan

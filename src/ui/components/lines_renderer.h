@@ -11,8 +11,8 @@
 #define UI_COMPONENTS_LINES_RENDERER_H
 
 #include <vector>
-#include <core/line.h>
-#include <ui/common/ui_color.h>
+#include "core/line.h"
+#include "ui/common/ui_color.h"
 
 namespace vulcan
 {

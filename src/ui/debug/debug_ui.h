@@ -1,25 +1,14 @@
-/* Copyright (C) 2010-2019, The Regents of The University of Michigan.
- All rights reserved.
-
- This software was developed as part of the The Vulcan project in the Intelligent Robotics Lab
- under the direction of Benjamin Kuipers, kuipers@umich.edu. Use of this code is governed by an
- MIT-style License that can be found at "https://github.com/h2ssh/Vulcan".
-*/
-
-
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2016)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 31 2020)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DEBUG_UI_H__
-#define __DEBUG_UI_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-class UIMainFrame;
 namespace vulcan{ namespace ui{ class CalibrationDisplayWidget; } }
 namespace vulcan{ namespace ui{ class DecisionPlannerDisplayWidget; } }
 namespace vulcan{ namespace ui{ class EvaluationDisplayWidget; } }
@@ -48,13 +37,13 @@ namespace vulcan{ namespace ui{ class VisionDisplayWidget; } }
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/slider.h>
 #include <wx/textctrl.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/tglbtn.h>
@@ -327,14 +316,14 @@ namespace vulcan
 		#define ID_GOAL_PLANNER_WINDOW_ITEM 1250
 		#define ID_VISION_WINDOW_ITEM 1251
 		#define ID_SYSTEM_WINDOW_ITEM 1252
-		
+
 		///////////////////////////////////////////////////////////////////////////////
 		/// Class DebugFrame
 		///////////////////////////////////////////////////////////////////////////////
 		class DebugFrame : public UIMainFrame
 		{
 			private:
-			
+
 			protected:
 				wxAuiNotebook* frameNotebook;
 				wxPanel* localMetricPanel;
@@ -698,20 +687,19 @@ namespace vulcan
 				wxStatusBar* gridCellStatusBar;
 				wxMenuBar* debugUIMenu;
 				wxMenu* windowMenu;
-				
-				// Virtual event handlers, overide them in your derived class
+
+				// Virtual event handlers, override them in your derived class
 				virtual void numTrajectoriesTextOnText( wxCommandEvent& event ) { event.Skip(); }
-				
-			
+
+
 			public:
-				
+
 				DebugFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Vulcan Debug UI"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1178,914 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-				
+
 				~DebugFrame();
-			
+
 		};
-		
+
 	} // namespace ui
 } // namespace vulcan
 
-#endif //__DEBUG_UI_H__

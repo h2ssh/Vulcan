@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_STORED_MAP_CLASSIFIER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_STORED_MAP_CLASSIFIER_H
 
-#include <hssh/local_topological/area_detection/area_classifier.h>
+#include "hssh/local_topological/area_detection/area_classifier.h"
 
 namespace vulcan
 {

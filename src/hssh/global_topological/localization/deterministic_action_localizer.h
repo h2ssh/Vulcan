@@ -17,7 +17,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_LOCALIZATION_DETERMINISTIC_ACTION_LOCALIZER_H
 #define HSSH_GLOBAL_TOPOLOGICAL_LOCALIZATION_DETERMINISTIC_ACTION_LOCALIZER_H
 
-#include <hssh/global_topological/localization/localizer.h>
+#include "hssh/global_topological/localization/localizer.h"
 #include <string>
 
 namespace vulcan

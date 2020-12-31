@@ -14,9 +14,9 @@
 * Definition of SkeletonGraphExtractor.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph_extractor.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_extractor.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
 #include <cassert>
 #include <iostream>
 

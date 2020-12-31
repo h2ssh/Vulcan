@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_SERIALIZATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_SERIALIZATION_H
 
-#include <hssh/local_topological/areas/decision_point.h>
-#include <hssh/local_topological/areas/destination.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/local_topological/areas/place.h>
+#include "hssh/local_topological/areas/decision_point.h"
+#include "hssh/local_topological/areas/destination.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/areas/place.h"
 
 #endif // HSSH_LOCAL_TOPOLOGICAL_AREAS_SERIALIZATION_H

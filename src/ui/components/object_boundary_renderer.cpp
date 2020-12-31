@@ -14,9 +14,9 @@
 * Definition of ObjectBoundaryRenderer and OutlineObjectBoundaryRenderer.
 */
 
-#include <ui/components/object_boundary_renderer.h>
-#include <ui/common/gl_shapes.h>
-#include <ui/common/ui_color.h>
+#include "ui/components/object_boundary_renderer.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/ui_color.h"
 #include <GL/gl.h>
 
 namespace vulcan

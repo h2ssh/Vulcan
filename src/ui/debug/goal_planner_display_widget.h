@@ -17,16 +17,16 @@
 #ifndef UI_DEBUG_GOAL_PLANNER_DISPLAY_WIDGET_H
 #define UI_DEBUG_GOAL_PLANNER_DISPLAY_WIDGET_H
 
-#include <ui/components/open_gl_widget.h>
-#include <ui/common/ui_params.h>
-#include <planner/goal/goal_target.h>
-#include <planner/goal/goal_route.h>
-#include <planner/goal/goal_progress.h>
-#include <planner/goal/debug_info.h>
-#include <hssh/global_topological/global_location.h>
-#include <hssh/global_topological/topological_map.h>
-#include <core/line.h>
-#include <utils/mutex.h>
+#include "ui/components/open_gl_widget.h"
+#include "ui/common/ui_params.h"
+#include "planner/goal/goal_target.h"
+#include "planner/goal/goal_route.h"
+#include "planner/goal/goal_progress.h"
+#include "planner/goal/debug_info.h"
+#include "hssh/global_topological/global_location.h"
+#include "hssh/global_topological/topological_map.h"
+#include "core/line.h"
+#include "utils/mutex.h"
 
 namespace vulcan
 {

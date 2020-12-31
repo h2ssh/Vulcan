@@ -17,8 +17,8 @@
 #ifndef MATH_POINT3D_H
 #define MATH_POINT3D_H
 
-#include <core/point.h>
-#include <core/float_comparison.h>
+#include "core/point.h"
+#include "core/float_comparison.h"
 
 namespace vulcan
 {

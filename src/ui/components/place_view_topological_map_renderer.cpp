@@ -14,12 +14,12 @@
 * Definition of PlaceViewTopologicalMapRenderer.
 */
 
-#include <ui/components/place_view_topological_map_renderer.h>
+#include "ui/components/place_view_topological_map_renderer.h"
 #include <GL/gl.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <hssh/global_topological/global_place.h>
-#include <hssh/local_topological/areas/place.h>
+#include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "hssh/global_topological/global_place.h"
+#include "hssh/local_topological/areas/place.h"
 
 namespace vulcan
 {

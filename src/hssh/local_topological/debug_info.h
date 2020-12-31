@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_DEBUG_INFO_H
 #define HSSH_LOCAL_TOPOLOGICAL_DEBUG_INFO_H
 
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
-#include <hssh/local_topological/area_detection/labeling/area_proposal.h>
-#include <hssh/local_topological/area_detection/labeling/debug.h>
-#include <system/message_traits.h>
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include "hssh/local_topological/area_detection/labeling/area_proposal.h"
+#include "hssh/local_topological/area_detection/labeling/debug.h"
+#include "system/message_traits.h"
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/utility.hpp>

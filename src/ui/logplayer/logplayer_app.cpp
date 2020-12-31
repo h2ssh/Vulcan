@@ -14,11 +14,11 @@
 * Definition of LogplayerApp.
 */
 
-#include <ui/logplayer/logplayer_app.h>
-#include <ui/logplayer/logplayer_frame.h>
-#include <logging/logplayer/log_player.h>
-#include <logging/logplayer/params.h>
-#include <utils/config_file.h>
+#include "ui/logplayer/logplayer_app.h"
+#include "ui/logplayer/logplayer_frame.h"
+#include "logging/logplayer/log_player.h"
+#include "logging/logplayer/params.h"
+#include "utils/config_file.h"
 
 using namespace vulcan;
 

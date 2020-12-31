@@ -17,8 +17,8 @@
 #ifndef LASER_REFLECTED_LASER_SCAN_H
 #define LASER_REFLECTED_LASER_SCAN_H
 
-#include <core/point.h>
-#include <system/message_traits.h>
+#include "core/point.h"
+#include "system/message_traits.h"
 #include <cereal/types/vector.hpp>
 #include <cereal/access.hpp>
 #include <cstdint>

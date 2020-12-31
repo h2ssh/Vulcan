@@ -14,9 +14,9 @@
 * Definition of GatewayClassifierTestResultsDialog.
 */
 
-#include <ui/mapeditor/gateway_classifier_test_dialog.h>
-#include <ui/common/file_dialog_settings.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_classifier.h>
+#include "ui/mapeditor/gateway_classifier_test_dialog.h"
+#include "ui/common/file_dialog_settings.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_classifier.h"
 #include <wx/variant.h>
 #include <boost/range/iterator_range.hpp>
 

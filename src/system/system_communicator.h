@@ -17,8 +17,8 @@
 #ifndef SYSTEM_SYSTEM_COMMUNICATOR_H
 #define SYSTEM_SYSTEM_COMMUNICATOR_H
 
-#include <system/message_traits.h>
-#include <system/module_communicator.h>
+#include "system/message_traits.h"
+#include "system/module_communicator.h"
 #include <type_traits>
 
 namespace vulcan

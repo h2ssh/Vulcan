@@ -14,8 +14,8 @@
 * Implmentation of OpenGLWidget.
 */
 
-#include <ui/components/open_gl_widget.h>
-#include <ui/common/gl_utilities.h>
+#include "ui/components/open_gl_widget.h"
+#include "ui/common/gl_utilities.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <cassert>

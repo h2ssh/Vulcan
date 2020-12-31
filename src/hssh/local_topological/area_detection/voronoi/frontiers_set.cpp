@@ -14,9 +14,9 @@
 * Definition of FrontiersSet.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/frontiers_set.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/frontier.h>
+#include "hssh/local_topological/area_detection/voronoi/frontiers_set.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/frontier.h"
 #include <algorithm>
 #include <cassert>
 #include <iostream>

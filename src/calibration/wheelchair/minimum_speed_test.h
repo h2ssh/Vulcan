@@ -20,7 +20,7 @@
 #ifndef CALIBRATION_WHEELCHAIR_MINIMUM_SPEED_TEST_H
 #define CALIBRATION_WHEELCHAIR_MINIMUM_SPEED_TEST_H
 
-#include <calibration/wheelchair/wheelchair_test.h>
+#include "calibration/wheelchair/wheelchair_test.h"
 
 namespace vulcan
 {

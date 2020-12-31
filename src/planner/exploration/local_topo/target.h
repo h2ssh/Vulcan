@@ -17,8 +17,8 @@
 #ifndef PLANNER_EXPLORATION_LOCAL_TOPO_TARGET_H
 #define PLANNER_EXPLORATION_LOCAL_TOPO_TARGET_H
 
-#include <math/geometry/polygon.h>
-#include <mpepc/metric_planner/task/navigation.h>
+#include "math/geometry/polygon.h"
+#include "mpepc/metric_planner/task/navigation.h"
 
 namespace vulcan
 {

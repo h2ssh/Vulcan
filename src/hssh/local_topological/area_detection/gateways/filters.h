@@ -20,7 +20,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_GATEWAY_FILTERS_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_GATEWAY_FILTERS_H
 
-#include <hssh/local_topological/area_detection/gateways/weighted_gateway.h>
+#include "hssh/local_topological/area_detection/gateways/weighted_gateway.h"
 #include <vector>
 
 namespace vulcan

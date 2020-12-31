@@ -14,8 +14,8 @@
 * Definition of NavigationGrid and NavigationGridBuilder.
 */
 
-#include <mpepc/grid/navigation_grid.h>
-#include <math/interpolation.h>
+#include "mpepc/grid/navigation_grid.h"
+#include "math/interpolation.h"
 
 namespace vulcan
 {

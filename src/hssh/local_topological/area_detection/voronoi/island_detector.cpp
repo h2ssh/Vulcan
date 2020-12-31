@@ -14,11 +14,11 @@
 * Definition of IslandDetector.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/island_detector.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <utils/disjoint_set_forest.h>
-#include <core/point.h>
+#include "hssh/local_topological/area_detection/voronoi/island_detector.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "utils/disjoint_set_forest.h"
+#include "core/point.h"
 #include <iostream>
 
 // #define DEBUG_CARDINAL_SEARCH

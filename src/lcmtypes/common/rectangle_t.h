@@ -10,9 +10,9 @@
 #ifndef LCMTYPES_COMMON_RECTANGLE_T_H
 #define LCMTYPES_COMMON_RECTANGLE_T_H
 
-#include <lcmtypes/vulcan_lcm_rectangle_t.h>
-#include <lcmtypes/common/point_t.h>
-#include <math/geometry/rectangle.h>
+#include "lcmtypes/vulcan_lcm_rectangle_t.h"
+#include "lcmtypes/common/point_t.h"
+#include "math/geometry/rectangle.h"
 
 namespace vulcan
 {

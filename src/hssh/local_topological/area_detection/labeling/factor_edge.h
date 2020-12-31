@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_FACTOR_EDGE_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_FACTOR_EDGE_H
 
-#include <core/vector.h>
+#include "core/vector.h"
 #include <array>
 #include <memory>
 

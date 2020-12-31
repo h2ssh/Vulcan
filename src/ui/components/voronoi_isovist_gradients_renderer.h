@@ -17,8 +17,8 @@
 #ifndef UI_COMPONENTS_VORONOI_ISOVIST_GRADIENTS_RENDERER_H
 #define UI_COMPONENTS_VORONOI_ISOVIST_GRADIENTS_RENDERER_H
 
-#include <ui/common/color_interpolator.h>
-#include <hssh/types.h>
+#include "ui/common/color_interpolator.h"
+#include "hssh/types.h"
 #include <GL/gl.h>
 #include <vector>
 

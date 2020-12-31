@@ -17,10 +17,10 @@
 #ifndef TRACKER_OBJECT_MOTION_H
 #define TRACKER_OBJECT_MOTION_H
 
-#include <tracker/types.h>
-#include <tracker/object_state.h>
-#include <core/point.h>
-#include <core/pose.h>
+#include "tracker/types.h"
+#include "tracker/object_state.h"
+#include "core/point.h"
+#include "core/pose.h"
 #include <cereal/access.hpp>
 #include <cereal/types/deque.hpp>
 

@@ -11,7 +11,7 @@
 #define SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_OUTPUT_CONSUMER_H
 
 #include <vector>
-#include <vision/image_segment.h>
+#include "vision/image_segment.h"
 
 namespace vulcan
 {

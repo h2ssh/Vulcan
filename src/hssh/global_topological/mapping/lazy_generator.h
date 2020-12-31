@@ -17,7 +17,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_LAZY_GENERATOR_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_LAZY_GENERATOR_H
 
-#include <hssh/global_topological/mapping/hypothesis_generator.h>
+#include "hssh/global_topological/mapping/hypothesis_generator.h"
 
 namespace vulcan
 {

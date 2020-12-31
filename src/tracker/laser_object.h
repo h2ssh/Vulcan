@@ -17,10 +17,10 @@
 #ifndef TRACKER_LASER_OBJECT_H
 #define TRACKER_LASER_OBJECT_H
 
-#include <tracker/object_boundary.h>
-#include <tracker/types.h>
-#include <core/multivariate_gaussian.h>
-#include <core/point.h>
+#include "tracker/object_boundary.h"
+#include "tracker/types.h"
+#include "core/multivariate_gaussian.h"
+#include "core/point.h"
 #include <boost/optional.hpp>
 #include <cereal/access.hpp>
 #include <cereal/types/array.hpp>

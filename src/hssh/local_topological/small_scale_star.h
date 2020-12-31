@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_STAR_H
 #define HSSH_LOCAL_TOPOLOGICAL_SMALL_SCALE_STAR_H
 
-#include <hssh/local_topological/gateway.h>
+#include "hssh/local_topological/gateway.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 #include <array>

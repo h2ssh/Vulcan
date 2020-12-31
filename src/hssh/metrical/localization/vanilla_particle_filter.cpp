@@ -14,8 +14,8 @@
 * Definition of VanillaParticleFilter.
 */
 
-#include <hssh/metrical/localization/vanilla_particle_filter.h>
-#include <hssh/metrical/localization/particle_filter_utils.h>
+#include "hssh/metrical/localization/vanilla_particle_filter.h"
+#include "hssh/metrical/localization/particle_filter_utils.h"
 
 namespace vulcan 
 {

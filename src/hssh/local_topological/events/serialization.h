@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENTS_SERIALIZATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENTS_SERIALIZATION_H
 
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_topological/events/turn_around.h>
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/events/turn_around.h"
 
 #endif // HSSH_LOCAL_TOPOLOGICAL_EVENTS_SERIALIZATION_H

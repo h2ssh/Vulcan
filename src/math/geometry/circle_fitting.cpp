@@ -14,10 +14,10 @@
 * Implementation of minimum_geometric_error_circle.
 */
 
-#include <math/geometry/shape_fitting.h>
-#include <math/geometry/algebraic_circle_fitting.h>
-#include <math/geometry/geometric_circle_fitting.h>
-#include <core/float_comparison.h>
+#include "math/geometry/shape_fitting.h"
+#include "math/geometry/algebraic_circle_fitting.h"
+#include "math/geometry/geometric_circle_fitting.h"
+#include "core/float_comparison.h"
 #include <cassert>
 
 namespace vulcan

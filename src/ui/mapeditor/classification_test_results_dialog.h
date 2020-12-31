@@ -17,8 +17,8 @@
 #ifndef UI_MAPEDITOR_CLASSIFICATION_TEST_RESULTS_DIALOG_H
 #define UI_MAPEDITOR_CLASSIFICATION_TEST_RESULTS_DIALOG_H
 
-#include <ui/mapeditor/map_editor.h>
-#include <hssh/local_topological/training/hypothesis_classifier_test.h>
+#include "ui/mapeditor/map_editor.h"
+#include "hssh/local_topological/training/hypothesis_classifier_test.h"
 
 namespace vulcan
 {

@@ -17,9 +17,9 @@
 #ifndef MPEPC_MOTION_CONTROLLER_PARAMS_H
 #define MPEPC_MOTION_CONTROLLER_PARAMS_H
 
-#include <mpepc/control/params.h>
-#include <mpepc/motion_controller/waypoint_follower/params.h>
-#include <robot/model/params.h>
+#include "mpepc/control/params.h"
+#include "mpepc/motion_controller/waypoint_follower/params.h"
+#include "robot/model/params.h"
 
 namespace vulcan
 {

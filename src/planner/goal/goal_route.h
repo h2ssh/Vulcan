@@ -17,8 +17,8 @@
 #ifndef PLANNER_GOAL_GOAL_ROUTE_H
 #define PLANNER_GOAL_GOAL_ROUTE_H
 
-#include <hssh/global_topological/global_place.h>
-#include <hssh/global_topological/global_path_segment.h>
+#include "hssh/global_topological/global_place.h"
+#include "hssh/global_topological/global_path_segment.h"
 #include <vector>
 
 namespace vulcan

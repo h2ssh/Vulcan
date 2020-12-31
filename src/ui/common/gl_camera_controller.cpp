@@ -14,8 +14,8 @@
 * Definition of GLCameraController.
 */
 
-#include <ui/common/gl_camera_controller.h>
-#include <ui/common/gl_camera.h>
+#include "ui/common/gl_camera_controller.h"
+#include "ui/common/gl_camera.h"
 #include <wx/event.h>
 
 namespace vulcan

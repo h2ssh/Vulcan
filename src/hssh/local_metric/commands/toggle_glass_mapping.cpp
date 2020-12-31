@@ -14,8 +14,8 @@
 * Definition of ToggleGlassMapping.
 */
 
-#include <hssh/local_metric/commands/toggle_glass_mapping.h>
-#include <hssh/metrical/mapping/mapper.h>
+#include "hssh/local_metric/commands/toggle_glass_mapping.h"
+#include "hssh/metrical/mapping/mapper.h"
 
 namespace vulcan
 {

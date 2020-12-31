@@ -14,7 +14,7 @@
 * Definition of DecisionTaskSequence.
 */
 
-#include <planner/decision/sequence.h>
+#include "planner/decision/sequence.h"
 
 namespace vulcan
 {

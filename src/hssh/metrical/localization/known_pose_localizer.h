@@ -17,8 +17,8 @@
 #ifndef HSSH_METRICAL_LOCALIZATION_KNOWN_POSE_LOCALIZER_H
 #define HSSH_METRICAL_LOCALIZATION_KNOWN_POSE_LOCALIZER_H
 
-#include <hssh/metrical/localization/localizer.h>
-#include <core/pose.h>
+#include "hssh/metrical/localization/localizer.h"
+#include "core/pose.h"
 
 namespace vulcan
 {

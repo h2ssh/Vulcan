@@ -14,8 +14,8 @@
 * Definition of ExplorationDirector.
 */
 
-#include <planner/exploration/director.h>
-#include <planner/exploration/map_explorer.h>
+#include "planner/exploration/director.h"
+#include "planner/exploration/map_explorer.h"
 #include <unistd.h>
 
 namespace vulcan

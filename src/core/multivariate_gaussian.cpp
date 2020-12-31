@@ -14,7 +14,7 @@
 * Definition of MultivariateGaussian.
 */
 
-#include <core/multivariate_gaussian.h>
+#include "core/multivariate_gaussian.h"
 #include <cassert>
 
 namespace vulcan

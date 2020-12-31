@@ -16,8 +16,8 @@
 
 #include <cmath>
 #include <iostream>
-#include <math/ransac.h>
-#include <math/regression.h>
+#include "math/ransac.h"
+#include "math/regression.h"
 
 namespace vulcan
 {

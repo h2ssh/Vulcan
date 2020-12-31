@@ -14,9 +14,9 @@
 * Definition of RotateTaskManifold.
 */
 
-#include <mpepc/manifold/rotate.h>
-#include <core/angle_functions.h>
-#include <core/motion_state.h>
+#include "mpepc/manifold/rotate.h"
+#include "core/angle_functions.h"
+#include "core/motion_state.h"
 
 namespace vulcan 
 {

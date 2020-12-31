@@ -17,8 +17,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_TREE_OF_MAPS_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_TREE_OF_MAPS_H
 
-#include <hssh/global_topological/state.h>
-#include <system/message_traits.h>
+#include "hssh/global_topological/state.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/unordered_map.hpp>

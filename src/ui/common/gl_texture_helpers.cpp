@@ -8,7 +8,7 @@
 
 
 #include <cmath>
-#include <ui/common/gl_texture_helpers.h>
+#include "ui/common/gl_texture_helpers.h"
 
 namespace vulcan
 {

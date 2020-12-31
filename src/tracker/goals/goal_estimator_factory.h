@@ -17,8 +17,8 @@
 #ifndef TRACKER_GOALS_GOAL_ESTIMATOR_FACTORY_H
 #define TRACKER_GOALS_GOAL_ESTIMATOR_FACTORY_H
 
-#include <tracker/goals/gateway_estimator.h>
-#include <tracker/motions/visitor.h>
+#include "tracker/goals/gateway_estimator.h"
+#include "tracker/motions/visitor.h"
 #include <memory>
 
 namespace vulcan

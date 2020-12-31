@@ -16,7 +16,7 @@
 
 #ifndef UI_COMPONENTS_AREA_GRAPH_RENDERER_H
 #define UI_COMPONENTS_AREA_GRAPH_RENDERER_H
-#include <ui/common/ui_color.h>
+#include "ui/common/ui_color.h"
 
 namespace vulcan
 {

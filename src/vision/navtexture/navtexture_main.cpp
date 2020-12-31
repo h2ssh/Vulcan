@@ -11,13 +11,13 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include <utils/command_line.h>
-#include <utils/config_file.h>
-#include <system/module.h>
+#include "utils/command_line.h"
+#include "utils/config_file.h"
+#include "system/module.h"
 
-#include <vision/navtexture/navtexture_communicator.h>
-#include <vision/navtexture/navtexture_director.h>
-#include <vision/navtexture/navtexture_params.h>
+#include "vision/navtexture/navtexture_communicator.h"
+#include "vision/navtexture/navtexture_director.h"
+#include "vision/navtexture/navtexture_params.h"
 
 
 const std::string HELP_SHORT("h");

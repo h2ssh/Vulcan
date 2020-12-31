@@ -10,7 +10,7 @@
 #ifndef SENSORS_VISION_COLOR_CONVERSION_H
 #define SENSORS_VISION_COLOR_CONVERSION_H
 
-#include <core/image.h>
+#include "core/image.h"
 
 namespace vulcan
 {

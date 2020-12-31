@@ -14,9 +14,9 @@
 * Definition of LogPlayer.
 */
 
-#include <logging/logplayer/log_player.h>
-#include <utils/auto_mutex.h>
-#include <logging/logplayer/log_reader.h>
+#include "logging/logplayer/log_player.h"
+#include "utils/auto_mutex.h"
+#include "logging/logplayer/log_reader.h"
 #include <unistd.h>
 #include <iostream>
 

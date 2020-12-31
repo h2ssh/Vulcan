@@ -17,11 +17,11 @@
 #ifndef SIMULATOR_TOPO_DIRECTOR_H
 #define SIMULATOR_TOPO_DIRECTOR_H
 
-#include <system/director.h>
-#include <simulator/topo/consumers.h>
-#include <utils/mutex.h>
-#include <utils/condition_variable.h>
-#include <simulator/topo/topological_map_simulator.h>
+#include "system/director.h"
+#include "simulator/topo/consumers.h"
+#include "utils/mutex.h"
+#include "utils/condition_variable.h"
+#include "simulator/topo/topological_map_simulator.h"
 
 namespace vulcan
 {

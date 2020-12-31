@@ -7,8 +7,8 @@
 */
 
 
-#include <hssh/local_metric/lpm.h>
-#include <hssh/metrical/mapping/mapping_params.h>
+#include "hssh/local_metric/lpm.h"
+#include "hssh/metrical/mapping/mapping_params.h"
 #include <iostream>
 
 namespace vulcan

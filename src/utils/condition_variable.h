@@ -11,7 +11,7 @@
 #define UTILS_CONDITION_VARIABLE_H
 
 #include <pthread.h>
-#include <utils/mutex.h>
+#include "utils/mutex.h"
 
 namespace vulcan
 {

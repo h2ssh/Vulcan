@@ -14,18 +14,18 @@
 * Definition of EndpointObservationModel and BeamObservationModel.
 */
 
-#include <hssh/metrical/localization/grid_based_observation_models.h>
-#include <hssh/metrical/localization/scan_weighting.h>
-#include <hssh/metrical/localization/debug_info.h>
-#include <hssh/metrical/occupancy_grid.h>
-#include <math/coordinates.h>
-#include <core/angle_functions.h>
-#include <core/line.h>
-#include <core/multivariate_gaussian.h>
-#include <laser/laser_scan_lines.h>
-#include <laser/moving_laser_scan.h>
-#include <utils/ray_tracing.h>
-#include <utils/timestamp.h>
+#include "hssh/metrical/localization/grid_based_observation_models.h"
+#include "hssh/metrical/localization/scan_weighting.h"
+#include "hssh/metrical/localization/debug_info.h"
+#include "hssh/metrical/occupancy_grid.h"
+#include "math/coordinates.h"
+#include "core/angle_functions.h"
+#include "core/line.h"
+#include "core/multivariate_gaussian.h"
+#include "laser/laser_scan_lines.h"
+#include "laser/moving_laser_scan.h"
+#include "utils/ray_tracing.h"
+#include "utils/timestamp.h"
 #include <iostream>
 #include <cmath>
 

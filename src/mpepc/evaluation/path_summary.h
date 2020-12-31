@@ -17,7 +17,7 @@
 #ifndef MPEPC_EVALUATION_PATH_SUMMARY_H
 #define MPEPC_EVALUATION_PATH_SUMMARY_H
 
-#include <utils/pose_trace.h>
+#include "utils/pose_trace.h"
 #include <vector>
 
 namespace vulcan

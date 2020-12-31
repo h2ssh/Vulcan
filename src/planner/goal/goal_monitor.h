@@ -17,7 +17,7 @@
 #ifndef PLANNER_GOAL_GOAL_MONITOR_H
 #define PLANNER_GOAL_GOAL_MONITOR_H
 
-#include <planner/goal/goal_route.h>
+#include "planner/goal/goal_route.h"
 #include <vector>
 
 namespace vulcan

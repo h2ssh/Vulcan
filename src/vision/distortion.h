@@ -11,7 +11,7 @@
 #define SENSORS_VISION_DISTORTION_H
 
 #include <vector>
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

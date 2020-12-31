@@ -15,8 +15,8 @@
 * into a usable set of parameters.
 */
 
-#include <planner/decision/params.h>
-#include <utils/config_file.h>
+#include "planner/decision/params.h"
+#include "utils/config_file.h"
 
 namespace vulcan
 {

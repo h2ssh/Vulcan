@@ -14,10 +14,10 @@
 * Definition of PathRenderer.
 */
 
-#include <ui/components/path_renderer.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/ui_color.h>
-#include <mpepc/grid/navigation_grid_utils.h>
+#include "ui/components/path_renderer.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/ui_color.h"
+#include "mpepc/grid/navigation_grid_utils.h"
 #include <boost/range/iterator_range.hpp>
 #include <GL/gl.h>
 

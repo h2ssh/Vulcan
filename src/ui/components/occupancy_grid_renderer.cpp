@@ -7,11 +7,11 @@
 */
 
 
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/common/gl_texture_helpers.h>
-#include <ui/common/ui_color.h>
-#include <ui/common/default_colors.h>
-#include <hssh/metrical/occupancy_grid.h>
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/common/gl_texture_helpers.h"
+#include "ui/common/ui_color.h"
+#include "ui/common/default_colors.h"
+#include "hssh/metrical/occupancy_grid.h"
 #include <cassert>
 #include <cmath>
 #include <cstring>

@@ -12,13 +12,13 @@
 
 #include <stdint.h>
 #include <string>
-#include <utils/thread.h>
-#include <utils/mutex.h>
-#include <utils/condition_variable.h>
-#include <utils/sensor_time.h>
-#include <utils/serial.h>
-#include <sensors/imu.h>
-#include <core/imu_data.h>
+#include "utils/thread.h"
+#include "utils/mutex.h"
+#include "utils/condition_variable.h"
+#include "utils/sensor_time.h"
+#include "utils/serial.h"
+#include "sensors/imu.h"
+#include "core/imu_data.h"
 
 namespace vulcan
 {

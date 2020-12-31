@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_AREA_MAP_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_AREA_MAP_H
 
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/areas/serialization.h>
-#include <core/point.h>
-#include <system/message_traits.h>
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/areas/serialization.h"
+#include "core/point.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/memory.hpp>

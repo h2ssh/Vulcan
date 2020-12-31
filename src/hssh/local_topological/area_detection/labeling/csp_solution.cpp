@@ -14,9 +14,9 @@
 * Definition of CSPSolution.
 */
 
-#include <hssh/local_topological/area_detection/labeling/csp_solution.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_graph.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
+#include "hssh/local_topological/area_detection/labeling/csp_solution.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_graph.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
 
 namespace vulcan
 {

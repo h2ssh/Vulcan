@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_DEBUG_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_DEBUG_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_extent.h>
-#include <math/geometry/rectangle.h>
-#include <system/message_traits.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_extent.h"
+#include "math/geometry/rectangle.h"
+#include "system/message_traits.h"
 #include <cereal/types/utility.hpp>
 #include <cereal/types/vector.hpp>
 

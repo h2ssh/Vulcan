@@ -14,21 +14,21 @@
 * Definition of AreaDetector.
 */
 
-#include <hssh/local_topological/area_detector.h>
-#include <hssh/local_topological/area_detection/area_classifier.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_locator.h>
-#include <hssh/local_topological/area_detection/voronoi_graph_builder.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/cmd_line.h>
-#include <hssh/local_topological/debug_info.h>
-#include <hssh/local_topological/event_visitor.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/pose.h>
-#include <system/debug_communicator.h>
-#include <utils/command_line.h>
-#include <utils/stub.h>
-#include <utils/timestamp.h>
+#include "hssh/local_topological/area_detector.h"
+#include "hssh/local_topological/area_detection/area_classifier.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_locator.h"
+#include "hssh/local_topological/area_detection/voronoi_graph_builder.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/cmd_line.h"
+#include "hssh/local_topological/debug_info.h"
+#include "hssh/local_topological/event_visitor.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/pose.h"
+#include "system/debug_communicator.h"
+#include "utils/command_line.h"
+#include "utils/stub.h"
+#include "utils/timestamp.h"
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>
 #include <iostream>

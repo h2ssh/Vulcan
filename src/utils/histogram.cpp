@@ -14,7 +14,7 @@
 * Definition of Histogram.
 */
 
-#include <utils/histogram.h>
+#include "utils/histogram.h"
 #include <boost/algorithm/clamp.hpp>
 #include <algorithm>
 #include <iostream>

@@ -14,9 +14,9 @@
 * Definition of RobotSimulator
 */
 
-#include <mpepc/simulator/robot_simulator.h>
-#include <mpepc/trajectory/robot_trajectory_info.h>
-#include <utils/timestamp.h>
+#include "mpepc/simulator/robot_simulator.h"
+#include "mpepc/trajectory/robot_trajectory_info.h"
+#include "utils/timestamp.h"
 #include <cmath>
 
 // #define DEBUG_ROBOT_SIMULATOR

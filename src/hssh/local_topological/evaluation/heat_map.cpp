@@ -14,10 +14,10 @@
 * Definition of LocalTopoHeatMap.
 */
 
-#include <hssh/local_topological/evaluation/heat_map.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_metric/lpm.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/evaluation/heat_map.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_metric/lpm.h"
+#include "utils/algorithm_ext.h"
 #include <random>
 
 namespace vulcan

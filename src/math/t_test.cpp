@@ -14,7 +14,7 @@
 * Definition of independent_t_test.
 */
 
-#include <math/t_test.h>
+#include "math/t_test.h"
 #include <boost/math/distributions/students_t.hpp>
 
 namespace vulcan

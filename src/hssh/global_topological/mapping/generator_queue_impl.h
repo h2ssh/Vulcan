@@ -20,7 +20,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_GENERATOR_QUEUE_IMPL_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_GENERATOR_QUEUE_IMPL_H
 
-#include <hssh/global_topological/mapping/generator_queue.h>
+#include "hssh/global_topological/mapping/generator_queue.h"
 #include <string>
 
 namespace vulcan

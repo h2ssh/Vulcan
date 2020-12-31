@@ -18,7 +18,7 @@
 #define MATH_RANSAC_H
 
 #include <vector>
-#include <core/line.h>
+#include "core/line.h"
 
 namespace vulcan
 {

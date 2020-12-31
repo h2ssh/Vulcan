@@ -17,8 +17,8 @@
 #ifndef MPEPC_TRAJECTORY_PLANNER_PARAMS_H
 #define MPEPC_TRAJECTORY_PLANNER_PARAMS_H
 
-#include <mpepc/simulator/params.h>
-#include <robot/model/params.h>
+#include "mpepc/simulator/params.h"
+#include "robot/model/params.h"
 #include <string>
 
 namespace vulcan

@@ -17,12 +17,12 @@
 #ifndef HSSH_GLOBAL_METRIC_DIRECTOR_H
 #define HSSH_GLOBAL_METRIC_DIRECTOR_H
 
-#include <hssh/global_metric/messages.h>
-#include <hssh/global_metric/map.h>
-#include <hssh/global_metric/pose.h>
-#include <utils/locked_double_buffer.h>
-#include <utils/pose_trace.h>
-#include <system/director.h>
+#include "hssh/global_metric/messages.h"
+#include "hssh/global_metric/map.h"
+#include "hssh/global_metric/pose.h"
+#include "utils/locked_double_buffer.h"
+#include "utils/pose_trace.h"
+#include "system/director.h"
 #include <memory>
 
 namespace vulcan

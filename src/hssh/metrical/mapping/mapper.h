@@ -18,11 +18,11 @@
 #ifndef HSSH_METRICAL_MAPPING_MAPPER_H
 #define HSSH_METRICAL_MAPPING_MAPPER_H
 
-#include <hssh/metrical/mapping/lpm_builder.h>
-#include <hssh/metrical/mapping/glass_map_builder.h>
-#include <hssh/metrical/mapping/laser_scan_rasterizer.h>
-#include <laser/moving_laser_scan.h>
-#include <laser/reflected_laser_scan.h>
+#include "hssh/metrical/mapping/lpm_builder.h"
+#include "hssh/metrical/mapping/glass_map_builder.h"
+#include "hssh/metrical/mapping/laser_scan_rasterizer.h"
+#include "laser/moving_laser_scan.h"
+#include "laser/reflected_laser_scan.h"
 #include <memory>
 #include <map>
 #include <set>

@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ALL_PATHS_GRAPH_REDUCER_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ALL_PATHS_GRAPH_REDUCER_H
 
-#include <math/graph/all_paths.h>
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h>
+#include "math/graph/all_paths.h"
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h"
 #include <string>
 
 namespace vulcan

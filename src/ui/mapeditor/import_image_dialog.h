@@ -17,7 +17,7 @@
 #ifndef UI_MAPEDITOR_IMPORT_IMAGE_DIALOG_H
 #define UI_MAPEDITOR_IMPORT_IMAGE_DIALOG_H
 
-#include <ui/mapeditor/map_editor.h>
+#include "ui/mapeditor/map_editor.h"
 #include <cassert>
 
 namespace vulcan

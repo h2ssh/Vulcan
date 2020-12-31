@@ -14,11 +14,11 @@
 * Definition of GoalEstimator and goal_estimator_params_t.
 */
 
-#include <tracker/goals/goal_estimator.h>
-#include <tracker/motions/fixed_endpoint.h>
-#include <tracker/motions/stationary.h>
-#include <tracker/motions/steady.h>
-#include <tracker/motions/striding.h>
+#include "tracker/goals/goal_estimator.h"
+#include "tracker/motions/fixed_endpoint.h"
+#include "tracker/motions/stationary.h"
+#include "tracker/motions/steady.h"
+#include "tracker/motions/striding.h"
 
 namespace vulcan
 {

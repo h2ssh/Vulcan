@@ -14,7 +14,7 @@
 * Definition of DecisionPlanRenderer.
 */
 
-#include <ui/components/decision_plan_renderer.h>
+#include "ui/components/decision_plan_renderer.h"
 #include <GL/gl.h>
 
 namespace vulcan

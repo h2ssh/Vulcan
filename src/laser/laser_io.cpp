@@ -14,9 +14,9 @@
 * Definition of laser scan I/O functions.
 */
 
-#include <laser/laser_io.h>
+#include "laser/laser_io.h"
 #include <fstream>
-#include <core/laser_scan.h>
+#include "core/laser_scan.h"
 
 namespace vulcan
 {

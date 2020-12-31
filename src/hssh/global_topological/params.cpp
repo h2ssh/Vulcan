@@ -14,8 +14,8 @@
 * Definition of the various parsers for the params structs for the global_topo_hssh module.
 */
 
-#include <hssh/global_topological/params.h>
-#include <utils/config_file.h>
+#include "hssh/global_topological/params.h"
+#include "utils/config_file.h"
 
 namespace vulcan
 {

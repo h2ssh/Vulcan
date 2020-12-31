@@ -14,7 +14,7 @@
 * Definition of BetaDistribution.
 */
 
-#include <math/beta_distribution.h>
+#include "math/beta_distribution.h"
 #include <boost/math/special_functions/beta.hpp>
 #include <cassert>
 #include <iostream>

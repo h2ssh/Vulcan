@@ -17,9 +17,9 @@
 #ifndef TRACKER_MOTIONS_ENDPOINT_MODEL_H
 #define TRACKER_MOTIONS_ENDPOINT_MODEL_H
 
-#include <tracker/types.h>
-#include <tracker/boundaries/shapes.h>
-#include <math/angle_range.h>
+#include "tracker/types.h"
+#include "tracker/boundaries/shapes.h"
+#include "math/angle_range.h"
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/variance.hpp>

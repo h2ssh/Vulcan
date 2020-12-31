@@ -14,11 +14,11 @@
 * Definition of TrajectoryEvaluator.
 */
 
-#include <mpepc/trajectory/trajectory_evaluator.h>
-#include <mpepc/trajectory/robot_trajectory_info.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <mpepc/manifold/task_manifold.h>
-#include <robot/model/params.h>
+#include "mpepc/trajectory/trajectory_evaluator.h"
+#include "mpepc/trajectory/robot_trajectory_info.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "mpepc/manifold/task_manifold.h"
+#include "robot/model/params.h"
 #include <iostream>
 
 // #define DEBUG_TRAJECTORY_EVALUATOR

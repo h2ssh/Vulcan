@@ -14,11 +14,11 @@
 * Definition of DiscretizedAngleGrid.
 */
 
-#include <utils/discretized_angle_grid.h>
-#include <utils/algorithm_ext.h>
-#include <utils/compression.h>
-#include <utils/stub.h>
-#include <utils/timestamp.h>
+#include "utils/discretized_angle_grid.h"
+#include "utils/algorithm_ext.h"
+#include "utils/compression.h"
+#include "utils/stub.h"
+#include "utils/timestamp.h"
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/clamp.hpp>
 #include <algorithm>

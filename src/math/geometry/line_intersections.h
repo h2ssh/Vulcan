@@ -11,8 +11,8 @@
 #define MATH_GEOMETRY_LINE_INTERSECTIONS_H
 
 #include <vector>
-#include <core/line.h>
-#include <core/point.h>
+#include "core/line.h"
+#include "core/point.h"
 
 namespace vulcan
 {

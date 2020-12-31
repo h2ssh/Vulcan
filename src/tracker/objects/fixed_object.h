@@ -17,9 +17,9 @@
 #ifndef TRACKER_OBJECTS_FIXED_OBJECT_H
 #define TRACKER_OBJECTS_FIXED_OBJECT_H
 
-#include <tracker/dynamic_object.h>
-#include <tracker/object_state.h>
-#include <tracker/objects/fixed_object_model.h>
+#include "tracker/dynamic_object.h"
+#include "tracker/object_state.h"
+#include "tracker/objects/fixed_object_model.h"
 #include <cereal/access.hpp>
 #include <cereal/types/deque.hpp>
 

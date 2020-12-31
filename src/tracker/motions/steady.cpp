@@ -14,10 +14,10 @@
 * Definition of SteadyMotion.
 */
 
-#include <tracker/motions/steady.h>
-#include <tracker/motions/visitor.h>
-#include <tracker/laser_object.h>
-#include <tracker/object_state.h>
+#include "tracker/motions/steady.h"
+#include "tracker/motions/visitor.h"
+#include "tracker/laser_object.h"
+#include "tracker/object_state.h"
 #include <iostream>
 #include <cassert>
 

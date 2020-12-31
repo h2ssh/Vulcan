@@ -17,7 +17,7 @@
 #ifndef PLANNER_CONTROL_TASK_STATUS_H
 #define PLANNER_CONTROL_TASK_STATUS_H
 
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cassert>
 

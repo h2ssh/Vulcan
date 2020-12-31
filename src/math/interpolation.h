@@ -20,7 +20,7 @@
 #ifndef MATH_INTERPOLATION_H
 #define MATH_INTERPOLATION_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <cassert>
 
 namespace vulcan

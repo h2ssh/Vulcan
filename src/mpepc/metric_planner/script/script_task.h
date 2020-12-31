@@ -17,8 +17,8 @@
 #ifndef MPEPC_SCRIPT_TASK_H
 #define MPEPC_SCRIPT_TASK_H
 
-#include <core/pose.h>
-#include <utils/timestamp.h>
+#include "core/pose.h"
+#include "utils/timestamp.h"
 #include <cereal/access.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>

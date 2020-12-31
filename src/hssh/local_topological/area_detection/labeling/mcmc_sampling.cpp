@@ -14,16 +14,16 @@
 * Definition of MCMCSampling.
 */
 
-#include <hssh/local_topological/area_detection/labeling/mcmc_sampling.h>
-#include <hssh/local_topological/area_detection/labeling/alignment_network_filter.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
-#include <hssh/local_topological/area_detection/labeling/csp_debug.h>
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/boundary_classifier.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_extent.h>
-#include <utils/algorithm_ext.h>
-#include <core/float_comparison.h>
+#include "hssh/local_topological/area_detection/labeling/mcmc_sampling.h"
+#include "hssh/local_topological/area_detection/labeling/alignment_network_filter.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include "hssh/local_topological/area_detection/labeling/csp_debug.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/boundary_classifier.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_extent.h"
+#include "utils/algorithm_ext.h"
+#include "core/float_comparison.h"
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/filtered_graph.hpp>
 #include <boost/range/as_array.hpp>

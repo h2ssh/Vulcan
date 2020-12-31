@@ -13,7 +13,7 @@
 *
 */
 
-#include <core/drive_wheel.h>
+#include "core/drive_wheel.h"
 
 #ifndef MOTOR_MODEL_H
 #define MOTOR_MODEL_H

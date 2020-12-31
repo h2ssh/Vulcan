@@ -14,11 +14,11 @@
 * Definition of BallisticGoalEstimator.
 */
 
-#include <tracker/goals/ballistic_estimator.h>
-#include <tracker/motions/stationary.h>
-#include <tracker/motions/steady.h>
-#include <tracker/motions/striding.h>
-#include <utils/stub.h>
+#include "tracker/goals/ballistic_estimator.h"
+#include "tracker/motions/stationary.h"
+#include "tracker/motions/steady.h"
+#include "tracker/motions/striding.h"
+#include "utils/stub.h"
 #include <cassert>
 
 namespace vulcan

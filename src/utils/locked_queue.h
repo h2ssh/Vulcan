@@ -17,8 +17,8 @@
 #ifndef UTILS_LOCKED_QUEUE_H
 #define UTILS_LOCKED_QUEUE_H
 
-#include <utils/mutex.h>
-#include <utils/auto_mutex.h>
+#include "utils/mutex.h"
+#include "utils/auto_mutex.h"
 #include <atomic>
 #include <cassert>
 #include <deque>

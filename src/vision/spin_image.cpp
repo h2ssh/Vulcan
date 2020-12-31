@@ -9,8 +9,8 @@
 
 #include <algorithm>
 #include <iostream>
-#include <core/image.h>
-#include <vision/spin_image.h>
+#include "core/image.h"
+#include "vision/spin_image.h"
 
 
 using namespace vulcan;

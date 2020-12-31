@@ -17,8 +17,8 @@
 #ifndef UI_COMMON_SHAPE_SELECTOR_H
 #define UI_COMMON_SHAPE_SELECTOR_H
 
-#include <ui/common/gl_event.h>
-#include <ui/common/object_selector_event_handler.h>
+#include "ui/common/gl_event.h"
+#include "ui/common/object_selector_event_handler.h"
 #include <vector>
 
 namespace vulcan

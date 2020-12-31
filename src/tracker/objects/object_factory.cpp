@@ -14,14 +14,14 @@
 * Definition of DynamicObjectFactory.
 */
 
-#include <tracker/objects/object_factory.h>
-#include <tracker/objects/person.h>
-#include <tracker/objects/pivoting_object.h>
-#include <tracker/objects/rigid.h>
-#include <tracker/objects/sliding_object.h>
-#include <tracker/objects/unclassified.h>
-#include <tracker/object_motion.h>
-#include <tracker/motions/fixed_endpoint.h>
+#include "tracker/objects/object_factory.h"
+#include "tracker/objects/person.h"
+#include "tracker/objects/pivoting_object.h"
+#include "tracker/objects/rigid.h"
+#include "tracker/objects/sliding_object.h"
+#include "tracker/objects/unclassified.h"
+#include "tracker/object_motion.h"
+#include "tracker/motions/fixed_endpoint.h"
 #include <iostream>
 
 namespace vulcan

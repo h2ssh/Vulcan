@@ -14,8 +14,8 @@
 * Definitions for nonholonomic distance functions
 */
 
-#include <mpepc/math/unicycle_nonholonomic_distance.h>
-#include <mpepc/math/egocentric_polar_coordinates.h>
+#include "mpepc/math/unicycle_nonholonomic_distance.h"
+#include "mpepc/math/egocentric_polar_coordinates.h"
 #include <cmath>
 #include <cassert>
 #include <iostream>

@@ -17,8 +17,8 @@
 #ifndef PLANNER_INTERFACE_NAVIGATION_INTERFACE_H
 #define PLANNER_INTERFACE_NAVIGATION_INTERFACE_H
 
-#include <planner/interface/decision_interface.h>
-#include <planner/interface/goal_interface.h>
+#include "planner/interface/decision_interface.h"
+#include "planner/interface/goal_interface.h"
 
 namespace vulcan
 {

@@ -19,14 +19,14 @@
 *   - select_straightest_gateway_boundary
 */
 
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
-#include <hssh/local_topological/area_detection/gateways/endpoint_validator.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <utils/algorithm_ext.h>
-#include <utils/ray_tracing.h>
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "hssh/local_topological/area_detection/gateways/endpoint_validator.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "utils/algorithm_ext.h"
+#include "utils/ray_tracing.h"
 #include <boost/range/iterator_range.hpp>
 #include <array>
 

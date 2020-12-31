@@ -14,21 +14,21 @@
 * Definition of LocalTopoDisplayWidget.
 */
 
-#include <ui/debug/local_topo_display_widget.h>
-#include <ui/components/labeling_csp_player.h>
-#include <ui/components/place_grid_renderer.h>
-#include <ui/components/gateways_renderer.h>
-#include <ui/components/isovist_renderer.h>
-#include <ui/components/voronoi_isovist_gradients_renderer.h>
-#include <ui/components/area_graph_renderer.h>
-#include <ui/components/visibility_graph_renderer.h>
-#include <ui/components/area_subgraph_renderer.h>
-#include <ui/components/local_area_renderer.h>
-#include <ui/components/local_area_event_renderer.h>
-#include <ui/common/grid_cell_selector.h>
-#include <ui/common/color_generator.h>
-#include <hssh/local_metric/pose.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/local_topo_display_widget.h"
+#include "ui/components/labeling_csp_player.h"
+#include "ui/components/place_grid_renderer.h"
+#include "ui/components/gateways_renderer.h"
+#include "ui/components/isovist_renderer.h"
+#include "ui/components/voronoi_isovist_gradients_renderer.h"
+#include "ui/components/area_graph_renderer.h"
+#include "ui/components/visibility_graph_renderer.h"
+#include "ui/components/area_subgraph_renderer.h"
+#include "ui/components/local_area_renderer.h"
+#include "ui/components/local_area_event_renderer.h"
+#include "ui/common/grid_cell_selector.h"
+#include "ui/common/color_generator.h"
+#include "hssh/local_metric/pose.h"
+#include "utils/auto_mutex.h"
 #include <iterator>
 #include <sstream>
 #include <cassert>

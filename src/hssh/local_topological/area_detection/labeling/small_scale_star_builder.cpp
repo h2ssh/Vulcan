@@ -14,9 +14,9 @@
 * Definition SmallScaleStarBuilder.
 */
 
-#include <hssh/local_topological/area_detection/labeling/small_scale_star_builder.h>
-#include <hssh/local_topological/area_detection/labeling/beam_star_builder.h>
-#include <hssh/local_topological/area_detection/labeling/path_similarity_star_builder.h>
+#include "hssh/local_topological/area_detection/labeling/small_scale_star_builder.h"
+#include "hssh/local_topological/area_detection/labeling/beam_star_builder.h"
+#include "hssh/local_topological/area_detection/labeling/path_similarity_star_builder.h"
 #include <cassert>
 #include <iostream>
 

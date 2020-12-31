@@ -17,8 +17,8 @@
 #ifndef UI_NAVIGATION_NAVIGATION_INTERFACE_FRAME_H
 #define UI_NAVIGATION_NAVIGATION_INTERFACE_FRAME_H
 
-#include <ui/navigation/navigation_interface.h>
-#include <ui/common/gl_event.h>
+#include "ui/navigation/navigation_interface.h"
+#include "ui/common/gl_event.h"
 
 namespace vulcan
 {

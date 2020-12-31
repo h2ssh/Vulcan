@@ -10,8 +10,8 @@
 #ifndef LCMTYPES_MATRIX_T_H
 #define LCMTYPES_MATRIX_T_H
 
-#include <lcmtypes/vulcan_lcm_matrix_t.h>
-#include <core/matrix.h>
+#include "lcmtypes/vulcan_lcm_matrix_t.h"
+#include "core/matrix.h"
 
 namespace vulcan
 {

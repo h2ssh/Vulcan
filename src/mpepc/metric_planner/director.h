@@ -18,39 +18,39 @@
 #define METRIC_PLANNER_DIRECTOR_H
 
 // system and utils
-#include <system/director.h>
-#include <utils/locked_double_buffer.h>
-#include <utils/locked_queue.h>
-#include <utils/locked_bool.h>
-#include <utils/condition_variable.h>
-#include <utils/mutex.h>
+#include "system/director.h"
+#include "utils/locked_double_buffer.h"
+#include "utils/locked_queue.h"
+#include "utils/locked_bool.h"
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
 #include <memory>
 
 // metric planner inputs and outputs
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <core/motion_state.h>
-#include <tracker/dynamic_object_collection.h>
-#include <mpepc/metric_planner/messages.h>
-#include <mpepc/motion_controller/task/target.h> // the planner can only send the motion target task (for now at least)
-#include <mpepc/motion_controller/messages.h>
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "core/motion_state.h"
+#include "tracker/dynamic_object_collection.h"
+#include "mpepc/metric_planner/messages.h"
+#include "mpepc/motion_controller/task/target.h" // the planner can only send the motion target task (for now at least)
+#include "mpepc/motion_controller/messages.h"
 
 // task and script processors
-#include <mpepc/metric_planner/task/task.h>
-#include <mpepc/metric_planner/script/script.h>
+#include "mpepc/metric_planner/task/task.h"
+#include "mpepc/metric_planner/script/script.h"
 
 // other data processors and paramsters
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <mpepc/grid/obstacle_distance_grid_builder.h>
-#include <mpepc/grid/visibility_analysis.h>
-#include <mpepc/simulator/dynamic_object_filter.h>
-#include <mpepc/simulator/dynamic_object_simulator.h>
-#include <mpepc/trajectory/trajectory_planner.h>
-#include <mpepc/trajectory/trajectory_planner_info.h>
-#include <mpepc/metric_planner/params.h>
-#include <mpepc/metric_planner/progress_checker.h>
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "mpepc/grid/obstacle_distance_grid_builder.h"
+#include "mpepc/grid/visibility_analysis.h"
+#include "mpepc/simulator/dynamic_object_filter.h"
+#include "mpepc/simulator/dynamic_object_simulator.h"
+#include "mpepc/trajectory/trajectory_planner.h"
+#include "mpepc/trajectory/trajectory_planner_info.h"
+#include "mpepc/metric_planner/params.h"
+#include "mpepc/metric_planner/progress_checker.h"
 
-#include <lcmtypes/mpepc/metric_pose_target_t.h>
+#include "lcmtypes/mpepc/metric_pose_target_t.h"
 
 // NOTE: For motion planning and generation in local metric spaces (non-topological spaces) there are
 //       three classes of motion representation at three distinct time scales:

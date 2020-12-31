@@ -10,9 +10,9 @@
 #ifndef SENSORS_LASER_LASER_SCAN_LINES_H
 #define SENSORS_LASER_LASER_SCAN_LINES_H
 
-#include <core/laser_scan.h>
-#include <core/line.h>
-#include <system/message_traits.h>
+#include "core/laser_scan.h"
+#include "core/line.h"
+#include "system/message_traits.h"
 #include <cereal/types/vector.hpp>
 
 namespace vulcan

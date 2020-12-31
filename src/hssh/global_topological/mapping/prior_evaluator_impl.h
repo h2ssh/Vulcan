@@ -21,8 +21,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_PRIOR_EVALUATOR_IMPL_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_PRIOR_EVALUATOR_IMPL_H
 
-#include <hssh/global_topological/mapping/prior_evaluator.h>
-#include <hssh/global_topological/params.h>
+#include "hssh/global_topological/mapping/prior_evaluator.h"
+#include "hssh/global_topological/params.h"
 
 namespace vulcan
 {

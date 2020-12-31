@@ -17,7 +17,7 @@
 #ifndef TRACKER_OBJECT_STATE_H
 #define TRACKER_OBJECT_STATE_H
 
-#include <tracker/object_boundary.h>
+#include "tracker/object_boundary.h"
 
 namespace vulcan
 {

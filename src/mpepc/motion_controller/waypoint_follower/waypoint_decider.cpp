@@ -15,9 +15,9 @@
 * to path.log.
 */
 
-#include <mpepc/motion_controller/waypoint_follower/waypoint_decider.h>
-#include <core/point.h>
-#include <core/angle_functions.h>
+#include "mpepc/motion_controller/waypoint_follower/waypoint_decider.h"
+#include "core/point.h"
+#include "core/angle_functions.h"
 
 namespace vulcan
 {

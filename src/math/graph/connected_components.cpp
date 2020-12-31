@@ -14,7 +14,7 @@
 * Definition of ConnectedComponents.
 */
 
-#include <math/graph/connected_components.h>
+#include "math/graph/connected_components.h"
 #include <stack>
 
 namespace vulcan

@@ -17,9 +17,9 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_DIRECTOR_H
 #define HSSH_GLOBAL_TOPOLOGICAL_DIRECTOR_H
 
-#include <system/director.h>
-#include <hssh/global_topological/utils/global_topo_data_queue.h>
-#include <hssh/global_topological/params.h>
+#include "system/director.h"
+#include "hssh/global_topological/utils/global_topo_data_queue.h"
+#include "hssh/global_topological/params.h"
 #include <memory>
 #include <vector>
 

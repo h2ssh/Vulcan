@@ -10,8 +10,8 @@
 #ifndef UI_DEBUG_GLOBAL_METRIC_PANEL_H
 #define UI_DEBUG_GLOBAL_METRIC_PANEL_H
 
-#include <ui/common/ui_panel.h>
-#include <hssh/global_metric/pose.h>
+#include "ui/common/ui_panel.h"
+#include "hssh/global_metric/pose.h"
 #include <wx/wx.h>
 
 namespace vulcan

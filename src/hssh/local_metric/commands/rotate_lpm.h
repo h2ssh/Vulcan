@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_ROTATE_LPM_H
 #define HSSH_LOCAL_METRIC_COMMANDS_ROTATE_LPM_H
 
-#include <hssh/local_metric/command.h>
+#include "hssh/local_metric/command.h"
 #include <cereal/types/base_class.hpp>
 
 namespace vulcan

@@ -14,15 +14,15 @@
 * Definition of ExplorationDisplayWidget.
 */
 
-#include <ui/debug/exploration_widget.h>
-#include <ui/components/exploration_map_renderer.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/components/pose_target_renderer.h>
-#include <ui/components/robot_renderer.h>
-#include <ui/components/robot_trajectory_renderer.h>
-#include <ui/components/tracked_object_renderer.h>
-#include <mpepc/metric_planner/task/navigation.h>
-#include <mpepc/simulator/dynamic_object_trajectory.h>
+#include "ui/debug/exploration_widget.h"
+#include "ui/components/exploration_map_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/pose_target_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "ui/components/robot_trajectory_renderer.h"
+#include "ui/components/tracked_object_renderer.h"
+#include "mpepc/metric_planner/task/navigation.h"
+#include "mpepc/simulator/dynamic_object_trajectory.h"
 
 namespace vulcan
 {

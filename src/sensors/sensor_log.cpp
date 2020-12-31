@@ -14,8 +14,8 @@
 * Definition of SensorLog.
 */
 
-#include <sensors/sensor_log.h>
-#include <system/module_communicator.h>
+#include "sensors/sensor_log.h"
+#include "system/module_communicator.h"
 #include <algorithm>
 #include <sstream>
 

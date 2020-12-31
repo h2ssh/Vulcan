@@ -8,7 +8,7 @@
 
 
 #include <cassert>
-#include <lcmtypes/common/vector_t.h>
+#include "lcmtypes/common/vector_t.h"
 
 
 void vulcan::lcm::allocate_lcm_vector(vulcan_lcm_vector_t& vector, int length)

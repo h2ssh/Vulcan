@@ -16,8 +16,8 @@
 #ifndef DIFFERENTIAL_MOTORS_PLANT_H
 #define DIFFERENTIAL_MOTORS_PLANT_H
 
-#include <robot/model/robot_plant_model.h>
-#include <robot/model/motor_model.h>
+#include "robot/model/robot_plant_model.h"
+#include "robot/model/motor_model.h"
 
 namespace vulcan
 {

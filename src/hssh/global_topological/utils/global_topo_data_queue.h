@@ -17,13 +17,13 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_UTILS_GLOBAL_TOPO_DATA_QUEUE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_UTILS_GLOBAL_TOPO_DATA_QUEUE_H
 
-#include <hssh/global_topological/command.h>
-#include <hssh/local_topological/event.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_metric/pose.h>
-#include <utils/locked_double_buffer.h>
-#include <utils/mutex.h>
-#include <utils/condition_variable.h>
+#include "hssh/global_topological/command.h"
+#include "hssh/local_topological/event.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_metric/pose.h"
+#include "utils/locked_double_buffer.h"
+#include "utils/mutex.h"
+#include "utils/condition_variable.h"
 #include <deque>
 
 namespace vulcan

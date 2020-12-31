@@ -17,15 +17,15 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_TOPOLOGICAL_MAP_H
 #define HSSH_GLOBAL_TOPOLOGICAL_TOPOLOGICAL_MAP_H
 
-#include <hssh/global_topological/area.h>
-#include <hssh/global_topological/chi.h>
-#include <hssh/global_topological/global_location.h>
-#include <hssh/global_topological/global_path.h>
-#include <hssh/global_topological/global_path_segment.h>
-#include <hssh/global_topological/global_place.h>
-#include <hssh/global_topological/transition.h>
-#include <hssh/utils/id.h>
-#include <system/message_traits.h>
+#include "hssh/global_topological/area.h"
+#include "hssh/global_topological/chi.h"
+#include "hssh/global_topological/global_location.h"
+#include "hssh/global_topological/global_path.h"
+#include "hssh/global_topological/global_path_segment.h"
+#include "hssh/global_topological/global_place.h"
+#include "hssh/global_topological/transition.h"
+#include "hssh/utils/id.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/unordered_map.hpp>

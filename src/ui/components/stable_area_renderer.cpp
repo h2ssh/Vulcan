@@ -14,12 +14,12 @@
 * Definition of StableAreaRenderer.
 */
 
-#include <ui/components/stable_area_renderer.h>
-#include <ui/components/small_scale_star_renderer.h>
-#include <ui/common/ui_color.h>
-#include <ui/common/gl_shapes.h>
-#include <ui/common/hssh_colors.h>
-#include <hssh/local_topological/evaluation/stability_analyzer.h>
+#include "ui/components/stable_area_renderer.h"
+#include "ui/components/small_scale_star_renderer.h"
+#include "ui/common/ui_color.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/hssh_colors.h"
+#include "hssh/local_topological/evaluation/stability_analyzer.h"
 
 namespace vulcan
 {

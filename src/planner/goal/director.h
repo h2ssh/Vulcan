@@ -17,17 +17,17 @@
 #ifndef PLANNER_GOAL_DIRECTOR_H
 #define PLANNER_GOAL_DIRECTOR_H
 
-#include <hssh/global_topological/topological_map.h>
-#include <planner/goal/params.h>
-#include <planner/goal/goal_target.h>
-#include <planner/goal/goal_planner.h>
-#include <planner/goal/goal_monitor.h>
-#include <planner/goal/messages.h>
-#include <planner/goal/debug_info.h>
-#include <planner/goal/consumers.h>
-#include <utils/mutex.h>
-#include <utils/condition_variable.h>
-#include <system/director.h>
+#include "hssh/global_topological/topological_map.h"
+#include "planner/goal/params.h"
+#include "planner/goal/goal_target.h"
+#include "planner/goal/goal_planner.h"
+#include "planner/goal/goal_monitor.h"
+#include "planner/goal/messages.h"
+#include "planner/goal/debug_info.h"
+#include "planner/goal/consumers.h"
+#include "utils/mutex.h"
+#include "utils/condition_variable.h"
+#include "system/director.h"
 
 namespace vulcan
 {

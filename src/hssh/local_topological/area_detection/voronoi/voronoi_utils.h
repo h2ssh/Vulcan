@@ -16,9 +16,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_VORONOI_UTILS_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_VORONOI_UTILS_H
 
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <core/line.h>
-#include <core/point.h>
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "core/line.h"
+#include "core/point.h"
 #include <array>
 #include <deque>
 #include <set>

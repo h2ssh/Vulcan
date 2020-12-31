@@ -17,7 +17,7 @@
 #ifndef MATH_GRAPH_CONNECTED_COMPONENTS_H
 #define MATH_GRAPH_CONNECTED_COMPONENTS_H
 
-#include <math/graph/graph.h>
+#include "math/graph/graph.h"
 #include <set>
 
 namespace vulcan

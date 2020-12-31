@@ -14,7 +14,7 @@
 * Definition of quasi_static_cost.
 */
 
-#include <mpepc/cost/quasi_static_cost.h>
+#include "mpepc/cost/quasi_static_cost.h"
 
 namespace vulcan
 {

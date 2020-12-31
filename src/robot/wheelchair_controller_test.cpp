@@ -7,10 +7,10 @@
 */
 
 
-#include <system/module_communicator.h>
-#include <robot/commands.h>
-#include <utils/command_line.h>
-#include <utils/timestamp.h>
+#include "system/module_communicator.h"
+#include "robot/commands.h"
+#include "utils/command_line.h"
+#include "utils/timestamp.h"
 #include <cstdlib>
 #include <iostream>
 #include <string>

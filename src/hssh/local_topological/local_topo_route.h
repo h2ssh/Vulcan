@@ -18,7 +18,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_ROUTE_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCAL_TOPO_ROUTE_H
 
-#include <hssh/local_topological/area.h>
+#include "hssh/local_topological/area.h"
 
 namespace vulcan
 {

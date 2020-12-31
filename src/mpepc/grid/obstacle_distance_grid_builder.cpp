@@ -14,11 +14,11 @@
 * Definition of ObstacleDistanceGridBuilder.
 */
 
-#include <mpepc/grid/obstacle_distance_grid_builder.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <mpepc/grid/params.h>
-#include <hssh/local_metric/lpm.h>
-#include <core/point.h>
+#include "mpepc/grid/obstacle_distance_grid_builder.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "mpepc/grid/params.h"
+#include "hssh/local_metric/lpm.h"
+#include "core/point.h"
 #include <queue>
 
 namespace vulcan

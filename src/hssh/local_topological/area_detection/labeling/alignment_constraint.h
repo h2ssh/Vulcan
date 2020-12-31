@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_CONSTRAINT_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_ALIGNMENT_CONSTRAINT_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
 #include <array>
 #include <iosfwd>
 #include <utility>

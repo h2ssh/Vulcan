@@ -14,10 +14,10 @@
 * Definition of LogicalInterfaceFrame.
 */
 
-#include <ui/logical/logical_interface_frame.h>
-#include <ui/logical/logical_interface_dialogs.h>
-#include <hssh/global_topological/messages.h>
-#include <system/module_communicator.h>
+#include "ui/logical/logical_interface_frame.h"
+#include "ui/logical/logical_interface_dialogs.h"
+#include "hssh/global_topological/messages.h"
+#include "system/module_communicator.h"
 
 namespace vulcan
 {

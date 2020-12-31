@@ -10,8 +10,8 @@
 #ifndef CORE_LINE_H
 #define CORE_LINE_H
 
-#include <core/point.h>
-#include <core/angle_functions.h>
+#include "core/point.h"
+#include "core/angle_functions.h"
 
 namespace vulcan
 {

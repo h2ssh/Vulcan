@@ -17,7 +17,7 @@
 #ifndef UI_MAPEDITOR_METRIC_EDITOR_PANEL_H
 #define UI_MAPEDITOR_METRIC_EDITOR_PANEL_H
 
-#include <ui/common/ui_panel.h>
+#include "ui/common/ui_panel.h"
 #include <wx/tglbtn.h>
 #include <wx/radiobox.h>
 #include <atomic>

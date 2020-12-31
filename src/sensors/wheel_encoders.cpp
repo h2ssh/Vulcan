@@ -14,12 +14,12 @@
 * Definition of WheelEncoders and create_wheel_encoders factory.
 */
 
-#include <sensors/wheel_encoders.h>
-#include <sensors/phidget_encoder_board.h>
-#include <sensors/remote_encoders.h>
-#include <system/module_communicator.h>
-#include <utils/timestamp.h>
-#include <core/angle_functions.h>
+#include "sensors/wheel_encoders.h"
+#include "sensors/phidget_encoder_board.h"
+#include "sensors/remote_encoders.h"
+#include "system/module_communicator.h"
+#include "utils/timestamp.h"
+#include "core/angle_functions.h"
 #include <iostream>
 #include <cmath>
 #include <cstdlib>

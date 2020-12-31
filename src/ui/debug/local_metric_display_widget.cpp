@@ -14,18 +14,18 @@
 * Definition of LocalMetricDisplayWidget.
 */
 
-#include <ui/debug/local_metric_display_widget.h>
-#include <utils/auto_mutex.h>
-#include <ui/common/gl_utilities.h>
-#include <ui/common/gl_shapes.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/components/glass_map_renderer.h>
-#include <ui/components/laser_scan_renderer.h>
-#include <ui/components/lines_renderer.h>
-#include <ui/components/particles_renderer.h>
-#include <ui/components/pose_trace_renderer.h>
-#include <ui/components/robot_renderer.h>
-#include <core/odometry.h>
+#include "ui/debug/local_metric_display_widget.h"
+#include "utils/auto_mutex.h"
+#include "ui/common/gl_utilities.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/glass_map_renderer.h"
+#include "ui/components/laser_scan_renderer.h"
+#include "ui/components/lines_renderer.h"
+#include "ui/components/particles_renderer.h"
+#include "ui/components/pose_trace_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "core/odometry.h"
 #include <boost/range/iterator_range.hpp>
 #include <GL/gl.h>
 #include <GL/glu.h>

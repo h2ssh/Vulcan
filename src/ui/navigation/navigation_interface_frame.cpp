@@ -14,10 +14,10 @@
 * Definition of NavigationInterfaceFrame.
 */
 
-#include <ui/navigation/navigation_interface_frame.h>
-#include <ui/navigation/goal_interface_control.h>
-#include <ui/navigation/navigation_interface_control.h>
-#include <ui/navigation/navigation_interface_display.h>
+#include "ui/navigation/navigation_interface_frame.h"
+#include "ui/navigation/goal_interface_control.h"
+#include "ui/navigation/navigation_interface_control.h"
+#include "ui/navigation/navigation_interface_display.h"
 
 namespace vulcan
 {

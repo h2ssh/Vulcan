@@ -14,8 +14,8 @@
 * Definition of DecisionPlanner.
 */
 
-#include <planner/decision/planner.h>
-#include <utils/stub.h>
+#include "planner/decision/planner.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

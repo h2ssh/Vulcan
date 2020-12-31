@@ -15,10 +15,10 @@
 * functionality.
 */
 
-#include <utils/icp.h>
-#include <core/point.h>
-#include <core/angle_functions.h>
-#include <core/pose.h>
+#include "utils/icp.h"
+#include "core/point.h"
+#include "core/angle_functions.h"
+#include "core/pose.h"
 #include <iostream>
 #include <vector>
 #include <cassert>

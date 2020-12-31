@@ -14,7 +14,7 @@
 * Definition of helper functions for velocity_t and acceleration_t.
 */
 
-#include <core/velocity.h>
+#include "core/velocity.h"
 #include <iostream>
 
 namespace vulcan

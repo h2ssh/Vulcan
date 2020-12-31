@@ -14,18 +14,18 @@
 * Definition of TrajectoryPlanner.
 */
 
-#include <mpepc/trajectory/trajectory_planner.h>
-#include <mpepc/trajectory/trajectory_planner_info.h>
-#include <mpepc/trajectory/params.h>
-#include <mpepc/grid/obstacle_distance_grid.h>
-#include <utils/timestamp.h>
+#include "mpepc/trajectory/trajectory_planner.h"
+#include "mpepc/trajectory/trajectory_planner_info.h"
+#include "mpepc/trajectory/params.h"
+#include "mpepc/grid/obstacle_distance_grid.h"
+#include "utils/timestamp.h"
 #include <memory>
 
 // #define DEBUG_TRAJECTORY_PLANNER
 // #define DEBUG_COLLISION_MODEL
 
 #ifdef DEBUG_COLLISION_MODEL
-    #include <mpepc/collision/robot_collision_model.h>
+    #include "mpepc/collision/robot_collision_model.h"
 #endif
 
 namespace vulcan

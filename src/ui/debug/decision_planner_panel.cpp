@@ -14,12 +14,12 @@
 * Definition of DecisionPlannerPanel.
 */
 
-#include <ui/debug/decision_planner_panel.h>
-#include <ui/debug/debug_ui.h>
-#include <ui/common/ui_params.h>
-#include <ui/debug/decision_planner_display_widget.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/decision_planner_panel.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/common/ui_params.h"
+#include "ui/debug/decision_planner_display_widget.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
 #include <sstream>
 #include <cassert>
 

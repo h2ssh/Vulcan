@@ -14,7 +14,7 @@
 * Decleration of RobotGroupReceiver.
 */
 
-#include <ui/simulator/simulator_robot_group_receiver.h>
+#include "ui/simulator/simulator_robot_group_receiver.h"
 
 namespace vulcan
 {

@@ -18,7 +18,7 @@
 #define MPEPC_METRIC_PLANNER_TASK_H
 
 #include <memory>
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 #include <cereal/types/memory.hpp>
 
 namespace vulcan

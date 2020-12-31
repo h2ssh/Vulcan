@@ -8,10 +8,10 @@
 
 
 #include <iostream>
-#include <core/pose.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h>
-#include <hssh/local_topological/params.h>
+#include "core/pose.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h"
+#include "hssh/local_topological/params.h"
 
 
 using vulcan::hssh::LocalPerceptualMap;

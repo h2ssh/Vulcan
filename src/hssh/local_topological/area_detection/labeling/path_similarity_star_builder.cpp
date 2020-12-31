@@ -14,11 +14,11 @@
 * Definition of PathSimilarityStarBuilder.
 */
 
-#include <hssh/local_topological/area_detection/labeling/path_similarity_star_builder.h>
-#include <hssh/local_topological/place_extent.h>
-#include <hssh/local_topological/small_scale_star.h>
-#include <math/geometry/shape_fitting.h>
-#include <math/geometry/rectangle.h>
+#include "hssh/local_topological/area_detection/labeling/path_similarity_star_builder.h"
+#include "hssh/local_topological/place_extent.h"
+#include "hssh/local_topological/small_scale_star.h"
+#include "math/geometry/shape_fitting.h"
+#include "math/geometry/rectangle.h"
 #include <cmath>
 #include <algorithm>
 #include <iostream>

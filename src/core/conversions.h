@@ -17,8 +17,8 @@
 #ifndef CORE_CONVERSIONS_H
 #define CORE_CONVERSIONS_H
 
-#include <core/point.h>
-#include <core/vector.h>
+#include "core/point.h"
+#include "core/vector.h"
 
 namespace vulcan
 {

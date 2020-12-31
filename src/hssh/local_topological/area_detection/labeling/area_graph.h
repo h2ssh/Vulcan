@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_AREA_GRAPH_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_AREA_GRAPH_H
 
-#include <hssh/local_topological/gateway.h>
-#include <hssh/types.h>
-#include <core/point.h>
-#include <utils/visibility_graph.h>
+#include "hssh/local_topological/gateway.h"
+#include "hssh/types.h"
+#include "core/point.h"
+#include "utils/visibility_graph.h"
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/vector.hpp>

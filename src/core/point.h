@@ -19,7 +19,7 @@
 #ifndef CORE_POINT_H
 #define CORE_POINT_H
 
-#include <core/float_comparison.h>
+#include "core/float_comparison.h"
 #include <type_traits>
 #include <cmath>
 

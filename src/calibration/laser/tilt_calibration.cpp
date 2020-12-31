@@ -14,8 +14,8 @@
 * Definition of calibrate_laser_pitch.
 */
 
-#include <calibration/laser/tilt_calibration.h>
-#include <math/regression.h>
+#include "calibration/laser/tilt_calibration.h"
+#include "math/regression.h"
 #include <boost/range/iterator_range.hpp>
 #include <iostream>
 

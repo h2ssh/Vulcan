@@ -14,8 +14,8 @@
 * Definition of create_hypothesis_prior_evaluator() factory function.
 */
 
-#include <hssh/global_topological/mapping/prior_evaluator.h>
-#include <hssh/global_topological/mapping/prior_evaluator_impl.h>
+#include "hssh/global_topological/mapping/prior_evaluator.h"
+#include "hssh/global_topological/mapping/prior_evaluator_impl.h"
 #include <iostream>
 #include <cassert>
 

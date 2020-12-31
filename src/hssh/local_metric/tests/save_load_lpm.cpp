@@ -7,10 +7,10 @@
 */
 
 
-#include <lcmtypes/commands/save_lpm_command.h>
-#include <lcmtypes/commands/load_lpm_command.h>
-#include <system/module_communicator.h>
-#include <utils/command_line.h>
+#include "lcmtypes/commands/save_lpm_command.h"
+#include "lcmtypes/commands/load_lpm_command.h"
+#include "system/module_communicator.h"
+#include "utils/command_line.h"
 #include <iostream>
 #include <random>
 #include <string>

@@ -14,7 +14,7 @@
 * Definition of functions for softmax regression and classification.
 */
 
-#include <math/softmax.h>
+#include "math/softmax.h"
 #include <iostream>
 #include <future>
 #include <thread>

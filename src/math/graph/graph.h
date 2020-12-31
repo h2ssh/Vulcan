@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 #include <vector>
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

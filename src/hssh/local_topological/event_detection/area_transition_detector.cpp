@@ -14,11 +14,11 @@
 * Implementation of AreaTransitionDetector.
 */
 
-#include <hssh/local_topological/event_detection/area_transition_detector.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/event_detection/area_transition_detector.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "utils/algorithm_ext.h"
 #include <boost/optional/optional_io.hpp>
 #include <iostream>
 

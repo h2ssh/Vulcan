@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_METRIC_COMMANDS_SET_SLAM_MODE_H
 #define HSSH_LOCAL_METRIC_COMMANDS_SET_SLAM_MODE_H
 
-#include <hssh/local_metric/command.h>
+#include "hssh/local_metric/command.h"
 #include <cereal/types/base_class.hpp>
 
 namespace vulcan

@@ -14,8 +14,8 @@
 * Definition of ScanLikelihoodGrid.
 */
 
-#include <laser/scan_likelihood_grid.h>
-#include <math/univariate_gaussian.h>
+#include "laser/scan_likelihood_grid.h"
+#include "math/univariate_gaussian.h"
 
 #include <iomanip>
 #include <iostream>

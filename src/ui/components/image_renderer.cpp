@@ -11,11 +11,11 @@
 #include <iostream>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <core/point.h>
-#include <core/image.h>
-#include <vision/filters.h>
-#include <ui/common/gl_texture_helpers.h>
-#include <ui/components/image_renderer.h>
+#include "core/point.h"
+#include "core/image.h"
+#include "vision/filters.h"
+#include "ui/common/gl_texture_helpers.h"
+#include "ui/components/image_renderer.h"
 
 
 using namespace vulcan;

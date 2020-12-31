@@ -17,9 +17,9 @@
 #ifndef SYSTEM_MODULE_COMMUNICATOR_H
 #define SYSTEM_MODULE_COMMUNICATOR_H
 
-#include <lcmtypes/lcm_types.h>
-#include <system/message_traits.h>
-#include <system/serialized_t.hpp>
+#include "lcmtypes/lcm_types.h"
+#include "system/message_traits.h"
+#include "system/serialized_t.hpp>
 #include <lcm/lcm-cpp.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/polymorphic.hpp>

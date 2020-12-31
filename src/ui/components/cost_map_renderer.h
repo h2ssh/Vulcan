@@ -17,7 +17,7 @@
 #ifndef UI_COMPONENTS_COST_MAP_RENDERER_H
 #define UI_COMPONENTS_COST_MAP_RENDERER_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <GL/gl.h>
 #include <vector>
 #include <cstdint>

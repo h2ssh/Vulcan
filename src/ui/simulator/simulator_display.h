@@ -17,13 +17,13 @@
 #ifndef UI_SIMULATOR_SIMULATOR_DISPLAY_H
 #define UI_SIMULATOR_SIMULATOR_DISPLAY_H
 
-#include <utils/mutex.h>
-#include <ui/simulator/simulator_robot_group_receiver.h>
-#include <ui/components/grid_based_display_widget.h>
-#include <ui/common/color_interpolator.h>
-#include <mpepc/trajectory/trajectory_planner_info.h>
-#include <utils/locked_double_buffer.h>
-#include <simulator/robot_group.h>
+#include "utils/mutex.h"
+#include "ui/simulator/simulator_robot_group_receiver.h"
+#include "ui/components/grid_based_display_widget.h"
+#include "ui/common/color_interpolator.h"
+#include "mpepc/trajectory/trajectory_planner_info.h"
+#include "utils/locked_double_buffer.h"
+#include "simulator/robot_group.h"
 
 namespace vulcan
 {

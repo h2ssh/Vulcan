@@ -14,8 +14,8 @@
 * Definition of pose_distribution_t.
 */
 
-#include <core/pose_distribution.h>
-#include <core/float_comparison.h>
+#include "core/pose_distribution.h"
+#include "core/float_comparison.h"
 
 namespace vulcan
 {

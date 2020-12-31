@@ -14,8 +14,8 @@
 * Definition of MotionTargetFollowingController.
 */
 
-#include <mpepc/motion_controller/controller/motion_target_following_controller.h>
-#include <mpepc/motion_controller/data.h>
+#include "mpepc/motion_controller/controller/motion_target_following_controller.h"
+#include "mpepc/motion_controller/data.h"
 
 namespace vulcan
 {

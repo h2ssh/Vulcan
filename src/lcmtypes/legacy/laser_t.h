@@ -12,11 +12,11 @@
 
 #include <string>
 #include <vector>
-#include <core/laser_scan.h>
-#include <lcmtypes/vulcan_lcm_laser_t.h>
-#include <lcmtypes/vulcan_lcm_laser_3dof_t.h>
-#include <lcmtypes/vulcan_lcm_laser_old_t.h>
-#include <lcmtypes/vulcan_lcm_laser_with_intensity_t.h>
+#include "core/laser_scan.h"
+#include "lcmtypes/vulcan_lcm_laser_t.h"
+#include "lcmtypes/vulcan_lcm_laser_3dof_t.h"
+#include "lcmtypes/vulcan_lcm_laser_old_t.h"
+#include "lcmtypes/vulcan_lcm_laser_with_intensity_t.h"
 
 namespace vulcan
 {

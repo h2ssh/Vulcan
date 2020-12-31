@@ -17,8 +17,8 @@
 #ifndef MPEPC_UNICYCLE_CHART_H
 #define MPEPC_UNICYCLE_CHART_H
 
-#include <mpepc/math/egocentric_polar_coordinates.h>
-#include <core/pose.h>
+#include "mpepc/math/egocentric_polar_coordinates.h"
+#include "core/pose.h"
 
 namespace vulcan
 {    

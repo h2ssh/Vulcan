@@ -17,11 +17,11 @@
 #ifndef ROBOT_QUANTUM_6000_H
 #define ROBOT_QUANTUM_6000_H
 
-#include <robot/wheelchair.h>
-#include <robot/commands.h>
-#include <utils/canbus.h>
-#include <utils/thread.h>
-#include <utils/mutex.h>
+#include "robot/wheelchair.h"
+#include "robot/commands.h"
+#include "utils/canbus.h"
+#include "utils/thread.h"
+#include "utils/mutex.h"
 #include <map>
 #include <string>
 #include <sys/select.h>

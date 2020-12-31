@@ -17,11 +17,11 @@
 #ifndef UI_COMPONENTS_HYPOTHESIS_TREE_RENDERER_H
 #define UI_COMPONENTS_HYPOTHESIS_TREE_RENDERER_H
 
-#include <ui/common/ui_color.h>
-#include <core/point.h>
-#include <hssh/utils/id.h>
-#include <math/geometry/rectangle.h>
-#include <utils/object_pool.h>
+#include "ui/common/ui_color.h"
+#include "core/point.h"
+#include "hssh/utils/id.h"
+#include "math/geometry/rectangle.h"
+#include "utils/object_pool.h"
 #include <map>
 
 namespace vulcan

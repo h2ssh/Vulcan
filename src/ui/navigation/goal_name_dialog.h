@@ -17,7 +17,7 @@
 #ifndef UI_NAVIGATION_GOAL_NAME_DIALOG_H
 #define UI_NAVIGATION_GOAL_NAME_DIALOG_H
 
-#include <ui/navigation/navigation_interface.h>
+#include "ui/navigation/navigation_interface.h"
 #include <cassert>
 
 namespace vulcan

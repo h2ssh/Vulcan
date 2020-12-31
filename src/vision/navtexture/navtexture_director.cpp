@@ -8,13 +8,13 @@
 
 
 #include <sstream>
-#include <utils/auto_mutex.h>
-#include <utils/timestamp.h>
-#include <core/pose.h>
-#include <core/image.h>
-#include <vision/image_utils.h>
-#include <vision/pixel_histograms.h>
-#include <vision/navtexture/navtexture_director.h>
+#include "utils/auto_mutex.h"
+#include "utils/timestamp.h"
+#include "core/pose.h"
+#include "core/image.h"
+#include "vision/image_utils.h"
+#include "vision/pixel_histograms.h"
+#include "vision/navtexture/navtexture_director.h"
 
 
 #define DEBUG_SEGMENTER

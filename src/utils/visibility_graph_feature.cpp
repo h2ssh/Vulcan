@@ -14,7 +14,7 @@
 * Definition of VisibilityGraphFeature.
 */
 
-#include <utils/visibility_graph_feature.h>
+#include "utils/visibility_graph_feature.h"
 #include <boost/accumulators/framework/accumulator_set.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/max.hpp>

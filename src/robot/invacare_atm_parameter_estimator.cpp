@@ -11,12 +11,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <core/matrix.h>
-#include <core/vector.h>
-#include <sensors/microstrain_3dmgx3.h>
-#include <robot/invacare_atm.h>
-#include <utils/command_line.h>
-#include <utils/timestamp.h> // added to mirror Quantum 6000 implementation
+#include "core/matrix.h"
+#include "core/vector.h"
+#include "sensors/microstrain_3dmgx3.h"
+#include "robot/invacare_atm.h"
+#include "utils/command_line.h"
+#include "utils/timestamp.h" // added to mirror Quantum 6000 implementation
 
 
 using namespace vulcan; // moved this line to be visually identical to Quantum 6000 implementation

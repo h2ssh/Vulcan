@@ -13,20 +13,20 @@
 *
 * Definition of SimulatorRobotControl.
 */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
-#include <ui/simulator/simulator_robot_control.h>
-#include <ui/simulator/simulator_robot_display.h>
-#include <ui/simulator/simulator_display.h>
-#include <ui/simulator/simulator_ui.h>
-#include <planner/interface/navigation_interface.h>
-#include <mpepc/metric_planner/task/navigation.h>
-#include <mpepc/metric_planner/messages.h>
-#include <mpepc/metric_planner/script/script.h>
-#include <mpepc/motion_controller/messages.h>
-#include <system/module_communicator.h>
-#include <utils/timestamp.h>
+#include "ui/simulator/simulator_robot_control.h"
+#include "ui/simulator/simulator_robot_display.h"
+#include "ui/simulator/simulator_display.h"
+#include "ui/simulator/simulator_ui.h"
+#include "planner/interface/navigation_interface.h"
+#include "mpepc/metric_planner/task/navigation.h"
+#include "mpepc/metric_planner/messages.h"
+#include "mpepc/metric_planner/script/script.h"
+#include "mpepc/motion_controller/messages.h"
+#include "system/module_communicator.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 namespace vulcan

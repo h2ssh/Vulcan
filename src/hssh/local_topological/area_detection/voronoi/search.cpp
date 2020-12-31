@@ -14,10 +14,10 @@
 * Definition of find_path_along_skeleton function.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/search.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/area_detection/voronoi/search.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "utils/algorithm_ext.h"
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>
 

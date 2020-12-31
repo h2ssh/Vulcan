@@ -14,13 +14,13 @@
 * Definition of LaserScanRenderer.
 */
 
-#include <ui/components/laser_scan_renderer.h>
-#include <ui/common/gl_arrays_helpers.h>
-#include <core/laser_scan.h>
-#include <laser/moving_laser_scan.h>
-#include <laser/reflected_laser_scan.h>
-#include <math/coordinates.h>
-#include <robot/proximity_warning_indices.h>
+#include "ui/components/laser_scan_renderer.h"
+#include "ui/common/gl_arrays_helpers.h"
+#include "core/laser_scan.h"
+#include "laser/moving_laser_scan.h"
+#include "laser/reflected_laser_scan.h"
+#include "math/coordinates.h"
+#include "robot/proximity_warning_indices.h"
 #include <algorithm>
 #include <cmath>
 

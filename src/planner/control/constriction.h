@@ -17,7 +17,7 @@
 #ifndef PLANNER_CONTROL_CONSTRICTION_H
 #define PLANNER_CONTROL_CONSTRICTION_H
 
-#include <core/position.h>
+#include "core/position.h"
 #include <vector>
 
 namespace vulcan

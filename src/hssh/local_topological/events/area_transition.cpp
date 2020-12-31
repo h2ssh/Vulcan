@@ -14,9 +14,9 @@
 * Definition of AreaTransitionEvent.
 */
 
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/event_visitor.h>
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/event_visitor.h"
 #include <sstream>
 #include <cassert>
 

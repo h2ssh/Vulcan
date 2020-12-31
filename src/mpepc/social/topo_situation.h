@@ -17,7 +17,7 @@
 #ifndef MPEPC_COSTS_TOPO_SITUATION_H
 #define MPEPC_COSTS_TOPO_SITUATION_H
 
-#include <mpepc/social/topo_agent.h>
+#include "mpepc/social/topo_agent.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/boost_variant.hpp>

@@ -13,15 +13,15 @@
 #include <iostream>
 #include <boost/shared_ptr.hpp>
 
-#include <sensors/imu.h>
-#include <core/imu_data.h>
+#include "sensors/imu.h"
+#include "core/imu_data.h"
 
-#include <sensors/microstrain_3dmgx2.h>
-#include <sensors/microstrain_3dmgx3.h>
-#include <system/module_communicator.h>
+#include "sensors/microstrain_3dmgx2.h"
+#include "sensors/microstrain_3dmgx3.h"
+#include "system/module_communicator.h"
 
-#include <utils/command_line.h>
-#include <utils/timestamp.h>
+#include "utils/command_line.h"
+#include "utils/timestamp.h"
 
 
 using vulcan::utils::CommandLine;

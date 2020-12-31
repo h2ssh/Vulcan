@@ -17,8 +17,8 @@
 #ifndef ROBOT_STATE_VELOCITY_ESTIMATOR_H
 #define ROBOT_STATE_VELOCITY_ESTIMATOR_H
 
-#include <robot/state/motion_state_input.h>
-#include <core/velocity.h>
+#include "robot/state/motion_state_input.h"
+#include "core/velocity.h"
 #include <deque>
 
 namespace vulcan

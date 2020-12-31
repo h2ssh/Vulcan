@@ -17,7 +17,7 @@
 #ifndef HSSH_UTILS_METRICAL_LOCALIZATION_MCL_LOCALIZER_H
 #define HSSH_UTILS_METRICAL_LOCALIZATION_MCL_LOCALIZER_H
 
-#include <hssh/metrical/localization/localizer.h>
+#include "hssh/metrical/localization/localizer.h"
 #include <memory>
 
 namespace vulcan

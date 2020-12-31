@@ -16,8 +16,8 @@
 
 #include <cassert>
 #include <iostream>
-#include <hssh/local_topological/small_scale_star.h>
-#include <hssh/global_topological/large_scale_star.h>
+#include "hssh/local_topological/small_scale_star.h"
+#include "hssh/global_topological/large_scale_star.h"
 
 // #define DEBUG_POTENTIAL_SEGMENTS
 

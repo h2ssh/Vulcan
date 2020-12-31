@@ -14,7 +14,7 @@
 * Implementation of GlobalTopoEditorPanel.
 */
 
-#include <ui/mapeditor/global_topo_editor_panel.h>
+#include "ui/mapeditor/global_topo_editor_panel.h"
 
 namespace vulcan
 {

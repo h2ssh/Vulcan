@@ -14,22 +14,22 @@
 * Definition of HypothesisFeatures.
 */
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_extent.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
-#include <math/moments_features.h>
-#include <math/covariance.h>
-#include <math/statistics.h>
-#include <math/zernike_moments.h>
-#include <core/float_comparison.h>
-#include <utils/float_io.h>
-#include <utils/visibility_graph.h>
-#include <utils/visibility_graph_feature.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "math/moments_features.h"
+#include "math/covariance.h"
+#include "math/statistics.h"
+#include "math/zernike_moments.h"
+#include "core/float_comparison.h"
+#include "utils/float_io.h"
+#include "utils/visibility_graph.h"
+#include "utils/visibility_graph_feature.h"
 #include <boost/accumulators/framework/accumulator_set.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/max.hpp>

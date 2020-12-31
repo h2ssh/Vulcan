@@ -17,10 +17,10 @@
 #ifndef UI_COMPONENTS_GLOBAL_TOPO_MAP_PREVIEWER_H
 #define UI_COMPONENTS_GLOBAL_TOPO_MAP_PREVIEWER_H
 
-#include <core/point.h>
-#include <ui/common/gl_camera.h>
-#include <ui/common/ui_color.h>
-#include <ui/common/ui_forward_declarations.h>
+#include "core/point.h"
+#include "ui/common/gl_camera.h"
+#include "ui/common/ui_color.h"
+#include "ui/common/ui_forward_declarations.h"
 #include <vector>
 #include <map>
 

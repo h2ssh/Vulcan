@@ -22,8 +22,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_LIKELIHOOD_EVALUATOR_IMPL_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_LIKELIHOOD_EVALUATOR_IMPL_H
 
-#include <hssh/global_topological/mapping/likelihood_evaluator.h>
-#include <hssh/global_topological/params.h>
+#include "hssh/global_topological/mapping/likelihood_evaluator.h"
+#include "hssh/global_topological/params.h"
 
 namespace vulcan
 {

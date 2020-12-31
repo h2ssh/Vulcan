@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_MAX_LIKELIHOOD_CSP_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_MAX_LIKELIHOOD_CSP_H
 
-#include <hssh/local_topological/area_detection/labeling/csp_solution.h>
-#include <hssh/local_topological/area_detection/labeling/mcmc_sampling.h>
-#include <hssh/local_topological/area_detection/labeling/csp_debug.h>
+#include "hssh/local_topological/area_detection/labeling/csp_solution.h"
+#include "hssh/local_topological/area_detection/labeling/mcmc_sampling.h"
+#include "hssh/local_topological/area_detection/labeling/csp_debug.h"
 
 namespace vulcan
 {

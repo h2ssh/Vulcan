@@ -19,7 +19,7 @@
 #define ROBOT_COLLISION_DETECTION_H
 
 #include <vector>
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

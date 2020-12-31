@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

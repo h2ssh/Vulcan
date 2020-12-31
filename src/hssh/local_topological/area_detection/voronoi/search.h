@@ -18,7 +18,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_VORONOI_SEARCH_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_VORONOI_SEARCH_H
 
-#include <hssh/types.h>
+#include "hssh/types.h"
 
 namespace vulcan
 {

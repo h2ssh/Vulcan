@@ -14,10 +14,10 @@
 * Definition of helpful parsing functions for various types used in config files.
 */
 
-#include <core/point.h>
-#include <math/geometry/rectangle.h>
-#include <core/pose.h>
-#include <utils/config_file_utils.h>
+#include "core/point.h"
+#include "math/geometry/rectangle.h"
+#include "core/pose.h"
+#include "utils/config_file_utils.h"
 
 namespace vulcan
 {

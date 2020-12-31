@@ -14,8 +14,8 @@
 * Definition of GlobalLocationDistribution.
 */
 
-#include <hssh/global_topological/localization/location_distribution.h>
-#include <core/float_comparison.h>
+#include "hssh/global_topological/localization/location_distribution.h"
+#include "core/float_comparison.h"
 #include <cassert>
 
 namespace vulcan

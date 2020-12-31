@@ -14,7 +14,7 @@
 * Definition of methods for robot_trajectory_info_t and robot_trajectory_debug_info_t.
 */
 
-#include <mpepc/trajectory/robot_trajectory_info.h>
+#include "mpepc/trajectory/robot_trajectory_info.h"
 
 namespace vulcan
 {

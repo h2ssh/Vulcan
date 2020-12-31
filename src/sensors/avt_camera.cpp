@@ -7,8 +7,8 @@
 */
 
 
-#include <sensors/avt_camera.h>
-#include <utils/timestamp.h>
+#include "sensors/avt_camera.h"
+#include "utils/timestamp.h"
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>   // for converting the strings to integer format

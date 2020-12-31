@@ -21,8 +21,8 @@
 #ifndef MATH_SOFTMAX_H
 #define MATH_SOFTMAX_H
 
-#include <core/matrix.h>
-#include <core/vector.h>
+#include "core/matrix.h"
+#include "core/vector.h"
 
 namespace vulcan 
 {

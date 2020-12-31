@@ -14,9 +14,9 @@
 * Implementation of PoseTraceRenderer.
 */
 
-#include <ui/components/pose_trace_renderer.h>
-#include <core/pose.h>
-#include <utils/pose_trace.h>
+#include "ui/components/pose_trace_renderer.h"
+#include "core/pose.h"
+#include "utils/pose_trace.h"
 #include <GL/gl.h>
 
 namespace vulcan

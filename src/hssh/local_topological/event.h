@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENT_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENT_H
 
-#include <hssh/local_metric/pose.h>
-#include <hssh/utils/id.h>
-#include <system/message_traits.h>
+#include "hssh/local_metric/pose.h"
+#include "hssh/utils/id.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <string>
 #include <vector>

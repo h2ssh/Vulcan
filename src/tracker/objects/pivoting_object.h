@@ -17,8 +17,8 @@
 #ifndef TRACKER_OBJECTS_PIVOTING_DOOR_H
 #define TRACKER_OBJECTS_PIVOTING_DOOR_H
 
-#include <tracker/objects/fixed_object.h>
-#include <math/angle_range.h>
+#include "tracker/objects/fixed_object.h"
+#include "math/angle_range.h"
 
 namespace vulcan
 {

@@ -14,10 +14,10 @@
 * Implementation of AreaHypothesisRenderer.
 */
 
-#include <ui/components/area_subgraph_renderer.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <hssh/local_topological/area_detection/labeling/debug.h>
+#include "ui/components/area_subgraph_renderer.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "hssh/local_topological/area_detection/labeling/debug.h"
 #include <boost/algorithm/clamp.hpp>
 #include <GL/gl.h>
 

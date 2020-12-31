@@ -14,7 +14,7 @@
 * Definition of apply_cell_edits, flood_fill_lpm, and cells_along_line.
 */
 
-#include <ui/mapeditor/lpm_editing.h>
+#include "ui/mapeditor/lpm_editing.h"
 #include <cassert>
 #include <cmath>
 #include <queue>

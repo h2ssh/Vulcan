@@ -17,12 +17,12 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_MCMC_SAMPLING_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_MCMC_SAMPLING_H
 
-#include <hssh/local_topological/area_detection/labeling/alignment_constraint.h>
-#include <hssh/local_topological/area_detection/labeling/alignment_graph.h>
-#include <hssh/local_topological/area_detection/labeling/csp_solution.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/labeling/type_distribution.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/area_detection/labeling/alignment_constraint.h"
+#include "hssh/local_topological/area_detection/labeling/alignment_graph.h"
+#include "hssh/local_topological/area_detection/labeling/csp_solution.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/type_distribution.h"
+#include "hssh/local_topological/params.h"
 #include <boost/graph/adjacency_list.hpp>
 #include <deque>
 #include <memory>

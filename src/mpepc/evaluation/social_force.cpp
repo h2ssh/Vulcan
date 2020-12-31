@@ -14,9 +14,9 @@
 * Definition of interaction_social_forces and trajectory_social_forces.
 */
 
-#include <mpepc/evaluation/social_force.h>
-#include <mpepc/evaluation/interaction.h>
-#include <core/line.h>
+#include "mpepc/evaluation/social_force.h"
+#include "mpepc/evaluation/interaction.h"
+#include "core/line.h"
 #include <boost/optional.hpp>
 #include <tuple>
 

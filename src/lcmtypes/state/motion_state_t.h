@@ -11,7 +11,7 @@
 #define LCMTYPES_MOTION_STATE_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_motion_state_t.h>
+#include "lcmtypes/vulcan_lcm_motion_state_t.h"
 
 namespace vulcan
 {

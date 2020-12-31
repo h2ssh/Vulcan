@@ -19,8 +19,8 @@
 #ifndef HSSH_LOCAL_METRIC_MAPPING_LPM_MAPPER_H
 #define HSSH_LOCAL_METRIC_MAPPING_LPM_MAPPER_H
 
-#include <hssh/metrical/mapping/map_builder.h>
-#include <hssh/local_metric/lpm.h>
+#include "hssh/metrical/mapping/map_builder.h"
+#include "hssh/local_metric/lpm.h"
 
 namespace vulcan
 {

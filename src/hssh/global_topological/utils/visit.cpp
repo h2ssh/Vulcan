@@ -14,8 +14,8 @@
 * Definition of TopologicalVisit.
 */
 
-#include <hssh/global_topological/utils/visit.h>
-#include <hssh/local_topological/local_topo_map.h>
+#include "hssh/global_topological/utils/visit.h"
+#include "hssh/local_topological/local_topo_map.h"
 #include <iostream>
 #include <cassert>
 

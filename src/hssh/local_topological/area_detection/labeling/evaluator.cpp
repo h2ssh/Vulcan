@@ -14,11 +14,11 @@
 * Implementation of AreaHypothesisEvaluator.
 */
 
-#include <hssh/local_topological/area_detection/labeling/evaluator.h>
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/boundary_classifier.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_classifier.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/area_detection/labeling/evaluator.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/boundary_classifier.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_classifier.h"
+#include "hssh/local_topological/params.h"
 #include <cassert>
 
 namespace vulcan

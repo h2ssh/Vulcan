@@ -17,8 +17,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_LOCALIZATION_TOPOLOGICAL_LOCALIZER_H
 #define HSSH_GLOBAL_TOPOLOGICAL_LOCALIZATION_TOPOLOGICAL_LOCALIZER_H
 
-#include <hssh/global_topological/localization/location_distribution.h>
-#include <hssh/global_topological/utils/visit.h>
+#include "hssh/global_topological/localization/location_distribution.h"
+#include "hssh/global_topological/utils/visit.h"
 
 namespace vulcan
 {

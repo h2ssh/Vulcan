@@ -17,10 +17,10 @@
 #ifndef MPEPC_ROBOT_SIMULATOR_H
 #define MPEPC_ROBOT_SIMULATOR_H
 
-#include <mpepc/simulator/params.h>
-#include <mpepc/control/kinematic_control_law.h>
-#include <mpepc/control/joystick_control_law.h>
-#include <robot/model/robot_plant_model.h>
+#include "mpepc/simulator/params.h"
+#include "mpepc/control/kinematic_control_law.h"
+#include "mpepc/control/joystick_control_law.h"
+#include "robot/model/robot_plant_model.h"
 
 namespace vulcan
 {

@@ -14,8 +14,8 @@
 * Definition of SensorTime.
 */
 
-#include <utils/sensor_time.h>
-#include <utils/timestamp.h>
+#include "utils/sensor_time.h"
+#include "utils/timestamp.h"
 #include <algorithm>
 #include <iostream>
 #include <limits>

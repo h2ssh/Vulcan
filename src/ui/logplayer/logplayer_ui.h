@@ -1,21 +1,11 @@
-/* Copyright (C) 2010-2019, The Regents of The University of Michigan.
- All rights reserved.
-
- This software was developed as part of the The Vulcan project in the Intelligent Robotics Lab
- under the direction of Benjamin Kuipers, kuipers@umich.edu. Use of this code is governed by an
- MIT-style License that can be found at "https://github.com/h2ssh/Vulcan".
-*/
-
-
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2011)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 31 2020)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __LOGPLAYER_UI_H__
-#define __LOGPLAYER_UI_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -51,10 +41,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class LogplayerUI
 ///////////////////////////////////////////////////////////////////////////////
-class LogplayerUI : public wxFrame 
+class LogplayerUI : public wxFrame
 {
 	private:
-	
+
 	protected:
 		wxMenuBar* logplayerMenuBar;
 		wxMenu* fileMenu;
@@ -66,13 +56,12 @@ class LogplayerUI : public wxFrame
 		wxButton* slowerButton;
 		wxTextCtrl* playbackSpeedText;
 		wxButton* fasterButton;
-	
+
 	public:
-		
+
 		LogplayerUI( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Logplayer"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 460,223 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-		
+
 		~LogplayerUI();
-	
+
 };
 
-#endif //__LOGPLAYER_UI_H__

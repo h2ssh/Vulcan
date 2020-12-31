@@ -18,12 +18,12 @@
 #define LOGPLAYER_LOG_PLAYER_H
 
 #include <vector>
-#include <utils/condition_variable.h>
-#include <utils/mutex.h>
-#include <utils/thread.h>
-#include <utils/locked_bool.h>
-#include <system/module_communicator.h>
-#include <logging/logplayer/log_loader.h>
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
+#include "utils/thread.h"
+#include "utils/locked_bool.h"
+#include "system/module_communicator.h"
+#include "logging/logplayer/log_loader.h"
 
 namespace vulcan
 {

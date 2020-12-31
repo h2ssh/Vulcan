@@ -14,11 +14,11 @@
 * Definition of convert_hypothesis_graph_to_factor_graph.
 */
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_factor_graph.h>
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/boundary_classifier.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_classifier.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_factor_graph.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/boundary_classifier.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_classifier.h"
 #include <boost/range/iterator_range.hpp>
 
 namespace vulcan

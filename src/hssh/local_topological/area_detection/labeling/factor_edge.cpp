@@ -14,7 +14,7 @@
 * Definition of FactorEdge.
 */
 
-#include <hssh/local_topological/area_detection/labeling/factor_edge.h>
+#include "hssh/local_topological/area_detection/labeling/factor_edge.h"
 #include <cassert>
 
 namespace vulcan 

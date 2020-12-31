@@ -14,15 +14,15 @@
 * Definition of TopoSituationRenderer.
 */
 
-#include <ui/components/topo_situation_renderer.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/ui_color.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <mpepc/social/topo_situation.h>
-#include <robot/model/params.h>
-#include <utils/config_file.h>
+#include "ui/components/topo_situation_renderer.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/ui_color.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "mpepc/social/topo_situation.h"
+#include "robot/model/params.h"
+#include "utils/config_file.h"
 #include <GL/gl.h>
 
 namespace vulcan

@@ -14,10 +14,10 @@
 * Definition of WaitTaskManifold that handles the WaitTask of temporarily halting the robot.
 */
 
-#include <mpepc/manifold/wait.h>
-#include <mpepc/types.h>
-#include <core/angle_functions.h>
-#include <core/motion_state.h>
+#include "mpepc/manifold/wait.h"
+#include "mpepc/types.h"
+#include "core/angle_functions.h"
+#include "core/motion_state.h"
 
 namespace vulcan 
 {

@@ -14,13 +14,13 @@
 * Definition of GoalPredictor.
 */
 
-#include <tracker/goal_predictor.h>
-#include <tracker/goals/goal_estimator.h>
-#include <tracker/goals/goal_estimator_factory.h>
-#include <tracker/objects/object_factory.h>
-#include <tracker/tracking/object_set.h>
-#include <tracker/tracking_environment.h>
-#include <utils/algorithm_ext.h>
+#include "tracker/goal_predictor.h"
+#include "tracker/goals/goal_estimator.h"
+#include "tracker/goals/goal_estimator_factory.h"
+#include "tracker/objects/object_factory.h"
+#include "tracker/tracking/object_set.h"
+#include "tracker/tracking_environment.h"
+#include "utils/algorithm_ext.h"
 
 namespace vulcan
 {

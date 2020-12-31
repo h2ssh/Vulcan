@@ -14,9 +14,9 @@
 * Definition of DecisionCommand.
 */
 
-#include <planner/decision/command.h>
-#include <planner/decision/planner.h>
-#include <utils/stub.h>
+#include "planner/decision/command.h"
+#include "planner/decision/planner.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

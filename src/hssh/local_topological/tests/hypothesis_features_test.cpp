@@ -14,8 +14,8 @@
 * Unit tests for ensuring proper functionality of HypothesisFeatures.
 */
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_features.h>
-#include <utils/float_io.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_features.h"
+#include "utils/float_io.h"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <utility>

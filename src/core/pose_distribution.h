@@ -17,9 +17,9 @@
 #ifndef CORE_POSE_DISTRIBUTION_H
 #define CORE_POSE_DISTRIBUTION_H
 
-#include <core/pose.h>
-#include <core/multivariate_gaussian.h>
-#include <system/message_traits.h>
+#include "core/pose.h"
+#include "core/multivariate_gaussian.h"
+#include "system/message_traits.h"
 
 namespace vulcan
 {

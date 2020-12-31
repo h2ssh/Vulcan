@@ -17,9 +17,9 @@
 #ifndef TRACKER_OBJECT_BOUNDARY_H
 #define TRACKER_OBJECT_BOUNDARY_H
 
-#include <tracker/types.h>
-#include <tracker/boundaries/shapes.h>
-#include <core/point.h>
+#include "tracker/types.h"
+#include "tracker/boundaries/shapes.h"
+#include "core/point.h"
 #include <cereal/access.hpp>
 #include <cereal/types/array.hpp>
 #include <cereal/types/utility.hpp>

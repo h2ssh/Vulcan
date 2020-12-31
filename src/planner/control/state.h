@@ -17,9 +17,9 @@
 #ifndef PLANNER_CONTROL_STATE_H
 #define PLANNER_CONTROL_STATE_H
 
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/pose.h>
-#include <mpepc/metric_planner/messages.h>
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/pose.h"
+#include "mpepc/metric_planner/messages.h"
 #include <boost/optional.hpp>
 
 namespace vulcan

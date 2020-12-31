@@ -17,8 +17,8 @@
 #ifndef PLANNER_CONTROL_TASK_H
 #define PLANNER_CONTROL_TASK_H
 
-#include <planner/control/task_status.h>
-#include <planner/control/task_stack.h>
+#include "planner/control/task_status.h"
+#include "planner/control/task_stack.h"
 
 namespace vulcan
 {

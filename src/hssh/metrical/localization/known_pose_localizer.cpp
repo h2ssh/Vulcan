@@ -14,9 +14,9 @@
 * Definition of KnownPoseLocalizer.
 */
 
-#include <hssh/metrical/localization/known_pose_localizer.h>
-#include <hssh/metrical/data.h>
-#include <core/pose_distribution.h>
+#include "hssh/metrical/localization/known_pose_localizer.h"
+#include "hssh/metrical/data.h"
+#include "core/pose_distribution.h"
 
 namespace vulcan
 {

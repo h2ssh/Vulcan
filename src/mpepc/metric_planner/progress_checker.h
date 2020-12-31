@@ -17,7 +17,7 @@
 #ifndef MPEPC_METRIC_PLANNER_PROGRESS_CHECKER_H
 #define MPEPC_METRIC_PLANNER_PROGRESS_CHECKER_H
 
-#include <core/motion_state.h>
+#include "core/motion_state.h"
 
 namespace vulcan
 {

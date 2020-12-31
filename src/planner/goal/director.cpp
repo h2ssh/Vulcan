@@ -14,10 +14,10 @@
 * Definition of GoalDirector.
 */
 
-#include <planner/goal/director.h>
-#include <planner/goal/goal_progress.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
+#include "planner/goal/director.h"
+#include "planner/goal/goal_progress.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
 #include <cassert>
 #include <iostream>
 

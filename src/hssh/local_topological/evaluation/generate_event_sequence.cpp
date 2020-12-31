@@ -28,13 +28,13 @@
 *   --config-file 'config' : location of config file for event detector (default = local_topo_hssh.cfg)
 */
 
-#include <hssh/local_topological/event_detector.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/areas/serialization.h>
-#include <hssh/local_metric/pose.h>
-#include <utils/command_line.h>
-#include <utils/config_file.h>
-#include <utils/serialized_file_io.h>
+#include "hssh/local_topological/event_detector.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/areas/serialization.h"
+#include "hssh/local_metric/pose.h"
+#include "utils/command_line.h"
+#include "utils/config_file.h"
+#include "utils/serialized_file_io.h"
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>
 #include <iostream>

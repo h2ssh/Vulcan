@@ -14,13 +14,13 @@
 * Definition of ObjectMotionClassifier.
 */
 
-#include <tracker/motions/classifier.h>
-#include <tracker/motions/fixed_endpoint.h>
-#include <tracker/motions/stationary.h>
-#include <tracker/motions/steady.h>
-#include <tracker/motions/striding.h>
-#include <tracker/laser_object.h>
-#include <utils/config_file.h>
+#include "tracker/motions/classifier.h"
+#include "tracker/motions/fixed_endpoint.h"
+#include "tracker/motions/stationary.h"
+#include "tracker/motions/steady.h"
+#include "tracker/motions/striding.h"
+#include "tracker/laser_object.h"
+#include "utils/config_file.h"
 #include <cassert>
 
 // #define DEBUG_CLASSIFICATION

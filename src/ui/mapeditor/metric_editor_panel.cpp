@@ -14,18 +14,18 @@
 * Implementation of MetricEditorPanel.
 */
 
-#include <ui/mapeditor/metric_editor_panel.h>
-#include <ui/mapeditor/map_editor.h>
-#include <ui/mapeditor/metric_editor_widget.h>
-#include <ui/mapeditor/import_image_dialog.h>
-#include <ui/mapeditor/lpm_editing.h>
-#include <ui/common/file_dialog_settings.h>
-#include <ui/common/grid_cell_selector.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/lpm_io.h>
-#include <hssh/local_metric/pose.h>
-#include <hssh/local_metric/commands/set_map.h>
-#include <system/module_communicator.h>
+#include "ui/mapeditor/metric_editor_panel.h"
+#include "ui/mapeditor/map_editor.h"
+#include "ui/mapeditor/metric_editor_widget.h"
+#include "ui/mapeditor/import_image_dialog.h"
+#include "ui/mapeditor/lpm_editing.h"
+#include "ui/common/file_dialog_settings.h"
+#include "ui/common/grid_cell_selector.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/lpm_io.h"
+#include "hssh/local_metric/pose.h"
+#include "hssh/local_metric/commands/set_map.h"
+#include "system/module_communicator.h"
 #include <wx/filedlg.h>
 
 namespace vulcan

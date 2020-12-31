@@ -42,16 +42,16 @@
 */
 
 // Sensor messages -- maintained for backwards-compatibility with old log files
-#include <lcmtypes/legacy/laser_t.h>
-#include <lcmtypes/legacy/imu_t.h>
-#include <lcmtypes/legacy/odometry_t.h>
-#include <lcmtypes/legacy/encoder_data_t.h>
-#include <lcmtypes/legacy/commanded_velocity_t.h>
-#include <lcmtypes/legacy/commanded_joystick_t.h>
-#include <lcmtypes/legacy/velocity_command_t.h>
-#include <lcmtypes/legacy/joystick_command_t.h>
+#include "lcmtypes/legacy/laser_t.h"
+#include "lcmtypes/legacy/imu_t.h"
+#include "lcmtypes/legacy/odometry_t.h"
+#include "lcmtypes/legacy/encoder_data_t.h"
+#include "lcmtypes/legacy/commanded_velocity_t.h"
+#include "lcmtypes/legacy/commanded_joystick_t.h"
+#include "lcmtypes/legacy/velocity_command_t.h"
+#include "lcmtypes/legacy/joystick_command_t.h"
 
 // Robot state messages for communication with other programming languages
-#include <lcmtypes/state/robot_pose_t.h>
+#include "lcmtypes/state/robot_pose_t.h"
 
 #endif // LCM_TYPES_H

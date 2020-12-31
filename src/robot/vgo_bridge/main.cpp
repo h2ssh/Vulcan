@@ -14,7 +14,7 @@
 * Definition of the main file to get the vgo_bridge module running.
 */
 
-#include <robot/vgo_bridge/bridge.h>
+#include "robot/vgo_bridge/bridge.h"
 
 using namespace vulcan;
 

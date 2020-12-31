@@ -18,8 +18,8 @@
 #ifndef MPEPC_MOTION_CONTROLLER_MOTION_TARGET_TASK_H
 #define MPEPC_MOTION_CONTROLLER_MOTION_TARGET_TASK_H
 
-#include <mpepc/motion_controller/task/task.h>
-#include <mpepc/control/control_law_coordinates.h>
+#include "mpepc/motion_controller/task/task.h"
+#include "mpepc/control/control_law_coordinates.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 

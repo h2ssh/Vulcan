@@ -17,7 +17,7 @@
 #ifndef ROBOT_PROXIMITY_WARNING_INDICES_H
 #define ROBOT_PROXIMITY_WARNING_INDICES_H
 
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 #include <cereal/types/vector.hpp>
 
 namespace vulcan

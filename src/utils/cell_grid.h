@@ -17,11 +17,11 @@
 #ifndef UTILS_CELL_GRID_H
 #define UTILS_CELL_GRID_H
 
-#include <core/point.h>
-#include <math/geometry/rectangle.h>
-#include <core/float_comparison.h>
-#include <utils/cell_grid_utils.h>
-#include <utils/compression.h>
+#include "core/point.h"
+#include "math/geometry/rectangle.h"
+#include "core/float_comparison.h"
+#include "utils/cell_grid_utils.h"
+#include "utils/compression.h"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
 #include <cassert>

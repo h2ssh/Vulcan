@@ -9,8 +9,8 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <core/pose.h>
-#include <ui/components/lines_renderer.h>
+#include "core/pose.h"
+#include "ui/components/lines_renderer.h"
 
 
 using vulcan::ui::LinesRenderer;

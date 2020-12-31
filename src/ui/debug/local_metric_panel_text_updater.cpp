@@ -14,13 +14,13 @@
 * Definition of LocalMetricPanelTextUpdater.
 */
 
-#include <ui/debug/local_metric_panel_text_updater.h>
-#include <utils/auto_mutex.h>
-#include <core/imu_data.h>
-#include <robot/commands.h>
-#include <core/pose.h>
-#include <core/velocity.h>
-#include <core/motion_state.h>
+#include "ui/debug/local_metric_panel_text_updater.h"
+#include "utils/auto_mutex.h"
+#include "core/imu_data.h"
+#include "robot/commands.h"
+#include "core/pose.h"
+#include "core/velocity.h"
+#include "core/motion_state.h"
 #include <wx/wx.h>
 #include <iomanip>
 #include <ios>

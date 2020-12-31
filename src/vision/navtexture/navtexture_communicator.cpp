@@ -7,8 +7,8 @@
 */
 
 
-#include <vision/navtexture/navtexture_input_consumer.h>
-#include <vision/navtexture/navtexture_communicator.h>
+#include "vision/navtexture/navtexture_input_consumer.h"
+#include "vision/navtexture/navtexture_communicator.h"
 
 namespace vulcan
 {

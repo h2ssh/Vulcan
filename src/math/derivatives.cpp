@@ -16,8 +16,8 @@
 *   - uncertain_time_derivative : take a time derivative between two uncertain measurements
 */
 
-#include <math/derivatives.h>
-#include <utils/timestamp.h>
+#include "math/derivatives.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 namespace vulcan

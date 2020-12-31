@@ -8,8 +8,8 @@
 
 
 #include <iostream>
-#include <utils/timestamp.h>
-#include <sensors/microstrain_3dmgx2.h>
+#include "utils/timestamp.h"
+#include "sensors/microstrain_3dmgx2.h"
 
 
 using namespace vulcan;

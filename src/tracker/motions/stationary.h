@@ -17,7 +17,7 @@
 #ifndef TRACKER_MOTIONS_STATIONARY_H
 #define TRACKER_MOTIONS_STATIONARY_H
 
-#include <tracker/object_motion.h>
+#include "tracker/object_motion.h"
 
 namespace vulcan
 {

@@ -12,8 +12,8 @@
 
 #include <wx/wx.h>
 #include <wx/glcanvas.h>
-#include <ui/components/open_gl_widget.h>
-#include <core/point.h>
+#include "ui/components/open_gl_widget.h"
+#include "core/point.h"
 
 namespace vulcan
 {

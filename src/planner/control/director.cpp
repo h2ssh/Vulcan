@@ -14,11 +14,11 @@
 * Definition of ControlPlannerDirector.
 */
 
-#include <planner/control/director.h>
-#include <planner/control/planner.h>
-#include <planner/control/tasks/absolute_motion.h>
-#include <mpepc/metric_planner/task/task.h>
-#include <system/module_communicator.h>
+#include "planner/control/director.h"
+#include "planner/control/planner.h"
+#include "planner/control/tasks/absolute_motion.h"
+#include "mpepc/metric_planner/task/task.h"
+#include "system/module_communicator.h"
 
 namespace vulcan
 {

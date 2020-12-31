@@ -14,8 +14,8 @@
 * Definition of DecisionResult.
 */
 
-#include <planner/decision/result.h>
-#include <system/system_communicator.h>
+#include "planner/decision/result.h"
+#include "system/system_communicator.h"
 
 namespace vulcan
 {

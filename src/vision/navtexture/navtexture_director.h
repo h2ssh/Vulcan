@@ -11,17 +11,17 @@
 #define SENSORS_VISION_NAVTEXTURE_NAVTEXTURE_DIRECTOR_H
 
 #include <fstream>
-#include <system/director.h>
-#include <utils/condition_variable.h>
-#include <utils/mutex.h>
-#include <core/image.h>
-#include <core/laser_scan.h>
-#include <laser/dynamic_laser_points.h>
-#include <vision/navtexture/image_object_identifier.h>
-#include <vision/navtexture/image_object.h>
-#include <vision/navtexture/navtexture_params.h>
-#include <vision/navtexture/navtexture_input_consumer.h>
-#include <vision/navtexture/navtexture_output_consumer.h>
+#include "system/director.h"
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
+#include "core/image.h"
+#include "core/laser_scan.h"
+#include "laser/dynamic_laser_points.h"
+#include "vision/navtexture/image_object_identifier.h"
+#include "vision/navtexture/image_object.h"
+#include "vision/navtexture/navtexture_params.h"
+#include "vision/navtexture/navtexture_input_consumer.h"
+#include "vision/navtexture/navtexture_output_consumer.h"
 
 namespace vulcan
 {

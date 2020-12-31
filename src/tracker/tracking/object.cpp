@@ -14,12 +14,12 @@
 * Definition of TrackingObject.
 */
 
-#include <tracker/tracking/object.h>
-#include <tracker/motions/classifier.h>
-#include <tracker/objects/object_factory.h>
-#include <tracker/laser_object.h>
-#include <tracker/object_motion.h>
-#include <tracker/dynamic_object.h>
+#include "tracker/tracking/object.h"
+#include "tracker/motions/classifier.h"
+#include "tracker/objects/object_factory.h"
+#include "tracker/laser_object.h"
+#include "tracker/object_motion.h"
+#include "tracker/dynamic_object.h"
 #include <iostream>
 
 namespace vulcan

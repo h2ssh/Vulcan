@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_SUBGRAPH_EVALUATOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_SUBGRAPH_EVALUATOR_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
-#include <hssh/local_topological/area_detection/labeling/type_distribution.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
+#include "hssh/local_topological/area_detection/labeling/type_distribution.h"
 #include <memory>
 
 namespace vulcan

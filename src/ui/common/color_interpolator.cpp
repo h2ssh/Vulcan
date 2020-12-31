@@ -14,8 +14,8 @@
 * Definition of LinearColorInterpolator and CircularColorInterpolator.
 */
 
-#include <ui/common/color_interpolator.h>
-#include <core/angle_functions.h>
+#include "ui/common/color_interpolator.h"
+#include "core/angle_functions.h"
 #include <boost/algorithm/clamp.hpp>
 #include <wx/image.h>
 #include <algorithm>

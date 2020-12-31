@@ -17,10 +17,10 @@
 #ifndef LASER_CORRELATIVE_SCAN_MATCHER_H
 #define LASER_CORRELATIVE_SCAN_MATCHER_H
 
-#include <laser/scan_matcher_params.h>
-#include <laser/scan_likelihood_grid.h>
-#include <core/laser_scan.h>
-#include <core/multivariate_gaussian.h>
+#include "laser/scan_matcher_params.h"
+#include "laser/scan_likelihood_grid.h"
+#include "core/laser_scan.h"
+#include "core/multivariate_gaussian.h"
 
 namespace vulcan
 {

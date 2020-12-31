@@ -24,8 +24,8 @@
 #ifndef HSSH_TYPES_H
 #define HSSH_TYPES_H
 
-#include <core/point.h>
-#include <core/point_util.h>
+#include "core/point.h"
+#include "core/point_util.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>

@@ -14,13 +14,13 @@
 * Definition of GlobalMetricDisplayWidget.
 */
 
-#include <ui/debug/global_metric_display_widget.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/components/robot_renderer.h>
-#include <ui/components/pose_trace_renderer.h>
-#include <ui/components/particles_renderer.h>
-#include <hssh/global_metric/map.h>
-#include <utils/timestamp.h>
+#include "ui/debug/global_metric_display_widget.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "ui/components/pose_trace_renderer.h"
+#include "ui/components/particles_renderer.h"
+#include "hssh/global_metric/map.h"
+#include "utils/timestamp.h"
 
 namespace vulcan
 {

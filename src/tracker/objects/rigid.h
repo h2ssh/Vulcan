@@ -17,8 +17,8 @@
 #ifndef TRACKER_OBJECTS_RIGID_H
 #define TRACKER_OBJECTS_RIGID_H
 
-#include <tracker/objects/bounded_moving.h>
-#include <tracker/motions/steady.h>
+#include "tracker/objects/bounded_moving.h"
+#include "tracker/motions/steady.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

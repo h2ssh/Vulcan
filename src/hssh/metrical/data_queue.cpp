@@ -14,14 +14,14 @@
 * Definition of MetricSLAMDataQueue.
 */
 
-#include <hssh/metrical/data_queue.h>
-#include <hssh/metrical/data.h>
-#include <laser/line_extraction.h>
-#include <laser/line_extractor_params.h>
-#include <system/module_communicator.h>
-#include <utils/algorithm_ext.h>
-#include <utils/auto_mutex.h>
-#include <utils/timestamp.h>
+#include "hssh/metrical/data_queue.h"
+#include "hssh/metrical/data.h"
+#include "laser/line_extraction.h"
+#include "laser/line_extractor_params.h"
+#include "system/module_communicator.h"
+#include "utils/algorithm_ext.h"
+#include "utils/auto_mutex.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 namespace vulcan

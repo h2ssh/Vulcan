@@ -19,9 +19,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_FEATURE_EXTRACTION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_FEATURE_EXTRACTION_H
 
-#include <hssh/types.h>
-#include <utils/feature_vector.h>
-#include <utils/isovist.h>
+#include "hssh/types.h"
+#include "utils/feature_vector.h"
+#include "utils/isovist.h"
 #include <utility>
 #include <vector>
 

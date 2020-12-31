@@ -14,12 +14,12 @@
 * Definition of BoundaryClassifier.
 */
 
-#include <hssh/local_topological/area_detection/labeling/boundary_classifier.h>
-#include <hssh/local_topological/area_detection/labeling/boundary.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
-#include <hssh/local_topological/training/labeled_boundary_data.h>
-#include <hssh/types.h>
+#include "hssh/local_topological/area_detection/labeling/boundary_classifier.h"
+#include "hssh/local_topological/area_detection/labeling/boundary.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
+#include "hssh/local_topological/training/labeled_boundary_data.h"
+#include "hssh/types.h"
 
 namespace vulcan
 {

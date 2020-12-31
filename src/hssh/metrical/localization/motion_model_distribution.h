@@ -17,9 +17,9 @@
 #ifndef HSSH_METRICAL_LOCALIZATION_MOTION_MODEL_DISTRIBUTION_H
 #define HSSH_METRICAL_LOCALIZATION_MOTION_MODEL_DISTRIBUTION_H
 
-#include <hssh/metrical/localization/params.h>
-#include <core/multivariate_gaussian.h>
-#include <core/pose.h>
+#include "hssh/metrical/localization/params.h"
+#include "core/multivariate_gaussian.h"
+#include "core/pose.h"
 #include <boost/optional.hpp>
 
 namespace vulcan

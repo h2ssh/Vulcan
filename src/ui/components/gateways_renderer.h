@@ -18,7 +18,7 @@
 #define UI_COMPONENTS_GATEWAYS_RENDERER_H
 
 #include <vector>
-#include <ui/common/ui_color.h>
+#include "ui/common/ui_color.h"
 
 namespace vulcan
 {

@@ -17,10 +17,10 @@
 #ifndef UI_COMMON_GRID_OBJECT_SELECTOR_H
 #define UI_COMMON_GRID_OBJECT_SELECTOR_H
 
-#include <ui/common/gl_event.h>
-#include <ui/common/grid_cell_selector.h>
-#include <ui/common/object_selector_event_handler.h>
-#include <ui/common/selection_policies.h>
+#include "ui/common/gl_event.h"
+#include "ui/common/grid_cell_selector.h"
+#include "ui/common/object_selector_event_handler.h"
+#include "ui/common/selection_policies.h"
 #include <boost/optional.hpp>
 #include <map>
 

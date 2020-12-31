@@ -20,8 +20,8 @@
 
 #include <wx/wx.h>
 #include <wx/glcanvas.h>
-#include <ui/common/gl_camera.h>
-#include <ui/common/gl_camera_controller.h>
+#include "ui/common/gl_camera.h"
+#include "ui/common/gl_camera_controller.h"
 #include <deque>
 #include <memory>
 

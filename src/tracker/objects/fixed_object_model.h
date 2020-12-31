@@ -17,9 +17,9 @@
 #ifndef TRACKER_OBJECTS_FIXED_OBJECT_MODEL_H
 #define TRACKER_OBJECTS_FIXED_OBJECT_MODEL_H
 
-#include <tracker/objects/endpoint_model.h>
-#include <tracker/object_boundary.h>
-#include <math/uncertain_value.h>
+#include "tracker/objects/endpoint_model.h"
+#include "tracker/object_boundary.h"
+#include "math/uncertain_value.h"
 #include <boost/optional.hpp>
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>

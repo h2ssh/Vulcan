@@ -14,10 +14,10 @@
  * Definition of em_1d_linear and em_2d_fixed.
  */
 
-#include <math/clustering.h>
-#include <core/multivariate_gaussian.h>
-#include <math/statistics.h>
-#include <math/univariate_gaussian.h>
+#include "math/clustering.h"
+#include "core/multivariate_gaussian.h"
+#include "math/statistics.h"
+#include "math/univariate_gaussian.h"
 #include <boost/range/iterator_range.hpp>
 #include <algorithm>
 #include <iomanip>

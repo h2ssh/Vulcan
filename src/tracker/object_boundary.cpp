@@ -14,7 +14,7 @@
 * Definition of ObjectBounday.
 */
 
-#include <tracker/object_boundary.h>
+#include "tracker/object_boundary.h"
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>

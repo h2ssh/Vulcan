@@ -7,7 +7,7 @@
 */
 
 
-#include <utils/histogram_2d.h>
+#include "utils/histogram_2d.h"
 #include <gnuplot-iostream.h>
 
 namespace vulcan

@@ -16,11 +16,11 @@
 *   - calculate_covariance_weights
 */
 
-#include <hssh/metrical/localization/scan_weighting.h>
-#include <laser/laser_scan_lines.h>
-#include <core/multivariate_gaussian.h>
-#include <math/statistics.h>
-#include <utils/strided_sequence.h>
+#include "hssh/metrical/localization/scan_weighting.h"
+#include "laser/laser_scan_lines.h"
+#include "core/multivariate_gaussian.h"
+#include "math/statistics.h"
+#include "utils/strided_sequence.h"
 
 #include <gnuplot-iostream.h>
 

@@ -17,12 +17,12 @@
 #ifndef PLANNER_CONTROL_DIRECTOR_H
 #define PLANNER_CONTROL_DIRECTOR_H
 
-#include <planner/control/command.h>
-#include <planner/control/state.h>
-#include <system/director.h>
-#include <utils/condition_variable.h>
-#include <utils/locked_double_buffer.h>
-#include <lcmtypes/commands/direct_control_command.h>
+#include "planner/control/command.h"
+#include "planner/control/state.h"
+#include "system/director.h"
+#include "utils/condition_variable.h"
+#include "utils/locked_double_buffer.h"
+#include "lcmtypes/commands/direct_control_command.h"
 
 namespace vulcan
 {

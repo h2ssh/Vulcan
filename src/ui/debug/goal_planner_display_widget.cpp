@@ -14,16 +14,16 @@
 * Definition of GoalPlannerDisplayWidget.
 */
 
-#include <ui/debug/goal_planner_display_widget.h>
-#include <ui/components/topological_map_renderer.h>
-#include <ui/components/graph_view_topological_map_renderer.h>
-#include <ui/components/topological_graph_renderer.h>
-#include <ui/common/color_interpolator.h>
-#include <ui/common/gl_utilities.h>
-#include <hssh/global_topological/utils/metric_map_cache.h>
-#include <math/geometry/rectangle.h>
-#include <utils/auto_mutex.h>
-#include <utils/stub.h>
+#include "ui/debug/goal_planner_display_widget.h"
+#include "ui/components/topological_map_renderer.h"
+#include "ui/components/graph_view_topological_map_renderer.h"
+#include "ui/components/topological_graph_renderer.h"
+#include "ui/common/color_interpolator.h"
+#include "ui/common/gl_utilities.h"
+#include "hssh/global_topological/utils/metric_map_cache.h"
+#include "math/geometry/rectangle.h"
+#include "utils/auto_mutex.h"
+#include "utils/stub.h"
 #include <iostream>
 #include <iomanip>
 #include <cassert>

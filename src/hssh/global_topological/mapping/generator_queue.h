@@ -17,8 +17,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_GENERATOR_QUEUE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_GENERATOR_QUEUE_H
 
-#include <hssh/global_topological/mapping/probability_heuristics.h>
-#include <hssh/utils/id.h>
+#include "hssh/global_topological/mapping/probability_heuristics.h"
+#include "hssh/utils/id.h"
 #include <memory>
 #include <queue>
 #include <unordered_map>

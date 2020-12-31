@@ -17,10 +17,10 @@
 #ifndef MPEPC_COSTS_LEARNED_NORM_COST_H
 #define MPEPC_COSTS_LEARNED_NORM_COST_H
 
-#include <mpepc/social/topo_agent.h>
-#include <mpepc/social/topo_situation.h>
-#include <mpepc/types.h>
-#include <system/message_traits.h>
+#include "mpepc/social/topo_agent.h"
+#include "mpepc/social/topo_situation.h"
+#include "mpepc/types.h"
+#include "system/message_traits.h"
 
 namespace vulcan
 {

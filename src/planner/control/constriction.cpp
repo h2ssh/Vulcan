@@ -14,9 +14,9 @@
 // * Definition of Constriction, find_route_constrictions, and find_map_constrictions.
 // */
 // 
-// #include <planner/control/constriction.h>
-// #include <hssh/local_topological/voronoi_skeleton_grid.h>
-// #include <hssh/types.h>
+// #include "planner/control/constriction.h"
+// #include "hssh/local_topological/voronoi_skeleton_grid.h"
+// #include "hssh/types.h"
 // 
 // namespace vulcan 
 // {

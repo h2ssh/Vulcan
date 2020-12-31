@@ -15,7 +15,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdint>
-#include <core/matrix.h>
+#include "core/matrix.h"
 
 namespace vulcan
 {

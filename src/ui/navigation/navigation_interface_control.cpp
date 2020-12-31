@@ -14,13 +14,13 @@
 * Definition of NavigationInterfaceControl.
 */
 
-#include <ui/navigation/navigation_interface_control.h>
-#include <ui/navigation/decision_interface_control.h>
-#include <ui/navigation/goal_interface_control.h>
-#include <ui/navigation/navigation_interface_display.h>
-#include <system/module_communicator.h>
-#include <system/system_communicator.h>
-#include <utils/timestamp.h>
+#include "ui/navigation/navigation_interface_control.h"
+#include "ui/navigation/decision_interface_control.h"
+#include "ui/navigation/goal_interface_control.h"
+#include "ui/navigation/navigation_interface_display.h"
+#include "system/module_communicator.h"
+#include "system/system_communicator.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 namespace vulcan

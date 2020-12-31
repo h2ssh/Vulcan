@@ -14,13 +14,13 @@
 * Definition of the create_univariate_distribution factory function.
 */
 
-#include <math/univariate_distribution.h>
-#include <math/discrete_gaussian.h>
-#include <math/beta_distribution.h>
-#include <math/gamma_distribution.h>
-#include <math/univariate_gaussian.h>
-#include <math/exponential_distribution.h>
-#include <math/truncated_gaussian_distribution.h>
+#include "math/univariate_distribution.h"
+#include "math/discrete_gaussian.h"
+#include "math/beta_distribution.h"
+#include "math/gamma_distribution.h"
+#include "math/univariate_gaussian.h"
+#include "math/exponential_distribution.h"
+#include "math/truncated_gaussian_distribution.h"
 #include <iostream>
 
 namespace vulcan

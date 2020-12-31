@@ -14,7 +14,7 @@
 * Definition of FixedBoundary.
 */
 
-#include <hssh/local_topological/boundary/fixed.h>
+#include "hssh/local_topological/boundary/fixed.h"
 
 namespace vulcan
 {

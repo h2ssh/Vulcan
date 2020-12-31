@@ -14,7 +14,7 @@
 * cyclic_iterator_test is a test program that tests the functionality of cyclic_iterator.
 */
 
-#include <utils/cyclic_iterator.h>
+#include "utils/cyclic_iterator.h"
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <numeric>

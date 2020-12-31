@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_REDUCER_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_REDUCER_H
 
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph.h>
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph.h"
 #include <memory>
 #include <vector>
 

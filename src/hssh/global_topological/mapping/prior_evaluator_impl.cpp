@@ -14,8 +14,8 @@
 * Definition of the various HypothesisPriorEvaluator subclasses and the create_topo_map_prior_evaluator() factory.
 */
 
-#include <hssh/global_topological/mapping/prior_evaluator_impl.h>
-#include <hssh/global_topological/state.h>
+#include "hssh/global_topological/mapping/prior_evaluator_impl.h"
+#include "hssh/global_topological/state.h"
 
 namespace vulcan
 {

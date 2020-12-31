@@ -17,11 +17,11 @@
 #ifndef TRACKER_MOTIONS_STRIDING_H
 #define TRACKER_MOTIONS_STRIDING_H
 
-#include <tracker/object_motion.h>
-#include <tracker/motions/motion_tracker.h>
-#include <tracker/objects/leg.h>
-#include <math/smoothed_derivative_sequence.h>
-#include <math/uncertain_value.h>
+#include "tracker/object_motion.h"
+#include "tracker/motions/motion_tracker.h"
+#include "tracker/objects/leg.h"
+#include "math/smoothed_derivative_sequence.h"
+#include "math/uncertain_value.h"
 #include <vector>
 
 namespace vulcan

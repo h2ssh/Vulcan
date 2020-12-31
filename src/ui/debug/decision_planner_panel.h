@@ -18,9 +18,9 @@
 #define UI_DEBUG_LOCAL_TOPO_PLANNER_PANEL_H
 
 #include <wx/wx.h>
-#include <utils/mutex.h>
-#include <ui/common/ui_forward_declarations.h>
-#include <ui/common/ui_panel.h>
+#include "utils/mutex.h"
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_panel.h"
 
 class wxGrid;
 class wxListBox;

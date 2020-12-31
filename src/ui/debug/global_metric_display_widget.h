@@ -17,11 +17,11 @@
 #ifndef UI_DEBUG_GLOBAL_METRIC_DISPLAY_WIDGET_H
 #define UI_DEBUG_GLOBAL_METRIC_DISPLAY_WIDGET_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <hssh/global_metric/pose.h>
-#include <hssh/metrical/localization/debug_info.h>
-#include <hssh/metrical/relocalization/debug_info.h>
-#include <utils/pose_trace.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "hssh/global_metric/pose.h"
+#include "hssh/metrical/localization/debug_info.h"
+#include "hssh/metrical/relocalization/debug_info.h"
+#include "utils/pose_trace.h"
 #include <mutex>
 
 namespace vulcan

@@ -11,7 +11,7 @@
 #define SENSORS_VISION_NAVTEXTURE_NAVTEXURE_PARAMS_H
 
 #include <string>
-#include <vision/vision_params.h>
+#include "vision/vision_params.h"
 
 namespace vulcan
 {

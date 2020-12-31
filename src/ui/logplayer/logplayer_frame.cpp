@@ -14,10 +14,10 @@
 * Definition of LogplayerFrame.
 */
 
-#include <ui/logplayer/logplayer_frame.h>
-#include <ui/common/file_dialog_settings.h>
-#include <logging/logplayer/log_player.h>
-#include <utils/auto_mutex.h>
+#include "ui/logplayer/logplayer_frame.h"
+#include "ui/common/file_dialog_settings.h"
+#include "logging/logplayer/log_player.h"
+#include "utils/auto_mutex.h"
 #include <wx/event.h>
 #include <wx/filedlg.h>
 #include <wx/string.h>

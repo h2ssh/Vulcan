@@ -14,11 +14,11 @@
 * Definition of SmallScaleStarRenderer.
 */
 
-#include <ui/components/small_scale_star_renderer.h>
-#include <ui/common/color_generator.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <hssh/local_topological/small_scale_star.h>
+#include "ui/components/small_scale_star_renderer.h"
+#include "ui/common/color_generator.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "hssh/local_topological/small_scale_star.h"
 
 namespace vulcan
 {

@@ -14,7 +14,7 @@
 * Definition of utility functions for dealing with agent_state_t observations.
 */
 
-#include <mpepc/training/agent_state.h>
+#include "mpepc/training/agent_state.h"
 #include <fstream>
 
 namespace vulcan

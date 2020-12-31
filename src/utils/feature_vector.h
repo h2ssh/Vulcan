@@ -17,7 +17,7 @@
 #ifndef UTILS_FEATURE_VECTOR_H
 #define UTILS_FEATURE_VECTOR_H
 
-#include <core/vector.h>
+#include "core/vector.h"
 
 namespace vulcan
 {

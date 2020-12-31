@@ -17,8 +17,8 @@
 #ifndef UI_DEBUG_GLOBAL_TOPO_PANEL_H
 #define UI_DEBUG_GLOBAL_TOPO_PANEL_H
 
-#include <ui/common/ui_forward_declarations.h>
-#include <ui/common/ui_panel.h>
+#include "ui/common/ui_forward_declarations.h"
+#include "ui/common/ui_panel.h"
 #include <wx/wx.h>
 #include <vector>
 

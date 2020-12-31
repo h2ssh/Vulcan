@@ -13,9 +13,9 @@
 #include <PvApi.h>
 #include <string>
 #include <vector>
-#include <sensors/camera.h>
-#include <sensors/avt_camera_parameters.h>
-#include <utils/sensor_time.h>
+#include "sensors/camera.h"
+#include "sensors/avt_camera_parameters.h"
+#include "utils/sensor_time.h"
 
 namespace vulcan
 {

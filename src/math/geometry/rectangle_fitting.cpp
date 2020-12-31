@@ -14,10 +14,10 @@
 * Definition of minimum_area_bounding_rectangle.
 */
 
-#include <math/geometry/shape_fitting.h>
-#include <math/geometry/convex_hull.h>
-#include <core/line.h>
-#include <core/point.h>
+#include "math/geometry/shape_fitting.h"
+#include "math/geometry/convex_hull.h"
+#include "core/line.h"
+#include "core/point.h"
 #include <cassert>
 #include <iostream>
 

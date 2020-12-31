@@ -14,9 +14,9 @@
 * Definition of Person.
 */
 
-#include <tracker/objects/person.h>
-#include <tracker/dynamic_object_visitor.h>
-#include <tracker/laser_object.h>
+#include "tracker/objects/person.h"
+#include "tracker/dynamic_object_visitor.h"
+#include "tracker/laser_object.h"
 
 namespace vulcan
 {

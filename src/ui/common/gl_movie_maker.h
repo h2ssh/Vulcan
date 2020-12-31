@@ -17,7 +17,7 @@
 #ifndef UI_COMMON_GL_MOVIE_MAKER_H
 #define UI_COMMON_GL_MOVIE_MAKER_H
 
-#include <ui/common/gl_buffer_consumer.h>
+#include "ui/common/gl_buffer_consumer.h"
 
 namespace vulcan
 {

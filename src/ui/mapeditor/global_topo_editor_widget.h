@@ -17,7 +17,7 @@
 #ifndef UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_WIDGET_H
 #define UI_MAPEDITOR_GLOBAL_TOPO_EDITOR_WIDGET_H
 
-#include <ui/components/open_gl_widget.h>
+#include "ui/components/open_gl_widget.h"
 
 namespace vulcan
 {

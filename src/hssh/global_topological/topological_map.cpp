@@ -14,13 +14,13 @@
 * Definition of TopologicalMap.
 */
 
-#include <hssh/global_topological/topological_map.h>
-#include <hssh/global_topological/chi.h>
-#include <hssh/global_topological/global_location.h>
-#include <hssh/global_topological/utils/local_to_global.h>
-#include <hssh/global_topological/utils/visit.h>
-#include <utils/algorithm_ext.h>
-#include <utils/stub.h>
+#include "hssh/global_topological/topological_map.h"
+#include "hssh/global_topological/chi.h"
+#include "hssh/global_topological/global_location.h"
+#include "hssh/global_topological/utils/local_to_global.h"
+#include "hssh/global_topological/utils/visit.h"
+#include "utils/algorithm_ext.h"
+#include "utils/stub.h"
 #include <boost/range/adaptor/map.hpp>
 #include <cassert>
 

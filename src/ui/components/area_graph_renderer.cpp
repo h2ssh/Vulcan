@@ -14,10 +14,10 @@
 * Definition of AreaGraphRenderer.
 */
 
-#include <ui/components/area_graph_renderer.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
+#include "ui/components/area_graph_renderer.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
 #include <GL/gl.h>
 
 namespace vulcan

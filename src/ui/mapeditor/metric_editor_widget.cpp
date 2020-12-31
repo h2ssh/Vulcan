@@ -14,10 +14,10 @@
 * Implementation of MetricEditorWidget.
 */
 
-#include <ui/mapeditor/metric_editor_widget.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/common/ui_params.h>
-#include <utils/auto_mutex.h>
+#include "ui/mapeditor/metric_editor_widget.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/common/ui_params.h"
+#include "utils/auto_mutex.h"
 #include <GL/gl.h>
 
 namespace vulcan

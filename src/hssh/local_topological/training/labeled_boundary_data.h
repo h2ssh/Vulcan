@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LABELED_BOUNDARY_DATA_H
 #define HSSH_LOCAL_TOPOLOGICAL_LABELED_BOUNDARY_DATA_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
-#include <hssh/local_topological/training/topo_training_data.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
+#include "hssh/local_topological/training/topo_training_data.h"
 
 namespace vulcan
 {

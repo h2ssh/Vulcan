@@ -14,10 +14,10 @@
 * Definition of find_path_endpoints.
 */
 
-#include <hssh/local_topological/area_detection/labeling/path_endpoints.h>
-#include <hssh/local_topological/area_detection/labeling/area_graph.h>
-#include <core/angle_functions.h>
-#include <core/line.h>
+#include "hssh/local_topological/area_detection/labeling/path_endpoints.h"
+#include "hssh/local_topological/area_detection/labeling/area_graph.h"
+#include "core/angle_functions.h"
+#include "core/line.h"
 #include <cassert>
 #include <cmath>
 

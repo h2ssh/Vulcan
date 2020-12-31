@@ -14,7 +14,7 @@
 * Definition of PlaygroundDisplayWidget.
 */
 
-#include <ui/calibration/playground_display_widget.h>
+#include "ui/calibration/playground_display_widget.h"
 
 namespace vulcan
 {

@@ -14,9 +14,9 @@
 * Definition of GatewayEditor.
 */
 
-#include <ui/mapeditor/gateway_editor.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
-#include <utils/algorithm_ext.h>
+#include "ui/mapeditor/gateway_editor.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "utils/algorithm_ext.h"
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>

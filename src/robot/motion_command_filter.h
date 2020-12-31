@@ -17,8 +17,8 @@
 #ifndef ROBOT_MOTION_COMMAND_FILTER_H
 #define ROBOT_MOTION_COMMAND_FILTER_H
 
-#include <robot/commands.h>
-#include <robot/params.h>
+#include "robot/commands.h"
+#include "robot/params.h"
 
 namespace vulcan
 {

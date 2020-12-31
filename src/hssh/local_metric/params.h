@@ -12,10 +12,10 @@
 
 #include <stdint.h>
 #include <string>
-#include <hssh/metrical/mapping/mapping_params.h>
-#include <hssh/metrical/localization/params.h>
-#include <hssh/metrical/relocalization/params.h>
-#include <hssh/local_metric/multifloor/params.h>
+#include "hssh/metrical/mapping/mapping_params.h"
+#include "hssh/metrical/localization/params.h"
+#include "hssh/metrical/relocalization/params.h"
+#include "hssh/local_metric/multifloor/params.h"
 
 namespace vulcan
 {

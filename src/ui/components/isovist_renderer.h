@@ -17,9 +17,9 @@
 #ifndef UI_COMPONENTS_ISOVIST_RENDERER_H
 #define UI_COMPONENTS_ISOVIST_RENDERER_H
 
-#include <utils/isovist.h>
-#include <ui/common/ui_color.h>
-#include <ui/common/color_interpolator.h>
+#include "utils/isovist.h"
+#include "ui/common/ui_color.h"
+#include "ui/common/color_interpolator.h"
 
 namespace vulcan
 {

@@ -18,8 +18,8 @@
 #define HSSH_LOCAL_METRIC_LOCALIZATION_LOCALIZER_H
 
 #include <boost/shared_ptr.hpp>
-#include <core/pose.h>
-#include <core/pose_distribution.h>
+#include "core/pose.h"
+#include "core/pose_distribution.h"
 
 namespace vulcan
 {

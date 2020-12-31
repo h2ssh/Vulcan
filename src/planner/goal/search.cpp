@@ -14,7 +14,7 @@
 * Definition of AStarSearch.
 */
 
-#include <planner/goal/search.h>
+#include "planner/goal/search.h"
 #include <iostream>
 #include <algorithm>
 #include <cassert>

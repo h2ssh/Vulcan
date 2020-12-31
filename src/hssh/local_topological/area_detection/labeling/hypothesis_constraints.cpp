@@ -14,9 +14,9 @@
 * Definition of functions to check constraints for an AreaHypothesis in relation to its neighbors.
 */
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_constraints.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis.h>
-#include <hssh/local_topological/area_extent.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_constraints.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis.h"
+#include "hssh/local_topological/area_extent.h"
 
 namespace vulcan
 {

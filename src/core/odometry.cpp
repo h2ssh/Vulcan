@@ -16,8 +16,8 @@
 *   - interpolate_odometry
 */
 
-#include <core/odometry.h>
-#include <core/angle_functions.h>
+#include "core/odometry.h"
+#include "core/angle_functions.h"
 #include <cassert>
 
 namespace vulcan

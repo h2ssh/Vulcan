@@ -17,9 +17,9 @@
 #ifndef SYSTEM_MODULE_H
 #define SYSTEM_MODULE_H
 
-#include <utils/repeated_task.h>
-#include <system/director.h>
-#include <system/module_communicator.h>
+#include "utils/repeated_task.h"
+#include "system/director.h"
+#include "system/module_communicator.h"
 #include <cstdio>
 #include <signal.h>
 #include <iostream>

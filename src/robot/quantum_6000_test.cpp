@@ -10,10 +10,10 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
-#include <utils/command_line.h>
-#include <utils/thread.h>
-#include <utils/timestamp.h>
-#include <robot/quantum_6000.h>
+#include "utils/command_line.h"
+#include "utils/thread.h"
+#include "utils/timestamp.h"
+#include "robot/quantum_6000.h"
 
 
 using vulcan::robot::Quantum6000;

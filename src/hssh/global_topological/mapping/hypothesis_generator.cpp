@@ -14,10 +14,10 @@
 * Definition of HypothesisGenerator abstract base class.
 */
 
-#include <hssh/global_topological/mapping/hypothesis_generator.h>
-#include <hssh/global_topological/mapping/loop_closures.h>
-#include <hssh/global_topological/mapping/probability_heuristics.h>
-#include <hssh/global_topological/utils/local_to_global.h>
+#include "hssh/global_topological/mapping/hypothesis_generator.h"
+#include "hssh/global_topological/mapping/loop_closures.h"
+#include "hssh/global_topological/mapping/probability_heuristics.h"
+#include "hssh/global_topological/utils/local_to_global.h"
 #include <boost/range/iterator_range.hpp>
 #include <cassert>
 

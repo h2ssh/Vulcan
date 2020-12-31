@@ -18,12 +18,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <utils/command_line.h>
-#include <utils/timestamp.h>
-#include <utils/config_file.h>
-#include <sensors/microstrain_3dmgx2.h>
-#include <sensors/wheel_encoders.h>
-#include <robot/quantum_6000.h>
+#include "utils/command_line.h"
+#include "utils/timestamp.h"
+#include "utils/config_file.h"
+#include "sensors/microstrain_3dmgx2.h"
+#include "sensors/wheel_encoders.h"
+#include "robot/quantum_6000.h"
 
 
 using namespace vulcan;

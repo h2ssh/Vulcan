@@ -10,7 +10,7 @@
 #ifndef LCMTYPES_ROBOT_VELOCITY_T_H
 #define LCMTYPES_ROBOT_VELOCITY_T_H
 
-#include <lcmtypes/vulcan_lcm_robot_velocity_t.h>
+#include "lcmtypes/vulcan_lcm_robot_velocity_t.h"
 #include <string>
 
 namespace vulcan

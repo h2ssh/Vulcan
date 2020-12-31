@@ -17,7 +17,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_COMMANDS_SAVE_TOPO_SLAM_DATA_H
 #define HSSH_GLOBAL_TOPOLOGICAL_COMMANDS_SAVE_TOPO_SLAM_DATA_H
 
-#include <hssh/global_topological/command.h>
+#include "hssh/global_topological/command.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

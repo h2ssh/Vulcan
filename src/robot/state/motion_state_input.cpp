@@ -14,9 +14,9 @@
 * Implementation of MotionStateInputQueue.
 */
 
-#include <robot/state/motion_state_input.h>
-#include <utils/timestamp.h>
-#include <utils/auto_mutex.h>
+#include "robot/state/motion_state_input.h"
+#include "utils/timestamp.h"
+#include "utils/auto_mutex.h"
 #include <iostream>
 
 namespace vulcan

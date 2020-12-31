@@ -17,8 +17,8 @@
 #ifndef UTILS_DECISION_STUMP_H
 #define UTILS_DECISION_STUMP_H
 
-#include <core/matrix.h>
-#include <core/vector.h>
+#include "core/matrix.h"
+#include "core/vector.h"
 #include <iosfwd>
 #include <memory>
 

@@ -14,17 +14,17 @@
 * Definition of ObjectTrackerDirector.
 */
 
-#include <tracker/director.h>
-#include <tracker/goal_predictor.h>
-#include <tracker/object_detector.h>
-#include <tracker/object_tracker.h>
-#include <tracker/tracking_environment.h>
-#include <hssh/local_topological/areas/serialization.h>
-#include <laser/moving_laser_scan.h>
-#include <core/motion_state.h>
-#include <system/module_communicator.h>
-#include <utils/algorithm_ext.h>
-#include <utils/auto_mutex.h>
+#include "tracker/director.h"
+#include "tracker/goal_predictor.h"
+#include "tracker/object_detector.h"
+#include "tracker/object_tracker.h"
+#include "tracker/tracking_environment.h"
+#include "hssh/local_topological/areas/serialization.h"
+#include "laser/moving_laser_scan.h"
+#include "core/motion_state.h"
+#include "system/module_communicator.h"
+#include "utils/algorithm_ext.h"
+#include "utils/auto_mutex.h"
 #include <cassert>
 
 namespace vulcan

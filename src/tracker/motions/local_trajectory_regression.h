@@ -17,8 +17,8 @@
 #ifndef TRACKER_MOTIONS_LOCAL_TRAJECTORY_REGRESSION_H
 #define TRACKER_MOTIONS_LOCAL_TRAJECTORY_REGRESSION_H
 
-#include <tracker/object_state.h>
-#include <core/point.h>
+#include "tracker/object_state.h"
+#include "core/point.h"
 #include <boost/optional.hpp>
 #include <nlopt.h>
 #include <deque>

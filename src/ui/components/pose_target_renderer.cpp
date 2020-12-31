@@ -14,10 +14,10 @@
 * Definition of PoseTargetRenderer.
 */
 
-#include <ui/components/pose_target_renderer.h>
-#include <ui/components/robot_renderer.h>
-#include <core/pose.h>
-#include <ui/common/gl_shapes.h>
+#include "ui/components/pose_target_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "core/pose.h"
+#include "ui/common/gl_shapes.h"
 #include <GL/gl.h>
 
 

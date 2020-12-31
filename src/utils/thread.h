@@ -11,8 +11,8 @@
 #define THREAD_H
 
 #include <pthread.h>
-#include <utils/mutex.h>
-#include <utils/condition_variable.h>
+#include "utils/mutex.h"
+#include "utils/condition_variable.h"
 
 namespace vulcan
 {

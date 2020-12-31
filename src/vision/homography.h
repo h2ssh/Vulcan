@@ -11,7 +11,7 @@
 #define SENSORS_VISION_HOMOGRAPHY_H
 
 #include <iosfwd>
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

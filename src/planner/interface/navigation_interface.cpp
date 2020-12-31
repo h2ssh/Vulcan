@@ -14,11 +14,11 @@
 * Definition of NavigationInterface.
 */
 
-#include <planner/interface/navigation_interface.h>
-#include <planner/interface/decision_action.h>
-#include <planner/interface/goal_action.h>
-#include <mpepc/metric_planner/messages.h>
-#include <system/system_communicator.h>
+#include "planner/interface/navigation_interface.h"
+#include "planner/interface/decision_action.h"
+#include "planner/interface/goal_action.h"
+#include "mpepc/metric_planner/messages.h"
+#include "system/system_communicator.h"
 #include <fstream>
 
 namespace vulcan

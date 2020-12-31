@@ -17,8 +17,8 @@
 #ifndef MPEPC_MANIFOLDS_WAIT_H
 #define MPEPC_MANIFOLDS_WAIT_H
 
-#include <mpepc/manifold/task_manifold.h>
-#include <core/pose.h>
+#include "mpepc/manifold/task_manifold.h"
+#include "core/pose.h"
 
 namespace vulcan
 {

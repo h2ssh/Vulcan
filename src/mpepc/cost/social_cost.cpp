@@ -14,14 +14,14 @@
 * Definition of a cost function for costs associated with learned social norms in the environment.
 */
 
-#include <mpepc/cost/social_cost.h>
-#include <mpepc/cost/cost_map.h>
-#include <mpepc/social/social_norm_utils.h>
-#include <mpepc/types.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/local_topo_route.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <utils/algorithm_ext.h>
+#include "mpepc/cost/social_cost.h"
+#include "mpepc/cost/cost_map.h"
+#include "mpepc/social/social_norm_utils.h"
+#include "mpepc/types.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/local_topo_route.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "utils/algorithm_ext.h"
 #include <boost/range/iterator_range.hpp>
 
 using namespace vulcan::hssh;

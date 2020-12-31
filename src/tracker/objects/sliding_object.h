@@ -17,7 +17,7 @@
 #ifndef TRACKER_OBJECTS_SLIDING_DOOR_H
 #define TRACKER_OBJECTS_SLIDING_DOOR_H
 
-#include <tracker/objects/fixed_object.h>
+#include "tracker/objects/fixed_object.h"
 
 namespace vulcan
 {

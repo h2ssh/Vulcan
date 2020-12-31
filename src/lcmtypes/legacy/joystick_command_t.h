@@ -11,7 +11,7 @@
 #define LCMTYPES_JOYSTICK_COMMAND_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_joystick_command_t.h>
+#include "lcmtypes/vulcan_lcm_joystick_command_t.h"
 
 namespace vulcan
 {

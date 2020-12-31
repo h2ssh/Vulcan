@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_VORONOI_VORONOI_EDGES_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_VORONOI_VORONOI_EDGES_H
 
-#include <hssh/types.h>
+#include "hssh/types.h"
 #include <vector>
 
 namespace vulcan

@@ -14,9 +14,9 @@
 * Definition of parsers for the various parameters structs for the motion_controller.
 */
 
-#include <mpepc/motion_controller/params.h>
-#include <utils/config_file.h>
-#include <utils/config_file_utils.h>
+#include "mpepc/motion_controller/params.h"
+#include "utils/config_file.h"
+#include "utils/config_file_utils.h"
 
 namespace vulcan
 {

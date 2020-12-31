@@ -21,7 +21,6 @@
 #include <termios.h>   //for serial port stuff
 #include <unistd.h>
 #include <string>
-#include <unistd.h>
 
 namespace vulcan
 {

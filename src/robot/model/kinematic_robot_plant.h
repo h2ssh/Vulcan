@@ -17,7 +17,7 @@
 #ifndef KINEMATIC_ROBOT_PLANT_H
 #define KINEMATIC_ROBOT_PLANT_H
 
-#include <robot/model/robot_plant_model.h>
+#include "robot/model/robot_plant_model.h"
 
 namespace vulcan
 {

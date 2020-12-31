@@ -15,7 +15,7 @@
 * tree of poses for unicycle-type vehicles.
 */
 
-#include <mpepc/rrt/unicycle_rrt_tree.h>
+#include "mpepc/rrt/unicycle_rrt_tree.h"
 
 namespace vulcan
 {

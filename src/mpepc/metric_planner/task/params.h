@@ -17,10 +17,10 @@
 #ifndef MPEPC_METRIC_PLANNER_TASK_PARAMS_H
 #define MPEPC_METRIC_PLANNER_TASK_PARAMS_H
 
-#include <mpepc/grid/params.h>
-#include <mpepc/cost/social_cost.h>
-#include <mpepc/cost/obstacle_cost.h>
-#include <mpepc/cost/quasi_static_cost.h>
+#include "mpepc/grid/params.h"
+#include "mpepc/cost/social_cost.h"
+#include "mpepc/cost/obstacle_cost.h"
+#include "mpepc/cost/quasi_static_cost.h"
 #include <string>
 
 namespace vulcan

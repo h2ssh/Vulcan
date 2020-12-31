@@ -17,10 +17,10 @@
 #ifndef MPEPC_METRIC_PLANNER_PARAMS_H
 #define MPEPC_METRIC_PLANNER_PARAMS_H
 
-#include <mpepc/grid/params.h>
-#include <mpepc/simulator/params.h>
-#include <mpepc/metric_planner/task/params.h>
-#include <mpepc/trajectory/params.h>
+#include "mpepc/grid/params.h"
+#include "mpepc/simulator/params.h"
+#include "mpepc/metric_planner/task/params.h"
+#include "mpepc/trajectory/params.h"
 
 #include <string>
 

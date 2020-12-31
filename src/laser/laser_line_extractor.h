@@ -17,8 +17,8 @@
 #ifndef SENSORS_LASER_LINE_EXTRACTOR_LASER_LINE_EXTRACTOR_H
 #define SENSORS_LASER_LINE_EXTRACTOR_LASER_LINE_EXTRACTOR_H
 
-#include <core/laser_scan.h>
-#include <laser/line_extractor_params.h>
+#include "core/laser_scan.h"
+#include "laser/line_extractor_params.h"
 
 namespace vulcan
 {

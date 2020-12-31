@@ -14,8 +14,8 @@
 * Definition of RemoteEncoders.
 */
 
-#include <sensors/remote_encoders.h>
-#include <system/module_communicator.h>
+#include "sensors/remote_encoders.h"
+#include "system/module_communicator.h"
 #include <iostream>
 
 namespace vulcan

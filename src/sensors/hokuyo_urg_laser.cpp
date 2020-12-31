@@ -16,9 +16,9 @@
 
 #include <iostream>
 #include <cassert>
-#include <math/statistics.h>
-#include <utils/timestamp.h>
-#include <sensors/hokuyo_urg_laser.h>
+#include "math/statistics.h"
+#include "utils/timestamp.h"
+#include "sensors/hokuyo_urg_laser.h"
 #include <urg/ScipHandler.h>
 #include <cstdlib>
 #include <unistd.h>

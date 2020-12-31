@@ -14,12 +14,12 @@
 * Definition of LabelingCSPPlayer.
 */
 
-#include <ui/components/labeling_csp_player.h>
-#include <ui/components/area_extent_renderer.h>
-#include <ui/common/hssh_colors.h>
-#include <ui/common/gl_shapes.h>
-#include <ui/common/ui_color.h>
-#include <hssh/local_topological/area_detection/labeling/csp_debug.h>
+#include "ui/components/labeling_csp_player.h"
+#include "ui/components/area_extent_renderer.h"
+#include "ui/common/hssh_colors.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/ui_color.h"
+#include "hssh/local_topological/area_detection/labeling/csp_debug.h"
 #include <GL/gl.h>
 #include <cassert>
 

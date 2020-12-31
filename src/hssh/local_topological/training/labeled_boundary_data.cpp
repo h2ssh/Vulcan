@@ -14,7 +14,7 @@
 * Definition of required operators for LabeledBoundaryFeatures.
 */
 
-#include <hssh/local_topological/training/labeled_boundary_data.h>
+#include "hssh/local_topological/training/labeled_boundary_data.h"
 
 namespace vulcan
 {

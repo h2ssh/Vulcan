@@ -17,10 +17,10 @@
 #ifndef UTILS_VISIBILITY_GRAPH_H
 #define UTILS_VISIBILITY_GRAPH_H
 
-#include <core/point_util.h>
-#include <utils/visibility_graph_feature.h>
-#include <utils/visibility_graph_types.h>
-#include <utils/ray_tracing.h>
+#include "core/point_util.h"
+#include "utils/visibility_graph_feature.h"
+#include "utils/visibility_graph_types.h"
+#include "utils/ray_tracing.h"
 #include <boost/graph/adjacency_list.hpp>
 #include <vector>
 

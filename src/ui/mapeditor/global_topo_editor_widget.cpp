@@ -14,7 +14,7 @@
 * Implementation of GlobalTopoEditorWidget.
 */
 
-#include <ui/mapeditor/global_topo_editor_widget.h>
+#include "ui/mapeditor/global_topo_editor_widget.h"
 
 namespace vulcan
 {

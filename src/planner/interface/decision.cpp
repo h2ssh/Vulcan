@@ -14,8 +14,8 @@
 * Definition of Decision.
 */
 
-#include <planner/interface/decision.h>
-#include <system/module_communicator.h>
+#include "planner/interface/decision.h"
+#include "system/module_communicator.h"
 
 namespace vulcan
 {

@@ -17,7 +17,7 @@
 #ifndef HSSH_UTILS_METRICAL_OCCUPANCY_GRID_H
 #define HSSH_UTILS_METRICAL_OCCUPANCY_GRID_H
 
-#include <utils/cell_grid.h>
+#include "utils/cell_grid.h"
 #include <cereal/access.hpp>
 #include <cstdint>
 

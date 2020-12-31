@@ -11,7 +11,7 @@
 #include <cctype>
 #include <iostream>
 #include <cstdlib>
-#include <utils/config_file.h>
+#include "utils/config_file.h"
 
 
 using vulcan::utils::ConfigFile;

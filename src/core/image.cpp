@@ -14,7 +14,7 @@
 * Definition of Image.
 */
 
-#include <core/image.h>
+#include "core/image.h"
 #include <cstring>
 
 namespace vulcan

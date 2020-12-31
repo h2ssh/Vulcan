@@ -15,7 +15,7 @@
 * a udev rule to be written for assigning a constant id.
 */
 
-#include <sensors/hokuyo_urg_laser.h>
+#include "sensors/hokuyo_urg_laser.h"
 #include <sstream>
 #include <iostream>
 

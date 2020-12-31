@@ -17,7 +17,7 @@
 #ifndef UI_SIMULATOR_SIMULATOR_UI_PARAMS_H
 #define UI_SIMULATOR_SIMULATOR_UI_PARAMS_H
 
-#include <utils/config_file.h>
+#include "utils/config_file.h"
 
 namespace vulcan
 {

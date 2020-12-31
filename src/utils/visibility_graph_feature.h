@@ -17,7 +17,7 @@
 #ifndef UTILS_VISIBILITY_GRAPH_FEATURE_H
 #define UTILS_VISIBILITY_GRAPH_FEATURE_H
 
-#include <utils/visibility_graph_types.h>
+#include "utils/visibility_graph_types.h"
 #include <string>
 #include <utility>
 

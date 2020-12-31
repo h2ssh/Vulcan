@@ -14,7 +14,7 @@
 * Definition of GlobalMetricMap.
 */
 
-#include <hssh/global_metric/map.h>
+#include "hssh/global_metric/map.h"
 #include <cereal/archives/portable_binary.hpp>
 #include <fstream>
 

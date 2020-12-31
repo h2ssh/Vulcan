@@ -19,7 +19,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_FACTOR_GRAPH_UTILS_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_FACTOR_GRAPH_UTILS_H
 
-#include <hssh/local_topological/area_detection/labeling/factor_edge.h>
+#include "hssh/local_topological/area_detection/labeling/factor_edge.h"
 
 namespace vulcan 
 {

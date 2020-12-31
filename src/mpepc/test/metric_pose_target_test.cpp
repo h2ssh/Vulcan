@@ -7,10 +7,10 @@
 */
 
 
-#include <lcmtypes/mpepc/metric_pose_target_t.h>
-#include <lcmtypes/mpepc/metric_pose_target_status_t.h>
-#include <system/module_communicator.h>
-#include <utils/command_line.h>
+#include "lcmtypes/mpepc/metric_pose_target_t.h"
+#include "lcmtypes/mpepc/metric_pose_target_status_t.h"
+#include "system/module_communicator.h"
+#include "utils/command_line.h"
 #include <iostream>
 #include <random>
 #include <string>

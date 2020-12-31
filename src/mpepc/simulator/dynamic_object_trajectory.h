@@ -17,10 +17,10 @@
 #ifndef MPEPC_DYNAMIC_OBJECT_TRAJECTORY_H
 #define MPEPC_DYNAMIC_OBJECT_TRAJECTORY_H
 
-#include <core/pose.h>
-#include <tracker/dynamic_object.h>
-#include <tracker/object_state.h>
-#include <system/message_traits.h>
+#include "core/pose.h"
+#include "tracker/dynamic_object.h"
+#include "tracker/object_state.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 

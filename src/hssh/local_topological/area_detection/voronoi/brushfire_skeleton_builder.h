@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_BRUSHFIRE_SKELETON_BUILDER_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_BRUSHFIRE_SKELETON_BUILDER_H
 
-#include <utils/bucketed_binary_heap.h>
-#include <hssh/local_topological/area_detection/voronoi/skeleton_builder.h>
+#include "utils/bucketed_binary_heap.h"
+#include "hssh/local_topological/area_detection/voronoi/skeleton_builder.h"
 #include <string>
 #include <queue>
 #include <vector>

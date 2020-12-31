@@ -14,9 +14,9 @@
 * Definition of CostMapRenderer.
 */
 
-#include <ui/components/cost_map_renderer.h>
-#include <ui/common/gl_texture_helpers.h>
-#include <mpepc/cost/cost_map.h>
+#include "ui/components/cost_map_renderer.h"
+#include "ui/common/gl_texture_helpers.h"
+#include "mpepc/cost/cost_map.h"
 
 namespace vulcan
 {

@@ -14,10 +14,10 @@
 * Definition of helper functions for pose_t.
 */
 
-#include <core/pose.h>
-#include <core/pose_distribution.h>
-#include <core/angle_functions.h>
-#include <core/float_comparison.h>
+#include "core/pose.h"
+#include "core/pose_distribution.h"
+#include "core/angle_functions.h"
+#include "core/float_comparison.h"
 #include <cassert>
 
 namespace vulcan

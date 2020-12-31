@@ -14,8 +14,8 @@
 * Definition of MoveAlongAffordance.
 */
 
-#include <hssh/local_topological/affordances/move_along.h>
-#include <hssh/local_topological/affordance_visitor.h>
+#include "hssh/local_topological/affordances/move_along.h"
+#include "hssh/local_topological/affordance_visitor.h"
 
 namespace vulcan
 {

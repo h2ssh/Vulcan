@@ -14,12 +14,12 @@
 * Definition of LaserScanRasterizer.
 */
 
-#include <hssh/metrical/mapping/laser_scan_rasterizer.h>
-#include <core/angle_functions.h>
-#include <math/geometry/shape_fitting.h>
-#include <core/pose.h>
-#include <laser/moving_laser_scan.h>
-#include <hssh/metrical/mapping/mapping_params.h>
+#include "hssh/metrical/mapping/laser_scan_rasterizer.h"
+#include "core/angle_functions.h"
+#include "math/geometry/shape_fitting.h"
+#include "core/pose.h"
+#include "laser/moving_laser_scan.h"
+#include "hssh/metrical/mapping/mapping_params.h"
 #include <iostream>
 #include <cassert>
 #include <cmath>

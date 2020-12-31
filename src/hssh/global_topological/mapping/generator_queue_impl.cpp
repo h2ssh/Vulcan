@@ -17,9 +17,9 @@
 *   - LazyGeneratorQueue
 */
 
-#include <hssh/global_topological/mapping/generator_queue_impl.h>
-#include <hssh/global_topological/mapping/hypothesis_generator.h>
-#include <hssh/global_topological/map_probability.h>
+#include "hssh/global_topological/mapping/generator_queue_impl.h"
+#include "hssh/global_topological/mapping/hypothesis_generator.h"
+#include "hssh/global_topological/map_probability.h"
 
 namespace vulcan
 {

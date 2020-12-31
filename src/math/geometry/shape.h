@@ -17,8 +17,8 @@
 #ifndef MATH_GEOMETRY_SHAPE_H
 #define MATH_GEOMETRY_SHAPE_H
 
-#include <core/line.h>
-#include <core/point.h>
+#include "core/line.h"
+#include "core/point.h"
 #include <vector>
 
 namespace vulcan

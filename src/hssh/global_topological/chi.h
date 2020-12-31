@@ -17,9 +17,9 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_CHI_H
 #define HSSH_GLOBAL_TOPOLOGICAL_CHI_H
 
-#include <hssh/local_topological/lambda.h>
-#include <hssh/utils/id.h>
-#include <core/pose_distribution.h>
+#include "hssh/local_topological/lambda.h"
+#include "hssh/utils/id.h"
+#include "core/pose_distribution.h"
 #include <cereal/access.hpp>
 #include <cereal/types/unordered_map.hpp>
 

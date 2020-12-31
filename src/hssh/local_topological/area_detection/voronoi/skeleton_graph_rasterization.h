@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_RASTERIZATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_SKELETON_GRAPH_RASTERIZATION_H
 
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph.h>
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph.h"
 
 namespace vulcan
 {

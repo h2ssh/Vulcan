@@ -12,7 +12,7 @@
 
 #include <cmath>
 #include <cstring>
-#include <core/image.h>
+#include "core/image.h"
 
 namespace vulcan
 {

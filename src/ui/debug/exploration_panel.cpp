@@ -14,15 +14,15 @@
 * Definition of ExplorationPanel.
 */
 
-#include <ui/debug/exploration_panel.h>
-#include <ui/debug/debug_ui.h>
-#include <ui/debug/exploration_widget.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/pose.h>
-#include <mpepc/simulator/dynamic_object_trajectory.h>
-#include <mpepc/trajectory/trajectory_planner_info.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/exploration_panel.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/exploration_widget.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/pose.h"
+#include "mpepc/simulator/dynamic_object_trajectory.h"
+#include "mpepc/trajectory/trajectory_planner_info.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
 
 // Put event table in separate namespace to help KDevelop with parsing
 namespace vulcan

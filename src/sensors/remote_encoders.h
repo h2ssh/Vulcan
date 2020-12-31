@@ -17,9 +17,9 @@
 #ifndef SENSORS_REMOTE_ENCODERS_H
 #define SENSORS_REMOTE_ENCODERS_H
 
-#include <sensors/wheel_encoders.h>
-#include <utils/condition_variable.h>
-#include <utils/mutex.h>
+#include "sensors/wheel_encoders.h"
+#include "utils/condition_variable.h"
+#include "utils/mutex.h"
 
 namespace vulcan
 {

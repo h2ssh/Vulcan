@@ -18,7 +18,7 @@
 #ifndef UI_DEBUG_DEBUG_UI_FRAME_H
 #define UI_DEBUG_DEBUG_UI_FRAME_H
 
-#include <ui/debug/debug_ui.h>
+#include "ui/debug/debug_ui.h"
 
 namespace vulcan
 {

@@ -9,9 +9,9 @@
 
 #include <cassert>
 #include <iostream>
-#include <core/image.h>
-#include <vision/vision_params.h>
-#include <vision/pixel_histograms.h>
+#include "core/image.h"
+#include "vision/vision_params.h"
+#include "vision/pixel_histograms.h"
 
 
 using namespace vulcan;

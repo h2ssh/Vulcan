@@ -14,7 +14,7 @@
 * Definition of GlobalTransition.
 */
 
-#include <hssh/global_topological/transition.h>
+#include "hssh/global_topological/transition.h"
 #include <iomanip>
 #include <iostream>
 

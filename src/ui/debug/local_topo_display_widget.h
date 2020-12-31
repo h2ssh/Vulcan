@@ -17,20 +17,20 @@
 #ifndef UI_DEBUG_LOCAL_TOPO_DISPLAY_WIDGET_H
 #define UI_DEBUG_LOCAL_TOPO_DISPLAY_WIDGET_H
 
-#include <ui/common/ui_params.h>
-#include <ui/components/grid_based_display_widget.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/frontier.h>
-#include <hssh/local_topological/location.h>
-#include <hssh/local_topological/evaluation/heat_map.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_gradients.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_maxima.h>
-#include <hssh/local_topological/debug_info.h>
-#include <utils/mutex.h>
-#include <utils/visibility_graph.h>
-#include <utils/visibility_graph_feature.h>
+#include "ui/common/ui_params.h"
+#include "ui/components/grid_based_display_widget.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/frontier.h"
+#include "hssh/local_topological/location.h"
+#include "hssh/local_topological/evaluation/heat_map.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_maxima.h"
+#include "hssh/local_topological/debug_info.h"
+#include "utils/mutex.h"
+#include "utils/visibility_graph.h"
+#include "utils/visibility_graph_feature.h"
 #include <memory>
 
 namespace vulcan

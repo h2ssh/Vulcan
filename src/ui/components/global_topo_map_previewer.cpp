@@ -14,12 +14,12 @@
 * Definition of GlobalTopoMapPreviewer.
 */
 
-#include <ui/components/global_topo_map_previewer.h>
-#include <ui/components/graph_view_topological_map_renderer.h>
-#include <ui/common/gl_shapes.h>
-#include <ui/common/color_generator.h>
-#include <hssh/global_topological/topological_map.h>
-#include <hssh/global_topological/mapping/tree_of_maps.h>
+#include "ui/components/global_topo_map_previewer.h"
+#include "ui/components/graph_view_topological_map_renderer.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/color_generator.h"
+#include "hssh/global_topological/topological_map.h"
+#include "hssh/global_topological/mapping/tree_of_maps.h"
 #include <GL/gl.h>
 
 namespace vulcan

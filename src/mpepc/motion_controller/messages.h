@@ -22,7 +22,7 @@
 #include <cstdint>
 #include <string>
 #include <cereal/access.hpp>
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 
 namespace vulcan
 {

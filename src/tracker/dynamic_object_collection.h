@@ -17,8 +17,8 @@
 #ifndef TRACKER_DYNAMIC_OBJECT_COLLECTION_H
 #define TRACKER_DYNAMIC_OBJECT_COLLECTION_H
 
-#include <tracker/dynamic_object.h>
-#include <system/message_traits.h>
+#include "tracker/dynamic_object.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 

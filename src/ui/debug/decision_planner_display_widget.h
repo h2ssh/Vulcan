@@ -17,10 +17,10 @@
 #ifndef UI_DEBUG_DECISION_PLANNER_DISPLAY_WIDGET_H
 #define UI_DEBUG_DECISION_PLANNER_DISPLAY_WIDGET_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <hssh/local_metric/lpm.h>
-#include <core/pose.h>
-#include <utils/mutex.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "hssh/local_metric/lpm.h"
+#include "core/pose.h"
+#include "utils/mutex.h"
 
 namespace vulcan
 {

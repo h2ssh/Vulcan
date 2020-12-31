@@ -17,8 +17,8 @@
 #ifndef MPEPC_COSTS_QUASI_STATIC_COST_H
 #define MPEPC_COSTS_QUASI_STATIC_COST_H
 
-#include <mpepc/types.h>
-#include <mpepc/cost/cost_map.h>
+#include "mpepc/types.h"
+#include "mpepc/cost/cost_map.h"
 
 namespace vulcan
 {

@@ -14,9 +14,9 @@
 * Implementation of ImportImageDialog.
 */
 
-#include <ui/mapeditor/import_image_dialog.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/lpm_io.h>
+#include "ui/mapeditor/import_image_dialog.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/lpm_io.h"
 #include <wx/filedlg.h>
 
 namespace vulcan

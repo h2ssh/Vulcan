@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_GATEWAY_CLASSIFIER_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_GATEWAY_CLASSIFIER_H
 
-#include <core/vector.h>
+#include "core/vector.h"
 #include <memory>
 
 namespace vulcan

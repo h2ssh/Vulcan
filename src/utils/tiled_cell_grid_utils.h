@@ -19,8 +19,8 @@
 #ifndef UTILS_TILED_CELL_GRID_UTILS_H
 #define UTILS_TILED_CELL_GRID_UTILS_H
 
-#include <core/point.h>
-#include <utils/cell_grid_utils.h>
+#include "core/point.h"
+#include "utils/cell_grid_utils.h"
 
 namespace vulcan
 {

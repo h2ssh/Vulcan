@@ -14,13 +14,13 @@
 * Implemenation of PlannerScriptingWidget.
 */
 
-#include <ui/debug/planner_scripting_widget.h>
-#include <ui/common/ui_params.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/components/pose_target_renderer.h>
-#include <ui/components/robot_renderer.h>
-#include <hssh/local_metric/lpm.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/planner_scripting_widget.h"
+#include "ui/common/ui_params.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/pose_target_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "hssh/local_metric/lpm.h"
+#include "utils/auto_mutex.h"
 
 namespace vulcan
 {

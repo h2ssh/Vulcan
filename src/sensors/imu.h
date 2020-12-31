@@ -10,7 +10,7 @@
 #ifndef SENSORS_IMU_H
 #define SENSORS_IMU_H
 
-#include <core/imu_data.h>
+#include "core/imu_data.h"
 
 namespace vulcan
 {

@@ -14,7 +14,7 @@
 * Definition of SafeStopChecker.
 */
 
-#include <robot/safe_stop_checker.h>
+#include "robot/safe_stop_checker.h"
 
 namespace vulcan
 {

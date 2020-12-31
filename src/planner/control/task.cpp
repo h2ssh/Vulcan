@@ -14,7 +14,7 @@
 * Definition of ControlTask.
 */
 
-#include <planner/control/task.h>
+#include "planner/control/task.h"
 
 namespace vulcan
 {

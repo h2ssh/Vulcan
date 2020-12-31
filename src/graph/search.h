@@ -30,6 +30,6 @@ namespace graph
 }
 }
 
-#include <graph/astar_impl.h>
+#include "graph/astar_impl.h"
 
 #endif // GRAPH_SEARCH_H

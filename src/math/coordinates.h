@@ -19,11 +19,11 @@
 
 #include <cmath>
 #include <boost/concept_check.hpp>
-#include <core/point.h>
-#include <core/angle_functions.h>
-#include <math/geometry/rectangle.h>
-#include <math/geometry/polygon.h>
-#include <core/pose.h>
+#include "core/point.h"
+#include "core/angle_functions.h"
+#include "math/geometry/rectangle.h"
+#include "math/geometry/polygon.h"
+#include "core/pose.h"
 
 namespace vulcan
 {

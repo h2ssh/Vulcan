@@ -10,9 +10,9 @@
 #ifndef SENSORS_VISION_NAVTEXTURE_IMAGE_OBJECT_H
 #define SENSORS_VISION_NAVTEXTURE_IMAGE_OBJECT_H
 
-#include <core/point.h>
-#include <vision/pixel_histograms.h>
-#include <vision/spin_image.h>
+#include "core/point.h"
+#include "vision/pixel_histograms.h"
+#include "vision/spin_image.h"
 
 namespace vulcan
 {

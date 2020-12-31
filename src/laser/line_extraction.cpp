@@ -11,14 +11,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <core/point.h>
-#include <core/angle_functions.h>
-#include <utils/minmax.h>
-#include <math/regression.h>
-#include <laser/line_extraction.h>
-#include <laser/line_extractor_params.h>
-#include <core/laser_scan.h>
-#include <core/laser_scan.h>
+#include "core/point.h"
+#include "core/angle_functions.h"
+#include "utils/minmax.h"
+#include "math/regression.h"
+#include "laser/line_extraction.h"
+#include "laser/line_extractor_params.h"
+#include "core/laser_scan.h"
+#include "core/laser_scan.h"
 
 //#define DEBUG_SPLIT
 // #define DEBUG_QUICK

@@ -17,9 +17,9 @@
 #ifndef UTILS_DISCRETIZED_ANGLE_GRID_H
 #define UTILS_DISCRETIZED_ANGLE_GRID_H
 
-#include <utils/tiled_cell_grid.h>
-#include <utils/grid_iterators.h>
-#include <core/point.h>
+#include "utils/tiled_cell_grid.h"
+#include "utils/grid_iterators.h"
+#include "core/point.h"
 #include <cereal/access.hpp>
 #include <cereal/types/deque.hpp>
 #include <cereal/types/string.hpp>

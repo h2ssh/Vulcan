@@ -10,7 +10,7 @@
 #ifndef LCMTYPES_COMMON_POINT_T_H
 #define LCMTYPES_COMMON_POINT_T_H
 
-#include <core/point.h>
+#include "core/point.h"
 
 namespace vulcan
 {

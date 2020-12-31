@@ -17,7 +17,7 @@
 #ifndef ROBOT_MODEL_ODOMETRY_MODELS_H
 #define ROBOT_MODEL_ODOMETRY_MODELS_H
 
-#include <robot/model/motion_model.h>
+#include "robot/model/motion_model.h"
 
 namespace vulcan
 {

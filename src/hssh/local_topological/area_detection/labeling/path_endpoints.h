@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABEL_PATH_ENDPOINTS_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABEL_PATH_ENDPOINTS_H
 
-#include <core/line.h>
-#include <core/point.h>
+#include "core/line.h"
+#include "core/point.h"
 #include <vector>
 
 namespace vulcan

@@ -18,7 +18,7 @@
 #ifndef MPEPC_MOTOIN_CONTROLLER_DATA_H
 #define MPEPC_MOTOIN_CONTROLLER_DATA_H
 
-#include <core/motion_state.h>
+#include "core/motion_state.h"
 #include <cstdint>
 
 namespace vulcan

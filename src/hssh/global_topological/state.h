@@ -17,12 +17,12 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_STATE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_STATE_H
 
-#include <hssh/global_topological/chi.h>
-#include <hssh/global_topological/global_location.h>
-#include <hssh/global_topological/map_probability.h>
-#include <hssh/global_topological/topological_map.h>
-#include <hssh/utils/id.h>
-#include <system/message_traits.h>
+#include "hssh/global_topological/chi.h"
+#include "hssh/global_topological/global_location.h"
+#include "hssh/global_topological/map_probability.h"
+#include "hssh/global_topological/topological_map.h"
+#include "hssh/utils/id.h"
+#include "system/message_traits.h"
 #include <cereal/types/memory.hpp>
 
 namespace vulcan

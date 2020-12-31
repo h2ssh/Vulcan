@@ -16,9 +16,9 @@
 
 #include <algorithm>
 #include <GL/gl.h>
-#include <ui/components/frontiers_renderer.h>
-#include <ui/common/gl_shapes.h>
-#include <hssh/local_topological/frontier.h>
+#include "ui/components/frontiers_renderer.h"
+#include "ui/common/gl_shapes.h"
+#include "hssh/local_topological/frontier.h"
 
 namespace vulcan
 {

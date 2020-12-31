@@ -14,13 +14,13 @@
 * Definition of IsovistVoronoiGatewayGenerator.
 */
 
-#include <hssh/local_topological/area_detection/gateways/isovist_voronoi_gateway_generator.h>
-#include <hssh/local_topological/area_detection/gateways/endpoint_validator.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/gateway.h>
-#include <utils/algorithm_ext.h>
-#include <utils/stub.h>
+#include "hssh/local_topological/area_detection/gateways/isovist_voronoi_gateway_generator.h"
+#include "hssh/local_topological/area_detection/gateways/endpoint_validator.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/gateway.h"
+#include "utils/algorithm_ext.h"
+#include "utils/stub.h"
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>
 #include <boost/range/iterator_range.hpp>

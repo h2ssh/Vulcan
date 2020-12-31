@@ -7,12 +7,12 @@
 */
 
 
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/areas/serialization.h>
-#include <utils/serialized_file_io.h>
-#include <core/image.h>
-#include <vision/image_utils.h>
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/areas/serialization.h"
+#include "utils/serialized_file_io.h"
+#include "core/image.h"
+#include "vision/image_utils.h"
 #include <boost/filesystem.hpp>
 
 using namespace vulcan;

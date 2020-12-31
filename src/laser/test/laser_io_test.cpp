@@ -18,9 +18,9 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <laser/laser_io.h>
-#include <core/laser_scan.h>
-#include <core/float_comparison.h>
+#include "laser/laser_io.h"
+#include "core/laser_scan.h"
+#include "core/float_comparison.h"
 
 using namespace vulcan;
 using namespace vulcan::laser;

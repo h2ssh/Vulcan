@@ -17,8 +17,8 @@
 #ifndef UI_COMPONENTS_PLACE_VIEW_TOPOLOGICAL_MAP_RENDERER_H
 #define UI_COMPONENTS_PLACE_VIEW_TOPOLOGICAL_MAP_RENDERER_H
 
-#include <ui/components/topological_map_renderer.h>
-#include <ui/components/occupancy_grid_renderer.h>
+#include "ui/components/topological_map_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
 
 namespace vulcan
 {

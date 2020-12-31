@@ -17,8 +17,8 @@
 #ifndef UTILS_LIBLINEAR_H
 #define UTILS_LIBLINEAR_H
 
-#include <core/matrix.h>
-#include <core/vector.h>
+#include "core/matrix.h"
+#include "core/vector.h"
 #include <liblinear/linear.h>
 #include <memory>
 #include <vector>

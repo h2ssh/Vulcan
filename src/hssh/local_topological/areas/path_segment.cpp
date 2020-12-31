@@ -14,8 +14,8 @@
 * Definition of LocalPathSegment.
 */
 
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/local_topological/area_visitor.h>
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/area_visitor.h"
 #include <sstream>
 
 namespace vulcan 

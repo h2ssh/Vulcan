@@ -11,7 +11,7 @@
 #define LCMTYPES_SENSORS_ENCODER_DATA_T_H
 
 #include <string>
-#include <lcmtypes/vulcan_lcm_encoder_data_t.h>
+#include "lcmtypes/vulcan_lcm_encoder_data_t.h"
 
 namespace vulcan
 {

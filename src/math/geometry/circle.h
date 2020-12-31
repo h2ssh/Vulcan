@@ -17,9 +17,9 @@
 #ifndef MATH_GEOMETRY_CIRCLE_H
 #define MATH_GEOMETRY_CIRCLE_H
 
-#include <math/geometry/shape.h>
-#include <core/line.h>
-#include <core/point.h>
+#include "math/geometry/shape.h"
+#include "core/line.h"
+#include "core/point.h"
 #include <cereal/access.hpp>
 #include <cassert>
 #include <cmath>

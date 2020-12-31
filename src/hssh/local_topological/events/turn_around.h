@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_EVENTS_TURN_AROUND_H
 #define HSSH_LOCAL_TOPOLOGICAL_EVENTS_TURN_AROUND_H
 
-#include <hssh/local_topological/event.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/types.h>
+#include "hssh/local_topological/event.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/types.h"
 #include <cereal/types/base_class.hpp>
 #include <memory>
 

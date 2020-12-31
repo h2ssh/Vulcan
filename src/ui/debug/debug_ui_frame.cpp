@@ -14,25 +14,25 @@
 * Definition of DebugUIFrame.
 */
 
-#include <ui/debug/debug_ui_frame.h>
-#include <ui/debug/evaluation_panel.h>
-#include <ui/debug/exploration_panel.h>
-#include <ui/debug/local_metric_panel.h>
-#include <ui/debug/local_metric_display_widget.h>
-#include <ui/debug/local_metric_panel_text_updater.h>
-#include <ui/debug/local_topo_panel.h>
-#include <ui/debug/global_topo_panel.h>
-#include <ui/debug/global_metric_panel.h>
-#include <ui/debug/calibration_panel.h>
-#include <ui/debug/metric_planner_panel.h>
-#include <ui/debug/relocalization_panel.h>
-#include <ui/debug/scripting_panel.h>
-#include <ui/debug/tracker_panel.h>
-#include <ui/debug/decision_planner_panel.h>
-#include <ui/debug/goal_planner_panel.h>
-#include <ui/debug/vision_panel.h>
-#include <ui/common/ui_params.h>
-#include <utils/timestamp.h>
+#include "ui/debug/debug_ui_frame.h"
+#include "ui/debug/evaluation_panel.h"
+#include "ui/debug/exploration_panel.h"
+#include "ui/debug/local_metric_panel.h"
+#include "ui/debug/local_metric_display_widget.h"
+#include "ui/debug/local_metric_panel_text_updater.h"
+#include "ui/debug/local_topo_panel.h"
+#include "ui/debug/global_topo_panel.h"
+#include "ui/debug/global_metric_panel.h"
+#include "ui/debug/calibration_panel.h"
+#include "ui/debug/metric_planner_panel.h"
+#include "ui/debug/relocalization_panel.h"
+#include "ui/debug/scripting_panel.h"
+#include "ui/debug/tracker_panel.h"
+#include "ui/debug/decision_planner_panel.h"
+#include "ui/debug/goal_planner_panel.h"
+#include "ui/debug/vision_panel.h"
+#include "ui/common/ui_params.h"
+#include "utils/timestamp.h"
 #include <iostream>
 
 namespace vulcan

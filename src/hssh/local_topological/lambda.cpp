@@ -14,10 +14,10 @@
 * Definition of various functions for calculating the lambda value between two places.
 */
 
-#include <hssh/local_topological/lambda.h>
-#include <core/pose.h>
-#include <core/pose_distribution.h>
-#include <core/angle_functions.h>
+#include "hssh/local_topological/lambda.h"
+#include "core/pose.h"
+#include "core/pose_distribution.h"
+#include "core/angle_functions.h"
 #include <cmath>
 
 #define DEBUG_MERGE

@@ -18,9 +18,9 @@
 #ifndef CORE_POSE_H
 #define CORE_POSE_H
 
-#include <core/position.h>
-#include <core/angle_functions.h>
-#include <system/message_traits.h>
+#include "core/position.h"
+#include "core/angle_functions.h"
+#include "system/message_traits.h"
 #include <cstdint>
 #include <iosfwd>
 

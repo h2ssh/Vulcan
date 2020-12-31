@@ -14,9 +14,9 @@
 * Definition of create_small_scale_space_boundary factory.
 */
 
-#include <hssh/local_topological/small_scale_space_boundary.h>
-#include <hssh/local_topological/boundary/fixed.h>
-#include <hssh/local_topological/boundary/shrink_and_stretch.h>
+#include "hssh/local_topological/small_scale_space_boundary.h"
+#include "hssh/local_topological/boundary/fixed.h"
+#include "hssh/local_topological/boundary/shrink_and_stretch.h"
 
 namespace vulcan
 {

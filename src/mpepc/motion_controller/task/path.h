@@ -17,9 +17,9 @@
 #ifndef MPEPC_MOTION_CONTROLLER_PATH_FOLLOWING_TASK_H
 #define MPEPC_MOTION_CONTROLLER_PATH_FOLLOWING_TASK_H
 
-#include <mpepc/motion_controller/task/task.h>
-#include <core/pose.h>
-#include <core/angle_functions.h>
+#include "mpepc/motion_controller/task/task.h"
+#include "core/pose.h"
+#include "core/angle_functions.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/base_class.hpp>

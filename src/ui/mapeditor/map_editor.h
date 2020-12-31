@@ -1,25 +1,14 @@
-/* Copyright (C) 2010-2019, The Regents of The University of Michigan.
- All rights reserved.
-
- This software was developed as part of the The Vulcan project in the Intelligent Robotics Lab
- under the direction of Benjamin Kuipers, kuipers@umich.edu. Use of this code is governed by an
- MIT-style License that can be found at "https://github.com/h2ssh/Vulcan".
-*/
-
-
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  3 2016)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 31 2020)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __MAP_EDITOR_H__
-#define __MAP_EDITOR_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-class UIMainFrame;
 namespace vulcan{ namespace ui{ class GlobalTopoEditorWidget; } }
 namespace vulcan{ namespace ui{ class LocalTopoEditorWidget; } }
 namespace vulcan{ namespace ui{ class MetricEditorWidget; } }
@@ -31,14 +20,14 @@ namespace vulcan{ namespace ui{ class MetricEditorWidget; } }
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/tglbtn.h>
 #include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/listctrl.h>
 #include <wx/listbox.h>
 #include <wx/stattext.h>
@@ -106,14 +95,14 @@ namespace vulcan
 		#define ID_CANCEL_IMPORT_BUTTON 1046
 		#define ID_SAVE_CLASSIFIER_BUTTON 1047
 		#define ID_CLOSE_CLASSIFIER_BUTTON 1048
-		
+
 		///////////////////////////////////////////////////////////////////////////////
 		/// Class EditorFrame
 		///////////////////////////////////////////////////////////////////////////////
 		class EditorFrame : public UIMainFrame
 		{
 			private:
-			
+
 			protected:
 				wxAuiNotebook* mapEditorNotebook;
 				wxPanel* localMetricNotebookPanel;
@@ -165,22 +154,22 @@ namespace vulcan
 				wxPanel* globalTopoNotebookPanel;
 				GlobalTopoEditorWidget* globalTopoEditorWidget;
 				wxStatusBar* editorStatusBar;
-			
+
 			public:
-				
+
 				EditorFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Map Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1094,862 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-				
+
 				~EditorFrame();
-			
+
 		};
-		
+
 		///////////////////////////////////////////////////////////////////////////////
 		/// Class ImportImageDialogBase
 		///////////////////////////////////////////////////////////////////////////////
-		class ImportImageDialogBase : public wxDialog 
+		class ImportImageDialogBase : public wxDialog
 		{
 			private:
-			
+
 			protected:
 				wxTextCtrl* imageFilenameText;
 				wxButton* selectImageButton;
@@ -196,21 +185,21 @@ namespace vulcan
 				wxTextCtrl* occupiedThresholdText;
 				wxButton* importImageButton;
 				wxButton* cancelImportButton;
-			
+
 			public:
-				
-				ImportImageDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Import LPM From Image..."), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 250,282 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+
+				ImportImageDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Import LPM From Image..."), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 250,282 ), long style = wxDEFAULT_DIALOG_STYLE );
 				~ImportImageDialogBase();
-			
+
 		};
-		
+
 		///////////////////////////////////////////////////////////////////////////////
 		/// Class ClassificationTestResultsDialogBase
 		///////////////////////////////////////////////////////////////////////////////
-		class ClassificationTestResultsDialogBase : public wxDialog 
+		class ClassificationTestResultsDialogBase : public wxDialog
 		{
 			private:
-			
+
 			protected:
 				wxStaticLine* m_staticline4;
 				wxStaticText* classificationResultsSummaryLabel;
@@ -235,15 +224,14 @@ namespace vulcan
 				wxDataViewListCtrl* classificationDetailsList;
 				wxButton* saveClassifierButton;
 				wxButton* closeClassifierButton;
-			
+
 			public:
-				
-				ClassificationTestResultsDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Classification Results"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1179,428 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+
+				ClassificationTestResultsDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Classification Results"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1179,428 ), long style = wxDEFAULT_DIALOG_STYLE );
 				~ClassificationTestResultsDialogBase();
-			
+
 		};
-		
+
 	} // namespace ui
 } // namespace vulcan
 
-#endif //__MAP_EDITOR_H__

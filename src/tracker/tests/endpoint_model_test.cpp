@@ -14,8 +14,8 @@
 * Unit tests for EndpointModel. Tests that stationary, rotating, and linear motion endpoints all work properly.
 */
 
-#include <tracker/objects/endpoint_model.h>
-#include <math/univariate_gaussian.h>
+#include "tracker/objects/endpoint_model.h"
+#include "math/univariate_gaussian.h"
 #include <gtest/gtest.h>
 #include <iostream>
 

@@ -17,8 +17,8 @@
 #ifndef UI_COMPONENTS_TOPOLOGICAL_GRAPH_RENDERER_H
 #define UI_COMPONENTS_TOPOLOGICAL_GRAPH_RENDERER_H
 
-#include <ui/common/ui_color.h>
-#include <hssh/global_topological/graph.h>  // not using forward-declaration because it is horridly messy
+#include "ui/common/ui_color.h"
+#include "hssh/global_topological/graph.h"  // not using forward-declaration because it is horridly messy
 #include <map>
 
 namespace vulcan

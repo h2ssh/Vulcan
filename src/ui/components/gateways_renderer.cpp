@@ -14,9 +14,9 @@
 * Definition of GatewaysRenderer.
 */
 
-#include <ui/components/gateways_renderer.h>
-#include <ui/common/default_colors.h>
-#include <hssh/local_topological/gateway.h>
+#include "ui/components/gateways_renderer.h"
+#include "ui/common/default_colors.h"
+#include "hssh/local_topological/gateway.h"
 #include <GL/gl.h>
 
 namespace vulcan

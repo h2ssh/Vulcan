@@ -14,7 +14,7 @@
 * Definition of StoppingDistanceTest.
 */
 
-#include <calibration/wheelchair/stopping_distance_test.h>
+#include "calibration/wheelchair/stopping_distance_test.h"
 
 namespace vulcan
 {

@@ -17,10 +17,10 @@
 #ifndef TRACKER_TRACKING_OBJECT_H
 #define TRACKER_TRACKING_OBJECT_H
 
-#include <tracker/laser_object.h>
-#include <tracker/object_boundary.h>
-#include <tracker/types.h>
-#include <math/mathfwd.h>
+#include "tracker/laser_object.h"
+#include "tracker/object_boundary.h"
+#include "tracker/types.h"
+#include "math/mathfwd.h"
 #include <memory>
 
 namespace vulcan

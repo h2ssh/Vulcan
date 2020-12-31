@@ -14,8 +14,8 @@
 * Definition of CornerRenderer.
 */
 
-#include <ui/components/corner_renderer.h>
-#include <ui/common/gl_shapes.h>
+#include "ui/components/corner_renderer.h"
+#include "ui/common/gl_shapes.h"
 #include <GL/gl.h>
 
 namespace vulcan

@@ -11,12 +11,12 @@
 #define SENSORS_VISION_NAVTEXTURE_IMAGE_OBJECT_IDENTIFIER_H
 
 #include <vector>
-#include <core/laser_scan.h>
-#include <vision/graph_based_segmenter.h>
-#include <vision/distortion.h>
-#include <vision/homography.h>
-#include <vision/navtexture/navtexture_params.h>
-#include <vision/navtexture/image_segment_clusterer.h>
+#include "core/laser_scan.h"
+#include "vision/graph_based_segmenter.h"
+#include "vision/distortion.h"
+#include "vision/homography.h"
+#include "vision/navtexture/navtexture_params.h"
+#include "vision/navtexture/image_segment_clusterer.h"
 
 namespace vulcan
 {

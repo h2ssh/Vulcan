@@ -17,7 +17,7 @@
 #ifndef UTILS_HISTOGRAM_H
 #define UTILS_HISTOGRAM_H
 
-#include <math/univariate_gaussian.h>
+#include "math/univariate_gaussian.h"
 #include <algorithm>
 #include <iosfwd>
 #include <vector>

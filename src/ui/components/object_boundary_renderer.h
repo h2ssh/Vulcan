@@ -18,7 +18,7 @@
 #define UI_COMPONENTS_OBJECT_BOUNDARY_RENDERER_H
 
 #include <boost/variant/static_visitor.hpp>
-#include <tracker/object_boundary.h>
+#include "tracker/object_boundary.h"
 
 namespace vulcan
 {

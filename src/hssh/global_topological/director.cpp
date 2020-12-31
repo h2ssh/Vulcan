@@ -14,14 +14,14 @@
 * Definition of GlobalTopoDirector.
 */
 
-#include <hssh/global_topological/director.h>
-#include <hssh/global_topological/topo_slam.h>
-#include <hssh/global_topological/commands/serialization.h>
-#include <system/debug_communicator.h>
-#include <system/module_communicator.h>
-#include <utils/auto_mutex.h>
-#include <utils/stub.h>
-#include <utils/timestamp.h>
+#include "hssh/global_topological/director.h"
+#include "hssh/global_topological/topo_slam.h"
+#include "hssh/global_topological/commands/serialization.h"
+#include "system/debug_communicator.h"
+#include "system/module_communicator.h"
+#include "utils/auto_mutex.h"
+#include "utils/stub.h"
+#include "utils/timestamp.h"
 #include <iostream>
 #include <cassert>
 

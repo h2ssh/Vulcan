@@ -14,9 +14,9 @@
 * Definition of VoronoiEdges.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/voronoi_edges.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
+#include "hssh/local_topological/area_detection/voronoi/voronoi_edges.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 
 namespace vulcan
 {

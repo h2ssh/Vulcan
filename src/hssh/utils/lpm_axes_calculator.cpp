@@ -14,8 +14,8 @@
 * Definition of LPMAxesCalculator.
 */
 
-#include <hssh/utils/lpm_axes_calculator.h>
-#include <laser/laser_scan_lines.h>
+#include "hssh/utils/lpm_axes_calculator.h"
+#include "laser/laser_scan_lines.h"
 #include <cmath>
 #include <cassert>
 

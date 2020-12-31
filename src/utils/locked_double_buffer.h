@@ -19,8 +19,8 @@
 #ifndef UTILS_LOCKED_DOUBLE_BUFFER_H
 #define UTILS_LOCKED_DOUBLE_BUFFER_H
 
-#include <utils/mutex.h>
-#include <utils/auto_mutex.h>
+#include "utils/mutex.h"
+#include "utils/auto_mutex.h"
 #include <algorithm>
 #include <atomic>
 

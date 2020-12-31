@@ -19,11 +19,11 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_PATH_SEGMENT_H
 #define HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_PATH_SEGMENT_H
 
-#include <hssh/global_topological/area.h>
-#include <hssh/global_topological/transition.h>
-#include <hssh/global_topological/transition_sequence.h>
-#include <hssh/local_topological/lambda.h>
-#include <hssh/utils/id.h>
+#include "hssh/global_topological/area.h"
+#include "hssh/global_topological/transition.h"
+#include "hssh/global_topological/transition_sequence.h"
+#include "hssh/local_topological/lambda.h"
+#include "hssh/utils/id.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 #include <memory>

@@ -14,9 +14,9 @@
 * Definition of VoronoiIsovistGradients.
 */
 
-#include <hssh/local_topological/area_detection/gateways/isovist_gradients.h>
-#include <hssh/local_topological/area_detection/local_topo_isovist_field.h>
-#include <math/savitzky_golay.h>
+#include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
+#include "hssh/local_topological/area_detection/local_topo_isovist_field.h"
+#include "math/savitzky_golay.h"
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/as_array.hpp>
 #include <numeric>

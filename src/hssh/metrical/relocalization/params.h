@@ -17,7 +17,7 @@
 #ifndef HSSH_UTILS_METRICAL_RELOCALIZATION_PARAMS_H
 #define HSSH_UTILS_METRICAL_RELOCALIZATION_PARAMS_H
 
-#include <hssh/metrical/localization/params.h>
+#include "hssh/metrical/localization/params.h"
 
 namespace vulcan
 {

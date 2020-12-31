@@ -8,8 +8,8 @@
 
 
 #include <cmath>
-#include <core/multivariate_gaussian.h>
-#include <math/mahalanobis.h>
+#include "core/multivariate_gaussian.h"
+#include "math/mahalanobis.h"
 
 namespace vulcan
 {

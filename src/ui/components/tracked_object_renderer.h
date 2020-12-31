@@ -10,7 +10,7 @@
 #ifndef UI_COMPONENTS_TRACKED_OBJECT_RENDERER_H
 #define UI_COMPONENTS_TRACKED_OBJECT_RENDERER_H
 
-#include <ui/common/ui_color.h>
+#include "ui/common/ui_color.h"
 #include <vector>
 
 namespace vulcan

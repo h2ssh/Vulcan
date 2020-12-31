@@ -14,12 +14,12 @@
 * Definition of find_interactions.
 */
 
-#include <mpepc/evaluation/interaction.h>
-#include <mpepc/evaluation/mpepc_log.h>
-#include <mpepc/social/social_norm_utils.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <math/interpolation.h>
+#include "mpepc/evaluation/interaction.h"
+#include "mpepc/evaluation/mpepc_log.h"
+#include "mpepc/social/social_norm_utils.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "math/interpolation.h"
 #include <boost/range/iterator_range.hpp>
 #include <tuple>
 

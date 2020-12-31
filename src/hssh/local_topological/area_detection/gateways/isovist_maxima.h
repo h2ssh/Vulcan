@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_MAXIMA_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISOVIST_MAXIMA_H
 
-#include <hssh/types.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_gradients.h>
+#include "hssh/types.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
 #include <unordered_set>
 
 namespace vulcan

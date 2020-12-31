@@ -17,11 +17,11 @@
 #ifndef ROBOT_DIRECTOR_H
 #define ROBOT_DIRECTOR_H
 
-#include <robot/motion_command_filter.h>
-#include <system/director.h>
-#include <utils/mutex.h>
-#include <utils/thread.h>
-#include <core/laser_scan.h>
+#include "robot/motion_command_filter.h"
+#include "system/director.h"
+#include "utils/mutex.h"
+#include "utils/thread.h"
+#include "core/laser_scan.h"
 #include <deque>
 #include <vector>
 

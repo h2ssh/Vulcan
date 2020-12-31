@@ -14,13 +14,13 @@
 * Definition of ObjectIntentionRenderer.
 */
 
-#include <ui/components/object_intention_renderer.h>
-#include <ui/common/color_generator.h>
-#include <ui/common/gl_shapes.h>
-#include <ui/common/ui_color.h>
-#include <tracker/dynamic_object_visitor.h>
-#include <tracker/evaluation/intention_evaluator.h>
-#include <tracker/objects/rigid.h>
+#include "ui/components/object_intention_renderer.h"
+#include "ui/common/color_generator.h"
+#include "ui/common/gl_shapes.h"
+#include "ui/common/ui_color.h"
+#include "tracker/dynamic_object_visitor.h"
+#include "tracker/evaluation/intention_evaluator.h"
+#include "tracker/objects/rigid.h"
 #include <GL/gl.h>
 
 namespace vulcan

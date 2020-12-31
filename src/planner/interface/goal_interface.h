@@ -17,8 +17,8 @@
 #ifndef PLANNER_INTERFACE_GOAL_INTERFACE_H
 #define PLANNER_INTERFACE_GOAL_INTERFACE_H
 
-#include <planner/interface/goal.h>
-#include <core/pose.h>
+#include "planner/interface/goal.h"
+#include "core/pose.h"
 #include <iosfwd>
 #include <map>
 

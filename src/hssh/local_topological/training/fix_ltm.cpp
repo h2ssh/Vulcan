@@ -7,10 +7,10 @@
 */
 
 
-#include <hssh/local_topological/training/area_labels.h>
-#include <hssh/local_topological/params.h>
-#include <utils/command_line.h>
-#include <utils/config_file.h>
+#include "hssh/local_topological/training/area_labels.h"
+#include "hssh/local_topological/params.h"
+#include "utils/command_line.h"
+#include "utils/config_file.h"
 #include <iostream>
 
 

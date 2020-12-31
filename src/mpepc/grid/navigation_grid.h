@@ -17,10 +17,10 @@
 #ifndef MPEPC_GRIDS_NAVIGATION_GRID_H
 #define MPEPC_GRIDS_NAVIGATION_GRID_H
 
-#include <mpepc/types.h>
-#include <core/pose.h>
-#include <utils/cell_grid.h>
-#include <system/message_traits.h>
+#include "mpepc/types.h"
+#include "core/pose.h"
+#include "utils/cell_grid.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 

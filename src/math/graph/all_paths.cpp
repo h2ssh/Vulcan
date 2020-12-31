@@ -14,7 +14,7 @@
 * Definition of AllPaths graph reducer.
 */
 
-#include <math/graph/all_paths.h>
+#include "math/graph/all_paths.h"
 
 namespace vulcan
 {

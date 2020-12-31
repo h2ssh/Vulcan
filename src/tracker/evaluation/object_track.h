@@ -17,8 +17,8 @@
 #ifndef TRACKER_EVALUATION_OBJECT_TRACK_H
 #define TRACKER_EVALUATION_OBJECT_TRACK_H
 
-#include <tracker/dynamic_object.h>
-#include <core/multivariate_gaussian.h>
+#include "tracker/dynamic_object.h"
+#include "core/multivariate_gaussian.h"
 
 namespace vulcan
 {

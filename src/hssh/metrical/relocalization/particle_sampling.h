@@ -20,7 +20,7 @@
 #ifndef HSSH_UTILS_METRICAL_RELOCALIZATION_PARTICLE_SAMPLING_H
 #define HSSH_UTILS_METRICAL_RELOCALIZATION_PARTICLE_SAMPLING_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <vector>
 
 namespace vulcan

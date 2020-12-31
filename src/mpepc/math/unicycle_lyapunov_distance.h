@@ -18,8 +18,8 @@
 #ifndef UNICYCLE_LYAPUNOV_DISTANCE_H
 #define UNICYCLE_LYAPUNOV_DISTANCE_H
 
-#include <mpepc/math/unicycle_nonholonomic_distance.h>
-#include <mpepc/math/unicycle_chart.h>
+#include "mpepc/math/unicycle_nonholonomic_distance.h"
+#include "mpepc/math/unicycle_chart.h"
 
 namespace vulcan
 {

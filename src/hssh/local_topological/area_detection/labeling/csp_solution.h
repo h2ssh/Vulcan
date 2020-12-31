@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_SOLUTION_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_LABELING_CSP_SOLUTION_H
 
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
-#include <hssh/local_topological/area_detection/labeling/type_distribution.h>
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
+#include "hssh/local_topological/area_detection/labeling/type_distribution.h"
 #include <vector>
 
 namespace vulcan

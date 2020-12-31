@@ -17,9 +17,9 @@
 #ifndef UI_DEBUG_SCRIPTING_PANEL_H
 #define UI_DEBUG_SCRIPTING_PANEL_H
 
-#include <ui/common/ui_panel.h>
-#include <core/pose.h>
-#include <utils/mutex.h>
+#include "ui/common/ui_panel.h"
+#include "core/pose.h"
+#include "utils/mutex.h"
 #include <wx/wx.h>
 #include <wx/listctrl.h>
 #include <atomic>

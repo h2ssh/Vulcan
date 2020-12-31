@@ -20,9 +20,9 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_GRAPH_H
 #define HSSH_GLOBAL_TOPOLOGICAL_GRAPH_H
 
-#include <graph/edge.h>
-#include <graph/vertex.h>
-#include <graph/edge_ordered_graph.h>
+#include "graph/edge.h"
+#include "graph/vertex.h"
+#include "graph/edge_ordered_graph.h"
 
 namespace vulcan
 {

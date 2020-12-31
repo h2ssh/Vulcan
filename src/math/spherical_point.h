@@ -18,7 +18,7 @@
 #define MATH_SPHERICAL_POINT_H
 
 #include <cmath>
-#include <math/point3d.h>
+#include "math/point3d.h"
 
 namespace vulcan
 {

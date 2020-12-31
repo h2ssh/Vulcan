@@ -17,7 +17,7 @@
 #ifndef GRAPH_VIEW_TOPOLOGICAL_MAP_RENDERER_H
 #define GRAPH_VIEW_TOPOLOGICAL_MAP_RENDERER_H
 
-#include <ui/components/topological_map_renderer.h>
+#include "ui/components/topological_map_renderer.h"
 #include <memory>
 
 namespace vulcan

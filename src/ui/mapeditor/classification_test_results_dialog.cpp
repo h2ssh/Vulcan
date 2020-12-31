@@ -14,8 +14,8 @@
 * Definition of ClassificationTestResultsDialog.
 */
 
-#include <ui/mapeditor/classification_test_results_dialog.h>
-#include <ui/common/file_dialog_settings.h>
+#include "ui/mapeditor/classification_test_results_dialog.h"
+#include "ui/common/file_dialog_settings.h"
 #include <wx/variant.h>
 #include <boost/range/iterator_range.hpp>
 

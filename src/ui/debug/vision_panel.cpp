@@ -14,13 +14,13 @@
 * Definition of VisionPanel.
 */
 
-#include <ui/debug/vision_panel.h>
-#include <ui/debug/vision_display_widget.h>
-#include <ui/debug/debug_ui.h>
-#include <vision/felzenszwalb_segmenter.h>
-#include <vision/wassenberg_segmenter.h>
-#include <utils/auto_mutex.h>
-#include <system/module_communicator.h>
+#include "ui/debug/vision_panel.h"
+#include "ui/debug/vision_display_widget.h"
+#include "ui/debug/debug_ui.h"
+#include "vision/felzenszwalb_segmenter.h"
+#include "vision/wassenberg_segmenter.h"
+#include "utils/auto_mutex.h"
+#include "system/module_communicator.h"
 
 namespace vulcan
 {

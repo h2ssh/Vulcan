@@ -14,15 +14,15 @@
 * Definition of AreaStabilityAnalyzer.
 */
 
-#include <hssh/local_topological/evaluation/stability_analyzer.h>
-#include <hssh/local_topological/areas/decision_point.h>
-#include <hssh/local_topological/areas/destination.h>
-#include <hssh/local_topological/areas/path_segment.h>
-#include <hssh/local_topological/events/area_transition.h>
-#include <hssh/local_topological/events/turn_around.h>
-#include <hssh/local_topological/area_visitor.h>
-#include <math/geometry/shape_fitting.h>
-#include <utils/stub.h>
+#include "hssh/local_topological/evaluation/stability_analyzer.h"
+#include "hssh/local_topological/areas/decision_point.h"
+#include "hssh/local_topological/areas/destination.h"
+#include "hssh/local_topological/areas/path_segment.h"
+#include "hssh/local_topological/events/area_transition.h"
+#include "hssh/local_topological/events/turn_around.h"
+#include "hssh/local_topological/area_visitor.h"
+#include "math/geometry/shape_fitting.h"
+#include "utils/stub.h"
 #include <boost/range/iterator_range.hpp>
 
 namespace vulcan

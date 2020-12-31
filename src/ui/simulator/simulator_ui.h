@@ -1,25 +1,14 @@
-/* Copyright (C) 2010-2019, The Regents of The University of Michigan.
- All rights reserved.
-
- This software was developed as part of the The Vulcan project in the Intelligent Robotics Lab
- under the direction of Benjamin Kuipers, kuipers@umich.edu. Use of this code is governed by an
- MIT-style License that can be found at "https://github.com/h2ssh/Vulcan".
-*/
-
-
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 16 2016)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 31 2020)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __SIMULATOR_UI_H__
-#define __SIMULATOR_UI_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-class UIMainFrame;
 namespace vulcan{ namespace ui{ class SimulatorDisplay; } }
 namespace vulcan{ namespace ui{ class SimulatorRobotDisplay; } }
 
@@ -30,6 +19,9 @@ namespace vulcan{ namespace ui{ class SimulatorRobotDisplay; } }
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
@@ -69,14 +61,14 @@ namespace vulcan
 		#define ID_SIMULATOR_CASE_THREE_START_BUTTON 1023
 		#define ID_SIMULATOR_START_SIMULATOR_BUTTON 1024
 		#define ID_GRID_CELL_STATUS_BAR 1025
-		
+
 		///////////////////////////////////////////////////////////////////////////////
 		/// Class SimulatorUI
 		///////////////////////////////////////////////////////////////////////////////
 		class SimulatorUI : public UIMainFrame
 		{
 			private:
-			
+
 			protected:
 				SimulatorDisplay* display;
 				SimulatorRobotDisplay* robot_display;
@@ -103,16 +95,15 @@ namespace vulcan
 				wxButton* StartSimulatorCaseThreeButton;
 				wxButton* StartSimulatorButton;
 				wxStatusBar* gridCellStatusBar;
-			
+
 			public:
-				
+
 				SimulatorUI( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Simulator UI"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1020,800 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-				
+
 				~SimulatorUI();
-			
+
 		};
-		
+
 	} // namespace ui
 } // namespace vulcan
 
-#endif //__SIMULATOR_UI_H__

@@ -14,8 +14,8 @@
 * Definition of create_skeleton_graph_reducer factory.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h>
-#include <hssh/local_topological/area_detection/voronoi/all_paths_graph_reducer.h>
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h"
+#include "hssh/local_topological/area_detection/voronoi/all_paths_graph_reducer.h"
 #include <iostream>
 #include <cassert>
 

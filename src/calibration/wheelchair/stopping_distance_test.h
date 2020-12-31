@@ -17,7 +17,7 @@
 #ifndef CALIBRATION_WHEELCHAIR_STOPPING_DISTANCE_TEST_H
 #define CALIBRATION_WHEELCHAIR_STOPPING_DISTANCE_TEST_H
 
-#include <calibration/wheelchair/wheelchair_test.h>
+#include "calibration/wheelchair/wheelchair_test.h"
 
 namespace vulcan
 {

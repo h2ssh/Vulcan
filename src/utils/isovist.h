@@ -20,10 +20,10 @@
 #ifndef UTILS_ISOVIST_H
 #define UTILS_ISOVIST_H
 
-#include <core/point.h>
-#include <utils/algorithm_ext.h>
-#include <utils/cell_grid.h>
-#include <utils/ray_tracing.h>
+#include "core/point.h"
+#include "utils/algorithm_ext.h"
+#include "utils/cell_grid.h"
+#include "utils/ray_tracing.h"
 #include <array>
 #include <functional>
 #include <future>

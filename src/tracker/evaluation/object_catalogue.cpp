@@ -14,9 +14,9 @@
 * Definition of ObjectCatalogue.
 */
 
-#include <tracker/evaluation/object_catalogue.h>
-#include <tracker/dynamic_object_collection.h>
-#include <utils/algorithm_ext.h>
+#include "tracker/evaluation/object_catalogue.h"
+#include "tracker/dynamic_object_collection.h"
+#include "utils/algorithm_ext.h"
 
 #define DEBUG_RESET
 

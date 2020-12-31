@@ -17,9 +17,9 @@
 #ifndef HSSH_LOCAL_METRIC_LPM_H
 #define HSSH_LOCAL_METRIC_LPM_H
 
-#include <hssh/metrical/occupancy_grid.h>
-#include <core/pose.h>
-#include <system/message_traits.h>
+#include "hssh/metrical/occupancy_grid.h"
+#include "core/pose.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/base_class.hpp>
 

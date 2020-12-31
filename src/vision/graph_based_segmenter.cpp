@@ -12,14 +12,14 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
-#include <core/point.h>
-#include <utils/timestamp.h>
-#include <utils/counting_sort.h>
-#include <vision/image_segment.h>
-#include <core/image.h>
-#include <vision/felzenszwalb_segmenter.h>
-#include <vision/wassenberg_segmenter.h>
-#include <vision/graph_based_segmenter.h>
+#include "core/point.h"
+#include "utils/timestamp.h"
+#include "utils/counting_sort.h"
+#include "vision/image_segment.h"
+#include "core/image.h"
+#include "vision/felzenszwalb_segmenter.h"
+#include "vision/wassenberg_segmenter.h"
+#include "vision/graph_based_segmenter.h"
 
 #define DEBUG_TIME
 

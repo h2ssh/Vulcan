@@ -17,8 +17,8 @@
 #ifndef UI_MAPEDITOR_GATEWAY_CLASSIFIER_TEST_DIALOG_H
 #define UI_MAPEDITOR_GATEWAY_CLASSIFIER_TEST_DIALOG_H
 
-#include <ui/mapeditor/map_editor.h>
-#include <hssh/local_topological/training/gateway_classifier_test.h>
+#include "ui/mapeditor/map_editor.h"
+#include "hssh/local_topological/training/gateway_classifier_test.h"
 
 namespace vulcan
 {

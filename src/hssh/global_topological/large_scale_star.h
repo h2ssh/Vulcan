@@ -19,7 +19,7 @@
 
 #include <iosfwd>
 #include <vector>
-#include <hssh/global_topological/global_path.h>
+#include "hssh/global_topological/global_path.h"
 
 namespace vulcan
 {

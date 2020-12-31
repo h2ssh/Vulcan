@@ -14,9 +14,9 @@
 * Definition of the DynamicObjectSimulator parameters.
 */
 
-#include <mpepc/simulator/params.h>
-#include <utils/config_file.h>
-#include <utils/config_file_utils.h>
+#include "mpepc/simulator/params.h"
+#include "utils/config_file.h"
+#include "utils/config_file_utils.h"
 #include <cassert>
 
 namespace vulcan

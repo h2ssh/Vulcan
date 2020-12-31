@@ -14,8 +14,8 @@
 #ifndef ENVIRONMENT_SIMULATOR_ROBOT_GROUP_H
 #define ENVIRONMENT_SIMULATOR_ROBOT_GROUP_H
 
-#include <simulator/simulator_params.h>
-#include <simulator/robot_object.h>
+#include "simulator/simulator_params.h"
+#include "simulator/robot_object.h"
 
 namespace vulcan{
 namespace sim{

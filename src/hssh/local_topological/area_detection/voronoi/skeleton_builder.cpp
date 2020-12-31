@@ -14,12 +14,12 @@
 * Definition of SkeletonBuilder and create_skeleton_builder factory.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/skeleton_builder.h>
-#include <hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_metric/lpm.h>
-#include <math/angle_range.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/area_detection/voronoi/skeleton_builder.h"
+#include "hssh/local_topological/area_detection/voronoi/brushfire_skeleton_builder.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_metric/lpm.h"
+#include "math/angle_range.h"
+#include "utils/algorithm_ext.h"
 #include <cassert>
 #include <iostream>
 

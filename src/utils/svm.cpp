@@ -14,9 +14,9 @@
 * Definition of learn_svm_classifier.
 */
 
-#include <utils/svm.h>
-#include <core/float_comparison.h>
-#include <core/vector.h>
+#include "utils/svm.h"
+#include "core/float_comparison.h"
+#include "core/vector.h"
 #include <boost/range/iterator_range.hpp>
 #include <future>
 #include <map>

@@ -14,8 +14,8 @@
 #ifndef UI_COMMON_GL_UTILITIES_H
 #define UI_COMMON_GL_UTILITIES_H
 
-#include <core/point.h>
-#include <math/point3d.h>
+#include "core/point.h"
+#include "math/point3d.h"
 
 namespace vulcan
 {

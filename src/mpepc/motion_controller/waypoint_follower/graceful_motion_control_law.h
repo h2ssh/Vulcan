@@ -18,8 +18,8 @@
 #ifndef MPEPC_GRACEFUL_MOTION_CONTROL_LAW_H
 #define MPEPC_GRACEFUL_MOTION_CONTROL_LAW_H
 
-#include <core/angle_functions.h>
-#include <core/pose.h>
+#include "core/angle_functions.h"
+#include "core/pose.h"
 #include <string>
 
 namespace vulcan

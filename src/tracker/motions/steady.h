@@ -17,9 +17,9 @@
 #ifndef TRACKER_MOTIONS_STEADY_H
 #define TRACKER_MOTIONS_STEADY_H
 
-#include <tracker/object_motion.h>
-#include <tracker/motions/motion_tracker.h>
-#include <core/multivariate_gaussian.h>
+#include "tracker/object_motion.h"
+#include "tracker/motions/motion_tracker.h"
+#include "core/multivariate_gaussian.h"
 
 namespace vulcan
 {

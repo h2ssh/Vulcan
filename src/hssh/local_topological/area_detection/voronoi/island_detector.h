@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISLAND_DETECTOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_GATEWAYS_ISLAND_DETECTOR_H
 
-#include <hssh/types.h>
+#include "hssh/types.h"
 #include <cstdint>
 #include <deque>
 #include <memory>

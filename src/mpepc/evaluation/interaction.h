@@ -19,10 +19,10 @@
 #ifndef MPEPC_EVALUATION_INTERACTION_H
 #define MPEPC_EVALUATION_INTERACTION_H
 
-#include <mpepc/social/topo_agent.h>
-#include <mpepc/social/topo_situation.h>
-#include <core/motion_state.h>
-#include <tracker/object_state.h>
+#include "mpepc/social/topo_agent.h"
+#include "mpepc/social/topo_situation.h"
+#include "core/motion_state.h"
+#include "tracker/object_state.h"
 #include <boost/optional.hpp>
 #include <vector>
 

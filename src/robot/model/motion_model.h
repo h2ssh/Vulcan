@@ -17,7 +17,7 @@
 #ifndef ROBOT_MODEL_MOTION_MODEL_H
 #define ROBOT_MODEL_MOTION_MODEL_H
 
-#include <core/pose_distribution.h>
+#include "core/pose_distribution.h"
 #include <vector>
 
 namespace vulcan

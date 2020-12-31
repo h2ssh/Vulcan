@@ -17,8 +17,8 @@
 #ifndef TRACKER_EVALUATION_OBJECT_CATALOGUE_H
 #define TRACKER_EVALUATION_OBJECT_CATALOGUE_H
 
-#include <tracker/evaluation/object_track.h>
-#include <tracker/types.h>
+#include "tracker/evaluation/object_track.h"
+#include "tracker/types.h"
 #include <boost/optional.hpp>
 #include <vector>
 #include <cstdint>

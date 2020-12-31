@@ -14,13 +14,13 @@
 * Definition of voronoi_direction() and best_anchor_boundary().
 */
 
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <core/point.h>
-#include <core/line.h>
-#include <core/angle_functions.h>
-#include <math/regression.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <utils/ray_tracing.h>
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "core/point.h"
+#include "core/line.h"
+#include "core/angle_functions.h"
+#include "math/regression.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "utils/ray_tracing.h"
 #include <iostream>
 #include <set>
 #include <queue>

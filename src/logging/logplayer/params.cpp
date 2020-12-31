@@ -14,8 +14,8 @@
 * Definition of the various config->params conversion functions.
 */
 
-#include <logging/logplayer/params.h>
-#include <utils/config_file.h>
+#include "logging/logplayer/params.h"
+#include "utils/config_file.h"
 
 namespace vulcan
 {

@@ -17,13 +17,13 @@
 #ifndef UI_DEBUG_TRACKER_DISPLAY_WIDGET_H
 #define UI_DEBUG_TRACKER_DISPLAY_WIDGET_H
 
-#include <ui/components/grid_based_display_widget.h>
-#include <tracker/dynamic_object_collection.h>
-#include <tracker/laser_object_collection.h>
-#include <tracker/evaluation/intention_evaluator.h>
-#include <utils/mutex.h>
-#include <hssh/local_metric/lpm.h>
-#include <core/motion_state.h>
+#include "ui/components/grid_based_display_widget.h"
+#include "tracker/dynamic_object_collection.h"
+#include "tracker/laser_object_collection.h"
+#include "tracker/evaluation/intention_evaluator.h"
+#include "utils/mutex.h"
+#include "hssh/local_metric/lpm.h"
+#include "core/motion_state.h"
 
 namespace vulcan
 {

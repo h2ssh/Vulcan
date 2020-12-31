@@ -20,7 +20,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_FACTORY_IMPL_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_FACTORY_IMPL_H
 
-#include <hssh/global_topological/mapping/hypothesis_generator_factory.h>
+#include "hssh/global_topological/mapping/hypothesis_generator_factory.h"
 #include <string>
 
 namespace vulcan

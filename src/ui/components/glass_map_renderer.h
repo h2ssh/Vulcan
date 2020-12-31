@@ -17,8 +17,8 @@
 #ifndef UI_COMPONENTS_GLASS_MAP_RENDERER_H
 #define UI_COMPONENTS_GLASS_MAP_RENDERER_H
 
-#include <ui/common/ui_color.h>
-#include <math/geometry/rectangle.h>
+#include "ui/common/ui_color.h"
+#include "math/geometry/rectangle.h"
 #include <memory>
 #include <vector>
 

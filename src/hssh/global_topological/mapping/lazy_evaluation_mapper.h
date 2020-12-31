@@ -20,11 +20,11 @@
 #include <deque>
 #include <queue>
 #include <fstream>
-#include <hssh/global_topological/mapping/topological_mapper.h>
-#include <hssh/global_topological/mapping/probability_evaluator.h>
-#include <hssh/global_topological/actions.h>
-#include <hssh/global_topological/measurements.h>
-#include <hssh/global_topological/params.h>
+#include "hssh/global_topological/mapping/topological_mapper.h"
+#include "hssh/global_topological/mapping/probability_evaluator.h"
+#include "hssh/global_topological/actions.h"
+#include "hssh/global_topological/measurements.h"
+#include "hssh/global_topological/params.h"
 
 namespace vulcan
 {

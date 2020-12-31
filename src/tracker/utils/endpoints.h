@@ -21,7 +21,7 @@
 #ifndef TRACKER_UTILS_ENDPOINTS_H
 #define TRACKER_UTILS_ENDPOINTS_H
 
-#include <tracker/boundaries/shapes.h>
+#include "tracker/boundaries/shapes.h"
 
 namespace vulcan
 {

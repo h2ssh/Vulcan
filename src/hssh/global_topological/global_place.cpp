@@ -14,7 +14,7 @@
 * Definition of GlobalPlace.
 */
 
-#include <hssh/global_topological/global_place.h>
+#include "hssh/global_topological/global_place.h"
 #include <algorithm>
 
 namespace vulcan

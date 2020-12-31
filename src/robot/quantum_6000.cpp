@@ -14,9 +14,9 @@
 * Definition of Quantum6000.
 */
 
-#include <robot/quantum_6000.h>
-#include <utils/auto_mutex.h>
-#include <utils/timestamp.h>
+#include "robot/quantum_6000.h"
+#include "utils/auto_mutex.h"
+#include "utils/timestamp.h"
 #include <sys/select.h>
 #include <libpcan.h>
 #include <iostream>

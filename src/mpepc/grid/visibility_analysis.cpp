@@ -14,10 +14,10 @@
 * Definition of VisibilityAnalysis.
 */
 
-#include <mpepc/grid/visibility_analysis.h>
-#include <math/geometry/shape_fitting.h>
-#include <hssh/local_metric/lpm.h>
-#include <tracker/dynamic_object_collection.h>
+#include "mpepc/grid/visibility_analysis.h"
+#include "math/geometry/shape_fitting.h"
+#include "hssh/local_metric/lpm.h"
+#include "tracker/dynamic_object_collection.h"
 
 namespace vulcan
 {

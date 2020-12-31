@@ -14,20 +14,20 @@
 * Definition of TrackerDisplayWidget.
 */
 
-#include <ui/debug/tracker_display_widget.h>
-#include <ui/components/laser_object_renderer.h>
-#include <ui/components/robot_renderer.h>
-#include <ui/components/occupancy_grid_renderer.h>
-#include <ui/components/dynamic_object_renderer.h>
-#include <ui/components/object_intention_renderer.h>
-#include <ui/common/default_colors.h>
-#include <ui/common/ui_params.h>
-#include <tracker/objects/unclassified.h>
-#include <tracker/objects/person.h>
-#include <tracker/objects/rigid.h>
-#include <tracker/objects/sliding_object.h>
-#include <tracker/objects/pivoting_object.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/tracker_display_widget.h"
+#include "ui/components/laser_object_renderer.h"
+#include "ui/components/robot_renderer.h"
+#include "ui/components/occupancy_grid_renderer.h"
+#include "ui/components/dynamic_object_renderer.h"
+#include "ui/components/object_intention_renderer.h"
+#include "ui/common/default_colors.h"
+#include "ui/common/ui_params.h"
+#include "tracker/objects/unclassified.h"
+#include "tracker/objects/person.h"
+#include "tracker/objects/rigid.h"
+#include "tracker/objects/sliding_object.h"
+#include "tracker/objects/pivoting_object.h"
+#include "utils/auto_mutex.h"
 
 namespace vulcan
 {

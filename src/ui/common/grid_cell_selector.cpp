@@ -14,8 +14,8 @@
 * Definition of GridCellSelector.
 */
 
-#include <ui/common/grid_cell_selector.h>
-#include <ui/components/grid_based_display_widget.h>
+#include "ui/common/grid_cell_selector.h"
+#include "ui/components/grid_based_display_widget.h"
 #include <algorithm>
 #include <cassert>
 

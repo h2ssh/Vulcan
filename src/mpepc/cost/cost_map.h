@@ -17,8 +17,8 @@
 #ifndef MPEPC_COSTS_COST_MAP_H
 #define MPEPC_COSTS_COST_MAP_H
 
-#include <utils/cell_grid.h>
-#include <system/message_traits.h>
+#include "utils/cell_grid.h"
+#include "system/message_traits.h"
 #include <cereal/types/base_class.hpp>
 
 namespace vulcan

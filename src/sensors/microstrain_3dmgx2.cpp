@@ -7,9 +7,9 @@
 */
 
 
-#include <sensors/microstrain_3dmgx2.h>
-#include <utils/byte_conversion.h>
-#include <utils/timestamp.h>
+#include "sensors/microstrain_3dmgx2.h"
+#include "utils/byte_conversion.h"
+#include "utils/timestamp.h"
 #include <limits>
 #include <cassert>
 #include <cstring>  // for memcpy

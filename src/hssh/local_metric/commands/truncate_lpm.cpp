@@ -14,8 +14,8 @@
 * Declaration of TruncateLpmCommand.
 */
 
-#include <hssh/local_metric/commands/truncate_lpm.h>
-#include <hssh/metrical/mapping/mapper.h>
+#include "hssh/local_metric/commands/truncate_lpm.h"
+#include "hssh/metrical/mapping/mapper.h"
 
 namespace vulcan
 {

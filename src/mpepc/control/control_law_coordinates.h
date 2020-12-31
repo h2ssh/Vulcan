@@ -17,8 +17,8 @@
 #ifndef MPEPC_KINEMATIC_CONTROL_LAW_COORDINATES_H
 #define MPEPC_KINEMATIC_CONTROL_LAW_COORDINATES_H
 
-#include <core/pose.h>
-#include <core/angle_functions.h>
+#include "core/pose.h"
+#include "core/angle_functions.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

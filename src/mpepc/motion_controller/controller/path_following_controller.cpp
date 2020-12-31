@@ -14,9 +14,9 @@
 * Definition of PathFollowingController.
 */
 
-#include <mpepc/motion_controller/controller/path_following_controller.h>
-#include <mpepc/motion_controller/data.h>
-#include <robot/commands.h>
+#include "mpepc/motion_controller/controller/path_following_controller.h"
+#include "mpepc/motion_controller/data.h"
+#include "robot/commands.h"
 #include <iostream>
 #include <cassert>
 

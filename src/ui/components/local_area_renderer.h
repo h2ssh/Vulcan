@@ -17,10 +17,10 @@
 #ifndef UI_COMPONENTS_LOCAL_AREA_RENDERER_H
 #define UI_COMPONENTS_LOCAL_AREA_RENDERER_H
 
-#include <ui/common/color_interpolator.h>
-#include <ui/common/ui_color.h>
-#include <hssh/local_topological/area_visitor.h>
-#include <core/point.h>
+#include "ui/common/color_interpolator.h"
+#include "ui/common/ui_color.h"
+#include "hssh/local_topological/area_visitor.h"
+#include "core/point.h"
 #include <memory>
 
 namespace vulcan

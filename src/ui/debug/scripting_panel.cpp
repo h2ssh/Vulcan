@@ -14,17 +14,17 @@
 * Implementation of ScriptingPanel.
 */
 
-#include <ui/debug/scripting_panel.h>
-#include <ui/debug/planner_scripting_widget.h>
-#include <ui/debug/debug_ui.h>
-#include <ui/common/metric_path_creator.h>
-#include <ui/common/ui_params.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/lpm_io.h>
-#include <hssh/local_metric/pose.h>
-#include <mpepc/metric_planner/script/script.h>
-#include <mpepc/metric_planner/script/target_set.h>
-#include <utils/auto_mutex.h>
+#include "ui/debug/scripting_panel.h"
+#include "ui/debug/planner_scripting_widget.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/common/metric_path_creator.h"
+#include "ui/common/ui_params.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/lpm_io.h"
+#include "hssh/local_metric/pose.h"
+#include "mpepc/metric_planner/script/script.h"
+#include "mpepc/metric_planner/script/target_set.h"
+#include "utils/auto_mutex.h"
 #include <cassert>
 #include <fstream>
 #include <sstream>

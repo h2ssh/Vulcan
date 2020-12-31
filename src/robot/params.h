@@ -18,8 +18,8 @@
 #define ROBOT_PARAMS_H
 
 #include <string>
-#include <math/geometry/rectangle.h>
-#include <robot/wheelchair.h>
+#include "math/geometry/rectangle.h"
+#include "robot/wheelchair.h"
 
 namespace vulcan
 {

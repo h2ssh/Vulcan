@@ -14,9 +14,9 @@
 * Definition of HypothesisClassifierTest.
 */
 
-#include <hssh/local_topological/training/hypothesis_classifier_test.h>
-#include <hssh/local_topological/training/labeled_area_data.h>
-#include <utils/stub.h>
+#include "hssh/local_topological/training/hypothesis_classifier_test.h"
+#include "hssh/local_topological/training/labeled_area_data.h"
+#include "utils/stub.h"
 #include <boost/range/iterator_range.hpp>
 
 namespace vulcan

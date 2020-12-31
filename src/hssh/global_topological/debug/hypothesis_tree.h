@@ -17,9 +17,9 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_DEBUG_HYPOTHESIS_TREE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_DEBUG_HYPOTHESIS_TREE_H
 
-#include <hssh/global_topological/map_probability.h>
-#include <hssh/utils/id.h>
-#include <system/message_traits.h>
+#include "hssh/global_topological/map_probability.h"
+#include "hssh/utils/id.h"
+#include "system/message_traits.h"
 #include <cereal/types/string.hpp>
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/vector.hpp>

@@ -19,9 +19,9 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_LOCATION_H
 #define HSSH_GLOBAL_TOPOLOGICAL_GLOBAL_LOCATION_H
 
-#include <hssh/global_topological/transition.h>
-#include <hssh/types.h>
-#include <core/pose.h>
+#include "hssh/global_topological/transition.h"
+#include "hssh/types.h"
+#include "core/pose.h"
 #include <iosfwd>
 
 namespace vulcan

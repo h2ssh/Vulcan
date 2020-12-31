@@ -14,14 +14,14 @@
 * Definition of EvaluationPanel.
 */
 
-#include <ui/debug/evaluation_panel.h>
-#include <ui/debug/evaluation_display_widget.h>
-#include <ui/debug/debug_ui.h>
-#include <ui/common/file_dialog_settings.h>
-#include <hssh/local_topological/evaluation/stability_analyzer.h>
-#include <hssh/local_topological/evaluation/stability_log.h>
-#include <mpepc/evaluation/path_summary.h>
-#include <utils/serialized_file_io.h>
+#include "ui/debug/evaluation_panel.h"
+#include "ui/debug/evaluation_display_widget.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/common/file_dialog_settings.h"
+#include "hssh/local_topological/evaluation/stability_analyzer.h"
+#include "hssh/local_topological/evaluation/stability_log.h"
+#include "mpepc/evaluation/path_summary.h"
+#include "utils/serialized_file_io.h"
 
 namespace vulcan
 {

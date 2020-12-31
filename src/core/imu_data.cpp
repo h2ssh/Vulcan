@@ -16,9 +16,9 @@
 *   - interpolate_imu
 */
 
-#include <core/imu_data.h>
-#include <core/angle_functions.h>
-#include <math/interpolation.h>
+#include "core/imu_data.h"
+#include "core/angle_functions.h"
+#include "math/interpolation.h"
 #include <cassert>
 
 namespace vulcan

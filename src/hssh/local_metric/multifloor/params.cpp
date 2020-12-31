@@ -14,7 +14,7 @@
 * Definition of load_multi_floor_mapper_params().
 */
 
-#include <hssh/local_metric/multifloor/params.h>
+#include "hssh/local_metric/multifloor/params.h"
 
 namespace vulcan
 {

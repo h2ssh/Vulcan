@@ -14,13 +14,13 @@
 * Definition of SkeletonPruner.
 */
 
-#include <hssh/local_topological/area_detection/voronoi/skeleton_pruner.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/area_detection/voronoi/search.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h>
-#include <hssh/local_topological/area_detection/voronoi/skeleton_graph_rasterization.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/area_detection/voronoi/skeleton_pruner.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/area_detection/voronoi/search.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_reducer.h"
+#include "hssh/local_topological/area_detection/voronoi/skeleton_graph_rasterization.h"
+#include "utils/algorithm_ext.h"
 #include <iostream>
 #include <iterator>
 #include <set>

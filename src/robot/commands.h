@@ -26,7 +26,7 @@
 #define CONTROL_COMMANDS_H
 
 #include <cstdint>
-#include <system/message_traits.h>
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 
 namespace vulcan

@@ -13,14 +13,14 @@
 #include <fstream>
 #include <iomanip>
 #include <boost/shared_ptr.hpp>
-#include <system/module_communicator.h>
-#include <sensors/camera.h>
-#include <core/image.h>
-#include <vision/image_utils.h>
-#include <sensors/avt_camera.h>
-#include <utils/command_line.h>
-#include <utils/config_file.h>
-#include <utils/timestamp.h>
+#include "system/module_communicator.h"
+#include "sensors/camera.h"
+#include "core/image.h"
+#include "vision/image_utils.h"
+#include "sensors/avt_camera.h"
+#include "utils/command_line.h"
+#include "utils/config_file.h"
+#include "utils/timestamp.h"
 
 
 using namespace vulcan;

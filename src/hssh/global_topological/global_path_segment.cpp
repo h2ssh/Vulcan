@@ -14,9 +14,9 @@
 * Definition of GlobalPathSegment.
 */
 
-#include <hssh/global_topological/global_path_segment.h>
-#include <hssh/global_topological/global_location.h>
-#include <hssh/global_topological/global_path.h>
+#include "hssh/global_topological/global_path_segment.h"
+#include "hssh/global_topological/global_location.h"
+#include "hssh/global_topological/global_path.h"
 
 namespace vulcan
 {

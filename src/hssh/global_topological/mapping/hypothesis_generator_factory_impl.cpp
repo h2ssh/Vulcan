@@ -14,9 +14,9 @@
 * Definition of ExhaustiveGeneratorFactory and LazyGeneratorFactory.
 */
 
-#include <hssh/global_topological/mapping/hypothesis_generator_factory_impl.h>
-#include <hssh/global_topological/mapping/hypothesis_generator.h>
-#include <hssh/global_topological/mapping/lazy_generator.h>
+#include "hssh/global_topological/mapping/hypothesis_generator_factory_impl.h"
+#include "hssh/global_topological/mapping/hypothesis_generator.h"
+#include "hssh/global_topological/mapping/lazy_generator.h"
 
 namespace vulcan
 {

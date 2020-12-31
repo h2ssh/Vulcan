@@ -14,8 +14,8 @@
 * Definition of FixedObjectModel.
 */
 
-#include <tracker/objects/fixed_object_model.h>
-#include <tracker/utils/endpoints.h>
+#include "tracker/objects/fixed_object_model.h"
+#include "tracker/utils/endpoints.h"
 #include <iostream>
 
 namespace vulcan

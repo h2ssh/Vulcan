@@ -14,8 +14,8 @@
 * Definition of load_ functions for the mapping system params structs.
 */
 
-#include <utils/config_file.h>
-#include <hssh/metrical/mapping/mapping_params.h>
+#include "utils/config_file.h"
+#include "hssh/metrical/mapping/mapping_params.h"
 
 namespace vulcan
 {

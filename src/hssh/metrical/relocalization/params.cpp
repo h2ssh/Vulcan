@@ -14,8 +14,8 @@
 * Definition of load_metric_relocalizer_params.
 */
 
-#include <hssh/metrical/relocalization/params.h>
-#include <utils/config_file.h>
+#include "hssh/metrical/relocalization/params.h"
+#include "utils/config_file.h"
 #include <cassert>
 
 namespace vulcan

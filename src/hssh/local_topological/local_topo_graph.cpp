@@ -14,10 +14,10 @@
 * Definition of LocalTopoGraph.
 */
 
-#include <hssh/local_topological/local_topo_graph.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/area_detection/voronoi/search.h>
+#include "hssh/local_topological/local_topo_graph.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/area_detection/voronoi/search.h"
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 
 // #define DEBUG_PATH

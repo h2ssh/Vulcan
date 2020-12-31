@@ -17,8 +17,8 @@
 #ifndef PLANNER_EXPLORATION_DIRECTOR_H
 #define PLANNER_EXPLORATION_DIRECTOR_H
 
-#include <system/director.h>
-#include <utils/condition_variable.h>
+#include "system/director.h"
+#include "utils/condition_variable.h"
 #include <memory>
 
 namespace vulcan

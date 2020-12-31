@@ -14,16 +14,16 @@
 * Definition of GlobalMetricPanel.
 */
 
-#include <ui/debug/global_metric_panel.h>
-#include <ui/debug/debug_ui.h>
-#include <ui/debug/global_metric_display_widget.h>
-#include <hssh/global_metric/messages.h>
-#include <hssh/global_metric/debug_info.h>
-#include <hssh/local_metric/lpm.h>
-#include <hssh/local_metric/lpm_io.h>
-#include <hssh/metrical/relocalization/filter_initializer_impl.h>
-#include <hssh/metrical/relocalization/scan_matching_initializer.h>
-#include <system/module_communicator.h>
+#include "ui/debug/global_metric_panel.h"
+#include "ui/debug/debug_ui.h"
+#include "ui/debug/global_metric_display_widget.h"
+#include "hssh/global_metric/messages.h"
+#include "hssh/global_metric/debug_info.h"
+#include "hssh/local_metric/lpm.h"
+#include "hssh/local_metric/lpm_io.h"
+#include "hssh/metrical/relocalization/filter_initializer_impl.h"
+#include "hssh/metrical/relocalization/scan_matching_initializer.h"
+#include "system/module_communicator.h"
 #include <wx/filedlg.h>
 #include <cassert>
 

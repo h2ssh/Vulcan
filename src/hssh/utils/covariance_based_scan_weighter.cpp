@@ -14,9 +14,9 @@
 * Definition of CovarianceBasedScanWeighter.
 */
 
-#include <hssh/utils/covariance_based_scan_weighter.h>
-#include <laser/laser_scan_lines.h>
-#include <core/multivariate_gaussian.h>
+#include "hssh/utils/covariance_based_scan_weighter.h"
+#include "laser/laser_scan_lines.h"
+#include "core/multivariate_gaussian.h"
 #include <cassert>
 
 namespace vulcan

@@ -8,7 +8,7 @@
 
 
 #include <errno.h>
-#include <utils/mutex.h>
+#include "utils/mutex.h"
 
 
 using vulcan::utils::Mutex;

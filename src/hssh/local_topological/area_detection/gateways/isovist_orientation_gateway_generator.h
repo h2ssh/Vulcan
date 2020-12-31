@@ -17,10 +17,10 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_ISOVIST_ORIENTATION_GATEWAY_GENERATOR_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_ISOVIST_ORIENTATION_GATEWAY_GENERATOR_H
 
-#include <hssh/local_topological/area_detection/gateways/generator.h>
-#include <hssh/local_topological/area_detection/gateways/isovist_gradients.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/params.h>
+#include "hssh/local_topological/area_detection/gateways/generator.h"
+#include "hssh/local_topological/area_detection/gateways/isovist_gradients.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/params.h"
 
 namespace vulcan
 {

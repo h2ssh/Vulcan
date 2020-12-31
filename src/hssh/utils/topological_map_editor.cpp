@@ -14,7 +14,7 @@
 * Definition of TopologicalMapEditor.
 */
 
-#include <hssh/utils/topological_map_editor.h>
+#include "hssh/utils/topological_map_editor.h"
 
 namespace vulcan
 {

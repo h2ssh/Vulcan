@@ -15,7 +15,7 @@
 */
 
 #include <cstring> // for memcpy
-#include <utils/byte_conversion.h>
+#include "utils/byte_conversion.h"
 
 namespace vulcan
 {

@@ -14,8 +14,8 @@
 * Definition of SetSlamModeCommand.
 */
 
-#include <hssh/local_metric/commands/set_slam_mode.h>
-#include <hssh/metrical/mapping/mapper.h>
+#include "hssh/local_metric/commands/set_slam_mode.h"
+#include "hssh/metrical/mapping/mapper.h"
 
 namespace vulcan
 {

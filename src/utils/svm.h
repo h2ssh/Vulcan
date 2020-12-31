@@ -17,8 +17,8 @@
 #ifndef UTILS_SVM_H
 #define UTILS_SVM_H
 
-#include <core/matrix.h>
-#include <core/vector.h>
+#include "core/matrix.h"
+#include "core/vector.h"
 #include <libsvm/svm.h>
 #include <memory>
 

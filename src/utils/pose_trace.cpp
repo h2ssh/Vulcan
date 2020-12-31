@@ -14,7 +14,7 @@
 * Implementation of PoseTrace.
 */
 
-#include <utils/pose_trace.h>
+#include "utils/pose_trace.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>

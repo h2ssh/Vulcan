@@ -18,7 +18,7 @@
 #define UI_COMPONENTS_GRADIENT_GRID_RENDERER_H
 
 #include <GL/gl.h>
-#include <ui/common/ui_color.h>
+#include "ui/common/ui_color.h"
 
 namespace vulcan
 {

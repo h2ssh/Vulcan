@@ -14,7 +14,7 @@
 * Unit tests for ensuring the compression and decompression work correctly.
 */
 
-#include <utils/compression.h>
+#include "utils/compression.h"
 #include <gtest/gtest.h>
 #include <boost/fusion/include/for_each.hpp>
 #include <boost/fusion/include/vector.hpp>

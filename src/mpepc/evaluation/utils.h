@@ -17,7 +17,7 @@
 #ifndef MPEPC_EVALUATION_UTILS_H
 #define MPEPC_EVALUATION_UTILS_H
 
-#include <hssh/local_topological/local_topo_map.h>
+#include "hssh/local_topological/local_topo_map.h"
 #include <string>
 #include <vector>
 

@@ -14,7 +14,7 @@
 * transition_cycle_test is a test program that tests the functionality of GlobalTransitionCycle.
 */
 
-#include <hssh/global_topological/transition_cycle.h>
+#include "hssh/global_topological/transition_cycle.h"
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <vector>

@@ -14,18 +14,18 @@
 * Definition of GatewayGoalEstimator.
 */
 
-#include <tracker/goals/gateway_estimator.h>
-#include <math/boundary.h>
-#include <tracker/motions/stationary.h>
-#include <tracker/motions/steady.h>
-#include <tracker/motions/striding.h>
-#include <tracker/tracking_environment.h>
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <utils/algorithm_ext.h>
-#include <utils/config_file.h>
-#include <utils/stub.h>
-#include <utils/timestamp.h>
+#include "tracker/goals/gateway_estimator.h"
+#include "math/boundary.h"
+#include "tracker/motions/stationary.h"
+#include "tracker/motions/steady.h"
+#include "tracker/motions/striding.h"
+#include "tracker/tracking_environment.h"
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "utils/algorithm_ext.h"
+#include "utils/config_file.h"
+#include "utils/stub.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 namespace vulcan

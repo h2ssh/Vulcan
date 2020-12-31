@@ -14,9 +14,9 @@
 * Definition of AreaProposal.
 */
 
-#include <hssh/local_topological/area_detection/labeling/area_proposal.h>
-#include <hssh/local_topological/area_detection/labeling/invalid_area.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
+#include "hssh/local_topological/area_detection/labeling/area_proposal.h"
+#include "hssh/local_topological/area_detection/labeling/invalid_area.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
 #include <iostream>
 
 

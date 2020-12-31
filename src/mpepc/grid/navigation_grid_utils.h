@@ -20,7 +20,7 @@
 #ifndef MPEPC_GRIDS_NAVIGATION_GRID_UTILS_H
 #define MPEPC_GRIDS_NAVIGATION_GRID_UTILS_H
 
-#include <core/point.h>
+#include "core/point.h"
 #include <vector>
 
 namespace vulcan

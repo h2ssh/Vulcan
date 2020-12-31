@@ -17,8 +17,8 @@
 #ifndef UI_DEBUG_LPM_PANEL_TEXT_UPDATER_H
 #define UI_DEBUG_LPM_PANEL_TEXT_UPDATER_H
 
-#include <ui/common/ui_forward_declarations.h>
-#include <utils/mutex.h>
+#include "ui/common/ui_forward_declarations.h"
+#include "utils/mutex.h"
 #include <wx/string.h>
 #include <string>
 

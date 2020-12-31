@@ -14,13 +14,13 @@
 * Definition of GoalInterfaceControl.
 */
 
-#include <ui/navigation/goal_interface_control.h>
-#include <ui/navigation/goal_name_dialog.h>
-#include <ui/navigation/navigation_data.h>
-#include <ui/navigation/navigation_interface_display.h>
-#include <ui/navigation/navigation_interface.h>
-#include <planner/interface/navigation_interface.h>
-#include <utils/stub.h>
+#include "ui/navigation/goal_interface_control.h"
+#include "ui/navigation/goal_name_dialog.h"
+#include "ui/navigation/navigation_data.h"
+#include "ui/navigation/navigation_interface_display.h"
+#include "ui/navigation/navigation_interface.h"
+#include "planner/interface/navigation_interface.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

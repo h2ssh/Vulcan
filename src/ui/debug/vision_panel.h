@@ -17,9 +17,9 @@
 #ifndef UI_DEBUG_VISION_PANEL_H
 #define UI_DEBUG_VISION_PANEL_H
 
-#include <ui/common/ui_panel.h>
-#include <core/image.h>
-#include <utils/mutex.h>
+#include "ui/common/ui_panel.h"
+#include "core/image.h"
+#include "utils/mutex.h"
 #include <atomic>
 
 class wxSlider;

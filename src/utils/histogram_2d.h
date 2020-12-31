@@ -10,7 +10,7 @@
 #ifndef UTILS_HISTOGRAM_2D_H
 #define UTILS_HISTOGRAM_2D_H
 
-#include <utils/cell_grid.h>
+#include "utils/cell_grid.h"
 #include <vector>
 
 namespace vulcan

@@ -17,7 +17,7 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_FACTORY_H
 #define HSSH_GLOBAL_TOPOLOGICAL_MAPPING_HYPOTHESIS_GENERATOR_FACTORY_H
 
-#include <hssh/global_topological/utils/visit.h>
+#include "hssh/global_topological/utils/visit.h"
 #include <memory>
 
 namespace vulcan

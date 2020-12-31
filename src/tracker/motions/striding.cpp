@@ -14,12 +14,12 @@
 * Definition of StridingMotion.
 */
 
-#include <tracker/motions/striding.h>
-#include <tracker/motions/visitor.h>
-#include <tracker/utils/endpoints.h>
-#include <tracker/laser_object.h>
-#include <math/statistics.h>
-#include <utils/timestamp.h>
+#include "tracker/motions/striding.h"
+#include "tracker/motions/visitor.h"
+#include "tracker/utils/endpoints.h"
+#include "tracker/laser_object.h"
+#include "math/statistics.h"
+#include "utils/timestamp.h"
 #include <cassert>
 
 // #define DEBUG_ENDPOINTS

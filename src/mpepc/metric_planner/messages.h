@@ -21,8 +21,8 @@
 #ifndef MPEPC_METRIC_PLANNER_MESSAGES_H
 #define MPEPC_METRIC_PLANNER_MESSAGES_H
 
-#include <mpepc/metric_planner/task/task.h>
-#include <system/message_traits.h>
+#include "mpepc/metric_planner/task/task.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cstdint>
 

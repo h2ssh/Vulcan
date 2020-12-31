@@ -14,13 +14,13 @@
 * Definition of DecisionInterfaceControl.
 */
 
-#include <ui/navigation/decision_interface_control.h>
-#include <ui/navigation/navigation_data.h>
-#include <ui/navigation/navigation_interface_display.h>
-#include <planner/interface/navigation_interface.h>
-#include <hssh/local_topological/local_topo_map.h>
-#include <utils/algorithm_ext.h>
-#include <utils/stub.h>
+#include "ui/navigation/decision_interface_control.h"
+#include "ui/navigation/navigation_data.h"
+#include "ui/navigation/navigation_interface_display.h"
+#include "planner/interface/navigation_interface.h"
+#include "hssh/local_topological/local_topo_map.h"
+#include "utils/algorithm_ext.h"
+#include "utils/stub.h"
 
 namespace vulcan
 {

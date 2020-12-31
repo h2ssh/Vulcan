@@ -17,8 +17,8 @@
 #ifndef HSSH_GLOBAL_TOPOLOGICAL_UTILS_VISIT_SEQUENCE_H
 #define HSSH_GLOBAL_TOPOLOGICAL_UTILS_VISIT_SEQUENCE_H
 
-#include <hssh/global_topological/utils/visit.h>
-#include <hssh/local_topological/event_visitor.h>
+#include "hssh/global_topological/utils/visit.h"
+#include "hssh/local_topological/event_visitor.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 

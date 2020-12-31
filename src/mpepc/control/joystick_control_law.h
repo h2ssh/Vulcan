@@ -17,10 +17,10 @@
 #ifndef MPEPC_JOYSTICK_CONTROL_LAW_H
 #define MPEPC_JOYSTICK_CONTROL_LAW_H
 
-#include <mpepc/control/control_law_coordinates.h>
-#include <mpepc/control/params.h>
-#include <core/motion_state.h>
-#include <robot/model/params.h>
+#include "mpepc/control/control_law_coordinates.h"
+#include "mpepc/control/params.h"
+#include "core/motion_state.h"
+#include "robot/model/params.h"
 
 namespace vulcan
 {

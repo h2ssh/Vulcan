@@ -14,9 +14,9 @@
 * Definition of PoseTask.
 */
 
-#include <planner/control/tasks/pose.h>
-#include <planner/control/state.h>
-#include <mpepc/metric_planner/task/navigation.h>
+#include "planner/control/tasks/pose.h"
+#include "planner/control/state.h"
+#include "mpepc/metric_planner/task/navigation.h"
 
 namespace vulcan
 {

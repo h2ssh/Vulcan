@@ -14,7 +14,7 @@
 * Definition of LabeledAreaData.
 */
 
-#include <hssh/local_topological/training/labeled_area_data.h>
+#include "hssh/local_topological/training/labeled_area_data.h"
 #include <istream>
 #include <map>
 #include <ostream>

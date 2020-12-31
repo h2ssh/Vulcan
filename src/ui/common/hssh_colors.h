@@ -17,9 +17,9 @@
 #ifndef UI_COMMON_HSSH_COLORS_H
 #define UI_COMMON_HSSH_COLORS_H
 
-#include <ui/common/default_colors.h>
-#include <hssh/types.h>
-#include <hssh/local_topological/area_detection/labeling/hypothesis_type.h>
+#include "ui/common/default_colors.h"
+#include "hssh/types.h"
+#include "hssh/local_topological/area_detection/labeling/hypothesis_type.h"
 
 namespace vulcan
 {

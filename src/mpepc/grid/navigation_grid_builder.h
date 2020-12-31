@@ -17,7 +17,7 @@
 #ifndef MPEPC_GRID_NAVIGATION_GRID_BUILDER_H
 #define MPEPC_GRID_NAVIGATION_GRID_BUILDER_H
 
-#include <mpepc/types.h>
+#include "mpepc/types.h"
 #include <memory>
 
 namespace vulcan

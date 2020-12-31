@@ -18,8 +18,8 @@
 #define ROBOT_MODEL_PARAMS_H
 
 #include <string>
-#include <math/geometry/polygon.h>
-#include <math/geometry/rectangle.h>
+#include "math/geometry/polygon.h"
+#include "math/geometry/rectangle.h"
 
 namespace vulcan
 {

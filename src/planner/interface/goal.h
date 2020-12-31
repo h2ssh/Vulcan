@@ -17,8 +17,8 @@
 #ifndef PLANNER_INTERFACE_GOAL_H
 #define PLANNER_INTERFACE_GOAL_H
 
-#include <hssh/local_topological/area.h>
-#include <core/pose.h>
+#include "hssh/local_topological/area.h"
+#include "core/pose.h"
 #include <boost/optional.hpp>
 #include <iosfwd>
 

@@ -14,10 +14,10 @@
 * Definition of HypothesisProbabilityEvaluator.
 */
 
-#include <hssh/global_topological/mapping/probability_evaluator.h>
-#include <hssh/global_topological/mapping/likelihood_evaluator.h>
-#include <hssh/global_topological/mapping/prior_evaluator.h>
-#include <hssh/global_topological/state.h>
+#include "hssh/global_topological/mapping/probability_evaluator.h"
+#include "hssh/global_topological/mapping/likelihood_evaluator.h"
+#include "hssh/global_topological/mapping/prior_evaluator.h"
+#include "hssh/global_topological/state.h"
 #include <iostream>
 #include <cassert>
 

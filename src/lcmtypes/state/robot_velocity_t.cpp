@@ -7,10 +7,10 @@
 */
 
 
-#include <lcmtypes/state/robot_velocity_t.h>
-#include <core/velocity.h>
-#include <lcmtypes/subscription_manager.h>
-#include <lcmtypes/message_helpers.h>
+#include "lcmtypes/state/robot_velocity_t.h"
+#include "core/velocity.h"
+#include "lcmtypes/subscription_manager.h"
+#include "lcmtypes/message_helpers.h"
 
 static vulcan::lcm::SubscriptionManager<vulcan_lcm_robot_velocity_t, vulcan::velocity_t> subscribers;
 

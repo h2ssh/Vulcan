@@ -17,7 +17,7 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_WEIGHTED_GATEWAY_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREA_DETECTION_GATEWAYS_WEIGHTED_GATEWAY_H
 
-#include <hssh/local_topological/gateway.h>
+#include "hssh/local_topological/gateway.h"
 
 namespace vulcan
 {

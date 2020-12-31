@@ -7,11 +7,11 @@
 */
 
 
-#include <ui/components/grid_based_display_widget.h>
+#include "ui/components/grid_based_display_widget.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <core/point.h>
-#include <ui/common/gl_utilities.h>
+#include "core/point.h"
+#include "ui/common/gl_utilities.h"
 
 
 namespace vulcan

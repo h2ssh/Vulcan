@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_AREAS_AREA_PROPOSAL_H
 #define HSSH_LOCAL_TOPOLOGICAL_AREAS_AREA_PROPOSAL_H
 
-#include <hssh/local_topological/area.h>
-#include <hssh/local_topological/area_extent.h>
+#include "hssh/local_topological/area.h"
+#include "hssh/local_topological/area_extent.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 

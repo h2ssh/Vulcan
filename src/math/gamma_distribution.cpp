@@ -14,8 +14,8 @@
 * Implementation of GammaDistribution.
 */
 
-#include <math/gamma_distribution.h>
-#include <math/roots.h>
+#include "math/gamma_distribution.h"
+#include "math/roots.h"
 #include <boost/math/special_functions/gamma.hpp>
 #include <algorithm>
 #include <functional>

@@ -14,7 +14,7 @@
 * Definition of SerialConnection.
 */
 
-#include <utils/serial.h>
+#include "utils/serial.h"
 #include <sys/select.h>
 #include <cstdio>
 #include <fcntl.h>

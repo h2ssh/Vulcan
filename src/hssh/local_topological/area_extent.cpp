@@ -14,15 +14,15 @@
 * Definition of AreaExtent.
 */
 
-#include <hssh/local_topological/area_extent.h>
-#include <hssh/local_topological/gateway.h>
-#include <hssh/local_topological/voronoi_skeleton_grid.h>
-#include <hssh/local_topological/area_detection/voronoi/voronoi_utils.h>
-#include <hssh/local_topological/area_detection/gateways/gateway_utils.h>
-#include <math/geometry/convex_hull.h>
-#include <math/geometry/shape_fitting.h>
-#include <utils/ray_tracing.h>
-#include <utils/algorithm_ext.h>
+#include "hssh/local_topological/area_extent.h"
+#include "hssh/local_topological/gateway.h"
+#include "hssh/local_topological/voronoi_skeleton_grid.h"
+#include "hssh/local_topological/area_detection/voronoi/voronoi_utils.h"
+#include "hssh/local_topological/area_detection/gateways/gateway_utils.h"
+#include "math/geometry/convex_hull.h"
+#include "math/geometry/shape_fitting.h"
+#include "utils/ray_tracing.h"
+#include "utils/algorithm_ext.h"
 #include <deque>
 #include <numeric>
 #include <cassert>

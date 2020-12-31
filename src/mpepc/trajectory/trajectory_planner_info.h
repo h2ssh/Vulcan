@@ -17,8 +17,8 @@
 #ifndef MPEPC_TRAJECTORY_PLANNER_INFO_H
 #define MPEPC_TRAJECTORY_PLANNER_INFO_H
 
-#include <mpepc/trajectory/robot_trajectory_info.h>
-#include <system/message_traits.h>
+#include "mpepc/trajectory/robot_trajectory_info.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 #include <cereal/types/vector.hpp>
 

@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <string>
-#include <hssh/global_topological/mapping/tree_of_maps.h>
+#include "hssh/global_topological/mapping/tree_of_maps.h"
 
 namespace vulcan
 {

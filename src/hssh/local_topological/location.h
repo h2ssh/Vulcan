@@ -17,8 +17,8 @@
 #ifndef HSSH_LOCAL_TOPOLOGICAL_LOCATION_H
 #define HSSH_LOCAL_TOPOLOGICAL_LOCATION_H
 
-#include <hssh/local_topological/gateway.h>
-#include <system/message_traits.h>
+#include "hssh/local_topological/gateway.h"
+#include "system/message_traits.h"
 #include <cereal/access.hpp>
 
 namespace vulcan
