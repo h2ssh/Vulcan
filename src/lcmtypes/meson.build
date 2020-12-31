@@ -46,13 +46,13 @@ lcm_gen = generator(lcmgen,
     '@BASENAME@.hpp'],
    arguments : [
     '-c', 
-    '--c-cpath=@CURRENT_SOURCE_DIR@', 
-    '--c-hpath=@CURRENT_SOURCE_DIR@', 
+    '--c-cpath=@BUILD_DIR@', 
+    '--c-hpath=@BUILD_DIR@', 
     '--lazy',
     '-x',
-    '--cpp-hpath=@CURRENT_SOURCE_DIR@',
+    '--cpp-hpath=@BUILD_DIR@',
     '-j', 
-    '--jpath=@CURRENT_SOURCE_DIR@/java/',
+    '--jpath=@BUILD_DIR@/java/',
     '@INPUT@'])
 
 lcm_src = lcm_gen.process(lcmtypes)
