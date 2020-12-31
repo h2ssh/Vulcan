@@ -10,7 +10,7 @@
 #ifndef LCMTYPES_MPEPC_METRIC_POSE_TARGET_H
 #define LCMTYPES_MPEPC_METRIC_POSE_TARGET_H
 
-#include "lcmtypes/vulcan_lcm/metric_pose_target_t.hpp>
+#include "lcmtypes/vulcan_lcm/metric_pose_target_t.hpp"
 #include "system/message_traits.h"
 
 namespace vulcan

@@ -10,7 +10,7 @@
 #ifndef LCMTYPES_COMMANDS_SAVE_LPM_COMMAND_T_LCM
 #define LCMTYPES_COMMANDS_SAVE_LPM_COMMAND_T_LCM
 
-#include "lcmtypes/vulcan_lcm/save_lpm_command.hpp>
+#include "lcmtypes/vulcan_lcm/save_lpm_command.hpp"
 #include "system/message_traits.h"
 
 namespace vulcan

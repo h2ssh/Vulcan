@@ -12,7 +12,7 @@
 #include "core/odometry.h"
 #include "lcmtypes/laser/laser_t.h"
 #include "lcmtypes/sensors/odometry_t.h"
-#include "system/serialized_t.hpp>
+#include "system/serialized_t.hpp"
 #include <lcm/lcm-cpp.hpp>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics.hpp>

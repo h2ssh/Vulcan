@@ -10,7 +10,7 @@
 #ifndef LCMTYPES_COMMANDS_LOAD_LPM_COMMAND_T_LCM
 #define LCMTYPES_COMMANDS_LOAD_LPM_COMMAND_T_LCM
 
-#include "lcmtypes/vulcan_lcm/load_lpm_command.hpp>
+#include "lcmtypes/vulcan_lcm/load_lpm_command.hpp"
 #include "system/message_traits.h"
 
 namespace vulcan

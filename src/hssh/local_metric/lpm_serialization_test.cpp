@@ -9,7 +9,7 @@
 
 #include "hssh/local_metric/lpm.h"
 #include "system/message_traits.h"
-#include "system/serialized_t.hpp>
+#include "system/serialized_t.hpp"
 #include <lcm/lcm-cpp.hpp>
 #include <cereal/archives/binary.hpp>
 #include <boost/iostreams/device/array.hpp>
