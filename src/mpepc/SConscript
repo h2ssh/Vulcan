@@ -1,7 +1,5 @@
 Import('*')
 
-import utils
-
 data_objects = lib_env.StaticObject([Glob('metric_planner/script/*.cpp'),
                                      Glob('metric_planner/task/*.cpp'),
                                      Glob('manifold/*.cpp'),

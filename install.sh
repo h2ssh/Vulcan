@@ -5,34 +5,37 @@ echo "Installing Vulcan from"$DIR
 echo "To install drivers for using the Vulcan wheelchair, set the DRIVERS environment variable:  DRIVERS=1 \
  $DIR/install.sh"
 
-sudo apt-get install -y git scons doxygen texlive-latex-extra libboost-all-dev libarmadillo-dev libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev libf2c2-dev openjdk-8-jdk libusb-dev libusb-1.0-0-dev libpopt-dev libsdl1.2-dev libsdl-net1.2-dev libopencv-dev cmake autoconf;
+sudo apt-get install -y wget git scons doxygen texlive-latex-extra libboost-all-dev libarmadillo-dev libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev libf2c2-dev openjdk-8-jdk libusb-dev libusb-1.0-0-dev libpopt-dev libsdl1.2-dev libsdl-net1.2-dev libopencv-dev cmake autoconf;
 
-cd $DIR/external
+EXTERNAL_DIR=$DIR/external
+cd $EXTERNAL_DIR
 
 # Install cereal for message passing serialization
-wget -nc https://github.com/USCiLab/cereal/archive/v1.2.2.tar.gz -O cereal.tar.gz
-tar -xzf cereal.tar.gz
-rsync -a cereal-1.2.2/ cereal
-rm -rf cereal-1.2.2/
+wget -nc https://github.com/USCiLab/cereal/archive/v1.2.1.tar.gz -O cereal-1.2.1.tar.gz
+tar -xzf cereal-1.2.1.tar.gz
+rsync -a cereal-1.2.1/ cereal
+rm -rf cereal-1.2.1/
 
 # Install LCM
-wget -nc https://github.com/lcm-proj/lcm/archive/v1.3.1.tar.gz -O lcm.tar.gz
-tar -xzf lcm.tar.gz
+wget -nc https://github.com/lcm-proj/lcm/archive/v1.3.1.tar.gz -O lcm-1.3.1.tar.gz
+tar -xzf lcm-1.3.1.tar.gz
 cd lcm-1.3.1
 ./bootstrap.sh
 ./configure
 make -j5
 sudo make install
-cd ..
+cd $EXTERNAL_DIR
 
 # Install NLopt for running MPEPC
 wget -nc https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz -O nlopt-2.5.0.tar.gz
 tar -xzf nlopt-2.5.0.tar.gz
 cd nlopt-2.5.0
-./configure
+mkdir build
+cd build
+cmake ../ -DBUILD_SHARED_LIB=0
 make -j5
 sudo make install
-cd ..
+cd $EXTERNAL_DIR
 
 # Install levmar for use with topological SLAM
 # NOTE: levmar is GPL which makes binaries using it GPL
@@ -42,8 +45,9 @@ make
 sudo cp liblevmar.a /usr/local/lib/
 chmod a+r levmar.h
 sudo cp levmar.h /usr/local/include/
-cd ../
 sudo cp levmar.pc /usr/local/lib/pkgconfig/
+cd $EXTERNAL_DIR/
+
 
 # Install libraries for place labeling
 wget -nc https://github.com/cjlin1/liblinear/archive/v220.tar.gz -O liblinear.tar.gz
@@ -74,7 +78,7 @@ if [ "$DRIVERS" = "1" ]; then
     sudo make install
     sudo cp driver/pcan.h /usr/local/include/
     sudo cp lib/libpcan.h /usr/local/include/
-    cd ..
+    cd $EXTERNAL_DIR
 
     # Install libphidget for talking with the encoders
     # NOTE: libphidget is GPL so binaries including it will be GPL licensed
@@ -84,7 +88,7 @@ if [ "$DRIVERS" = "1" ]; then
     ./configure
     make -j5
     sudo make install
-    cd ..
+    cd $EXTERNAL_DIR
 
     # Install URG library for talking to Hokuyos
     tar -xzf urg-0.8.18.tar.gz
@@ -93,7 +97,7 @@ if [ "$DRIVERS" = "1" ]; then
     make
     sudo make install
     sudo cp src/cpp/urg/ScipHandler.h /usr/local/include/urg/
-    cd ..
+    cd $EXTERNAL_DIR
     sudo cp liburg.pc /usr/local/lib/pkgconfig/
 fi
 

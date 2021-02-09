@@ -16,7 +16,7 @@ bare_env = Environment(ENV        = os.environ,             # use the system $PA
                                      '-Werror',
                                      '-Wno-unused-local-typedefs',
                                      '-g'],
-                       CXXFLAGS   = ['-std=c++14'],
+                       CXXFLAGS   = ['-std=c++17'],
                        CPPPATH    = [BUILD_INCLUDE_DIR, '#src/', '#external', '#external/cereal/include',
                                      '#external/gnuplot-iostream'],
                        LIBPATH    = [BUILD_LIB_DIR],
