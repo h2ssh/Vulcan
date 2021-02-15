@@ -28,9 +28,17 @@ arma_base_dep = dependency('armadillo')
 # manually define the armadillo dependency to also link in blas and lapack since we aren't using cmake wrapper
 arma_dep = declare_dependency(dependencies : [ lapack_dep, blas_dep, arma_base_dep] )
 
+
+if get_option('platform') == 'vulcan'
+    urg_dep = dependency('liburg')
+    phidgets_dep = dependency('libphidget21')
+else
+    urg_dep = disabler()
+    phidgets_dep = disabler()
+endif
+
 vulcan_inc = include_directories('src',
-                                 'external',
-                                 'external/cereal/include',
-                                 'external/gnuplot-iostream',)
+                                 'external/include',
+                                )
 
 subdir('src')

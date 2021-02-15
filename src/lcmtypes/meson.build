@@ -39,23 +39,36 @@ lcmtypes = [
 
 lcmgen = find_program('lcm-gen')
 
-lcm_gen = generator(lcmgen,
-   output : [
-    'vulcan_lcm_@BASENAME@.c', 
-    'vulcan_lcm_@BASENAME@.h', 
-    '@BASENAME@.hpp'],
-   arguments : [
-    '-c', 
-    '--c-cpath=@BUILD_DIR@', 
-    '--c-hpath=@BUILD_DIR@', 
-    '--lazy',
-    '-x',
-    '--cpp-hpath=@BUILD_DIR@',
-    '-j', 
-    '--jpath=@BUILD_DIR@/java/',
-    '@INPUT@'])
+lcm_outdir = meson.current_build_dir()
 
-lcm_src = lcm_gen.process(lcmtypes)
+lcm_src = []
+foreach type : lcmtypes
+    base_type = type.split('/')[1].split('.')[0]
+
+    this_type = custom_target(
+        base_type,
+        input : type,
+        output : [
+            'vulcan_lcm_@BASENAME@.c', 
+            'vulcan_lcm_@BASENAME@.h', 
+            '@BASENAME@.hpp'],
+        command :   [
+            lcmgen,
+            '-c', 
+            '--c-cpath='+lcm_outdir, 
+            '--c-hpath='+lcm_outdir,
+            '--lazy',
+            '-x',
+            '--cpp-hpath='+lcm_outdir,
+            '-j', 
+            '--jpath='+lcm_outdir + '/java/',
+            '@INPUT@']
+        )
+
+    lcm_src += this_type
+endforeach
+
+message(lcm_src.length())
 
 vulcan_to_lcm_src = [
     'common/gaussian_distribution_t.cpp',
@@ -82,4 +95,10 @@ lcm_lib = static_library(
     [lcm_src, vulcan_to_lcm_src],
     include_directories : vulcan_inc,
     dependencies: [lcm_dep]
+)
+
+lcmtypes_dep = declare_dependency(
+    link_with : lcm_lib,
+    sources : lcm_src,
+    dependencies : [lcm_dep]
 )

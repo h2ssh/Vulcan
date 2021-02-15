@@ -1,8 +1,9 @@
+subdir('lcmtypes')
+
 subdir('core')
 subdir('math')
 subdir('utils')
 subdir('system')
-subdir('lcmtypes')
 subdir('robot')
 subdir('sensors')
 subdir('laser')

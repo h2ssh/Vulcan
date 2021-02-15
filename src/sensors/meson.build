@@ -1,13 +1,12 @@
 ############################## Laser producer ###################################
 
-urg_dep = dependency('liburg')
-
 laser_producer = executable(
     'laser_scan_producer',
     ['hokuyo_urg_laser.cpp', 'laser_scan_producer.cpp'],
     include_directories : vulcan_inc,
-    dependencies : urg_dep,
     link_with : [core_lib, system_lib, lcm_lib, utils_lib],
+    dependencies : urg_dep,
+    cpp_args : ['-Wno-deprecated-declarations'], # avoid warning on auto_ptr use in liburg
     install : true,
 )
 
@@ -25,8 +24,6 @@ imu_producer = executable(
 )
 
 ############################## Odometry producer ###################################
-
-phidgets_dep = dependency('libphidget21')
 
 odometry_src = ['wheel_encoders.cpp',
                 'odometry_estimator.cpp',

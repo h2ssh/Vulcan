@@ -6,5 +6,6 @@ system_lib = static_library(
     'vulcan_system',
     system_src,
     include_directories: [vulcan_inc],
-    dependencies: [lcm_dep]
+    link_with : [lcm_lib],
+    dependencies: [lcm_dep, lcmtypes_dep]
 )

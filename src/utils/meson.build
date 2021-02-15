@@ -18,7 +18,6 @@ utils_src = [
     'hough_transform.cpp',
     'icp.cpp',
     'isovist.cpp',
-    'kmeans_angles.cpp',
     'liblinear.cpp',
     'mutex.cpp',
     'plot2d.cpp',

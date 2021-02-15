@@ -10,3 +10,7 @@ libsvm/*
 liblinear/*
 *.tar.gz
 *.a
+include/*
+pkgconfig/*
+lib/*
+share/*
