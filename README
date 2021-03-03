@@ -12,10 +12,12 @@ STEP 1: Install dependecies using the install scripts.
 
 From the root directory, just run;
 
-./install.sh
+DRIVERS=1 ./install.sh
 
 This script will install all required packages via apt-get and by installing other
 dependencies contained in the external folder.
+
+Subsequent installs can omit the "DRIVERS=1"
 
 ===================================================================================
 
@@ -23,7 +25,7 @@ STEP 2: Compile Vulcan code.
 
 1) To compile the code, type in the Vulcan root directory:
 
-        scons (scons -c for cleaning, scons -jx with x=number of jobs)
+        ninja -C build install
 
 2) To view the code documentation, type in ./src
 
@@ -92,7 +94,7 @@ architecture.
 
 To use this jar file:
 
-1) Build the code as normal via scons.
+1) Build the code as normal.
 2) Run from the root directory in a terminal:
     source setenv.sh
 3) Run lcm-spy from this terminal.
