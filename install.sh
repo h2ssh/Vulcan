@@ -5,7 +5,7 @@ echo "Installing Vulcan from"$DIR
 echo "To install drivers for using the Vulcan wheelchair, set the DRIVERS environment variable:  DRIVERS=1 \
  $DIR/install.sh"
 
-sudo apt install -y build-essential meson ninja-build ccache wget liblcm-dev googletest doxygen graphviz texlive-latex-extra libboost-all-dev libarmadillo-dev libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev libusb-dev libusb-1.0-0-dev libpopt-dev libsdl1.2-dev libsdl-net1.2-dev libopencv-dev libf2c2-dev cmake;
+sudo apt install -y build-essential meson ninja-build ccache wget default-jdk liblcm-dev liblcm-java libjchart2d-java googletest doxygen graphviz texlive-latex-extra libboost-all-dev libarmadillo-dev libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev libusb-dev libusb-1.0-0-dev libpopt-dev libsdl1.2-dev libsdl-net1.2-dev libopencv-dev libf2c2-dev cmake;
 
 EXTERNAL_DIR=$DIR/external
 LIB_DIR=$EXTERNAL_DIR/lib
@@ -17,6 +17,10 @@ cd $EXTERNAL_DIR
 mkdir include
 mkdir lib
 mkdir pkgconfig
+
+# Get JVM if not already there and clean up lcm java bits to run on current JVM
+java --version || sudo apt install default-jdk
+sudo sed -i 's/ -Xincgc / /g' `which lcm-spy` `which lcm-logplayer-gui`
 
 # FIX for libarmadillo-dev not including a pkg-config (fixed upstream)
 cp armadillo.pc $PKG_CONFIG_DIR
