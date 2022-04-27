@@ -44,7 +44,7 @@ public:
      *                               considered complete (optional, default = 0.05 (about 3 degrees))
      * \pre  maxCompletionError > 0
      */
-    explicit RotateTask(double goalOrientation, double maxCompletionError = 0.05);
+    explicit RotateTask(float goalOrientation, float maxCompletionError = 0.05f);
 
     /**
      * Constructor for RotateTask.
@@ -67,8 +67,8 @@ public:
 private:
     Id id_;
     RotationMode mode_;
-    double orientation_;
-    double maxError_;
+    float orientation_;
+    float maxError_;
 
     // Serialization support
     friend class cereal::access;

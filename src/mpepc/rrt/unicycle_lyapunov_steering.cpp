@@ -101,10 +101,10 @@ pose_t UnicycleLyapunovSteering::incrementalRotation(const pose_t& robotPose,
     pose_t nextPose = robotPose;
 
     // find reference heading induced by the laypunov function
-    double referenceHeading = lyap.stabilizingHeading(robotPose.toPoint());
-    double headingError = angle_diff(referenceHeading, robotPose.theta);
+    float referenceHeading = lyap.stabilizingHeading(robotPose.toPoint());
+    float headingError = angle_diff(referenceHeading, robotPose.theta);
 
-    if (fabs(headingError) > maxRotation) {
+    if (std::abs(headingError) > maxRotation) {
         *isAligned = false;
         nextPose.theta = nextPose.theta + copysign(maxRotation, headingError);
     } else {

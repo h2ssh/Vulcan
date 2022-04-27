@@ -123,8 +123,8 @@ void WheelEncoders::calculateWheelMotion(void)
 
 void WheelEncoders::calculateDeadReckoningPose(void)
 {
-    float distance = (currentEncoders.deltaLeftWheel + currentEncoders.deltaRightWheel) / 2;
-    float rotation = (currentEncoders.deltaRightWheel - currentEncoders.deltaLeftWheel) / currentEncoders.wheelbase;
+    const double distance = (currentEncoders.deltaLeftWheel + currentEncoders.deltaRightWheel) * 0.5;
+    const double rotation = (currentEncoders.deltaRightWheel - currentEncoders.deltaLeftWheel) / currentEncoders.wheelbase;
 
     cumulative.x += distance * std::cos(cumulative.theta + rotation / 2);
     cumulative.y += distance * std::sin(cumulative.theta + rotation / 2);

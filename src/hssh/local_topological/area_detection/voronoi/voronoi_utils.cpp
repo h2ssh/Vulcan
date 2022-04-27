@@ -86,7 +86,7 @@ int follow_branch(const cell_t& startCell,
 template <class Iter>
 Iter extract_cells_along_edge(cell_t parent, cell_t child, const VoronoiSkeletonGrid& grid, Iter edgeOut);
 
-voronoi_directions_t find_directions_from_trace(const voronoi_trace_t& trace, double angleHint);
+voronoi_directions_t find_directions_from_trace(const voronoi_trace_t& trace, float angleHint);
 
 
 ////////////////////// Main functions ///////////////////////////////////////
@@ -614,13 +614,13 @@ Iter extract_cells_along_edge(cell_t parent, cell_t child, const VoronoiSkeleton
 }
 
 
-voronoi_directions_t find_directions_from_trace(const voronoi_trace_t& trace, double angleHint)
+voronoi_directions_t find_directions_from_trace(const voronoi_trace_t& trace, float angleHint)
 {
     assert(!trace.traces.empty());
 
-    double otherHint = angle_sum(angleHint, M_PI);
-    double minHintDist = 1000.0;
-    double minOtherDist = 1000.0;
+    float otherHint = angle_sum(angleHint, PI_F);
+    float minHintDist = 1000.0f;
+    float minOtherDist = 1000.0f;
 
     voronoi_directions_t directions = {angleHint, otherHint, minHintDist, minOtherDist};
 
@@ -630,7 +630,7 @@ voronoi_directions_t find_directions_from_trace(const voronoi_trace_t& trace, do
         }
 
         auto traceLine = math::total_least_squares(t.points.begin(), t.points.end());
-        double traceDirection = angle_to_point(traceLine.a, traceLine.b);
+        float traceDirection = angle_to_point(traceLine.a, traceLine.b);
 
         if (angle_diff_abs(traceDirection, angleHint) < minHintDist) {
             directions.left = traceDirection;
@@ -653,8 +653,8 @@ voronoi_directions_t find_directions_from_trace(const voronoi_trace_t& trace, do
         directions.right = otherHint;
     }
 
-    if (angle_diff_abs(directions.left, directions.right) < M_PI / 3.0) {
-        directions.right = angle_sum(directions.right, M_PI);
+    if (angle_diff_abs(directions.left, directions.right) < PI_F / 3.0f) {
+        directions.right = angle_sum(directions.right, PI_2_F);
     }
 
     return directions;

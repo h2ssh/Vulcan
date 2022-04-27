@@ -255,7 +255,7 @@ caliper_rotation_t find_minimum_caliper_rotation(rotating_calipers_state_t& stat
         int previousVertexIndex = previous_index(caliper.vertexIndex, state.hullVertices.size());
 
         // The calipers rotate clockwise around the polygon, so the caliper rotation is always negative or zero.
-        float hullAngle =
+        double hullAngle =
           angle_to_point(state.hullVertices[caliper.vertexIndex], state.hullVertices[previousVertexIndex]);
         float caliperRotation = angle_diff(hullAngle, caliper.angle);
 

@@ -106,7 +106,7 @@ private:
 
     double getCostToGoFromNavGrid(const motion_state_t& state) const;
 
-    double computeNavGradient(const pose_t& pose) const;
+    float computeNavGradient(const pose_t& pose) const;
 };
 
 }   // namespace mpepc

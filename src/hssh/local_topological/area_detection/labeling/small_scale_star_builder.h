@@ -91,7 +91,7 @@ public:
      * \param    axisDirection       Direction of the axis of alignment
      * \return   Number of gateways aligned to the specified axis.
      */
-    virtual int numGatewaysAlignedToAxis(const std::vector<Gateway>& gateways, double axisDirection) const = 0;
+    virtual int numGatewaysAlignedToAxis(const std::vector<Gateway>& gateways, float axisDirection) const = 0;
 
     /**
      * areGatewaysAligned asks if a pair of gateways are aligned. Aligned gateways do not necessarily belong to the same

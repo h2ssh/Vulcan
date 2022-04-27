@@ -114,7 +114,7 @@ SmallScaleStar BeamStarBuilder::buildStar(const std::vector<Gateway>& gateways,
 }
 
 
-int BeamStarBuilder::numGatewaysAlignedToAxis(const std::vector<Gateway>& gateways, double axisDirection) const
+int BeamStarBuilder::numGatewaysAlignedToAxis(const std::vector<Gateway>& gateways, float axisDirection) const
 {
     std::cerr << "STUB! BeamStarBuilder::areGatewaysAlignedToAxis() \n";
     return 0;

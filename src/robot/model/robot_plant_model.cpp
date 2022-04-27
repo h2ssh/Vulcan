@@ -41,12 +41,12 @@ pose_t RobotPlantModel::turnDriveTurnIntegration(const pose_t& priorPose,
                                                  const velocity_t& averageVelocity,
                                                  const float timestep)
 {
-    float halfDeltaTheta = averageVelocity.angular * timestep * 0.5;
+    float halfDeltaTheta = averageVelocity.angular * timestep * 0.5f;
     float travelDistance = averageVelocity.linear * timestep;
 
     return pose_t(priorPose.x + travelDistance * cos(priorPose.theta + halfDeltaTheta),
                   priorPose.y + travelDistance * sin(priorPose.theta + halfDeltaTheta),
-                  angle_sum(priorPose.theta, halfDeltaTheta * 2.0));
+                  angle_sum(priorPose.theta, halfDeltaTheta * 2.0f));
 }
 
 

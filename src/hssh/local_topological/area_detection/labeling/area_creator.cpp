@@ -211,8 +211,8 @@ std::unique_ptr<LocalArea> AreaBuilder::createPathSegment(const proposal_info_t&
             endpoint.gateway = create_gateway_for_skeleton_cell(endpoint.point, info.grid, info.isovists);
 
             // If the gateways point the same direction, then flip them
-            if (angle_diff_abs(endpoint.gateway.direction(), angle_to_point(endpoint.point, otherEndpoint.point))
-                < M_PI_2) {
+            if (angle_diff_abs(static_cast<double>(endpoint.gateway.direction()),
+                               angle_to_point(endpoint.point, otherEndpoint.point)) < M_PI_2) {
                 endpoint.gateway.reverseDirections();
             }
             // Make sure this fake gateway is included in the complete list of gateways for the area
@@ -229,8 +229,8 @@ std::unique_ptr<LocalArea> AreaBuilder::createPathSegment(const proposal_info_t&
             }
 
             // If the gateways point the same direction, then flip them
-            if (angle_diff_abs(endpoint.gateway.direction(), angle_to_point(endpoint.point, otherEndpoint.point))
-                < M_PI_2) {
+            if (angle_diff_abs(static_cast<double>(endpoint.gateway.direction()),
+                               angle_to_point(endpoint.point, otherEndpoint.point)) < M_PI_2) {
                 endpoint.gateway.reverseDirections();
             }
 
@@ -402,7 +402,7 @@ Gateway create_outbound_gateway(const Gateway& g, Point<float> interiorPoint)
     // to the gateway. This ensures the direction of the gateway points away from the area because a direction pointing
     // into the area will be closer to pi.
 
-    auto interiorAngle = angle_to_point(interiorPoint, g.center());
+    float interiorAngle = angle_to_point(interiorPoint, g.center());
     auto leftAngleDiff = angle_diff_abs(interiorAngle, g.leftDirection());
     auto rightAngleDiff = angle_diff_abs(interiorAngle, g.rightDirection());
 
@@ -431,7 +431,7 @@ Gateway create_gateway_for_skeleton_cell(const Point<float>& skeletonCenter,
         return *gateway;
     }
 
-    direction = angle_sum(voronoi_direction(pointCell, grid).left, M_PI_2);
+    direction = angle_sum(voronoi_direction(pointCell, grid).left, PI_2_F);
 
     gateway = create_gateway_at_cell(pointCell, direction, -1, grid, minExtraDist);
     if (gateway) {

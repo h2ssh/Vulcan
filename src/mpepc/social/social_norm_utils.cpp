@@ -220,9 +220,9 @@ double normalized_position_path(const topo_agent_t& agent, const hssh::LocalTopo
     // If the goal isn't one of the ends, but a destination, then use the heading information to try and
     // determine which gateway to use.
     else {
-        double agentHeading = std::atan2(agent.state.yVel, agent.state.xVel);
-        double plusDiff = angle_diff_abs(agentHeading, plusGwy.direction());
-        double minusDiff = angle_diff_abs(agentHeading, minusGwy.direction());
+        float agentHeading = std::atan2(agent.state.yVel, agent.state.xVel);
+        float plusDiff = angle_diff_abs(agentHeading, plusGwy.direction());
+        float minusDiff = angle_diff_abs(agentHeading, minusGwy.direction());
 
         startCell = (plusDiff > minusDiff) ? plusGwy.skeletonCell() : minusGwy.skeletonCell();
     }

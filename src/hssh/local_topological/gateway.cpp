@@ -213,10 +213,10 @@ bool Gateway::isSimilarTo(const Gateway& rhs) const
 void Gateway::calculateDirections(const VoronoiSkeletonGrid& grid, const VoronoiIsovistField* isovists)
 {
     // Use the skeleton to calculate the direction of the gateway
-    float normalAngle = angle_sum(vulcan::direction(boundary_), M_PI / 2.0f);
+    float normalAngle = angle_sum(vulcan::direction(boundary_), M_PI_2);
 
     leftDirection_ = normalAngle;
-    rightDirection_ = angle_sum(normalAngle, M_PI);
+    rightDirection_ = angle_sum(normalAngle, PI_F);
 
     auto skeletonDirections = voronoi_direction(skeletonCell_, grid, normalAngle);
 
@@ -250,7 +250,7 @@ void Gateway::calculateDirections(const VoronoiSkeletonGrid& grid, const Voronoi
     // Gateways closely track the normal in their construction, so don't let the direction change by too much
     if (angle_diff_abs_pi_2(leftDirection_, normalAngle) > M_PI / 36.0) {
         leftDirection_ = normalAngle;
-        rightDirection_ = angle_sum(normalAngle, M_PI);
+        rightDirection_ = angle_sum(normalAngle, PI_F);
     }
 }
 

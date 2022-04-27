@@ -28,6 +28,7 @@
 #include "core/point_util.h"
 #include <cassert>
 #include <cstdint>
+#include <ostream>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>

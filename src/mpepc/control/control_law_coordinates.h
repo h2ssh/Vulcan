@@ -95,9 +95,9 @@ struct control_law_coordinates_t
                    == BACKWARD)   // flip the target and the robot pose when the direction of approach is backward.
         {
             float lineOfSightOrientation =
-              (r > SMALL_RADIUS_M) ? atan2(deltaY, deltaX) : angle_sum(targetPose.theta, M_PI);
-            theta = angle_diff(angle_sum(targetPose.theta, M_PI), lineOfSightOrientation);
-            delta = angle_diff(angle_sum(robotPose.theta, M_PI), lineOfSightOrientation);
+              (r > SMALL_RADIUS_M) ? std::atan2(deltaY, deltaX) : angle_sum(targetPose.theta, PI_F);
+            theta = angle_diff(angle_sum(targetPose.theta, PI_F), lineOfSightOrientation);
+            delta = angle_diff(angle_sum(robotPose.theta, PI_F), lineOfSightOrientation);
             r *= -1;
         } else {
             std::cout << "ERROR: Unknown direction of approach!\n";
@@ -107,24 +107,24 @@ struct control_law_coordinates_t
     pose_t toRobotPose(const pose_t& targetPose) const
     {
         float lineOfSightOrientation =
-          (r > 0.0) ? angle_diff(targetPose.theta, theta) : angle_diff(angle_sum(targetPose.theta, M_PI), theta);
+          (r > 0.0f) ? angle_diff(targetPose.theta, theta) : angle_diff(angle_sum(targetPose.theta, PI_F), theta);
         float robotOrientation =
-          (r > 0.0) ? angle_sum(lineOfSightOrientation, delta) : angle_sum(lineOfSightOrientation + M_PI, delta);
+          (r > 0.0f) ? angle_sum(lineOfSightOrientation, delta) : angle_sum(lineOfSightOrientation + PI_F, delta);
 
-        return pose_t(targetPose.x - fabs(r) * cos(lineOfSightOrientation),
-                      targetPose.y - fabs(r) * sin(lineOfSightOrientation),
+        return pose_t(targetPose.x - std::abs(r) * std::cos(lineOfSightOrientation),
+                      targetPose.y - std::abs(r) * std::sin(lineOfSightOrientation),
                       robotOrientation);
     }
 
     pose_t toTargetPose(const pose_t& robotPose) const
     {
         float lineOfSightOrientation =
-          (r > 0.0) ? angle_diff(robotPose.theta, delta) : angle_diff(angle_sum(robotPose.theta, M_PI), delta);
+          (r > 0.0f) ? angle_diff(robotPose.theta, delta) : angle_diff(angle_sum(robotPose.theta, PI_F), delta);
         float targetOrientation =
-          (r > 0.0) ? angle_sum(lineOfSightOrientation, theta) : angle_sum(lineOfSightOrientation + M_PI, theta);
+          (r > 0.0f) ? angle_sum(lineOfSightOrientation, theta) : angle_sum(lineOfSightOrientation + PI_F, theta);
 
-        return pose_t(robotPose.x + fabs(r) * cos(lineOfSightOrientation),
-                      robotPose.y + fabs(r) * sin(lineOfSightOrientation),
+        return pose_t(robotPose.x + std::abs(r) * std::cos(lineOfSightOrientation),
+                      robotPose.y + std::abs(r) * std::sin(lineOfSightOrientation),
                       targetOrientation);
     }
 };

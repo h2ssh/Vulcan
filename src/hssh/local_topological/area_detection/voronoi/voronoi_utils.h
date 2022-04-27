@@ -69,11 +69,11 @@ struct voronoi_trace_t
 
 struct voronoi_directions_t
 {
-    double left;
-    double right;
+    float left;
+    float right;
 
-    double leftDist;    ///< Distance along skeleton the left direction was computed
-    double rightDist;   ///< Distance along skeleton the right direction was computed
+    float leftDist;    ///< Distance along skeleton the left direction was computed
+    float rightDist;   ///< Distance along skeleton the right direction was computed
 };
 
 /**

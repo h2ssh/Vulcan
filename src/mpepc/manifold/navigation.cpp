@@ -447,7 +447,7 @@ double NavigationTaskManifold::getCostToGo(const motion_state_t& state) const
         costToGo = getCostToGoFromNavGrid(state);
 
         if (isUsingNavGradient_) {
-            double gradientHeading = computeNavGradient(state.pose);
+            float gradientHeading = computeNavGradient(state.pose);
             headingError = taskParams_.orientationHeuristicWeight * angle_diff_abs(gradientHeading, state.pose.theta);
         }
     } else {
@@ -522,7 +522,7 @@ double NavigationTaskManifold::calculateHeuristicCost(const robot_trajectory_inf
 }
 
 
-double NavigationTaskManifold::computeNavGradient(const pose_t& pose) const
+float NavigationTaskManifold::computeNavGradient(const pose_t& pose) const
 {
     // in other places follow the gradient of the navigation function, comupted by central gradient.
     // point to cell introduces error up to half grid size, which probably is tolerable.
@@ -535,7 +535,7 @@ double NavigationTaskManifold::computeNavGradient(const pose_t& pose) const
     float dx =
       (navGrid_.getCostToGo(Point<int>(cell.x - 1, cell.y)) - navGrid_.getCostToGo(Point<int>(cell.x + 1, cell.y)));
 
-    return atan2(dy, dx);
+    return std::atan2(dy, dx);
 }
 
 

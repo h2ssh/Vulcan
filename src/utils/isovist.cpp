@@ -320,7 +320,7 @@ void Isovist::calculateDerivs(std::vector<Point<float>>& endpoints)
     }
 
     scalars_[kMinLineDist] = std::sqrt(minDist);
-    scalars_[kMinLineNormal] = angle_sum(angle_to_point(endpoints[minIdx], endpoints[minIdx + otherSide]), M_PI_2);
+    scalars_[kMinLineNormal] = angle_sum(angle_to_point(endpoints[minIdx], endpoints[minIdx + otherSide]), PI_2_F);
 
     // Copy the derivative points on to the end of endpoints. Want to continuous regions, so do the [n,n+otherSide)
     // then [n+otherSide,end) [0,n)

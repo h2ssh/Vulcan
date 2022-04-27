@@ -285,7 +285,7 @@ struct ClassifierBasedGenerator::Impl
         //         }
         //     }
 
-        double skeletonNormal = 0.0;
+        float skeletonNormal = 0.0f;
 
         // Use regionCells_ to get the appropriate possibilities
         auto bestSources = skeleton.getSourceCells(maxCell.x, maxCell.y);

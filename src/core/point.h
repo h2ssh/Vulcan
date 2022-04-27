@@ -72,7 +72,7 @@ struct Point
  * distance_between_points calculates the Cartesian distance between two points.
  */
 template <typename T, typename U>
-float distance_between_points(T pointAx, T pointAy, U pointBx, U pointBy)
+T distance_between_points(T pointAx, T pointAy, U pointBx, U pointBy)
 {
     return std::sqrt((pointAx - pointBx) * (pointAx - pointBx) + (pointAy - pointBy) * (pointAy - pointBy));
 }
@@ -81,7 +81,7 @@ float distance_between_points(T pointAx, T pointAy, U pointBx, U pointBy)
  * distance_between_points calculates the Cartesian distance between two points.
  */
 template <typename T, typename U>
-float distance_between_points(const Point<T>& pointA, const Point<U>& pointB)
+T distance_between_points(const Point<T>& pointA, const Point<U>& pointB)
 {
     return std::sqrt((pointA.x - pointB.x) * (pointA.x - pointB.x) + (pointA.y - pointB.y) * (pointA.y - pointB.y));
 }
@@ -90,13 +90,13 @@ float distance_between_points(const Point<T>& pointA, const Point<U>& pointB)
  * distance_to_point calculates the radial distance from the origin to the specified point.
  */
 template <typename T>
-float distance_to_point(const Point<T>& point)
+T distance_to_point(const Point<T>& point)
 {
     return std::sqrt(point.x * point.x + point.y * point.y);
 }
 
 template <typename T, typename U>
-float squared_point_distance(const Point<T>& pointA, const Point<U>& pointB)
+T squared_point_distance(const Point<T>& pointA, const Point<U>& pointB)
 {
     return (pointA.x - pointB.x) * (pointA.x - pointB.x) + (pointA.y - pointB.y) * (pointA.y - pointB.y);
 }
@@ -137,19 +137,21 @@ T inner_product_between_points(const Point<T>& pointA, const Point<T>& pointB)
  * \return   Angle between first and second in the range of [0, PI]. NAN if first == center or second == center.
  */
 template <typename T>
-float angle_between_points(const Point<T>& first, const Point<T>& second, const Point<T>& center)
+auto angle_between_points(const Point<T>& first, const Point<T>& second, const Point<T>& center) -> std::common_type_t<T, float>
 {
     // Use the vector form here to get a pretty answer:
     //  cos(theta) = a dot b / ||a||*||b||
+
+    using Value = std::common_type_t<T, float>;
 
     if ((first == center) || (second == center)) {
         return NAN;
     }
 
-    T xA = first.x - center.x;
-    T yA = first.y - center.y;
-    T xB = second.x - center.x;
-    T yB = second.y - center.y;
+    Value xA = first.x - center.x;
+    Value yA = first.y - center.y;
+    Value xB = second.x - center.x;
+    Value yB = second.y - center.y;
 
     double acosTerm = (xA * xB + yA * yB) / (std::sqrt(xA * xA + yA * yA) * std::sqrt(xB * xB + yB * yB));
     if (acosTerm < -1.0) {
@@ -170,7 +172,7 @@ float angle_between_points(const Point<T>& first, const Point<T>& second, const 
  * \return   Angle of vector atan2(to - from).
  */
 template <typename T, typename U>
-float angle_to_point(const Point<T>& from, const Point<U>& to)
+auto angle_to_point(const Point<T>& from, const Point<U>& to) -> std::common_type_t<T, U, float>
 {
     return std::atan2(to.y - from.y, to.x - from.x);
 }

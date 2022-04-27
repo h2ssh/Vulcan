@@ -433,7 +433,7 @@ extracted_lines_t vulcan::laser::angle_segmentation(const polar_laser_scan_t& sc
 
     // Need to check the distance from PI / 2 for the angles as the angle found is [0, PI], but I want only the curvy
     // spots
-    double threshAng = fabs(angle_diff(M_PI, params.thresholdAngleDegrees));
+    double threshAng = std::abs(angle_diff(PI_F, params.thresholdAngleDegrees));
     double curAngle = 0;
     double nextAngle = 0;
     double minAngle = M_PI;

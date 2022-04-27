@@ -49,7 +49,7 @@ public:
     SmallScaleStar buildStar(const std::vector<Gateway>& gateways,
                              const Point<float>& center,
                              const math::Rectangle<float>& boundary) const override;
-    int numGatewaysAlignedToAxis(const std::vector<Gateway>& gateways, double axisDirection) const override;
+    int numGatewaysAlignedToAxis(const std::vector<Gateway>& gateways, float axisDirection) const override;
     bool areGatewaysAligned(const Gateway& lhs, const Gateway& rhs, const Point<float>& center) const override;
 
 private:

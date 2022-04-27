@@ -149,7 +149,7 @@ void GracefulMotionControlLaw::setTargetPose(const pose_t& pose,
     this->params = params;
 
     if (direction == GRACEFUL_MOTION_BACKWARD) {
-        target.theta = angle_sum(target.theta, M_PI);
+        target.theta = angle_sum(target.theta, PI_F);
     }
 
 #ifdef DEBUG_TARGET
@@ -173,7 +173,7 @@ graceful_motion_output_t GracefulMotionControlLaw::apply(const motion_state_t& c
 
     // If not moving forward, then flip the pose to be used for calculating the controls
     float theta =
-      (direction == GRACEFUL_MOTION_FORWARD) ? currentState.pose.theta : angle_sum(currentState.pose.theta, M_PI);
+      (direction == GRACEFUL_MOTION_FORWARD) ? currentState.pose.theta : angle_sum(currentState.pose.theta, PI_F);
     pose_t currentPose{currentState.pose.x, currentState.pose.y, theta};
 
     float deltaTheta = angle_diff(target.theta, currentPose.theta);

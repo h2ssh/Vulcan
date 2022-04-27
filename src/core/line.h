@@ -97,7 +97,7 @@ double length(const Line<T>& line)
  * \return   The slope of the line. If the line is vertical, then HUGE_VAL is returned.
  */
 template <typename T>
-double slope(const Line<T>& line)
+T slope(const Line<T>& line)
 {
     if (line.a.x == line.b.x) {
         return HUGE_VAL;
@@ -112,7 +112,7 @@ double slope(const Line<T>& line)
  * \return   atan2(b.y-a.y, b.x-a.x)
  */
 template <typename T>
-double direction(const Line<T>& line)
+T direction(const Line<T>& line)
 {
     return angle_to_point(line.a, line.b);
 }

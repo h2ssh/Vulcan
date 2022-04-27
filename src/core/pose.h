@@ -23,6 +23,7 @@
 #include "system/message_traits.h"
 #include <cstdint>
 #include <iosfwd>
+#include <numbers>
 
 namespace vulcan
 {
@@ -62,7 +63,7 @@ struct pose_t
     /**
      * flip rotates the pose by 180 degrees.
      */
-    pose_t flip(void) const { return pose_t(x, y, angle_sum(theta, M_PI)); }
+    pose_t flip(void) const { return pose_t(x, y, angle_sum(theta, PI_F)); }
 
     /**
      * transformToNewFrame applies a transform to the pose and returns the resulting pose.

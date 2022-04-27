@@ -10,10 +10,16 @@
 #ifndef CORE_ANGLE_FUNCTIONS_H
 #define CORE_ANGLE_FUNCTIONS_H
 
+#include <numbers>
 #include <cmath>
 
 namespace vulcan
 {
+
+constexpr float PI_F = std::numbers::pi_v<float>;
+constexpr float TWO_PI_F = 2.0f * PI_F;
+constexpr float PI_2_F = PI_F / 2.0f;
+constexpr float PI_4_F = PI_F / 4.0f;
 
 /**
  * wrap_to_pi takes an angle of arbitrary size and reduces it to the range [-PI, PI].
@@ -21,13 +27,17 @@ namespace vulcan
  * \param    angle           Angle to wrap
  * \return   Equivalent angle in range [-PI, PI].
  */
-inline float wrap_to_pi(float angle)
+template <typename T>
+T wrap_to_pi(T angle)
 {
-    if (angle < -M_PI) {
-        for (; angle < -M_PI; angle += 2.0 * M_PI)
+    constexpr auto PI = std::numbers::pi_v<T>;
+    constexpr auto TWO_PI = T(2) * PI;
+
+    if (angle < -PI) {
+        for (; angle < -PI; angle += TWO_PI)
             ;
-    } else if (angle > M_PI) {
-        for (; angle > M_PI; angle -= 2.0 * M_PI)
+    } else if (angle > PI) {
+        for (; angle > PI; angle -= TWO_PI)
             ;
     }
 
@@ -40,13 +50,17 @@ inline float wrap_to_pi(float angle)
  * \param    angle           Angle to wrap
  * \return   Equivalent angle in range [0, 2PI].
  */
-inline float wrap_to_2pi(float angle)
+template <typename T>
+T wrap_to_2pi(T angle)
 {
+    constexpr auto PI = std::numbers::pi_v<T>;
+    constexpr auto TWO_PI = T(2) * PI;
+
     if (angle < 0) {
-        for (; angle < 0; angle += 2.0 * M_PI)
+        for (; angle < 0; angle += TWO_PI)
             ;
-    } else if (angle > 2 * M_PI) {
-        for (; angle > 2 * M_PI; angle -= 2.0 * M_PI)
+    } else if (angle > TWO_PI) {
+        for (; angle > TWO_PI; angle -= TWO_PI)
             ;
     }
 
@@ -61,14 +75,18 @@ inline float wrap_to_2pi(float angle)
  * \param    angle           Angle to wrap
  * \return   Angle in the range [-pi/2,pi/2].
  */
-inline float wrap_to_pi_2(float angle)
+template <typename T>
+T wrap_to_pi_2(T angle)
 {
-    float wrapped = wrap_to_pi(angle);
+    constexpr auto PI = std::numbers::pi_v<T>;
+    constexpr auto PI_2 = PI / T(2);
 
-    if (wrapped < -M_PI_2) {
-        wrapped += M_PI;
-    } else if (wrapped > M_PI_2) {
-        wrapped -= M_PI;
+    T wrapped = wrap_to_pi(angle);
+
+    if (wrapped < -PI_2) {
+        wrapped += PI;
+    } else if (wrapped > PI_2) {
+        wrapped -= PI;
     }
 
     return wrapped;
@@ -82,11 +100,15 @@ inline float wrap_to_pi_2(float angle)
  * \param    rightAngle          Angle on the right-handside of the '-'
  * \return   The difference between the angles, leftAngle - rightAngle, in the range [-PI, PI].
  */
-inline double angle_diff(double leftAngle, double rightAngle)
+template <typename T>
+T angle_diff(T leftAngle, T rightAngle)
 {
-    double diff = leftAngle - rightAngle;
-    if (fabs(diff) > M_PI) {
-        diff -= (diff > 0) ? M_PI * 2 : M_PI * -2;
+    constexpr auto PI = std::numbers::pi_v<T>;
+    constexpr auto TWO_PI = T(2) * PI;
+
+    T diff = leftAngle - rightAngle;
+    if (std::abs(diff) > PI) {
+        diff -= (diff > 0) ? TWO_PI : -TWO_PI;
     }
 
     return diff;
@@ -100,9 +122,10 @@ inline double angle_diff(double leftAngle, double rightAngle)
  * \param    rightAngle          Angle on the right-handside of the '-'
  * \return   The absolute value of the difference between the angles, leftAngle - rightAngle, in the range [0, PI].
  */
-inline double angle_diff_abs(double leftAngle, double rightAngle)
+template <typename T>
+T angle_diff_abs(T leftAngle, T rightAngle)
 {
-    return fabs(angle_diff(leftAngle, rightAngle));
+    return std::abs(angle_diff(leftAngle, rightAngle));
 }
 
 
@@ -116,11 +139,15 @@ inline double angle_diff_abs(double leftAngle, double rightAngle)
  * \param    rhs         Angle on right of '-'
  * \return   lhs - rhs, in the range [0, PI/2].
  */
-inline double angle_diff_abs_pi_2(double lhs, double rhs)
+template <typename T>
+T angle_diff_abs_pi_2(T lhs, T rhs)
 {
-    double diff = std::abs(angle_diff(lhs, rhs));
+    constexpr auto PI = std::numbers::pi_v<T>;
+    constexpr auto PI_2 = PI / T(2);
 
-    return (diff < M_PI / 2.0) ? diff : M_PI - diff;
+    T diff = std::abs(angle_diff(lhs, rhs));
+
+    return (diff < PI_2) ? diff : PI - diff;
 }
 
 
@@ -131,12 +158,16 @@ inline double angle_diff_abs_pi_2(double lhs, double rhs)
  * \param    angleB              Second angle in the sum
  * \return   The sum of the two angles, angleA + angleB, in the range [-PI, PI].
  */
-inline double angle_sum(double angleA, double angleB)
+template <typename T>
+T angle_sum(T angleA, T angleB)
 {
-    double sum = angleA + angleB;
+    constexpr auto PI = std::numbers::pi_v<T>;
+    constexpr auto TWO_PI = T(2) * PI;
 
-    if (fabs(sum) > M_PI) {
-        sum -= (sum > 0) ? M_PI * 2 : M_PI * -2;
+    T sum = angleA + angleB;
+
+    if (std::abs(sum) > PI) {
+        sum -= (sum > 0) ? TWO_PI : -TWO_PI;
     }
 
     return sum;

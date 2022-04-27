@@ -190,14 +190,18 @@ Matrix calculate_sample_set_covariance(const std::vector<particle_t>& samples, c
     double sumWeightSquared = 0;
 
     for (int i = samples.size(); --i >= 0;) {
-        sigmaXX += samples[i].weight * pow(meanX - samples[i].pose.x, 2);
-        sigmaYY += samples[i].weight * pow(meanY - samples[i].pose.y, 2);
+        const double errX = meanX - samples[i].pose.x;
+        const double errY = meanY - samples[i].pose.y;
+        const double errTheta = angle_diff(meanTheta, static_cast<double>(samples[i].pose.theta));
 
-        sigmaXY += samples[i].weight * (meanX - samples[i].pose.x) * (meanY - samples[i].pose.y);
-        sigmaXTheta += samples[i].weight * (meanX - samples[i].pose.x) * angle_diff(meanTheta, samples[i].pose.theta);
-        sigmaYTheta += samples[i].weight * (meanY - samples[i].pose.y) * angle_diff(meanTheta, samples[i].pose.theta);
+        sigmaXX += samples[i].weight * errX * errX;
+        sigmaYY += samples[i].weight * errY * errY;
 
-        sigmaThetaTheta += samples[i].weight * pow(angle_diff(meanTheta, samples[i].pose.theta), 2);
+        sigmaXY += samples[i].weight * errX * errY;
+        sigmaXTheta += samples[i].weight * errX * errTheta;
+        sigmaYTheta += samples[i].weight * errY * errTheta;
+
+        sigmaThetaTheta += samples[i].weight * errTheta * errTheta;
         sumWeightSquared += samples[i].weight * samples[i].weight;
     }
 

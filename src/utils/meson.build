@@ -37,7 +37,7 @@ utils_lib = static_library(
     utils_src,
     include_directories : vulcan_inc,
     link_with : [core_lib, math_lib],
-    dependencies : [arma_dep],
+    dependencies : [arma_dep, boost_dep],
 )
 
 subdir('tests')

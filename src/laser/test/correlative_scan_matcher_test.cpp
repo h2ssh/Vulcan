@@ -364,5 +364,5 @@ void do_odometry_update(pose_t& pose, const vulcan::Vector& delta)
 {
     pose.x += delta(X_INDEX);   // delta.deltaX * cos(delta.deltaTheta/2 + pose.theta);
     pose.y += delta(Y_INDEX);   // delta.deltaX * sin(delta.deltaTheta/2 + pose.theta);
-    pose.theta = vulcan::angle_sum(pose.theta, delta(THETA_INDEX));
+    pose.theta = vulcan::angle_sum(pose.theta, static_cast<float>(delta(THETA_INDEX)));
 }

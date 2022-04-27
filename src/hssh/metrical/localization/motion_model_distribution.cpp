@@ -69,19 +69,19 @@ MotionModelDistribution::MotionModelDistribution(const odometry_t& startOdom,
         //         imuTheta *= -1;
     }
 
-    float odometryTheta = angle_diff(endOdom.theta, startOdom.theta);
+    double odometryTheta = angle_diff(endOdom.theta, startOdom.theta);
 
-    float deltaX = endOdom.x - startOdom.x;
-    float deltaY = endOdom.y - startOdom.y;
-    float deltaTheta = haveImu ? imuTheta : odometryTheta;
-    float direction = 1.0;
+    double deltaX = endOdom.x - startOdom.x;
+    double deltaY = endOdom.y - startOdom.y;
+    double deltaTheta = haveImu ? imuTheta : odometryTheta;
+    double direction = 1.0;
 
-    double trans = sqrt(deltaY * deltaY + deltaX * deltaX);
-    double rot1 = angle_diff(atan2(deltaY, deltaX), startOdom.theta);
+    double trans = std::sqrt(deltaY * deltaY + deltaX * deltaX);
+    double rot1 = angle_diff(std::atan2(deltaY, deltaX), startOdom.theta);
 
     if (std::abs(trans) < 0.00005) {
         rot1 = 0.0;
-    } else if (std::abs(rot1) > M_PI / 2.0) {
+    } else if (std::abs(rot1) > M_PI_2) {
         rot1 = angle_diff(M_PI, rot1);
         direction = -1.0;
     }

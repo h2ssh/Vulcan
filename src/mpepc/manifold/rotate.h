@@ -42,7 +42,7 @@ public:
      *
      * \param    orientation         Desired orientation for the robot to reach
      */
-    explicit RotateTaskManifold(double orientation);
+    explicit RotateTaskManifold(float orientation);
 
     /**
      * Constructor for RotateTaskManifold.
@@ -68,7 +68,7 @@ public:
 
 private:
     RotationMode mode_;
-    double orientation_;
+    float orientation_;
     pose_t targetPose_;   // if the robot were to turn perfect in-place, where would it end up?s
 };
 

@@ -97,31 +97,31 @@ control_law_output_t KinematicControlLaw::computeOutput(const pose_t& robotPose,
         }
     } else   // normal update
     {
-        double kKappaThresh = 4.0;
+        const float kKappaThresh = 4.0f;
         //         double kSmallRadius = 0.15;
         //         double kLargeRadius = 2.0;
         //         double kMinLinearVelocity = 0.15;
         //         double kMaxLinearVelocity  = motionTarget.velocityGain;
 
-        double minimumForwardSpeed = 0.15;
+        const float minimumForwardSpeed = 0.15f;
 
-        double referenceDelta =
-          atan(-params_.k1 * coords.theta);   // robot reference heading in controller coordinates.
+        float referenceDelta =
+          std::atan(-params_.k1 * coords.theta);   // robot reference heading in controller coordinates.
 
         // determination of the control based on error kinematics
-        double propotionalControlTerm =
+        float propotionalControlTerm =
           params_.k2 * angle_diff(coords.delta, referenceDelta);   // I usually prefer (reference - current) for the
                                                                    // error, but well this is how it was published.
-        double feedforwardControlTerm =
-          sin(coords.delta) * (1.0 + (params_.k1 / (1.0 + pow(params_.k1 * coords.theta, 2.0))));
+        float feedforwardControlTerm =
+          std::sin(coords.delta) * (1.0f + (params_.k1 / (1.0f + std::pow(params_.k1 * coords.theta, 2.0f))));
 
-        double radiusTimesKappa = -(propotionalControlTerm + feedforwardControlTerm);
-        double referenceKappa = radiusTimesKappa / fabs(coords.r);
+        float radiusTimesKappa = -(propotionalControlTerm + feedforwardControlTerm);
+        float referenceKappa = radiusTimesKappa / std::abs(coords.r);
 
         double lambda = params_.lambda;
         double beta = params_.beta;
 
-        if (fabs(referenceKappa) > kKappaThresh) {
+        if (std::abs(referenceKappa) > kKappaThresh) {
             lambda = 1.0;
             beta = beta * pow(kKappaThresh, (params_.lambda - lambda));
         }
@@ -149,7 +149,7 @@ control_law_output_t KinematicControlLaw::computeOutput(const pose_t& robotPose,
                               // and the control law coordinates were computed from flipped robot and target pose.
         {
             output.linearVelocity *= -1;
-            output.referenceHeading = angle_sum(output.referenceHeading, M_PI);
+            output.referenceHeading = angle_sum(output.referenceHeading, PI_F);
         }
     }
 
@@ -224,7 +224,7 @@ control_law_output_t
     if (coords.r < 0)   // Flip reference heading and linear velocity if r < 0, since desired motion is backward and the
                         // control law coordinates were computed from flipped robot and target pose.
     {
-        output.referenceHeading = angle_sum(output.referenceHeading, M_PI);
+        output.referenceHeading = angle_sum(output.referenceHeading, PI_F);
     }
 
     return output;

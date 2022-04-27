@@ -23,7 +23,7 @@ namespace vulcan
 namespace mpepc
 {
 
-RotateTaskManifold::RotateTaskManifold(double orientation)
+RotateTaskManifold::RotateTaskManifold(float orientation)
 : mode_(RotationMode::fixed_orientation)
 , orientation_(wrap_to_pi(orientation))   // wrap to ensure the angle is within the [-pi,pi] range
 {
@@ -41,9 +41,9 @@ void RotateTaskManifold::update(const planning_environment_t& env,
 {
     // In turn left or turn right mode, the goal orientation constantly moves away from the robot.
     if (mode_ == RotationMode::turn_left) {
-        orientation_ = angle_sum(env.robotState.pose.theta, M_PI_2);
+        orientation_ = angle_sum(env.robotState.pose.theta, PI_2_F);
     } else if (mode_ == RotationMode::turn_right) {
-        orientation_ = angle_diff(env.robotState.pose.theta, M_PI_2);
+        orientation_ = angle_diff(env.robotState.pose.theta, PI_2_F);
     }
     // Otherwise, the goal orientation is fixed
 

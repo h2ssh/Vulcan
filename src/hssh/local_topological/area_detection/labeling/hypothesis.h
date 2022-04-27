@@ -465,10 +465,10 @@ private:
     int id_;          // Unique identifier for this hypothesis -- to be applied to the AreaProposal
 
     CellVector cells_;
-    double length_;
-    double width_;   // mean width of all contained edges
-    double axisRatio_;
-    double axisDirection_;
+    float length_;
+    float width_;   // mean width of all contained edges
+    float axisRatio_;
+    float axisDirection_;
 
     std::unique_ptr<AreaExtent> extent_;
     Point<double> center_;                                    // center of extent

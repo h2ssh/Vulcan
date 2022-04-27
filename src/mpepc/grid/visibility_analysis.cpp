@@ -75,7 +75,7 @@ math::Polygon<double>
     auto origin = laserPose.toPoint();
 
     auto rotatedRange = laser.range;
-    rotatedRange.startAngle = angle_sum(rotatedRange.startAngle, laserPose.theta);
+    rotatedRange.startAngle = angle_sum(rotatedRange.startAngle, static_cast<double>(laserPose.theta));
 
     // Create the ray trace scan of the static environment
     PointVec<double> rays(rotatedRange.numIncrements + 2);

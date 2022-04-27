@@ -28,13 +28,13 @@ namespace mpepc
 
 //////////////////////// RotateTask implementation /////////////////////////////////////
 
-RotateTask::RotateTask(double goalOrientation, double maxCompletionError)
+RotateTask::RotateTask(float goalOrientation, float maxCompletionError)
 : id_(utils::system_time_us())
 , mode_(RotationMode::fixed_orientation)
 , orientation_(goalOrientation)
 , maxError_(maxCompletionError)
 {
-    assert(maxCompletionError > 0.0);
+    assert(maxCompletionError > 0);
 }
 
 

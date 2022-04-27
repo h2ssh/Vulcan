@@ -177,7 +177,7 @@ void CarmenReader::processOldLaserMessage(std::istringstream& message)
 
     if (havePreviousPose) {
         odom.translation = std::sqrt(std::pow((odom.x - previousPose.x), 2) + std::pow((odom.y - previousPose.y), 2));
-        odom.rotation = angle_diff(odom.theta, previousPose.theta);
+        odom.rotation = angle_diff(odom.theta, static_cast<double>(previousPose.theta));
     } else {
         odom.translation = 0.0;
         odom.rotation = 0.0;
@@ -258,7 +258,7 @@ void CarmenReader::processLaserMessage(std::istringstream& message)
     // then subtract off the robot pose to get the actual laser offset
     scan.offset.x = odom.x - scan.offset.x;
     scan.offset.y = odom.y - scan.offset.y;
-    scan.offset.theta = angle_diff(odom.theta, scan.offset.theta);
+    scan.offset.theta = angle_diff(odom.theta, static_cast<double>(scan.offset.theta));
 
     // Skip reading safety, velocity
     skipIt = std::istream_iterator<double>(message);   // tv
@@ -290,7 +290,7 @@ void CarmenReader::processLaserMessage(std::istringstream& message)
 
     if (havePreviousPose) {
         odom.translation = std::sqrt(std::pow((odom.x - previousPose.x), 2) + std::pow((odom.y - previousPose.y), 2));
-        odom.rotation = angle_diff(odom.theta, previousPose.theta);
+        odom.rotation = angle_diff(odom.theta, static_cast<double>(previousPose.theta));
     } else {
         odom.translation = 0.0;
         odom.rotation = 0.0;

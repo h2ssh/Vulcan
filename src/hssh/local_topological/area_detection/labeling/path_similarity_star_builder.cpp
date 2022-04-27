@@ -37,7 +37,7 @@ namespace hssh
 
 math::Rectangle<float> boundary_around_gateways(const std::vector<Gateway>& gateways);
 double distance_similarity_score(const Gateway& gateway, double direction);
-double direction_towards_center(const Gateway& gateway, const Point<float>& center);
+float direction_towards_center(const Gateway& gateway, const Point<float>& center);
 local_path_fragment_t create_path_fragment(int index, float direction, const Gateway& gateway);
 
 
@@ -92,7 +92,7 @@ SmallScaleStar PathSimilarityStarBuilder::buildStar(const std::vector<Gateway>& 
 
 
 int PathSimilarityStarBuilder::numGatewaysAlignedToAxis(const std::vector<Gateway>& gateways,
-                                                        double axisDirection) const
+                                                        float axisDirection) const
 {
     // Need at least two gateways for them to be aligned
     if (gateways.size() < 2) {
@@ -381,9 +381,9 @@ double distance_similarity_score(const Gateway& gateway, double direction)
 }
 
 
-double direction_towards_center(const Gateway& gateway, const Point<float>& center)
+float direction_towards_center(const Gateway& gateway, const Point<float>& center)
 {
-    double angleToCenter = angle_to_point(gateway.center(), center);
+    float angleToCenter = angle_to_point(gateway.center(), center);
     double leftDiff = angle_diff_abs(gateway.leftDirection(), angleToCenter);
     double rightDiff = angle_diff_abs(gateway.rightDirection(), angleToCenter);
     return (leftDiff < rightDiff) ? gateway.leftDirection() : gateway.rightDirection();

@@ -181,7 +181,7 @@ double gateway_normal_from_source_cells(cell_t cell, const VoronoiSkeletonGrid& 
             double angleBetweenSources = std::abs(angle_between_points(sources[n], sources[m], cell));
             if (angleBetweenSources > maxAngle) {
                 maxAngle = angleBetweenSources;
-                maxNormal = angle_sum(angle_to_point(sources[n], sources[m]), M_PI_2);
+                maxNormal = angle_sum(angle_to_point(sources[n], sources[m]), PI_F);
             }
         }
     }

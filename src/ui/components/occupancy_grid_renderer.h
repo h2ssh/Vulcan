@@ -19,6 +19,7 @@
 
 #include "core/point.h"
 #include <array>
+#include <cstdint>
 
 namespace vulcan
 {
